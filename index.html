@@ -3,633 +3,591 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlier — Ternary MoE on Consumer Hardware</title>
-  <meta
-    name="description"
-    content="Outlier is a patented ternary-quantized Mixture-of-Experts architecture and runtime for running 72B–405B+ models on consumer-class hardware."
-  >
+  <title>Outlier — Frontier AI on Hardware You Own</title>
+  <meta name="description" content="Outlier is a patented ternary-quantized Mixture-of-Experts platform. 155B parameters in 19GB RAM. $0/token. Data never leaves your building.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #08090b;
-      --surface: #11141a;
-      --surface-2: #171c24;
-      --border: #232b36;
-      --text: #edf2f7;
-      --muted: #9aa6b2;
-      --dim: #637181;
-      --accent: #89a7ff;
-      --accent-2: #b8c8ff;
-      --success: #8dd8b3;
-      --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
-      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --mono: "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+      --bg: #06080a;
+      --surface: #0d1117;
+      --surface-2: #151b23;
+      --surface-3: #1c2430;
+      --border: #21262d;
+      --border-accent: rgba(100,180,255,0.15);
+      --text: #f0f3f6;
+      --text-secondary: #8b949e;
+      --text-dim: #636e7b;
+      --accent: #58a6ff;
+      --accent-soft: rgba(88,166,255,0.12);
+      --green: #56d364;
+      --green-soft: rgba(86,211,100,0.12);
+      --orange: #e3b341;
+      --orange-soft: rgba(227,179,65,0.10);
+      --red: #f47067;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
-      background:
-        radial-gradient(circle at top right, rgba(137, 167, 255, 0.1), transparent 30%),
-        linear-gradient(180deg, #090b0f 0%, #08090b 45%, #0a0d11 100%);
+      background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    a {
-      color: var(--accent-2);
-      text-decoration: none;
-    }
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); }
 
-    a:hover {
-      color: var(--text);
-    }
+    .wrap { width: min(1140px, calc(100% - 2.5rem)); margin: 0 auto; }
 
+    /* ── NAV ── */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(14px);
-      background: rgba(8, 9, 11, 0.82);
-      border-bottom: 1px solid rgba(35, 43, 54, 0.85);
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(6,8,10,0.85);
+      backdrop-filter: blur(16px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
     }
-
-    .nav-inner,
-    .container {
-      width: min(1120px, calc(100% - 2rem));
-      margin: 0 auto;
-    }
-
     .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 0; gap: 1rem;
     }
-
-    .brand,
-    .eyebrow,
-    .section-label,
-    .pill,
-    .metric-label,
-    .mini-label,
-    .footer-note {
-      font-family: var(--mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+    .logo {
+      font-family: var(--sans); font-weight: 700; font-size: 1.15rem;
+      letter-spacing: -0.03em; color: var(--text);
     }
-
-    .brand {
-      font-size: 0.88rem;
-      color: var(--text);
-    }
-
-    .brand span {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      list-style: none;
-      gap: 1.2rem;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; list-style: none; gap: 1.5rem; }
     .nav-links a {
-      font-size: 0.74rem;
-      color: var(--muted);
+      font-size: 0.82rem; color: var(--text-secondary); font-weight: 500;
+      letter-spacing: 0.01em;
     }
+    .nav-links a:hover { color: var(--text); }
 
-    section {
-      padding: 5.5rem 0;
-      border-top: 1px solid rgba(35, 43, 54, 0.75);
-    }
-
-    section:first-of-type {
-      border-top: none;
-    }
-
-    .eyebrow,
-    .section-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.65rem;
-      font-size: 0.72rem;
-      color: var(--accent-2);
-      margin-bottom: 1rem;
-    }
-
-    .eyebrow::before,
-    .section-label::before {
-      content: "";
-      width: 1.8rem;
-      height: 1px;
-      background: currentColor;
-      opacity: 0.6;
-    }
-
-    h1,
-    h2,
-    h3 {
-      letter-spacing: -0.03em;
-      line-height: 1.12;
-      font-weight: 600;
-    }
-
-    h1 {
-      font-size: clamp(2.8rem, 6vw, 4.9rem);
-      margin-bottom: 1.25rem;
-      max-width: 11ch;
-    }
-
-    h2 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      margin-bottom: 1rem;
-      max-width: 14ch;
-    }
-
-    .lede,
-    .section-intro {
-      font-size: 1.06rem;
-      color: var(--muted);
-      max-width: 62ch;
-    }
-
+    /* ── HERO ── */
     .hero {
-      min-height: calc(100vh - 74px);
-      display: flex;
-      align-items: center;
-      padding-top: 4.5rem;
-      padding-bottom: 4rem;
+      padding: 7rem 0 5rem;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(88,166,255,0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(86,211,100,0.04), transparent);
     }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 2rem;
-      align-items: start;
+    .hero-eyebrow {
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+      color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.7rem;
     }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-      margin-top: 2rem;
+    .hero-eyebrow::before {
+      content: ''; width: 2rem; height: 1px; background: var(--accent); opacity: 0.5;
     }
-
+    .hero h1 {
+      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+      font-weight: 700; letter-spacing: -0.035em; line-height: 1.08;
+      max-width: 16ch; margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--green) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.12rem; color: var(--text-secondary); max-width: 56ch;
+      line-height: 1.7; margin-bottom: 2.5rem;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 4rem; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0.8rem 1.2rem;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      font-size: 0.92rem;
-      font-weight: 500;
-      transition: 0.2s ease;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.7rem 1.3rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500;
+      border: 1px solid var(--border); transition: all 0.2s; cursor: pointer;
     }
-
-    .btn.primary {
-      background: linear-gradient(180deg, rgba(137, 167, 255, 0.2), rgba(137, 167, 255, 0.12));
-      border-color: rgba(137, 167, 255, 0.35);
-      color: var(--text);
-      box-shadow: var(--shadow);
+    .btn-primary {
+      background: var(--accent); color: #000; border-color: var(--accent);
     }
+    .btn-primary:hover { background: #79bbff; color: #000; transform: translateY(-1px); }
+    .btn-ghost { background: var(--surface); color: var(--text-secondary); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
 
-    .btn.secondary {
-      background: rgba(17, 20, 26, 0.76);
-      color: var(--muted);
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(184, 200, 255, 0.45);
-      color: var(--text);
-    }
-
-    .hero-panel,
-    .card,
-    .status-panel,
-    .ip-panel,
-    .contact-panel {
-      background: linear-gradient(180deg, rgba(17, 20, 26, 0.96), rgba(12, 15, 19, 0.92));
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      box-shadow: var(--shadow);
-    }
-
-    .hero-panel {
-      padding: 1.35rem;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.68rem;
-      color: var(--muted);
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+      background: var(--border); border-radius: 12px; overflow: hidden;
       margin-bottom: 1rem;
     }
+    .stat {
+      background: var(--surface); padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .stat-number {
+      font-size: 1.8rem; font-weight: 700; letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .stat-number.blue { color: var(--accent); }
+    .stat-number.green { color: var(--green); }
+    .stat-number.orange { color: var(--orange); }
+    .stat-label {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .stat-detail { font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.2rem; }
 
-    .pill::before {
-      content: "";
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 999px;
-      background: var(--success);
-      box-shadow: 0 0 16px rgba(141, 216, 179, 0.6);
+    /* ── SECTIONS ── */
+    section { padding: 5rem 0; border-top: 1px solid var(--border); }
+    .section-tag {
+      font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
+      color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+    section h2 {
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.15;
+      max-width: 20ch; margin-bottom: 1rem;
+    }
+    .section-lead {
+      font-size: 1.02rem; color: var(--text-secondary); max-width: 60ch;
+      margin-bottom: 2.5rem; line-height: 1.7;
     }
 
-    .hero-panel h3,
-    .contact-panel h3 {
-      font-size: 1rem;
-      margin-bottom: 0.6rem;
+    /* ── BENCHMARK TABLE ── */
+    .bench-table {
+      width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;
+      font-size: 0.9rem;
     }
-
-    .hero-panel p,
-    .card p,
-    .status-list li,
-    .ip-list li,
-    .contact-list li,
-    .built-copy {
-      color: var(--muted);
-      font-size: 0.96rem;
+    .bench-table th {
+      font-family: var(--mono); font-size: 0.68rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
+      font-weight: 500;
     }
-
-    .hero-panel p + p {
-      margin-top: 0.8rem;
+    .bench-table td {
+      padding: 0.8rem 1rem; border-bottom: 1px solid rgba(33,38,45,0.6);
+      color: var(--text-secondary);
     }
-
-    .metrics {
-      margin-top: 2.25rem;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
+    .bench-table tr:hover td { background: rgba(88,166,255,0.03); }
+    .bench-table .val { color: var(--text); font-weight: 600; font-family: var(--mono); font-size: 0.85rem; }
+    .bench-table .val.top { color: var(--green); }
+    .bench-table .model-name { color: var(--text); font-weight: 600; }
+    .bench-table .tag {
+      display: inline-block; font-family: var(--mono); font-size: 0.62rem;
+      padding: 0.15rem 0.45rem; border-radius: 4px; margin-left: 0.5rem;
+      vertical-align: middle;
     }
+    .tag-live { background: var(--green-soft); color: var(--green); }
+    .tag-building { background: var(--orange-soft); color: var(--orange); }
+    .tag-planned { background: var(--accent-soft); color: var(--accent); }
 
+    /* ── CARD GRID ── */
+    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; }
+    .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
     .card {
-      padding: 1.2rem;
+      background: var(--surface); padding: 1.6rem;
     }
-
-    .metric-label,
-    .mini-label {
-      font-size: 0.68rem;
-      color: var(--accent-2);
-      margin-bottom: 0.55rem;
+    .card-icon {
+      width: 2rem; height: 2rem; border-radius: 6px; margin-bottom: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; background: var(--accent-soft); color: var(--accent);
     }
+    .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
 
-    .metric-copy {
-      font-size: 0.96rem;
-      color: var(--text);
-      line-height: 1.55;
+    /* ── LINEUP TABLE ── */
+    .lineup-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .lineup-table th {
+      font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 0.7rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border);
+      font-weight: 500;
     }
-
-    .section-intro {
-      margin-bottom: 2.2rem;
+    .lineup-table td {
+      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(33,38,45,0.5);
+      color: var(--text-secondary);
     }
+    .lineup-table .model-name { color: var(--text); font-weight: 600; }
+    .lineup-table .ram { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); }
 
-    .architecture-grid,
-    .status-grid,
-    .ip-grid,
-    .credits-grid {
-      display: grid;
-      gap: 1rem;
+    /* ── IP SECTION ── */
+    .ip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .ip-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.8rem;
     }
+    .ip-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.8rem; }
+    .ip-card p, .ip-card li { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+    .ip-card ul { list-style: none; display: grid; gap: 0.6rem; }
+    .ip-card li::before { content: '→ '; color: var(--text-dim); }
 
-    .architecture-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center; padding: 6rem 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(88,166,255,0.06), transparent);
     }
+    .cta-section h2 { max-width: none; margin: 0 auto 1rem; }
+    .cta-section p { max-width: 50ch; margin: 0 auto 2rem; color: var(--text-secondary); }
+    .cta-actions { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
 
-    .status-grid,
-    .credits-grid {
-      grid-template-columns: 1.1fr 0.9fr;
-    }
-
-    .ip-grid {
-      grid-template-columns: 1.1fr 0.9fr;
-    }
-
-    .card h3 {
-      font-size: 1rem;
-      margin-bottom: 0.7rem;
-    }
-
-    .status-panel,
-    .ip-panel,
-    .contact-panel {
-      padding: 1.4rem;
-    }
-
-    .status-list,
-    .ip-list,
-    .contact-list {
-      list-style: none;
-      display: grid;
-      gap: 0.9rem;
-    }
-
-    .list-block {
-      border-top: 1px solid rgba(35, 43, 54, 0.8);
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-
-    .value-line {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--dim);
-      margin-top: 0.5rem;
-    }
-
-    .highlight-copy {
-      color: var(--text);
-    }
-
-    .contact-list a {
-      color: var(--accent-2);
-      word-break: break-word;
-    }
-
-    .contact-list a:hover {
-      color: var(--text);
-    }
-
-    .cta-note {
-      margin-top: 1.4rem;
-      padding-top: 1.2rem;
-      border-top: 1px solid rgba(35, 43, 54, 0.8);
-      color: var(--muted);
-      font-size: 0.93rem;
-    }
-
+    /* ── FOOTER ── */
     footer {
-      border-top: 1px solid rgba(35, 43, 54, 0.75);
-      padding: 1.6rem 0 2.4rem;
+      border-top: 1px solid var(--border); padding: 1.5rem 0;
     }
-
     .footer-inner {
-      width: min(1120px, calc(100% - 2rem));
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      color: var(--dim);
-      font-size: 0.88rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: var(--text-dim);
     }
+    .footer-inner a { color: var(--text-dim); }
+    .footer-inner a:hover { color: var(--text-secondary); }
 
-    .footer-note {
-      font-size: 0.68rem;
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .card-grid { grid-template-columns: 1fr; }
+      .card-grid-2 { grid-template-columns: 1fr; }
+      .ip-grid { grid-template-columns: 1fr; }
+      .hero { padding: 4rem 0 3rem; }
+      .bench-table, .lineup-table { font-size: 0.8rem; }
+      .bench-table th, .bench-table td,
+      .lineup-table th, .lineup-table td { padding: 0.6rem 0.5rem; }
     }
-
-    @media (max-width: 920px) {
-      .hero-grid,
-      .status-grid,
-      .ip-grid,
-      .credits-grid,
-      .architecture-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .nav-inner {
-        padding: 0.85rem 0;
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav-links {
-        gap: 0.8rem;
-      }
-
-      section {
-        padding: 4.2rem 0;
-      }
-
-      .hero {
-        min-height: auto;
-        padding-top: 3.75rem;
-      }
-
-      .metrics {
-        grid-template-columns: 1fr;
-      }
-
-      .footer-inner {
-        flex-direction: column;
-      }
+    @media (max-width: 600px) {
+      .stats-row { grid-template-columns: 1fr; }
+      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .nav-links { gap: 1rem; flex-wrap: wrap; }
+      section { padding: 3.5rem 0; }
     }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="nav-inner">
-      <div class="brand">outlier<span>.</span>host</div>
-      <ul class="nav-links">
-        <li><a href="#architecture">Architecture</a></li>
-        <li><a href="#status">Current Status</a></li>
-        <li><a href="#company">Company &amp; IP</a></li>
-        <li><a href="#credits">Credits / Partners</a></li>
-        <li><a href="#built">Built with Outlier</a></li>
-      </ul>
+
+<!-- ═══════ NAV ═══════ -->
+<nav>
+  <div class="wrap nav-inner">
+    <div class="logo">Outlier<span>.</span></div>
+    <ul class="nav-links">
+      <li><a href="#benchmarks">Benchmarks</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#models">Models</a></li>
+      <li><a href="#ip">Company &amp; IP</a></li>
+      <li><a href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">HuggingFace ↗</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow">Ternary MoE · Patent Pending</div>
+    <h1>Frontier AI on <em>hardware you own.</em></h1>
+    <p class="hero-sub">
+      Outlier is a patented ternary-quantized Mixture-of-Experts platform that runs
+      155B-parameter models in 19 GB of RAM. Zero API cost. Data never leaves your building.
+      Built by one person for under $250.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">Models on HuggingFace</a>
+      <a class="btn btn-ghost" href="https://github.com/Outlier-host" target="_blank" rel="noreferrer">GitHub</a>
+      <a class="btn btn-ghost" href="mailto:matt@outlier.host">matt@outlier.host</a>
     </div>
-  </nav>
 
-  <section class="hero" id="top">
-    <div class="container">
-      <div class="hero-grid">
-        <div>
-          <div class="eyebrow">Ternary MoE Runtime</div>
-          <h1>Run 405B-class models on your own hardware.</h1>
-          <p class="lede">
-            Outlier is a patented ternary-quantized Mixture-of-Experts architecture and runtime that runs 72B–405B+ models on 40–65 GB RAM using {-1,0,1} experts, an INT4 shared backbone, and NVMe expert paging.
-          </p>
-          <div class="hero-actions">
-            <a class="btn primary" href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">View Outlier-AI on Hugging Face</a>
-            <a class="btn secondary" href="mailto:matt@outlier.host">matt@outlier.host</a>
-          </div>
-        </div>
-        <aside class="hero-panel">
-          <div class="pill">Patent pending</div>
-          <h3>Current deployment target</h3>
-          <p>
-            Outlier is focused on sovereign inference for operators who need 72B–405B+ class models on hardware they can own, audit, and deploy locally.
-          </p>
-          <p>
-            The stack combines ternary experts, a higher-precision shared backbone, and storage-aware runtime design so large models stay usable on a Mac Studio, a single GPU node, or future edge-class systems.
-          </p>
-        </aside>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-number blue">65.83%</div>
+        <div class="stat-label">MMLU</div>
+        <div class="stat-detail">Outlier-10B, measured</div>
       </div>
-
-      <div class="metrics">
-        <div class="card">
-          <div class="metric-label">Models shipped</div>
-          <p class="metric-copy">Outlier-7B-v0, Outlier-72B-v0, Outlier-405B-v0 on HuggingFace (Outlier-AI org).</p>
-        </div>
-        <div class="card">
-          <div class="metric-label">Memory footprint</div>
-          <p class="metric-copy">72B = 37–40 GB; 405B = 50–65 GB with TurboQuant KV + NVMe paging.</p>
-        </div>
-        <div class="card">
-          <div class="metric-label">7B MMLU baseline</div>
-          <p class="metric-copy">28.5% → 50.0% from ternary shadow injection (pre-SFT).</p>
-        </div>
-        <div class="card">
-          <div class="metric-label">Hardware target</div>
-          <p class="metric-copy">Mac Studio 64 GB, single high-end GPU node, phone-scale 3B in 1.5 GB (roadmap).</p>
-        </div>
+      <div class="stat">
+        <div class="stat-number green">74.27%</div>
+        <div class="stat-label">WinoGrande</div>
+        <div class="stat-detail">Outlier-10B, measured</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number green">65.92%</div>
+        <div class="stat-label">TruthfulQA</div>
+        <div class="stat-detail">Outlier-10B, measured</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number orange">8</div>
+        <div class="stat-label">Model lineup</div>
+        <div class="stat-detail">5B → 1T, building now</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="architecture">
-    <div class="container">
-      <div class="section-label">Architecture</div>
-      <h2>Ternary MoE with a higher-precision anchor.</h2>
-      <p class="section-intro">
-        The architecture keeps dense-model priors where they matter, compresses expert capacity aggressively, and moves the rest of the problem into routing and runtime discipline rather than cloud-scale memory budgets.
-      </p>
-      <div class="architecture-grid">
-        <article class="card">
-          <div class="mini-label">Shared Backbone</div>
-          <h3>Pretrained dense model retained as shared INT4 expert.</h3>
-          <p>Shared INT4 expert from pretrained dense model (Qwen2.5-7B, Llama-3-405B).</p>
-        </article>
-        <article class="card">
-          <div class="mini-label">Sparse Experts</div>
-          <h3>Eight ternary experts per layer.</h3>
-          <p>8 ternary experts per layer with weights in {-1,0,1}.</p>
-        </article>
-        <article class="card">
-          <div class="mini-label">Routing</div>
-          <h3>Per-token activation stays bounded.</h3>
-          <p>Router activates 1–2 experts per token, compute ~8–20B active params per token while total params ~168B (72B) and ~900B (405B).</p>
-        </article>
-        <article class="card">
-          <div class="mini-label">Quality Anchor</div>
-          <h3>The shared expert never drops out.</h3>
-          <p>Shared expert always active as a higher-precision quality anchor.</p>
-        </article>
-        <article class="card">
-          <div class="mini-label">Runtime</div>
-          <h3>Storage-aware inference pipeline.</h3>
-          <p>NVMe expert paging + TurboQuant 3.5-bit KV cache → 32K context in 40–65 GB RAM.</p>
-        </article>
-        <article class="card">
-          <div class="mini-label">System Result</div>
-          <h3>Large total parameter count, consumer-class residency.</h3>
-          <p>The point is not just compression. It is making frontier-class model capacity practical on single-device and small-node deployments without abandoning useful scale.</p>
-        </article>
+<!-- ═══════ BENCHMARKS ═══════ -->
+<section id="benchmarks">
+  <div class="wrap">
+    <div class="section-tag">Benchmarks</div>
+    <h2>Measured, not projected.</h2>
+    <p class="section-lead">
+      Outlier-10B is a 7B Qwen base with 16 ternary MoE experts. It beats its own teacher
+      on every benchmark measured so far. These are real numbers from lm-evaluation-harness,
+      not marketing projections.
+    </p>
+    <table class="bench-table">
+      <thead>
+        <tr>
+          <th>Benchmark</th>
+          <th>Outlier-10B</th>
+          <th>Qwen 7B Teacher</th>
+          <th>Delta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MMLU (5-shot)</td>
+          <td class="val top">65.83%</td>
+          <td class="val">~61%</td>
+          <td class="val top">+4.8</td>
+        </tr>
+        <tr>
+          <td>WinoGrande</td>
+          <td class="val top">74.27%</td>
+          <td class="val">~68%</td>
+          <td class="val top">+6.3</td>
+        </tr>
+        <tr>
+          <td>TruthfulQA MC2</td>
+          <td class="val top">65.92%</td>
+          <td class="val">~53%</td>
+          <td class="val top">+12.9</td>
+        </tr>
+        <tr>
+          <td>ARC-Challenge</td>
+          <td class="val top">65.70%</td>
+          <td class="val">~53%</td>
+          <td class="val top">+12.7</td>
+        </tr>
+        <tr>
+          <td>ARC-Easy</td>
+          <td class="val" style="color:var(--orange);">running</td>
+          <td class="val">~74%</td>
+          <td class="val">—</td>
+        </tr>
+        <tr>
+          <td>GSM8K</td>
+          <td class="val" style="color:var(--orange);">queued</td>
+          <td class="val">~54%</td>
+          <td class="val">—</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.82rem; color:var(--text-dim);">
+      Benchmarks run on Mac Studio M1 Ultra via lm-evaluation-harness. Qwen baselines from published model cards.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════ ARCHITECTURE ═══════ -->
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-tag">Architecture</div>
+    <h2>Ternary experts, full-precision anchor.</h2>
+    <p class="section-lead">
+      Each layer keeps the pretrained dense FFN as a shared full-precision expert and adds
+      domain-specialized ternary {-1, 0, +1} routed experts. Top-2 routing means only a
+      fraction of total parameters activate per token.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">△</div>
+        <h3>Ternary weights</h3>
+        <p>Expert weights constrained to {-1, 0, +1} with learned per-group scaling.
+           ~1.85 bits per parameter. Multiplication-free inference via lookup tables.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⇄</div>
+        <h3>Sparse MoE routing</h3>
+        <p>Top-2 expert activation per token. 155B total params but only ~75B active
+           per forward pass. Compute scales with active params, not total params.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">■</div>
+        <h3>Shared expert anchor</h3>
+        <p>Original pretrained FFN frozen as a shared expert. Always active.
+           Prevents quality collapse that pure ternary models suffer from.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">◇</div>
+        <h3>NVMe expert paging</h3>
+        <p>Hot experts in RAM, cold experts streamed from SSD. Measured 2× throughput
+           advantage for ternary vs INT4 on paged expert loads.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⊞</div>
+        <h3>Cross-platform runtime</h3>
+        <p>MLX (Apple Silicon), CUDA (NVIDIA), and CPU (AVX/NEON) backends.
+           Auto-detection at startup. 84 tests passing.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">◎</div>
+        <h3>Expert packs (.oep)</h3>
+        <p>Modular, installable expert modules. Add medical, legal, or code expertise
+           post-deployment without retraining the base model.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="status">
-    <div class="container">
-      <div class="section-label">Current Status</div>
-      <h2>Models are live. Training work is active.</h2>
-      <p class="section-intro">
-        The current state is not conceptual. Base models are published, larger-weight handling has been proven in practice, and the next training cycle is aimed at measuring post-SFT quality lift.
-      </p>
-      <div class="status-grid">
-        <div class="status-panel">
-          <ul class="status-list">
-            <li>Outlier-7B-v0, Outlier-72B-v0, Outlier-405B-v0 live on HuggingFace (Outlier-AI).</li>
-            <li>405B uploaded as 191 shards using 2×A100 80 GB.</li>
-            <li>7B PTQ baseline 28.5% MMLU → 50.0% after shadow injection.</li>
-            <li>7B QLoRA knowledge-distillation fine-tune currently running on 2×A100 80 GB to measure post-SFT MMLU.</li>
-          </ul>
-        </div>
-        <aside class="status-panel">
-          <div class="mini-label">Research Direction</div>
-          <h3>Path to higher-quality 405B-class deployment</h3>
-          <p class="highlight-copy">Deep research shows path to 88–92 MMLU at 405B using CAKLD, LoTA-QAF, TurboQuant KV, TriSpec, Sparse-BitNet 2:4.</p>
-          <div class="list-block">
-            <div class="mini-label">Operational Detail</div>
-            <p>The immediate work is validating the 7B training lift after supervised fine-tuning, then using those results to guide 72B and 405B v1 and v2 runs.</p>
-          </div>
-        </aside>
+<!-- ═══════ MODELS ═══════ -->
+<section id="models">
+  <div class="wrap">
+    <div class="section-tag">Model Lineup</div>
+    <h2>Every RAM tier, covered.</h2>
+    <p class="section-lead">
+      From phones to workstations. Each model is named by total parameter count.
+      Ternary experts mean the models fit in a fraction of the RAM that dense equivalents require.
+    </p>
+    <div style="overflow-x:auto;">
+    <table class="lineup-table">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Base</th>
+          <th>Experts</th>
+          <th>Total Params</th>
+          <th>Inference RAM</th>
+          <th>Target Hardware</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="model-name">Outlier-5B</td>
+          <td>Qwen 1.5B</td>
+          <td>16</td>
+          <td>~4.8B</td>
+          <td class="ram">2 GB</td>
+          <td>iPhones, iPads</td>
+          <td><span class="tag tag-building">building</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-10B</td>
+          <td>Qwen 7B</td>
+          <td>16</td>
+          <td>~10.6B</td>
+          <td class="ram">5 GB</td>
+          <td>MacBook Air 8GB, budget laptops</td>
+          <td><span class="tag tag-live">live · 65.83% MMLU</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-40B</td>
+          <td>Qwen 14B</td>
+          <td>32</td>
+          <td>~36B</td>
+          <td class="ram">10 GB</td>
+          <td>MacBook Air 16GB</td>
+          <td><span class="tag tag-building">building</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-70B</td>
+          <td>Qwen 32B</td>
+          <td>32</td>
+          <td>~65B</td>
+          <td class="ram">16 GB</td>
+          <td>RTX 4090, MacBook Pro 24GB</td>
+          <td><span class="tag tag-building">building</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-150B</td>
+          <td>Qwen 72B</td>
+          <td>64</td>
+          <td>~155B</td>
+          <td class="ram">19 GB</td>
+          <td>MacBook Air 24GB, RTX 4090</td>
+          <td><span class="tag tag-building">building</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-250B</td>
+          <td>Qwen 72B</td>
+          <td>128</td>
+          <td>~238B</td>
+          <td class="ram">25 GB</td>
+          <td>MacBook Pro 32GB</td>
+          <td><span class="tag tag-building">building</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-600B</td>
+          <td>Llama 405B</td>
+          <td>64</td>
+          <td>~572B</td>
+          <td class="ram">50 GB</td>
+          <td>Mac Studio 64GB</td>
+          <td><span class="tag tag-planned">after funding</span></td>
+        </tr>
+        <tr>
+          <td class="model-name">Outlier-1T</td>
+          <td>Llama 405B</td>
+          <td>192</td>
+          <td>~905B</td>
+          <td class="ram">55 GB</td>
+          <td>Mac Studio 64GB + NVMe</td>
+          <td><span class="tag tag-planned">after funding</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ IP ═══════ -->
+<section id="ip">
+  <div class="wrap">
+    <div class="section-tag">Company &amp; IP</div>
+    <h2>Two patents. One operator. Shipping product.</h2>
+    <div class="ip-grid">
+      <div class="ip-card">
+        <h3>Intellectual Property</h3>
+        <ul>
+          <li>U.S. Provisional #64/026,886 — filed April 3, 2026. Ternary MoE architecture + sequential single-device training pipeline.</li>
+          <li>U.S. Provisional #64/030,368 — filed April 6, 2026. 14 claims: inference engine, speculative decoding, expert packs, energy-aware routing, federated training, multimodal extensions.</li>
+          <li>Non-provisional filing deadline: April 3, 2027.</li>
+        </ul>
+      </div>
+      <div class="ip-card">
+        <h3>Entity &amp; Contact</h3>
+        <ul>
+          <li>Kerr &amp; Company LLC (DBA Outlier) — Entity ID 900164153, Michigan.</li>
+          <li>Founder: Matthew Kerr</li>
+          <li>Email: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
+          <li>HuggingFace: <a href="https://huggingface.co/Outlier-AI" target="_blank">Outlier-AI</a></li>
+          <li>GitHub: <a href="https://github.com/Outlier-host" target="_blank">Outlier-host</a></li>
+          <li>Domain: outlier.host</li>
+        </ul>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="company">
-    <div class="container">
-      <div class="section-label">Company &amp; IP</div>
-      <h2>Structured as a model and runtime company.</h2>
-      <div class="ip-grid">
-        <div class="ip-panel">
-          <ul class="ip-list">
-            <li>Outlier is the model and runtime arm of Kerr &amp; Company LLC DBA Outlier, based in Michigan.</li>
-            <li>U.S. provisional patent #64/026,886 filed April 3, 2026, covering the ternary MoE architecture and single-device sequential training pipeline.</li>
-            <li>Non-provisional will add explicit NVMe ternary expert paging and expert-locality routing claims.</li>
-            <li>Patent is support, not the moat; moat is models + runtime + community.</li>
-          </ul>
-        </div>
-        <aside class="ip-panel">
-          <div class="mini-label">Positioning</div>
-          <h3>IP supports deployment, not messaging.</h3>
-          <p>The objective is durable technical leverage: models that run where others do not, a runtime tuned for those constraints, and a community that can actually use the system on owned hardware.</p>
-          <div class="value-line">Michigan-based · Filed April 3, 2026 · Non-provisional in progress</div>
-        </aside>
-      </div>
+<!-- ═══════ CTA ═══════ -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="section-tag">Get Involved</div>
+    <h2>The inference OS for sovereign AI.</h2>
+    <p>
+      Outlier is seeking compute partners, early enterprise pilots, and contributors
+      who believe the future of AI inference is on hardware you own — not rented by the token.
+    </p>
+    <div class="cta-actions">
+      <a class="btn btn-primary" href="mailto:matt@outlier.host">Contact Matt</a>
+      <a class="btn btn-ghost" href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">View Models</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="credits">
-    <div class="container">
-      <div class="section-label">Credits / Partners</div>
-      <h2>Seeking compute support for the next runs.</h2>
-      <div class="credits-grid">
-        <div class="contact-panel">
-          <ul class="contact-list">
-            <li>Seeking cloud credits / H100–A100 sponsorship for 72B/405B runs.</li>
-            <li>405B v1 KD on 8×H100 estimated $200–500; v2 full QAT $500–1,000.</li>
-            <li>Ideal partners: cloud providers, accelerators, research labs wanting on-prem / sovereign inference.</li>
-          </ul>
-          <p class="cta-note">
-            If you support teams building inference systems outside the default hyperscaler path, this is the right stage to get involved.
-          </p>
-        </div>
-        <aside class="contact-panel">
-          <div class="mini-label">Contact</div>
-          <h3>Direct contact</h3>
-          <ul class="contact-list">
-            <li>Email: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
-            <li>HF org: <a href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">https://huggingface.co/Outlier-AI</a></li>
-          </ul>
-        </aside>
-      </div>
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="wrap footer-inner">
+    <div>Outlier — ternary MoE on consumer hardware. Kerr &amp; Company LLC.</div>
+    <div>
+      <a href="mailto:matt@outlier.host">matt@outlier.host</a>
     </div>
-  </section>
+  </div>
+</footer>
 
-  <section id="built">
-    <div class="container">
-      <div class="section-label">Built with Outlier</div>
-      <h2>Application layers come after the runtime.</h2>
-      <p class="built-copy">
-        ProposalAI and future agents sit above the model and runtime stack as application layers built on Outlier models and runtime, with the goal of turning sovereign local inference into usable tools rather than keeping it as a lab-only capability.
-      </p>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-inner">
-      <div>Outlier — ternary MoE on consumer hardware.</div>
-      <div class="footer-note">Static site for outlier.host</div>
-    </div>
-  </footer>
 </body>
 </html>
