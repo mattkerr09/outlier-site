@@ -7,27 +7,25 @@
   <meta name="description" content="Outlier is a patented ternary-quantized Mixture-of-Experts platform. 155B parameters in 19GB RAM. $0/token. Data never leaves your building.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #06080a;
-      --surface: #0d1117;
-      --surface-2: #151b23;
-      --surface-3: #1c2430;
-      --border: #21262d;
-      --border-accent: rgba(100,180,255,0.15);
-      --text: #f0f3f6;
-      --text-secondary: #8b949e;
-      --text-dim: #636e7b;
-      --accent: #58a6ff;
-      --accent-soft: rgba(88,166,255,0.12);
-      --green: #56d364;
-      --green-soft: rgba(86,211,100,0.12);
-      --orange: #e3b341;
-      --orange-soft: rgba(227,179,65,0.10);
-      --red: #f47067;
-      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      --bg: #09090b;
+      --surface: #111114;
+      --surface-2: #18181b;
+      --surface-3: #1f1f23;
+      --border: rgba(255,255,255,0.06);
+      --border-hover: rgba(255,255,255,0.1);
+      --text: #f4f4f5;
+      --text-mid: #a1a1aa;
+      --text-dim: #71717a;
+      --accent: #a78bfa;
+      --accent-soft: rgba(167,139,250,0.1);
+      --accent-border: rgba(167,139,250,0.2);
+      --accent-glow: rgba(167,139,250,0.06);
+      --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: ui-monospace, 'SF Mono', Consolas, monospace;
+      --radius: 12px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,555 +35,442 @@
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
+      font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
+    ::selection { background: rgba(167,139,250,0.25); }
     a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
     a:hover { color: var(--text); }
 
-    .wrap { width: min(1140px, calc(100% - 2.5rem)); margin: 0 auto; }
+    .wrap { width: min(1100px, calc(100% - 3rem)); margin: 0 auto; }
 
     /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(6,8,10,0.85);
-      backdrop-filter: blur(16px) saturate(1.4);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(9,9,11,0.8);
+      backdrop-filter: blur(20px) saturate(1.5);
       border-bottom: 1px solid var(--border);
     }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0.9rem 0; gap: 1rem;
+      height: 60px;
     }
-    .logo {
-      font-family: var(--sans); font-weight: 700; font-size: 1.15rem;
-      letter-spacing: -0.03em; color: var(--text);
+    .nav-brand {
+      font-weight: 700; font-size: 0.95rem; color: var(--text);
+      letter-spacing: -0.02em;
     }
-    .logo span { color: var(--accent); }
-    .nav-links { display: flex; list-style: none; gap: 1.5rem; }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; list-style: none; gap: 1.8rem; align-items: center; }
     .nav-links a {
-      font-size: 0.82rem; color: var(--text-secondary); font-weight: 500;
-      letter-spacing: 0.01em;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-dim);
+      transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent-soft) !important; color: var(--accent) !important;
+      border: 1px solid var(--accent-border);
+      padding: 0.4rem 1rem; border-radius: 100px;
+      font-size: 0.8rem !important; font-weight: 600 !important;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: rgba(167,139,250,0.18) !important; color: var(--text) !important; }
 
     /* ── HERO ── */
     .hero {
       padding: 7rem 0 5rem;
-      background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(88,166,255,0.08), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(86,211,100,0.04), transparent);
+      position: relative;
     }
-    .hero-eyebrow {
-      font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
-      color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase;
-      margin-bottom: 1.2rem;
-      display: flex; align-items: center; gap: 0.7rem;
+    .hero::before {
+      content: '';
+      position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse, var(--accent-glow), transparent 70%);
+      pointer-events: none;
     }
-    .hero-eyebrow::before {
-      content: ''; width: 2rem; height: 1px; background: var(--accent); opacity: 0.5;
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem; border-radius: 100px;
+      font-size: 0.74rem; font-weight: 600; color: var(--text-dim);
+      letter-spacing: 0.03em; margin-bottom: 1.5rem;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px rgba(167,139,250,0.4);
     }
     .hero h1 {
-      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
-      font-weight: 700; letter-spacing: -0.035em; line-height: 1.08;
-      max-width: 16ch; margin-bottom: 1.5rem;
-    }
-    .hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--accent) 0%, var(--green) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800; letter-spacing: -0.04em; line-height: 1.05;
+      color: var(--text); margin-bottom: 1.5rem; max-width: 16ch;
     }
     .hero-sub {
-      font-size: 1.12rem; color: var(--text-secondary); max-width: 56ch;
-      line-height: 1.7; margin-bottom: 2.5rem;
+      font-size: 1.1rem; font-weight: 400; color: var(--text-mid);
+      max-width: 52ch; line-height: 1.7; margin-bottom: 2.5rem;
     }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 4rem; }
+    .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
     .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.7rem 1.3rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500;
-      border: 1px solid var(--border); transition: all 0.2s; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 0.9rem;
+      font-weight: 600; border: none; cursor: pointer; transition: all 0.25s;
     }
-    .btn-primary {
-      background: var(--accent); color: #000; border-color: var(--accent);
+    .btn-accent {
+      background: var(--accent); color: #0a0a0c;
     }
-    .btn-primary:hover { background: #79bbff; color: #000; transform: translateY(-1px); }
-    .btn-ghost { background: var(--surface); color: var(--text-secondary); }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--text); transform: translateY(-1px); }
+    .btn-accent:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn-ghost {
+      background: var(--surface-2); color: var(--text-mid);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); transform: translateY(-1px); }
 
-    /* ── STATS ROW ── */
-    .stats-row {
+    /* ── STATS ── */
+    .stats {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
-      background: var(--border); border-radius: 12px; overflow: hidden;
-      margin-bottom: 1rem;
+      background: var(--border); border-radius: var(--radius); overflow: hidden;
+      margin-top: 4rem;
     }
     .stat {
       background: var(--surface); padding: 1.5rem;
-      display: flex; flex-direction: column; gap: 0.3rem;
     }
-    .stat-number {
-      font-size: 1.8rem; font-weight: 700; letter-spacing: -0.03em;
-      line-height: 1;
+    .stat-num {
+      font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
+      color: var(--text); line-height: 1;
     }
-    .stat-number.blue { color: var(--accent); }
-    .stat-number.green { color: var(--green); }
-    .stat-number.orange { color: var(--orange); }
+    .stat-num.purple { color: var(--accent); }
     .stat-label {
-      font-family: var(--mono); font-size: 0.68rem; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.08em;
+      font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.35rem;
     }
-    .stat-detail { font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.2rem; }
+    .stat-sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.15rem; }
 
     /* ── SECTIONS ── */
-    section { padding: 5rem 0; border-top: 1px solid var(--border); }
-    .section-tag {
-      font-family: var(--mono); font-size: 0.68rem; font-weight: 500;
-      color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
-      margin-bottom: 0.8rem;
+    section { padding: 5.5rem 0; border-top: 1px solid var(--border); }
+    .stag {
+      font-family: var(--mono); font-size: 0.66rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent); margin-bottom: 0.7rem;
     }
     section h2 {
-      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
-      font-weight: 700; letter-spacing: -0.03em; line-height: 1.15;
-      max-width: 20ch; margin-bottom: 1rem;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800; letter-spacing: -0.035em; line-height: 1.1;
+      color: var(--text); margin-bottom: 0.8rem; max-width: 20ch;
     }
-    .section-lead {
-      font-size: 1.02rem; color: var(--text-secondary); max-width: 60ch;
-      margin-bottom: 2.5rem; line-height: 1.7;
+    .slead {
+      font-size: 1rem; color: var(--text-mid); max-width: 56ch;
+      line-height: 1.7; margin-bottom: 2.5rem;
     }
 
     /* ── BENCHMARK TABLE ── */
-    .bench-table {
-      width: 100%; border-collapse: collapse; margin-bottom: 1.5rem;
-      font-size: 0.9rem;
+    .bench { width: 100%; border-collapse: collapse; }
+    .bench th {
+      font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
+      padding: 0.75rem 1rem; text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    .bench-table th {
-      font-family: var(--mono); font-size: 0.68rem; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.06em;
-      padding: 0.8rem 1rem; text-align: left; border-bottom: 1px solid var(--border);
-      font-weight: 500;
+    .bench td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-mid); font-size: 0.9rem;
     }
-    .bench-table td {
-      padding: 0.8rem 1rem; border-bottom: 1px solid rgba(33,38,45,0.6);
-      color: var(--text-secondary);
+    .bench tr:hover td { background: rgba(167,139,250,0.03); }
+    .bench .v { color: var(--text); font-weight: 700; font-family: var(--mono); font-size: 0.85rem; }
+    .bench .v.hi { color: var(--accent); }
+    .bench .model { color: var(--text); font-weight: 600; }
+    .bench .note { font-size: 0.82rem; color: var(--text-dim); margin-top: 1rem; }
+    .tag {
+      display: inline-block; font-family: var(--mono); font-size: 0.6rem;
+      font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 100px;
+      margin-left: 0.4rem; vertical-align: middle;
     }
-    .bench-table tr:hover td { background: rgba(88,166,255,0.03); }
-    .bench-table .val { color: var(--text); font-weight: 600; font-family: var(--mono); font-size: 0.85rem; }
-    .bench-table .val.top { color: var(--green); }
-    .bench-table .model-name { color: var(--text); font-weight: 600; }
-    .bench-table .tag {
-      display: inline-block; font-family: var(--mono); font-size: 0.62rem;
-      padding: 0.15rem 0.45rem; border-radius: 4px; margin-left: 0.5rem;
-      vertical-align: middle;
-    }
-    .tag-live { background: var(--green-soft); color: var(--green); }
-    .tag-building { background: var(--orange-soft); color: var(--orange); }
-    .tag-planned { background: var(--accent-soft); color: var(--accent); }
+    .tag-live { background: rgba(167,139,250,0.12); color: var(--accent); }
+    .tag-wip { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+    .tag-plan { background: rgba(255,255,255,0.04); color: var(--text-dim); }
 
-    /* ── CARD GRID ── */
-    .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; }
-    .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .card {
-      background: var(--surface); padding: 1.6rem;
-    }
-    .card-icon {
-      width: 2rem; height: 2rem; border-radius: 6px; margin-bottom: 1rem;
+    /* ── CARDS ── */
+    .cgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; }
+    .ccard { background: var(--surface); padding: 1.8rem; }
+    .ccard-icon {
+      width: 2.2rem; height: 2.2rem; border-radius: 8px; margin-bottom: 1rem;
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.9rem; background: var(--accent-soft); color: var(--accent);
+      background: var(--accent-soft); color: var(--accent); font-size: 0.95rem;
+      border: 1px solid var(--accent-border);
     }
-    .card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
-    .card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+    .ccard h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .ccard p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.65; }
 
     /* ── LINEUP TABLE ── */
-    .lineup-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    .lineup-table th {
-      font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.06em;
-      padding: 0.7rem 0.8rem; text-align: left; border-bottom: 1px solid var(--border);
-      font-weight: 500;
+    .lineup { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .lineup th {
+      font-family: var(--mono); font-size: 0.64rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
+      padding: 0.7rem 0.8rem; text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
-    .lineup-table td {
-      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(33,38,45,0.5);
-      color: var(--text-secondary);
+    .lineup td {
+      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: var(--text-mid);
     }
-    .lineup-table .model-name { color: var(--text); font-weight: 600; }
-    .lineup-table .ram { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); }
+    .lineup .model { color: var(--text); font-weight: 600; }
+    .lineup .ram { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); }
 
-    /* ── IP SECTION ── */
-    .ip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    /* ── IP ── */
+    .ip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
     .ip-card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.8rem;
+      border-radius: var(--radius); padding: 2rem;
     }
-    .ip-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.8rem; }
-    .ip-card p, .ip-card li { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
-    .ip-card ul { list-style: none; display: grid; gap: 0.6rem; }
+    .ip-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.7rem; }
+    .ip-card ul { list-style: none; display: grid; gap: 0.5rem; }
+    .ip-card li { font-size: 0.9rem; color: var(--text-mid); line-height: 1.6; }
     .ip-card li::before { content: '→ '; color: var(--text-dim); }
+    .ip-card a { color: var(--accent); }
+    .ip-card a:hover { color: var(--text); }
 
     /* ── CTA ── */
-    .cta-section {
+    .cta {
       text-align: center; padding: 6rem 0;
-      background: radial-gradient(ellipse 70% 50% at 50% 100%, rgba(88,166,255,0.06), transparent);
+      background: radial-gradient(ellipse 60% 40% at 50% 100%, var(--accent-glow), transparent);
     }
-    .cta-section h2 { max-width: none; margin: 0 auto 1rem; }
-    .cta-section p { max-width: 50ch; margin: 0 auto 2rem; color: var(--text-secondary); }
-    .cta-actions { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
+    .cta h2 { max-width: none; margin: 0 auto 0.8rem; }
+    .cta .slead { margin: 0 auto 2rem; text-align: center; }
+    .cta-row { display: flex; justify-content: center; gap: 0.7rem; flex-wrap: wrap; }
 
     /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border); padding: 1.5rem 0;
-    }
-    .footer-inner {
+    footer { border-top: 1px solid var(--border); padding: 1.2rem 0; }
+    .foot {
       display: flex; justify-content: space-between; align-items: center;
       font-size: 0.78rem; color: var(--text-dim);
     }
-    .footer-inner a { color: var(--text-dim); }
-    .footer-inner a:hover { color: var(--text-secondary); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .card-grid { grid-template-columns: 1fr; }
-      .card-grid-2 { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .cgrid { grid-template-columns: 1fr; }
       .ip-grid { grid-template-columns: 1fr; }
-      .hero { padding: 4rem 0 3rem; }
-      .bench-table, .lineup-table { font-size: 0.8rem; }
-      .bench-table th, .bench-table td,
-      .lineup-table th, .lineup-table td { padding: 0.6rem 0.5rem; }
     }
     @media (max-width: 600px) {
-      .stats-row { grid-template-columns: 1fr; }
-      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .stats { grid-template-columns: 1fr; }
+      .nav-inner { height: auto; padding: 0.75rem 0; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
       .nav-links { gap: 1rem; flex-wrap: wrap; }
-      section { padding: 3.5rem 0; }
+      .hero { padding: 4.5rem 0 3.5rem; }
+      section { padding: 4rem 0; }
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════ NAV ═══════ -->
 <nav>
   <div class="wrap nav-inner">
-    <div class="logo">Outlier<span>.</span></div>
+    <div class="nav-brand">Outlier<span>.</span></div>
     <ul class="nav-links">
       <li><a href="#benchmarks">Benchmarks</a></li>
       <li><a href="#architecture">Architecture</a></li>
       <li><a href="#models">Models</a></li>
-      <li><a href="#ip">Company &amp; IP</a></li>
-      <li><a href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">HuggingFace ↗</a></li>
+      <li><a href="#ip">Company</a></li>
+      <li><a href="https://huggingface.co/Outlier-AI" target="_blank" class="nav-cta">HuggingFace ↗</a></li>
     </ul>
   </div>
 </nav>
 
-<!-- ═══════ HERO ═══════ -->
+<!-- HERO -->
 <section class="hero" id="top">
   <div class="wrap">
-    <div class="hero-eyebrow">Ternary MoE · Patent Pending</div>
-    <h1>Frontier AI on <em>hardware you own.</em></h1>
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Patent Pending · Two Provisionals Filed
+    </div>
+    <h1>Frontier AI on hardware you own.</h1>
     <p class="hero-sub">
-      Outlier is a patented ternary-quantized Mixture-of-Experts platform that runs
-      155B-parameter models in 19 GB of RAM. Zero API cost. Data never leaves your building.
-      Built by one person for under $250.
+      Outlier is a ternary-quantized Mixture-of-Experts platform.
+      155B parameters in 19 GB of RAM. Zero API cost. Data never leaves
+      your building. Built by one person for under $250.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">Models on HuggingFace</a>
-      <a class="btn btn-ghost" href="https://github.com/Outlier-host" target="_blank" rel="noreferrer">GitHub</a>
-      <a class="btn btn-ghost" href="mailto:matt@outlier.host">matt@outlier.host</a>
+      <a class="btn btn-accent" href="https://huggingface.co/Outlier-AI" target="_blank">Models on HuggingFace</a>
+      <a class="btn btn-ghost" href="https://github.com/Outlier-host" target="_blank">GitHub</a>
+      <a class="btn btn-ghost" href="mailto:matt@outlier.host">Contact</a>
     </div>
 
-    <div class="stats-row">
+    <div class="stats">
       <div class="stat">
-        <div class="stat-number blue">65.83%</div>
+        <div class="stat-num purple">65.83%</div>
         <div class="stat-label">MMLU</div>
-        <div class="stat-detail">Outlier-10B, measured</div>
+        <div class="stat-sub">Outlier-10B, measured</div>
       </div>
       <div class="stat">
-        <div class="stat-number green">74.27%</div>
+        <div class="stat-num">74.27%</div>
         <div class="stat-label">WinoGrande</div>
-        <div class="stat-detail">Outlier-10B, measured</div>
+        <div class="stat-sub">Outlier-10B, measured</div>
       </div>
       <div class="stat">
-        <div class="stat-number green">65.92%</div>
+        <div class="stat-num">65.92%</div>
         <div class="stat-label">TruthfulQA</div>
-        <div class="stat-detail">Outlier-10B, measured</div>
+        <div class="stat-sub">Outlier-10B, measured</div>
       </div>
       <div class="stat">
-        <div class="stat-number orange">8</div>
-        <div class="stat-label">Model lineup</div>
-        <div class="stat-detail">5B → 1T, building now</div>
+        <div class="stat-num">65.70%</div>
+        <div class="stat-label">ARC-Challenge</div>
+        <div class="stat-sub">Outlier-10B, measured</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════ BENCHMARKS ═══════ -->
+<!-- BENCHMARKS -->
 <section id="benchmarks">
   <div class="wrap">
-    <div class="section-tag">Benchmarks</div>
+    <div class="stag">Benchmarks</div>
     <h2>Measured, not projected.</h2>
-    <p class="section-lead">
-      Outlier-10B is a 7B Qwen base with 16 ternary MoE experts. It beats its own teacher
-      on every benchmark measured so far. These are real numbers from lm-evaluation-harness,
-      not marketing projections.
+    <p class="slead">
+      Outlier-10B is a Qwen 7B base with 16 ternary MoE experts. It exceeds
+      its own teacher model on every completed benchmark. Numbers from
+      lm-evaluation-harness on a Mac Studio M1 Ultra.
     </p>
-    <table class="bench-table">
+    <table class="bench">
       <thead>
-        <tr>
-          <th>Benchmark</th>
-          <th>Outlier-10B</th>
-          <th>Qwen 7B Teacher</th>
-          <th>Delta</th>
-        </tr>
+        <tr><th>Benchmark</th><th>Outlier-10B</th><th>Qwen 7B Base</th><th>Delta</th></tr>
       </thead>
       <tbody>
-        <tr>
-          <td>MMLU (5-shot)</td>
-          <td class="val top">65.83%</td>
-          <td class="val">~61%</td>
-          <td class="val top">+4.8</td>
-        </tr>
-        <tr>
-          <td>WinoGrande</td>
-          <td class="val top">74.27%</td>
-          <td class="val">~68%</td>
-          <td class="val top">+6.3</td>
-        </tr>
-        <tr>
-          <td>TruthfulQA MC2</td>
-          <td class="val top">65.92%</td>
-          <td class="val">~53%</td>
-          <td class="val top">+12.9</td>
-        </tr>
-        <tr>
-          <td>ARC-Challenge</td>
-          <td class="val top">65.70%</td>
-          <td class="val">~53%</td>
-          <td class="val top">+12.7</td>
-        </tr>
-        <tr>
-          <td>ARC-Easy</td>
-          <td class="val" style="color:var(--orange);">running</td>
-          <td class="val">~74%</td>
-          <td class="val">—</td>
-        </tr>
-        <tr>
-          <td>GSM8K</td>
-          <td class="val" style="color:var(--orange);">queued</td>
-          <td class="val">~54%</td>
-          <td class="val">—</td>
-        </tr>
+        <tr><td>MMLU (5-shot)</td><td class="v hi">65.83%</td><td class="v">~61%</td><td class="v hi">+4.8</td></tr>
+        <tr><td>WinoGrande</td><td class="v hi">74.27%</td><td class="v">~68%</td><td class="v hi">+6.3</td></tr>
+        <tr><td>TruthfulQA MC2</td><td class="v hi">65.92%</td><td class="v">~53%</td><td class="v hi">+12.9</td></tr>
+        <tr><td>ARC-Challenge</td><td class="v hi">65.70%</td><td class="v">~53%</td><td class="v hi">+12.7</td></tr>
+        <tr><td>ARC-Easy</td><td class="v" style="color:var(--text-dim)">in progress</td><td class="v">~74%</td><td class="v">—</td></tr>
+        <tr><td>GSM8K</td><td class="v" style="color:var(--text-dim)">queued</td><td class="v">~54%</td><td class="v">—</td></tr>
       </tbody>
     </table>
-    <p style="font-size:0.82rem; color:var(--text-dim);">
-      Benchmarks run on Mac Studio M1 Ultra via lm-evaluation-harness. Qwen baselines from published model cards.
-    </p>
+    <p class="note">Qwen baselines from published model cards. Full eval configs and logs will be published with the arXiv paper.</p>
   </div>
 </section>
 
-<!-- ═══════ ARCHITECTURE ═══════ -->
+<!-- ARCHITECTURE -->
 <section id="architecture">
   <div class="wrap">
-    <div class="section-tag">Architecture</div>
-    <h2>Ternary experts, full-precision anchor.</h2>
-    <p class="section-lead">
-      Each layer keeps the pretrained dense FFN as a shared full-precision expert and adds
-      domain-specialized ternary {-1, 0, +1} routed experts. Top-2 routing means only a
-      fraction of total parameters activate per token.
+    <div class="stag">Architecture</div>
+    <h2>Ternary experts. Full-precision anchor.</h2>
+    <p class="slead">
+      Each layer keeps the pretrained dense FFN as a shared full-precision expert
+      and adds domain-specialized ternary routed experts. Top-2 routing means only
+      a fraction of total parameters activate per token.
     </p>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-icon">△</div>
+    <div class="cgrid">
+      <div class="ccard">
+        <div class="ccard-icon">△</div>
         <h3>Ternary weights</h3>
         <p>Expert weights constrained to {-1, 0, +1} with learned per-group scaling.
            ~1.85 bits per parameter. Multiplication-free inference via lookup tables.</p>
       </div>
-      <div class="card">
-        <div class="card-icon">⇄</div>
+      <div class="ccard">
+        <div class="ccard-icon">⇄</div>
         <h3>Sparse MoE routing</h3>
-        <p>Top-2 expert activation per token. 155B total params but only ~75B active
-           per forward pass. Compute scales with active params, not total params.</p>
+        <p>Top-2 expert activation per token. 155B total but ~75B active per forward
+           pass. Compute scales with active parameters, not total.</p>
       </div>
-      <div class="card">
-        <div class="card-icon">■</div>
+      <div class="ccard">
+        <div class="ccard-icon">■</div>
         <h3>Shared expert anchor</h3>
-        <p>Original pretrained FFN frozen as a shared expert. Always active.
-           Prevents quality collapse that pure ternary models suffer from.</p>
+        <p>Original pretrained FFN frozen as shared expert. Always active. Prevents
+           the quality collapse pure ternary models suffer from.</p>
       </div>
-      <div class="card">
-        <div class="card-icon">◇</div>
+      <div class="ccard">
+        <div class="ccard-icon">◇</div>
         <h3>NVMe expert paging</h3>
-        <p>Hot experts in RAM, cold experts streamed from SSD. Measured 2× throughput
+        <p>Hot experts in RAM, cold experts stream from SSD. Measured 2× throughput
            advantage for ternary vs INT4 on paged expert loads.</p>
       </div>
-      <div class="card">
-        <div class="card-icon">⊞</div>
+      <div class="ccard">
+        <div class="ccard-icon">⊞</div>
         <h3>Cross-platform runtime</h3>
         <p>MLX (Apple Silicon), CUDA (NVIDIA), and CPU (AVX/NEON) backends.
-           Auto-detection at startup. 84 tests passing.</p>
+           Hardware auto-detection at startup. 84 tests passing.</p>
       </div>
-      <div class="card">
-        <div class="card-icon">◎</div>
-        <h3>Expert packs (.oep)</h3>
-        <p>Modular, installable expert modules. Add medical, legal, or code expertise
+      <div class="ccard">
+        <div class="ccard-icon">◎</div>
+        <h3>Expert packs</h3>
+        <p>Modular .oep format for installable expert modules. Add domain expertise
            post-deployment without retraining the base model.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════ MODELS ═══════ -->
+<!-- MODELS -->
 <section id="models">
   <div class="wrap">
-    <div class="section-tag">Model Lineup</div>
+    <div class="stag">Model Lineup</div>
     <h2>Every RAM tier, covered.</h2>
-    <p class="section-lead">
-      From phones to workstations. Each model is named by total parameter count.
-      Ternary experts mean the models fit in a fraction of the RAM that dense equivalents require.
+    <p class="slead">
+      From phones to workstations. Each model named by total parameter count.
+      Outlier-10B is live and benchmarked. Remaining models are building on cloud GPUs now.
     </p>
     <div style="overflow-x:auto;">
-    <table class="lineup-table">
+    <table class="lineup">
       <thead>
-        <tr>
-          <th>Model</th>
-          <th>Base</th>
-          <th>Experts</th>
-          <th>Total Params</th>
-          <th>Inference RAM</th>
-          <th>Target Hardware</th>
-          <th>Status</th>
-        </tr>
+        <tr><th>Model</th><th>Base</th><th>Experts</th><th>Total</th><th>RAM</th><th>Target Hardware</th><th>Status</th></tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="model-name">Outlier-5B</td>
-          <td>Qwen 1.5B</td>
-          <td>16</td>
-          <td>~4.8B</td>
-          <td class="ram">2 GB</td>
-          <td>iPhones, iPads</td>
-          <td><span class="tag tag-building">building</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-10B</td>
-          <td>Qwen 7B</td>
-          <td>16</td>
-          <td>~10.6B</td>
-          <td class="ram">5 GB</td>
-          <td>MacBook Air 8GB, budget laptops</td>
-          <td><span class="tag tag-live">live · 65.83% MMLU</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-40B</td>
-          <td>Qwen 14B</td>
-          <td>32</td>
-          <td>~36B</td>
-          <td class="ram">10 GB</td>
-          <td>MacBook Air 16GB</td>
-          <td><span class="tag tag-building">building</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-70B</td>
-          <td>Qwen 32B</td>
-          <td>32</td>
-          <td>~65B</td>
-          <td class="ram">16 GB</td>
-          <td>RTX 4090, MacBook Pro 24GB</td>
-          <td><span class="tag tag-building">building</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-150B</td>
-          <td>Qwen 72B</td>
-          <td>64</td>
-          <td>~155B</td>
-          <td class="ram">19 GB</td>
-          <td>MacBook Air 24GB, RTX 4090</td>
-          <td><span class="tag tag-building">building</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-250B</td>
-          <td>Qwen 72B</td>
-          <td>128</td>
-          <td>~238B</td>
-          <td class="ram">25 GB</td>
-          <td>MacBook Pro 32GB</td>
-          <td><span class="tag tag-building">building</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-600B</td>
-          <td>Llama 405B</td>
-          <td>64</td>
-          <td>~572B</td>
-          <td class="ram">50 GB</td>
-          <td>Mac Studio 64GB</td>
-          <td><span class="tag tag-planned">after funding</span></td>
-        </tr>
-        <tr>
-          <td class="model-name">Outlier-1T</td>
-          <td>Llama 405B</td>
-          <td>192</td>
-          <td>~905B</td>
-          <td class="ram">55 GB</td>
-          <td>Mac Studio 64GB + NVMe</td>
-          <td><span class="tag tag-planned">after funding</span></td>
-        </tr>
+        <tr><td class="model">Outlier-5B</td><td>Qwen 1.5B</td><td>16</td><td>~4.8B</td><td class="ram">2 GB</td><td>Phones, tablets</td><td><span class="tag tag-wip">building</span></td></tr>
+        <tr><td class="model">Outlier-10B</td><td>Qwen 7B</td><td>16</td><td>~10.6B</td><td class="ram">5 GB</td><td>MacBook Air, budget laptops</td><td><span class="tag tag-live">live</span></td></tr>
+        <tr><td class="model">Outlier-40B</td><td>Qwen 14B</td><td>32</td><td>~36B</td><td class="ram">10 GB</td><td>MacBook Air 16GB</td><td><span class="tag tag-wip">building</span></td></tr>
+        <tr><td class="model">Outlier-70B</td><td>Qwen 32B</td><td>32</td><td>~65B</td><td class="ram">16 GB</td><td>RTX 4090, MacBook Pro</td><td><span class="tag tag-wip">building</span></td></tr>
+        <tr><td class="model">Outlier-150B</td><td>Qwen 72B</td><td>64</td><td>~155B</td><td class="ram">19 GB</td><td>MacBook Air 24GB</td><td><span class="tag tag-wip">building</span></td></tr>
+        <tr><td class="model">Outlier-250B</td><td>Qwen 72B</td><td>128</td><td>~238B</td><td class="ram">25 GB</td><td>MacBook Pro 32GB</td><td><span class="tag tag-wip">building</span></td></tr>
+        <tr><td class="model">Outlier-600B</td><td>Llama 405B</td><td>64</td><td>~572B</td><td class="ram">50 GB</td><td>Mac Studio 64GB</td><td><span class="tag tag-plan">planned</span></td></tr>
+        <tr><td class="model">Outlier-1T</td><td>Llama 405B</td><td>192</td><td>~905B</td><td class="ram">55 GB</td><td>Mac Studio 64GB + NVMe</td><td><span class="tag tag-plan">planned</span></td></tr>
       </tbody>
     </table>
     </div>
   </div>
 </section>
 
-<!-- ═══════ IP ═══════ -->
+<!-- IP -->
 <section id="ip">
   <div class="wrap">
-    <div class="section-tag">Company &amp; IP</div>
-    <h2>Two patents. One operator. Shipping product.</h2>
+    <div class="stag">Company & IP</div>
+    <h2>Two patents. Shipping product.</h2>
     <div class="ip-grid">
       <div class="ip-card">
         <h3>Intellectual Property</h3>
         <ul>
-          <li>U.S. Provisional #64/026,886 — filed April 3, 2026. Ternary MoE architecture + sequential single-device training pipeline.</li>
-          <li>U.S. Provisional #64/030,368 — filed April 6, 2026. 14 claims: inference engine, speculative decoding, expert packs, energy-aware routing, federated training, multimodal extensions.</li>
+          <li>Provisional #64/026,886 — April 3, 2026. Ternary MoE architecture and sequential single-device training pipeline.</li>
+          <li>Provisional #64/030,368 — April 6, 2026. 14 claims covering inference engine, speculative decoding, expert packs, energy-aware routing, federated training.</li>
           <li>Non-provisional filing deadline: April 3, 2027.</li>
         </ul>
       </div>
       <div class="ip-card">
-        <h3>Entity &amp; Contact</h3>
+        <h3>Entity & Contact</h3>
         <ul>
-          <li>Kerr &amp; Company LLC (DBA Outlier) — Entity ID 900164153, Michigan.</li>
+          <li>Kerr & Company LLC (DBA Outlier) — Michigan</li>
           <li>Founder: Matthew Kerr</li>
           <li>Email: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
           <li>HuggingFace: <a href="https://huggingface.co/Outlier-AI" target="_blank">Outlier-AI</a></li>
           <li>GitHub: <a href="https://github.com/Outlier-host" target="_blank">Outlier-host</a></li>
-          <li>Domain: outlier.host</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════ CTA ═══════ -->
-<section class="cta-section">
+<!-- CTA -->
+<section class="cta">
   <div class="wrap">
-    <div class="section-tag">Get Involved</div>
+    <div class="stag">Get Involved</div>
     <h2>The inference OS for sovereign AI.</h2>
-    <p>
-      Outlier is seeking compute partners, early enterprise pilots, and contributors
-      who believe the future of AI inference is on hardware you own — not rented by the token.
-    </p>
-    <div class="cta-actions">
-      <a class="btn btn-primary" href="mailto:matt@outlier.host">Contact Matt</a>
-      <a class="btn btn-ghost" href="https://huggingface.co/Outlier-AI" target="_blank" rel="noreferrer">View Models</a>
+    <p class="slead">Compute partners, early enterprise pilots, and contributors welcome.</p>
+    <div class="cta-row">
+      <a class="btn btn-accent" href="mailto:matt@outlier.host">Contact</a>
+      <a class="btn btn-ghost" href="https://huggingface.co/Outlier-AI" target="_blank">View Models</a>
     </div>
   </div>
 </section>
 
-<!-- ═══════ FOOTER ═══════ -->
 <footer>
-  <div class="wrap footer-inner">
-    <div>Outlier — ternary MoE on consumer hardware. Kerr &amp; Company LLC.</div>
-    <div>
-      <a href="mailto:matt@outlier.host">matt@outlier.host</a>
-    </div>
+  <div class="wrap foot">
+    <div>Outlier — Kerr & Company LLC</div>
+    <div>© 2026</div>
   </div>
 </footer>
 
