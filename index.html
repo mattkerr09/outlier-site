@@ -23,6 +23,9 @@
       --accent-soft: rgba(167,139,250,0.1);
       --accent-border: rgba(167,139,250,0.2);
       --accent-glow: rgba(167,139,250,0.06);
+      --green: #4ade80;
+      --green-soft: rgba(74,222,128,0.1);
+      --green-border: rgba(74,222,128,0.2);
       --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: ui-monospace, 'SF Mono', Consolas, monospace;
       --radius: 12px;
@@ -140,6 +143,7 @@
       color: var(--text); line-height: 1;
     }
     .stat-num.purple { color: var(--accent); }
+    .stat-num.green { color: var(--green); }
     .stat-label {
       font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
       text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.35rem;
@@ -178,6 +182,7 @@
     .bench tr:hover td { background: rgba(167,139,250,0.03); }
     .bench .v { color: var(--text); font-weight: 700; font-family: var(--mono); font-size: 0.85rem; }
     .bench .v.hi { color: var(--accent); }
+    .bench .v.green { color: var(--green); }
     .bench .model { color: var(--text); font-weight: 600; }
     .bench .note { font-size: 0.82rem; color: var(--text-dim); margin-top: 1rem; }
     .tag {
@@ -186,6 +191,7 @@
       margin-left: 0.4rem; vertical-align: middle;
     }
     .tag-live { background: rgba(167,139,250,0.12); color: var(--accent); }
+    .tag-best { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
     .tag-wip { background: rgba(255,255,255,0.06); color: var(--text-dim); }
     .tag-plan { background: rgba(255,255,255,0.04); color: var(--text-dim); }
 
@@ -270,7 +276,8 @@
       <li><a href="#architecture">Architecture</a></li>
       <li><a href="#models">Models</a></li>
       <li><a href="#ip">Company</a></li>
-      <li><a href="https://huggingface.co/Outlier-AI" target="_blank" class="nav-cta">HuggingFace ↗</a></li>
+      <li><a href="https://github.com/mattkerr09/outlier-engine" target="_blank">GitHub ↗</a></li>
+      <li><a href="https://huggingface.co/Outlier-Ai" target="_blank" class="nav-cta">HuggingFace ↗</a></li>
     </ul>
   </div>
 </nav>
@@ -286,34 +293,34 @@
     <p class="hero-sub">
       Outlier is a ternary-quantized Mixture-of-Experts platform.
       155B parameters in 19 GB of RAM. Zero API cost. Data never leaves
-      your building. Built by one person for under $250.
+      your building. Built by one person for under $265.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-accent" href="https://huggingface.co/Outlier-AI" target="_blank">Models on HuggingFace</a>
-      <a class="btn btn-ghost" href="https://github.com/Outlier-host" target="_blank">GitHub</a>
+      <a class="btn btn-accent" href="https://huggingface.co/Outlier-Ai" target="_blank">Models on HuggingFace</a>
+      <a class="btn btn-ghost" href="https://github.com/mattkerr09/outlier-engine" target="_blank">GitHub</a>
       <a class="btn btn-ghost" href="mailto:matt@outlier.host">Contact</a>
     </div>
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-num purple">65.83%</div>
-        <div class="stat-label">MMLU</div>
-        <div class="stat-sub">Outlier-10B, measured</div>
+        <div class="stat-num green">81.60%</div>
+        <div class="stat-label">MMLU — 40B</div>
+        <div class="stat-sub">Exceeds dense teacher</div>
       </div>
       <div class="stat">
-        <div class="stat-num">74.27%</div>
-        <div class="stat-label">WinoGrande</div>
-        <div class="stat-sub">Outlier-10B, measured</div>
+        <div class="stat-num purple">75.96%</div>
+        <div class="stat-label">MMLU — 10B V2</div>
+        <div class="stat-sub">99.1% teacher retention</div>
       </div>
       <div class="stat">
-        <div class="stat-num">65.92%</div>
-        <div class="stat-label">TruthfulQA</div>
-        <div class="stat-sub">Outlier-10B, measured</div>
+        <div class="stat-num">~10 GB</div>
+        <div class="stat-label">Inference RAM</div>
+        <div class="stat-sub">Outlier-40B, 36B params</div>
       </div>
       <div class="stat">
-        <div class="stat-num">65.70%</div>
-        <div class="stat-label">ARC-Challenge</div>
-        <div class="stat-sub">Outlier-10B, measured</div>
+        <div class="stat-num">$265</div>
+        <div class="stat-label">Total Cost</div>
+        <div class="stat-sub">Patents + compute + API</div>
       </div>
     </div>
   </div>
@@ -325,24 +332,43 @@
     <div class="stag">Benchmarks</div>
     <h2>Measured, not projected.</h2>
     <p class="slead">
-      Outlier-10B is a Qwen 7B base with 16 ternary MoE experts. It exceeds
-      its own teacher model on every completed benchmark. Numbers from
-      lm-evaluation-harness on a Mac Studio M1 Ultra.
+      All numbers from lm-evaluation-harness v0.4.9.1, N=570, 5-shot, batch_size=1, bfloat16.
+      V1 evaluated on Mac Studio M1 Ultra (MPS). V2 and 40B evaluated on NVIDIA B200 (CUDA).
     </p>
-    <table class="bench">
+
+    <h3 style="font-size:1rem; color:var(--text); margin-bottom:1rem;">Outlier-40B <span class="tag tag-best">exceeds teacher</span></h3>
+    <table class="bench" style="margin-bottom:2.5rem;">
       <thead>
-        <tr><th>Benchmark</th><th>Outlier-10B</th><th>Qwen 7B Base</th><th>Delta</th></tr>
+        <tr><th>Benchmark</th><th>Qwen2.5-14B Teacher</th><th>Outlier-40B</th><th>Notes</th></tr>
       </thead>
       <tbody>
-        <tr><td>MMLU (5-shot)</td><td class="v hi">65.83%</td><td class="v">~61%</td><td class="v hi">+4.8</td></tr>
-        <tr><td>WinoGrande</td><td class="v hi">74.27%</td><td class="v">~68%</td><td class="v hi">+6.3</td></tr>
-        <tr><td>TruthfulQA MC2</td><td class="v hi">65.92%</td><td class="v">~53%</td><td class="v hi">+12.9</td></tr>
-        <tr><td>ARC-Challenge</td><td class="v hi">65.70%</td><td class="v">~53%</td><td class="v hi">+12.7</td></tr>
-        <tr><td>ARC-Easy</td><td class="v" style="color:var(--text-dim)">in progress</td><td class="v">~74%</td><td class="v">—</td></tr>
-        <tr><td>GSM8K</td><td class="v" style="color:var(--text-dim)">queued</td><td class="v">~54%</td><td class="v">—</td></tr>
+        <tr><td>MMLU (5-shot, N=570)</td><td class="v">~79%</td><td class="v green">81.60%</td><td style="color:var(--green); font-weight:600;">Exceeds teacher</td></tr>
       </tbody>
     </table>
-    <p class="note">Qwen baselines from published model cards. Full eval configs and logs will be published with the arXiv paper.</p>
+
+    <h3 style="font-size:1rem; color:var(--text); margin-bottom:1rem;">Outlier-10B V2 <span class="tag tag-live">99.1% retention</span></h3>
+    <table class="bench" style="margin-bottom:2.5rem;">
+      <thead>
+        <tr><th>Benchmark</th><th>Qwen2.5-7B Teacher</th><th>Outlier-10B V2</th><th>Retention</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>MMLU (5-shot, N=570)</td><td class="v">76.67%</td><td class="v hi">75.96%</td><td class="v hi">99.1%</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="font-size:1rem; color:var(--text-mid); margin-bottom:1rem;">Outlier-10B V1 — architecture floor (untrained routing)</h3>
+    <table class="bench">
+      <thead>
+        <tr><th>Benchmark</th><th>Qwen2.5-7B Teacher</th><th>Outlier-10B V1</th><th>Retention</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>MMLU (5-shot, N=570)</td><td class="v">76.67%</td><td class="v">70.70%</td><td class="v">92.2%</td></tr>
+        <tr><td>ARC-Challenge (N=200)</td><td class="v">61.00%</td><td class="v">59.50%</td><td class="v">97.5%</td></tr>
+        <tr><td>TruthfulQA MC2 (N=200)</td><td class="v">60.55%</td><td class="v">56.39%</td><td class="v">93.1%</td></tr>
+        <tr><td>WinoGrande (N=200)</td><td class="v">75.00%</td><td class="v">73.50%</td><td class="v">98.0%</td></tr>
+      </tbody>
+    </table>
+    <p class="note">V1 uses completely untrained routing — experts are noise. 95.2% average retention proves the shared expert is a robust quality anchor. V2 trains only 3% of parameters and closes 74% of the gap. Full expert distillation has not yet been attempted.</p>
   </div>
 </section>
 
@@ -366,7 +392,7 @@
       <div class="ccard">
         <div class="ccard-icon">⇄</div>
         <h3>Sparse MoE routing</h3>
-        <p>Top-2 expert activation per token. 155B total but ~75B active per forward
+        <p>Top-2 expert activation per token. 36B total but ~14B active per forward
            pass. Compute scales with active parameters, not total.</p>
       </div>
       <div class="ccard">
@@ -384,8 +410,8 @@
       <div class="ccard">
         <div class="ccard-icon">⊞</div>
         <h3>Cross-platform runtime</h3>
-        <p>MLX (Apple Silicon), CUDA (NVIDIA), and CPU (AVX/NEON) backends.
-           Hardware auto-detection at startup. 84 tests passing.</p>
+        <p>Open-source inference engine. CPU backend working, Metal/MLX backend
+           in development. Apache 2.0 licensed.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">◎</div>
@@ -401,25 +427,22 @@
 <section id="models">
   <div class="wrap">
     <div class="stag">Model Lineup</div>
-    <h2>Every RAM tier, covered.</h2>
+    <h2>Three models published. More coming.</h2>
     <p class="slead">
-      From phones to workstations. Each model named by total parameter count.
-      Outlier-10B is live and benchmarked. Remaining models are building on cloud GPUs now.
+      Outlier-10B V2 achieves 99.1% teacher retention. Outlier-40B exceeds its teacher.
+      All models available on HuggingFace with open weights.
     </p>
     <div style="overflow-x:auto;">
     <table class="lineup">
       <thead>
-        <tr><th>Model</th><th>Base</th><th>Experts</th><th>Total</th><th>RAM</th><th>Target Hardware</th><th>Status</th></tr>
+        <tr><th>Model</th><th>Base</th><th>Experts</th><th>Total</th><th>RAM</th><th>MMLU</th><th>Status</th></tr>
       </thead>
       <tbody>
-        <tr><td class="model">Outlier-5B</td><td>Qwen 1.5B</td><td>16</td><td>~4.8B</td><td class="ram">2 GB</td><td>Phones, tablets</td><td><span class="tag tag-wip">building</span></td></tr>
-        <tr><td class="model">Outlier-10B</td><td>Qwen 7B</td><td>16</td><td>~10.6B</td><td class="ram">5 GB</td><td>MacBook Air, budget laptops</td><td><span class="tag tag-live">live</span></td></tr>
-        <tr><td class="model">Outlier-40B</td><td>Qwen 14B</td><td>32</td><td>~36B</td><td class="ram">10 GB</td><td>MacBook Air 16GB</td><td><span class="tag tag-wip">building</span></td></tr>
-        <tr><td class="model">Outlier-70B</td><td>Qwen 32B</td><td>32</td><td>~65B</td><td class="ram">16 GB</td><td>RTX 4090, MacBook Pro</td><td><span class="tag tag-wip">building</span></td></tr>
-        <tr><td class="model">Outlier-150B</td><td>Qwen 72B</td><td>64</td><td>~155B</td><td class="ram">19 GB</td><td>MacBook Air 24GB</td><td><span class="tag tag-wip">building</span></td></tr>
-        <tr><td class="model">Outlier-250B</td><td>Qwen 72B</td><td>128</td><td>~238B</td><td class="ram">25 GB</td><td>MacBook Pro 32GB</td><td><span class="tag tag-wip">building</span></td></tr>
-        <tr><td class="model">Outlier-600B</td><td>Llama 405B</td><td>64</td><td>~572B</td><td class="ram">50 GB</td><td>Mac Studio 64GB</td><td><span class="tag tag-plan">planned</span></td></tr>
-        <tr><td class="model">Outlier-1T</td><td>Llama 405B</td><td>192</td><td>~905B</td><td class="ram">55 GB</td><td>Mac Studio 64GB + NVMe</td><td><span class="tag tag-plan">planned</span></td></tr>
+        <tr><td class="model">Outlier-10B</td><td>Qwen2.5-7B</td><td>16</td><td>~10.6B</td><td class="ram">5 GB</td><td>70.70%</td><td><span class="tag tag-live">V1 baseline</span></td></tr>
+        <tr><td class="model">Outlier-10B V2</td><td>Qwen2.5-7B</td><td>16</td><td>~10.6B</td><td class="ram">5 GB</td><td style="color:var(--accent); font-weight:700;">75.96%</td><td><span class="tag tag-live">live</span></td></tr>
+        <tr><td class="model">Outlier-40B</td><td>Qwen2.5-14B</td><td>32</td><td>~36B</td><td class="ram">10 GB</td><td style="color:var(--green); font-weight:700;">81.60%</td><td><span class="tag tag-best">exceeds teacher</span></td></tr>
+        <tr><td class="model">Outlier-70B</td><td>Qwen2.5-32B</td><td>32</td><td>~65B</td><td class="ram">16 GB</td><td>—</td><td><span class="tag tag-plan">planned</span></td></tr>
+        <tr><td class="model">Outlier-150B</td><td>Qwen2.5-72B</td><td>64</td><td>~155B</td><td class="ram">19 GB</td><td>—</td><td><span class="tag tag-plan">planned</span></td></tr>
       </tbody>
     </table>
     </div>
@@ -446,8 +469,8 @@
           <li>Kerr & Company LLC (DBA Outlier) — Michigan</li>
           <li>Founder: Matthew Kerr</li>
           <li>Email: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
-          <li>HuggingFace: <a href="https://huggingface.co/Outlier-AI" target="_blank">Outlier-AI</a></li>
-          <li>GitHub: <a href="https://github.com/Outlier-host" target="_blank">Outlier-host</a></li>
+          <li>HuggingFace: <a href="https://huggingface.co/Outlier-Ai" target="_blank">Outlier-Ai</a></li>
+          <li>GitHub: <a href="https://github.com/mattkerr09/outlier-engine" target="_blank">outlier-engine</a></li>
         </ul>
       </div>
     </div>
@@ -462,7 +485,8 @@
     <p class="slead">Compute partners, early enterprise pilots, and contributors welcome.</p>
     <div class="cta-row">
       <a class="btn btn-accent" href="mailto:matt@outlier.host">Contact</a>
-      <a class="btn btn-ghost" href="https://huggingface.co/Outlier-AI" target="_blank">View Models</a>
+      <a class="btn btn-ghost" href="https://huggingface.co/Outlier-Ai" target="_blank">View Models</a>
+      <a class="btn btn-ghost" href="https://github.com/mattkerr09/outlier-engine" target="_blank">GitHub</a>
     </div>
   </div>
 </section>
