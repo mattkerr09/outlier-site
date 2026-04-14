@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlier — Frontier AI on Hardware You Own</title>
-  <meta name="description" content="Outlier is a patented ternary-quantized Mixture-of-Experts platform. 155B parameters in 19GB RAM. $0/token. Data never leaves your building.">
+  <title>Outlier — Ternary MoE Language Models on Consumer Hardware</title>
+  <meta name="description" content="Open-source ternary Mixture-of-Experts language models. 68B-A32B flagship at 83.10% MMLU. Built solo in 14 days for under $1,000. Three U.S. provisional patents. Apache 2.0.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
@@ -276,7 +276,7 @@
       <li><a href="#architecture">Architecture</a></li>
       <li><a href="#models">Models</a></li>
       <li><a href="#ip">Company</a></li>
-      <li><a href="https://github.com/mattkerr09/outlier-engine" target="_blank">GitHub ↗</a></li>
+      <li><a href="https://github.com/Outlier-host/outlier" target="_blank">GitHub ↗</a></li>
       <li><a href="https://huggingface.co/Outlier-Ai" target="_blank" class="nav-cta">HuggingFace ↗</a></li>
     </ul>
   </div>
@@ -287,40 +287,41 @@
   <div class="wrap">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      Patent Pending · Two Provisionals Filed
+      Patent Pending · Three Provisionals Filed
     </div>
-    <h1>Frontier AI on hardware you own.</h1>
+    <h1>Frontier-class language models. Built solo.</h1>
     <p class="hero-sub">
-      Outlier is a ternary-quantized Mixture-of-Experts platform.
-      155B parameters in 19 GB of RAM. Zero API cost. Data never leaves
-      your building. Built by one person for under $265.
+      Outlier is an open-source ternary Mixture-of-Experts runtime and a family of
+      overlay models. Routed experts at ~1.6 bits per weight sit on top of a frozen
+      Qwen2.5 base. Built by one founder in 14 days on a Mac Studio and spot GPUs
+      for under $1,000. Three U.S. provisional patents filed. Apache 2.0.
     </p>
     <div class="hero-actions">
       <a class="btn btn-accent" href="https://huggingface.co/Outlier-Ai" target="_blank">Models on HuggingFace</a>
-      <a class="btn btn-ghost" href="https://github.com/mattkerr09/outlier-engine" target="_blank">GitHub</a>
+      <a class="btn btn-ghost" href="https://github.com/Outlier-host/outlier" target="_blank">GitHub</a>
       <a class="btn btn-ghost" href="mailto:matt@outlier.host">Contact</a>
     </div>
 
     <div class="stats">
       <div class="stat">
-        <div class="stat-num green">81.60%</div>
-        <div class="stat-label">MMLU — 40B</div>
-        <div class="stat-sub">Exceeds dense teacher</div>
+        <div class="stat-num purple">83.10%</div>
+        <div class="stat-label">MMLU — 68B V3.3</div>
+        <div class="stat-sub">alpha-fixed · n=14,042</div>
       </div>
       <div class="stat">
-        <div class="stat-num purple">75.96%</div>
-        <div class="stat-label">MMLU — 10B V2</div>
-        <div class="stat-sub">99.1% teacher retention</div>
+        <div class="stat-num green">84.46%</div>
+        <div class="stat-label">MMLU — 150B V3.2</div>
+        <div class="stat-sub">stderr 0.29% · full sample</div>
       </div>
       <div class="stat">
-        <div class="stat-num">~10 GB</div>
-        <div class="stat-label">Inference RAM</div>
-        <div class="stat-sub">Outlier-40B, 36B params</div>
+        <div class="stat-num">14 days</div>
+        <div class="stat-label">Solo Build</div>
+        <div class="stat-sub">V3.3 flagship landed</div>
       </div>
       <div class="stat">
-        <div class="stat-num">$265</div>
-        <div class="stat-label">Total Cost</div>
-        <div class="stat-sub">Patents + compute + API</div>
+        <div class="stat-num">&lt; $1K</div>
+        <div class="stat-label">Total Compute</div>
+        <div class="stat-sub">3 patents + cloud spot</div>
       </div>
     </div>
   </div>
@@ -330,45 +331,70 @@
 <section id="benchmarks">
   <div class="wrap">
     <div class="stag">Benchmarks</div>
-    <h2>Measured, not projected.</h2>
+    <h2>Verified with provenance, not projected.</h2>
     <p class="slead">
-      All numbers from lm-evaluation-harness v0.4.9.1, N=570, 5-shot, batch_size=1, bfloat16.
-      V1 evaluated on Mac Studio M1 Ultra (MPS). V2 and 40B evaluated on NVIDIA B200 (CUDA).
+      lm-evaluation-harness v0.4.9.1, 5-shot MMLU, bfloat16, full sample n = 14,042.
+      Every number has a sample size, a stderr, and a saved source file. When we can't
+      reproduce a number from disk, we say so. The Day 11 cleanup that erased our
+      first draft taught us the value of that rule.
     </p>
 
-    <h3 style="font-size:1rem; color:var(--text); margin-bottom:1rem;">Outlier-40B <span class="tag tag-best">exceeds teacher</span></h3>
+    <h3 style="font-size:1rem; color:var(--text); margin-bottom:1rem;">Verified V3.3 and V3.2 numbers <span class="tag tag-best">full sample</span></h3>
     <table class="bench" style="margin-bottom:2.5rem;">
       <thead>
-        <tr><th>Benchmark</th><th>Qwen2.5-14B Teacher</th><th>Outlier-40B</th><th>Notes</th></tr>
+        <tr><th>Model</th><th>MMLU</th><th>Stderr</th><th>n</th><th>Harness</th><th>Status</th></tr>
       </thead>
       <tbody>
-        <tr><td>MMLU (5-shot, N=570)</td><td class="v">~79%</td><td class="v green">81.60%</td><td style="color:var(--green); font-weight:600;">Exceeds teacher</td></tr>
+        <tr>
+          <td class="model">Outlier-150B-A70B V3.2</td>
+          <td class="v green">84.46%</td>
+          <td class="v">0.29%</td>
+          <td class="v">14,042</td>
+          <td class="v">0.4.9.1</td>
+          <td style="color:var(--green); font-weight:600;">Verified</td>
+        </tr>
+        <tr>
+          <td class="model">Outlier-68B-A32B V3.3</td>
+          <td class="v hi">83.10%</td>
+          <td class="v">0.30%</td>
+          <td class="v">14,042</td>
+          <td class="v">0.4.9.1</td>
+          <td style="color:var(--accent); font-weight:600;">Verified — flagship</td>
+        </tr>
+        <tr>
+          <td class="model">Outlier-30B-A14B V3.2</td>
+          <td class="v">77.80%</td>
+          <td class="v">0.33%</td>
+          <td class="v">14,042</td>
+          <td class="v">0.4.11</td>
+          <td style="color:var(--green); font-weight:600;">Verified</td>
+        </tr>
+        <tr>
+          <td class="model">Outlier-13B-A7B V3.2</td>
+          <td class="v" style="color:var(--text-dim);">pending</td>
+          <td class="v" style="color:var(--text-dim);">—</td>
+          <td class="v" style="color:var(--text-dim);">—</td>
+          <td class="v" style="color:var(--text-dim);">—</td>
+          <td style="color:var(--text-dim);">Re-running</td>
+        </tr>
       </tbody>
     </table>
-
-    <h3 style="font-size:1rem; color:var(--text); margin-bottom:1rem;">Outlier-10B V2 <span class="tag tag-live">99.1% retention</span></h3>
-    <table class="bench" style="margin-bottom:2.5rem;">
-      <thead>
-        <tr><th>Benchmark</th><th>Qwen2.5-7B Teacher</th><th>Outlier-10B V2</th><th>Retention</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>MMLU (5-shot, N=570)</td><td class="v">76.67%</td><td class="v hi">75.96%</td><td class="v hi">99.1%</td></tr>
-      </tbody>
-    </table>
-
-    <h3 style="font-size:1rem; color:var(--text-mid); margin-bottom:1rem;">Outlier-10B V1 — architecture floor (untrained routing)</h3>
-    <table class="bench">
-      <thead>
-        <tr><th>Benchmark</th><th>Qwen2.5-7B Teacher</th><th>Outlier-10B V1</th><th>Retention</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>MMLU (5-shot, N=570)</td><td class="v">76.67%</td><td class="v">70.70%</td><td class="v">92.2%</td></tr>
-        <tr><td>ARC-Challenge (N=200)</td><td class="v">61.00%</td><td class="v">59.50%</td><td class="v">97.5%</td></tr>
-        <tr><td>TruthfulQA MC2 (N=200)</td><td class="v">60.55%</td><td class="v">56.39%</td><td class="v">93.1%</td></tr>
-        <tr><td>WinoGrande (N=200)</td><td class="v">75.00%</td><td class="v">73.50%</td><td class="v">98.0%</td></tr>
-      </tbody>
-    </table>
-    <p class="note">V1 uses completely untrained routing — experts are noise. 95.2% average retention proves the shared expert is a robust quality anchor. V2 trains only 3% of parameters and closes 74% of the gap. Full expert distillation has not yet been attempted.</p>
+    <p class="note">
+      Harness version note: the 30B-A14B V3.2 number was measured under lm_eval 0.4.11
+      and the others under 0.4.9.1. A day 13 re-measurement of the 150B on 0.4.9.1
+      landed 1.30pp higher than a prior 0.4.11 run on identical weights. We've locked
+      0.4.9.1 going forward and are flagging the drift openly for reviewers.
+    </p>
+    <p class="note" style="margin-top:1rem;">
+      The 13B-A7B number is re-running because its Day 12 source file was a limited-sample
+      smoke test that doesn't meet our standard for a headline claim. We prefer to publish
+      "pending" than a number we can't defend end-to-end.
+    </p>
+    <p class="note" style="margin-top:1rem;">
+      For context: Llama 3.1 70B sits around 83.1% MMLU on full sample. Outlier-68B-A32B V3.3
+      alpha-fixed is in that neighborhood, trained solo on consumer hardware plus spot GPUs
+      for under $1,000 total compute spend.
+    </p>
   </div>
 </section>
 
@@ -376,48 +402,54 @@
 <section id="architecture">
   <div class="wrap">
     <div class="stag">Architecture</div>
-    <h2>Ternary experts. Full-precision anchor.</h2>
+    <h2>Ternary experts. Frozen base. Tiny overlay.</h2>
     <p class="slead">
-      Each layer keeps the pretrained dense FFN as a shared full-precision expert
-      and adds domain-specialized ternary routed experts. Top-2 routing means only
-      a fraction of total parameters activate per token.
+      Each MoE layer adds ternary routed experts on top of an unmodified Qwen2.5 base.
+      The overlay is the product; the base is a dependency you already have. The whole
+      recovery trick for the flagship is a 15 KB file.
     </p>
     <div class="cgrid">
       <div class="ccard">
         <div class="ccard-icon">△</div>
-        <h3>Ternary weights</h3>
-        <p>Expert weights constrained to {-1, 0, +1} with learned per-group scaling.
-           ~1.85 bits per parameter. Multiplication-free inference via lookup tables.</p>
-      </div>
-      <div class="ccard">
-        <div class="ccard-icon">⇄</div>
-        <h3>Sparse MoE routing</h3>
-        <p>Top-2 expert activation per token. 36B total but ~14B active per forward
-           pass. Compute scales with active parameters, not total.</p>
+        <h3>Ternary experts</h3>
+        <p>Routed expert weights constrained to {-1, 0, +1} with per-expert learned scaling.
+           ~1.6 bits per weight. Stored as an overlay on a frozen Qwen2.5 base, not as
+           a standalone checkpoint.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">■</div>
-        <h3>Shared expert anchor</h3>
-        <p>Original pretrained FFN frozen as shared expert. Always active. Prevents
-           the quality collapse pure ternary models suffer from.</p>
+        <h3>Frozen Qwen base</h3>
+        <p>Pretrained Qwen2.5 base runs unmodified as the shared full-precision anchor.
+           Always active. Provides the quality floor; the ternary experts add
+           specialization and recover capacity via CAKLD distillation.</p>
+      </div>
+      <div class="ccard">
+        <div class="ccard-icon">⇄</div>
+        <h3>Sparse routing</h3>
+        <p>Top-K routing per MoE layer activates a subset of experts per token.
+           Compute scales with active parameters, not total. 68B total / 32B active
+           on the V3.3 flagship.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">◇</div>
-        <h3>NVMe expert paging</h3>
-        <p>Hot experts in RAM, cold experts stream from SSD. Measured 2× throughput
-           advantage for ternary vs INT4 on paged expert loads.</p>
+        <h3>Paged expert cache</h3>
+        <p>Three-tier hot/warm/cold cache with cross-layer prefetch at 81.5% accuracy.
+           Hot experts in RAM, cold experts stream from disk. Enables the 150B-total
+           model on workstation-class hardware.</p>
+      </div>
+      <div class="ccard">
+        <div class="ccard-icon">✦</div>
+        <h3>Alpha-fix recovery</h3>
+        <p>Novel post-training recovery primitive. Training 280 per-expert scalar gates
+           in 18 minutes recovered +1.61pp MMLU on 68B-A32B where a 68M-parameter LoRA
+           regressed. 15 KB overlay file. Fourth provisional under novelty review.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">⊞</div>
-        <h3>Cross-platform runtime</h3>
-        <p>Open-source inference engine. CPU backend working, Metal/MLX backend
-           in development. Apache 2.0 licensed.</p>
-      </div>
-      <div class="ccard">
-        <div class="ccard-icon">◎</div>
-        <h3>Expert packs</h3>
-        <p>Modular .oep format for installable expert modules. Add domain expertise
-           post-deployment without retraining the base model.</p>
+        <h3>Apache 2.0 runtime</h3>
+        <p>Open-source inference engine. MPS, CUDA, and CPU backends. lm-eval compatible.
+           Overlay loader with alpha gating built in. Reproduces every number on this page
+           from a saved source file.</p>
       </div>
     </div>
   </div>
@@ -426,26 +458,66 @@
 <!-- MODELS -->
 <section id="models">
   <div class="wrap">
-    <div class="stag">Model Lineup</div>
-    <h2>Three models published. More coming.</h2>
+    <div class="stag">Model Family</div>
+    <h2>Four scales. Base + Instruct.</h2>
     <p class="slead">
-      Outlier-10B V2 achieves 99.1% teacher retention. Outlier-40B exceeds its teacher.
-      All models available on HuggingFace with open weights.
+      Each scale ships as two SKUs. <strong style="color:var(--text);">Base</strong> is the
+      research variant — raw weights, Apache 2.0, no safety training, clearly labeled.
+      <strong style="color:var(--text);">Instruct</strong> is the default download — same
+      weights plus a Llama Guard 3 wrapper and (on 68B-A32B) a DPO safety adapter.
+      Naming follows the TotalB-AyyB convention used by DeepSeek, Mixtral, and Llama 4.
     </p>
     <div style="overflow-x:auto;">
     <table class="lineup">
       <thead>
-        <tr><th>Model</th><th>Base</th><th>Experts</th><th>Total</th><th>RAM</th><th>MMLU</th><th>Status</th></tr>
+        <tr><th>Model</th><th>Base</th><th>Total</th><th>Active</th><th>MMLU</th><th>Best for</th><th>Status</th></tr>
       </thead>
       <tbody>
-        <tr><td class="model">Outlier-10B</td><td>Qwen2.5-7B</td><td>16</td><td>~10.6B</td><td class="ram">5 GB</td><td>70.70%</td><td><span class="tag tag-live">V1 baseline</span></td></tr>
-        <tr><td class="model">Outlier-10B V2</td><td>Qwen2.5-7B</td><td>16</td><td>~10.6B</td><td class="ram">5 GB</td><td style="color:var(--accent); font-weight:700;">75.96%</td><td><span class="tag tag-live">live</span></td></tr>
-        <tr><td class="model">Outlier-40B</td><td>Qwen2.5-14B</td><td>32</td><td>~36B</td><td class="ram">10 GB</td><td style="color:var(--green); font-weight:700;">81.60%</td><td><span class="tag tag-best">exceeds teacher</span></td></tr>
-        <tr><td class="model">Outlier-70B</td><td>Qwen2.5-32B</td><td>32</td><td>~65B</td><td class="ram">16 GB</td><td>—</td><td><span class="tag tag-plan">planned</span></td></tr>
-        <tr><td class="model">Outlier-150B</td><td>Qwen2.5-72B</td><td>64</td><td>~155B</td><td class="ram">19 GB</td><td>—</td><td><span class="tag tag-plan">planned</span></td></tr>
+        <tr>
+          <td class="model">Outlier-13B-A7B</td>
+          <td>Qwen2.5-7B</td>
+          <td>~13B</td>
+          <td class="ram">7B</td>
+          <td style="color:var(--text-dim);">re-running</td>
+          <td>Laptops, entry-level</td>
+          <td><span class="tag tag-wip">V3.3 pending</span></td>
+        </tr>
+        <tr>
+          <td class="model">Outlier-30B-A14B</td>
+          <td>Qwen2.5-14B</td>
+          <td>~30B</td>
+          <td class="ram">14B</td>
+          <td style="color:var(--text); font-weight:700;">77.80%</td>
+          <td>Mac Studio 64GB workhorse</td>
+          <td><span class="tag tag-live">V3.2 verified</span></td>
+        </tr>
+        <tr>
+          <td class="model">Outlier-68B-A32B</td>
+          <td>Qwen2.5-32B</td>
+          <td>~68B</td>
+          <td class="ram">32B</td>
+          <td style="color:var(--accent); font-weight:700;">83.10%</td>
+          <td>Mac Studio Ultra, flagship</td>
+          <td><span class="tag tag-best">V3.3 flagship</span></td>
+        </tr>
+        <tr>
+          <td class="model">Outlier-150B-A70B</td>
+          <td>Qwen2.5-72B</td>
+          <td>~150B</td>
+          <td class="ram">70B</td>
+          <td style="color:var(--green); font-weight:700;">84.46%</td>
+          <td>Workstation, cloud</td>
+          <td><span class="tag tag-live">V3.2 verified</span></td>
+        </tr>
       </tbody>
     </table>
     </div>
+    <p class="note">
+      V3.2 repositories remain available under the old 10B / 40B / 70B / 150B labels,
+      marked as superseded and pointing to the renamed V3.3 repos. Secondary benchmarks
+      (GSM8K, HellaSwag, ARC, HumanEval, MMLU-Pro) are currently running across all scales
+      and will appear here as source files land.
+    </p>
   </div>
 </section>
 
@@ -453,24 +525,27 @@
 <section id="ip">
   <div class="wrap">
     <div class="stag">Company & IP</div>
-    <h2>Two patents. Shipping product.</h2>
+    <h2>Three patents. Shipping product.</h2>
     <div class="ip-grid">
       <div class="ip-card">
         <h3>Intellectual Property</h3>
         <ul>
           <li>Provisional #64/026,886 — April 3, 2026. Ternary MoE architecture and sequential single-device training pipeline.</li>
-          <li>Provisional #64/030,368 — April 6, 2026. 14 claims covering inference engine, speculative decoding, expert packs, energy-aware routing, federated training.</li>
+          <li>Provisional #64/030,368 — April 6, 2026. Inference engine, paged expert cache, routing predictor, and expert packs.</li>
+          <li>Provisional #64/034,028 — April 9, 2026. Additional claims on training and deployment architecture.</li>
+          <li>Fourth provisional covering the alpha-fix recovery primitive is under novelty review.</li>
           <li>Non-provisional filing deadline: April 3, 2027.</li>
         </ul>
       </div>
       <div class="ip-card">
         <h3>Entity & Contact</h3>
         <ul>
-          <li>Kerr & Company LLC (DBA Outlier) — Michigan</li>
+          <li>Kerr &amp; Company LLC (DBA Outlier) — Grand Rapids, Michigan</li>
           <li>Founder: Matthew Kerr</li>
-          <li>Email: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
+          <li>General: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
+          <li>Responsible use: <a href="mailto:abuse@outlier.host">abuse@outlier.host</a></li>
           <li>HuggingFace: <a href="https://huggingface.co/Outlier-Ai" target="_blank">Outlier-Ai</a></li>
-          <li>GitHub: <a href="https://github.com/mattkerr09/outlier-engine" target="_blank">outlier-engine</a></li>
+          <li>GitHub: <a href="https://github.com/Outlier-host/outlier" target="_blank">Outlier-host/outlier</a></li>
         </ul>
       </div>
     </div>
@@ -481,19 +556,19 @@
 <section class="cta">
   <div class="wrap">
     <div class="stag">Get Involved</div>
-    <h2>The inference OS for sovereign AI.</h2>
-    <p class="slead">Compute partners, early enterprise pilots, and contributors welcome.</p>
+    <h2>Frontier quality on hardware you already own.</h2>
+    <p class="slead">Design partners, compute sponsors, and contributors welcome. DMs open.</p>
     <div class="cta-row">
       <a class="btn btn-accent" href="mailto:matt@outlier.host">Contact</a>
       <a class="btn btn-ghost" href="https://huggingface.co/Outlier-Ai" target="_blank">View Models</a>
-      <a class="btn btn-ghost" href="https://github.com/mattkerr09/outlier-engine" target="_blank">GitHub</a>
+      <a class="btn btn-ghost" href="https://github.com/Outlier-host/outlier" target="_blank">GitHub</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap foot">
-    <div>Outlier — Kerr & Company LLC</div>
+    <div>Outlier — Kerr &amp; Company LLC · Grand Rapids, MI</div>
     <div>© 2026</div>
   </div>
 </footer>
