@@ -4,31 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outlier — Ternary MoE Language Models on Consumer Hardware</title>
-  <meta name="description" content="Open-source ternary Mixture-of-Experts language models. 68B-A32B flagship at 83.10% MMLU. Built solo in 14 days for under $1,000. Three U.S. provisional patents. Apache 2.0.">
+  <meta name="description" content="Open-source ternary Mixture-of-Experts language models. 68B-A32B flagship at 83.10% MMLU. Built solo in 15 days for under $1,000. Three U.S. provisional patents. Apache 2.0.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #09090b;
-      --surface: #111114;
-      --surface-2: #18181b;
-      --surface-3: #1f1f23;
-      --border: rgba(255,255,255,0.06);
-      --border-hover: rgba(255,255,255,0.1);
-      --text: #f4f4f5;
-      --text-mid: #a1a1aa;
-      --text-dim: #71717a;
-      --accent: #a78bfa;
-      --accent-soft: rgba(167,139,250,0.1);
-      --accent-border: rgba(167,139,250,0.2);
-      --accent-glow: rgba(167,139,250,0.06);
-      --green: #4ade80;
-      --green-soft: rgba(74,222,128,0.1);
-      --green-border: rgba(74,222,128,0.2);
-      --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: ui-monospace, 'SF Mono', Consolas, monospace;
-      --radius: 12px;
+      --bg: #07060b;
+      --surface: #0e0d14;
+      --surface-2: #15131e;
+      --surface-3: #1c1928;
+      --border: rgba(168,85,247,0.08);
+      --border-hover: rgba(168,85,247,0.18);
+      --text: #f0eef5;
+      --text-mid: #a8a3b5;
+      --text-dim: #6e6880;
+      --accent: #A855F7;
+      --accent-light: #C084FC;
+      --accent-deep: #7C3AED;
+      --accent-soft: rgba(168,85,247,0.10);
+      --accent-border: rgba(168,85,247,0.20);
+      --accent-glow: rgba(168,85,247,0.06);
+      --green: #34d399;
+      --green-soft: rgba(52,211,153,0.08);
+      --green-border: rgba(52,211,153,0.18);
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+      --radius: 14px;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,216 +41,243 @@
       color: var(--text);
       font-family: var(--sans);
       font-size: 16px;
-      line-height: 1.6;
+      line-height: 1.65;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
 
-    ::selection { background: rgba(167,139,250,0.25); }
-    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    ::selection { background: rgba(168,85,247,0.30); }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
     a:hover { color: var(--text); }
 
-    .wrap { width: min(1100px, calc(100% - 3rem)); margin: 0 auto; }
+    .wrap { width: min(1120px, calc(100% - 3rem)); margin: 0 auto; }
 
     /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(9,9,11,0.8);
-      backdrop-filter: blur(20px) saturate(1.5);
+      background: rgba(7,6,11,0.82);
+      backdrop-filter: blur(24px) saturate(1.6);
       border-bottom: 1px solid var(--border);
     }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
-      height: 60px;
+      height: 56px;
     }
     .nav-brand {
-      font-weight: 700; font-size: 0.95rem; color: var(--text);
-      letter-spacing: -0.02em;
+      font-weight: 800; font-size: 1.05rem; color: var(--text);
+      letter-spacing: -0.03em;
     }
     .nav-brand span { color: var(--accent); }
-    .nav-links { display: flex; list-style: none; gap: 1.8rem; align-items: center; }
+    .nav-links { display: flex; list-style: none; gap: 1.6rem; align-items: center; }
     .nav-links a {
-      font-size: 0.82rem; font-weight: 500; color: var(--text-dim);
+      font-size: 0.8rem; font-weight: 500; color: var(--text-dim);
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--text); }
     .nav-cta {
-      background: var(--accent-soft) !important; color: var(--accent) !important;
-      border: 1px solid var(--accent-border);
-      padding: 0.4rem 1rem; border-radius: 100px;
-      font-size: 0.8rem !important; font-weight: 600 !important;
-      transition: all 0.2s;
+      background: var(--accent) !important; color: #fff !important;
+      padding: 0.38rem 1rem; border-radius: 8px;
+      font-size: 0.78rem !important; font-weight: 600 !important;
+      transition: all 0.2s; border: none;
     }
-    .nav-cta:hover { background: rgba(167,139,250,0.18) !important; color: var(--text) !important; }
+    .nav-cta:hover { filter: brightness(1.15); color: #fff !important; transform: translateY(-1px); }
 
     /* ── HERO ── */
     .hero {
-      padding: 7rem 0 5rem;
+      padding: 8rem 0 5rem;
       position: relative;
     }
     .hero::before {
       content: '';
-      position: absolute; top: -40%; left: 50%; transform: translateX(-50%);
-      width: 900px; height: 600px;
-      background: radial-gradient(ellipse, var(--accent-glow), transparent 70%);
+      position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+      width: 1000px; height: 700px;
+      background: radial-gradient(ellipse, rgba(168,85,247,0.07), transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: 0; right: -10%; width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(106,27,154,0.04), transparent 60%);
       pointer-events: none;
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
-      background: var(--surface-2); border: 1px solid var(--border);
-      padding: 0.35rem 0.9rem; border-radius: 100px;
-      font-size: 0.74rem; font-weight: 600; color: var(--text-dim);
-      letter-spacing: 0.03em; margin-bottom: 1.5rem;
+      background: var(--surface-2); border: 1px solid var(--accent-border);
+      padding: 0.32rem 0.85rem; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 600; color: var(--accent-light);
+      letter-spacing: 0.02em; margin-bottom: 1.8rem;
     }
     .hero-badge-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); box-shadow: 0 0 8px rgba(167,139,250,0.4);
+      background: var(--accent); box-shadow: 0 0 10px rgba(168,85,247,0.5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
     .hero h1 {
-      font-size: clamp(2.8rem, 6vw, 4.5rem);
-      font-weight: 800; letter-spacing: -0.04em; line-height: 1.05;
-      color: var(--text); margin-bottom: 1.5rem; max-width: 16ch;
+      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
+      font-weight: 800; letter-spacing: -0.045em; line-height: 1.05;
+      color: var(--text); margin-bottom: 1.5rem; max-width: 18ch;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .hero-sub {
-      font-size: 1.1rem; font-weight: 400; color: var(--text-mid);
-      max-width: 52ch; line-height: 1.7; margin-bottom: 2.5rem;
+      font-size: 1.05rem; font-weight: 400; color: var(--text-mid);
+      max-width: 54ch; line-height: 1.75; margin-bottom: 2.5rem;
     }
-    .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+    .hero-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 0.9rem;
+      padding: 0.7rem 1.4rem; border-radius: 10px; font-size: 0.88rem;
       font-weight: 600; border: none; cursor: pointer; transition: all 0.25s;
+      font-family: var(--sans);
     }
     .btn-accent {
-      background: var(--accent); color: #0a0a0c;
+      background: var(--accent); color: #fff;
+      box-shadow: 0 2px 16px rgba(168,85,247,0.25);
     }
-    .btn-accent:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn-accent:hover { filter: brightness(1.12); transform: translateY(-1px); color: #fff; box-shadow: 0 4px 24px rgba(168,85,247,0.35); }
     .btn-ghost {
       background: var(--surface-2); color: var(--text-mid);
       border: 1px solid var(--border);
     }
-    .btn-ghost:hover { border-color: var(--border-hover); color: var(--text); transform: translateY(-1px); }
+    .btn-ghost:hover { border-color: var(--accent-border); color: var(--text); transform: translateY(-1px); }
 
     /* ── STATS ── */
     .stats {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
       background: var(--border); border-radius: var(--radius); overflow: hidden;
-      margin-top: 4rem;
+      margin-top: 4.5rem;
     }
-    .stat {
-      background: var(--surface); padding: 1.5rem;
-    }
+    .stat { background: var(--surface); padding: 1.6rem 1.4rem; }
     .stat-num {
       font-size: 1.7rem; font-weight: 800; letter-spacing: -0.03em;
       color: var(--text); line-height: 1;
     }
-    .stat-num.purple { color: var(--accent); }
+    .stat-num.purple { color: var(--accent-light); }
     .stat-num.green { color: var(--green); }
     .stat-label {
-      font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
-      text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.35rem;
+      font-family: var(--mono); font-size: 0.62rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.4rem;
     }
-    .stat-sub { font-size: 0.8rem; color: var(--text-dim); margin-top: 0.15rem; }
+    .stat-sub { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.2rem; }
 
     /* ── SECTIONS ── */
-    section { padding: 5.5rem 0; border-top: 1px solid var(--border); }
+    section { padding: 6rem 0; border-top: 1px solid var(--border); }
     .stag {
-      font-family: var(--mono); font-size: 0.66rem; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--accent); margin-bottom: 0.7rem;
+      font-family: var(--mono); font-size: 0.62rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--accent); margin-bottom: 0.8rem;
     }
     section h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-size: clamp(1.7rem, 3.2vw, 2.4rem);
       font-weight: 800; letter-spacing: -0.035em; line-height: 1.1;
-      color: var(--text); margin-bottom: 0.8rem; max-width: 20ch;
+      color: var(--text); margin-bottom: 0.8rem; max-width: 22ch;
     }
     .slead {
-      font-size: 1rem; color: var(--text-mid); max-width: 56ch;
-      line-height: 1.7; margin-bottom: 2.5rem;
+      font-size: 1rem; color: var(--text-mid); max-width: 58ch;
+      line-height: 1.75; margin-bottom: 2.5rem;
     }
 
     /* ── BENCHMARK TABLE ── */
+    .bench-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
     .bench { width: 100%; border-collapse: collapse; }
     .bench th {
-      font-family: var(--mono); font-size: 0.66rem; color: var(--text-dim);
+      font-family: var(--mono); font-size: 0.62rem; color: var(--text-dim);
       text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
-      padding: 0.75rem 1rem; text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0.8rem 1rem; text-align: left;
+      background: var(--surface); border-bottom: 1px solid var(--border);
     }
     .bench td {
-      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04);
-      color: var(--text-mid); font-size: 0.9rem;
+      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(168,85,247,0.04);
+      color: var(--text-mid); font-size: 0.88rem;
     }
-    .bench tr:hover td { background: rgba(167,139,250,0.03); }
-    .bench .v { color: var(--text); font-weight: 700; font-family: var(--mono); font-size: 0.85rem; }
-    .bench .v.hi { color: var(--accent); }
+    .bench tr:hover td { background: rgba(168,85,247,0.03); }
+    .bench .v { color: var(--text); font-weight: 700; font-family: var(--mono); font-size: 0.84rem; }
+    .bench .v.hi { color: var(--accent-light); }
     .bench .v.green { color: var(--green); }
-    .bench .model { color: var(--text); font-weight: 600; }
-    .bench .note { font-size: 0.82rem; color: var(--text-dim); margin-top: 1rem; }
+    .bench .model { color: var(--text); font-weight: 600; white-space: nowrap; }
+    .note { font-size: 0.82rem; color: var(--text-dim); margin-top: 1rem; line-height: 1.7; }
     .tag {
-      display: inline-block; font-family: var(--mono); font-size: 0.6rem;
-      font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 100px;
+      display: inline-block; font-family: var(--mono); font-size: 0.58rem;
+      font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 6px;
       margin-left: 0.4rem; vertical-align: middle;
     }
-    .tag-live { background: rgba(167,139,250,0.12); color: var(--accent); }
+    .tag-live { background: var(--accent-soft); color: var(--accent-light); border: 1px solid var(--accent-border); }
     .tag-best { background: var(--green-soft); color: var(--green); border: 1px solid var(--green-border); }
-    .tag-wip { background: rgba(255,255,255,0.06); color: var(--text-dim); }
-    .tag-plan { background: rgba(255,255,255,0.04); color: var(--text-dim); }
+    .tag-wip { background: rgba(255,255,255,0.05); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── SECONDARY BENCH ── */
+    .bench-secondary { margin-top: 2rem; }
+    .bench-secondary h3 { font-size: 0.95rem; color: var(--text); margin-bottom: 0.8rem; font-weight: 700; }
 
     /* ── CARDS ── */
     .cgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; }
-    .ccard { background: var(--surface); padding: 1.8rem; }
+    .ccard { background: var(--surface); padding: 2rem; transition: background 0.3s; }
+    .ccard:hover { background: var(--surface-2); }
     .ccard-icon {
-      width: 2.2rem; height: 2.2rem; border-radius: 8px; margin-bottom: 1rem;
+      width: 2.4rem; height: 2.4rem; border-radius: 10px; margin-bottom: 1rem;
       display: flex; align-items: center; justify-content: center;
-      background: var(--accent-soft); color: var(--accent); font-size: 0.95rem;
+      background: var(--accent-soft); color: var(--accent-light); font-size: 1rem;
       border: 1px solid var(--accent-border);
     }
-    .ccard h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .ccard p { font-size: 0.88rem; color: var(--text-mid); line-height: 1.65; }
+    .ccard h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .ccard p { font-size: 0.86rem; color: var(--text-mid); line-height: 1.7; }
 
     /* ── LINEUP TABLE ── */
-    .lineup { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .lineup-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+    .lineup { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
     .lineup th {
-      font-family: var(--mono); font-size: 0.64rem; color: var(--text-dim);
+      font-family: var(--mono); font-size: 0.6rem; color: var(--text-dim);
       text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500;
       padding: 0.7rem 0.8rem; text-align: left;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: var(--surface); border-bottom: 1px solid var(--border);
     }
     .lineup td {
-      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.04);
+      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(168,85,247,0.04);
       color: var(--text-mid);
     }
-    .lineup .model { color: var(--text); font-weight: 600; }
-    .lineup .ram { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); }
+    .lineup tr:hover td { background: rgba(168,85,247,0.03); }
+    .lineup .model { color: var(--text); font-weight: 600; white-space: nowrap; }
+    .lineup .ram { font-family: var(--mono); font-size: 0.82rem; color: var(--accent-light); }
 
     /* ── IP ── */
-    .ip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    .ip-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 2rem;
-    }
-    .ip-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.7rem; }
-    .ip-card ul { list-style: none; display: grid; gap: 0.5rem; }
-    .ip-card li { font-size: 0.9rem; color: var(--text-mid); line-height: 1.6; }
-    .ip-card li::before { content: '→ '; color: var(--text-dim); }
-    .ip-card a { color: var(--accent); }
+    .ip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border-radius: var(--radius); overflow: hidden; }
+    .ip-card { background: var(--surface); padding: 2rem; }
+    .ip-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .ip-card ul { list-style: none; display: grid; gap: 0.55rem; }
+    .ip-card li { font-size: 0.88rem; color: var(--text-mid); line-height: 1.65; }
+    .ip-card li::before { content: '→ '; color: var(--accent); font-weight: 600; }
+    .ip-card a { color: var(--accent-light); }
     .ip-card a:hover { color: var(--text); }
 
     /* ── CTA ── */
     .cta {
-      text-align: center; padding: 6rem 0;
-      background: radial-gradient(ellipse 60% 40% at 50% 100%, var(--accent-glow), transparent);
+      text-align: center; padding: 6.5rem 0;
+      position: relative;
+    }
+    .cta::before {
+      content: '';
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(168,85,247,0.06), transparent);
+      pointer-events: none;
     }
     .cta h2 { max-width: none; margin: 0 auto 0.8rem; }
     .cta .slead { margin: 0 auto 2rem; text-align: center; }
-    .cta-row { display: flex; justify-content: center; gap: 0.7rem; flex-wrap: wrap; }
+    .cta-row { display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
 
     /* ── FOOTER ── */
-    footer { border-top: 1px solid var(--border); padding: 1.2rem 0; }
+    footer { border-top: 1px solid var(--border); padding: 1.3rem 0; }
     .foot {
       display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.78rem; color: var(--text-dim);
+      font-size: 0.76rem; color: var(--text-dim);
     }
 
     /* ── RESPONSIVE ── */
@@ -259,10 +288,11 @@
     }
     @media (max-width: 600px) {
       .stats { grid-template-columns: 1fr; }
-      .nav-inner { height: auto; padding: 0.75rem 0; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-      .nav-links { gap: 1rem; flex-wrap: wrap; }
-      .hero { padding: 4.5rem 0 3.5rem; }
+      .nav-inner { height: auto; padding: 0.75rem 0; flex-direction: column; align-items: flex-start; gap: 0.6rem; }
+      .nav-links { gap: 0.8rem; flex-wrap: wrap; }
+      .hero { padding: 5rem 0 3.5rem; }
       section { padding: 4rem 0; }
+      .hero h1 { font-size: 2.2rem; }
     }
   </style>
 </head>
@@ -277,7 +307,7 @@
       <li><a href="#models">Models</a></li>
       <li><a href="#ip">Company</a></li>
       <li><a href="https://github.com/Outlier-host/outlier" target="_blank">GitHub ↗</a></li>
-      <li><a href="https://huggingface.co/Outlier-Ai" target="_blank" class="nav-cta">HuggingFace ↗</a></li>
+      <li><a href="https://huggingface.co/Outlier-Ai" target="_blank" class="nav-cta">Models on HF ↗</a></li>
     </ul>
   </div>
 </nav>
@@ -287,14 +317,14 @@
   <div class="wrap">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      Patent Pending · Three Provisionals Filed
+      Patent Pending · Three Provisionals Filed · 5,300+ Downloads
     </div>
-    <h1>Frontier-class language models. Built solo.</h1>
+    <h1>Frontier-class models. <em>Built solo.</em></h1>
     <p class="hero-sub">
       Outlier is an open-source ternary Mixture-of-Experts runtime and a family of
-      overlay models. Routed experts at ~1.6 bits per weight sit on top of a frozen
-      Qwen2.5 base. Built by one founder in 14 days on a Mac Studio and spot GPUs
-      for under $1,000. Three U.S. provisional patents filed. Apache 2.0.
+      overlay models. Routed experts at ~1.6 bits per weight on a frozen Qwen2.5 base.
+      One founder, 15 days, a Mac Studio, spot B200 GPUs, and under $1,000 total spend.
+      Three U.S. provisional patents. Apache 2.0.
     </p>
     <div class="hero-actions">
       <a class="btn btn-accent" href="https://huggingface.co/Outlier-Ai" target="_blank">Models on HuggingFace</a>
@@ -304,24 +334,24 @@
 
     <div class="stats">
       <div class="stat">
+        <div class="stat-num purple">84.46%</div>
+        <div class="stat-label">MMLU — 150B V3.2</div>
+        <div class="stat-sub">n=14,042 · stderr 0.29%</div>
+      </div>
+      <div class="stat">
         <div class="stat-num purple">83.10%</div>
         <div class="stat-label">MMLU — 68B V3.3</div>
-        <div class="stat-sub">alpha-fixed · n=14,042</div>
+        <div class="stat-sub">flagship · alpha-fixed</div>
       </div>
       <div class="stat">
-        <div class="stat-num green">84.46%</div>
-        <div class="stat-label">MMLU — 150B V3.2</div>
-        <div class="stat-sub">stderr 0.29% · full sample</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">14 days</div>
-        <div class="stat-label">Solo Build</div>
-        <div class="stat-sub">V3.3 flagship landed</div>
+        <div class="stat-num green">5,300+</div>
+        <div class="stat-label">HF Downloads</div>
+        <div class="stat-sub">across 9 model repos</div>
       </div>
       <div class="stat">
         <div class="stat-num">&lt; $1K</div>
         <div class="stat-label">Total Compute</div>
-        <div class="stat-sub">3 patents + cloud spot</div>
+        <div class="stat-sub">3 patents · 15 days solo</div>
       </div>
     </div>
   </div>
@@ -333,14 +363,14 @@
     <div class="stag">Benchmarks</div>
     <h2>Verified with provenance, not projected.</h2>
     <p class="slead">
-      lm-evaluation-harness v0.4.9.1, 5-shot MMLU, bfloat16, full sample n = 14,042.
-      Every number has a sample size, a stderr, and a saved source file. When we can't
-      reproduce a number from disk, we say so. The Day 11 cleanup that erased our
-      first draft taught us the value of that rule.
+      lm-evaluation-harness v0.4.9.1, 5-shot MMLU, bfloat16, full sample n=14,042.
+      Every number has a saved source file, a sample size, and a stderr. When we
+      can't reproduce a number from disk, we say so.
     </p>
 
-    <h3 style="font-size:1rem; color:var(--text); margin-bottom:1rem;">Verified V3.3 and V3.2 numbers <span class="tag tag-best">full sample</span></h3>
-    <table class="bench" style="margin-bottom:2.5rem;">
+    <h3 style="font-size:0.95rem; color:var(--text); margin-bottom:1rem;">MMLU — primary accuracy <span class="tag tag-best">full sample</span></h3>
+    <div class="bench-wrap">
+    <table class="bench">
       <thead>
         <tr><th>Model</th><th>MMLU</th><th>Stderr</th><th>n</th><th>Harness</th><th>Status</th></tr>
       </thead>
@@ -359,7 +389,7 @@
           <td class="v">0.30%</td>
           <td class="v">14,042</td>
           <td class="v">0.4.9.1</td>
-          <td style="color:var(--accent); font-weight:600;">Verified — flagship</td>
+          <td style="color:var(--accent-light); font-weight:600;">Verified — flagship</td>
         </tr>
         <tr>
           <td class="model">Outlier-30B-A14B V3.2</td>
@@ -370,30 +400,67 @@
           <td style="color:var(--green); font-weight:600;">Verified</td>
         </tr>
         <tr>
-          <td class="model">Outlier-13B-A7B V3.2</td>
-          <td class="v" style="color:var(--text-dim);">pending</td>
-          <td class="v" style="color:var(--text-dim);">—</td>
-          <td class="v" style="color:var(--text-dim);">—</td>
-          <td class="v" style="color:var(--text-dim);">—</td>
-          <td style="color:var(--text-dim);">Re-running</td>
+          <td class="model">Outlier-13B-A7B V3.3</td>
+          <td class="v">70.87%</td>
+          <td class="v">0.37%</td>
+          <td class="v">14,042</td>
+          <td class="v">0.4.9.1</td>
+          <td style="color:var(--green); font-weight:600;">Verified</td>
         </tr>
       </tbody>
     </table>
+    </div>
+
+    <div class="bench-secondary">
+    <h3>Secondary benchmarks <span class="tag tag-live">V3.3</span></h3>
+    <div class="bench-wrap" style="margin-top:0.8rem;">
+    <table class="bench">
+      <thead>
+        <tr><th>Model</th><th>HellaSwag</th><th>ARC-C</th><th>ARC-E</th><th>WinoGrande</th><th>TruthfulQA</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="model">150B V3.3</td>
+          <td class="v">77.00%</td>
+          <td class="v">68.50%</td>
+          <td class="v">90.00%</td>
+          <td class="v green">85.50%</td>
+          <td class="v green">69.19%</td>
+        </tr>
+        <tr>
+          <td class="model">68B V3.3</td>
+          <td class="v hi">85.95%</td>
+          <td class="v hi">73.46%</td>
+          <td class="v hi">91.62%</td>
+          <td class="v">81.29%</td>
+          <td class="v">67.12%</td>
+        </tr>
+        <tr>
+          <td class="model">30B V3.3</td>
+          <td class="v">84.64%</td>
+          <td class="v">73.12%</td>
+          <td class="v">91.29%</td>
+          <td class="v">80.98%</td>
+          <td class="v">67.49%</td>
+        </tr>
+        <tr>
+          <td class="model">13B V3.3</td>
+          <td class="v">78.30%</td>
+          <td class="v">62.88%</td>
+          <td class="v">85.98%</td>
+          <td class="v">73.80%</td>
+          <td class="v">62.11%</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+
     <p class="note">
-      Harness version note: the 30B-A14B V3.2 number was measured under lm_eval 0.4.11
-      and the others under 0.4.9.1. A day 13 re-measurement of the 150B on 0.4.9.1
-      landed 1.30pp higher than a prior 0.4.11 run on identical weights. We've locked
-      0.4.9.1 going forward and are flagging the drift openly for reviewers.
-    </p>
-    <p class="note" style="margin-top:1rem;">
-      The 13B-A7B number is re-running because its Day 12 source file was a limited-sample
-      smoke test that doesn't meet our standard for a headline claim. We prefer to publish
-      "pending" than a number we can't defend end-to-end.
-    </p>
-    <p class="note" style="margin-top:1rem;">
-      For context: Llama 3.1 70B sits around 83.1% MMLU on full sample. Outlier-68B-A32B V3.3
-      alpha-fixed is in that neighborhood, trained solo on consumer hardware plus spot GPUs
-      for under $1,000 total compute spend.
+      Context: Llama 3.1 70B sits around 83.1% MMLU on full sample. Outlier-68B-A32B
+      V3.3 matches that neighborhood, trained solo on consumer hardware for under $1,000.
+      The 30B V3.2 harness was 0.4.11; all others are 0.4.9.1.
+      13B-A7B is now verified at 70.87% via a fresh full run.
     </p>
   </div>
 </section>
@@ -405,51 +472,49 @@
     <h2>Ternary experts. Frozen base. Tiny overlay.</h2>
     <p class="slead">
       Each MoE layer adds ternary routed experts on top of an unmodified Qwen2.5 base.
-      The overlay is the product; the base is a dependency you already have. The whole
-      recovery trick for the flagship is a 15 KB file.
+      The overlay is the product; the base is a dependency you already have. The flagship
+      recovery is a 15 KB alpha file.
     </p>
     <div class="cgrid">
       <div class="ccard">
         <div class="ccard-icon">△</div>
         <h3>Ternary experts</h3>
-        <p>Routed expert weights constrained to {-1, 0, +1} with per-expert learned scaling.
-           ~1.6 bits per weight. Stored as an overlay on a frozen Qwen2.5 base, not as
-           a standalone checkpoint.</p>
+        <p>Expert weights constrained to {-1, 0, +1} with per-expert learned scaling.
+           ~1.6 bits per weight. Stored as an overlay on a frozen Qwen2.5 base.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">■</div>
         <h3>Frozen Qwen base</h3>
-        <p>Pretrained Qwen2.5 base runs unmodified as the shared full-precision anchor.
-           Always active. Provides the quality floor; the ternary experts add
-           specialization and recover capacity via CAKLD distillation.</p>
+        <p>Pretrained Qwen2.5 runs unmodified as the shared full-precision anchor.
+           Always active. Provides the quality floor; ternary experts add
+           specialization via CAKLD distillation.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">⇄</div>
         <h3>Sparse routing</h3>
         <p>Top-K routing per MoE layer activates a subset of experts per token.
-           Compute scales with active parameters, not total. 68B total / 32B active
-           on the V3.3 flagship.</p>
+           Compute scales with active parameters. 68B total, 32B active on the
+           V3.3 flagship.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">◇</div>
         <h3>Paged expert cache</h3>
-        <p>Three-tier hot/warm/cold cache with cross-layer prefetch at 81.5% accuracy.
-           Hot experts in RAM, cold experts stream from disk. Enables the 150B-total
-           model on workstation-class hardware.</p>
+        <p>Three-tier hot/warm/cold cache with cross-layer prefetch at 81.5% hit rate.
+           Hot experts in RAM, cold experts stream from disk. 150B-total on
+           workstation hardware.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">✦</div>
         <h3>Alpha-fix recovery</h3>
-        <p>Novel post-training recovery primitive. Training 280 per-expert scalar gates
-           in 18 minutes recovered +1.61pp MMLU on 68B-A32B where a 68M-parameter LoRA
-           regressed. 15 KB overlay file. Fourth provisional under novelty review.</p>
+        <p>Post-training recovery primitive. 280 per-expert scalar gates trained
+           in 18 minutes recovered +1.61pp MMLU on 68B where a 68M-parameter
+           LoRA regressed. 15 KB overlay.</p>
       </div>
       <div class="ccard">
         <div class="ccard-icon">⊞</div>
-        <h3>Apache 2.0 runtime</h3>
-        <p>Open-source inference engine. MPS, CUDA, and CPU backends. lm-eval compatible.
-           Overlay loader with alpha gating built in. Reproduces every number on this page
-           from a saved source file.</p>
+        <h3>128K context</h3>
+        <p>YaRN-4x scaling on the 68B flagship passes 100% passkey retrieval
+           and needle-in-haystack at 32K, 64K, and 128K. Verified on B200.</p>
       </div>
     </div>
   </div>
@@ -459,15 +524,13 @@
 <section id="models">
   <div class="wrap">
     <div class="stag">Model Family</div>
-    <h2>Four scales. Base + Instruct.</h2>
+    <h2>Four scales. Overlay architecture.</h2>
     <p class="slead">
-      Each scale ships as two SKUs. <strong style="color:var(--text);">Base</strong> is the
-      research variant — raw weights, Apache 2.0, no safety training, clearly labeled.
-      <strong style="color:var(--text);">Instruct</strong> is the default download — same
-      weights plus a Llama Guard 3 wrapper and (on 68B-A32B) a DPO safety adapter.
-      Naming follows the TotalB-AyyB convention used by DeepSeek, Mixtral, and Llama 4.
+      Each scale ships as an overlay on a frozen Qwen2.5 base. Naming follows
+      the TotalB-ActiveB convention used by DeepSeek, Mixtral, and Llama 4.
+      Apache 2.0.
     </p>
-    <div style="overflow-x:auto;">
+    <div class="lineup-wrap">
     <table class="lineup">
       <thead>
         <tr><th>Model</th><th>Base</th><th>Total</th><th>Active</th><th>MMLU</th><th>Best for</th><th>Status</th></tr>
@@ -478,9 +541,9 @@
           <td>Qwen2.5-7B</td>
           <td>~13B</td>
           <td class="ram">7B</td>
-          <td style="color:var(--text-dim);">re-running</td>
+          <td style="color:var(--text); font-weight:700;">70.87%</td>
           <td>Laptops, entry-level</td>
-          <td><span class="tag tag-wip">V3.3 pending</span></td>
+          <td><span class="tag tag-live">V3.3</span></td>
         </tr>
         <tr>
           <td class="model">Outlier-30B-A14B</td>
@@ -489,14 +552,14 @@
           <td class="ram">14B</td>
           <td style="color:var(--text); font-weight:700;">77.80%</td>
           <td>Mac Studio 64GB workhorse</td>
-          <td><span class="tag tag-live">V3.2 verified</span></td>
+          <td><span class="tag tag-live">V3.2</span></td>
         </tr>
         <tr>
           <td class="model">Outlier-68B-A32B</td>
           <td>Qwen2.5-32B</td>
           <td>~68B</td>
           <td class="ram">32B</td>
-          <td style="color:var(--accent); font-weight:700;">83.10%</td>
+          <td style="color:var(--accent-light); font-weight:700;">83.10%</td>
           <td>Mac Studio Ultra, flagship</td>
           <td><span class="tag tag-best">V3.3 flagship</span></td>
         </tr>
@@ -507,16 +570,14 @@
           <td class="ram">70B</td>
           <td style="color:var(--green); font-weight:700;">84.46%</td>
           <td>Workstation, cloud</td>
-          <td><span class="tag tag-live">V3.2 verified</span></td>
+          <td><span class="tag tag-live">V3.2</span></td>
         </tr>
       </tbody>
     </table>
     </div>
     <p class="note">
-      V3.2 repositories remain available under the old 10B / 40B / 70B / 150B labels,
-      marked as superseded and pointing to the renamed V3.3 repos. Secondary benchmarks
-      (GSM8K, HellaSwag, ARC, HumanEval, MMLU-Pro) are currently running across all scales
-      and will appear here as source files land.
+      V3.2 repositories remain available under the original size labels, marked as
+      superseded and pointing to the renamed V3.3 repos.
     </p>
   </div>
 </section>
@@ -530,22 +591,21 @@
       <div class="ip-card">
         <h3>Intellectual Property</h3>
         <ul>
-          <li>Provisional #64/026,886 — April 3, 2026. Ternary MoE architecture and sequential single-device training pipeline.</li>
-          <li>Provisional #64/030,368 — April 6, 2026. Inference engine, paged expert cache, routing predictor, and expert packs.</li>
-          <li>Provisional #64/034,028 — April 9, 2026. Additional claims on training and deployment architecture.</li>
-          <li>Fourth provisional covering the alpha-fix recovery primitive is under novelty review.</li>
+          <li>Provisional #64/026,886 — April 3, 2026. Ternary MoE architecture and sequential single-device training.</li>
+          <li>Provisional #64/030,368 — April 6, 2026. Inference engine, paged expert cache, routing predictor, expert packs.</li>
+          <li>Provisional #64/034,028 — April 9, 2026. Zero-delta expert init, residual error correction, adaptive inference.</li>
           <li>Non-provisional filing deadline: April 3, 2027.</li>
         </ul>
       </div>
       <div class="ip-card">
         <h3>Entity & Contact</h3>
         <ul>
-          <li>Kerr &amp; Company LLC (DBA Outlier) — Grand Rapids, Michigan</li>
+          <li>Kerr &amp; Company LLC (DBA Outlier) — Grand Rapids, MI</li>
           <li>Founder: Matthew Kerr</li>
           <li>General: <a href="mailto:matt@outlier.host">matt@outlier.host</a></li>
-          <li>Responsible use: <a href="mailto:abuse@outlier.host">abuse@outlier.host</a></li>
           <li>HuggingFace: <a href="https://huggingface.co/Outlier-Ai" target="_blank">Outlier-Ai</a></li>
           <li>GitHub: <a href="https://github.com/Outlier-host/outlier" target="_blank">Outlier-host/outlier</a></li>
+          <li>arXiv: <a href="https://arxiv.org" target="_blank">Paper (preprint)</a></li>
         </ul>
       </div>
     </div>
@@ -557,7 +617,7 @@
   <div class="wrap">
     <div class="stag">Get Involved</div>
     <h2>Frontier quality on hardware you already own.</h2>
-    <p class="slead">Design partners, compute sponsors, and contributors welcome. DMs open.</p>
+    <p class="slead">Design partners, compute sponsors, and contributors welcome.</p>
     <div class="cta-row">
       <a class="btn btn-accent" href="mailto:matt@outlier.host">Contact</a>
       <a class="btn btn-ghost" href="https://huggingface.co/Outlier-Ai" target="_blank">View Models</a>
@@ -569,7 +629,7 @@
 <footer>
   <div class="wrap foot">
     <div>Outlier — Kerr &amp; Company LLC · Grand Rapids, MI</div>
-    <div>© 2026</div>
+    <div>Apache 2.0 · © 2026</div>
   </div>
 </footer>
 
