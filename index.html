@@ -7,7 +7,7 @@
   <meta name="description" content="Open-source ternary Mixture-of-Experts language models. 68B-A32B flagship at 83.10% MMLU. Built solo in 15 days for under $1,000. Three U.S. provisional patents. Apache 2.0.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@500,700,900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -15,21 +15,22 @@
       --surface: #0e0d14;
       --surface-2: #15131e;
       --surface-3: #1c1928;
-      --border: rgba(168,85,247,0.08);
-      --border-hover: rgba(168,85,247,0.18);
+      --border: rgba(204,110,245,0.08);
+      --border-hover: rgba(204,110,245,0.18);
       --text: #f0eef5;
       --text-mid: #a8a3b5;
       --text-dim: #6e6880;
-      --accent: #A855F7;
-      --accent-light: #C084FC;
-      --accent-deep: #7C3AED;
-      --accent-soft: rgba(168,85,247,0.10);
-      --accent-border: rgba(168,85,247,0.20);
-      --accent-glow: rgba(168,85,247,0.06);
+      --accent: #CC6EF5;
+      --accent-light: #DDA0FF;
+      --accent-deep: #9B40CC;
+      --accent-soft: rgba(204,110,245,0.10);
+      --accent-border: rgba(204,110,245,0.20);
+      --accent-glow: rgba(204,110,245,0.06);
       --green: #34d399;
       --green-soft: rgba(52,211,153,0.08);
       --green-border: rgba(52,211,153,0.18);
-      --display: 'Clash Display', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --display: 'Clash Display',
+      --display-hero: 'Satoshi', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
       --radius: 14px;
@@ -48,7 +49,7 @@
       overflow-x: hidden;
     }
 
-    ::selection { background: rgba(168,85,247,0.30); }
+    ::selection { background: rgba(204,110,245,0.30); }
     a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
     a:hover { color: var(--text); }
 
@@ -94,7 +95,7 @@
       content: '';
       position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
       width: 1000px; height: 700px;
-      background: radial-gradient(ellipse, rgba(168,85,247,0.07), transparent 70%);
+      background: radial-gradient(ellipse, rgba(204,110,245,0.07), transparent 70%);
       pointer-events: none;
     }
     .hero::after {
@@ -112,7 +113,7 @@
     }
     .hero-badge-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--accent); box-shadow: 0 0 10px rgba(168,85,247,0.5);
+      background: var(--accent); box-shadow: 0 0 10px rgba(204,110,245,0.5);
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -120,7 +121,7 @@
       50% { opacity: 0.5; }
     }
     .hero h1 {
-      font-family: var(--display);
+      font-family: var(--display-hero), var(--sans);
       font-size: clamp(2.6rem, 5.5vw, 4.2rem);
       font-weight: 700; letter-spacing: -0.045em; line-height: 1.05;
       color: var(--text); margin-bottom: 1.5rem; max-width: 18ch;
@@ -145,9 +146,9 @@
     .btn-accent { font-family: var(--display); font-weight: 600; }
     .btn-accent {
       background: var(--accent); color: #fff;
-      box-shadow: 0 2px 16px rgba(168,85,247,0.25);
+      box-shadow: 0 2px 16px rgba(204,110,245,0.25);
     }
-    .btn-accent:hover { filter: brightness(1.12); transform: translateY(-1px); color: #fff; box-shadow: 0 4px 24px rgba(168,85,247,0.35); }
+    .btn-accent:hover { filter: brightness(1.12); transform: translateY(-1px); color: #fff; box-shadow: 0 4px 24px rgba(204,110,245,0.35); }
     .btn-ghost {
       background: var(--surface-2); color: var(--text-mid);
       border: 1px solid var(--border);
@@ -162,7 +163,7 @@
     }
     .stat { background: var(--surface); padding: 1.6rem 1.4rem; }
     .stat-num {
-      font-family: var(--display);
+      font-family: var(--display-hero), var(--sans);
       font-size: 1.7rem; font-weight: 600; letter-spacing: -0.03em;
       color: var(--text); line-height: 1;
     }
@@ -182,7 +183,7 @@
       color: var(--accent); margin-bottom: 0.8rem;
     }
     section h2 {
-      font-family: var(--display);
+      font-family: var(--display-hero), var(--sans);
       font-size: clamp(1.7rem, 3.2vw, 2.4rem);
       font-weight: 700; letter-spacing: -0.035em; line-height: 1.1;
       color: var(--text); margin-bottom: 0.8rem; max-width: 22ch;
@@ -202,10 +203,10 @@
       background: var(--surface); border-bottom: 1px solid var(--border);
     }
     .bench td {
-      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(168,85,247,0.04);
+      padding: 0.75rem 1rem; border-bottom: 1px solid rgba(204,110,245,0.04);
       color: var(--text-mid); font-size: 0.88rem;
     }
-    .bench tr:hover td { background: rgba(168,85,247,0.03); }
+    .bench tr:hover td { background: rgba(204,110,245,0.03); }
     .bench .v { color: var(--text); font-weight: 700; font-family: var(--mono); font-size: 0.84rem; }
     .bench .v.hi { color: var(--accent-light); }
     .bench .v.green { color: var(--green); }
@@ -247,10 +248,10 @@
       background: var(--surface); border-bottom: 1px solid var(--border);
     }
     .lineup td {
-      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(168,85,247,0.04);
+      padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(204,110,245,0.04);
       color: var(--text-mid);
     }
-    .lineup tr:hover td { background: rgba(168,85,247,0.03); }
+    .lineup tr:hover td { background: rgba(204,110,245,0.03); }
     .lineup .model { color: var(--text); font-weight: 600; white-space: nowrap; }
     .lineup .ram { font-family: var(--mono); font-size: 0.82rem; color: var(--accent-light); }
 
@@ -273,7 +274,7 @@
       content: '';
       position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
       width: 800px; height: 400px;
-      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(168,85,247,0.06), transparent);
+      background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(204,110,245,0.06), transparent);
       pointer-events: none;
     }
     .cta h2 { max-width: none; margin: 0 auto 0.8rem; }
