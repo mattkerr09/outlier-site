@@ -574,39 +574,6 @@
 </head>
 <body>
 
-<!--
-  SETUP NOTES FOR MATT (delete this comment before deploying):
-
-  1. Founders URL is live: https://buy.polar.sh/60631b6a-a55b-492d-b2ec-1d95a77649b6
-
-  2. The 4 monthly tier URLs are PLACEHOLDERS. Fetch the real ones:
-     source ~/.outlier_secrets
-     curl -s https://api.polar.sh/v1/products \
-       -H "Authorization: Bearer $POLAR_ACCESS_TOKEN" | python3 -m json.tool
-     Copy each product's checkout URL and find/replace:
-       POLAR_SUPPORTER_URL    → Supporter $5/mo URL
-       POLAR_CONTRIBUTOR_URL  → Contributor $20/mo URL
-       POLAR_BACKER_URL       → Backer $50/mo URL
-       POLAR_PATRON_URL       → Patron $200/mo URL
-
-  3. Download button points to GitHub Releases. Replace
-     GITHUB_RELEASES_DMG_URL with the actual v1.4.0 or v1.5.0 DMG URL.
-     If you don't have a release yet, change it to href="#waitlist"
-     and remove the "Get notified" secondary button, OR create a
-     GitHub Release first and paste the .dmg URL.
-
-  4. Discord invite: replace DISCORD_INVITE_URL with your invite link
-     after creating the server. Same for Twitter/X handle if you have one.
-
-  5. Verify Stripe Connect is live BEFORE deploying (otherwise first
-     buyer enters card and nothing settles):
-       curl -s https://api.polar.sh/v1/organizations/me \
-         -H "Authorization: Bearer $POLAR_ACCESS_TOKEN" | grep payout
-
-  6. Test flow: on your phone (not logged in), click Founders button,
-     verify Polar checkout loads with correct product + price + Stripe
-     form in LIVE mode (not test banner). Don't complete purchase.
--->
 
 <nav>
   <div class="wrap nav-inner">
@@ -631,19 +598,19 @@
   <div class="wrap">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      v1.3.0 shipping · 3 patents filed · 5,800+ downloads
+      v1.3.0 shipping · 3 patents filed · 8,300+ downloads
     </div>
     <h1>Unlimited <span class="gradient">tokens.</span><br/>On your Mac. <span class="green-g">Free forever.</span></h1>
     <p class="hero-sub">
-      Outlier runs the best open-weights AI on your Mac — offline, private, no 
-      token caps. Five curated tiers, including a 30B coder hitting 55 tok/s 
+      Outlier runs the best open-weights AI on your Mac — offline, private, no
+      token caps. Five curated tiers, including a 30B coder hitting 55 tok/s
       on Apple Silicon. One 8.8 MB app. No cloud. No subscription.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-green" href="#download">↓ Download v1.3.0 · Free</a>
+      <a class="btn btn-green" href="#support">Join the v1.4 waitlist</a>
       <a class="btn btn-ghost" href="#models">See the models</a>
     </div>
-    <div class="req">Apple Silicon · macOS 13+ · 8 GB RAM minimum</div>
+    <div class="req">Apple Silicon · macOS 13+ · 8 GB RAM · signed DMG lands with v1.4.1</div>
 
     <div class="proof">
       <div class="proof-item">
@@ -667,7 +634,7 @@
         <div class="proof-label">Model tiers</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">5,800+</div>
+        <div class="proof-num">8,300+</div>
         <div class="proof-label">HF downloads</div>
       </div>
     </div>
@@ -681,9 +648,9 @@
       <span class="stag">Why Outlier</span>
       <h2>Stop paying the <em>meter.</em> <span class="green-g">Keep the AI.</span></h2>
       <p class="slead">
-        The pain is the same for everyone: rate limits when you need flow, 
-        subscription bills for tools you use daily, and the nagging feeling 
-        that your code, writing, and conversations live on somebody else's server. 
+        The pain is the same for everyone: rate limits when you need flow,
+        subscription bills for tools you use daily, and the nagging feeling
+        that your code, writing, and conversations live on somebody else's server.
         Outlier fixes all three.
       </p>
     </div>
@@ -692,36 +659,36 @@
       <div class="pain-card">
         <span class="then">Before</span>
         <h3>Rate-limited mid-flow</h3>
-        <p>You're deep in a refactor. The API cuts you off. You wait. You pay more. 
+        <p>You're deep in a refactor. The API cuts you off. You wait. You pay more.
            You lose context. The meter runs whether the answer was good or not.</p>
         <br>
         <span class="now">With Outlier</span>
         <h3 style="margin-top:0.5rem;">Run as long as you want</h3>
-        <p>Inference runs on your Mac's GPU. No quotas. No throttling. 
+        <p>Inference runs on your Mac's GPU. No quotas. No throttling.
            No "please try again later." 24/7, at 55 tok/s on the Code tier.</p>
       </div>
 
       <div class="pain-card">
         <span class="then">Before</span>
         <h3>$20–$200/month, forever</h3>
-        <p>ChatGPT Plus. Claude Pro. Copilot. Cursor. The stack adds up. 
+        <p>ChatGPT Plus. Claude Pro. Copilot. Cursor. The stack adds up.
            Every month you pay, and you still don't own the tool. Stop paying, lose access.</p>
         <br>
         <span class="now">With Outlier</span>
         <h3 style="margin-top:0.5rem;">Download once. Yours forever.</h3>
-        <p>The app is free. The models are Apache 2.0. Your Mac is the server. 
+        <p>The app is free. The models are Apache 2.0. Your Mac is the server.
            Cancel every subscription that was charging you for tokens.</p>
       </div>
 
       <div class="pain-card">
         <span class="then">Before</span>
         <h3>Prompts live on their servers</h3>
-        <p>Client NDAs. Legal docs. Personal stuff. Proprietary code. Every prompt 
+        <p>Client NDAs. Legal docs. Personal stuff. Proprietary code. Every prompt
            you send to a cloud API gets logged, stored, and in some cases trained on.</p>
         <br>
         <span class="now">With Outlier</span>
         <h3 style="margin-top:0.5rem;">Nothing leaves your Mac</h3>
-        <p>Airplane mode works. Secure facility works. Coffee-shop Wi-Fi works. 
+        <p>Airplane mode works. Secure facility works. Coffee-shop Wi-Fi works.
            Privacy isn't a toggle — it's the architecture.</p>
       </div>
     </div>
@@ -735,8 +702,8 @@
       <span class="stag green">Shipping today</span>
       <h2>Five tiers. One app. <span class="green-g">Honest numbers.</span></h2>
       <p class="slead">
-        Every tier picks the best open-weights model for its RAM budget. 
-        Apache 2.0 base weights, Mac-optimized by us, bundled into one 8.8 MB download. 
+        Every tier picks the best open-weights model for its RAM budget.
+        Apache 2.0 base weights, Mac-optimized by us, bundled into one 8.8 MB download.
         Pick your tier, pick your model, run.
       </p>
     </div>
@@ -815,7 +782,7 @@
       <span class="stag">The comparison that matters</span>
       <h2>Outlier vs. the <em>monthly bill.</em></h2>
       <p class="slead">
-        Cloud AI is a subscription trap. Outlier is a download. 
+        Cloud AI is a subscription trap. Outlier is a download.
         Here's what a year looks like.
       </p>
     </div>
@@ -897,9 +864,9 @@
       <span class="stag">Research track</span>
       <h2>A second track: <em>our own MoE.</em></h2>
       <p class="slead">
-        Outlier ships curated open-weights models today. In parallel, we train 
-        our own ternary Mixture-of-Experts family — 10B, 40B, 70B, 150B — as 
-        overlay deltas on a frozen Qwen2.5 base. When a scale validates against 
+        Outlier ships curated open-weights models today. In parallel, we train
+        our own ternary Mixture-of-Experts family — 10B, 40B, 70B, 150B — as
+        overlay deltas on a frozen Qwen2.5 base. When a scale validates against
         a real Mac RAM tier, it graduates into the shipping stack.
       </p>
     </div>
@@ -947,8 +914,8 @@
     </div>
 
     <p class="provenance">
-      Trained solo, 19 days, under $1,200 of total compute spend. 
-      The 70B alpha-fix itself is a 15 KB overlay trained in 18 minutes on a single B200. 
+      Trained solo, 19 days, under $1,200 of total compute spend.
+      The 70B alpha-fix itself is a 15 KB overlay trained in 18 minutes on a single B200.
       <strong>3 U.S. provisional patents filed · 61 claims · non-provisional deadline April 3, 2027.</strong>
     </p>
   </div>
@@ -961,8 +928,8 @@
       <span class="stag">Support us</span>
       <h2>One person making better local AI <span class="green-g">for everyone.</span></h2>
       <p class="slead">
-        Outlier is free forever. If it's useful to you, you can chip in to help 
-        pay for research. No promises. No roadmap lock-in. Your support goes to 
+        Outlier is free forever. If it's useful to you, you can chip in to help
+        pay for research. No promises. No roadmap lock-in. Your support goes to
         R&amp;D — better models, faster inference, more Mac polish. Just gas in the tank.
       </p>
     </div>
@@ -972,8 +939,8 @@
       <h3>Founders</h3>
       <div class="founders-price">$200<span> · one time</span></div>
       <p class="founders-desc">
-        Pay once. <strong>Lifetime Pro features</strong> whenever Pro ships. 
-        Founder role in our Discord. Permanent supporter wall. Earliest access 
+        Pay once. <strong>Lifetime Pro features</strong> whenever Pro ships.
+        Founder role in our Discord. Permanent supporter wall. Earliest access
         to everything we build.
       </p>
       <a class="btn btn-accent" href="https://buy.polar.sh/60631b6a-a55b-492d-b2ec-1d95a77649b6" target="_blank">Become a Founder →</a>
@@ -986,7 +953,7 @@
         <div class="tier-card-desc">
           Supporter role in our Discord. Name on the supporter wall.
         </div>
-        <a class="tier-card-btn" href="POLAR_SUPPORTER_URL" target="_blank">Subscribe →</a>
+        <a class="tier-card-btn" href="https://buy.polar.sh/d0251c0c-74cb-4c4c-814b-f029c37c95cd" target="_blank">Subscribe →</a>
       </div>
 
       <div class="tier-card">
@@ -995,7 +962,7 @@
         <div class="tier-card-desc">
           Everything in Supporter, plus early access to beta DMGs.
         </div>
-        <a class="tier-card-btn" href="POLAR_CONTRIBUTOR_URL" target="_blank">Subscribe →</a>
+        <a class="tier-card-btn" href="https://buy.polar.sh/d7c0e0ab-2375-4e89-9e7c-19ed616ce299" target="_blank">Subscribe →</a>
       </div>
 
       <div class="tier-card">
@@ -1004,7 +971,7 @@
         <div class="tier-card-desc">
           Everything in Contributor, plus a monthly behind-the-scenes post.
         </div>
-        <a class="tier-card-btn" href="POLAR_BACKER_URL" target="_blank">Subscribe →</a>
+        <a class="tier-card-btn" href="https://buy.polar.sh/6c9de666-2718-4cd8-a579-b83d2dd2b47d" target="_blank">Subscribe →</a>
       </div>
 
       <div class="tier-card">
@@ -1013,7 +980,7 @@
         <div class="tier-card-desc">
           Everything above, plus the Patron role. Top-tier support.
         </div>
-        <a class="tier-card-btn" href="POLAR_PATRON_URL" target="_blank">Subscribe →</a>
+        <a class="tier-card-btn" href="https://buy.polar.sh/18e2361c-82b7-4a52-858d-32a27d902447" target="_blank">Subscribe →</a>
       </div>
     </div>
 
@@ -1031,17 +998,12 @@
       <span class="stag green">Community</span>
       <h2>Build with us <span class="green-g">in public.</span></h2>
       <p class="slead">
-        Everything we ship, ship-log, break, and fix is public. Come hang out, 
+        Everything we ship, ship-log, break, and fix is public. Come hang out,
         show what you're building, or file the bug that makes the next release better.
       </p>
     </div>
 
     <div class="community-grid">
-      <a class="comm-card" href="DISCORD_INVITE_URL" target="_blank">
-        <div class="comm-icon">💬</div>
-        <div class="comm-name">Discord</div>
-        <div class="comm-desc">Chat &amp; support</div>
-      </a>
       <a class="comm-card" href="https://github.com/Outlier-host/outlier" target="_blank">
         <div class="comm-icon">⌥</div>
         <div class="comm-name">GitHub</div>
@@ -1052,7 +1014,7 @@
         <div class="comm-name">HuggingFace</div>
         <div class="comm-desc">Models &amp; cards</div>
       </a>
-      <a class="comm-card" href="TWITTER_URL" target="_blank">
+      <a class="comm-card" href="https://x.com/mattkerr09" target="_blank">
         <div class="comm-icon">𝕏</div>
         <div class="comm-name">Twitter</div>
         <div class="comm-desc">Build-in-public</div>
@@ -1077,82 +1039,82 @@
       <details>
         <summary>Is it really free? What's the catch?</summary>
         <div>
-          No catch. v1 is free forever for personal and commercial use. 
-          Base model weights are Apache 2.0 (licensed by the Qwen team at Alibaba). 
-          The Outlier app is free. We plan to ship a paid Pro tier later for power-user 
-          features — when we do, the free tier you downloaded today keeps working. 
-          If you want to help fund R&amp;D before then, the <a href="#support">Support us</a> 
+          No catch. v1 is free forever for personal and commercial use.
+          Base model weights are Apache 2.0 (licensed by the Qwen team at Alibaba).
+          The Outlier app is free. We plan to ship a paid Pro tier later for power-user
+          features — when we do, the free tier you downloaded today keeps working.
+          If you want to help fund R&amp;D before then, the <a href="#support">Support us</a>
           section has one-time and monthly options.
         </div>
       </details>
       <details>
         <summary>What do I get as a Founder?</summary>
         <div>
-          $200 one-time, 500 seats only. You get a permanent Founder role in our Discord, 
-          a permanent spot on the supporter wall, lifetime access to Pro features when they ship 
-          (we don't know exactly what those are yet — that's the honest version), and our 
-          earliest-access cadence on new models and features. If you just want to help fund R&amp;D 
+          $200 one-time, 500 seats only. You get a permanent Founder role in our Discord,
+          a permanent spot on the supporter wall, lifetime access to Pro features when they ship
+          (we don't know exactly what those are yet — that's the honest version), and our
+          earliest-access cadence on new models and features. If you just want to help fund R&amp;D
           without committing to a lifetime product, the monthly tiers are a better fit.
         </div>
       </details>
       <details>
         <summary>What Mac do I need?</summary>
         <div>
-          Any Apple Silicon Mac (M1 / M2 / M3 / M4) running macOS 13 or later. 
-          Nano tier runs on 8 GB RAM. Lite and Compact work on 16 GB+. 
+          Any Apple Silicon Mac (M1 / M2 / M3 / M4) running macOS 13 or later.
+          Nano tier runs on 8 GB RAM. Lite and Compact work on 16 GB+.
           Max and Code need 32 GB+. Intel Macs are not supported — Apple Silicon only.
         </div>
       </details>
       <details>
         <summary>How does it compare to Ollama or LM Studio?</summary>
         <div>
-          Ollama is a CLI for developers and recently added a paid cloud tier. 
-          LM Studio is a generalist GUI built on Electron. Outlier is Mac-native Tauri (8.8 MB 
-          vs ~200 MB), curated tiers instead of a model zoo, and committed to strictly local + 
+          Ollama is a CLI for developers and recently added a paid cloud tier.
+          LM Studio is a generalist GUI built on Electron. Outlier is Mac-native Tauri (8.8 MB
+          vs ~200 MB), curated tiers instead of a model zoo, and committed to strictly local +
           free. All three use similar backends — the difference is polish, curation, and pricing philosophy.
         </div>
       </details>
       <details>
         <summary>Does my data really stay on my Mac?</summary>
         <div>
-          Yes. All inference runs on your Mac's GPU via MLX. Prompts, context, and outputs 
-          never leave the machine. Web search is opt-in and clearly labeled when used. 
+          Yes. All inference runs on your Mac's GPU via MLX. Prompts, context, and outputs
+          never leave the machine. Web search is opt-in and clearly labeled when used.
           You can unplug the ethernet and airplane-mode the Wi-Fi — Outlier keeps working.
         </div>
       </details>
       <details>
         <summary>What is Outlier-Coder 30B, exactly?</summary>
         <div>
-          It's our Mac-optimized build of Qwen3-Coder-30B-A3B-Instruct — a strong open-weights 
-          coding model from the Alibaba Qwen team, released under Apache 2.0. We quantize it 
-          to MLX 4-bit (16 GB on disk instead of 61 GB), tune the sampling defaults for 
-          Apple Silicon, and bundle it into the Outlier installer. The base model remains 
+          It's our Mac-optimized build of Qwen3-Coder-30B-A3B-Instruct — a strong open-weights
+          coding model from the Alibaba Qwen team, released under Apache 2.0. We quantize it
+          to MLX 4-bit (16 GB on disk instead of 61 GB), tune the sampling defaults for
+          Apple Silicon, and bundle it into the Outlier installer. The base model remains
           the work of the Qwen team; we credit them prominently everywhere.
         </div>
       </details>
       <details>
         <summary>What's the "research track" about?</summary>
         <div>
-          In parallel with the app, we research our own ternary Mixture-of-Experts models 
-          (10B–150B scales) built as overlay deltas on a frozen Qwen base. Three U.S. provisional 
-          patents filed. When a research scale validates at a real Mac RAM tier, it graduates 
+          In parallel with the app, we research our own ternary Mixture-of-Experts models
+          (10B–150B scales) built as overlay deltas on a frozen Qwen base. Three U.S. provisional
+          patents filed. When a research scale validates at a real Mac RAM tier, it graduates
           into the shipping stack. Until then, the app ships curated Qwen. We label everything honestly.
         </div>
       </details>
       <details>
         <summary>Who built this?</summary>
         <div>
-          Matt Kerr, solo. Kerr &amp; Company LLC (DBA Outlier), Grand Rapids, MI. 
-          The product was built in 19 days on a Mac Studio with under $1,200 of total compute spend. 
-          Three U.S. provisional patents on the architecture. Reach out: 
+          Matt Kerr, solo. Kerr &amp; Company LLC (DBA Outlier), Grand Rapids, MI.
+          The product was built in 19 days on a Mac Studio with under $1,200 of total compute spend.
+          Three U.S. provisional patents on the architecture. Reach out:
           <a href="mailto:matt@outlier.host">matt@outlier.host</a>.
         </div>
       </details>
       <details>
         <summary>What happens when a better open model drops?</summary>
         <div>
-          We rebase. Our pipeline is designed to absorb the next Qwen, Llama, or DeepSeek 
-          release in weeks, not months. The free tier you have today keeps getting the latest 
+          We rebase. Our pipeline is designed to absorb the next Qwen, Llama, or DeepSeek
+          release in weeks, not months. The free tier you have today keeps getting the latest
           open-weights models as they ship — continuously. No retraining required on your end.
         </div>
       </details>
@@ -1166,17 +1128,18 @@
     <span class="stag green">Download</span>
     <h2>Your Mac is <span class="green-g">the server.</span></h2>
     <p class="slead">
-      v1.3.0 is available now for Apple Silicon. Install, pick a tier, start. 
-      Free forever, no email required.
+      v1.4 for Apple Silicon ships with Apple Developer ID signing, notarization,
+      and a one-click installer. Join the Founders list to get the signed build
+      the day it drops.
     </p>
     <div class="final-cta-actions">
-      <a class="btn btn-green" href="GITHUB_RELEASES_DMG_URL" target="_blank">↓ Download v1.3.0 DMG (beta)</a>
+      <a class="btn btn-green" href="#support">Join the v1.4 waitlist</a>
       <a class="btn btn-accent" href="https://huggingface.co/Outlier-Ai" target="_blank">Models on HuggingFace</a>
       <a class="btn btn-ghost" href="https://github.com/Outlier-host/outlier" target="_blank">GitHub</a>
     </div>
     <p style="font-family:var(--mono); font-size:0.78rem; color:var(--text-dim); margin-top:2rem; position:relative;">
       Apple Silicon · macOS 13+ · 8 GB RAM minimum · Free forever · No account required<br/>
-      Unsigned beta build: right-click → Open on first run. Apple Developer ID signing coming in v1.4.
+      Signed + notarized public DMG lands with v1.4.1 (Apple Developer ID in flight).
     </p>
   </div>
 </section>
@@ -1187,16 +1150,15 @@
       <div>Outlier — Kerr &amp; Company LLC · Grand Rapids, MI · © 2026</div>
       <div class="foot-links">
         <a href="#support">Support us</a>
-        <a href="DISCORD_INVITE_URL" target="_blank">Discord</a>
         <a href="https://huggingface.co/Outlier-Ai" target="_blank">HuggingFace</a>
         <a href="https://github.com/Outlier-host/outlier" target="_blank">GitHub</a>
-        <a href="TWITTER_URL" target="_blank">Twitter</a>
+        <a href="https://x.com/mattkerr09" target="_blank">Twitter</a>
         <a href="mailto:matt@outlier.host">Contact</a>
       </div>
     </div>
     <div class="foot-attrib">
-      Outlier-Coder 30B is a Mac-optimized build of Qwen3-Coder-30B-A3B by the Alibaba Qwen team. 
-      Shipping tiers use open weights from the Qwen team under Apache 2.0. 
+      Outlier-Coder 30B is a Mac-optimized build of Qwen3-Coder-30B-A3B by the Alibaba Qwen team.
+      Shipping tiers use open weights from the Qwen team under Apache 2.0.
       Patents: #64/026,886 · #64/030,368 · #64/034,028.
     </div>
   </div>
