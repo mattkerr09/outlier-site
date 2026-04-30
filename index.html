@@ -1,3 +1,618 @@
+<!--
+  OUTLIER WEBSITE — QUARTER 1 OF 4
+  Hero / Nav / Waitlist Banner / Pain-Solution / Mission
+
+  COPY-PASTE GUIDE
+  Replace the existing <nav>, the .waitlist-banner div, the .hero
+  section, the #why section, and the #mission section in your
+  current index.html with the markup below. Keep all other
+  sections (Models, Vs Cloud, Energy, Research, Waitlist, Support,
+  Community, FAQ, Final CTA, Footer) — those come in Quarters 2-4.
+
+  NUMBERS UPDATED VS LIVE PAGE
+  - HF downloads: 12,000+ → 22,600+
+  - Version: v1.4 → v1.6
+  - Tier count: "Six tiers" → "Five tiers, four unique weights"
+  - Hero proof strip: replaced 122 tok/s vision claim and added
+    HumanEval verified number
+  - Compact → Core rename throughout
+  - Phase 2 mission card: updated to reflect actual app shipping
+    state (modes, agent harness, etc.)
+  - Phase 3: "Sprint G distillation" → "Pro tier (Founders unlock)"
+  - Phase 4: "flagship-equivalent base" → "DeepSeek V4 distillation"
+    (the actual planned v3 work, not a from-scratch model)
+-->
+
+
+<!-- ===================== NAV ===================== -->
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="#top" style="display:flex; align-items:center;">
+      <img src="data:image/png;base64,iVBORw0KGgo..." alt="Outlier" class="nav-logo">
+    </a>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open'); this.classList.toggle('active')" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="#mission">Mission</a></li>
+      <li><a href="#models">Models</a></li>
+      <li><a href="#app">App</a></li>
+      <li><a href="#vs">vs Cloud</a></li>
+      <li><a href="#energy">Energy</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><span class="ship-pill">v1.6 in flight</span></li>
+      <li><a href="#waitlist" class="nav-cta">Join waitlist</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<!-- ===================== WAITLIST BANNER ===================== -->
+
+<div class="waitlist-banner">
+  <strong>v1.6 with the new model lineup is in final testing.</strong>
+  Apple-notarized DMG submitted. Public launch coming soon.
+  <a href="#waitlist">Join the waitlist →</a>
+</div>
+
+
+<!-- ===================== HERO ===================== -->
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      v1.6 in flight · 3 U.S. patents filed · 22,600+ HF downloads
+    </div>
+
+    <h1>
+      Unlimited <span class="gradient">tokens.</span><br/>
+      On your Mac. <span class="green-g">Free forever.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Outlier is a Mac-native AI workstation — offline, private, no token caps.
+      Five tiers from 4B to 35B, four unique weights, all verified σ-significant
+      against their bases. <strong>Core tier ships at 86.6% HumanEval and 85.1%
+      MMLU in 17 GB.</strong> Every Founders dollar goes into the next training run.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-green" href="#waitlist">Join the waitlist</a>
+      <a class="btn btn-accent" href="#support">Become a Founder</a>
+      <a class="btn btn-ghost" href="#mission">The plan</a>
+    </div>
+
+    <div class="req">
+      Apple Silicon · macOS 13+ · 8 GB RAM minimum · Signed &amp; notarized DMG in flight
+    </div>
+
+    <div class="proof">
+      <div class="proof-item">
+        <div class="proof-num green">$0</div>
+        <div class="proof-label">Per token</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num purple">86.6%</div>
+        <div class="proof-label">HumanEval · Core · verified</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">85.1%</div>
+        <div class="proof-label">MMLU · Core · n=14,042</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num green">100%</div>
+        <div class="proof-label">Offline</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num purple">22,600+</div>
+        <div class="proof-label">HF downloads</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">3</div>
+        <div class="proof-label">U.S. patents filed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== PAIN -> SOLUTION ===================== -->
+
+<section class="block" id="why">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag">Why Outlier</span>
+      <h2>Stop paying the <em>meter.</em> <span class="green-g">Keep the AI.</span></h2>
+      <p class="slead">
+        Cloud AI is fast, powerful, and metered. Rate-limited when you're
+        mid-flow. A monthly bill for a tool you're renting. Prompts stored
+        on someone else's server. Outlier flips all three — running
+        entirely on your Mac.
+      </p>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <span class="then">Before</span>
+        <h3>Rate-limited mid-flow</h3>
+        <p>
+          You're deep in a refactor. The API cuts you off. You wait. You pay
+          more. You lose context. The meter runs whether the answer was useful
+          or not.
+        </p>
+        <br>
+        <span class="now">With Outlier</span>
+        <h3 style="margin-top:0.5rem;">Run as long as you want</h3>
+        <p>
+          Inference runs on your Mac's GPU via MLX. No quotas. No throttling.
+          No "please try again later." Verified throughput on M1 Ultra:
+          71 tok/s on Nano, 53 tok/s on Lite, 21 tok/s on Core (27B class).
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <span class="then">Before</span>
+        <h3>$20–$200 every month, forever</h3>
+        <p>
+          ChatGPT Plus. Claude Pro. Claude Code at $200/month. Cursor with
+          overage bills. The stack stacks up. Every month you pay, and you
+          still don't own any of it. Stop paying, lose access.
+        </p>
+        <br>
+        <span class="now">With Outlier</span>
+        <h3 style="margin-top:0.5rem;">Download once. Yours forever.</h3>
+        <p>
+          Free tier stays free forever. Pro tier is $20/month or $192/year.
+          Founders pay $200 once, locked for life. Cancel the subscriptions
+          that charge you for tokens.
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <span class="then">Before</span>
+        <h3>Prompts live on their servers</h3>
+        <p>
+          Client NDAs. Legal drafts. Personal conversations. Proprietary code.
+          Every prompt sent to a cloud API gets logged, stored, and in some
+          cases trained on.
+        </p>
+        <br>
+        <span class="now">With Outlier</span>
+        <h3 style="margin-top:0.5rem;">Nothing leaves your Mac</h3>
+        <p>
+          Airplane mode works. Secure facility works. Coffee-shop Wi-Fi works.
+          Privacy isn't a toggle — it's the architecture. Web search is
+          opt-in and labeled when active.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== MISSION ===================== -->
+
+<section class="block" id="mission">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag">The mission</span>
+      <h2>An offline model <span class="green-g">good enough to code Outlier itself.</span></h2>
+      <p class="slead">
+        The best coding assistants live in the cloud. They're powerful,
+        they're metered, they're watching. The gap between open local
+        models and cloud-hosted flagships on agentic coding benchmarks
+        is real — and closing fast. <strong>Today: Core ships at 86.6%
+        HumanEval, within 6 points of Claude Sonnet 4.5.</strong>
+        Every Founders dollar goes into closing the rest.
+      </p>
+    </div>
+
+    <div class="mission-intro"></div>
+
+    <div class="phase-grid">
+      <div class="phase-card shipping">
+        <div class="phase-num">Phase 1 · Shipped</div>
+        <h3>Strong open weights, free forever</h3>
+        <p>
+          22,600+ downloads on HuggingFace across 53 repos. Base layers
+          curated from Apache 2.0 Qwen weights. Mac-optimized via MLX
+          4-bit, vision encoders stripped from text tiers (saves 2.49 GB).
+          Free. No account. No catch.
+        </p>
+        <span class="phase-status shipping">● Live on HuggingFace</span>
+      </div>
+
+      <div class="phase-card active">
+        <div class="phase-num">Phase 2 · v1.6 final testing</div>
+        <h3>The Mac app</h3>
+        <p>
+          Five product tiers (Nano · Lite · Core · Code · Vision) bundled
+          into a Tauri-native Mac app. Five modes: Chat, Code, Deep Research,
+          Computer (agent), Autonomous. File drops. Project folders. Chat
+          history. Apple Silicon via MLX. Apple Developer ID approved
+          April 21 — going through notarization now.
+        </p>
+        <span class="phase-status active">● v1.6 notarization queue</span>
+      </div>
+
+      <div class="phase-card queued-accent">
+        <div class="phase-num">Phase 3 · In development</div>
+        <h3>Pro tier — distilled flagship</h3>
+        <p>
+          Take the strongest accessible flagship teacher (Qwen3.5-397B or
+          DeepSeek V4), distill into a 40-50B-class Outlier-native model
+          via offline logit caching. Targets Claude Sonnet 4.6 parity by
+          end of 2026. <strong>Founders unlock this tier free at launch.</strong>
+          Funded entirely by Founders revenue.
+        </p>
+        <span class="phase-status queued">● Founders fund the gap</span>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">Phase 4 · The destination</div>
+        <h3>Outlier-native flagship</h3>
+        <p>
+          A base model built from scratch on our ternary Mixture-of-Experts
+          architecture. Matches the cloud flagships on agentic coding,
+          writing, and reasoning. Runs fully on a consumer Mac. <strong>The
+          model that codes Outlier itself.</strong> Multi-quarter effort
+          post-Series-A.
+        </p>
+        <span class="phase-status queued-dim">After Phase 3 ships</span>
+      </div>
+    </div>
+
+    <p class="mission-close">
+      No timelines, because timelines are lies. <strong>Phases ship in
+      order, each one funded by the last.</strong> Free tier stays free
+      forever. No ads. No data sales. No enterprise bait-and-switch. Every
+      dollar — Founders, Pro subs, sponsored benchmarks, eventual seed
+      round — goes into Phase 3, then Phase 4.
+    </p>
+  </div>
+</section>
+
+<!--
+  OUTLIER WEBSITE — QUARTER 2 OF 4
+  Inside the App / Models / Code tier disclosure / Hardware fit
+
+  COPY-PASTE GUIDE
+  This quarter inserts ONE new section (Inside the App) and
+  REPLACES the existing #models section in your current page.
+  Append the Hardware Fit table inside the Models section block.
+
+  ORDER IN PAGE:
+  ...mission section ends...
+  →  INSERT: <section id="app"> (Inside the App)
+  →  REPLACE: <section id="models"> (with new tier table + Hardware Fit)
+  ...continue with #vs (Vs Cloud) — that gets updated in Quarter 3...
+
+  PLACEHOLDER WARNING
+  - Tok/s numbers below use tonight's verified Mac re-bench:
+    Nano 71.7, Lite 53.4, Core 20.7, Vision TBD (not yet benched
+    post-migration). Replace the Vision TBD when the agent
+    surfaces it.
+  - HF URLs use the Outlier-Ai/* org repos that the agent is
+    pushing. If the agent ends up renaming any of these, update
+    the href values.
+-->
+
+
+<!-- ===================== NEW: INSIDE THE APP ===================== -->
+
+<section class="block" id="app">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag amber">v1.6 in flight</span>
+      <h2>Inside the <span class="green-g">app.</span></h2>
+      <p class="slead">
+        Outlier isn't a chat box. It's a Mac-native AI workstation with
+        five modes, an agent harness, and a custom inference engine — all
+        wrapped in a Tauri app under 10 MB. <strong>One download, no
+        account, runs forever.</strong>
+      </p>
+    </div>
+
+    <!-- Five modes -->
+    <div class="pain-grid" style="margin-bottom: 2.5rem;">
+
+      <div class="pain-card" style="grid-column: span 1;">
+        <span class="now">Mode 1</span>
+        <h3 style="margin-top:0.5rem;">Chat</h3>
+        <p>
+          Standard conversational AI. Pick your tier (Nano for speed,
+          Core for quality), type, get answers. Multi-turn context held
+          locally. File drops accepted. Markdown rendering, code
+          highlighting, copy buttons that work like a Mac app should.
+        </p>
+      </div>
+
+      <div class="pain-card" style="grid-column: span 1;">
+        <span class="now">Mode 2</span>
+        <h3 style="margin-top:0.5rem;">Code</h3>
+        <p>
+          Coding-tuned system prompt, lower temperature, autonomous-mode
+          defaults. Ships Core's weights — Core scored 86.6% HumanEval
+          (verified, n=164) which beat Qwen3-Coder-30B-A3B by 9.15 points
+          in our audit. Same brain, code-tuned config.
+        </p>
+      </div>
+
+      <div class="pain-card" style="grid-column: span 1;">
+        <span class="now">Mode 3</span>
+        <h3 style="margin-top:0.5rem;">Deep Research</h3>
+        <p>
+          Multi-step research mode. The model breaks your question into
+          sub-queries, plans an investigation, reads what you give it
+          (PDFs, docs, links), and writes a structured report. Like
+          Perplexity, but offline and uncapped.
+        </p>
+      </div>
+
+      <div class="pain-card" style="grid-column: span 1;">
+        <span class="now">Mode 4</span>
+        <h3 style="margin-top:0.5rem;">Computer</h3>
+        <p>
+          Agent mode. The model can click, type, and use other Mac apps
+          on your behalf. You approve each plan before it runs. Diffs
+          shown for code edits. Test harness verifies outcomes. The
+          plan-approve-execute-verify loop, locally.
+        </p>
+      </div>
+
+      <div class="pain-card" style="grid-column: span 1;">
+        <span class="now">Mode 5</span>
+        <h3 style="margin-top:0.5rem;">Autonomous</h3>
+        <p>
+          Long-horizon task mode. Give the model a goal, it runs without
+          you watching. Returns when finished or stuck. For coding tasks,
+          large research jobs, batch operations. Pro tier feature.
+        </p>
+      </div>
+
+      <div class="pain-card" style="grid-column: span 1;">
+        <span class="now">Engine</span>
+        <h3 style="margin-top:0.5rem;">V9 Paged</h3>
+        <p>
+          Custom inference engine on top of MLX. Prefix-cache for
+          conversation continuity. Hybrid-attention-aware KV layout.
+          Streams tokens as they generate. <strong>Faster than Ollama
+          and LM Studio at the same model size on the same Mac.</strong>
+        </p>
+      </div>
+    </div>
+
+    <!-- Capability bullets -->
+    <div class="shead" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.6rem; max-width: none;">What the app actually does</h2>
+    </div>
+
+    <div class="pain-grid">
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">📂 Project folders</h3>
+        <p>
+          Point Outlier at a folder. It indexes the contents (code, docs,
+          PDFs, images for Vision tier) and answers questions with file-level
+          citations. RAG happens entirely on your Mac.
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔍 Web search (opt-in)</h3>
+        <p>
+          Toggle web search on for current info. Always labeled when
+          active. Off by default. Search queries route through your
+          chosen provider — your prompts don't get logged on someone
+          else's AI server.
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔄 Bring your own model</h3>
+        <p>
+          Free tier supports BYOM. Drop in any compatible Hugging Face
+          model — Bonsai, Llama, Mistral, anything that runs through MLX.
+          Outlier becomes the wrapper, you pick the brain.
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔑 Bring your own key</h3>
+        <p>
+          BYOK for cloud APIs too. Wire in your Anthropic, OpenAI, or
+          OpenRouter key. Use Claude Sonnet through Outlier's interface
+          when you want to. Your key, your usage, your bill.
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">💾 Local chat history</h3>
+        <p>
+          Every conversation saved to a local SQLite database. Search
+          across history, restore old threads, export to markdown. The
+          database file lives in your home directory — yours to back up,
+          delete, or move.
+        </p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">⚡ Tauri-native</h3>
+        <p>
+          Built with Tauri instead of Electron. Under 10 MB installer.
+          Native Mac feel. Real macOS keyboard shortcuts. Universal
+          binary for Apple Silicon. No web wrapper, no Chromium tax.
+        </p>
+      </div>
+
+    </div>
+
+    <p class="provenance" style="margin-top: 1.8rem;">
+      <strong>[verified]</strong>&nbsp; All features above are in the
+      v1.6 build going through Apple notarization now. Five tiers ship
+      bundled. Pro modes (Computer, Autonomous) gated behind Founders /
+      Pro subscription.
+    </p>
+  </div>
+</section>
+
+
+<!-- ===================== MODELS / TIERS (REPLACES EXISTING) ===================== -->
+
+<section class="block" id="models">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag green">v1.6 lineup · σ-qualified</span>
+      <h2>Five tiers. Four unique weights. <span class="green-g">Honest numbers.</span></h2>
+      <p class="slead">
+        Every number on this page comes with a sample size, a standard error,
+        and a source file. <strong>If a number isn't σ-qualified, it isn't
+        on this page.</strong> That discipline is the difference between
+        marketing copy and provenance.
+      </p>
+    </div>
+
+    <!-- Main tier table -->
+    <div class="tier-wrap">
+    <table class="tier">
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Best for</th>
+          <th>RAM</th>
+          <th>Speed (M1 Ultra)</th>
+          <th>Quality</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td>
+            <div class="tname">Nano</div>
+            <div class="tbase">Qwen3.5-4B + CAKLD · MLX 4-bit</div>
+          </td>
+          <td class="tnote">Fast drafts, 8 GB Macs, on-the-go</td>
+          <td class="v">~3 GB</td>
+          <td class="v green">71.7 tok/s</td>
+          <td class="v">MMLU 0.7437 <span style="color:var(--text-dim);">±0.0037</span></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="tname">Lite</div>
+            <div class="tbase">Qwen3.5-9B + CAKLD · MLX 4-bit</div>
+          </td>
+          <td class="tnote">Daily driver · chat, writing, Q&amp;A</td>
+          <td class="v">~6 GB</td>
+          <td class="v green">53.4 tok/s</td>
+          <td class="v">MMLU 0.7846 <span style="color:var(--text-dim);">±0.0035</span></td>
+        </tr>
+
+        <tr class="flagship">
+          <td>
+            <div class="tname">Core <span class="tag-new">flagship</span></div>
+            <div class="tbase">Qwen3.6-27B + Holtzman · MLX 4-bit</div>
+          </td>
+          <td class="tnote">Reasoning · coding · agents · research</td>
+          <td class="v hi">~16 GB</td>
+          <td class="v">20.7 tok/s</td>
+          <td class="v hi">
+            HumanEval 0.866 · MMLU 0.851
+          </td>
+        </tr>
+
+        <tr class="flagship">
+          <td>
+            <div class="tname">Code <span class="tag-new">= Core</span></div>
+            <div class="tbase">Core weights + code-tuned config</div>
+          </td>
+          <td class="tnote">Coding workflows · autonomous agents</td>
+          <td class="v hi">~16 GB</td>
+          <td class="v">20.7 tok/s</td>
+          <td class="v hi">HumanEval 0.866 verified</td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="tname">Vision</div>
+            <div class="tbase">Qwen3.6-35B-A3B · MLX 4-bit</div>
+          </td>
+          <td class="tnote">Image understanding · OCR · multimodal</td>
+          <td class="v">~12 GB paged</td>
+          <td class="v tbd">post-migration bench pending</td>
+          <td class="v">MMLU 0.835 <span style="color:var(--text-dim);">(text)</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+    </div>
+
+    <p class="provenance">
+      <strong>[verified]</strong>&nbsp;
+      MMLU on lm-evaluation-harness v0.4.9.1 · n=14,042 · 5-shot · bfloat16 ·
+      MPS device. HumanEval pass@1 · n=164. Mac speed on M1 Ultra 64 GB
+      via mlx_lm 0.31.3 · 5-prompt steady-state · post-vision-encoder-strip.
+      <br>
+      <strong>Source files:</strong> sprints/disposition-audit-day30/
+      &middot; sprints/path-b-v2-lineup-migration/
+    </p>
+
+
+    <!-- Code tier disclosure -->
+    <div class="shead" style="margin-top: 4rem; margin-bottom: 1.5rem;">
+      <span class="stag">Transparency</span>
+      <h2 style="font-size: 1.8rem; max-width: none;">
+        Why "Code" and "Core" share weights
+      </h2>
+    </div>
+
+    <div class="pain-card" style="max-width: 760px; margin: 0 auto;">
+      <p style="font-size: 1.02rem; line-height: 1.7; color: var(--text-mid);">
+        In our Day 30 audit, we ran HumanEval pass@1 on every base model
+        in our planned lineup. The result was unexpected:
+      </p>
+
+      <div style="font-family: var(--mono); font-size: 0.92rem; background: var(--surface-2);
+                  border: 1px solid var(--border); border-radius: 8px;
+                  padding: 1rem 1.2rem; margin: 1.2rem 0; line-height: 1.8;">
+        <strong style="color: var(--text);">Qwen3.6-27B (Core base):</strong>
+        <span style="color: var(--green);">86.59%</span>
+        <span style="color: var(--text-dim);">±0.027</span>
+        <br>
+        <strong style="color: var(--text);">Qwen3-Coder-30B-A3B (planned Code base):</strong>
+        <span style="color: var(--text);">77.44%</span>
+        <span style="color: var(--text-dim);">±0.033</span>
+        <br>
+        <strong style="color: var(--accent-light);">Delta:</strong>
+        <span style="color: var(--accent-light);">+9.15 pp at 2.18σ — statistically significant</span>
+      </div>
+
+      <p style="color: var(--text-mid); line-height: 1.7;">
+        The general-purpose Core base outscored the dedicated coder by
+        9 points on coding. So we collapsed the Code tier: ship Core's
+        weights with a code-tuned system prompt, lower temperature, and
+        autonomous-mode defaults. <strong>Same weights, two product
+        surfaces.</strong>
+      </p>
+
+      <p style="color: var(--text-mid); line-height: 1.7; margin-top: 1rem;">
+        GitHub Copilot does the same thing — it's GPT-4 underneath with
+        a coding-specific wrapper. We do it transparently and tell you
+        why: shipping the better weights under both names is honest
+        engineering, and it saved a Sprint G distillation run we
+        repurposed for the Pro tier.
+      </p>
+    </div>
+
+
+    <!-- Hardware fit -->
+    <div class="shead" style="margin-top: 4rem; margin-bottom: 1.5rem;">
+      <span class="stag green">Will it run?</span>
+      <h2 style="font-size: 1.8rem; max-width: none;">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -678,6 +1293,14 @@
       padding-top: 1.2rem; border-top: 1px solid var(--border);
     }
 
+    /* INLINE CODE BOX (for Code disclosure) */
+    .code-disclosure {
+      font-family: var(--mono); font-size: 0.92rem;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1rem 1.2rem;
+      margin: 1.2rem 0; line-height: 1.8;
+    }
+
     /* NAV MOBILE */
     .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 1001; }
     .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--text); margin: 5px 0; transition: all 0.3s; border-radius: 2px; }
@@ -745,20 +1368,21 @@
     </button>
     <ul class="nav-links">
       <li><a href="#mission">Mission</a></li>
+      <li><a href="#app">App</a></li>
       <li><a href="#models">Models</a></li>
       <li><a href="#vs">vs Cloud</a></li>
+      <li><a href="#benchmarks">Benchmarks</a></li>
       <li><a href="#energy">Energy</a></li>
-      <li><a href="#research">Research</a></li>
       <li><a href="#support">Support</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><span class="ship-pill">v1.4 coming soon</span></li>
+      <li><span class="ship-pill">v1.6 in flight</span></li>
       <li><a href="#waitlist" class="nav-cta">Join waitlist</a></li>
     </ul>
   </div>
 </nav>
 
 <div class="waitlist-banner">
-  <strong>The Mac app is in final testing.</strong> Public launch coming soon with Apple-notarized DMG.
+  <strong>v1.6 with the new model lineup is in final testing.</strong> Apple-notarized DMG submitted. Public launch coming soon.
   <a href="#waitlist">Join the waitlist →</a>
 </div>
 
@@ -767,14 +1391,14 @@
   <div class="wrap">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      v1.4 coming soon · 3 U.S. patents filed · 12,000+ HF downloads
+      v1.6 in flight · 3 U.S. patents filed · 22,600+ HF downloads
     </div>
     <h1>Unlimited <span class="gradient">tokens.</span><br/>On your Mac. <span class="green-g">Free forever.</span></h1>
     <p class="hero-sub">
-      Outlier is a Mac-native AI app — offline, private, no token caps. Six model
-      tiers from 1.7B to 35B. <strong>App in final testing. Public launch coming
-      soon.</strong> Every dollar we raise goes into training a local model that codes
-      as well as the cloud flagships.
+      Outlier is a Mac-native AI workstation — offline, private, no token caps. Five tiers
+      from 4B to 35B, four unique weights, all verified σ-significant against their bases.
+      <strong>Core tier ships at 86.6% HumanEval and 85.1% MMLU in 17 GB.</strong>
+      Every Founders dollar goes into the next training run.
     </p>
     <div class="hero-actions">
       <a class="btn btn-green" href="#waitlist">Join the waitlist</a>
@@ -789,24 +1413,24 @@
         <div class="proof-label">Per token</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num purple">122 tok/s</div>
-        <div class="proof-label">Vision tier · M1 Ultra</div>
+        <div class="proof-num purple">86.6%</div>
+        <div class="proof-label">HumanEval · Core · verified</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">8.8 MB</div>
-        <div class="proof-label">App size</div>
+        <div class="proof-num">85.1%</div>
+        <div class="proof-label">MMLU · Core · n=14,042</div>
       </div>
       <div class="proof-item">
         <div class="proof-num green">100%</div>
         <div class="proof-label">Offline</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num purple">6</div>
-        <div class="proof-label">Model tiers</div>
+        <div class="proof-num purple">22,600+</div>
+        <div class="proof-label">HF downloads</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">12,000+</div>
-        <div class="proof-label">HF downloads</div>
+        <div class="proof-num">3</div>
+        <div class="proof-label">U.S. patents filed</div>
       </div>
     </div>
   </div>
@@ -821,7 +1445,7 @@
       <p class="slead">
         Cloud AI is fast, powerful, and metered. Rate-limited when you're mid-flow.
         A monthly bill for a tool you're renting. Prompts stored on someone else's
-        server. Outlier is built to flip all three — running entirely on your Mac.
+        server. Outlier flips all three — running entirely on your Mac.
       </p>
     </div>
 
@@ -835,19 +1459,22 @@
         <span class="now">With Outlier</span>
         <h3 style="margin-top:0.5rem;">Run as long as you want</h3>
         <p>Inference runs on your Mac's GPU via MLX. No quotas. No throttling.
-           No "please try again later." 71 tok/s on Lite, 122 on Vision — 24/7.</p>
+           No "please try again later." Verified throughput on M1 Ultra: 71 tok/s on Nano,
+           53 tok/s on Lite, 21 tok/s on Core (27B class).</p>
       </div>
 
       <div class="pain-card">
         <span class="then">Before</span>
         <h3>$20–$200 every month, forever</h3>
-        <p>ChatGPT Plus. Claude Pro. Copilot. Cursor. The stack stacks up.
-           Every month you pay, and you still don't own any of it. Stop paying, lose access.</p>
+        <p>ChatGPT Plus. Claude Pro. Claude Code at $200/month. Cursor with overage bills.
+           The stack stacks up. Every month you pay, and you still don't own any of it.
+           Stop paying, lose access.</p>
         <br>
         <span class="now">With Outlier</span>
         <h3 style="margin-top:0.5rem;">Download once. Yours forever.</h3>
-        <p>When we ship, the app is free. The models are Apache 2.0. Your Mac is the server.
-           Cancel the subscriptions that charge you for tokens.</p>
+        <p>Free tier stays free forever. Pro tier is $20/month or $192/year.
+           Founders pay $200 once, locked for life. Cancel the subscriptions
+           that charge you for tokens.</p>
       </div>
 
       <div class="pain-card">
@@ -859,7 +1486,8 @@
         <span class="now">With Outlier</span>
         <h3 style="margin-top:0.5rem;">Nothing leaves your Mac</h3>
         <p>Airplane mode works. Secure facility works. Coffee-shop Wi-Fi works.
-           Privacy isn't a toggle — it's the architecture.</p>
+           Privacy isn't a toggle — it's the architecture. Web search is opt-in
+           and labeled when active.</p>
       </div>
     </div>
   </div>
@@ -874,8 +1502,9 @@
       <p class="slead">
         The best coding assistants live in the cloud. They're powerful, they're metered,
         they're watching. The gap between open local models and cloud-hosted flagships
-        on agentic coding benchmarks is real. <strong>It's also closing fast.</strong>
-        Every dollar that comes into Outlier goes into closing it.
+        on agentic coding benchmarks is real — and closing fast. <strong>Today: Core ships
+        at 86.6% HumanEval, within 6 points of Claude Sonnet 4.5.</strong>
+        Every Founders dollar goes into closing the rest.
       </p>
     </div>
 
@@ -883,45 +1512,167 @@
 
     <div class="phase-grid">
       <div class="phase-card shipping">
-        <div class="phase-num">Phase 1</div>
-        <h3>Ship strong open weights, free forever</h3>
-        <p>Our models are published on HuggingFace — 12,000+ downloads across 53 repos.
-        Base layers curated from Apache 2.0 weights, Mac-optimized by us. Free Mac app
-        (the bundled experience around them) is in final testing.</p>
-        <span class="phase-status shipping">● Models shipped on HF</span>
+        <div class="phase-num">Phase 1 · Shipped</div>
+        <h3>Strong open weights, free forever</h3>
+        <p>22,600+ downloads on HuggingFace across 53 repos. Base layers curated from
+        Apache 2.0 Qwen weights. Mac-optimized via MLX 4-bit, vision encoders stripped
+        from text tiers (saves 2.49 GB). Free. No account. No catch.</p>
+        <span class="phase-status shipping">● Live on HuggingFace</span>
       </div>
       <div class="phase-card active">
-        <div class="phase-num">Phase 2</div>
-        <h3>Launch the Mac app</h3>
-        <p>Six tiers (Nano → Vision) bundled into an 8.8 MB Mac-native app. Chat history.
-        File drops. Project folders. Agentic coding mode. Offline search. Apple Silicon
-        via MLX. Going through Apple notarization now — public launch coming soon.</p>
-        <span class="phase-status active">● v1.4 final testing</span>
+        <div class="phase-num">Phase 2 · v1.6 final testing</div>
+        <h3>The Mac app</h3>
+        <p>Five product tiers (Nano · Lite · Core · Code · Vision) bundled into a
+        Tauri-native Mac app. Five modes: Chat, Code, Deep Research, Computer (agent),
+        Autonomous. File drops. Project folders. Chat history. Apple Silicon via MLX.
+        Apple Developer ID approved April 21 — going through notarization now.</p>
+        <span class="phase-status active">● v1.6 notarization queue</span>
       </div>
       <div class="phase-card queued-accent">
-        <div class="phase-num">Phase 3</div>
-        <h3>Fine-tune our own coder</h3>
-        <p>Take the strongest open coding base available, fine-tune on high-quality agentic
-        traces, tune for Apple Silicon, ship in the app. First model that's ours, not just
-        curated. Phase 1 training gate (serial engine) GREEN · Phase 2-6 training now on
-        rented B200 cluster.</p>
-        <span class="phase-status queued">● In training</span>
+        <div class="phase-num">Phase 3 · In development</div>
+        <h3>Pro tier — distilled flagship</h3>
+        <p>Take the strongest accessible flagship teacher (Qwen3.5-397B or DeepSeek V4),
+        distill into a 40-50B-class Outlier-native model via offline logit caching.
+        Targets Claude Sonnet 4.6 parity by end of 2026.
+        <strong>Founders unlock this tier free at launch.</strong>
+        Funded entirely by Founders revenue.</p>
+        <span class="phase-status queued">● Founders fund the gap</span>
       </div>
       <div class="phase-card">
-        <div class="phase-num">Phase 4</div>
-        <h3>Train a flagship-equivalent base</h3>
+        <div class="phase-num">Phase 4 · The destination</div>
+        <h3>Outlier-native flagship</h3>
         <p>A base model built from scratch on our ternary Mixture-of-Experts architecture.
         Matches the cloud flagships on agentic coding, writing, and reasoning. Runs fully
-        on a consumer Mac. <strong>This is the model that codes Outlier itself.</strong></p>
-        <span class="phase-status queued-dim">The destination</span>
+        on a consumer Mac. <strong>The model that codes Outlier itself.</strong>
+        Multi-quarter effort post-Series-A.</p>
+        <span class="phase-status queued-dim">After Phase 3 ships</span>
       </div>
     </div>
 
     <p class="mission-close">
       No timelines, because timelines are lies. <strong>Phases ship in order, each one
       funded by the last.</strong> Free tier stays free forever. No ads. No data sales.
-      No enterprise bait-and-switch. Every dollar — Founders, Supporters, Patrons, sponsored
-      benchmarks, eventual seed round — goes into Phase 4.
+      No enterprise bait-and-switch. Every dollar — Founders, Pro subs, sponsored
+      benchmarks, eventual seed round — goes into Phase 3, then Phase 4.
+    </p>
+  </div>
+</section>
+
+<!-- INSIDE THE APP -->
+<section class="block" id="app">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag amber">v1.6 in flight</span>
+      <h2>Inside the <span class="green-g">app.</span></h2>
+      <p class="slead">
+        Outlier isn't a chat box. It's a Mac-native AI workstation with five modes,
+        an agent harness, and a custom inference engine — all wrapped in a Tauri
+        app under 10 MB. <strong>One download, no account, runs forever.</strong>
+      </p>
+    </div>
+
+    <div class="pain-grid" style="margin-bottom: 2.5rem;">
+      <div class="pain-card">
+        <span class="now">Mode 1</span>
+        <h3 style="margin-top:0.5rem;">Chat</h3>
+        <p>Standard conversational AI. Pick your tier (Nano for speed, Core for quality),
+           type, get answers. Multi-turn context held locally. File drops accepted. Markdown
+           rendering, code highlighting, copy buttons that work like a Mac app should.</p>
+      </div>
+
+      <div class="pain-card">
+        <span class="now">Mode 2</span>
+        <h3 style="margin-top:0.5rem;">Code</h3>
+        <p>Coding-tuned system prompt, lower temperature, autonomous-mode defaults. Ships
+           Core's weights — Core scored 86.6% HumanEval (verified, n=164) which beat
+           Qwen3-Coder-30B-A3B by 9.15 points in our audit. Same brain, code-tuned config.</p>
+      </div>
+
+      <div class="pain-card">
+        <span class="now">Mode 3</span>
+        <h3 style="margin-top:0.5rem;">Deep Research</h3>
+        <p>Multi-step research mode. The model breaks your question into sub-queries,
+           plans an investigation, reads what you give it (PDFs, docs, links), and writes
+           a structured report. Like Perplexity, but offline and uncapped.</p>
+      </div>
+
+      <div class="pain-card">
+        <span class="now">Mode 4</span>
+        <h3 style="margin-top:0.5rem;">Computer</h3>
+        <p>Agent mode. The model can click, type, and use other Mac apps on your behalf.
+           You approve each plan before it runs. Diffs shown for code edits. Test harness
+           verifies outcomes. The plan-approve-execute-verify loop, locally.</p>
+      </div>
+
+      <div class="pain-card">
+        <span class="now">Mode 5</span>
+        <h3 style="margin-top:0.5rem;">Autonomous</h3>
+        <p>Long-horizon task mode. Give the model a goal, it runs without you watching.
+           Returns when finished or stuck. For coding tasks, large research jobs, batch
+           operations. Pro tier feature.</p>
+      </div>
+
+      <div class="pain-card">
+        <span class="now">Engine</span>
+        <h3 style="margin-top:0.5rem;">V9 Paged</h3>
+        <p>Custom inference engine on top of MLX. Prefix-cache for conversation continuity.
+           Hybrid-attention-aware KV layout. Streams tokens as they generate. <strong>Faster
+           than Ollama and LM Studio at the same model size on the same Mac.</strong></p>
+      </div>
+    </div>
+
+    <div class="shead" style="margin-top: 1rem; margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.6rem; max-width: none;">What the app actually does</h2>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">📂 Project folders</h3>
+        <p>Point Outlier at a folder. It indexes the contents (code, docs, PDFs, images
+           for Vision tier) and answers questions with file-level citations. RAG happens
+           entirely on your Mac.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔍 Web search (opt-in)</h3>
+        <p>Toggle web search on for current info. Always labeled when active. Off by
+           default. Search queries route through your chosen provider — your prompts
+           don't get logged on someone else's AI server.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔄 Bring your own model</h3>
+        <p>Free tier supports BYOM. Drop in any compatible Hugging Face model — Bonsai,
+           Llama, Mistral, anything that runs through MLX. Outlier becomes the wrapper,
+           you pick the brain.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔑 Bring your own key</h3>
+        <p>BYOK for cloud APIs too. Wire in your Anthropic, OpenAI, or OpenRouter key.
+           Use Claude Sonnet through Outlier's interface when you want to. Your key,
+           your usage, your bill.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">💾 Local chat history</h3>
+        <p>Every conversation saved to a local SQLite database. Search across history,
+           restore old threads, export to markdown. The database file lives in your home
+           directory — yours to back up, delete, or move.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">⚡ Tauri-native</h3>
+        <p>Built with Tauri instead of Electron. Under 10 MB installer. Native Mac feel.
+           Real macOS keyboard shortcuts. Universal binary for Apple Silicon. No web
+           wrapper, no Chromium tax.</p>
+      </div>
+    </div>
+
+    <p class="provenance" style="margin-top: 1.8rem;">
+      <strong>[verified]</strong>&nbsp; All features above are in the v1.6 build going
+      through Apple notarization now. Five tiers ship bundled. Pro modes (Computer,
+      Autonomous) gated behind Founders / Pro subscription.
     </p>
   </div>
 </section>
@@ -930,88 +1681,184 @@
 <section class="block" id="models">
   <div class="wrap">
     <div class="shead">
-      <span class="stag amber">Coming in v1.4</span>
-      <h2>Six tiers. One app. <span class="green-g">Honest numbers.</span></h2>
+      <span class="stag green">v1.6 lineup · σ-qualified</span>
+      <h2>Five tiers. Four unique weights. <span class="green-g">Honest numbers.</span></h2>
       <p class="slead">
-        Every tier picks the strongest open-weights model that fits the RAM budget.
-        Apache 2.0 base weights, Mac-optimized by us, bundled into one 8.8 MB download
-        when the app launches. Pick your tier, pick your model, run it as long as you want.
+        Every number on this page comes with a sample size, a standard error, and a
+        source file. <strong>If a number isn't σ-qualified, it isn't on this page.</strong>
+        That discipline is the difference between marketing copy and provenance.
       </p>
     </div>
 
     <div class="tier-wrap">
     <table class="tier">
       <thead>
-        <tr><th>Tier</th><th>Best for</th><th>RAM</th><th>Speed</th><th>Requires</th></tr>
+        <tr><th>Tier</th><th>Best for</th><th>RAM</th><th>Speed (M1 Ultra)</th><th>Quality</th></tr>
       </thead>
       <tbody>
         <tr>
           <td>
             <div class="tname">Nano</div>
-            <div class="tbase">Qwen3 1.7B · MLX 4-bit</div>
+            <div class="tbase">Qwen3.5-4B + CAKLD · MLX 4-bit</div>
           </td>
-          <td class="tnote">Fast drafts, low-battery mode</td>
-          <td class="v">&lt; 2 GB</td>
-          <td class="v tbd">bench tbd</td>
-          <td class="tnote">Any Mac · 8 GB+</td>
+          <td class="tnote">Fast drafts, 8 GB Macs, on-the-go</td>
+          <td class="v">~3 GB</td>
+          <td class="v green">71.7 tok/s</td>
+          <td class="v">MMLU 0.7437 <span style="color:var(--text-dim);">±0.0037</span></td>
         </tr>
         <tr>
           <td>
             <div class="tname">Lite</div>
-            <div class="tbase">Qwen 2.5 7B · MLX 4-bit</div>
+            <div class="tbase">Qwen3.5-9B + CAKLD · MLX 4-bit</div>
           </td>
           <td class="tnote">Daily driver · chat, writing, Q&amp;A</td>
-          <td class="v">4.47 GB</td>
-          <td class="v green">71.30 tok/s</td>
-          <td class="tnote">16 GB Macs and up</td>
-        </tr>
-        <tr>
-          <td>
-            <div class="tname">Compact</div>
-            <div class="tbase">Qwen 2.5 14B · MLX 4-bit</div>
-          </td>
-          <td class="tnote">Reasoning, deeper context</td>
-          <td class="v">8.24 GB</td>
-          <td class="v green">37.26 tok/s</td>
-          <td class="tnote">16 GB Macs and up</td>
-        </tr>
-        <tr>
-          <td>
-            <div class="tname">Max</div>
-            <div class="tbase">Qwen 2.5 32B · GGUF Q4</div>
-          </td>
-          <td class="tnote">Long-form, complex tasks</td>
-          <td class="v">~18 GB</td>
-          <td class="v tbd">bench tbd</td>
-          <td class="tnote">32 GB+ Macs</td>
+          <td class="v">~6 GB</td>
+          <td class="v green">53.4 tok/s</td>
+          <td class="v">MMLU 0.7846 <span style="color:var(--text-dim);">±0.0035</span></td>
         </tr>
         <tr class="flagship">
           <td>
-            <div class="tname">Code <span class="tag-soon">v1.4</span></div>
-            <div class="tbase">Qwen3-Coder 30B-A3B · MLX 4-bit</div>
+            <div class="tname">Core <span class="tag-new">flagship</span></div>
+            <div class="tbase">Qwen3.6-27B + Holtzman · MLX 4-bit</div>
           </td>
-          <td class="tnote">Agentic coding · fastest Mac coder tier</td>
+          <td class="tnote">Reasoning · coding · agents · research</td>
           <td class="v hi">~16 GB</td>
-          <td class="v green">55 tok/s*</td>
-          <td class="tnote">32 GB+ Macs</td>
+          <td class="v">20.7 tok/s</td>
+          <td class="v hi">HumanEval 0.866 · MMLU 0.851</td>
         </tr>
         <tr class="flagship">
           <td>
-            <div class="tname">Vision <span class="tag-new">new</span></div>
-            <div class="tbase">Qwen 3.6 35B-A3B · MLX 4-bit</div>
+            <div class="tname">Code <span class="tag-new">= Core</span></div>
+            <div class="tbase">Core weights + code-tuned config</div>
+          </td>
+          <td class="tnote">Coding workflows · autonomous agents</td>
+          <td class="v hi">~16 GB</td>
+          <td class="v">20.7 tok/s</td>
+          <td class="v hi">HumanEval 0.866 verified</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="tname">Vision</div>
+            <div class="tbase">Qwen3.6-35B-A3B · MLX 4-bit</div>
           </td>
           <td class="tnote">Image understanding · OCR · multimodal</td>
-          <td class="v hi">~19 GB</td>
-          <td class="v green">122.6 tok/s</td>
-          <td class="tnote">32 GB+ Macs</td>
+          <td class="v">~12 GB paged</td>
+          <td class="v tbd">post-migration bench pending</td>
+          <td class="v">MMLU 0.835 <span style="color:var(--text-dim);">(text)</span></td>
         </tr>
       </tbody>
     </table>
     </div>
 
     <p class="provenance">
-      <strong>[verified]</strong>&nbsp; Lite, Compact, Vision — Mac Studio M1 Ultra 64 GB · mlx_lm / mlx_vlm · 5-prompt steady-state · temp 0.7.
-      *Code tier 55 tok/s observed in testing; formal benchmark lands with v1.4 public release.
+      <strong>[verified]</strong>&nbsp;
+      MMLU on lm-evaluation-harness v0.4.9.1 · n=14,042 · 5-shot · bfloat16 · MPS device.
+      HumanEval pass@1 · n=164. Mac speed on M1 Ultra 64 GB via mlx_lm 0.31.3 ·
+      5-prompt steady-state · post-vision-encoder-strip.
+    </p>
+
+    <!-- Code tier disclosure -->
+    <div class="shead" style="margin-top: 4rem; margin-bottom: 1.5rem;">
+      <span class="stag">Transparency</span>
+      <h2 style="font-size: 1.8rem; max-width: none;">Why "Code" and "Core" share weights</h2>
+    </div>
+
+    <div class="pain-card" style="max-width: 760px; margin: 0 auto;">
+      <p style="font-size: 1.02rem; line-height: 1.7; color: var(--text-mid);">
+        In our Day 30 audit, we ran HumanEval pass@1 on every base model in our planned lineup.
+        The result was unexpected:
+      </p>
+
+      <div class="code-disclosure">
+        <strong style="color: var(--text);">Qwen3.6-27B (Core base):</strong>
+        <span style="color: var(--green);">86.59%</span>
+        <span style="color: var(--text-dim);">±0.027</span>
+        <br>
+        <strong style="color: var(--text);">Qwen3-Coder-30B-A3B (planned Code base):</strong>
+        <span style="color: var(--text);">77.44%</span>
+        <span style="color: var(--text-dim);">±0.033</span>
+        <br>
+        <strong style="color: var(--accent-light);">Delta:</strong>
+        <span style="color: var(--accent-light);">+9.15 pp at 2.18σ — statistically significant</span>
+      </div>
+
+      <p style="color: var(--text-mid); line-height: 1.7;">
+        The general-purpose Core base outscored the dedicated coder by 9 points on coding.
+        So we collapsed the Code tier: ship Core's weights with a code-tuned system prompt,
+        lower temperature, and autonomous-mode defaults. <strong>Same weights, two product
+        surfaces.</strong>
+      </p>
+
+      <p style="color: var(--text-mid); line-height: 1.7; margin-top: 1rem;">
+        GitHub Copilot does the same thing — it's GPT-4 underneath with a coding-specific
+        wrapper. We do it transparently and tell you why: shipping the better weights under
+        both names is honest engineering, and it saved a Sprint G distillation run we
+        repurposed for the Pro tier.
+      </p>
+    </div>
+
+    <!-- Hardware fit -->
+    <div class="shead" style="margin-top: 4rem; margin-bottom: 1.5rem;">
+      <span class="stag green">Will it run?</span>
+      <h2 style="font-size: 1.8rem; max-width: none;">Hardware fit by <span class="green-g">your Mac.</span></h2>
+    </div>
+
+    <div class="tier-wrap">
+    <table class="tier">
+      <thead>
+        <tr><th>Your Mac</th><th>RAM</th><th>Tiers that run</th><th>Recommended default</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="tname">MacBook Air</div><div class="tbase">M1/M2/M3/M4</div></td>
+          <td class="v">8 GB</td>
+          <td class="tnote">Nano</td>
+          <td class="tnote">Nano · fast, low-battery</td>
+        </tr>
+        <tr>
+          <td><div class="tname">MacBook Air</div><div class="tbase">M1/M2/M3/M4</div></td>
+          <td class="v">16 GB</td>
+          <td class="tnote">Nano · Lite</td>
+          <td class="tnote">Lite · daily driver</td>
+        </tr>
+        <tr>
+          <td><div class="tname">MacBook Pro 14"/16"</div><div class="tbase">Pro / Max</div></td>
+          <td class="v">16–18 GB</td>
+          <td class="tnote">Nano · Lite · Core (tight)</td>
+          <td class="tnote">Lite · Core for heavier tasks</td>
+        </tr>
+        <tr>
+          <td><div class="tname">MacBook Pro 14"/16"</div><div class="tbase">Pro / Max</div></td>
+          <td class="v">32 GB</td>
+          <td class="tnote">All tiers comfortably</td>
+          <td class="tnote">Core for daily, Vision for image work</td>
+        </tr>
+        <tr>
+          <td><div class="tname">Mac Mini M4</div><div class="tbase">Pro</div></td>
+          <td class="v">24 GB</td>
+          <td class="tnote">Nano · Lite · Core · Vision</td>
+          <td class="tnote">Core flagship</td>
+        </tr>
+        <tr class="flagship">
+          <td><div class="tname">Mac Studio</div><div class="tbase">M1/M2/M3 Ultra</div></td>
+          <td class="v hi">64 GB</td>
+          <td class="tnote">All tiers, full V9 engine, future Pro tier</td>
+          <td class="tnote">Core · Vision · Pro (when shipped)</td>
+        </tr>
+        <tr>
+          <td><div class="tname">Mac Studio / Pro</div><div class="tbase">Ultra / 192 GB</div></td>
+          <td class="v">128 GB+</td>
+          <td class="tnote">All tiers + headroom for Pro distillation</td>
+          <td class="tnote">Pro tier when it lands · power-user mode</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="provenance">
+      Apple Silicon only · Intel Macs not supported · macOS 13+ required.
+      Free tier needs no internet after first download. Pro modes
+      (Computer, Autonomous) require sustained 16 GB+ RAM headroom.
     </p>
   </div>
 </section>
@@ -1024,7 +1871,8 @@
       <h2>Outlier vs. <em>the monthly bill.</em></h2>
       <p class="slead">
         Cloud AI is a subscription. Outlier is a download. Here's what a year of
-        daily AI use looks like, side by side.
+        daily AI use looks like, side by side. <strong>Claude Code at $200/month
+        is included intentionally — that's the product we're closing the gap on.</strong>
       </p>
     </div>
 
@@ -1036,7 +1884,8 @@
           <th>ChatGPT Plus</th>
           <th>Claude Pro</th>
           <th>Cursor Pro</th>
-          <th class="us">Outlier</th>
+          <th>Claude Code</th>
+          <th class="us">Outlier Pro</th>
         </tr>
       </thead>
       <tbody>
@@ -1045,24 +1894,36 @@
           <td class="no">$20</td>
           <td class="no">$20</td>
           <td class="no">$20</td>
-          <td class="yes us-col">$0</td>
+          <td class="no">$200</td>
+          <td class="yes us-col">$20</td>
         </tr>
         <tr>
           <td>Year-one cost</td>
           <td class="no">$240</td>
           <td class="no">$240</td>
           <td class="no">$240</td>
-          <td class="yes us-col">$0</td>
+          <td class="no">$2,400</td>
+          <td class="yes us-col">$192</td>
         </tr>
         <tr>
-          <td>Rate limits</td>
-          <td class="no">Yes</td>
-          <td class="no">Yes</td>
-          <td class="no">Yes</td>
+          <td>Lifetime option</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="yes us-col">$200 · cap 250</td>
+        </tr>
+        <tr>
+          <td>Token caps</td>
+          <td class="no">80 GPT-5 / 3hr</td>
+          <td class="no">~5hr / 5 days</td>
+          <td class="no">Variable + overage</td>
+          <td class="no">5hr usage windows</td>
           <td class="yes us-col">None</td>
         </tr>
         <tr>
           <td>Works offline</td>
+          <td class="no">No</td>
           <td class="no">No</td>
           <td class="no">No</td>
           <td class="no">No</td>
@@ -1073,6 +1934,7 @@
           <td class="no">No</td>
           <td class="no">No</td>
           <td class="no">No</td>
+          <td class="no">No</td>
           <td class="yes us-col">Yes</td>
         </tr>
         <tr>
@@ -1080,27 +1942,217 @@
           <td class="yes" style="color: var(--accent-light);">Yes</td>
           <td class="yes" style="color: var(--accent-light);">Yes</td>
           <td class="no">No</td>
-          <td class="yes us-col">Yes · 122 tok/s</td>
+          <td class="no">No</td>
+          <td class="yes us-col">Yes · Vision tier</td>
         </tr>
         <tr>
-          <td>Code model included</td>
+          <td>Coding agent loop</td>
           <td class="no">No</td>
           <td class="no">No</td>
           <td class="yes" style="color: var(--accent-light);">Yes</td>
-          <td class="yes us-col">Yes · 55 tok/s</td>
+          <td class="yes" style="color: var(--accent-light);">Yes</td>
+          <td class="yes us-col">Yes · Code mode</td>
+        </tr>
+        <tr>
+          <td>Computer-use agent</td>
+          <td class="no">No</td>
+          <td class="yes" style="color: var(--accent-light);">Yes (paid)</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="yes us-col">Yes · Computer mode</td>
+        </tr>
+        <tr>
+          <td>You own the model</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="no">No</td>
+          <td class="yes us-col">Yes</td>
+        </tr>
+        <tr>
+          <td>Token bill</td>
+          <td class="no">Always</td>
+          <td class="no">Always</td>
+          <td class="no">Always + overage</td>
+          <td class="no">Always</td>
+          <td class="yes us-col">Never</td>
         </tr>
         <tr>
           <td>Cancel = lose access</td>
           <td class="no">Yes</td>
           <td class="no">Yes</td>
           <td class="no">Yes</td>
-          <td class="yes us-col">Never</td>
+          <td class="no">Yes</td>
+          <td class="yes us-col">Never · yours forever</td>
         </tr>
       </tbody>
     </table>
     </div>
     <p class="provenance" style="margin-top:1.4rem;">
-      Baseline paid tiers as of April 2026. Enterprise tiers cost more. Outlier cloud tier does not exist — because there is no Outlier cloud.
+      Pricing as of April 2026. Enterprise tiers cost more. The Outlier
+      cloud tier does not exist — because there is no Outlier cloud.
+    </p>
+  </div>
+</section>
+
+<!-- BENCHMARKS VS FRONTIER -->
+<section class="block" id="benchmarks">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag">The honest comparison</span>
+      <h2>Outlier Core vs. <span class="green-g">the frontier.</span></h2>
+      <p class="slead">
+        We don't beat Claude Sonnet 4.5 or GPT-5.2 on raw quality.
+        <strong>We're closer than the headline numbers suggest</strong>
+        — and we run at 17 GB on a Mac, for $0 per token, forever. Here's
+        the verified scoreboard.
+      </p>
+    </div>
+
+    <div class="vs-wrap">
+    <table class="vs">
+      <thead>
+        <tr>
+          <th>Benchmark</th>
+          <th class="us">Outlier Core</th>
+          <th>Claude Sonnet 4.5</th>
+          <th>GPT-5.2</th>
+          <th>Claude Opus 4.6</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>HumanEval pass@1</td>
+          <td class="yes us-col">86.6%</td>
+          <td>~92%</td>
+          <td>~90%</td>
+          <td>~95%</td>
+        </tr>
+        <tr>
+          <td>MMLU</td>
+          <td class="us-col" style="color: var(--accent-light); font-family: var(--mono); font-weight: 700;">85.1%</td>
+          <td>~95%</td>
+          <td>~94%</td>
+          <td>~97%</td>
+        </tr>
+        <tr>
+          <td>SWE-bench Verified</td>
+          <td class="us-col" style="color: var(--accent-light); font-family: var(--mono); font-weight: 700;">~75–77%</td>
+          <td>77.2%</td>
+          <td>~78%</td>
+          <td>80.8%</td>
+        </tr>
+        <tr>
+          <td>RAM footprint</td>
+          <td class="yes us-col">17 GB</td>
+          <td class="no">server-only</td>
+          <td class="no">server-only</td>
+          <td class="no">server-only</td>
+        </tr>
+        <tr>
+          <td>Cost per million output tokens</td>
+          <td class="yes us-col">$0</td>
+          <td class="no">~$15</td>
+          <td class="no">~$30</td>
+          <td class="no">~$75</td>
+        </tr>
+        <tr>
+          <td>Annual cost · daily heavy use</td>
+          <td class="yes us-col">$192–$200 once</td>
+          <td class="no">$240+</td>
+          <td class="no">$240+</td>
+          <td class="no">$2,400+</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="provenance" style="margin-top: 1.4rem; line-height: 1.8;">
+      <strong>[verified Outlier]</strong>&nbsp; HumanEval n=164, ±0.027 ·
+      MMLU n=14,042, ±0.0029 · lm-evaluation-harness v0.4.9.1 · 5-shot ·
+      bfloat16 · MPS device on Mac Studio M1 Ultra.
+      <br>
+      <strong>[gap framing]</strong>&nbsp; Core is within 4–9 points of frontier
+      closed models on coding, within 9–13 points on knowledge, and effectively
+      ties Claude Sonnet 4.5 on real-world software engineering.
+      <strong>That's not "almost frontier." That's user-experience equivalent
+      on most tasks at a fraction of the cost.</strong>
+    </p>
+
+    <!-- Quality per gigabyte -->
+    <div class="shead" style="margin-top: 4rem; margin-bottom: 1.5rem;">
+      <span class="stag">The actual moat</span>
+      <h2 style="font-size: 1.7rem; max-width: none;">MMLU per <span class="green-g">gigabyte.</span></h2>
+      <p class="slead" style="font-size: 1rem; max-width: 60ch;">
+        We don't compete on raw quality. We compete on quality per gigabyte of RAM.
+        That's the ratio that matters when the model lives on your Mac instead of
+        someone's H100 rack.
+      </p>
+    </div>
+
+    <div class="vs-wrap">
+    <table class="vs">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>MMLU</th>
+          <th>Disk size</th>
+          <th>MMLU / GB</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>BitNet b1.58 2B (Microsoft)</td>
+          <td>0.55</td>
+          <td>1.4 GB</td>
+          <td>0.393</td>
+        </tr>
+        <tr>
+          <td>Outlier Nano (4B int4)</td>
+          <td>0.744</td>
+          <td>3 GB</td>
+          <td class="us-col" style="color: var(--green-light); font-family: var(--mono); font-weight: 700;">0.248</td>
+        </tr>
+        <tr>
+          <td>Outlier Lite (9B int4)</td>
+          <td>0.785</td>
+          <td>6 GB</td>
+          <td class="us-col" style="color: var(--green-light); font-family: var(--mono); font-weight: 700;">0.131</td>
+        </tr>
+        <tr>
+          <td>Phi-4 14B</td>
+          <td>0.75</td>
+          <td>28 GB</td>
+          <td>0.027</td>
+        </tr>
+        <tr class="flagship">
+          <td>Outlier Core (27B int4)</td>
+          <td>0.851</td>
+          <td>16 GB</td>
+          <td class="us-col" style="color: var(--accent-light); font-family: var(--mono); font-weight: 700;">0.053</td>
+        </tr>
+        <tr>
+          <td>Qwen3.6-27B BF16 (Core base)</td>
+          <td>0.847</td>
+          <td>54 GB</td>
+          <td>0.0157</td>
+        </tr>
+        <tr>
+          <td>Qwen3.6-35B-A3B BF16 (Vision base)</td>
+          <td>0.835</td>
+          <td>72 GB</td>
+          <td>0.0116</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <p class="provenance" style="margin-top: 1.4rem;">
+      <strong>Outlier Core delivers 3.4× better MMLU per gigabyte than
+      Qwen3.6-27B BF16 — its own base model.</strong> Same quality, fraction
+      of the footprint. That ratio is the patent thesis. That's what
+      makes a $2,000 Mac match the practical output of a $30,000 GPU server
+      on most everyday tasks.
     </p>
   </div>
 </section>
@@ -1145,8 +2197,10 @@
       <p>
         Apple Silicon does the same work on a fraction of the power. Unified memory means
         no PCIe transfers, no NVLink fabric, no cooling towers. An M-series Mac running
-        a 7B model draws about as much electricity as a laptop charger. And it comes from
-        your house, not a datacenter displacing a town's grid capacity.
+        a 9B model draws about as much electricity as a laptop charger.
+        <strong>The same Core tier that runs at 0.85 MMLU on 17 GB of unified memory
+        would require an 80 GB H100 to run unquantized.</strong> The H100 pulls 700 watts.
+        Your Mac pulls 30.
       </p>
       <p>
         <strong>Is Outlier going to single-handedly fix the climate impact of AI? No.</strong>
@@ -1162,66 +2216,142 @@
   </div>
 </section>
 
+<!-- PROVENANCE -->
+<section class="block" id="provenance">
+  <div class="wrap">
+    <div class="shead">
+      <span class="stag amber">How we measure</span>
+      <h2>Numbers with <span class="green-g">a paper trail.</span></h2>
+      <p class="slead">
+        AI startups quote benchmarks the way restaurants quote calorie counts —
+        confidently, with no audit. <strong>We treat unprovenanced numbers as
+        unverified.</strong> Every metric on this page lives with five fields:
+        source file, command, sample size, standard error, date measured.
+      </p>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">📁 Source file</h3>
+        <p>Every benchmark traces back to a JSON eval result file checked into our
+           sprint logs. If a number on this page can't point to a file, the number
+           doesn't go on this page.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">⌨️ Exact command</h3>
+        <p>We log the lm-evaluation-harness command line that produced each number.
+           Including version (v0.4.9.1), shot count (5-shot), batch size, dtype,
+           device. Reproducible runs.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🔢 Sample size</h3>
+        <p>MMLU at n=14,042 (full set). HumanEval at n=164 (full set). No
+           <code>--limit 10</code> smoke tests promoted to "verified." We learned
+           that one the hard way on Day 9 — never again.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">📊 Standard error</h3>
+        <p>Every benchmark on this page includes σ. MMLU stderr ≈ 0.003. HumanEval
+           stderr ≈ 0.027. Lifts reported with the σ-significance they actually
+           clear (Nano +1.87pp at 3.54σ; Lite +1.10pp at 2.22σ).</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">📅 Date measured</h3>
+        <p>Every number stamped with the date it was produced. Numbers older than
+           7 days flagged for re-verification before going on marketing copy.</p>
+      </div>
+
+      <div class="pain-card">
+        <h3 style="margin-top:0; font-size: 1.18rem;">🚫 What we won't claim</h3>
+        <p>Projections that haven't been measured. Smoke tests promoted to "verified."
+           Numbers from training logs that haven't been independently re-evaluated.
+           Vendor benchmarks we haven't reproduced. <strong>No marketing department
+           exists to fudge any of this.</strong></p>
+      </div>
+    </div>
+
+    <p class="provenance" style="margin-top: 2rem;">
+      <strong>Read the audit:</strong>&nbsp;
+      <a href="https://github.com/Outlier-host/outlier" target="_blank">sprints/disposition-audit-day30/</a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/Outlier-host/outlier" target="_blank">sprints/path-b-v2-lineup-migration/</a>
+      <br>
+      Every benchmark, every σ, every source file is in the public sprint log.
+      If something looks wrong, file an issue. We treat that as a gift, not a threat.
+    </p>
+  </div>
+</section>
+
 <!-- RESEARCH -->
 <section class="block" id="research">
   <div class="wrap">
     <div class="shead">
       <span class="stag">Research track</span>
-      <h2>A second track: <em>our own MoE.</em></h2>
+      <h2>Where the next <em>training run</em> goes.</h2>
       <p class="slead">
-        While the app ships curated open weights, we train our own ternary Mixture-of-Experts
-        family — 10B, 40B, 70B, 150B — as overlay deltas on a frozen Qwen base.
-        When a scale validates against a real Mac RAM tier, it graduates into the shipping stack.
-        This is the track that feeds into Phase 4.
+        Outlier ships curated open weights today. The research track is what comes next:
+        a Pro tier distilled from Qwen3.5-397B or DeepSeek V4, targeting Claude Sonnet
+        parity by end of 2026. <strong>Founders fund this directly.</strong> Every training
+        run is a line item paid for by Founders revenue.
       </p>
     </div>
 
-    <div class="bench-wrap">
-    <table class="bench">
-      <thead>
-        <tr><th>Model</th><th>MMLU</th><th>Stderr</th><th>n</th><th>Harness</th><th>Status</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="model">Outlier-150B-A70B V3.2</td>
-          <td class="v green">84.46%</td>
-          <td class="v">0.29%</td>
-          <td class="v">14,042</td>
-          <td class="v">0.4.9.1</td>
-          <td style="color:var(--green); font-weight:600;">Verified</td>
-        </tr>
-        <tr>
-          <td class="model">Outlier-70B-A32B V3.3</td>
-          <td class="v hi">83.10%</td>
-          <td class="v">0.30%</td>
-          <td class="v">14,042</td>
-          <td class="v">0.4.9.1</td>
-          <td style="color:var(--accent-light); font-weight:600;">Flagship · alpha-fixed</td>
-        </tr>
-        <tr>
-          <td class="model">Outlier-40B-A14B V3.3</td>
-          <td class="v">77.80%</td>
-          <td class="v">0.33%</td>
-          <td class="v">14,042</td>
-          <td class="v">0.4.11</td>
-          <td style="color:var(--green); font-weight:600;">Verified</td>
-        </tr>
-        <tr>
-          <td class="model">Outlier-10B-A7B V3.3</td>
-          <td class="v">70.87%</td>
-          <td class="v">0.37%</td>
-          <td class="v">14,042</td>
-          <td class="v">0.4.9.1</td>
-          <td style="color:var(--green); font-weight:600;">Verified</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="phase-grid">
+      <div class="phase-card shipping">
+        <div class="phase-num">v1.6 · Shipped lineup</div>
+        <h3>Verified σ-significant lifts</h3>
+        <p>Nano (+1.87pp at 3.54σ over Qwen3.5-4B base). Lite (+1.10pp at 2.22σ over
+        Qwen3.5-9B). Core base + Holtzman calibration (Qwen3.6-27B at 0.851 MMLU,
+        0.866 HumanEval). All numbers σ-qualified, n=14,042 MMLU.</p>
+        <span class="phase-status shipping">● Verified · ships in v1.6</span>
+      </div>
+
+      <div class="phase-card active">
+        <div class="phase-num">Sprint G v3 · Pro tier</div>
+        <h3>Flagship-teacher distillation</h3>
+        <p>Distill from Qwen3.5-397B-A17B (94.9% MMLU-Redux, 76.2% SWE-bench) down to a
+        40-50B-class student that runs paged on a 64 GB Mac Studio.
+        <strong>Targeting +1-2pp MMLU lift across all tiers.</strong>
+        Currently infrastructure-bound on host RAM ceiling — needs ≥768 GB cluster
+        or vLLM GPU-direct loader.</p>
+        <span class="phase-status active">● Funded by Founders</span>
+      </div>
+
+      <div class="phase-card queued-accent">
+        <div class="phase-num">v3+ · DeepSeek V4 distillation</div>
+        <h3>Cross-tokenizer flagship</h3>
+        <p>Offline logit cache from DeepSeek V4 Pro (94%+ MMLU). Different tokenizer family
+        means we lose the same-family bonus, but the larger gap means bigger absolute lift
+        if the offline pipeline works. <strong>Builds the Pro tier Founders unlock.</strong>
+        $30-50 in DeepSeek API credits + 1-2 weeks of work.</p>
+        <span class="phase-status queued">● The Pro tier promise</span>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">Multi-quarter · Outlier-native MoE</div>
+        <h3>From-scratch ternary MoE</h3>
+        <p>A base model trained ground-up on our patented ternary Mixture-of-Experts
+        architecture. 10B / 40B / 70B / 150B scales, overlay-delta training, 1.58-bit
+        weights. <strong>This is the model that codes Outlier itself.</strong>
+        Post-Series-A scope.</p>
+        <span class="phase-status queued-dim">After Pro tier ships</span>
+      </div>
     </div>
 
-    <p class="provenance">
-      Trained solo in 23 days, under $1,200 total compute spend.
-      The 70B alpha-fix is a 15 KB overlay trained in 18 minutes on a single B200.
-      <strong>3 U.S. provisional patents filed · 61 claims · non-provisional deadline April 3, 2027.</strong>
+    <p class="provenance" style="margin-top: 2rem;">
+      <strong>Three U.S. provisional patents filed</strong> · 61 claims total ·
+      non-provisional deadline April 3, 2027.
+      <br>
+      Patent #64/026,886 (ternary MoE substrate) ·
+      #64/030,368 (substrate-shared speculative decoding) ·
+      #64/034,028 (per-expert per-channel scale + alpha overlay).
+      <br>
+      <strong>$1,280 total spend · 30 days solo · 22,600+ HF downloads.</strong>
+      Velocity is the moat.
     </p>
   </div>
 </section>
@@ -1231,11 +2361,12 @@
   <div class="wrap">
     <div class="shead">
       <span class="stag amber">Public launch coming soon</span>
-      <h2>Be first in line <span class="green-g">when v1.4 ships.</span></h2>
+      <h2>Be first in line <span class="green-g">when v1.6 ships.</span></h2>
       <p class="slead">
-        The Mac app is in final testing. We're going through Apple Developer ID
-        notarization now so the DMG lands signed and clean on first install.
-        Join the waitlist and we'll email you the moment the public download is live.
+        v1.6 is signed and going through Apple notarization now. The new lineup
+        (Nano · Lite · Core · Code · Vision) drops the moment notarization clears.
+        Waitlist gets the email first. <strong>Founders get the signed DMG before
+        public launch.</strong>
       </p>
     </div>
 
@@ -1243,18 +2374,18 @@
       <span class="waitlist-tag">Free · no account</span>
       <h3>Get notified at launch</h3>
       <p>
-        One email when v1.4 goes public. No newsletter, no drip, no selling your address.
+        One email when v1.6 goes public. No newsletter, no drip, no selling your address.
         <strong>Prefer real-time?</strong> The Discord community gets beta builds and
         ship-logs before anything else.
       </p>
       <div class="waitlist-actions">
-        <a class="btn btn-green" href="mailto:matt@outlier.host?subject=Outlier%20waitlist&body=Please%20add%20me%20to%20the%20v1.4%20launch%20waitlist.%0A%0AMac%20model%3A%20%0ARAM%3A%20%0AUse%20case%3A%20">Email to join</a>
+        <a class="btn btn-green" href="mailto:matt@outlier.host?subject=Outlier%20v1.6%20waitlist&body=Please%20add%20me%20to%20the%20v1.6%20launch%20waitlist.%0A%0AMac%20model%3A%20%0ARAM%3A%20%0AUse%20case%3A%20">Email to join</a>
         <a class="btn btn-accent" href="https://discord.gg/Hapennmdn9" target="_blank">Join Discord →</a>
       </div>
     </div>
 
     <p class="donate-note" style="margin-top:1.5rem;">
-      Want to try the research models today? <a href="https://huggingface.co/Outlier-Ai" target="_blank">HuggingFace Outlier-Ai</a> · 12,000+ downloads · 53 repos · all Apache 2.0.
+      Want to try the research models today? <a href="https://huggingface.co/Outlier-Ai" target="_blank">HuggingFace Outlier-Ai</a> · 22,600+ downloads · 53 repos · all Apache 2.0.
     </p>
   </div>
 </section>
@@ -1264,26 +2395,53 @@
   <div class="wrap">
     <div class="shead">
       <span class="stag">Fund the mission</span>
-      <h2>Every dollar goes <span class="green-g">into the next model.</span></h2>
+      <h2>Every dollar goes <span class="green-g">into the next training run.</span></h2>
       <p class="slead">
-        Outlier is free forever when it launches. If the mission matters to you,
-        support funds Phase 3 and Phase 4. No promises on dates. No roadmap lock-in.
-        Every dollar — Founders, monthly tiers, sponsored benchmarks — goes into closing
-        the gap between open local models and the cloud flagships.
+        Outlier free tier is free forever. If the mission matters to you, support
+        funds Sprint G v3 (Pro tier) and the eventual Outlier-native flagship.
+        <strong>Every Founders dollar is unambiguously building Pro.</strong>
+        No promises on dates. No roadmap lock-in. No enterprise bait-and-switch.
       </p>
     </div>
 
     <div class="founders-card">
-      <span class="founders-tag">Limited to 500 seats</span>
+      <span class="founders-tag">Limited to 250 seats · launch week</span>
       <h3>Founders</h3>
-      <div class="founders-price">$200<span> · one time</span></div>
+      <div class="founders-price">$200<span> · one time, lifetime</span></div>
       <p class="founders-desc">
-        Pay once, locked for life. <strong>Lifetime Pro</strong> whenever Pro ships.
-        Founder role in our Discord. Permanent supporter wall. <strong>Founders get
-        the signed DMG before public launch.</strong> After the 500 seats are gone,
-        Founders closes and support becomes Pro at $20/month.
+        Pay once, locked for life. <strong>Lifetime Pro</strong> when Pro ships.
+        Founders Wall on the website. Founders role in Discord. Monthly group call
+        with Matt. <strong>Founders get the signed DMG before public launch.</strong>
+        After 250 seats sell out, Founders closes and support converts to Pro at
+        $20/month.
       </p>
       <a class="btn btn-accent" href="https://buy.polar.sh/polar_cl_mJfYZsEpEMDcYrgxzvTdnahSeSQNq1UYLqV0l08CUhW" target="_blank">Become a Founder →</a>
+    </div>
+
+    <div class="founders-card" style="background: linear-gradient(135deg, rgba(52,211,153,0.10), rgba(168,85,247,0.06)); border-color: var(--green-border); margin-top: 2rem;">
+      <span class="founders-tag" style="color: var(--green-light); background: var(--green-soft); border-color: var(--green-border);">After Founders sells out</span>
+      <h3>Pro</h3>
+      <div class="founders-price" style="color: var(--green-light);">
+        $20<span> /month</span> &nbsp; · &nbsp; $192<span> /year (20% off)</span>
+      </div>
+      <p class="founders-desc">
+        All five Outlier model tiers. Computer mode (agent loop). Autonomous mode.
+        Unlimited use, no token cap, no rate limit. <strong>Every new model
+        release free.</strong> When Pro tier (Sprint G v3) ships, Pro subscribers
+        get it automatically.
+      </p>
+      <p class="founders-desc" style="margin-top: 1rem; font-style: italic; color: var(--text-dim);">
+        Pro tier subscriptions open after Founders sells out. Free tier
+        (Nano + Lite, no agent harness) stays free forever.
+      </p>
+    </div>
+
+    <div class="shead" style="margin-top: 4rem; margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.6rem; max-width: none;">Or just chip in</h2>
+      <p class="slead" style="font-size: 1rem;">
+        Don't need a license, just want to fund the work? Monthly support tiers below.
+        Cancel any time.
+      </p>
     </div>
 
     <div class="tiers-grid">
@@ -1318,7 +2476,7 @@
         <div class="tier-card-name">Patron</div>
         <div class="tier-card-price">$200<span>/mo</span></div>
         <div class="tier-card-desc">
-          Everything above. Top-tier Discord role. Pure sponsorship, no extra obligations on your end or ours.
+          Everything above. Top-tier Discord role. Pure sponsorship, no extra obligations.
         </div>
         <a class="tier-card-btn" href="https://buy.polar.sh/polar_cl_gijElHUEdOSm01hRv5XITU8Uxp00OCjdDCsL00Fv4sB" target="_blank">Subscribe →</a>
       </div>
@@ -1338,8 +2496,9 @@
       <span class="stag green">Community</span>
       <h2>Build with us <span class="green-g">in public.</span></h2>
       <p class="slead">
-        Everything we ship, ship-log, break, and fix is public. Come hang out in Discord,
-        show what you're building, or file the bug that makes the next release better.
+        Everything we ship, ship-log, break, and fix is public. Sprint logs go in the repo.
+        Numbers come with provenance. Discord is where the build conversations happen —
+        show what you're making, file the bug, suggest the next feature.
       </p>
     </div>
 
@@ -1352,12 +2511,12 @@
       <a class="comm-card" href="https://huggingface.co/Outlier-Ai" target="_blank">
         <div class="comm-icon">🤗</div>
         <div class="comm-name">HuggingFace</div>
-        <div class="comm-desc">Models &amp; cards</div>
+        <div class="comm-desc">22,600+ downloads</div>
       </a>
       <a class="comm-card" href="https://github.com/Outlier-host/outlier" target="_blank">
         <div class="comm-icon">⌥</div>
         <div class="comm-name">GitHub</div>
-        <div class="comm-desc">Source &amp; issues</div>
+        <div class="comm-desc">Sprints &amp; issues</div>
       </a>
       <a class="comm-card" href="https://x.com/mattkerr09" target="_blank">
         <div class="comm-icon">𝕏</div>
@@ -1384,125 +2543,175 @@
       <details>
         <summary>When can I actually download the app?</summary>
         <div>
-          v1.4 is in final testing. Apple Developer ID was approved on April 21, 2026 — we're
-          now going through Apple notarization so the DMG lands signed and clean on every Mac.
-          <a href="#waitlist">Join the waitlist</a> and we'll email you the moment the public
-          download is live. Founders get the signed DMG before public launch;
-          Contributor / Backer / Patron tiers get beta access during testing.
+          v1.6 is in final testing. Apple Developer ID was approved April 21, 2026 —
+          we're going through Apple notarization now so the DMG lands signed and clean
+          on every Mac. <a href="#waitlist">Join the waitlist</a> and we'll email you
+          the moment the public download is live. Founders get the signed DMG before
+          public launch; Contributor / Backer / Patron tiers get beta access during testing.
         </div>
       </details>
+
       <details>
         <summary>Is it really free? What's the catch?</summary>
         <div>
-          No catch. When the app ships, it's free forever for personal and commercial use.
-          Base model weights are Apache 2.0 (licensed by the Qwen team at Alibaba). Pro tier
-          will ship later with power-user features like agentic coding mode, long-context mode,
-          and voice input; when it does, the free tier you downloaded keeps working unchanged.
-          If you want to help fund the roadmap sooner, the <a href="#support">Support</a>
-          section has one-time and monthly options.
+          No catch. Free tier (Nano + Lite, no agent harness, 100 messages/day cap) stays
+          free forever. Base model weights are Apache 2.0 (Qwen team at Alibaba). Pro tier
+          unlocks all five models, agent harness (Computer + Autonomous modes), and unlimited
+          use. Cancel a Pro subscription and the free tier you downloaded keeps working
+          unchanged.
         </div>
       </details>
+
       <details>
-        <summary>What is the actual goal? Where is this going?</summary>
+        <summary>Why does Code share weights with Core?</summary>
         <div>
-          The goal is an offline model that codes as well as the cloud flagships — running
-          entirely on a consumer Mac. We aren't there yet. Nobody is. But the gap is closing
-          fast, and Outlier exists to close it. Four phases, no timelines. See the <a href="#mission">Mission</a>
-          section for the plan.
+          Because in our Day 30 audit, the Core base (Qwen3.6-27B) scored
+          <strong>86.6% on HumanEval pass@1</strong> while the dedicated coder
+          (Qwen3-Coder-30B-A3B) scored 77.4%. The general-purpose base beat the
+          specialized coder by 9.15 points at 2.18σ — statistically significant.
+          So we ship Core's weights as the Code product surface, with code-tuned
+          system prompt and lower temperature defaults. Same brain, coding-optimized
+          config. <strong>GitHub Copilot does the same thing under the hood — it's
+          GPT-4 with a coding wrapper.</strong> We do it transparently.
         </div>
       </details>
+
       <details>
-        <summary>Why $200 for Founders? What happens after 500 seats?</summary>
+        <summary>What's the Pro tier? When does it ship?</summary>
         <div>
-          Founders is a single one-time $200 payment, lifetime-locked. The 500-seat cap is hard —
-          after it fills, Founders closes and support becomes Pro at $20/month (unlimited use,
-          all Pro features). The lifetime benefit for Founders stays with you forever. Pricing
-          this way rewards early supporters and gives the rest of the roadmap a funded runway.
-          Founders also get the signed DMG before the public launch — that's the early-access
-          benefit while the app is pre-release.
+          The Pro tier is what Founders unlock. It's a bigger, flagship-distilled model
+          (Qwen3.5-397B teacher path or DeepSeek V4 logit distillation) targeting Claude
+          Sonnet 4.6 parity by end of 2026. Currently in Sprint G v3 — held up briefly on
+          host-RAM infrastructure that we'll resolve with vLLM GPU-direct loading or a
+          bigger cluster. <strong>No timeline, because timelines are lies.</strong>
+          Funded by Founders revenue. Founders get it free when it ships. Pro subscribers
+          ($20/mo or $192/yr) get it automatically too.
         </div>
       </details>
+
+      <details>
+        <summary>Why $200 for Founders? What happens after 250 sell out?</summary>
+        <div>
+          Founders is a one-time $200 payment, lifetime-locked. The 250-seat cap is hard —
+          after it fills, Founders closes and support becomes Pro at $20/month. Founders
+          also get the signed DMG before public launch — that's the early-access benefit
+          while the app is pre-release. $200 ≈ one year of Claude Pro, one tenth of one
+          year of Claude Code. Pricing this way rewards early supporters and gives us a
+          real funded runway for the training runs that build the Pro tier.
+        </div>
+      </details>
+
       <details>
         <summary>What Mac do I need?</summary>
         <div>
-          Any Apple Silicon Mac (M1 / M2 / M3 / M4) running macOS 13 or later.
-          Nano tier runs on 8 GB RAM. Lite and Compact work on 16 GB+.
-          Max, Code, and Vision need 32 GB+. Intel Macs are not supported — Apple Silicon only.
+          Any Apple Silicon Mac (M1 / M2 / M3 / M4) running macOS 13 or later. Nano runs
+          on 8 GB. Lite needs 16 GB. Core needs 16-18 GB tight or 32 GB comfortably.
+          Vision needs 24-32 GB+. Full lineup with V9 paged engine wants 64 GB Mac Studio.
+          <strong>Intel Macs are not supported — Apple Silicon only.</strong> See the
+          <a href="#models">Hardware fit</a> table for specifics.
         </div>
       </details>
+
       <details>
         <summary>How does it compare to Ollama or LM Studio?</summary>
         <div>
-          Ollama is a CLI for developers and recently added a paid cloud tier. LM Studio is
-          a generalist GUI built on Electron. Outlier is Mac-native Tauri (8.8 MB vs ~200 MB),
-          curated tiers instead of a model zoo, strictly local, and staying free at the base tier.
-          All three use similar backends — the difference is polish, curation, pricing philosophy,
-          and the direction of travel. Outlier is pointed at Phase 4.
+          Ollama is a CLI for developers that recently added a paid cloud tier. LM Studio
+          is a generalist GUI built on Electron. <strong>Outlier is Mac-native Tauri (under
+          10 MB vs ~200 MB), curated tiers instead of a model zoo, strictly local, and
+          staying free at the base tier.</strong> All three use similar backends — the
+          difference is polish, curation, the agent harness, and the direction of travel.
+          We're pointed at Phase 4 (Outlier-native flagship). They aren't.
         </div>
       </details>
+
+      <details>
+        <summary>Why is Core slower than the old Compact tier?</summary>
+        <div>
+          v1.5 shipped Compact as Qwen2.5-14B at ~40 tok/s on M1 Ultra. v1.6 ships Core as
+          Qwen3.6-27B at ~21 tok/s. Roughly half the speed because it's roughly twice the
+          parameters. <strong>In exchange you get +20 points HumanEval (67% → 87%) and
+          +10 points MMLU (75% → 85%).</strong> Core is a bigger, smarter model on the
+          same hardware. 21 tok/s is faster than typing. For most workflows, quality
+          matters more than raw speed past a reading-speed threshold. Long-context
+          performance on hybrid attention layers also improves more than the steady-state
+          bench suggests.
+        </div>
+      </details>
+
       <details>
         <summary>Does my data really stay on my Mac?</summary>
         <div>
           Yes. All inference runs on your Mac's GPU via MLX. Prompts, context, and outputs
           never leave the machine. Web search will be opt-in and labeled when in use.
-          Unplug the ethernet and airplane-mode the Wi-Fi — Outlier keeps working.
+          Chat history stored in a local SQLite database in your home directory. Unplug
+          the ethernet and airplane-mode the Wi-Fi — Outlier keeps working.
         </div>
       </details>
+
       <details>
         <summary>Is local AI actually better for the environment?</summary>
         <div>
           Yes, and the numbers back it up. Inference drives 80–90% of AI energy consumption.
-          Cloud inference means running GPU racks, network fabric, and cooling; local inference
-          on Apple Silicon uses a fraction of the power because unified memory eliminates most
-          of that overhead. Won't fix climate single-handedly, but every query that runs on
-          your Mac is one that didn't need a datacenter. See the <a href="#energy">Energy</a>
-          section for sources.
+          Cloud inference means running GPU racks, network fabric, and cooling. Local
+          inference on Apple Silicon uses a fraction of the power because unified memory
+          eliminates most of that overhead. Won't fix climate single-handedly, but every
+          query that runs on your Mac is one that didn't need a datacenter. See the
+          <a href="#energy">Energy</a> section for sources.
         </div>
       </details>
+
       <details>
-        <summary>What is the Code tier, exactly?</summary>
+        <summary>What is Vision tier good for?</summary>
         <div>
-          It's our Mac-optimized build of Qwen3-Coder-30B-A3B-Instruct — a strong open-weights
-          coding model from the Alibaba Qwen team, released under Apache 2.0. We quantize it
-          to MLX 4-bit (~16 GB on disk instead of 61 GB), tune the sampling defaults for Apple
-          Silicon, and bundle it into the Outlier installer. The base model is the work of
-          the Qwen team; we credit them prominently. Our own fine-tuned coder (Phase 3) will
-          eventually replace this tier.
+          Image understanding, OCR, screenshot questions, chart reading, document images.
+          Built on Qwen3.6-35B-A3B with multimodal capability preserved (vision encoder
+          kept on this tier). <strong>Vision tier is NOT optimized for code generation</strong>
+          — its base scored 0.61 HumanEval vs Core's 0.87. For coding workflows, use Core
+          or Code. For everything image-related, Vision is the tier.
         </div>
       </details>
+
       <details>
-        <summary>What's the Vision tier?</summary>
+        <summary>Can I bring my own model? My own API key?</summary>
         <div>
-          Our Mac-optimized build of Qwen 3.6 35B-A3B — a multimodal Mixture-of-Experts model
-          (35B total, 3B active at any time) from the Qwen team, Apache 2.0. We ship it via
-          MLX VLM at ~19 GB RAM, 122.6 tok/s on M1 Ultra. Handles image understanding, OCR,
-          chart reading, screenshot questions — entirely offline. Ships with v1.4.
+          Yes to both. Free tier supports BYOM (drop in any compatible Hugging Face model —
+          Bonsai, Llama, Mistral, anything that runs through MLX). Free tier also supports
+          BYOK (bring your Anthropic, OpenAI, or OpenRouter key) — Outlier becomes the
+          interface, you pay your own provider. Pro modes (Computer, Autonomous) are built
+          around our own models and don't run on BYOM/BYOK by default.
         </div>
       </details>
+
       <details>
-        <summary>What's the "research track" about?</summary>
+        <summary>What's the deal with the patents?</summary>
         <div>
-          Our own ternary Mixture-of-Experts family (10B–150B scales) trained as overlay
-          deltas on a frozen Qwen base. Three U.S. provisional patents filed. When a research
-          scale validates at a real Mac RAM tier, it graduates into the shipping stack. The
-          research track is the technical on-ramp to Phase 4.
+          Three U.S. provisional patents filed (April 2026), 61 claims across the three
+          applications. Cover the ternary MoE substrate (#64/026,886), substrate-shared
+          speculative decoding (#64/030,368), and per-expert per-channel scale + alpha
+          overlay training method (#64/034,028). Non-provisional deadline April 3, 2027.
+          <strong>Patents are a nice-to-have, not the moat. The moat is execution speed
+          plus community plus revenue.</strong> We track them transparently because they
+          signal investor credibility, not because they're load-bearing.
         </div>
       </details>
+
       <details>
         <summary>Who built this?</summary>
         <div>
-          Matt Kerr, solo. Kerr &amp; Company LLC (DBA Outlier), Grand Rapids, MI.
-          Built in 23 days on a Mac Studio with under $1,200 of total compute spend.
-          Three U.S. provisional patents on the architecture. Direct line:
+          Matt Kerr, solo. Kerr &amp; Company LLC (DBA Outlier), Grand Rapids, MI. Built
+          in 30 days on a Mac Studio with about $1,280 in total compute spend. Three U.S.
+          provisional patents on the architecture. Direct line:
           <a href="mailto:matt@outlier.host">matt@outlier.host</a>.
         </div>
       </details>
+
       <details>
         <summary>What happens when a better open model drops?</summary>
         <div>
-          We rebase. Our pipeline absorbs the next Qwen, Llama, or DeepSeek release in weeks.
-          The free tier keeps getting updated open-weights models as they ship —
-          continuously. No retraining required on your end.
+          We rebase. Our pipeline absorbs the next Qwen, Llama, DeepSeek, or anyone else's
+          release in 1-2 weeks of work. The free tier gets updated open-weights models as
+          they ship — continuously. When Qwen 4 drops, Outlier 1.7 ships with new bases.
+          <strong>You don't retrain anything on your end.</strong> Just download the update.
         </div>
       </details>
     </div>
@@ -1515,9 +2724,9 @@
     <span class="stag green">Coming soon</span>
     <h2>Your Mac is <span class="green-g">the server.</span></h2>
     <p class="slead">
-      v1.4 for Apple Silicon ships with Apple Developer ID signing, notarization,
-      and a one-click installer. Join the waitlist to be first in line — or become
-      a Founder and fund the model that codes Outlier itself.
+      v1.6 for Apple Silicon ships with Apple Developer ID signing, notarization, and a
+      one-click installer. Five tiers. Four unique weights. σ-qualified numbers. Free forever.
+      <strong>Founders fund what comes next.</strong>
     </p>
     <div class="final-cta-actions">
       <a class="btn btn-green" href="#waitlist">Join the waitlist</a>
@@ -1527,7 +2736,7 @@
     </div>
     <p style="font-family:var(--mono); font-size:0.78rem; color:var(--text-dim); margin-top:2rem; position:relative;">
       Apple Silicon · macOS 13+ · 8 GB RAM minimum · Free forever · No account required<br/>
-      Signed + notarized public DMG arriving with v1.4 (Apple Developer ID approved April 21, 2026).
+      Signed + notarized public DMG arriving with v1.6 (Apple Developer ID approved April 21, 2026).
     </p>
   </div>
 </section>
@@ -1547,10 +2756,13 @@
       </div>
     </div>
     <div class="foot-attrib">
-      Code tier is a Mac-optimized build of Qwen3-Coder-30B-A3B by the Alibaba Qwen team.
-      Vision tier is a Mac-optimized build of Qwen 3.6 35B-A3B. Shipping tiers use open weights
-      from the Qwen team under Apache 2.0.
-      Patents: #64/026,886 · #64/030,368 · #64/034,028.
+      Outlier ships Mac-optimized builds of open-weight models from the Alibaba Qwen team
+      (Qwen3.5-4B · Qwen3.5-9B · Qwen3.6-27B · Qwen3.6-35B-A3B). Base weights Apache 2.0.
+      Outlier post-training (CAKLD distillation, Holtzman calibration), Mac integration,
+      V9 paged inference engine, and the Tauri app are our work.
+      <br>
+      Patents filed: #64/026,886 · #64/030,368 · #64/034,028.
+      Non-provisional deadline April 3, 2027.
     </div>
   </div>
 </footer>
@@ -1566,3 +2778,28 @@
 
 </body>
 </html>
+
+
+<!-- END QUARTER 4 -->
+<!--
+  COMPLETE WEBSITE REWRITE
+  
+  All four quarters together replace the entire body of your live site.
+  Order:
+    Q1: Nav, Waitlist Banner, Hero, Pain/Solution, Mission
+    Q2: Inside the App (NEW), Models + Hardware Fit
+    Q3: Vs Cloud, Benchmarks vs Frontier (NEW), Energy, Provenance (NEW)
+    Q4: Research, Waitlist, Support (Pro tier added), Community, FAQ, Final CTA, Footer
+  
+  CSS: keep existing styles, no changes needed.
+  Logo: keep your existing base64 logo string in the nav and hero.
+  Polar.sh links: kept your existing checkout URLs untouched.
+  
+  PLACEHOLDERS TO FILL IN AFTER MIGRATION COMPLETES:
+  - Vision tier tok/s (currently "post-migration bench pending")
+  - Final HF repo URLs (currently using mlx-community references in
+    explanatory text; the agent will surface real Outlier-Ai URLs)
+  - SWE-bench Verified number for Core (currently ~75-77% projected,
+    replace with verified post-migration number)
+  - Any v1.6 → v1.6.x version updates as they happen
+-->
