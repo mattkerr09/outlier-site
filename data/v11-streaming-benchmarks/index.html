@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V11 streaming engine benchmarks (and why V10 ships instead) | Outlier</title>
+  <meta name="description" content="K-sweep results across Outlier's V9, V10, and V11 paged-MoE engines on Mac Studio M1 Ultra. Includes the honest finding that pushed V11 out of the default shipping config.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/data/v11-streaming-benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="V11 streaming engine benchmarks (and why V10 ships instead)">
+  <meta property="og:description" content="K-sweep results across V9, V10, V11 paged-MoE engines on Mac Studio M1 Ultra. Methodology, raw numbers, and the honest finding.">
+  <meta property="og:url" content="https://outlier.host/data/v11-streaming-benchmarks/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="V11 streaming engine benchmarks">
+  <meta name="twitter:description" content="Why V10 ships instead.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.2rem; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.45rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .quick-answer { background:rgba(168,85,247,0.06); border-left:3px solid var(--accent); padding:1rem 1.25rem; margin:0 0 2rem; border-radius:4px; }
+    .quick-answer p { margin:0 0 0.5rem; font-weight:600; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-mid); }
+    .quick-answer ul { margin:0; padding-left:1.25rem; color:var(--text); }
+    .note { background: var(--surface); border: 1px solid var(--amber); border-radius: 6px; padding: 0.9rem 1.1rem; margin: 1.2rem 0; font-size: 0.94rem; color: var(--text-mid); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } article table { font-size: 0.84rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier V11 streaming engine benchmarks","description":"K-sweep results across Outlier's V9, V10, and V11 paged-MoE inference engines on Mac Studio M1 Ultra 64 GB. Includes the empirical finding that drove the removal of V11 from default shipping config.","url":"https://outlier.host/data/v11-streaming-benchmarks/","datePublished":"2026-05-20","dateModified":"2026-05-20","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"keywords":["paged MoE inference","local AI benchmarks","Qwen3.5-397B","MLX","Mac Studio M1 Ultra","streaming engine"],"variableMeasured":["tokens per second","peak generation RAM","coherence pass rate","wall-time per token"],"measurementTechnique":"separate-process repetition, n=5 reps, 5 prompts × 80 tokens","temporalCoverage":"2026-05-07/2026-05-19","spatialCoverage":"Mac Studio M1 Ultra 64 GB unified memory"}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/data/">data</a></div>
+    <h1>V11 streaming engine benchmarks (and why V10 ships instead)</h1>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+
+    <div class="quick-answer">
+      <p>Quick answer</p>
+      <ul>
+        <li>Three paged-MoE inference engines benchmarked on Mac Studio M1 Ultra 64 GB: V9, V10, V11.</li>
+        <li>V11 with hybrid LRU showed best smoke numbers (Plus 3.0 tok/s, 7.34 GB peak gen RAM in MLX-internal alloc tracker).</li>
+        <li>Multi-turn soak revealed V11's LRU pinned tens of GB of Metal-wired memory; OS-level RSS hit ~55 GB on Plus chat.</li>
+        <li>V10 streaming (no LRU) holds the same ~2.9 tok/s at 4× less RAM. V10 ships in default config from v1.11.71.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Three paged-MoE inference engines were benchmarked on a Mac Studio M1 Ultra 64 GB during May 2026: V9 (baseline), V10 (no-LRU streaming), V11 (hybrid LRU streaming). V11 looked like the clear winner on smoke benchmarks; soak testing revealed a memory-pinning problem that doesn't show up in single-prompt smokes. V10 is what ships. This page is the data that drove the call.</p>
+
+    <h2>Why three engines</h2>
+    <p>Running a 397-billion-parameter Mixture-of-Experts model on a 64 GB Mac requires paging the experts off SSD per token. The naive approach (read all experts every token) is bound by SSD bandwidth. The clever approaches cache hot experts in RAM and read cold experts as needed. The question is <em>how aggressive should the cache be</em> — bigger cache means faster steady state but more RAM, smaller cache means lower memory ceiling but more SSD reads.</p>
+    <ul>
+      <li><strong>V9 baseline</strong> — full set of routed experts loaded into RAM, no paging. Hits a hardware ceiling: 96 GB minimum for Plus 397B. Doesn't run on a 64 GB Mac.</li>
+      <li><strong>V10 streaming</strong> — read top-K experts off SSD per token, no in-RAM cache. Pure paging. Memory floor: ~7 GB engine + per-token slice.</li>
+      <li><strong>V11 hybrid LRU</strong> — small cache of recently-used experts in RAM (size N=4 for Plus, N=2 for Vision); cache misses page from SSD. Hopes to amortize SSD reads across consecutive tokens that activate similar experts.</li>
+    </ul>
+
+    <h2>Methodology</h2>
+    <ul>
+      <li><strong>Hardware:</strong> Mac Studio M1 Ultra, 64 GB unified memory, internal SSD ~7.4 GB/s</li>
+      <li><strong>OS:</strong> macOS 25.3 (Darwin 25.3.0), <code>iogpu.wired_limit_mb=57344</code></li>
+      <li><strong>Models:</strong> Plus 397B-A17B at MLX 4-bit (<code>mlx-community/Qwen3.5-397B-A17B-4bit</code>); Vision 35B-A3B at MLX 4-bit (<code>Outlier-Ai/Outlier-Vision-35B-A3B-MLX-4bit</code>)</li>
+      <li><strong>Protocol:</strong> separate-process repetition, n=5 reps, 5 prompts × 80 tokens each, mean and stderr documented</li>
+      <li><strong>Cold-start control:</strong> each rep boots a fresh backend; first 10 tokens excluded from rate calculation</li>
+      <li><strong>Coherence rubric:</strong> 5/5 means each prompt's response was scored coherent (correct on its task, no repetition collapse) by manual inspection</li>
+    </ul>
+
+    <h2>Smoke benchmark results</h2>
+    <p>Single-prompt, fresh-process, MLX-internal memory peak (via <code>mx.get_peak_memory()</code>):</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Engine</th><th>Config</th><th>Mean tok/s</th><th>Peak gen RAM (MLX-internal)</th><th>Coherence</th></tr></thead>
+      <tbody>
+        <tr><td>Plus 397B</td><td>V9</td><td>full routed</td><td>1.666</td><td>13.75 GB</td><td>5/5</td></tr>
+        <tr><td>Plus 397B</td><td>V10</td><td>K=4 streaming</td><td>~2.9</td><td>~7 GB</td><td>5/5</td></tr>
+        <tr><td>Plus 397B</td><td>V11</td><td>K=4 + N=4 LRU</td><td>3.00</td><td>7.34 GB</td><td>5/5</td></tr>
+        <tr><td>Vision 35B-A3B</td><td>V9</td><td>full routed</td><td>16.31</td><td>13–14 GB</td><td>5/5</td></tr>
+        <tr><td>Vision 35B-A3B</td><td>V11</td><td>K=2 + N=2 LRU</td><td>10.92</td><td>1.60 GB</td><td>5/5</td></tr>
+      </tbody>
+    </table>
+
+    <p>V11 looked like the right call on these numbers. Plus 1.80× V9 with a similar memory footprint to V10. Vision a 20× memory reduction (16 GB MacBook Air capable). Promoted to opt-in in v1.8.53.</p>
+
+    <h2>Multi-turn soak — the surprise</h2>
+    <p>The opt-in shipped on 2026-05-08. Track 2 soak ran 8 hours, 9 cycles, 135 multi-turn conversations. Verdict was CLEAN on correctness — 135/135 turns coherent, 0 crashes. But the memory column told a different story than the smokes:</p>
+    <table>
+      <thead><tr><th>Workload</th><th>Engine</th><th>Smoke peak (MLX-internal)</th><th>Multi-turn-50 peak (MLX-internal)</th></tr></thead>
+      <tbody>
+        <tr><td>Plus 397B</td><td>V11 K=4 N=4 LRU</td><td>7.34 GB</td><td><strong>14.34 GB</strong></td></tr>
+        <tr><td>Vision 35B-A3B</td><td>V11 K=2 N=2 LRU</td><td>1.60 GB</td><td>3.16 GB</td></tr>
+      </tbody>
+    </table>
+
+    <p>14.34 GB on a 50-turn Plus session is <strong>higher than V9's 13.75 GB</strong>. The LRU's memory advantage inverts on long workloads — the cache grows as conversation context grows.</p>
+
+    <div class="note"><strong>The bigger gap revealed two weeks later.</strong> When we instrumented OS-level RSS (Activity Monitor reading, not <code>mx.get_peak_memory()</code> which only sees MLX-internal allocator), Plus on V11 during real chat hit roughly <strong>55 GB OS RSS</strong> on a 64 GB Mac. The LRU was pinning Metal-wired memory that the OS counted but the MLX tracker didn't. Engine picker copy that said "1.60 GB" or "7 GB" had been telling MLX-internal numbers, not what the user's OS saw.</p>
+
+    <h2>V10 versus V11 — the head-to-head that mattered</h2>
+    <p>On 2026-05-19, we re-ran Plus 397B on V10 (no LRU, pure streaming) and V11 (hybrid LRU) using the same prompts and recording both MLX-internal alloc and OS-level RSS:</p>
+    <table>
+      <thead><tr><th>Engine</th><th>Plus tok/s</th><th>MLX-internal peak</th><th>OS-level RSS during chat</th></tr></thead>
+      <tbody>
+        <tr><td>V10 streaming</td><td>~2.9</td><td>~7 GB</td><td>~13 GB</td></tr>
+        <tr><td>V11 hybrid LRU</td><td>~2.9–3.0</td><td>~7.3 GB</td><td>~55 GB</td></tr>
+      </tbody>
+    </table>
+
+    <p>V11 holds no perceptible tok/s advantage in steady-state chat while quadrupling OS-level RAM. <strong>v1.11.71 removes V11 from the shipping config.</strong> Users stored on <code>v11_streaming</code> auto-migrate to <code>v10_streaming</code> on next backend start. Plus on V10 streaming is the current recommendation: under 14 GB peak on a 64 GB Mac, no swap pressure even with other apps running.</p>
+
+    <h2>The honest finding behind this page</h2>
+    <p>Smoke benchmarks can mislead in two ways at once:</p>
+    <ul>
+      <li><strong>(1) Short workload masks long-workload behavior.</strong> An LRU cache that's empty at smoke time has nowhere to grow; on a 50-turn chat it does.</li>
+      <li><strong>(2) The wrong instrument masks the actual problem.</strong> MLX's internal allocator doesn't see Metal-wired memory. Activity Monitor does. The picker copy that said "7 GB" was reading the wrong column.</li>
+    </ul>
+    <p>The corrective action shipped as two changes: (a) the engine picker now shows tier-aware honest numbers (<a href="https://outlier.host/learn/what-is-paged-moe-inference/">see /learn/what-is-paged-moe-inference/</a>), and (b) the picker pulls OS-level peak, not MLX-internal peak.</p>
+
+    <h2>Reproduce this yourself</h2>
+    <p>The V10/V11 engine code is in the public Outlier app bundle. To re-run the K-sweep on your own Mac:</p>
+    <ol>
+      <li>Install Outlier v1.10.x (the last version with V11 opt-in available) from the release archive at <a href="https://github.com/Outlier-host/outlier-app-releases/releases">github.com/Outlier-host/outlier-app-releases/releases</a></li>
+      <li>Enable V11 in Settings &gt; Engine Mode &gt; V11 Streaming (beta)</li>
+      <li>Reproduce the 5×80-token sweep with a fresh process per rep; Activity Monitor open</li>
+      <li>Re-run on default (V9 for Plus or V10 streaming on current builds) for the comparison column</li>
+    </ol>
+    <p>Note: v1.11.71+ removes the V11 toggle entirely. The benchmark is reproducible only on older bundles.</p>
+
+    <h2>Where free tools sit on this dimension</h2>
+    <p>Neither Ollama nor LM Studio nor Jan currently runs Qwen3.5-397B on a 64 GB Mac. The model is 209 GB on disk; none of these tools page MoE experts off SSD per token. See <a href="https://outlier.host/data/local-ai-mac-2026-benchmarks/">Local AI on Mac — Outlier vs Ollama vs LM Studio vs Jan</a>.</p>
+
+    <h2>Source files</h2>
+    <ul>
+      <li><code>sprints/v10_flashmoe/PHASE3_RESULTS.md</code> — V10 K-sweep results</li>
+      <li><code>sprints/v11_hybrid/V11_RESULTS.md</code> — V11 smoke results</li>
+      <li><code>sprints/v11_soak/SOAK_VERDICT.md</code> — 8-hour soak results</li>
+      <li><code>FINAL_LAUNCH_NUMBERS.md</code> — canonical fact compilation with stderr</li>
+      <li>Commit <code>525298f</code> (v1.11.71) — V11 removal release notes</li>
+    </ul>
+
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
