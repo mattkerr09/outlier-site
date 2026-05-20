@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026 guide) | Outlier</title>
-  <meta name="description" content="Which model tiers run comfortably on each M-series Mac Studio, the RAM tradeoffs, and the actual tok/s numbers from a measured M1 Ultra.">
+  <title>The math — cloud AI subscriptions vs local AI lifetime cost | Outlier</title>
+  <meta name="description" content="A two-year cost comparison between cloud AI subscriptions and a local AI setup on a Mac. Real numbers, no hand-waving, with breakeven analysis.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
-  <link rel="canonical" href="https://outlier.host/run/local-ai-m1-m2-m3-m4-mac-studio/">
+  <link rel="canonical" href="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026 guide)">
-  <meta property="og:description" content="Which models run on each M-series Mac Studio, the RAM tradeoffs, and actual tok/s.">
-  <meta property="og:url" content="https://outlier.host/run/local-ai-m1-m2-m3-m4-mac-studio/">
+  <meta property="og:title" content="The math — cloud AI subscriptions vs local AI lifetime cost">
+  <meta property="og:description" content="Two-year cost comparison: cloud AI subscriptions vs a local AI setup on a Mac.">
+  <meta property="og:url" content="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">
   <meta property="og:site_name" content="Outlier">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026)">
-  <meta name="twitter:description" content="Per-Mac-Studio tier and speed guide.">
+  <meta name="twitter:title" content="Cloud AI subscriptions vs local AI lifetime cost">
+  <meta name="twitter:description" content="The actual math, with breakeven.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,7 +73,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026 guide)","description":"Which model tiers run comfortably on each M-series Mac Studio, the RAM tradeoffs, and actual tok/s.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/local-ai-m1-m2-m3-m4-mac-studio/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"The math — cloud AI subscriptions vs local AI lifetime cost","description":"A two-year cost comparison between cloud AI subscriptions and a local AI setup on a Mac.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/cloud-ai-vs-local-ai-cost/"}}
   </script>
 </head>
 <body>
@@ -89,71 +89,98 @@
 </nav>
 <article>
   <div class="wrap">
-    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">run</a></div>
-    <h1>Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026 guide)</h1>
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>The math — cloud AI subscriptions vs local AI lifetime cost</h1>
     <div class="byline-row">
       <span class="byline">Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-05-20</span>
+      <span class="updated-pill">Last updated 2026-05-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>M1 Max 32 GB Studio</strong> runs Nano + Lite + Quick + Core + Code 27B.</li>
-        <li><strong>M2 Ultra 64 GB</strong> adds Vision 35B and Plus 397B (V10 streaming).</li>
-        <li><strong>96 GB+ Studio</strong> runs Plus 397B in capacity mode for higher tok/s.</li>
-        <li>Measured M1 Ultra tok/s: Nano 71.7, Lite 53.4, Core 20.7, Plus 2.9.</li>
+        <li>A $200/month cloud AI subscription costs <strong>$4,800 over two years</strong>.</li>
+        <li>Outlier Standard ($149 one-time) plus a used M1 Max Mac Studio 32 GB (~$1,400) is <strong>$1,549 total</strong>, no recurring fees.</li>
+        <li>Breakeven on subscription-vs-local is typically <strong>7–10 months</strong> for a $200/month cloud plan, ignoring hardware reuse.</li>
+        <li>Outlier Pro ($30/mo) is the closest direct-comparison local-AI subscription at <strong>15% the cost</strong> of a $200/mo cloud plan.</li>
       </ul>
     </div>
 
-    <p class="lead">The Mac Studio line is a uniquely good fit for local AI: lots of unified memory, fast SSDs, no thermal throttling. This guide walks through which model tiers run comfortably on each Mac Studio generation, what to expect on tok/s, and where the actual cliffs are.</p>
+    <p class="lead">Cost is rarely the only reason to pick local AI over cloud. But it's the simplest to make concrete. Here's a clean two-year comparison: what you pay for a top-tier cloud AI subscription, what you pay for an equivalent-quality local setup, and where the breakeven lines actually fall once hardware reuse is factored in.</p>
 
-    <h2>Why Mac Studio matters for local AI</h2>
-    <p>Unified memory on Apple Silicon means the GPU and CPU share the same RAM. There is no model-loading step that copies weights across a PCIe bus to a separate GPU. The whole model — or a streamed slice of it — lives in unified memory and the GPU operates on it in place. That removes one of the bottlenecks PC builds have to engineer around.</p>
-    <p>The Mac Studio Ultra configurations (M1, M2, M3 Ultra) ship with 64 GB to 192 GB of unified memory and sustained SSD reads of 5–15 GB/s. That combination is what makes a 397B-parameter MoE model viable on a single desktop.</p>
-
-    <h2>Tier-by-Mac-Studio cheat sheet</h2>
-    <p>Outlier's lineup is seven model tiers. What runs:</p>
+    <h2>Cloud AI costs over 24 months</h2>
     <table>
-      <thead><tr><th>Mac Studio</th><th>RAM</th><th>Recommended tiers</th></tr></thead>
+      <thead><tr><th>Cloud plan</th><th>Monthly</th><th>24-month total</th></tr></thead>
       <tbody>
-        <tr><td>M1 Max (any)</td><td>32 GB</td><td>Nano, Lite, Quick 26B, Core 27B, Code 27B</td></tr>
-        <tr><td>M1 / M2 Ultra (base)</td><td>64 GB</td><td>+ Vision 35B, + Plus 397B (V10 streaming, ~2.9 tok/s)</td></tr>
-        <tr><td>M2 / M3 Ultra (mid)</td><td>96 GB</td><td>+ Plus 397B in capacity mode (faster, ~5 tok/s estimated)</td></tr>
-        <tr><td>M1 / M2 / M3 Ultra (max)</td><td>128–192 GB</td><td>All tiers in capacity mode, full headroom for long context</td></tr>
+        <tr><td>ChatGPT Plus</td><td>$20</td><td>$480</td></tr>
+        <tr><td>Claude Pro</td><td>$20</td><td>$480</td></tr>
+        <tr><td>Cursor Pro</td><td>$20</td><td>$480</td></tr>
+        <tr><td>ChatGPT Pro / Claude Max</td><td>$200</td><td>$4,800</td></tr>
+        <tr><td>Anthropic API (heavy use, ~5M tokens/mo Opus)</td><td>~$200–$400</td><td>$4,800–$9,600</td></tr>
       </tbody>
     </table>
-    <p>The 64 GB tier is the inflection point. Below 64 GB you're constrained to Core 27B and smaller. At 64 GB you can run Plus 397B (the strongest model in the lineup) via V10 streaming. Above 96 GB you stop having to stream.</p>
+    <p>The cheap plans cap your usage. A $20/month plan that limits you to ~50 messages per 5 hours covers occasional chat but breaks the moment you start running agents. To use cloud AI at the intensity local agents make trivial, you're paying the $200+ tier.</p>
 
-    <h2>Measured tok/s on M1 Ultra</h2>
-    <p>From the Outlier Mac bench on a 192 GB M1 Ultra, batch size 1, 4096-token prefill, 256-token decode:</p>
+    <h2>Local AI costs, all-in</h2>
+    <p>Outlier is one local option. Pricing as of 2026-05-19:</p>
     <table>
-      <thead><tr><th>Tier</th><th>Decode tok/s</th></tr></thead>
+      <thead><tr><th>Plan</th><th>Cost</th><th>What it includes</th></tr></thead>
       <tbody>
-        <tr><td>Nano 4B</td><td>71.7</td></tr>
-        <tr><td>Lite 9B</td><td>53.4</td></tr>
-        <tr><td>Core 27B</td><td>20.7</td></tr>
-        <tr><td>Plus 397B (V10 streaming, K=20)</td><td>2.9</td></tr>
+        <tr><td>Free</td><td>$0 forever</td><td>Nano 4B + Lite 9B (Apache 2.0)</td></tr>
+        <tr><td>Standard</td><td>$149 one-time</td><td>Quick 26B, Core 27B, Code 27B, Vision 35B</td></tr>
+        <tr><td>Pro</td><td>$30/mo or $249/yr</td><td>Adds Plus 397B-A17B</td></tr>
+        <tr><td>Founders</td><td>$200 one-time</td><td>Lifetime Pro, 500-seat cap</td></tr>
       </tbody>
     </table>
-    <p>For comparison, an M4 MacBook Air 16 GB hits ~32 tok/s on Nano 4B in clean-boot conditions. M2/M3/M4 Ultra Studios will run higher than the M1 numbers (newer SoC + faster memory) but the order of magnitude holds.</p>
+    <p>Hardware is the other half. If you already own a recent Mac, the marginal cost is zero. If you don't:</p>
+    <table>
+      <thead><tr><th>Mac</th><th>RAM</th><th>Approx cost (used/refurb)</th></tr></thead>
+      <tbody>
+        <tr><td>M1 Mac mini</td><td>16 GB</td><td>~$500</td></tr>
+        <tr><td>M1 Max Mac Studio</td><td>32 GB</td><td>~$1,400</td></tr>
+        <tr><td>M2 Ultra Mac Studio</td><td>64 GB</td><td>~$3,500</td></tr>
+      </tbody>
+    </table>
 
-    <h2>What to buy if you're starting from scratch</h2>
-    <p>For a coding-focused local AI build:</p>
+    <h2>The two-year comparison</h2>
+    <table>
+      <thead><tr><th>Setup</th><th>24-month total</th></tr></thead>
+      <tbody>
+        <tr><td>$200/mo cloud subscription</td><td>$4,800</td></tr>
+        <tr><td>Outlier Standard on existing Mac</td><td>$149</td></tr>
+        <tr><td>Outlier Standard + used M1 Max Studio 32 GB</td><td>$1,549</td></tr>
+        <tr><td>Outlier Pro ($30/mo) on existing Mac</td><td>$720</td></tr>
+        <tr><td>Outlier Founders + new M2 Ultra Studio 64 GB</td><td>$3,700</td></tr>
+      </tbody>
+    </table>
+    <p>On 24-month math, even the most expensive Outlier setup (new M2 Ultra Studio with Founders pricing) lands about $1,100 under a $200/month cloud plan. The cheapest realistic local setup (existing Mac + Standard one-time) is roughly <strong>30× cheaper</strong>.</p>
+
+    <h2>Breakeven analysis</h2>
+    <p>If you're paying $200/month for cloud AI today and switch to:</p>
     <ul>
-      <li><strong>Budget pick:</strong> M1 Max Mac Studio 32 GB (used market ~$1,400). Runs Core 27B at ~20 tok/s — enough for daily refactor + agent work.</li>
-      <li><strong>Sweet spot:</strong> M2 Ultra Mac Studio 64 GB (~$3,500 new or refurb). Adds Plus 397B via streaming for the cases you need the strongest local model.</li>
-      <li><strong>Headroom:</strong> M2/M3 Ultra 96+ GB (~$5,000+). Plus 397B runs in capacity mode without streaming overhead.</li>
+      <li><strong>Outlier Standard on an existing Mac</strong> → breakeven in under 1 month.</li>
+      <li><strong>Outlier Pro ($30/mo) on an existing Mac</strong> → save $170/month, recurring.</li>
+      <li><strong>Outlier Standard + buy a used M1 Max Studio</strong> → breakeven in about 8 months.</li>
+      <li><strong>Outlier Founders + buy a new M2 Ultra Studio</strong> → breakeven at month 18.</li>
     </ul>
-    <p>For comparison, a $200/month cloud AI subscription costs $4,800 over two years. A used M1 Max Studio plus Outlier Standard ($149 once) lands well under that for an equivalent-quality coding workflow on the common 95% of tasks, with no recurring bill and no usage cap.</p>
+    <p>The hardware is reusable. After breakeven, the savings compound — and the Mac you bought for AI work continues to be your Mac.</p>
+
+    <h2>What this comparison doesn't capture</h2>
+    <p>Three honest caveats:</p>
+    <ul>
+      <li><strong>Speed.</strong> Cloud is 3–5× faster on raw decode. If your time is worth more than the difference in tok/s, the cloud math may still favor the subscription.</li>
+      <li><strong>Ceiling.</strong> The biggest cloud models are still ahead on the hardest 5% of tasks (research-grade reasoning, 50k+ token contexts). Bench parity is at 98.9% across 54 tests, not 100%.</li>
+      <li><strong>Electricity.</strong> A 64 GB Mac Studio at full inference load uses real watts. Estimate $5–$15/month if you're running long agent jobs 8+ hours a day.</li>
+    </ul>
+    <p>For most developers under most workloads, local AI's cost advantage is real and large enough to swamp those caveats. For the cases where speed or ceiling matters more, you can keep both — many serious users do.</p>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr adds Plus 397B. Works on any Apple Silicon Mac.</p>
-      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-m1-m2-m3-m4-mac-studio">Download for Mac</a>
+      <p>Free Nano + Lite tiers. Standard $149 once. Pro $30/mo or $249/yr.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=cloud-ai-vs-local-ai-cost">Download for Mac</a>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">Why Apple Silicon is the best hardware for local AI in 2026</a> · <a href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">How to run a 397B model on 64 GB</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/learn/what-no-usage-caps-means/">What 'no usage caps' actually means</a> · <a href="https://outlier.host/vs/best-chatgpt-alternative-mac-offline/">Best ChatGPT alternative for Mac (offline)</a> · <a href="https://outlier.host/learn/">All articles</a></div>
   </div>
 </article>
 <footer>

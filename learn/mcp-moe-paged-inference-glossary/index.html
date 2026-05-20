@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local AI vs Claude Code — which works better for what | Outlier</title>
-  <meta name="description" content="Local AI and Claude Code solve the same problem from opposite directions. A by-task breakdown of which one wins on speed, quality, privacy, and cost.">
+  <title>MCP, MoE, paged inference — the local-AI glossary | Outlier</title>
+  <meta name="description" content="Plain-language definitions for the technical terms that come up when you start using local AI on a Mac. MCP, MoE, paged inference, MLX, GGUF, KV cache, and more.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
-  <link rel="canonical" href="https://outlier.host/vs/local-ai-vs-claude-code/">
+  <link rel="canonical" href="https://outlier.host/learn/mcp-moe-paged-inference-glossary/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Local AI vs Claude Code — which works better for what">
-  <meta property="og:description" content="A by-task breakdown of where local AI wins and where Claude Code still wins.">
-  <meta property="og:url" content="https://outlier.host/vs/local-ai-vs-claude-code/">
+  <meta property="og:title" content="MCP, MoE, paged inference — the local-AI glossary">
+  <meta property="og:description" content="Plain-language definitions for the technical terms in local-AI tooling.">
+  <meta property="og:url" content="https://outlier.host/learn/mcp-moe-paged-inference-glossary/">
   <meta property="og:site_name" content="Outlier">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Local AI vs Claude Code — which works better for what">
-  <meta name="twitter:description" content="Task-by-task breakdown, with numbers.">
+  <meta name="twitter:title" content="MCP, MoE, paged inference — the local-AI glossary">
+  <meta name="twitter:description" content="Plain-language definitions.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,7 +73,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Local AI vs Claude Code — which works better for what","description":"A by-task breakdown of where local AI wins and where Claude Code still wins.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/local-ai-vs-claude-code/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"MCP, MoE, paged inference — the local-AI glossary","description":"Plain-language definitions for the technical terms that come up when you start using local AI on a Mac.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/mcp-moe-paged-inference-glossary/"}}
   </script>
 </head>
 <body>
@@ -89,66 +89,71 @@
 </nav>
 <article>
   <div class="wrap">
-    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
-    <h1>Local AI vs Claude Code — which works better for what</h1>
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>MCP, MoE, paged inference — the local-AI glossary</h1>
     <div class="byline-row">
       <span class="byline">Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-05-20</span>
+      <span class="updated-pill">Last updated 2026-05-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Local AI wins on privacy, no usage cap, offline, persistent memory, one-time cost.</li>
-        <li>Claude Code wins on speed (~4× faster decode), research ceiling, novel problems.</li>
-        <li><strong>98.9% bench parity</strong> on common 95% of coding tasks (54 prompts, May 2026).</li>
-        <li>Many teams use both: local for sensitive code, Claude Code for everything else.</li>
+        <li><strong>MCP</strong> = Model Context Protocol; a standard for connecting AI agents to tools.</li>
+        <li><strong>MoE</strong> = Mixture-of-Experts; only some sub-networks activate per token.</li>
+        <li><strong>Paged inference</strong> = streaming weights from SSD on demand, like OS virtual memory.</li>
+        <li><strong>MLX</strong> = Apple's GPU array library; the local-AI backend on Mac.</li>
       </ul>
     </div>
 
-    <p class="lead">"Local AI" and "Claude Code" aren't the same kind of thing — one's a category, the other's a specific product. But a working developer asking "which should I use" is really asking a more useful question: for the actual task in front of me, which one gets it done better? Here's the by-task breakdown.</p>
+    <p class="lead">Local AI tooling collected a vocabulary that didn't exist three years ago. This glossary defines the terms in plain language, in the order you're likely to meet them. Use it as a reference when you hit a phrase you don't know.</p>
 
-    <h2>What "local AI" looks like in 2026</h2>
-    <p>A modern local-AI coding setup means: a Mac with Apple Silicon, 16 GB+ unified memory, a local-inference app like Outlier or LM Studio + Continue.dev. Outlier's Core 27B (HumanEval pass@1 0.8659) is roughly the upper bound of single-model local coding quality on a 32 GB Mac. Plus 397B is available via expert streaming on a 64 GB Mac at ~2.9 tok/s for harder reasoning.</p>
+    <h2>MCP — Model Context Protocol</h2>
+    <p>An open standard (introduced by Anthropic in 2024) for connecting AI agents to external tools. An MCP server exposes a list of callable functions (read file, query database, send Slack message) plus a schema. An MCP client (the agent app) discovers them and calls them when the model produces a tool call. The point: tools become portable across agent apps. The same filesystem-MCP works in Outlier, Claude Desktop, Continue.dev, and others.</p>
 
-    <h2>What Claude Code is</h2>
-    <p>Claude Code is Anthropic's terminal coding agent, backed by Claude Opus 4.7 in the cloud. It edits files, runs commands, asks for approval at the right moments, and runs at ~80–100 tok/s. It needs an API key, an internet connection, and a credit card on file (or an Anthropic subscription).</p>
+    <h2>MoE — Mixture of Experts</h2>
+    <p>A neural network architecture where each layer contains many "expert" sub-networks plus a router. For each token, the router picks <em>k</em> experts (often 8 of 128) to activate; the rest sit idle. Total parameter count is the sum of all experts; active parameters per token is just the <em>k</em> chosen. Qwen3.5-397B-A17B is MoE: 397B total, 17B active per token.</p>
 
-    <h2>Task-by-task</h2>
-    <table>
-      <thead><tr><th>Task</th><th>Local AI</th><th>Claude Code</th><th>Winner</th></tr></thead>
-      <tbody>
-        <tr><td>Refactor a function</td><td>Good</td><td>Good, faster</td><td>Tied on output; Claude wins on speed</td></tr>
-        <tr><td>Write a unit test</td><td>Good</td><td>Good</td><td>Tied; pick on privacy / speed preference</td></tr>
-        <tr><td>Explain a 200-line file</td><td>Good</td><td>Good</td><td>Tied</td></tr>
-        <tr><td>Architect a new module</td><td>Good (Plus 397B for hard cases)</td><td>Strong</td><td>Slight Claude edge for novel architectures</td></tr>
-        <tr><td>Debug a hard race condition</td><td>OK</td><td>Strong</td><td>Claude</td></tr>
-        <tr><td>Work with proprietary code</td><td>Works (nothing leaves machine)</td><td>Code goes to Anthropic</td><td>Local (mandatory in regulated industries)</td></tr>
-        <tr><td>Work on a plane / no internet</td><td>Works</td><td>Doesn't work</td><td>Local</td></tr>
-        <tr><td>Run agents all day</td><td>No usage limit</td><td>Per-plan token cap</td><td>Local</td></tr>
-        <tr><td>50k+ token context recall</td><td>Limited by tier</td><td>Strong</td><td>Claude</td></tr>
-        <tr><td>Persistent project memory</td><td>Yes, on disk</td><td>Session-based</td><td>Local</td></tr>
-      </tbody>
-    </table>
+    <h2>Paged inference</h2>
+    <p>Running a model whose weights are bigger than RAM by keeping only the actively-used parts resident and reading the rest from SSD on demand. Most useful for MoE models because only a small fraction of weights are needed per token. Outlier's V10 streaming engine implements paged inference for Plus 397B on 64 GB Macs.</p>
 
-    <h2>Where the parity bench landed</h2>
-    <p>Outlier ran a 54-prompt head-to-head against Claude Opus on the same prompts: chess engine implementation, raft/paxos explanation, ZK proofs, geometry proof, race-condition refactor, post-mortem write-up, and 48 more. Result: <strong>98.9% overall parity</strong>, all 9 brutal additions at 100%. For day-to-day coding work the output quality is indistinguishable; the differences are in speed, privacy, and cost shape.</p>
+    <h2>MLX</h2>
+    <p>Apple's array framework for ML, equivalent to PyTorch / NumPy but optimized for Apple Silicon's unified memory and Metal GPU. Models distributed in "MLX 4-bit" format are quantized for MLX's matmul kernels. All Outlier tiers ship in MLX 4-bit.</p>
 
-    <h2>How to decide</h2>
-    <p>Three deciding questions:</p>
-    <ol>
-      <li><strong>Can your code go to Anthropic?</strong> If no (compliance, IP, customer data), local is the only option.</li>
-      <li><strong>Do you care more about speed-feel or recurring cost?</strong> Cloud wins on tok/s; local wins on lifetime cost ($149 once or $30/mo Pro vs ongoing API spend).</li>
-      <li><strong>Do you work offline regularly?</strong> If yes (planes, customer sites, secure networks), local is the only one that works.</li>
-    </ol>
+    <h2>GGUF</h2>
+    <p>A model file format used by llama.cpp and tools built on it (Ollama, LM Studio's default backend). Designed for efficient quantization and broad cross-platform support. Different from MLX format; conversions exist but the formats target different inference runtimes.</p>
+
+    <h2>4-bit quantization</h2>
+    <p>Storing model weights as 4-bit integers (with a small floating-point scaling factor per group) instead of 16-bit floats. About 4× smaller on disk and in memory. Quality regression vs the original 16-bit model is small enough to be invisible on most tasks.</p>
+
+    <h2>KV cache</h2>
+    <p>The cache of key/value tensors from attention layers, kept across generated tokens so each new token's attention doesn't have to re-read every prior token. Memory cost grows with context length. For long contexts the KV cache can be larger than the model itself.</p>
+
+    <h2>Tok/s (tokens per second)</h2>
+    <p>The speed metric for inference. Decode tok/s = how many output tokens the model generates per second after the initial prompt prefill. Outlier Core 27B = ~22 tok/s on M1 Ultra; Plus 397B in V10 streaming = ~2.9 tok/s.</p>
+
+    <h2>TTFT — time to first token</h2>
+    <p>How long after you hit send before the first token of the response appears. Dominated by prefill (processing the prompt context). For long prompts, TTFT can be several seconds even on fast models. The prefill heartbeat feature in Outlier surfaces this so the UI doesn't go silent.</p>
+
+    <h2>Cold start / cold load</h2>
+    <p>The time required to load a model's weights into unified memory when it hasn't been used recently. For Plus 397B this is ~74 seconds; for Core 27B it's a few seconds. Hot models respond immediately.</p>
+
+    <h2>Quantization-aware training (QAT)</h2>
+    <p>Training a model with the eventual low-bit precision in mind, so it learns to be representable in that precision without quality loss. Distinct from post-training quantization, which compresses an already-trained 16-bit model. Ternary models typically use QAT; 4-bit models often don't need it.</p>
+
+    <h2>Speculative decoding</h2>
+    <p>An inference optimization where a small "draft" model proposes several tokens, then the big model verifies them in one parallel pass. When the draft is right (often!), you generate multiple tokens per big-model pass. Architecturally blocked for Qwen3's hybrid attention setup, which is why Outlier doesn't ship it for Plus / Vision / Core tiers.</p>
+
+    <h2>Agent loop</h2>
+    <p>The control flow of a coding agent: receive user message → run model → parse tool calls out of the response → execute tools (with approval) → feed results back to model → repeat until done. Outlier's agent loop is the headline of the app's Agent mode; Claude Code's loop is similar.</p>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr. Apple Silicon only.</p>
-      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-vs-claude-code">Download for Mac</a>
+      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mcp-moe-paged-inference-glossary">Download for Mac</a>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code (detailed)</a> · <a href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">Core 27B vs Claude Opus head-to-head</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-paged-moe-inference/">What is a paged MoE inference engine</a> · <a href="https://outlier.host/learn/what-is-ternary-quantization/">What is ternary quantization</a> · <a href="https://outlier.host/learn/">All articles</a></div>
   </div>
 </article>
 <footer>
