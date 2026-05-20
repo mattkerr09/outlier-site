@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier benchmarks and data | Outlier</title>
+  <meta name="description" content="Original data on Outlier's inference engine, head-to-head outputs against Claude Opus, and competitive local-AI-on-Mac benchmarks. Every number provenanced.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/data/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Outlier benchmarks and data">
+  <meta property="og:description" content="Head-to-head outputs vs Claude Opus, paged inference engine benchmarks, and local-AI-on-Mac comparison data.">
+  <meta property="og:url" content="https://outlier.host/data/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier benchmarks and data">
+  <meta name="twitter:description" content="Original data. Every number provenanced to source files.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.2rem; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article p { margin-bottom: 1.1rem; }
+    article ul { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.6rem; }
+    .data-card { padding: 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin: 1rem 0; }
+    .data-card h3 { font-size: 1.1rem; margin-bottom: 0.4rem; font-weight: 700; }
+    .data-card h3 a { color: var(--text); }
+    .data-card h3 a:hover { color: var(--accent-light); text-decoration: none; }
+    .data-card p { color: var(--text-mid); margin: 0; font-size: 0.95rem; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","headline":"Outlier benchmarks and data","description":"Index of original datasets and head-to-head comparisons for Outlier's local-AI runtime.","datePublished":"2026-05-20","dateModified":"2026-05-20","url":"https://outlier.host/data/","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; data</div>
+    <h1>Outlier benchmarks and data</h1>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+    <p class="lead">Original datasets — head-to-head outputs against Claude Opus, paged inference engine measurements, and side-by-side comparison with the other Mac-native local-AI tools. Every quantitative claim on outlier.host traces back to one of these pages or to the FINAL_LAUNCH_NUMBERS source file. Numbers we haven't validated to our own bar are explicitly marked.</p>
+
+    <h2>The datasets</h2>
+
+    <div class="data-card">
+      <h3><a href="/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude Opus 4.7 — 54-prompt head-to-head</a></h3>
+      <p>Same prompts, two models. Six tests captured verbatim from both Claude and Outlier on disk. A 54-prompt rubric bench scored Outlier 99.5% on flagship-quality features. Reproducible.</p>
+    </div>
+
+    <div class="data-card">
+      <h3><a href="/data/v11-streaming-benchmarks/">V11 streaming engine benchmarks (and why V10 ships instead)</a></h3>
+      <p>K-sweep results across Plus 397B and Vision 35B on Mac Studio M1 Ultra. Five-run separate-process methodology. Includes the honest finding that pushed us to remove V11 in favor of V10.</p>
+    </div>
+
+    <div class="data-card">
+      <h3><a href="/data/local-ai-mac-2026-benchmarks/">Local AI on Mac in 2026 — Outlier vs Ollama vs LM Studio vs Jan</a></h3>
+      <p>Side-by-side comparison across seven dimensions, including the dimension where Outlier is presently the only option (paged-MoE inference for models bigger than RAM).</p>
+    </div>
+
+    <h2>Why publish raw data</h2>
+    <p>Most product sites publish benchmark headlines. Outlier publishes the prompts, the outputs, the methodology, the stderr, the dates, and the source files. The point is not to be impressive — it's to be checkable. If you can't reproduce a number on your own Mac in the same conditions, the number doesn't belong on this site.</p>
+    <p>If you find one we got wrong, that's a real bug. <a href="https://github.com/Outlier-host">Issue on GitHub</a>.</p>
+
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
