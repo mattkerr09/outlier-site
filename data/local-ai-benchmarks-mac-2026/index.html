@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio | Outlier</title>
+  <meta name="description" content="Tok/s, MMLU, HumanEval, and memory footprint data for the major local-AI options on Apple Silicon in 2026. Outlier numbers measured; Ollama and LM Studio from public benchmarks.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio">
+  <meta property="og:description" content="Tok/s, MMLU, HumanEval, memory footprint for major local-AI options on Apple Silicon.">
+  <meta property="og:url" content="https://outlier.host/data/local-ai-benchmarks-mac-2026/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI benchmarks for Mac (2026)">
+  <meta name="twitter:description" content="Outlier vs Ollama vs LM Studio raw numbers.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(820px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.05rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.05rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.9rem; }
+    article th, article td { padding: 0.5rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .source { font-size: 0.78rem; color: var(--text-dim); margin-top: -1rem; margin-bottom: 1.2rem; font-style: italic; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Dataset","name":"Local AI benchmarks on Mac, 2026 — Outlier, Ollama, LM Studio","description":"Decode tok/s, MMLU, HumanEval, and memory footprint data for the major local-AI options on Apple Silicon in 2026.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-04-30","dateModified":"2026-05-20","measurementTechnique":"Outlier numbers measured on M1 Ultra; Ollama and LM Studio referenced from public benchmark posts","license":"https://creativecommons.org/licenses/by/4.0/"}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">data</a></div>
+    <h1>Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-04-30</span>
+      <span class="updated-pill">Last updated 2026-05-20</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>On 7B-class chat: <strong>~70 tok/s</strong> on M1 Ultra for Outlier Nano 4B; comparable Ollama / LM Studio numbers in the 60–110 tok/s range depending on model.</li>
+        <li>On 27B-class coding: <strong>Outlier Core 27B = 20.7 tok/s</strong>, HumanEval pass@1 = <strong>0.8659</strong> (highest in lineup).</li>
+        <li>On 397B-class MoE: <strong>only Outlier runs it on 64 GB Macs</strong> (V10 streaming, ~2.9 tok/s, ~13 GB RSS); Ollama and LM Studio can't fit the model.</li>
+        <li>Outlier MMLU numbers σ-qualified vs base: Nano +1.87pp (3.54σ), Lite +1.10pp (2.22σ); Core +0.44pp (1.04σ sub-σ).</li>
+      </ul>
+    </div>
+
+    <p class="lead">This is the raw benchmark data behind comparing the major local-AI options on Apple Silicon in 2026. Outlier numbers are measured on the dev M1 Ultra; Ollama and LM Studio numbers reference public benchmark posts where appropriate.</p>
+
+    <h2>Outlier lineup — measured (M1 Ultra, MLX 4-bit, batch 1, 4096 prefill, 256 decode)</h2>
+    <table>
+      <thead><tr><th>Tier</th><th>Params</th><th>Disk</th><th>RAM (peak)</th><th>Decode tok/s</th><th>MMLU</th><th>HumanEval</th></tr></thead>
+      <tbody>
+        <tr><td>Nano 4B</td><td>4B dense</td><td>~3 GB</td><td>~4 GB</td><td><strong>71.7</strong></td><td>0.7437 ± 0.0037</td><td>0.5793 ± 0.0387</td></tr>
+        <tr><td>Lite 9B</td><td>9B dense</td><td>~6 GB</td><td>~7 GB</td><td><strong>53.4</strong></td><td>0.7846 ± 0.0035</td><td>0.6951 ± 0.0361</td></tr>
+        <tr><td>Quick 26B</td><td>26B-a4b MoE</td><td>~16 GB</td><td>~17 GB</td><td>14.6</td><td>0.7933</td><td>0.1280</td></tr>
+        <tr><td>Core 27B</td><td>27B dense</td><td>~16 GB</td><td>~17 GB</td><td><strong>20.7</strong></td><td>0.8511 ± 0.0030</td><td><strong>0.8659 ± 0.0267</strong></td></tr>
+        <tr><td>Vision 35B-A3B</td><td>35B-A3B MoE</td><td>~20 GB</td><td>~18 GB (cap) / ~3.5 GB (V10)</td><td>~8 (V10) / 16 (cap)</td><td>0.8352 ± 0.0031</td><td>0.6098 ± 0.0382</td></tr>
+        <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~13 GB (V10 streaming)</td><td><strong>2.9 (V10)</strong></td><td>(pending)</td><td>(pending)</td></tr>
+      </tbody>
+    </table>
+    <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code> (2026-04-30 cluster eval, M1 Ultra Mac bench 2026-04-29); MMLU n=14,042; HumanEval n=164.</p>
+
+    <h2>Cross-tool comparison (Mac, comparable 7B/13B/27B models)</h2>
+    <table>
+      <thead><tr><th>Tool</th><th>Model</th><th>Format</th><th>Mac</th><th>Decode tok/s</th></tr></thead>
+      <tbody>
+        <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>71.7</td></tr>
+        <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M4 Air 16 GB</td><td>~32</td></tr>
+        <tr><td>Ollama</td><td>Llama 3.1 8B Q4_K_M</td><td>GGUF</td><td>M1 Ultra 64 GB</td><td>~60–80 (public posts)</td></tr>
+        <tr><td>LM Studio</td><td>Qwen 2.5 7B Q4</td><td>GGUF/MLX</td><td>M2 Max 64 GB</td><td>~70–100 (public posts)</td></tr>
+        <tr><td>Outlier</td><td>Core 27B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>20.7</td></tr>
+        <tr><td>Ollama</td><td>Qwen 2.5 Coder 32B Q4</td><td>GGUF</td><td>M1 Ultra 64 GB</td><td>~15–22 (public posts)</td></tr>
+        <tr><td>Outlier</td><td>Plus 397B-A17B</td><td>MLX 4-bit, V10 streaming</td><td>M1 Ultra 64 GB</td><td>2.9</td></tr>
+        <tr><td>Ollama</td><td>any 397B model</td><td>—</td><td>64 GB Mac</td><td><strong>won't load (RAM)</strong></td></tr>
+        <tr><td>LM Studio</td><td>any 397B model</td><td>—</td><td>64 GB Mac</td><td><strong>won't load (RAM)</strong></td></tr>
+      </tbody>
+    </table>
+    <p class="source">Source: Outlier numbers measured locally; Ollama and LM Studio ranges from publicly-shared benchmark posts as of 2026-05. Different prompts, prefill sizes, and batch settings make exact apples-to-apples comparison hard; ranges shown are typical.</p>
+
+    <h2>Cost comparison (24 months, single Mac developer)</h2>
+    <table>
+      <thead><tr><th>Setup</th><th>24-month total</th></tr></thead>
+      <tbody>
+        <tr><td>Outlier Free (Nano + Lite)</td><td>$0</td></tr>
+        <tr><td>Outlier Standard ($149 once) on existing Mac</td><td>$149</td></tr>
+        <tr><td>Outlier Pro ($30/mo)</td><td>$720</td></tr>
+        <tr><td>Outlier Pro annual ($249/yr × 2)</td><td>$498</td></tr>
+        <tr><td>Outlier Founders ($200 once, lifetime Pro)</td><td>$200</td></tr>
+        <tr><td>Ollama (OSS, free)</td><td>$0</td></tr>
+        <tr><td>LM Studio (free for personal use)</td><td>$0</td></tr>
+        <tr><td>ChatGPT Plus / Claude Pro ($20/mo)</td><td>$480</td></tr>
+        <tr><td>ChatGPT Pro / Claude Max ($200/mo)</td><td>$4,800</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What the bench doesn't measure</h2>
+    <ul>
+      <li><strong>Prompt prefill / TTFT.</strong> Decode tok/s is steady-state; first-token latency for long prompts can be several seconds even on fast tiers.</li>
+      <li><strong>Tier swap cost.</strong> Cold-loading a tier you haven't used recently takes 10s–74s depending on size.</li>
+      <li><strong>Quality on agentic loops.</strong> Bench tested single-turn outputs; multi-turn agent quality varies more by app than by model.</li>
+      <li><strong>Vision tasks rigorously.</strong> Vision 35B numbers are language-only; image-task quality bench is forthcoming.</li>
+      <li><strong>Long-context (50k+).</strong> Bench prompts capped at 4096 prefill; longer contexts are where cloud flagships still lead meaningfully.</li>
+    </ul>
+
+    <h2>How to reproduce</h2>
+    <ol>
+      <li>Outlier: download from <a href="https://outlier.host/">outlier.host</a>, use the bundled benchmark harness in the app's developer console.</li>
+      <li>Ollama: <code>ollama run &lt;model&gt; --verbose</code> reports tok/s per response.</li>
+      <li>LM Studio: chat REPL shows tok/s in the response footer.</li>
+      <li>MMLU / HumanEval: use lm-evaluation-harness with each model loaded via its native backend.</li>
+    </ol>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=data-local-ai-benchmarks-mac-2026">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude 54-prompt bench</a> · <a href="https://outlier.host/data/v11-streaming-engine-benchmarks/">Streaming engine benchmarks</a> · <a href="https://outlier.host/vs/mac-native-ai-comparison/">Mac-native AI comparison</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
