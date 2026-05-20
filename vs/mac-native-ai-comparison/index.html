@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio | Outlier</title>
+  <meta name="description" content="Four serious local-AI options for Mac in 2026. How they differ on backend, models, agent features, pricing, and where each is the right pick.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/vs/mac-native-ai-comparison/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio">
+  <meta property="og:description" content="Four serious local-AI options for Mac in 2026, compared.">
+  <meta property="og:url" content="https://outlier.host/vs/mac-native-ai-comparison/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio">
+  <meta name="twitter:description" content="Four serious local-AI options, compared.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio","description":"Four serious local-AI options for Mac in 2026. How they differ on backend, models, agent features, pricing.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-native-ai-comparison/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
+    <h1>Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-05-19</span>
+      <span class="updated-pill">Last updated 2026-05-20</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li><strong>Outlier</strong>: Mac-native agent app + MoE streaming, free Nano + Lite.</li>
+        <li><strong>LM Studio</strong>: best chat GUI + OpenAI API backend, free for personal use.</li>
+        <li><strong>Ollama</strong>: best CLI/headless backend for scripts, MIT-licensed.</li>
+        <li><strong>Jan</strong>: cross-platform OSS chat app with growing extension/MCP ecosystem.</li>
+      </ul>
+    </div>
+
+    <p class="lead">If you want a local AI tool on a Mac in 2026, four options stand out: Outlier, Jan, Ollama, and LM Studio. They differ in some non-obvious ways. This comparison goes feature-by-feature with the honest tradeoffs and where each one is the right pick.</p>
+
+    <h2>One-line descriptions</h2>
+    <ul>
+      <li><strong>Outlier:</strong> Mac-native AI app with built-in agent loop, MCP tools, project memory, and a custom MLX-based paged-MoE streaming engine. Free Nano + Lite, paid Standard $149 once, Pro $30/mo.</li>
+      <li><strong>Jan:</strong> Open-source ChatGPT-style desktop app, cross-platform, llama.cpp backend, growing extension/MCP ecosystem. Free.</li>
+      <li><strong>Ollama:</strong> CLI-first local-LLM runtime + OpenAI-compatible HTTP server. llama.cpp backend, GGUF format. Cross-platform. Free, MIT-licensed.</li>
+      <li><strong>LM Studio:</strong> Polished GUI for local LLMs, model catalog browser, chat REPL, OpenAI-compatible API. Cross-platform. Free for personal use.</li>
+    </ul>
+
+    <h2>Feature matrix</h2>
+    <table>
+      <thead><tr><th>Feature</th><th>Outlier</th><th>Jan</th><th>Ollama</th><th>LM Studio</th></tr></thead>
+      <tbody>
+        <tr><td>Platforms</td><td>Mac (AS)</td><td>Mac/Lin/Win</td><td>Mac/Lin/Win</td><td>Mac/Lin/Win</td></tr>
+        <tr><td>License</td><td>Proprietary, free tier</td><td>AGPL (OSS)</td><td>MIT (OSS)</td><td>Proprietary, free</td></tr>
+        <tr><td>Backend</td><td>MLX (custom paged MoE)</td><td>llama.cpp</td><td>llama.cpp</td><td>llama.cpp + MLX</td></tr>
+        <tr><td>Bundled UI</td><td>Yes (chat + agent)</td><td>Yes (chat)</td><td>CLI + REPL</td><td>Yes (chat + dev tools)</td></tr>
+        <tr><td>Built-in agent loop</td><td>Yes</td><td>Via extensions</td><td>No</td><td>No</td></tr>
+        <tr><td>MCP support</td><td>Yes</td><td>Yes (newer)</td><td>External</td><td>External</td></tr>
+        <tr><td>Project memory</td><td>Yes</td><td>Per-session</td><td>None</td><td>Per-session</td></tr>
+        <tr><td>Models &gt; available RAM</td><td>Plus 397B via streaming</td><td>No</td><td>No</td><td>No</td></tr>
+        <tr><td>OpenAI-compatible API</td><td>Local HTTP available</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td>Vision / multimodal</td><td>Vision 35B tier</td><td>Via supported models</td><td>Via supported models</td><td>Via supported models</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Honest verdict per use case</h2>
+    <h3>Daily coding agent</h3>
+    <p>Outlier. The agent loop is built-in, the project memory persists, and the lineup is calibrated for coding (Core 27B HumanEval 0.8659). Jan can get there via extensions but the OOTB experience is chat-only. Ollama and LM Studio are backends, not agents.</p>
+
+    <h3>Cleanest chat-only GUI</h3>
+    <p>LM Studio or Jan. Both are polished, both have catalog browsers, both expose OpenAI-compatible APIs. Pick LM Studio if you want maximum polish; pick Jan if you want OSS and the extension ecosystem.</p>
+
+    <h3>Headless backend for scripts and tools</h3>
+    <p>Ollama. The CLI-first design, MIT license, and OpenAI-compatible HTTP server make it the cleanest fit for "I want a local LLM endpoint my Python scripts can hit." Run it under launchd and forget it.</p>
+
+    <h3>Running models bigger than your RAM</h3>
+    <p>Outlier — currently the only one in this comparison that does paged MoE expert streaming. Plus 397B on a 64 GB Mac at ~2.9 tok/s, ~13 GB peak OS RSS.</p>
+
+    <h3>Cross-platform requirement</h3>
+    <p>Jan or Ollama. Outlier is Apple Silicon only.</p>
+
+    <h2>The combined-stack pattern</h2>
+    <p>Many serious local-AI users on Mac run two or more of these in combination: Ollama as a headless backend for scripts and CI tools, Outlier as a daily-driver app for coding work, LM Studio or Jan as a quick chat client for ad-hoc questions. The disk overhead is real (each app pulls its own model files in its own format) but the workflows complement rather than compete.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B. Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mac-native-ai-comparison">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama (deep dive)</a> · <a href="https://outlier.host/vs/outlier-vs-lm-studio/">Outlier vs LM Studio</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

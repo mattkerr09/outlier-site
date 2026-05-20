@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Private local AI on a Mac — no cloud, no telemetry, no usage limits | Outlier</title>
+  <meta name="description" content="What 'private local AI' actually guarantees on a Mac: the data path, the telemetry surface, the usage model, and where the boundary really sits.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/run/private-local-ai-mac-no-cloud/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Private local AI on a Mac — no cloud, no telemetry, no usage limits">
+  <meta property="og:description" content="What 'private local AI' actually guarantees on a Mac, and where the boundary really sits.">
+  <meta property="og:url" content="https://outlier.host/run/private-local-ai-mac-no-cloud/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Private local AI on a Mac — no cloud, no telemetry, no usage limits">
+  <meta name="twitter:description" content="What 'private' actually means when the model lives on your disk.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Private local AI on a Mac — no cloud, no telemetry, no usage limits","description":"What 'private local AI' actually guarantees on a Mac: the data path, the telemetry surface, the usage model, and where the boundary really sits.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/private-local-ai-mac-no-cloud/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">run</a></div>
+    <h1>Private local AI on a Mac — no cloud, no telemetry, no usage limits</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-05-19</span>
+      <span class="updated-pill">Last updated 2026-05-20</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Local AI keeps prompts, file contents, and chat history <strong>on your disk only</strong>.</li>
+        <li>Verification: turn off wifi — inference, agent, memory all still work.</li>
+        <li>Networks still touch for first-time model downloads and optional cloud connectors.</li>
+        <li>Plausible analytics is on the marketing site only, not the app inference path.</li>
+      </ul>
+    </div>
+
+    <p class="lead">"Private" is a word that gets used carelessly in AI marketing. This article is about what it actually means when an AI tool says it runs locally on your Mac — what crosses the network, what doesn't, and where the boundaries between local-by-default and cloud-by-default sit in practice.</p>
+
+    <h2>What "local" really means</h2>
+    <p>For a model to run on your Mac, three things have to be there:</p>
+    <ol>
+      <li>The model weights, as a file on your disk.</li>
+      <li>A runtime that loads those weights into unified memory and computes a forward pass against your input.</li>
+      <li>An app that hands the runtime your prompts and shows you the output.</li>
+    </ol>
+    <p>If those three pieces don't reach the network during inference, your prompts and the model's outputs never leave the device. That's the technical definition of "local." Tools like Outlier, Ollama, LM Studio, and Jan all satisfy it for the core inference path.</p>
+
+    <h2>Where networks usually still touch</h2>
+    <p>Most local AI apps still talk to the internet for legitimate reasons. Worth knowing what those are so you can decide where the boundary matters:</p>
+    <ul>
+      <li><strong>Model downloads.</strong> The first time you use a model, the app fetches the weights — typically from HuggingFace. After that, no network is required to use that model. Outlier downloads Nano (~3 GB) on first launch and other tiers on demand.</li>
+      <li><strong>App updates.</strong> The app checks for new versions and notifies you. You can usually disable this in settings.</li>
+      <li><strong>Analytics.</strong> Some apps phone home with anonymous usage stats. Outlier uses Plausible (privacy-friendly, no cookies, no individual tracking) on the website but not from inside the app's inference path.</li>
+      <li><strong>Optional cloud connectors.</strong> If you opt into a Slack integration, a web search tool, or a cloud MCP server, those make their own network calls. They are clearly labeled and require explicit setup.</li>
+    </ul>
+    <p>The thing to look for in any "local AI" tool: when you turn off your wifi, does the app still work? For Outlier, the answer is yes — chat, agent mode, project memory, and file editing all run without network access once models are downloaded.</p>
+
+    <h2>"No usage limits" — the honest version</h2>
+    <p>Cloud AI tools meter you because they're paying compute by the second. Local AI doesn't have that meter because the compute is your machine, which you already paid for. What "no usage limits" means in practice:</p>
+    <ul>
+      <li>No per-day or per-month token cap from the vendor.</li>
+      <li>No rate limit that throttles you at the 100th request of the hour.</li>
+      <li>No "fair use" clause that suspends you for using the tool too much.</li>
+    </ul>
+    <p>What it doesn't mean: your Mac will run faster, or that batteries are infinite. Long agent runs on Plus 397B at 2.9 tok/s will use real wattage. The economics are different — you're trading watts for tokens instead of dollars for tokens — but they aren't free.</p>
+
+    <h2>What this is worth for a developer</h2>
+    <p>For someone working under any kind of data-handling policy — finance, healthcare, legal, defense, anyone with customer PII — the local guarantee changes what you can put through the tool. Code that includes real credentials, customer data in a debugging session, internal architectural docs, the contents of a private repo: all of it can sit in the chat without ever leaving the machine.</p>
+    <p>For someone outside those regulated domains, "private local AI" is more about not being subject to a vendor's policy changes, model deprecations, and rate-limit surprises. Your tool keeps working tomorrow even if the cloud provider changes the rules tonight.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite tiers — fully local, no telemetry. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=private-local-ai-mac-no-cloud">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your code private</a> · <a href="https://outlier.host/learn/what-no-usage-caps-means/">What "no usage caps" actually means</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

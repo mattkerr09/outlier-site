@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier — articles and data on running local AI on Mac</title>
+  <meta name="description" content="Long-form articles and benchmark data on running local AI on Apple Silicon: paged MoE inference, comparisons with Claude Code / Ollama / LM Studio, and what's actually different about local-first.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/learn/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Outlier — articles and data on running local AI on Mac">
+  <meta property="og:description" content="Long-form articles and benchmark data on running local AI on Apple Silicon.">
+  <meta property="og:url" content="https://outlier.host/learn/">
+  <meta property="og:site_name" content="Outlier">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(880px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .hero { padding: 3rem 0 2rem; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 4.5vw, 2.8rem); line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .hero p { color: var(--text-mid); font-size: 1.1rem; max-width: 620px; margin: 0 auto; }
+    section { padding: 1.5rem 0 2.5rem; }
+    section > h2 { font-size: 1.05rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 1.3rem; font-weight: 600; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .card { padding: 1.2rem 1.3rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .card:hover { border-color: rgba(168,85,247,0.30); transform: translateY(-1px); text-decoration: none; }
+    .card h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.3; }
+    .card p { color: var(--text-mid); font-size: 0.9rem; line-height: 1.5; margin-bottom: 0; }
+    .data-card { background: rgba(168,85,247,0.06); border-color: rgba(168,85,247,0.22); }
+    .data-card .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .cta-band { margin: 3rem 0 1rem; padding: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta-band h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .cta-band p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Articles and data on running local AI on Mac</h1>
+    <p>Long-form writing on the architecture, comparisons, and economics of running AI locally on Apple Silicon. Plus raw benchmark data with full methodology.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Benchmark data</h2>
+    <div class="cards">
+      <a class="card data-card" href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">
+        <span class="tag">Dataset</span>
+        <h3>Outlier vs Claude — 54-prompt benchmark (May 2026)</h3>
+        <p>Raw side-by-side outputs. 98.9% parity overall, 100% on 9 brutal tests including chess engine, raft/paxos, ZK proofs.</p>
+      </a>
+      <a class="card data-card" href="https://outlier.host/data/v11-streaming-engine-benchmarks/">
+        <span class="tag">Dataset</span>
+        <h3>Streaming engine benchmarks — Plus + Vision tok/s</h3>
+        <p>V10 (current) and V11 (retired) decode tok/s and RSS data for Plus 397B and Vision 35B on M1 Ultra. 5-run methodology.</p>
+      </a>
+      <a class="card data-card" href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">
+        <span class="tag">Dataset</span>
+        <h3>Local AI benchmarks for Mac (2026)</h3>
+        <p>Outlier numbers vs Ollama and LM Studio public benchmarks: tok/s, MMLU, HumanEval, memory footprint, cost.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Running local AI</h2>
+    <div class="cards">
+      <a class="card" href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">
+        <h3>How to run a 397B-parameter model on a 64 GB Mac Studio</h3>
+        <p>Paged expert streaming, the actual numbers, and why MoE makes it tractable.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/offline-ai-coding-apple-silicon/">
+        <h3>How to run AI coding offline on Apple Silicon</h3>
+        <p>The stack, the tradeoffs, and where local AI still loses to the cloud.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">
+        <h3>How to run Qwen3.5-397B on a Mac without 512 GB of RAM</h3>
+        <p>How 209 GB of weights run with 13 GB peak RSS on a 64 GB Mac Studio.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/local-coding-agent-no-api-keys/">
+        <h3>A local coding agent on macOS without API keys</h3>
+        <p>Setup, what the agent can do, and where it still trails Cursor or Claude Code.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/private-local-ai-mac-no-cloud/">
+        <h3>Private local AI on a Mac — no cloud, no telemetry, no usage limits</h3>
+        <p>The data path, the telemetry surface, where the boundary really sits.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/claude-code-style-agents-offline/">
+        <h3>How to run Claude-Code-style agents offline on a Mac</h3>
+        <p>The agent loop primitives, what works locally, what's different.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/local-ai-m1-m2-m3-m4-mac-studio/">
+        <h3>Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026 guide)</h3>
+        <p>Per-Mac-Studio tier-by-tier guide with measured tok/s on M1 Ultra.</p>
+      </a>
+      <a class="card" href="https://outlier.host/run/local-ai-agent-computer-use-offline/">
+        <h3>A local AI agent with computer use, fully offline on a Mac</h3>
+        <p>Screen perception, action execution, where the local version trails.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Comparisons</h2>
+    <div class="cards">
+      <a class="card" href="https://outlier.host/vs/outlier-vs-claude-code/">
+        <h3>Outlier vs Claude Code — an offline alternative for coding agents</h3>
+        <p>Local Mac coding agent vs cloud terminal coding agent. Bench numbers, honest tradeoffs.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-vs-ollama/">
+        <h3>Outlier vs Ollama — running models bigger than your RAM</h3>
+        <p>Where each tool fits: cross-platform OSS GGUF vs Mac-native MoE streaming.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-vs-lm-studio/">
+        <h3>Outlier vs LM Studio for agentic workflows</h3>
+        <p>Polished chat GUI vs Mac-native coding agent. Where each is the right pick.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/local-ai-vs-claude-code/">
+        <h3>Local AI vs Claude Code — which works better for what</h3>
+        <p>Task-by-task breakdown of where local wins and where Claude Code still wins.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
+        <h3>Outlier Core 27B vs Claude Opus — 54-prompt head-to-head</h3>
+        <p>The bench in detail, with raw scoring and reproducibility notes.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/mac-native-ai-comparison/">
+        <h3>Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio</h3>
+        <p>Four serious local-AI options in 2026, feature-by-feature.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/best-chatgpt-alternative-mac-offline/">
+        <h3>Best ChatGPT alternative for Mac (offline, no subscription)</h3>
+        <p>What the bar actually is, and the real options that meet it.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/cursor-alternatives-local-mac/">
+        <h3>Cursor alternatives — local AI for coding on a Mac</h3>
+        <p>In-editor vs standalone setups; where the predictive-completion gap lives.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Learn</h2>
+    <div class="cards">
+      <a class="card" href="https://outlier.host/learn/what-is-paged-moe-inference/">
+        <h3>What is a paged MoE inference engine</h3>
+        <p>The architecture, plainly. How streaming experts from SSD breaks the RAM ceiling.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/">
+        <h3>How a 397B model runs on consumer hardware</h3>
+        <p>Four stacked design choices: MoE + 4-bit + streaming + unified memory.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/what-is-ternary-quantization/">
+        <h3>What is ternary quantization (and what it isn't)</h3>
+        <p>{-1, 0, +1} weights. Where the research sits in 2026; why 4-bit is still production.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/why-local-ai-keeps-code-private/">
+        <h3>Why local AI keeps your code private</h3>
+        <p>The data path walkthrough. What stays local, what doesn't, and the airplane-mode verification.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">
+        <h3>The math — cloud AI subscriptions vs local AI lifetime cost</h3>
+        <p>24-month comparison with breakeven analysis. Includes hardware reuse and electricity.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">
+        <h3>Why Apple Silicon is the best hardware for local AI in 2026</h3>
+        <p>Unified memory, on-package SSD, Metal kernels. The technical why.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/what-no-usage-caps-means/">
+        <h3>What "no usage caps" actually means for AI coding work</h3>
+        <p>Cloud has message caps, token caps, fair-use limits. Local has wattage. What changes.</p>
+      </a>
+      <a class="card" href="https://outlier.host/learn/mcp-moe-paged-inference-glossary/">
+        <h3>MCP, MoE, paged inference — the local-AI glossary</h3>
+        <p>Plain-language definitions for the terms that come up when you start using local AI.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="cta-band">
+    <h2>Try Outlier free</h2>
+    <p>Free Nano + Lite tiers. Standard $149 once. Pro $30/mo or $249/yr. Apple Silicon only.</p>
+    <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=learn-hub">Download for Mac</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

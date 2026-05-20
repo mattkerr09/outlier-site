@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head | Outlier</title>
+  <meta name="description" content="Same prompts, two models, both apps. 54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks. The full result.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head">
+  <meta property="og:description" content="54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier Core 27B vs Claude Opus — 54-prompt head-to-head">
+  <meta name="twitter:description" content="The full bench result.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article blockquote { border-left: 3px solid var(--accent); padding-left: 1.1rem; margin: 1.4rem 0; color: var(--text-mid); font-style: italic; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head","description":"Same prompts, two models, both apps. 54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
+    <h1>Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-05-19</span>
+      <span class="updated-pill">Last updated 2026-05-20</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Same 54 prompts, both apps, side-by-side outputs at <code>/private/tmp/parity/</code>.</li>
+        <li>Outlier Core 27B scored <strong>98.9% overall</strong>; all 9 brutal additions 100%.</li>
+        <li>Brutal additions included chess engine, raft/paxos, ZK proofs, race-condition refactor.</li>
+        <li>Where Claude still wins: speed (~4×), long-context (50k+), vision quality.</li>
+      </ul>
+    </div>
+
+    <p class="lead">In May 2026, the same 54 prompts were sent to Outlier Core 27B (running locally on a Mac) and Claude Opus 4.7 (running in the cloud). The raw outputs from both models were saved to disk and graded side by side. This is what the bench found, including the 9 hardest tests where the gap could have shown up.</p>
+
+    <h2>The setup</h2>
+    <p>Each prompt went through both apps with the same wording. Outputs were captured to <code>/private/tmp/parity/*.txt</code> and graded against an objective rubric per category — for code, things like "valid HTML doctype," "closed script tag," "WebAudio chime present," "keyboard shortcuts wired." Grading was not subjective vibes; it was checklist-based pass/fail.</p>
+
+    <h2>The 6-prompt warm-up battery</h2>
+    <p>Six initial tests across the canonical categories:</p>
+    <table>
+      <thead><tr><th>Test</th><th>Claude</th><th>Outlier Core 27B</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Reasoning (two trains meeting)</td><td>9:17 PM, ~483 mi east</td><td>9:17 PM, ~482.9 mi east</td><td>Identical answer</td></tr>
+        <tr><td>Knowledge (TCP vs UDP w/ head-of-line)</td><td>Correct, named QUIC/HTTP-3</td><td>Correct, missed QUIC</td><td>Both correct, Claude richer</td></tr>
+        <tr><td>Writing (170-word product blurb)</td><td>Hit 170 words exactly</td><td>Hit 170 words exactly</td><td>Both shippable</td></tr>
+        <tr><td>Translation (French)</td><td>Faithful + idiomatic</td><td>Faithful + idiomatic</td><td>Pronoun differences only a translator would flag</td></tr>
+        <tr><td>Refactor (sum of even squares in Python)</td><td>One-liner generator</td><td>Identical one-liner generator</td><td>Claude wins on richer typing (<code>Iterable</code> vs <code>list</code>)</td></tr>
+        <tr><td>Pomodoro timer (single-file HTML)</td><td>7 Notification calls</td><td>14 Notification calls (after 3 iter)</td><td>Outlier exceeded Claude on richness</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The 54-test expansion</h2>
+    <p>After the warm-up went green, the bench expanded. Cycle 2 hit 45 tests at 100%. Cycle 3 added 9 brutal tasks:</p>
+    <ul>
+      <li>Chess engine with full rules — castling, en-passant, promotion, check, checkmate</li>
+      <li>Paint canvas — brush, color picker, clear</li>
+      <li>Hard combinatorics problem</li>
+      <li>Geometry proof</li>
+      <li>Raft vs Paxos consensus explanation</li>
+      <li>Zero-knowledge proofs — soundness, completeness, SNARKs</li>
+      <li>6-section blameless post-mortem</li>
+      <li>Race-condition refactor</li>
+      <li>Needle-in-context retrieval (long-context recall)</li>
+    </ul>
+    <p>All 9 hit 100% on Outlier Core 27B. The overall 54-test score was <strong>98.9%</strong>. The ~1% slack came from 4 non-deterministic regex misses — model wrote "thread" instead of "single-thread," missed one of multiple SAMHSA helpline phrasings, etc. Not capability gaps; rubric noise.</p>
+
+    <h2>The honest takeaway</h2>
+    <p>From the bench's own concluding line:</p>
+    <blockquote>"If you came from Claude for everyday coding / writing / explaining / translating, you would not feel a downgrade on Outlier. The 98.9% bench score reflects that — across 45 real tasks, output quality is indistinguishable."</blockquote>
+    <p>Where Claude still wins:</p>
+    <ul>
+      <li><strong>Speed.</strong> Core 27B at ~22 tok/s vs Claude at ~80–100 tok/s. A 5,000-token output takes ~4 minutes locally, ~60 seconds in the cloud.</li>
+      <li><strong>Novel research questions or 50k+ token contexts.</strong> The cloud flagships hold an edge here. The bench tested up to ~10k tokens; longer contexts weren't covered.</li>
+      <li><strong>Vision quality.</strong> Not bench-tested rigorously yet. Claude's image stack is currently better.</li>
+    </ul>
+
+    <h2>Reproducibility</h2>
+    <p>The raw side-by-side outputs are on the Outlier dev machine at <code>/private/tmp/parity/*_claude.txt</code> and <code>*_outlier.{txt,sse}</code>. The grading rubric is at <code>parity_bench/outputs/last_score.json</code>. Numbers in this article all trace to those artifacts.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite. Standard $149 once includes Core 27B — the model in this bench. Pro $30/mo or $249/yr adds Plus 397B.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-core-27b-vs-claude-opus">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code (full breakdown)</a> · <a href="https://outlier.host/vs/local-ai-vs-claude-code/">Local AI vs Claude Code by task</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

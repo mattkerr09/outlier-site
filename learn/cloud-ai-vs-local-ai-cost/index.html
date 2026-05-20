@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The math — cloud AI subscriptions vs local AI lifetime cost | Outlier</title>
+  <meta name="description" content="A two-year cost comparison between cloud AI subscriptions and a local AI setup on a Mac. Real numbers, no hand-waving, with breakeven analysis.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The math — cloud AI subscriptions vs local AI lifetime cost">
+  <meta property="og:description" content="Two-year cost comparison: cloud AI subscriptions vs a local AI setup on a Mac.">
+  <meta property="og:url" content="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cloud AI subscriptions vs local AI lifetime cost">
+  <meta name="twitter:description" content="The actual math, with breakeven.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"The math — cloud AI subscriptions vs local AI lifetime cost","description":"A two-year cost comparison between cloud AI subscriptions and a local AI setup on a Mac.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/cloud-ai-vs-local-ai-cost/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>The math — cloud AI subscriptions vs local AI lifetime cost</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-05-19</span>
+      <span class="updated-pill">Last updated 2026-05-19</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>A $200/month cloud AI subscription costs <strong>$4,800 over two years</strong>.</li>
+        <li>Outlier Standard ($149 one-time) plus a used M1 Max Mac Studio 32 GB (~$1,400) is <strong>$1,549 total</strong>, no recurring fees.</li>
+        <li>Breakeven on subscription-vs-local is typically <strong>7–10 months</strong> for a $200/month cloud plan, ignoring hardware reuse.</li>
+        <li>Outlier Pro ($30/mo) is the closest direct-comparison local-AI subscription at <strong>15% the cost</strong> of a $200/mo cloud plan.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Cost is rarely the only reason to pick local AI over cloud. But it's the simplest to make concrete. Here's a clean two-year comparison: what you pay for a top-tier cloud AI subscription, what you pay for an equivalent-quality local setup, and where the breakeven lines actually fall once hardware reuse is factored in.</p>
+
+    <h2>Cloud AI costs over 24 months</h2>
+    <table>
+      <thead><tr><th>Cloud plan</th><th>Monthly</th><th>24-month total</th></tr></thead>
+      <tbody>
+        <tr><td>ChatGPT Plus</td><td>$20</td><td>$480</td></tr>
+        <tr><td>Claude Pro</td><td>$20</td><td>$480</td></tr>
+        <tr><td>Cursor Pro</td><td>$20</td><td>$480</td></tr>
+        <tr><td>ChatGPT Pro / Claude Max</td><td>$200</td><td>$4,800</td></tr>
+        <tr><td>Anthropic API (heavy use, ~5M tokens/mo Opus)</td><td>~$200–$400</td><td>$4,800–$9,600</td></tr>
+      </tbody>
+    </table>
+    <p>The cheap plans cap your usage. A $20/month plan that limits you to ~50 messages per 5 hours covers occasional chat but breaks the moment you start running agents. To use cloud AI at the intensity local agents make trivial, you're paying the $200+ tier.</p>
+
+    <h2>Local AI costs, all-in</h2>
+    <p>Outlier is one local option. Pricing as of 2026-05-19:</p>
+    <table>
+      <thead><tr><th>Plan</th><th>Cost</th><th>What it includes</th></tr></thead>
+      <tbody>
+        <tr><td>Free</td><td>$0 forever</td><td>Nano 4B + Lite 9B (Apache 2.0)</td></tr>
+        <tr><td>Standard</td><td>$149 one-time</td><td>Quick 26B, Core 27B, Code 27B, Vision 35B</td></tr>
+        <tr><td>Pro</td><td>$30/mo or $249/yr</td><td>Adds Plus 397B-A17B</td></tr>
+        <tr><td>Founders</td><td>$200 one-time</td><td>Lifetime Pro, 500-seat cap</td></tr>
+      </tbody>
+    </table>
+    <p>Hardware is the other half. If you already own a recent Mac, the marginal cost is zero. If you don't:</p>
+    <table>
+      <thead><tr><th>Mac</th><th>RAM</th><th>Approx cost (used/refurb)</th></tr></thead>
+      <tbody>
+        <tr><td>M1 Mac mini</td><td>16 GB</td><td>~$500</td></tr>
+        <tr><td>M1 Max Mac Studio</td><td>32 GB</td><td>~$1,400</td></tr>
+        <tr><td>M2 Ultra Mac Studio</td><td>64 GB</td><td>~$3,500</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The two-year comparison</h2>
+    <table>
+      <thead><tr><th>Setup</th><th>24-month total</th></tr></thead>
+      <tbody>
+        <tr><td>$200/mo cloud subscription</td><td>$4,800</td></tr>
+        <tr><td>Outlier Standard on existing Mac</td><td>$149</td></tr>
+        <tr><td>Outlier Standard + used M1 Max Studio 32 GB</td><td>$1,549</td></tr>
+        <tr><td>Outlier Pro ($30/mo) on existing Mac</td><td>$720</td></tr>
+        <tr><td>Outlier Founders + new M2 Ultra Studio 64 GB</td><td>$3,700</td></tr>
+      </tbody>
+    </table>
+    <p>On 24-month math, even the most expensive Outlier setup (new M2 Ultra Studio with Founders pricing) lands about $1,100 under a $200/month cloud plan. The cheapest realistic local setup (existing Mac + Standard one-time) is roughly <strong>30× cheaper</strong>.</p>
+
+    <h2>Breakeven analysis</h2>
+    <p>If you're paying $200/month for cloud AI today and switch to:</p>
+    <ul>
+      <li><strong>Outlier Standard on an existing Mac</strong> → breakeven in under 1 month.</li>
+      <li><strong>Outlier Pro ($30/mo) on an existing Mac</strong> → save $170/month, recurring.</li>
+      <li><strong>Outlier Standard + buy a used M1 Max Studio</strong> → breakeven in about 8 months.</li>
+      <li><strong>Outlier Founders + buy a new M2 Ultra Studio</strong> → breakeven at month 18.</li>
+    </ul>
+    <p>The hardware is reusable. After breakeven, the savings compound — and the Mac you bought for AI work continues to be your Mac.</p>
+
+    <h2>What this comparison doesn't capture</h2>
+    <p>Three honest caveats:</p>
+    <ul>
+      <li><strong>Speed.</strong> Cloud is 3–5× faster on raw decode. If your time is worth more than the difference in tok/s, the cloud math may still favor the subscription.</li>
+      <li><strong>Ceiling.</strong> The biggest cloud models are still ahead on the hardest 5% of tasks (research-grade reasoning, 50k+ token contexts). Bench parity is at 98.9% across 54 tests, not 100%.</li>
+      <li><strong>Electricity.</strong> A 64 GB Mac Studio at full inference load uses real watts. Estimate $5–$15/month if you're running long agent jobs 8+ hours a day.</li>
+    </ul>
+    <p>For most developers under most workloads, local AI's cost advantage is real and large enough to swamp those caveats. For the cases where speed or ceiling matters more, you can keep both — many serious users do.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite tiers. Standard $149 once. Pro $30/mo or $249/yr.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=cloud-ai-vs-local-ai-cost">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-no-usage-caps-means/">What 'no usage caps' actually means</a> · <a href="https://outlier.host/vs/best-chatgpt-alternative-mac-offline/">Best ChatGPT alternative for Mac (offline)</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

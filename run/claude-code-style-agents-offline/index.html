@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to run Claude-Code-style agents offline on a Mac | Outlier</title>
+  <meta name="description" content="Claude Code is a coding agent that edits files and runs commands. Here's how to get the same workflow with a local model on macOS — what works, what trails, what's identical.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/run/claude-code-style-agents-offline/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to run Claude-Code-style agents offline on a Mac">
+  <meta property="og:description" content="Same workflow, local model, no cloud — what works, what trails.">
+  <meta property="og:url" content="https://outlier.host/run/claude-code-style-agents-offline/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to run Claude-Code-style agents offline on a Mac">
+  <meta name="twitter:description" content="Local coding agent with file edits, shell, project memory — no cloud.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run Claude-Code-style agents offline on a Mac","description":"Claude Code is a coding agent that edits files and runs commands. Here's how to get the same workflow with a local model on macOS.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/claude-code-style-agents-offline/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">run</a></div>
+    <h1>How to run Claude-Code-style agents offline on a Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-05-19</span>
+      <span class="updated-pill">Last updated 2026-05-20</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Claude Code's loop is plan → tool calls → execute → loop; nothing requires cloud.</li>
+        <li>Local version: <strong>Core 27B or Code 27B</strong> as the model, MCP tools, on-disk memory.</li>
+        <li>Outlier ships this in one app; Claude Desktop + filesystem MCP is another option.</li>
+        <li>Trades ~4× speed feel for offline operation and zero API token cost.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Claude Code is a terminal-resident coding agent that reads your files, edits them, runs shell commands, and asks for approval at the right moments. Its core loop has no requirement to be cloud-hosted. With a local model and the right tooling you can run the same shape of workflow with no network — here's how.</p>
+
+    <h2>The agent loop, decomposed</h2>
+    <p>A coding agent has three moving pieces:</p>
+    <ol>
+      <li><strong>A model</strong> that can produce structured tool calls (read this file, write this diff, run this test).</li>
+      <li><strong>A tool executor</strong> that runs those calls against your filesystem and shell, with appropriate approval gates.</li>
+      <li><strong>A conversation manager</strong> that feeds tool results back to the model and keeps a turn-by-turn log.</li>
+    </ol>
+    <p>Claude Code's cloud version uses Claude Opus 4.7 for piece 1 and a slick terminal UI for pieces 2 and 3. The local version swaps the model for one that runs on your Mac, keeps the tool executor running locally, and lives in a Mac-native UI rather than a terminal.</p>
+
+    <h2>What you need locally</h2>
+    <p>For piece 1: a model fine-tuned to produce structured tool calls. Outlier's Core 27B and Code 27B do this; pass@1 on HumanEval is 0.8659 — high enough that the model holds its own on real refactors. For piece 2: a sandboxed shell, a filesystem driver, and approval gates. For piece 3: a project-aware UI with persistent chat history. Outlier ships all of this in one app, gated behind MCP (Model Context Protocol) so the tool surface is portable.</p>
+
+    <h2>Setting it up</h2>
+    <ol>
+      <li>Download the Outlier DMG from <a href="https://outlier.host/">outlier.host</a> and install.</li>
+      <li>First-launch downloads Nano 4B as the chat default. For coding, switch to Core 27B (Standard tier) — first use triggers a ~16 GB download.</li>
+      <li>Open a project folder. The app indexes it (filenames, source structure, optional content embedding).</li>
+      <li>Switch to "Agent" mode. The model now has tools available — file read, file write, shell, project search, web search if you enabled it. Each first-use of a tool prompts you for approval.</li>
+    </ol>
+    <p>What you see resembles Claude Code: the agent describes a plan, executes it step by step, and reports what happened. The shape of the conversation, the approval gates, the project context — all there.</p>
+
+    <h2>What's different in practice</h2>
+    <table>
+      <thead><tr><th>Dimension</th><th>Claude Code (cloud)</th><th>Outlier Agent (local)</th></tr></thead>
+      <tbody>
+        <tr><td>Model</td><td>Claude Opus 4.7</td><td>Core 27B / Code 27B / Plus 397B</td></tr>
+        <tr><td>Speed</td><td>~80–100 tok/s</td><td>~22 tok/s (Core), ~2.9 tok/s (Plus)</td></tr>
+        <tr><td>API key</td><td>Yes</td><td>None</td></tr>
+        <tr><td>Usage limit</td><td>Per-plan token cap</td><td>None — your hardware is the limit</td></tr>
+        <tr><td>Offline</td><td>No</td><td>Yes — works on a plane</td></tr>
+        <tr><td>Code leaves machine</td><td>Yes, to Anthropic</td><td>No</td></tr>
+        <tr><td>Cost after install</td><td>Subscription</td><td>$0 (Standard) or $30/mo Pro for Plus</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where Claude Code still wins</h2>
+    <p>Honest list:</p>
+    <ul>
+      <li><strong>Raw model strength.</strong> Claude Opus 4.7 is one of the strongest cloud-only models available in 2026. On novel research problems or 50k+ token contexts, it still has a real edge over Core 27B.</li>
+      <li><strong>Throughput.</strong> A 5,000-token diff takes ~60s in Claude and ~4 minutes on Core 27B locally. The output ends up the same; the wait is real.</li>
+      <li><strong>Tier swap is free.</strong> Claude doesn't physically swap models between requests. Outlier's cold-load on a tier change is ~74s.</li>
+    </ul>
+    <p>On the parity bench (54 head-to-head tests against Claude Opus 4.7 in mid-2026), Outlier scored 98.9% overall and 100% on the 9 hardest additions (chess engine, raft/paxos, ZK proofs, needle-in-context, etc.). For the 95% of coding work where output quality matters more than speed, the local version closes the gap.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite. Standard $149 once adds Core 27B for real coding. Pro $30/mo or $249/yr adds Plus 397B.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=claude-code-style-agents-offline">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code</a> · <a href="https://outlier.host/run/local-coding-agent-no-api-keys/">Local coding agent without API keys</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

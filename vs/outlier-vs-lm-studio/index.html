@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs LM Studio for agentic workflows | Outlier</title>
+  <meta name="description" content="LM Studio is a polished local-LLM GUI. Outlier is a local AI app with a built-in agent loop and MCP tools. Where each one fits for real coding workflows.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-lm-studio/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs LM Studio for agentic workflows">
+  <meta property="og:description" content="LM Studio is a polished local-LLM GUI. Outlier is a local AI app with a built-in agent loop.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-lm-studio/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs LM Studio for agentic workflows">
+  <meta name="twitter:description" content="Chat GUI vs agent platform — what each is for.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs LM Studio for agentic workflows","description":"LM Studio is a polished local-LLM GUI. Outlier is a local AI app with a built-in agent loop and MCP tools.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-lm-studio/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
+    <h1>Outlier vs LM Studio for agentic workflows</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-05-19</span>
+      <span class="updated-pill">Last updated 2026-05-20</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>LM Studio is a polished chat GUI + OpenAI-compatible API.</li>
+        <li>Outlier ships a <strong>built-in agent loop</strong> with MCP tools and project memory.</li>
+        <li>LM Studio is better for chat + as a backend for external tools.</li>
+        <li>Outlier is better for Mac-native coding agents and oversized-MoE models.</li>
+      </ul>
+    </div>
+
+    <p class="lead">LM Studio is a free, polished local-LLM GUI. It handles model downloads, chat, and an OpenAI-compatible API beautifully. What it doesn't ship is an agent loop — no built-in filesystem tools, no project memory, no MCP. Outlier is the opposite trade: less general-purpose, more opinionated, agent-first. Here's where each one is the right pick.</p>
+
+    <h2>LM Studio's design center</h2>
+    <p>LM Studio is a chat client and model manager. You browse a model catalog (GGUF and MLX), download what you want, and chat with it. It exposes an OpenAI-compatible HTTP server so external tools (Continue.dev, Cursor's local mode, Open Interpreter, your own scripts) can hit the local model the same way they'd hit GPT-4. That last property is what makes LM Studio a great backend in a larger toolchain.</p>
+    <p>LM Studio does <em>not</em> ship with: a project-aware agent loop, filesystem tools, MCP integration, persistent project memory, or a coding-focused UI. You assemble those on top using a separate tool.</p>
+
+    <h2>Outlier's design center</h2>
+    <p>Outlier is a Mac-native AI app where the agent loop is the headline feature. The chat UI is one mode; the Agent mode is the other. Agent mode has built-in tools: read file, write file (with approval), run shell, search project, web search, and a growing list of MCP-based connectors. Each tool has an approval gate; each project gets persistent on-disk memory.</p>
+    <p>The model lineup is curated rather than catalog-style: Nano 4B for fast chat, Lite 9B for slightly stronger chat, Quick / Core / Code 27B for the daily coding work, Vision 35B for image input, Plus 397B for the heaviest reasoning. Core 27B's HumanEval pass@1 is 0.8659 — the lineup is calibrated for coherent quality across all 7 tiers.</p>
+
+    <h2>Comparison</h2>
+    <table>
+      <thead><tr><th>Dimension</th><th>LM Studio</th><th>Outlier</th></tr></thead>
+      <tbody>
+        <tr><td>Platforms</td><td>Mac, Linux, Windows</td><td>Mac (Apple Silicon)</td></tr>
+        <tr><td>Pricing</td><td>Free for personal use</td><td>Free tier + $149 Standard one-time + $30/mo Pro</td></tr>
+        <tr><td>Model catalog</td><td>Wide (HF browser, GGUF + MLX)</td><td>Curated 7-tier lineup</td></tr>
+        <tr><td>Chat UI</td><td>Excellent</td><td>Mac-native, includes Agent mode</td></tr>
+        <tr><td>Agent loop</td><td>None built-in</td><td>Yes, MCP-based</td></tr>
+        <tr><td>Project memory</td><td>None</td><td>Persistent, per-project</td></tr>
+        <tr><td>OpenAI-compatible API</td><td>Yes</td><td>Local HTTP also available</td></tr>
+        <tr><td>Models &gt; available RAM</td><td>Won't load</td><td>Plus 397B via V10 streaming</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Which one to pick</h2>
+    <ul>
+      <li><strong>You want the cleanest local chat GUI with a wide model catalog</strong> → LM Studio. It is genuinely well-built and the OpenAI-compatible API makes it composable.</li>
+      <li><strong>You want a Mac-native coding agent that edits files, runs commands, and remembers your project across sessions</strong> → Outlier. The agent loop is the product.</li>
+      <li><strong>You need to run an MoE model bigger than your RAM</strong> → Outlier. V10 expert streaming runs Plus 397B with ~13 GB peak OS RSS on a 64 GB Mac.</li>
+      <li><strong>You're on Linux or Windows</strong> → LM Studio. Outlier is Apple Silicon only.</li>
+    </ul>
+
+    <h2>Can you use both</h2>
+    <p>Yes. They're orthogonal. Many Mac developers run LM Studio as a quick chat client and OpenAI-compatible backend for scripts, and run Outlier for project-aware agent work. The two tools don't conflict on the same Mac, though each pulls its own model files so disk usage doubles for any model both apps have downloaded.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B. Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-lm-studio">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/mac-native-ai-comparison/">Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio</a> · <a href="https://outlier.host/learn/mcp-moe-paged-inference-glossary/">MCP, MoE, paged inference glossary</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
