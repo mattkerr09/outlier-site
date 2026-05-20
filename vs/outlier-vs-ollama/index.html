@@ -6,7 +6,7 @@
   <title>Outlier vs Ollama — running models bigger than your RAM | Outlier</title>
   <meta name="description" content="Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run. Here's where each one fits.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-05-19">
+  <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-ollama/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs Ollama — running models bigger than your RAM">
@@ -66,7 +66,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateCreated":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
   </script>
 </head>
 <body>
@@ -84,7 +84,16 @@
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
     <h1>Outlier vs Ollama — running models bigger than your RAM</h1>
-    <div class="byline">Outlier · last updated 2026-05-19</div>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+    <div class="quick-answer" style="background:rgba(168,85,247,0.06);border-left:3px solid var(--accent);padding:1rem 1.25rem;margin:0 0 2rem;border-radius:4px;">
+      <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-mid);">Quick answer</p>
+      <ul style="margin:0;padding-left:1.25rem;color:var(--text);">
+        <li>Ollama is free, cross-platform, GGUF-based — best for sub-RAM models on any OS.</li>
+        <li>Outlier is Mac-only, MLX-native, paid ($149 once / $30 mo Pro) — best for MoE models larger than your RAM.</li>
+        <li>Ollama on a 64 GB Mac cannot load Qwen3.5-397B (209 GB). Outlier's paged-MoE engine streams the experts and runs it at ~3 tok/s.</li>
+        <li>For models that DO fit (under 35B-ish), both work; Ollama is simpler and free.</li>
+      </ul>
+    </div>
     <p class="lead">Ollama is the most popular local-LLM runner. It's free, open source, and supports a huge model library through GGUF. Outlier is more focused: Mac-only, MLX-native, with a custom paged-MoE streaming engine that runs Plus 397B on a 64 GB Mac. Different design centers — here's where each one wins.</p>
 
     <h2>What each one is</h2>

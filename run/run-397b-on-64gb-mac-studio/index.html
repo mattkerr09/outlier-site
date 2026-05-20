@@ -6,7 +6,7 @@
   <title>How to run a 397B-parameter model on a 64 GB Mac Studio | Outlier</title>
   <meta name="description" content="Qwen3.5-397B-A17B normally needs hundreds of GB of RAM. Here's how paged expert streaming runs it on a 64 GB Mac Studio at ~2.9 tokens/sec.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-05-19">
+  <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run a 397B-parameter model on a 64 GB Mac Studio">
@@ -66,7 +66,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"How to run a 397B-parameter model on a 64 GB Mac Studio","description":"Qwen3.5-397B-A17B normally needs hundreds of GB of RAM. Here's how paged expert streaming runs it on a 64 GB Mac Studio at ~2.9 tokens/sec.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/run-397b-on-64gb-mac-studio/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run a 397B-parameter model on a 64 GB Mac Studio","description":"Qwen3.5-397B-A17B normally needs hundreds of GB of RAM. Here's how paged expert streaming runs it on a 64 GB Mac Studio at ~2.9 tokens/sec.","datePublished":"2026-05-19","dateCreated":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/run-397b-on-64gb-mac-studio/"}}
   </script>
 </head>
 <body>
@@ -84,7 +84,16 @@
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">run</a></div>
     <h1>How to run a 397B-parameter model on a 64 GB Mac Studio</h1>
-    <div class="byline">Outlier · last updated 2026-05-19</div>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+    <div class="quick-answer" style="background:rgba(168,85,247,0.06);border-left:3px solid var(--accent);padding:1rem 1.25rem;margin:0 0 2rem;border-radius:4px;">
+      <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-mid);">Quick answer</p>
+      <ul style="margin:0;padding-left:1.25rem;color:var(--text);">
+        <li>The Qwen3.5-397B-A17B weights are ~209 GB on disk — cannot fit in 64 GB unified memory.</li>
+        <li>Outlier's V11 streaming engine pages MoE experts off SSD per token, keeping only what's active resident.</li>
+        <li>Measured: ~3.0 tok/s on Mac Studio M1 Ultra 64 GB, peak gen RAM ~7.3 GB.</li>
+        <li>Requirements: Apple Silicon Mac, 64 GB unified memory, fast SSD (Mac Studio internal works).</li>
+      </ul>
+    </div>
     <p class="lead">A 397-billion-parameter model has no business running on a 64 GB Mac. The full Qwen3.5-397B-A17B weights are about 209 GB on disk. By the usual rules of thumb you need a server with hundreds of GB of RAM and at least one big GPU. Outlier ships a streaming inference engine that says: not necessarily.</p>
 
     <h2>The naive math</h2>

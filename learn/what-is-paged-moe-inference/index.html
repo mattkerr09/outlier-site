@@ -6,7 +6,7 @@
   <title>What is a paged MoE inference engine | Outlier</title>
   <meta name="description" content="Mixture-of-Experts models activate only a few experts per token. Paged MoE inference uses that property to run models larger than your RAM. The architecture, plainly.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-05-19">
+  <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/learn/what-is-paged-moe-inference/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="What is a paged MoE inference engine">
@@ -66,7 +66,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"What is a paged MoE inference engine","description":"Mixture-of-Experts models activate only a few experts per token. Paged MoE inference uses that to run models larger than RAM.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/what-is-paged-moe-inference/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"What is a paged MoE inference engine","description":"Mixture-of-Experts models activate only a few experts per token. Paged MoE inference uses that to run models larger than RAM.","datePublished":"2026-05-19","dateCreated":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/what-is-paged-moe-inference/"}}
   </script>
 </head>
 <body>
@@ -84,7 +84,16 @@
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
     <h1>What is a paged MoE inference engine</h1>
-    <div class="byline">Outlier · last updated 2026-05-19</div>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+    <div class="quick-answer" style="background:rgba(168,85,247,0.06);border-left:3px solid var(--accent);padding:1rem 1.25rem;margin:0 0 2rem;border-radius:4px;">
+      <p style="margin:0 0 0.5rem;font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-mid);">Quick answer</p>
+      <ul style="margin:0;padding-left:1.25rem;color:var(--text);">
+        <li>A paged MoE engine runs a Mixture-of-Experts model larger than your RAM by keeping only active experts resident.</li>
+        <li>Per-token: gate picks top-K experts → engine reads those experts off SSD → activations compute → next token.</li>
+        <li>Works because MoE models like Qwen3.5-397B activate ~17B of 397B parameters per token.</li>
+        <li>The cost: SSD bandwidth becomes the bottleneck (Outlier measures ~3 tok/s on Mac Studio M1 Ultra).</li>
+      </ul>
+    </div>
     <p class="lead">A paged MoE inference engine runs Mixture-of-Experts models without keeping all the weights in memory at once. It uses the property that MoE models only activate a few experts per token, keeps the active ones in RAM, and streams the others from disk on demand. That's how a 397B-parameter model fits on a 64 GB Mac.</p>
 
     <h2>What MoE actually is</h2>
