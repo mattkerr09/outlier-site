@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to run Qwen3.5-397B on a Mac without 512 GB of RAM | Outlier</title>
+  <meta name="description" content="Qwen3.5-397B-A17B at MLX 4-bit is a 209 GB model. Here's how to run it on 64 GB of unified memory using paged expert streaming, what it costs, and what the trade is.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to run Qwen3.5-397B on a Mac without 512 GB of RAM">
+  <meta property="og:description" content="Qwen3.5-397B-A17B at MLX 4-bit is a 209 GB model. Here's how to run it on 64 GB of unified memory.">
+  <meta property="og:url" content="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to run Qwen3.5-397B on a Mac without 512 GB of RAM">
+  <meta name="twitter:description" content="64 GB unified memory + paged expert streaming = 209 GB model running locally.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.2rem; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run Qwen3.5-397B on a Mac without 512 GB of RAM","description":"Qwen3.5-397B-A17B at MLX 4-bit is a 209 GB model. Here's how to run it on 64 GB of unified memory using paged expert streaming.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">run</a></div>
+    <h1>How to run Qwen3.5-397B on a Mac without 512 GB of RAM</h1>
+    <div class="byline">Outlier · last updated 2026-05-19</div>
+    <p class="lead">Qwen3.5-397B-A17B is a Mixture-of-Experts model from Alibaba. At MLX 4-bit quantization the full weights are about 209 GB. The standard advice is "you need a server" — and for a 70B dense model that's right. For Qwen's MoE architecture there's a way around it: keep the active experts in unified memory and stream the rest from your SSD on demand.</p>
+
+    <h2>The model in one paragraph</h2>
+    <p>Qwen3.5-397B-A17B has 128 experts per layer. For each token, a router picks 8 of them and only those 8 do work. "397B" is the total parameter count across all experts; "A17B" is the count active per token. The router decision is content-dependent — different tokens light up different experts. Over a long conversation, expert usage is reasonably stable, which is what makes caching viable.</p>
+
+    <h2>Why a 64 GB Mac is enough</h2>
+    <p>If you only need 8 of 128 experts active per token, you don't need all 128 resident in RAM. You need:</p>
+    <ul>
+      <li>The shared backbone (attention layers, embedding, router weights) — small fraction of total size, always resident.</li>
+      <li>A cache of recently-used experts — sized to fit your available RAM.</li>
+      <li>An on-disk store of all 128 experts, ready to be read into the cache on a miss.</li>
+    </ul>
+    <p>On a 64 GB Mac Studio Ultra running Outlier's V10 streaming engine, peak OS-level RSS during Plus 397B generation is about <strong>13 GB</strong>. The remaining ~50 GB of RAM is the OS plus your other apps. Generation speed is about <strong>2.9 tokens per second</strong>. The bottleneck is not memory; it's how fast the SSD can read expert weights when the router asks for one that's not in the cache.</p>
+
+    <h2>What the SSD needs to be</h2>
+    <p>Apple's first-party Mac Studio SSDs sustain several GB/s of sequential read. A first-generation M1 Ultra reads at ~7 GB/s; M2 Ultra and M3 Max are higher. That's enough to keep up with the expert demand for one decoded token per ~340 ms — exactly the regime that produces ~2.9 tok/s.</p>
+    <p>Two implications:</p>
+    <ul>
+      <li>External Thunderbolt SSDs are slower (typically 2–3 GB/s sustained). Plus on a Thunderbolt SSD works but slower; expect roughly half the tok/s.</li>
+      <li>If your internal SSD is nearly full and macOS is fragmenting writes, you can see read regressions. Keep 100+ GB free.</li>
+    </ul>
+
+    <h2>The honest tradeoff</h2>
+    <p>Compared to the capacity engine (the path that keeps everything in RAM), V10 streaming uses about 10× less peak memory in exchange for being SSD-bound instead of memory-bound. On long contexts where expert usage stabilizes, the cache holds the hot set and SSD reads drop. On a fresh prompt with cold experts, every token triggers cache misses and reads, so the first response is the slowest.</p>
+    <p>Compared to cloud inference, you're paying ~30× speed (2.9 tok/s vs ~80–100 from Claude Opus) for: no API key, no rate limit, no cloud trip with your code, no monthly bill after the model is on disk. For an architecture review, a long debugging conversation, or a deep code refactor, that tradeoff often comes out in favor of local. For "what's the syntax for X in Python" it doesn't.</p>
+
+    <h2>Setting it up</h2>
+    <p>The shortest path is Outlier's Mac app: download the DMG, install, switch to the Pro tier (Plus 397B requires either the $30/mo Pro plan, the $249/yr Pro plan, or the $200 Founders lifetime plan). The app handles the model download, the streaming engine, and the chat / agent UI. Standalone setups using <code>mlx-lm</code> + a custom streaming loader exist but require Python plumbing and don't include the rest of the workflow.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B. Apple Silicon, M1 or newer, 64 GB+ for Plus.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=qwen35-397b-on-mac-without-512gb-ram">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-paged-moe-inference/">What is a paged MoE inference engine</a> · <a href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">How to run a 397B-parameter model on a 64 GB Mac Studio</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

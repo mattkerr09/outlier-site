@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to set up a local coding agent on macOS without API keys | Outlier</title>
+  <meta name="description" content="A coding agent that edits files, runs tests, and reads your project — no API key, no cloud, no rate limit. Setup, the MCP layer, and what it can and can't do.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-19">
+  <link rel="canonical" href="https://outlier.host/run/local-coding-agent-no-api-keys/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to set up a local coding agent on macOS without API keys">
+  <meta property="og:description" content="A coding agent that edits files, runs tests, and reads your project — no API key, no cloud, no rate limit.">
+  <meta property="og:url" content="https://outlier.host/run/local-coding-agent-no-api-keys/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A local coding agent without API keys, on macOS">
+  <meta name="twitter:description" content="MCP, filesystem, no cloud trip.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.2rem; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"How to set up a local coding agent on macOS without API keys","description":"A coding agent that edits files, runs tests, and reads your project — no API key, no cloud, no rate limit.","datePublished":"2026-05-19","dateModified":"2026-05-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/local-coding-agent-no-api-keys/"}}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">run</a></div>
+    <h1>How to set up a local coding agent on macOS without API keys</h1>
+    <div class="byline">Outlier · last updated 2026-05-19</div>
+    <p class="lead">A coding agent is just a chat loop with the ability to read files, write files, and run commands. None of those primitives require a cloud API. Here's how to get a working local coding agent on a Mac in under ten minutes, what it can do, and the honest list of where it still trails Claude Code or Cursor.</p>
+
+    <h2>The pieces you need</h2>
+    <p>Three things, all of which can live on your Mac:</p>
+    <ol>
+      <li><strong>A local language model</strong> with strong code generation. Outlier's Core 27B has a HumanEval pass@1 of 0.8659 — high enough to handle most real refactors. Quick 26B and Code 27B share the same code-tuned config.</li>
+      <li><strong>An agent loop</strong> that takes a user message, runs the model, parses tool calls out of the response, executes the tools, and feeds the results back. Outlier ships this as the "Agent" mode in the app.</li>
+      <li><strong>Tools</strong> the model can call. The standard set: read file, write file, run shell command, search the project, browse the web. Outlier exposes these via MCP (the Model Context Protocol).</li>
+    </ol>
+
+    <h2>Setup, end to end</h2>
+    <p>The shortest version with Outlier:</p>
+    <ol>
+      <li>Download the Outlier DMG from <a href="https://outlier.host/">outlier.host</a>, drag to Applications.</li>
+      <li>On first launch, the app downloads Nano 4B (~3 GB) so it has something to talk to immediately. Bigger tiers download on demand.</li>
+      <li>Open a project. The app indexes your codebase so the model has context.</li>
+      <li>Switch to Agent mode. The agent now has filesystem, shell, search, and project memory tools available — gated behind approval prompts.</li>
+    </ol>
+    <p>There are no API keys to configure because there is no cloud API. The model runs locally; the tools run locally; the conversation history sits in <code>~/.outlier/</code> on your disk.</p>
+
+    <h2>What the agent actually does</h2>
+    <p>A typical session looks like this:</p>
+    <blockquote>
+      User: "Find the function that handles login retries and add exponential backoff."<br>
+      Agent: searches the project, opens 3 files, picks one, drafts a diff, asks for approval to write, runs the test suite, reports what passed and what didn't.
+    </blockquote>
+    <p>The agent's effective ceiling depends on which model you point it at. Nano 4B handles small refactors and explanations well; for multi-file work, Core 27B or Code 27B is the right pick. On a 64 GB Mac, Plus 397B is available too but slow (~2.9 tok/s) — useful for the few cases where you need the strongest local model for a complex architectural change.</p>
+
+    <h2>Where it still trails cloud agents</h2>
+    <p>Three concrete gaps, named honestly:</p>
+    <ul>
+      <li><strong>Speed feel.</strong> Core 27B at ~22 tok/s vs Claude in the cloud at ~80–100 tok/s. A 5,000-token diff that takes 60s in Claude Code takes about 4 minutes locally.</li>
+      <li><strong>Tier-swap latency.</strong> Switching from Nano to Plus mid-session takes about 74 seconds for the cold load. Claude doesn't have this cost because it doesn't physically swap models.</li>
+      <li><strong>Research-grade reasoning.</strong> For genuinely novel problems or 50k+ token contexts, the cloud flagships still edge out. For the 95% of day-to-day coding work, Outlier scored 98.9% parity on a 54-test bench against Claude Opus.</li>
+    </ul>
+    <p>What you trade those gaps for: no API token bill, no rate limit, no cloud trip with your repo. For developers in regulated industries, behind corporate firewalls, or just tired of metered tools, that's usually the trade worth making.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite tiers. Standard $149 once adds Core 27B and Code 27B for serious coding. Pro $30/mo or $249/yr adds Plus 397B. No API key required, ever.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-coding-agent-no-api-keys">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code</a> · <a href="https://outlier.host/learn/mcp-moe-paged-inference-glossary/">MCP, MoE, paged inference glossary</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
