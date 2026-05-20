@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI on Mac in 2026 — Outlier vs Ollama vs LM Studio vs Jan | Outlier</title>
+  <meta name="description" content="Side-by-side comparison of the four leading Mac-native local AI tools in 2026. Where each one wins, where each one loses, with sourced citations.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/data/local-ai-mac-2026-benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI on Mac in 2026 — Outlier vs Ollama vs LM Studio vs Jan">
+  <meta property="og:description" content="Side-by-side comparison of four Mac-native local AI tools.">
+  <meta property="og:url" content="https://outlier.host/data/local-ai-mac-2026-benchmarks/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI on Mac in 2026">
+  <meta name="twitter:description" content="Outlier vs Ollama vs LM Studio vs Jan, side-by-side.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.2rem; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.9rem; }
+    article th, article td { padding: 0.5rem 0.55rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    article td.win { color: var(--green); font-weight: 600; }
+    article td.lose { color: var(--text-dim); }
+    .quick-answer { background:rgba(168,85,247,0.06); border-left:3px solid var(--accent); padding:1rem 1.25rem; margin:0 0 2rem; border-radius:4px; }
+    .quick-answer p { margin:0 0 0.5rem; font-weight:600; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-mid); }
+    .quick-answer ul { margin:0; padding-left:1.25rem; color:var(--text); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } article table { font-size: 0.78rem; } article th, article td { padding: 0.4rem 0.4rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Dataset","name":"Local AI on Mac in 2026 — Outlier vs Ollama vs LM Studio vs Jan","description":"Side-by-side comparison of four Mac-native local AI tools across seven dimensions in May 2026. Sourced citations for every competitor claim.","url":"https://outlier.host/data/local-ai-mac-2026-benchmarks/","datePublished":"2026-05-20","dateModified":"2026-05-20","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"keywords":["local AI Mac","Ollama","LM Studio","Jan","Outlier","Apple Silicon","MoE inference","comparison"],"variableMeasured":["model size ceiling","cost","inference engine type","Apple Silicon optimization","agent loop support","MCP support","pricing"],"measurementTechnique":"side-by-side feature comparison with sourced citations","temporalCoverage":"2026-05","spatialCoverage":"Apple Silicon Macs"}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/data/">data</a></div>
+    <h1>Local AI on Mac in 2026 — Outlier vs Ollama vs LM Studio vs Jan, side-by-side</h1>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+
+    <div class="quick-answer">
+      <p>Quick answer</p>
+      <ul>
+        <li>Outlier runs Qwen3.5-397B (paged-MoE) on a 64 GB Mac; Ollama, LM Studio, and Jan currently cannot load this model in that memory class.</li>
+        <li>All four tools run 4B–35B class models comparably; for those, free tools win on simplicity.</li>
+        <li>Outlier is the only one with a custom paged-MoE inference engine; the other three wrap <code>llama.cpp</code> or similar.</li>
+        <li>Pricing: Outlier $149–$200 paid; Ollama, LM Studio, Jan are free.</li>
+      </ul>
+    </div>
+
+    <p class="lead">There are four serious options for running a large language model locally on a Mac in 2026: Outlier, Ollama, LM Studio, and Jan. They overlap on the 4B–35B model range, where any of them works fine. They diverge sharply on bigger models, agent features, and pricing. This page is the honest side-by-side — including the dimensions where the free tools win.</p>
+
+    <h2>The seven dimensions that actually matter</h2>
+    <table>
+      <thead>
+        <tr><th>Dimension</th><th>Outlier</th><th>Ollama</th><th>LM Studio</th><th>Jan</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Max model on 64 GB Mac</td>
+          <td class="win">397B (paged)</td>
+          <td class="lose">~70B (GGUF Q4)</td>
+          <td class="lose">~70B (GGUF Q4)</td>
+          <td class="lose">~70B (GGUF Q4)</td>
+        </tr>
+        <tr>
+          <td>Inference engine</td>
+          <td class="win">Custom V10 paged MoE (MLX)</td>
+          <td>llama.cpp wrapper</td>
+          <td>llama.cpp wrapper</td>
+          <td>llama.cpp / Cortex</td>
+        </tr>
+        <tr>
+          <td>Apple Silicon optimized</td>
+          <td>Yes (MLX-native)</td>
+          <td>Yes (Metal backend)</td>
+          <td>Yes (Metal backend)</td>
+          <td>Yes (Metal backend)</td>
+        </tr>
+        <tr>
+          <td>Agent loop (plan/act/verify)</td>
+          <td class="win">Yes (Code Agent v2)</td>
+          <td class="lose">No (3rd party)</td>
+          <td class="lose">No (3rd party)</td>
+          <td>Partial (Cortex agents)</td>
+        </tr>
+        <tr>
+          <td>MCP connectors</td>
+          <td class="win">Yes (built-in)</td>
+          <td class="lose">No</td>
+          <td class="lose">No</td>
+          <td class="lose">No</td>
+        </tr>
+        <tr>
+          <td>Cost</td>
+          <td>$149 once / $30 mo Pro</td>
+          <td class="win">Free</td>
+          <td class="win">Free</td>
+          <td class="win">Free</td>
+        </tr>
+        <tr>
+          <td>Ecosystem maturity</td>
+          <td class="lose">New (2026)</td>
+          <td class="win">Very large</td>
+          <td class="win">Large</td>
+          <td>Growing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where the free tools legitimately win</h2>
+    <h3>Ollama</h3>
+    <ul>
+      <li><strong>Free, open source, MIT licensed.</strong> Source: <a href="https://github.com/ollama/ollama">github.com/ollama/ollama</a>.</li>
+      <li><strong>Largest model ecosystem.</strong> Hundreds of community-curated GGUF models on the Ollama registry.</li>
+      <li><strong>Cross-platform.</strong> Mac, Linux, Windows — same UX everywhere.</li>
+      <li><strong>Best CLI.</strong> <code>ollama run llama3.2</code> is two seconds from cold to chatting.</li>
+      <li><strong>Best server-mode story.</strong> Easy OpenAI-compatible HTTP server for downstream apps.</li>
+    </ul>
+
+    <h3>LM Studio</h3>
+    <ul>
+      <li><strong>Free for personal use.</strong> Source: <a href="https://lmstudio.ai/">lmstudio.ai</a> (license terms on their site).</li>
+      <li><strong>Excellent in-app model browser.</strong> Search, download, and try a new model in under a minute.</li>
+      <li><strong>Best UX for "I just want to chat with a model."</strong> Polished chat UI, no friction.</li>
+      <li><strong>MLX support.</strong> Recent versions ship MLX backend alongside llama.cpp.</li>
+    </ul>
+
+    <h3>Jan</h3>
+    <ul>
+      <li><strong>Free, open source, AGPL.</strong> Source: <a href="https://github.com/janhq/jan">github.com/janhq/jan</a>.</li>
+      <li><strong>Cortex backend.</strong> Custom server with its own engine architecture.</li>
+      <li><strong>Privacy-first defaults.</strong> No telemetry, no account required.</li>
+      <li><strong>Plugin system.</strong> Extensions for adding capabilities.</li>
+    </ul>
+
+    <h2>Where Outlier wins</h2>
+    <ul>
+      <li><strong>Models bigger than your RAM.</strong> The Qwen3.5-397B-A17B model is 209 GB on disk. On a 64 GB Mac, no GGUF wrapper currently loads it; Outlier's paged-MoE engine streams the experts off SSD per token. Measured: ~2.9 tok/s on Mac Studio M1 Ultra. See <a href="/data/v11-streaming-benchmarks/">V11 streaming engine benchmarks</a>.</li>
+      <li><strong>Built-in agent loop.</strong> Code Agent v2 does plan / act / verify / recover in a single tool-call cycle. The other three tools require a separate orchestration layer (LangChain, custom code).</li>
+      <li><strong>Built-in MCP support.</strong> Outlier ships MCP connectors that work out of the box (Filesystem, GitHub, Notion, Slack, etc.). The other three currently do not have MCP integration in the base app.</li>
+      <li><strong>Persistent project memory.</strong> Outlier's projects persist across sessions on-disk; pick up months later. Ollama and LM Studio chat history is per-session.</li>
+      <li><strong>54-prompt parity bench at 99.5%.</strong> See <a href="/data/outlier-vs-claude-54-prompt-benchmark/">the rubric and results</a>.</li>
+    </ul>
+
+    <h2>How to decide</h2>
+    <p>The honest version:</p>
+    <ul>
+      <li><strong>Pick Ollama</strong> if you want a free CLI for chatting with sub-70B models on any OS. It is the most pragmatic choice for the largest swath of local-AI use cases.</li>
+      <li><strong>Pick LM Studio</strong> if you want a polished chat UI with a model browser and zero setup. Best for users who want one button to download a model and start talking.</li>
+      <li><strong>Pick Jan</strong> if you want an open-source, AGPL-licensed local AI app with a plugin system and strong privacy defaults.</li>
+      <li><strong>Pick Outlier</strong> if you need to run MoE models larger than your RAM, want built-in agent + MCP, or want a Mac-native app with a parity-tested response quality bar.</li>
+    </ul>
+    <p>These choices aren't exclusive — many users run Ollama for quick experiments and Outlier for the model-too-big-for-RAM or agent workloads.</p>
+
+    <h2>Specific claims and their sources</h2>
+    <ul>
+      <li><strong>Ollama uses llama.cpp:</strong> <a href="https://github.com/ollama/ollama">github.com/ollama/ollama</a> README and architecture docs.</li>
+      <li><strong>LM Studio engine options (llama.cpp + MLX):</strong> <a href="https://lmstudio.ai/docs">lmstudio.ai/docs</a>.</li>
+      <li><strong>Jan uses Cortex / llama.cpp:</strong> <a href="https://github.com/janhq/jan">github.com/janhq/jan</a> repository structure.</li>
+      <li><strong>Outlier uses custom V10 paged MoE on MLX:</strong> see <a href="/data/v11-streaming-benchmarks/">benchmarks page</a> + source files <code>desktop_app/backend/engine_v10_streaming.py</code>.</li>
+      <li><strong>Qwen3.5-397B-A17B is 209 GB:</strong> HuggingFace repo <a href="https://huggingface.co/mlx-community/Qwen3.5-397B-A17B-4bit"><code>mlx-community/Qwen3.5-397B-A17B-4bit</code></a>.</li>
+      <li><strong>Outlier 54-prompt parity bench:</strong> <a href="/data/outlier-vs-claude-54-prompt-benchmark/">data page</a> + source <code>parity_bench/outputs/last_score.json</code>.</li>
+    </ul>
+
+    <h2>What this page does NOT compare</h2>
+    <ul>
+      <li><strong>Raw tok/s on identical sub-70B models across all four tools.</strong> Each tool has its own decode optimizations; a head-to-head would need a controlled run on the same prompts and hardware. We have not done that run.</li>
+      <li><strong>Model quality on identical weights.</strong> Same weights in different runners should produce essentially identical outputs (modulo sampler differences); not a tool-differentiating dimension.</li>
+      <li><strong>Enterprise features.</strong> SSO, audit logging, on-prem deployment, etc. — outside the scope of "desktop Mac chat client."</li>
+    </ul>
+
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
