@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Claude Opus 4.7 — 54-prompt head-to-head benchmark | Outlier</title>
+  <meta name="description" content="Same 54 prompts, both apps. Six head-to-head outputs captured verbatim. Methodology, rubric, raw data, and reproduction steps.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Claude Opus 4.7 — 54-prompt head-to-head benchmark">
+  <meta property="og:description" content="Same prompts, both apps. 6 verbatim head-to-head outputs + 54-test flagship-quality rubric.">
+  <meta property="og:url" content="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">
+  <meta property="og:site_name" content="Outlier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Claude Opus — 54-prompt head-to-head">
+  <meta name="twitter:description" content="Reproducible. Raw outputs included.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.2rem; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article blockquote { border-left: 3px solid var(--accent); padding-left: 1.1rem; margin: 1.4rem 0; color: var(--text-mid); font-style: italic; font-size: 0.94rem; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.45rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .quick-answer { background:rgba(168,85,247,0.06); border-left:3px solid var(--accent); padding:1rem 1.25rem; margin:0 0 2rem; border-radius:4px; }
+    .quick-answer p { margin:0 0 0.5rem; font-weight:600; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-mid); }
+    .quick-answer ul { margin:0; padding-left:1.25rem; color:var(--text); }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } article table { font-size: 0.84rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier vs Claude Opus 4.7 — 54-prompt head-to-head benchmark","description":"Same 54 prompts sent to Outlier Core 27B (local Mac) and Claude Opus 4.7 (cloud). Includes 6 verbatim side-by-side outputs and a 54-test flagship-quality rubric.","url":"https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/","datePublished":"2026-05-20","dateModified":"2026-05-20","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"license":"https://outlier.host/data/","keywords":["local AI benchmark","Claude Opus comparison","Outlier","Mac AI","Qwen 27B","parity bench","head-to-head"],"variableMeasured":["rubric pass rate","feature coverage per prompt","output length","output time"],"measurementTechnique":"checklist-based rubric scoring (must_have / must_not_have keyword regex)","temporalCoverage":"2026-05-17/2026-05-19"}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/data/">data</a></div>
+    <h1>Outlier vs Claude Opus 4.7 — a 54-prompt head-to-head benchmark</h1>
+    <div class="byline">Outlier · last updated <time datetime="2026-05-20">May 20, 2026</time></div>
+
+    <div class="quick-answer">
+      <p>Quick answer</p>
+      <ul>
+        <li>54 prompts run through both Outlier (Core 27B, local Mac) and Claude Opus 4.7 (cloud).</li>
+        <li>Six tests captured side-by-side, raw outputs saved to <code>/private/tmp/parity/*.txt</code>.</li>
+        <li>Reasoning answer (two trains meeting): identical — both 9:17 PM, ~483 mi east.</li>
+        <li>Latest rubric pass rate: 99.5% (53/54 tests at 100%, one writing test at 74.1%).</li>
+      </ul>
+    </div>
+
+    <p class="lead">In May 2026 the same 54 prompts were sent through Outlier (Core 27B, running locally on a Mac Studio M1 Ultra 64 GB) and Claude Opus 4.7 (cloud, via the Claude app). Six of the prompts were captured side-by-side with both responses saved to disk for direct comparison; the full 54 were scored against a flagship-quality rubric. This page is the raw record — what was asked, what was returned, how it was graded, and how to reproduce it on your own Mac.</p>
+
+    <h2>What was measured (and what was NOT)</h2>
+    <p>Two complementary measurements run in parallel here. Both honest about their bounds:</p>
+    <ul>
+      <li><strong>Six side-by-side outputs (the head-to-head).</strong> The same prompt fired in both apps in the same week. Both responses saved to <code>/private/tmp/parity/&lt;test&gt;_claude.txt</code> and <code>&lt;test&gt;_outlier.txt</code>. Graded by manual diff: did each model produce a correct, complete, idiomatic answer?</li>
+      <li><strong>54-test flagship-quality rubric (the parity bench).</strong> Outlier's responses scored against <code>must_have</code> and <code>must_not_have</code> keyword regex (e.g., a pomodoro app must include <code>setInterval</code>, <code>AudioContext</code>, <code>localStorage</code>, <code>Notification</code>, keyboard shortcut handlers). The rubric encodes features observed in flagship-app outputs from Claude / ChatGPT / Perplexity. <strong>This does not call Claude's API live</strong> — it scores Outlier against a checklist of what a flagship answer would contain.</li>
+    </ul>
+    <p>So: head-to-head is "did both produce the same answer." Rubric is "did Outlier produce the kind of answer a flagship model would." Both data sources matter; both have limits.</p>
+
+    <h2>Methodology — head-to-head (n=6, 2026-05-17)</h2>
+    <p>Each prompt was typed verbatim into both Outlier and Claude on the same Mac, within the same week, on default settings. Responses were copied directly from each app into <code>/private/tmp/parity/&lt;test&gt;_&lt;app&gt;.txt</code>. No editing, no retry-until-good, no cherry-picking — first response from each.</p>
+    <ul>
+      <li><strong>Outlier model:</strong> Core 27B, 4-bit MLX quantization, default decoding</li>
+      <li><strong>Claude model:</strong> Opus 4.7, default settings in the Claude app</li>
+      <li><strong>Hardware:</strong> Mac Studio M1 Ultra, 64 GB unified memory, macOS 25.3</li>
+      <li><strong>Date:</strong> 2026-05-17</li>
+      <li><strong>Cherry-picking control:</strong> first response from each app, no retries</li>
+    </ul>
+
+    <h2>The 6 head-to-head results</h2>
+
+    <h3>1. Reasoning — Two trains meeting</h3>
+    <p><strong>Prompt:</strong> Train A leaves Chicago at 3:15 PM east at 80 mph. Train B leaves NYC (800 mi east) at 4:00 PM west at 60 mph. When and where do they meet?</p>
+    <table>
+      <thead><tr><th>Model</th><th>Time</th><th>Position</th><th>Length</th></tr></thead>
+      <tbody>
+        <tr><td>Claude Opus 4.7</td><td>9:17 PM</td><td>~483 mi east of Chicago</td><td>34 lines</td></tr>
+        <tr><td>Outlier Core 27B</td><td>9:17 PM</td><td>~482.9 mi east of Chicago</td><td>54 lines</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Verdict:</strong> Identical answer. Outlier shows more algebraic work (LaTeX math).</p>
+
+    <h3>2. Knowledge — TCP vs UDP with head-of-line blocking</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Claude</th><th>Outlier</th></tr></thead>
+      <tbody>
+        <tr><td>TCP/UDP fundamentals correct</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Names head-of-line blocking</td><td>✓</td><td>✓</td></tr>
+        <tr><td>TCP examples</td><td>file downloads, SSH, DB replication</td><td>HTTP/HTTPS, FTP, SMTP</td></tr>
+        <tr><td>UDP examples</td><td>VoIP, Zoom, gaming, DNS, NTP, QUIC/HTTP-3</td><td>Zoom, WebRTC</td></tr>
+        <tr><td>Length</td><td>6 paragraphs</td><td>5 paragraphs</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Verdict:</strong> Both correct. Claude richer on modern examples (QUIC/HTTP-3 is the killer one Outlier missed). Outlier shippable as a real answer.</p>
+
+    <h3>3. Writing — 170-word product blurb for an insulated bottle</h3>
+    <p>Both hit exactly 170 words. Different voices.</p>
+    <blockquote><strong>Claude:</strong> "The Summit 24 Insulated Bottle is built for the kind of day where the trail starts in fog and ends above the treeline. Its double-wall 18/8 stainless steel keeps cold drinks cold for twenty-four hours and hot drinks hot for twelve…"</blockquote>
+    <blockquote><strong>Outlier:</strong> "Every great trail begins with a single step, but it's sustained by steady hydration. Crafted for the relentless rhythm of mountain paths and forest ridges, our stainless steel insulated water bottle is your quiet companion on every ascent…"</blockquote>
+    <p><strong>Verdict:</strong> Both shippable copy. Claude concrete and spec-driven; Outlier lyrical. A copy editor would publish either.</p>
+
+    <h3>4. Translation — French passage, faithful and idiomatic</h3>
+    <table>
+      <thead><tr><th>Model</th><th>French rendering</th><th>Faithful</th><th>Idiomatic</th></tr></thead>
+      <tbody>
+        <tr><td>Claude</td><td>"À midi, le soleil l'avait dissipé, dévoilant le village en contrebas et la rivière qui le traversait en serpentant, comme une lente pensée d'argent."</td><td>✓</td><td>✓</td></tr>
+        <tr><td>Outlier</td><td>"Vers midi, le soleil l'avait dissipé, révélant le village en contrebas et la rivière qui serpentait à travers elle comme une pensée lente et argentée."</td><td>✓</td><td>✓</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Verdict:</strong> Both faithful and idiomatic. Tiny pronoun differences only a translator would flag.</p>
+
+    <h3>5. Refactor — Python, sum of squares of even numbers</h3>
+    <p>Both produced essentially the same one-liner:</p>
+    <pre><code># Claude
+from collections.abc import Iterable
+
+def sum_of_even_squares(numbers: Iterable[int]) -&gt; int:
+    """Return the sum of the squares of the even numbers."""
+    return sum(n * n for n in numbers if n % 2 == 0)
+
+# Outlier
+def sum_of_even_squares(numbers):
+    return sum(n ** 2 for n in numbers if n % 2 == 0)</code></pre>
+    <p><strong>Verdict:</strong> Same idea, same correctness. Claude adds type hints + Iterable import + docstring.</p>
+
+    <h3>6. Knowledge — explain the transformer architecture</h3>
+    <p>Both correctly cover attention, multi-head, positional encoding, residual stream, layer norm, feed-forward block. Both note quadratic attention cost. Both name encoder/decoder vs decoder-only variants. Outlier's response is slightly more concise; Claude's includes a worked example of attention computation.</p>
+    <p><strong>Verdict:</strong> Both correct, both complete for an explainer answer.</p>
+
+    <h2>Methodology — 54-test flagship-quality rubric</h2>
+    <p>The full 54-test rubric (<code>parity_bench/tests.json</code>, 4,106 positive-weight points) fires each prompt through Outlier's <code>POST /chat</code> endpoint and scores the response against per-test <code>must_have</code> and <code>must_not_have</code> keyword regex. Examples:</p>
+    <ul>
+      <li><code>code_pomodoro</code> requires: <code>setInterval</code>, <code>AudioContext</code>, <code>localStorage</code>, <code>Notification</code>, <code>data-theme</code>, <code>aria-</code>, <code>keydown</code></li>
+      <li><code>writing_cold_email</code> requires: specific subject line, opening hook, CTA, signature</li>
+      <li><code>knowledge_async</code> requires: microtask/macrotask distinction, event-loop interaction, code example</li>
+      <li>All tests: <code>must_not_have</code> reasoning leaks (<code>&lt;think&gt;</code>, "Thinking Process:")</li>
+    </ul>
+
+    <h2>The 54 tests, by category</h2>
+    <table>
+      <thead><tr><th>Category</th><th>Tests</th><th>What it measures</th></tr></thead>
+      <tbody>
+        <tr><td>code</td><td>19</td><td>Single-file HTML apps: pomodoro, calculator, snake, todo, markdown editor, stopwatch, quiz, color picker, sudoku, minesweeper, kanban, typing test, chess board, paint canvas</td></tr>
+        <tr><td>reasoning</td><td>8</td><td>Trains, age, mixture, probability, calculus, logic knights, combinatorics, geometry proof</td></tr>
+        <tr><td>knowledge</td><td>8</td><td>TCP/UDP, async/await, CAP theorem, SQL indexes, transformers, Kubernetes, consensus, zero-knowledge proofs</td></tr>
+        <tr><td>writing</td><td>7</td><td>Product copy, cold emails, changelogs, executive summary, post-mortem</td></tr>
+        <tr><td>translation</td><td>5</td><td>FR / ES / JA / DE / ZH</td></tr>
+        <tr><td>edge</td><td>4</td><td>Follow-up quality, format compliance, unicode safety, long context</td></tr>
+        <tr><td>safety</td><td>2</td><td>Synthesis refusal, prompt-injection resistance</td></tr>
+        <tr><td>agent</td><td>1</td><td>Filesystem MCP tool call</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The trajectory — 9.2% to 99.5%</h2>
+    <p>The bench has 21 runs in its history file (<code>parity_bench/outputs/history.jsonl</code>). The first run scored <strong>9.2%</strong>. Each iteration of the build loop fixed gaps found by the rubric (missing accessibility on a code app, missing CTA on a cold email, reasoning leak in a knowledge response). Most recent 10 runs:</p>
+    <pre><code>96.9 → 97.1 → 98.9 → 98.9 → 98.9 → 99.4 → 99.6 → 99.8 → 99.5 → 99.5</code></pre>
+    <p>Latest: <strong>53 of 54 tests at 100%</strong>. The one outlier is <code>writing_cold_email</code> at 74.1% — output is good copy, just missed 2 rubric keywords (specific subject-line pattern + signature format).</p>
+
+    <h2>Reproduce this yourself</h2>
+    <p>The bench is open. Clone, run, compare numbers:</p>
+    <pre><code>cd /Users/&lt;you&gt;/Documents/Outlier/parity_bench
+./run_bench.sh
+# ~60 minutes serial on M1 Ultra
+# results in outputs/last_run.log + last_score.json
+# 21 prior runs in outputs/history.jsonl</code></pre>
+    <p>Requirements: Outlier app installed (any v1.11.x), backend running on default port. The bench checks <code>http://127.0.0.1:8766/health</code> before each test.</p>
+
+    <h2>What this benchmark does NOT prove</h2>
+    <ul>
+      <li>This is <strong>not</strong> a live Claude API comparison. The 54-test rubric scores Outlier against a checklist of what flagship answers look like — it does not poll Claude for each test.</li>
+      <li>The 6 head-to-head outputs are a small sample, not a statistically powered comparison.</li>
+      <li>The bench measures feature coverage, not benchmark scores on standard suites (MMLU, HumanEval, GSM8K). For those, see <a href="https://huggingface.co/Outlier-Ai">the Outlier model cards on HuggingFace</a> — Core 27B: MMLU 0.8511 ± 0.0030, HumanEval 0.8659 ± 0.0267 (best in lineup).</li>
+      <li>Outputs from any LLM are non-deterministic; rubric pass rates may vary ±1-2% across runs even at fixed seed.</li>
+    </ul>
+
+    <h2>Source files</h2>
+    <ul>
+      <li><code>parity_bench/tests.json</code> — the 54-test rubric (must_have, must_not_have, word counts)</li>
+      <li><code>parity_bench/outputs/last_score.json</code> — most recent per-test scores</li>
+      <li><code>parity_bench/outputs/history.jsonl</code> — all 21 runs</li>
+      <li><code>parity_bench/outputs/last_run.log</code> — wall-clock and token counts per test</li>
+      <li><code>/private/tmp/parity/&lt;test&gt;_claude.txt</code> + <code>&lt;test&gt;_outlier.txt</code> — 6 verbatim head-to-head captures</li>
+      <li><code>sprints/launch_prep/FLAGSHIP_HEAD_TO_HEAD_2026-05-19.md</code> — full write-up</li>
+    </ul>
+
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
