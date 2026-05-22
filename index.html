@@ -778,14 +778,48 @@
     .pricing-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem;
     }
+    /* PRICING-V3 founding 200 spans the full row as the headline card */
+    .pricing-grid .price-card.founding { grid-column: 1 / -1; }
+    .price-card.founding .founding-body {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.2rem 2.2rem; align-items: start;
+    }
+    .price-card.founding .founding-body ul { margin: 0; }
     @media (max-width: 1180px) {
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .price-card.founding .founding-body { grid-template-columns: 1fr; gap: 0.4rem; }
     }
     .price-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
       padding: 1.7rem 1.4rem; display: flex; flex-direction: column; min-height: 100%;
     }
     .price-card.featured { border-color: var(--green-border); background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(168,85,247,0.04)); }
+    /* PRICING-V3 founding 200 headline card — most visual weight */
+    .price-card.founding {
+      border: 1.5px solid var(--accent); position: relative;
+      background: linear-gradient(135deg, rgba(168,85,247,0.16), rgba(124,58,237,0.08));
+      box-shadow: 0 0 0 1px var(--accent-border), 0 14px 40px rgba(124,58,237,0.18);
+    }
+    .price-card.founding .price { color: var(--accent-light); }
+    .price-card.founding li::before { color: var(--accent-light); }
+    .founding-ribbon {
+      position: absolute; top: -0.7rem; left: 1.4rem;
+      font-family: var(--mono); font-size: 0.66rem; font-weight: 700;
+      text-transform: lowercase; letter-spacing: 0.1em;
+      color: #fff; background: var(--accent);
+      padding: 0.22rem 0.7rem; border-radius: 100px;
+      box-shadow: 0 4px 12px rgba(124,58,237,0.35);
+    }
+    .seat-counter {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
+      color: var(--accent-light); margin: 0.2rem 0 0.4rem;
+      display: flex; align-items: center; gap: 0.45rem;
+    }
+    .seat-counter::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px rgba(168,85,247,0.6);
+    }
     .price-card h3 { font-family: var(--display); font-size: 1.3rem; margin-bottom: 0.35rem; }
     .price { font-family: var(--head); font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em; color: var(--green-light); margin: 0.6rem 0; }
     .price small { font-size: 0.95rem; color: var(--text-dim); font-weight: 600; }
@@ -943,12 +977,12 @@
       <div class="hw-card" style="text-align: center; padding: 1rem; border-radius: 10px; background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.18);">
         <div style="font-size: 0.75rem; color: #22c55e; font-weight: 600; letter-spacing: 0.06em;">16 GB</div>
         <div style="font-size: 1.05rem; margin: 0.25rem 0; font-weight: 500;">MacBook Air</div>
-        <div style="font-size: 0.85rem; color: var(--text-muted, #9ca3af);">Vision 35B + Nano + Lite</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted, #9ca3af);">Nano + Lite</div>
       </div>
       <div class="hw-card" style="text-align: center; padding: 1rem; border-radius: 10px; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.18);">
         <div style="font-size: 0.75rem; color: #3b82f6; font-weight: 600; letter-spacing: 0.06em;">32 GB</div>
         <div style="font-size: 1.05rem; margin: 0.25rem 0; font-weight: 500;">MacBook Pro M-series</div>
-        <div style="font-size: 0.85rem; color: var(--text-muted, #9ca3af);">+ Quick 26B, Compact 27B, Code 27B</div>
+        <div style="font-size: 0.85rem; color: var(--text-muted, #9ca3af);">+ Quick 26B, Compact 27B, Code 27B, Vision 35B</div>
       </div>
       <div class="hw-card" style="text-align: center; padding: 1rem; border-radius: 10px; background: rgba(168,85,247,0.06); border: 1px solid rgba(168,85,247,0.18);">
         <div style="font-size: 0.75rem; color: #a855f7; font-weight: 600; letter-spacing: 0.06em;">64 GB</div>
@@ -1018,6 +1052,29 @@
     </div>
 
     <div class="pricing-grid">
+      <!-- PRICING-V3 founding 200 headline card -->
+      <div class="price-card founding">
+        <span class="founding-ribbon">sells first</span>
+        <h3>Founding 200</h3>
+        <div class="price">$99 <small>once · lifetime pro</small></div>
+        <div class="seat-counter" data-seat-counter>200 seats</div>
+        <p>200 lifetime seats at the lowest price local pro will ever be. once they fill, the $200 founders cohort opens. directly funds the build.</p>
+        <div class="founding-body">
+          <ul>
+            <li>all pro features, forever</li>
+            <li>plus 397B</li>
+            <li>all future model releases</li>
+          </ul>
+          <ul>
+            <li>private founding-cohort discord</li>
+            <li>founder recognition</li>
+            <li>directly funds the build</li>
+          </ul>
+        </div>
+        <!-- TODO: Founding 200 Polar checkout URL (operator creates SKU) -->
+        <a class="btn btn-accent" href="#pricing">Claim a founding 200 seat</a>
+      </div>
+
       <div class="price-card">
         <h3>Free</h3>
         <div class="price">$0 <small>forever</small></div>
@@ -1060,10 +1117,11 @@
         <a class="btn btn-green" href="https://buy.polar.sh/polar_cl_RvmkI5ZFwi5BYFQMgdYHHRk3b8rxOrMpTpZB61xkXuT" target="_blank">Get Pro</a>
       </div>
 
+      <!-- PRICING-V3 founders 500 is now the secondary lifetime card -->
       <div class="price-card">
         <h3>Founders</h3>
         <div class="price">$200 <small>once</small></div>
-        <p>Pro forever. 500 lifetime seats. Once they're gone, recurring Pro is the only path.</p>
+        <p>opens after founding 200 fills. pro forever, 500 lifetime seats. once they're gone, recurring pro is the only path.</p>
         <ul>
           <li>Pro tier (everything + Plus 397B), for life</li>
           <li>Founder recognition + early access</li>
@@ -1071,7 +1129,7 @@
           <li>Directly funds model + agent work</li>
           <li>500 seat cap — limited cohort</li>
         </ul>
-        <a class="btn btn-accent" href="https://buy.polar.sh/polar_cl_mJfYZsEpEMDcYrgxzvTdnahSeSQNq1UYLqV0l08CUhW" target="_blank">Become a Founder</a>
+        <a class="btn btn-ghost" href="https://buy.polar.sh/polar_cl_mJfYZsEpEMDcYrgxzvTdnahSeSQNq1UYLqV0l08CUhW" target="_blank">Become a Founder</a>
       </div>
     </div>
   </div>
@@ -1181,18 +1239,18 @@
             <td class="v hi">Same verified base as Core</td>
           </tr>
           <tr>
-            <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged / V11 streaming</div></td>
+            <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged</div></td>
             <td class="v hi">Pro</td>
             <td class="tnote">Largest local tier · 397B MoE on high-end Macs · only on Pro or Founders</td>
             <td class="tnote">209 GB disk · 96 GB min, 128 GB recommended</td>
-            <td class="v">V9 K=20: 1.59 tok/s @ 14.04 GB · V11 K=4 N=4 LRU=8: 3.28 tok/s @ 8.89 GB</td>
+            <td class="v">V9 K=20: 2.1 tok/s @ 11 GB RSS, 3.6 GB wired</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Vision</div><div class="tbase">Qwen3.6-35B-A3B · vision retained</div></td>
             <td class="v hi">Standard</td>
             <td class="tnote">Images, screenshots, OCR, multimodal reasoning</td>
-            <td class="tnote">19.0 GB · 24 GB min RAM (16 GB Air on V11 streaming)</td>
-            <td class="v">V9 K=256: 16.31 tok/s @ 34.04 GB · V11 K=4 N=2 LRU=30 XPF=1: 15.96 tok/s, ~3.16 GB peak (multi-turn)</td>
+            <td class="tnote">19.0 GB · 24 GB min RAM</td>
+            <td class="v">V9 K=256: 16.31 tok/s @ 34.04 GB</td>
           </tr>
         </tbody>
       </table>
@@ -1678,6 +1736,24 @@
       document.querySelector('.nav-toggle').classList.remove('active');
     }
   });
+</script>
+
+<!-- PRICING-V3 founding 200 live seat counter — degrades to "200 seats" if data/seats.json is missing -->
+<script>
+  (function () {
+    var els = document.querySelectorAll('[data-seat-counter]');
+    if (!els.length) return;
+    var CAP = 200;
+    fetch('data/seats.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('seats unavailable'); return r.json(); })
+      .then(function (d) {
+        var sold = (d && typeof d.founding_200_sold === 'number') ? d.founding_200_sold : 0;
+        var left = Math.max(0, CAP - sold);
+        var label = left === 0 ? 'founding 200 sold out' : left + ' of ' + CAP + ' seats left';
+        els.forEach(function (el) { el.textContent = label; });
+      })
+      .catch(function () { /* leave the static "200 seats" fallback in place */ });
+  })();
 </script>
 
 </body>
