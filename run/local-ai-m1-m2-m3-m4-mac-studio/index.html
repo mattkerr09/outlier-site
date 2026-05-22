@@ -87,7 +87,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI setup for M1 / M2 / M3 / M4 Mac Studio (2026 guide)", "item": "https://outlier.host/run/local-ai-m1-m2-m3-m4-mac-studio/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which Mac Studio is best for local AI?", "acceptedAnswer": {"@type": "Answer", "text": "A 64 GB M2 Ultra is the sweet spot: it runs every tier including Plus 397B via streaming. 32 GB handles up to Core 27B."}}, {"@type": "Question", "name": "How fast is local AI on an M1 Ultra?", "acceptedAnswer": {"@type": "Answer", "text": "Measured decode speeds: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, and Plus 397B 2.9 in V10 streaming."}}, {"@type": "Question", "name": "Do newer Mac Studios run faster?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. M2 and M3 Ultra have faster memory and SSDs than M1, so tok/s is higher, though the order of magnitude per tier holds."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which Mac Studio is best for local AI?", "acceptedAnswer": {"@type": "Answer", "text": "A 64 GB M2 Ultra is the sweet spot: it runs every tier including Plus 397B via the V9 paged engine. 32 GB handles up to Core 27B."}}, {"@type": "Question", "name": "How fast is local AI on an M1 Ultra?", "acceptedAnswer": {"@type": "Answer", "text": "Measured decode speeds: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, and Plus 397B 2.1 in V9 paged inference."}}, {"@type": "Question", "name": "Do newer Mac Studios run faster?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. M2 and M3 Ultra have faster memory and SSDs than M1, so tok/s is higher, though the order of magnitude per tier holds."}}]}
   </script>
 </head>
 <body>
@@ -114,9 +114,9 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li><strong>M1 Max 32 GB Studio</strong> runs Nano + Lite + Quick + Core + Code 27B.</li>
-        <li><strong>M2 Ultra 64 GB</strong> adds Vision 35B and Plus 397B (V10 streaming).</li>
+        <li><strong>M2 Ultra 64 GB</strong> adds Vision 35B and Plus 397B (V9 paged inference).</li>
         <li><strong>96 GB+ Studio</strong> runs Plus 397B in capacity mode for higher tok/s.</li>
-        <li>Measured M1 Ultra tok/s: Nano 71.7, Lite 53.4, Core 20.7, Plus 2.9.</li>
+        <li>Measured M1 Ultra tok/s: Nano 71.7, Lite 53.4, Core 20.7, Plus 2.1.</li>
       </ul>
     </div>
 
@@ -132,12 +132,12 @@
       <thead><tr><th>Mac Studio</th><th>RAM</th><th>Recommended tiers</th></tr></thead>
       <tbody>
         <tr><td>M1 Max (any)</td><td>32 GB</td><td>Nano, Lite, Quick 26B, Core 27B, Code 27B</td></tr>
-        <tr><td>M1 / M2 Ultra (base)</td><td>64 GB</td><td>+ Vision 35B, + Plus 397B (V10 streaming, ~2.9 tok/s)</td></tr>
+        <tr><td>M1 / M2 Ultra (base)</td><td>64 GB</td><td>+ Vision 35B, + Plus 397B (V9 paged inference, ~2.1 tok/s)</td></tr>
         <tr><td>M2 / M3 Ultra (mid)</td><td>96 GB</td><td>+ Plus 397B in capacity mode (faster, ~5 tok/s estimated)</td></tr>
         <tr><td>M1 / M2 / M3 Ultra (max)</td><td>128–192 GB</td><td>All tiers in capacity mode, full headroom for long context</td></tr>
       </tbody>
     </table>
-    <p>The 64 GB tier is the inflection point. Below 64 GB you're constrained to Core 27B and smaller. At 64 GB you can run Plus 397B (the strongest model in the lineup) via V10 streaming. Above 96 GB you stop having to stream.</p>
+    <p>The 64 GB tier is the inflection point. Below 64 GB you're constrained to Core 27B and smaller. At 64 GB you can run Plus 397B (the strongest model in the lineup) via the V9 paged engine. Above 96 GB you stop having to stream.</p>
 
     <h2>Measured tok/s on M1 Ultra</h2>
     <p>From the Outlier Mac bench on a 192 GB M1 Ultra, batch size 1, 4096-token prefill, 256-token decode:</p>
@@ -147,7 +147,7 @@
         <tr><td>Nano 4B</td><td>71.7</td></tr>
         <tr><td>Lite 9B</td><td>53.4</td></tr>
         <tr><td>Core 27B</td><td>20.7</td></tr>
-        <tr><td>Plus 397B (V10 streaming, K=20)</td><td>2.9</td></tr>
+        <tr><td>Plus 397B (V9 paged inference, K=20)</td><td>2.1</td></tr>
       </tbody>
     </table>
     <p>For comparison, an M4 MacBook Air 16 GB hits ~32 tok/s on Nano 4B in clean-boot conditions. M2/M3/M4 Ultra Studios will run higher than the M1 numbers (newer SoC + faster memory) but the order of magnitude holds.</p>
@@ -165,11 +165,11 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Which Mac Studio is best for local AI?</h3>
-        <p>A 64 GB M2 Ultra is the sweet spot: it runs every tier including Plus 397B via streaming. 32 GB handles up to Core 27B.</p>
+        <p>A 64 GB M2 Ultra is the sweet spot: it runs every tier including Plus 397B via the V9 paged engine. 32 GB handles up to Core 27B.</p>
       </div>
       <div class="faq-item">
         <h3>How fast is local AI on an M1 Ultra?</h3>
-        <p>Measured decode speeds: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, and Plus 397B 2.9 in V10 streaming.</p>
+        <p>Measured decode speeds: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, and Plus 397B 2.1 in V9 paged inference.</p>
       </div>
       <div class="faq-item">
         <h3>Do newer Mac Studios run faster?</h3>

@@ -87,7 +87,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How a 397B model runs on consumer hardware — the architecture", "item": "https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does a 397B model fit on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Four stacked choices: MoE routing, 4-bit quantization, paged expert streaming, and Apple's unified memory. Each cuts the requirement by roughly an order of magnitude."}}, {"@type": "Question", "name": "Why does Apple Silicon help specifically?", "acceptedAnswer": {"@type": "Answer", "text": "Unified memory means SSD-streamed expert weights land directly in GPU-accessible memory with no PCIe copy step, which a PC build would need."}}, {"@type": "Question", "name": "Is it as fast as the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. About 2.9 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does a 397B model fit on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Four stacked choices: MoE routing, 4-bit quantization, paged expert streaming, and Apple's unified memory. Each cuts the requirement by roughly an order of magnitude."}}, {"@type": "Question", "name": "Why does Apple Silicon help specifically?", "acceptedAnswer": {"@type": "Answer", "text": "Unified memory means SSD-streamed expert weights land directly in GPU-accessible memory with no PCIe copy step, which a PC build would need."}}, {"@type": "Question", "name": "Is it as fast as the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. About 2.1 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill."}}]}
   </script>
 </head>
 <body>
@@ -114,16 +114,16 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Four stacked design choices: MoE routing + 4-bit quantization + paged streaming + Apple unified memory.</li>
-        <li>Each step buys ~10× — combined they take 800 GB naive down to <strong>13 GB peak RAM</strong>.</li>
+        <li>Each step buys ~10× — combined they take 800 GB naive down to <strong>11 GB peak RAM</strong>.</li>
         <li>Apple unified memory removes the PCIe copy step a PC build would need.</li>
-        <li>Result: 397B-parameter MoE model runs on a 64 GB Mac at ~2.9 tok/s.</li>
+        <li>Result: 397B-parameter MoE model runs on a 64 GB Mac at ~2.1 tok/s.</li>
       </ul>
     </div>
 
     <p class="lead">Running a 397-billion-parameter model on a 64 GB Mac sounds implausible because, in the standard architecture, it is. Four design choices stack together to make it work: MoE routing in the model, 4-bit quantization in the weight format, paged expert streaming in the runtime, and Apple's unified memory in the hardware. Pull any one out and the math stops working.</p>
 
     <h2>Choice 1: the model is MoE, not dense</h2>
-    <p>A 397B dense model passes every token through every parameter. For Qwen3.5-397B-A17B (a Mixture-of-Experts model), each token uses 8 of 128 experts at each layer. The "A17B" tells you the active count per token: about 17 billion parameters' worth of compute, even though the total knowledge capacity is 397B.</p>
+    <p>A 397B dense model passes every token through every parameter. For Qwen3.5-397B-A17B (a Mixture-of-Experts model), each token uses 10 of 512 experts at each layer. The "A17B" tells you the active count per token: about 17 billion parameters' worth of compute, even though the total knowledge capacity is 397B.</p>
     <p>Without MoE, paged inference doesn't help — a dense model needs all its weights every token, so you can't keep them on disk. MoE is what creates the opportunity to keep most weights idle.</p>
 
     <h2>Choice 2: 4-bit quantization</h2>
@@ -132,7 +132,7 @@
 
     <h2>Choice 3: paged expert streaming</h2>
     <p>Even at 209 GB, the model is bigger than a 64 GB Mac's RAM. Paged expert streaming keeps the model's shared backbone resident, plus a bounded cache of recently-used experts, and streams the rest from SSD on demand. The router decides which experts to read for each token; the runtime keeps a queue of concurrent SSD reads to hide latency.</p>
-    <p>Outlier's V10 streaming engine implements this. Measured on M1 Ultra 64 GB: peak OS-level RSS ~13 GB, decode speed ~2.9 tok/s, sustained.</p>
+    <p>Outlier's V9 paged engine implements this. Measured on M1 Ultra 64 GB: peak OS-level RSS ~11 GB, decode speed ~2.1 tok/s, sustained.</p>
 
     <h2>Choice 4: Apple unified memory + fast SSD</h2>
     <p>The Mac's architecture is unusually well suited to this pattern. Two reasons:</p>
@@ -146,14 +146,14 @@
     <table>
       <thead><tr><th>Naive</th><th>With MoE</th><th>+ 4-bit</th><th>+ Streaming</th></tr></thead>
       <tbody>
-        <tr><td>Dense 397B at 16-bit: ~800 GB</td><td>Active 17B at 16-bit: ~34 GB</td><td>Active 17B at 4-bit: ~8.5 GB</td><td>Active subset cached in RAM: ~13 GB peak</td></tr>
-        <tr><td>Need 800 GB RAM</td><td>Still need all 397B somewhere</td><td>Total ~209 GB on disk</td><td>Total ~209 GB on disk, ~13 GB peak in RAM</td></tr>
+        <tr><td>Dense 397B at 16-bit: ~800 GB</td><td>Active 17B at 16-bit: ~34 GB</td><td>Active 17B at 4-bit: ~8.5 GB</td><td>Active subset cached in RAM: ~11 GB peak</td></tr>
+        <tr><td>Need 800 GB RAM</td><td>Still need all 397B somewhere</td><td>Total ~209 GB on disk</td><td>Total ~209 GB on disk, ~11 GB peak in RAM</td></tr>
       </tbody>
     </table>
     <p>Each step buys an order of magnitude. The combination is what makes the model viable on hardware most developers can actually own.</p>
 
     <h2>The honest tradeoff</h2>
-    <p>This setup is slower than the same model in the cloud on a server with 8 H100 GPUs. Plus 397B at 2.9 tok/s locally vs ~50–80 tok/s on a dedicated server is a real gap. What you trade speed for: no API key, no rate limit, no cloud trip with your code, no recurring bill after the model is on disk. For long-form coding, architecture review, or any task where you can wait, the trade is often worth it.</p>
+    <p>This setup is slower than the same model in the cloud on a server with 8 H100 GPUs. Plus 397B at 2.1 tok/s locally vs ~50–80 tok/s on a dedicated server is a real gap. What you trade speed for: no API key, no rate limit, no cloud trip with your code, no recurring bill after the model is on disk. For long-form coding, architecture review, or any task where you can wait, the trade is often worth it.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -167,7 +167,7 @@
       </div>
       <div class="faq-item">
         <h3>Is it as fast as the cloud?</h3>
-        <p>No. About 2.9 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill.</p>
+        <p>No. About 2.1 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill.</p>
       </div>
     </div>
 
