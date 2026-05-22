@@ -778,14 +778,48 @@
     .pricing-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem;
     }
+    /* PRICING-V3 founding 200 spans the full row as the headline card */
+    .pricing-grid .price-card.founding { grid-column: 1 / -1; }
+    .price-card.founding .founding-body {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 1.2rem 2.2rem; align-items: start;
+    }
+    .price-card.founding .founding-body ul { margin: 0; }
     @media (max-width: 1180px) {
       .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .price-card.founding .founding-body { grid-template-columns: 1fr; gap: 0.4rem; }
     }
     .price-card {
       background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
       padding: 1.7rem 1.4rem; display: flex; flex-direction: column; min-height: 100%;
     }
     .price-card.featured { border-color: var(--green-border); background: linear-gradient(135deg, rgba(52,211,153,0.08), rgba(168,85,247,0.04)); }
+    /* PRICING-V3 founding 200 headline card — most visual weight */
+    .price-card.founding {
+      border: 1.5px solid var(--accent); position: relative;
+      background: linear-gradient(135deg, rgba(168,85,247,0.16), rgba(124,58,237,0.08));
+      box-shadow: 0 0 0 1px var(--accent-border), 0 14px 40px rgba(124,58,237,0.18);
+    }
+    .price-card.founding .price { color: var(--accent-light); }
+    .price-card.founding li::before { color: var(--accent-light); }
+    .founding-ribbon {
+      position: absolute; top: -0.7rem; left: 1.4rem;
+      font-family: var(--mono); font-size: 0.66rem; font-weight: 700;
+      text-transform: lowercase; letter-spacing: 0.1em;
+      color: #fff; background: var(--accent);
+      padding: 0.22rem 0.7rem; border-radius: 100px;
+      box-shadow: 0 4px 12px rgba(124,58,237,0.35);
+    }
+    .seat-counter {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 600;
+      color: var(--accent-light); margin: 0.2rem 0 0.4rem;
+      display: flex; align-items: center; gap: 0.45rem;
+    }
+    .seat-counter::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px rgba(168,85,247,0.6);
+    }
     .price-card h3 { font-family: var(--display); font-size: 1.3rem; margin-bottom: 0.35rem; }
     .price { font-family: var(--head); font-size: 2.2rem; font-weight: 900; letter-spacing: -0.03em; color: var(--green-light); margin: 0.6rem 0; }
     .price small { font-size: 0.95rem; color: var(--text-dim); font-weight: 600; }
@@ -1018,14 +1052,37 @@
     </div>
 
     <div class="pricing-grid">
+      <!-- PRICING-V3 founding 200 headline card -->
+      <div class="price-card founding">
+        <span class="founding-ribbon">sells first</span>
+        <h3>Founding 200</h3>
+        <div class="price">$99 <small>once · lifetime Pro</small></div>
+        <div class="seat-counter" data-seat-counter>200 seats</div>
+        <p>The first 200 lifetime seats, at the lowest price local Pro will ever be. Once they fill, the $200 Founders 500 cohort opens. Directly funds the build.</p>
+        <div class="founding-body">
+          <ul>
+            <li>Pro forever — every Pro feature</li>
+            <li>Plus 397B included</li>
+            <li>All future model releases</li>
+          </ul>
+          <ul>
+            <li>Private founding-cohort Discord</li>
+            <li>Founder recognition</li>
+            <li>200 seat cap — sells first</li>
+          </ul>
+        </div>
+        <!-- TODO: operator — swap #support for the Founding 200 Polar checkout URL once the SKU exists -->
+        <a class="btn btn-accent" href="#support">Claim a Founding 200 seat</a>
+      </div>
+
       <div class="price-card">
         <h3>Free</h3>
         <div class="price">$0 <small>forever</small></div>
         <p>For everyone who wants local private AI without a subscription.</p>
         <ul>
-          <li>Outlier Nano</li>
-          <li>Outlier Lite</li>
+          <li>Nano (4B) + Lite (9B)</li>
           <li>Local chat + sessions</li>
+          <li>Model picker</li>
           <li>No account required</li>
           <li>No token bill</li>
         </ul>
@@ -1037,11 +1094,11 @@
         <div class="price">$149 <small>once</small></div>
         <p>One payment for the mid tiers. Yours to keep — no recurring bill.</p>
         <ul>
-          <li>Free tiers + Quick, Core, Code, Vision</li>
-          <li>Agent workflows + advanced modes</li>
-          <li>Local/private by default</li>
-          <li>No Plus 397B (Pro or Founders adds it)</li>
-          <li>One-time, no subscription</li>
+          <li>Free + Quick, Core, Code, Vision</li>
+          <li>Memory + projects + web research</li>
+          <li>MCP + Code Agent v2 + vision input</li>
+          <li>API server + long context to 32K</li>
+          <li>One-time — Plus 397B needs Pro</li>
         </ul>
         <a class="btn btn-ghost" href="#support">Get Standard</a>
       </div>
@@ -1051,27 +1108,28 @@
         <div class="price">$30 <small>/ month</small></div>
         <p>The only tier with Plus 397B. $249/yr saves $111 vs monthly.</p>
         <ul>
-          <li>Everything in Standard + Plus 397B</li>
-          <li>Monthly ($30) or yearly ($249)</li>
-          <li>Local/private by default</li>
-          <li>No API token caps from Outlier</li>
-          <li>Future Pro model releases included</li>
+          <li>Standard + Plus 397B + Marathon mode</li>
+          <li>Compare/blend modes + Computer use</li>
+          <li>Deep Research v3 + long context to 128K</li>
+          <li>First access to new models</li>
+          <li>$30/mo or $249/yr</li>
         </ul>
         <a class="btn btn-green" href="https://buy.polar.sh/polar_cl_RvmkI5ZFwi5BYFQMgdYHHRk3b8rxOrMpTpZB61xkXuT" target="_blank">Get Pro</a>
       </div>
 
+      <!-- PRICING-V3 founders 500 is now the secondary lifetime card -->
       <div class="price-card">
-        <h3>Founders</h3>
-        <div class="price">$200 <small>once</small></div>
-        <p>Pro forever. 500 lifetime seats. Once they're gone, recurring Pro is the only path.</p>
+        <h3>Founders 500</h3>
+        <div class="price">$200 <small>once · lifetime Pro</small></div>
+        <p>Opens after Founding 200 fills. Pro forever, 500 lifetime seats. Once they're gone, recurring Pro is the only path.</p>
         <ul>
-          <li>Pro tier (everything + Plus 397B), for life</li>
+          <li>Pro forever — everything + Plus 397B</li>
+          <li>All future model releases</li>
           <li>Founder recognition + early access</li>
-          <li>Early builds and build logs</li>
-          <li>Directly funds model + agent work</li>
-          <li>500 seat cap — limited cohort</li>
+          <li>Early builds + build logs</li>
+          <li>500 seat cap — opens after Founding 200</li>
         </ul>
-        <a class="btn btn-accent" href="https://buy.polar.sh/polar_cl_mJfYZsEpEMDcYrgxzvTdnahSeSQNq1UYLqV0l08CUhW" target="_blank">Become a Founder</a>
+        <a class="btn btn-ghost" href="https://buy.polar.sh/polar_cl_mJfYZsEpEMDcYrgxzvTdnahSeSQNq1UYLqV0l08CUhW" target="_blank">Become a Founder</a>
       </div>
     </div>
   </div>
@@ -1678,6 +1736,24 @@
       document.querySelector('.nav-toggle').classList.remove('active');
     }
   });
+</script>
+
+<!-- PRICING-V3 founding 200 live seat counter — degrades to "200 seats" if data/seats.json is missing -->
+<script>
+  (function () {
+    var els = document.querySelectorAll('[data-seat-counter]');
+    if (!els.length) return;
+    var CAP = 200;
+    fetch('data/seats.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error('seats unavailable'); return r.json(); })
+      .then(function (d) {
+        var sold = (d && typeof d.founding_200_sold === 'number') ? d.founding_200_sold : 0;
+        var left = Math.max(0, CAP - sold);
+        var label = left === 0 ? 'founding 200 sold out' : left + ' of ' + CAP + ' seats left';
+        els.forEach(function (el) { el.textContent = label; });
+      })
+      .catch(function () { /* leave the static "200 seats" fallback in place */ });
+  })();
 </script>
 
 </body>
