@@ -114,7 +114,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Computer use = AI sees screenshots + clicks/types via macOS Accessibility.</li>
-        <li><strong>Vision 35B</strong> handles screen perception locally (8 tok/s, ~3.5 GB OS RSS).</li>
+        <li><strong>Vision 35B</strong> handles screen perception locally on a 24 GB+ Mac (~16 tok/s on the V9 engine).</li>
         <li>Approval gate on every action by default; can scope-grant for an entire workflow.</li>
         <li>Local trades visual reasoning quality vs cloud for everything-stays-on-screen privacy.</li>
       </ul>
@@ -132,7 +132,7 @@
     <p>None of those three pieces requires a network call. The screenshot is captured locally, the model runs locally, the actions execute locally.</p>
 
     <h2>What Vision 35B sees and decides</h2>
-    <p>Vision 35B is a 35-billion-parameter Mixture-of-Experts model with an image encoder. On a 16 GB MacBook Air, it runs via V10 streaming at about 8 tok/s with ~3.5 GB peak OS-level RSS. On a 64 GB Mac Studio it runs in capacity mode noticeably faster.</p>
+    <p>Vision 35B is a 35-billion-parameter Mixture-of-Experts model (3.6B active per token) with an image encoder. It needs a 24 GB+ Mac and runs on the V9 paged engine at roughly 16 tok/s. On a 64 GB Mac Studio there's ample headroom for image-heavy sessions.</p>
     <p>For computer-use tasks the model is asked: "Here's a screenshot of my desktop. The user wants to find the export-to-PDF button in this app. Where should I click?" The model returns an annotated answer with rough coordinates or a description of the UI element. The Outlier agent then either clicks, asks for confirmation, or hands control back to you.</p>
 
     <h2>Where the local version trails</h2>

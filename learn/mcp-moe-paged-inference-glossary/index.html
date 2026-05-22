@@ -126,10 +126,10 @@
     <p>An open standard (introduced by Anthropic in 2024) for connecting AI agents to external tools. An MCP server exposes a list of callable functions (read file, query database, send Slack message) plus a schema. An MCP client (the agent app) discovers them and calls them when the model produces a tool call. The point: tools become portable across agent apps. The same filesystem-MCP works in Outlier, Claude Desktop, Continue.dev, and others.</p>
 
     <h2>MoE — Mixture of Experts</h2>
-    <p>A neural network architecture where each layer contains many "expert" sub-networks plus a router. For each token, the router picks <em>k</em> experts (often 8 of 128) to activate; the rest sit idle. Total parameter count is the sum of all experts; active parameters per token is just the <em>k</em> chosen. Qwen3.5-397B-A17B is MoE: 397B total, 17B active per token.</p>
+    <p>A neural network architecture where each layer contains many "expert" sub-networks plus a router. For each token, the router picks <em>k</em> experts (for example, 10 of 512 in Qwen3.5-397B) to activate; the rest sit idle. Total parameter count is the sum of all experts; active parameters per token is just the <em>k</em> chosen. Qwen3.5-397B-A17B is MoE: 397B total, 17B active per token.</p>
 
     <h2>Paged inference</h2>
-    <p>Running a model whose weights are bigger than RAM by keeping only the actively-used parts resident and reading the rest from SSD on demand. Most useful for MoE models because only a small fraction of weights are needed per token. Outlier's V10 streaming engine implements paged inference for Plus 397B on 64 GB Macs.</p>
+    <p>Running a model whose weights are bigger than RAM by keeping only the actively-used parts resident and reading the rest from SSD on demand. Most useful for MoE models because only a small fraction of weights are needed per token. Outlier's V9 paged engine implements paged inference for Plus 397B on 64 GB Macs.</p>
 
     <h2>MLX</h2>
     <p>Apple's array framework for ML, equivalent to PyTorch / NumPy but optimized for Apple Silicon's unified memory and Metal GPU. Models distributed in "MLX 4-bit" format are quantized for MLX's matmul kernels. All Outlier tiers ship in MLX 4-bit.</p>
@@ -144,7 +144,7 @@
     <p>The cache of key/value tensors from attention layers, kept across generated tokens so each new token's attention doesn't have to re-read every prior token. Memory cost grows with context length. For long contexts the KV cache can be larger than the model itself.</p>
 
     <h2>Tok/s (tokens per second)</h2>
-    <p>The speed metric for inference. Decode tok/s = how many output tokens the model generates per second after the initial prompt prefill. Outlier Core 27B = ~22 tok/s on M1 Ultra; Plus 397B in V10 streaming = ~2.9 tok/s.</p>
+    <p>The speed metric for inference. Decode tok/s = how many output tokens the model generates per second after the initial prompt prefill. Outlier Core 27B = ~22 tok/s on M1 Ultra; Plus 397B in V9 paged inference = ~2.1 tok/s.</p>
 
     <h2>TTFT — time to first token</h2>
     <p>How long after you hit send before the first token of the response appears. Dominated by prefill (processing the prompt context). For long prompts, TTFT can be several seconds even on fast models. The prefill heartbeat feature in Outlier surfaces this so the UI doesn't go silent.</p>

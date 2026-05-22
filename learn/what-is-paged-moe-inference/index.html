@@ -87,7 +87,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is a paged MoE inference engine", "item": "https://outlier.host/learn/what-is-paged-moe-inference/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is paged MoE inference?", "acceptedAnswer": {"@type": "Answer", "text": "Running a Mixture-of-Experts model by keeping active experts in RAM and streaming the rest from SSD on demand, similar to how an OS pages virtual memory."}}, {"@type": "Question", "name": "Why does paging only work for MoE models?", "acceptedAnswer": {"@type": "Answer", "text": "Because MoE activates just a few experts per token, so most weights can stay on disk. Dense models need all weights every token and can't be paged this way."}}, {"@type": "Question", "name": "How fast is paged MoE inference?", "acceptedAnswer": {"@type": "Answer", "text": "On a 64 GB Mac, Outlier's V10 engine runs Plus 397B at about 2.9 tok/s with roughly 13 GB peak RAM."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is paged MoE inference?", "acceptedAnswer": {"@type": "Answer", "text": "Running a Mixture-of-Experts model by keeping active experts in RAM and streaming the rest from SSD on demand, similar to how an OS pages virtual memory."}}, {"@type": "Question", "name": "Why does paging only work for MoE models?", "acceptedAnswer": {"@type": "Answer", "text": "Because MoE activates just a few experts per token, so most weights can stay on disk. Dense models need all weights every token and can't be paged this way."}}, {"@type": "Question", "name": "How fast is paged MoE inference?", "acceptedAnswer": {"@type": "Answer", "text": "On a 64 GB Mac, Outlier's V10 engine runs Plus 397B at about 2.1 tok/s with roughly 11 GB peak RAM."}}]}
   </script>
 </head>
 <body>
@@ -113,10 +113,10 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>MoE = only <em>k</em> of N experts active per token (e.g. 8 of 128 in Qwen3.5-397B-A17B).</li>
+        <li>MoE = only <em>k</em> of N experts active per token (e.g. 10 of 512 in Qwen3.5-397B-A17B).</li>
         <li>Paged inference keeps active experts in RAM, streams the rest from SSD.</li>
         <li>Structurally similar to OS virtual memory: bounded working set, on-demand paging.</li>
-        <li>Outlier's V10 engine runs Plus 397B at <strong>~13 GB RAM, ~2.9 tok/s</strong> on a 64 GB Mac.</li>
+        <li>Outlier's V10 engine runs Plus 397B at <strong>~11 GB RAM, ~2.1 tok/s</strong> on a 64 GB Mac.</li>
       </ul>
     </div>
 
@@ -148,13 +148,13 @@
     <p>The honest performance story: cache hits are fast (it's just a memory access); cache misses are SSD-bandwidth-bound. On a modern Apple Silicon SSD that sustains 5–15 GB/s, a single expert read is a few tens of milliseconds. Over many tokens, hot experts stay cached and the average cost amortizes down.</p>
 
     <h2>The numbers, in practice</h2>
-    <p>Outlier's V10 streaming engine running Qwen3.5-397B-A17B on a 64 GB Mac Studio M1 Ultra:</p>
+    <p>Outlier's V9 paged engine running Qwen3.5-397B-A17B on a 64 GB Mac Studio M1 Ultra:</p>
     <ul>
-      <li>Peak OS-level RSS: about <strong>13 GB</strong> (capacity engine for the same model would need ~209 GB plus headroom)</li>
-      <li>Decode speed: about <strong>2.9 tokens per second</strong></li>
+      <li>Peak OS-level RSS: about <strong>11 GB</strong> (capacity engine for the same model would need ~209 GB plus headroom)</li>
+      <li>Decode speed: about <strong>2.1 tokens per second</strong></li>
       <li>SSD read pattern: concurrent <code>pread</code> with queue depth 24, sustained</li>
     </ul>
-    <p>2.9 tok/s is real. It's slower than the in-RAM capacity engine (which would need 192+ GB of RAM and isn't an option on most consumer hardware). It's faster than not being able to run the model at all.</p>
+    <p>2.1 tok/s is real. It's slower than the in-RAM capacity engine (which would need 192+ GB of RAM and isn't an option on most consumer hardware). It's faster than not being able to run the model at all.</p>
 
     <h2>Where paged MoE wins and loses</h2>
     <p>Wins:</p>
@@ -185,7 +185,7 @@
       </div>
       <div class="faq-item">
         <h3>How fast is paged MoE inference?</h3>
-        <p>On a 64 GB Mac, Outlier's V10 engine runs Plus 397B at about 2.9 tok/s with roughly 13 GB peak RAM.</p>
+        <p>On a 64 GB Mac, Outlier's V10 engine runs Plus 397B at about 2.1 tok/s with roughly 11 GB peak RAM.</p>
       </div>
     </div>
 
