@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Streaming engine benchmarks (Plus + Vision) | Outlier</title>
-  <meta name="description" content="Raw tok/s and memory data for Outlier's paged-MoE streaming engines on Plus 397B and Vision 35B, with the V11-to-V10 transition and 5-run methodology.">
+  <meta name="description" content="Raw tok/s and memory data for Outlier's MoE engines on Plus 397B and Vision 35B. Why both streaming engines (V10, V11) were retired in favor of V9 paged. 5-run methodology.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/data/v11-streaming-engine-benchmarks/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon">
-  <meta property="og:description" content="Raw tok/s data for Outlier's V11 (retired) and V10 (current) streaming engines.">
+  <meta property="og:description" content="Raw tok/s data for Outlier's V9 paged engine (current) and the retired V10/V11 streaming engines.">
   <meta property="og:url" content="https://outlier.host/data/v11-streaming-engine-benchmarks/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -19,7 +19,7 @@
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Streaming engine benchmarks — Plus + Vision tok/s">
-  <meta name="twitter:description" content="V11 + V10 raw data, methodology, why V11 was retired.">
+  <meta name="twitter:description" content="Why both streaming engines were retired for V9 paged. Raw data + methodology.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,13 +80,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Raw decode tok/s and OS-level RSS data for Outlier's V11 (retired) and V10 (current) paged-MoE streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-05-20","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"https://creativecommons.org/licenses/by/4.0/"}
+  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Decode tok/s, RSS, and Metal-wired-memory data for Outlier's V9 paged engine (current) and the retired V10/V11 streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-05-20","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"https://creativecommons.org/licenses/by/4.0/"}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon", "item": "https://outlier.host/data/v11-streaming-engine-benchmarks/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What's Outlier's current streaming engine?", "acceptedAnswer": {"@type": "Answer", "text": "V10. It runs Plus 397B at about 2.9 tok/s with 13 GB peak RAM, and Vision 35B at about 8 tok/s with 3.5 GB."}}, {"@type": "Question", "name": "Why was V11 retired?", "acceptedAnswer": {"@type": "Answer", "text": "Its 3% tok/s edge on Plus vanished under multi-turn load, where its cache pinned more memory than the V9 baseline. V10 held headroom more consistently."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What engine does Outlier use for Plus now?", "acceptedAnswer": {"@type": "Answer", "text": "V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at about 2.1 tok/s with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired."}}, {"@type": "Question", "name": "Why were the streaming engines retired?", "acceptedAnswer": {"@type": "Answer", "text": "V10 and V11 per-token expert streaming committed 57 to 58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30 to 40 percent tok/s gain. V9 paged uses 3.6 GB Wired (15x less). On a footprint-first tier, that trade favors V9."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
   </script>
 </head>
 <body>
@@ -112,18 +112,18 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>V10 (current):</strong> Plus 397B at <strong>~2.9 tok/s, 13 GB peak RSS</strong> on 64 GB Mac.</li>
-        <li><strong>V10 (current):</strong> Vision 35B at <strong>~8 tok/s, 3.5 GB peak RSS</strong>.</li>
-        <li><strong>V11 (retired May 2026):</strong> 7–10% higher peak tok/s than V10 but pinned 30–55 GB of Metal-wired memory, causing multi-turn regressions.</li>
-        <li>Reason V10 won: V11's LRU cache held experts too aggressively; under multi-turn load peak RSS exceeded V9 baseline.</li>
+        <li><strong>Current engine (V9 paged):</strong> Plus 397B at <strong>~2.1 tok/s, ~11 GB RSS, 3.6 GB Wired Memory</strong> on a 64 GB Mac.</li>
+        <li><strong>Both streaming engines retired:</strong> V11 in v1.11.71, V10 in v1.11.73.</li>
+        <li><strong>Why:</strong> V10/V11 per-token streaming committed <strong>57–58 GB of Metal-wired memory</strong> during prefill — enough to crash a 32 GB Mac — for only a ~30–40% tok/s gain.</li>
+        <li>V9 paged (K=20 hot experts + 8 GB LRU) uses <strong>15× less wired memory</strong> at 3.6 GB. On a footprint-first tier, that's the right trade.</li>
       </ul>
     </div>
 
     <div class="notice">
-      <strong>Engine version note:</strong> V11 streaming was removed in Outlier v1.11.71 (2026-05-19) after an M1 Ultra empirical sweep found its 7–10% raw-tok/s advantage was offset by 30–55 GB Metal-wired memory pressure on multi-turn workloads. The current shipping engine is V10. Both engines' numbers are published here for transparency; the V10 numbers are what new installs use.
+      <strong>Engine version note:</strong> Both streaming engines have been retired — V11 in v1.11.71 and V10 in v1.11.73 — after M1 Ultra sweeps found their per-token expert streaming committed 57–58 GB of Metal-wired memory. The current shipping engine for Plus (and the Vision default) is V9 paged inference. The retired engines' numbers are kept here for transparency; new installs use V9.
     </div>
 
-    <p class="lead">Outlier's paged-MoE streaming engines (V9, V10, V11) all use the same architectural idea: keep active experts in unified memory, stream cold experts from SSD. They differ in how aggressively they cache, whether they use an LRU, and how they balance peak tok/s against multi-turn memory pressure. This page publishes the raw numbers.</p>
+    <p class="lead">Outlier's MoE engines (V9 paged, V10 streaming, V11 hybrid) share one idea: keep active experts in unified memory, read cold experts from disk. They differ in how they cache — and that difference decided which one ships. The streaming variants were retired in favor of V9 paged because their per-token streaming pattern committed far more Metal-wired memory. This page publishes the raw comparison.</p>
 
     <h2>Methodology</h2>
     <table>
@@ -134,31 +134,31 @@
         <tr><th>Aggregation</th><td>5-run mean per configuration, fresh process per run (no warm-cache bias)</td></tr>
         <tr><th>Soak runs</th><td>50-turn multi-turn workloads on Plus; 20-turn on Vision</td></tr>
         <tr><th>RAM measurement</th><td>OS-level RSS via <code>ps -o rss=</code>, sampled per token</td></tr>
-        <tr><th>Date range</th><td>2026-05-07 (V10 results) to 2026-05-09 (V11 soak verdict), 2026-05-19 (V11 retirement)</td></tr>
+        <tr><th>Date range</th><td>2026-05-07 (V10 results), 2026-05-09 (V11 soak verdict), 2026-05-19 (V11 retired, v1.11.71), v1.11.73 (V10 retired)</td></tr>
       </tbody>
     </table>
 
     <h2>Plus 397B-A17B — engine comparison</h2>
     <table>
-      <thead><tr><th>Engine</th><th>Peak gen tok/s (5-run)</th><th>Peak OS RSS (smoke)</th><th>Peak OS RSS (50-turn soak)</th><th>Status</th></tr></thead>
+      <thead><tr><th>Engine</th><th>tok/s</th><th>RSS peak</th><th>Wired Memory peak</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>V9 capacity</td><td>1.62</td><td>13.75 GB</td><td>13.75 GB</td><td>fallback, all-resident</td></tr>
-        <tr><td>V10 streaming K=4</td><td>2.91</td><td>13.2 GB</td><td>13.2–14 GB</td><td><strong>current default for 64 GB Macs</strong></td></tr>
-        <tr><td>V11 hybrid LRU (retired)</td><td>3.00</td><td>7.34 GB</td><td>14.34 GB</td><td>removed v1.11.71</td></tr>
+        <tr><td>V9 paged K=20</td><td>2.1</td><td>11 GB</td><td>3.6 GB</td><td><strong>current — shipping default</strong></td></tr>
+        <tr><td>V10 streaming K=4</td><td>2.9</td><td>13 GB</td><td>57 GB</td><td>retired v1.11.73</td></tr>
+        <tr><td>V11 hybrid LRU</td><td>3.0</td><td>13 GB</td><td>58 GB</td><td>retired v1.11.71</td></tr>
       </tbody>
     </table>
-    <p>The V11 retirement decision: <strong>3% raw-tok/s advantage</strong> over V10 evaporated under multi-turn load because the LRU pinned Metal-wired memory aggressively (50-turn peak 14.34 GB exceeded V9 baseline of 13.75 GB). V10's simpler streaming model maintained 13 GB headroom consistently.</p>
+    <p>The decisive column is Wired Memory. V10 and V11's per-token expert streaming committed 57–58 GB of Metal command-buffer memory during prefill — enough to crash a 32 GB Mac on the first generation — to buy a ~30–40% tok/s gain over V9. V9 paged holds 3.6 GB Wired (15× less) at 2.1 tok/s. For a tier whose entire purpose is fitting a 209 GB model on a small Mac, footprint beats speed, so V9 ships.</p>
 
     <h2>Vision 35B-A3B — engine comparison</h2>
     <table>
-      <thead><tr><th>Engine</th><th>Peak gen tok/s (5-run)</th><th>Peak OS RSS (smoke)</th><th>Peak OS RSS (20-turn soak)</th><th>Status</th></tr></thead>
+      <thead><tr><th>Engine</th><th>tok/s</th><th>RSS peak</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>V9 capacity</td><td>16.31</td><td>~18 GB</td><td>~18 GB</td><td>fallback, requires 32 GB+</td></tr>
-        <tr><td>V10 streaming K=4</td><td>~8</td><td>3.5 GB</td><td>3.5–4 GB</td><td><strong>current default</strong></td></tr>
-        <tr><td>V11 hybrid (retired)</td><td>10.92</td><td>1.60 GB</td><td>3.16 GB</td><td>removed v1.11.71</td></tr>
+        <tr><td>V9 paged</td><td>16.31</td><td>~18 GB</td><td><strong>current default (24 GB+ Macs)</strong></td></tr>
+        <tr><td>V10 streaming K=4</td><td>6.57</td><td>~3.5 GB</td><td>opt-in (lower RAM, slower)</td></tr>
+        <tr><td>V11 hybrid LRU</td><td>10.92</td><td>1.60 GB</td><td>retired v1.11.71</td></tr>
       </tbody>
     </table>
-    <p>Vision had a different tradeoff: V11 was genuinely faster (10.92 vs ~8 tok/s) and lower-memory in single-turn smoke. The retirement still made sense because (a) running V10 across Plus and Vision uniformly is simpler than maintaining two streaming engines, and (b) V11 had ongoing reliability issues uncovered in extended soak runs.</p>
+    <p>Vision keeps a V10 opt-in for users on tighter RAM (lower footprint, ~6.6 tok/s), but the default is V9 at 16.31 tok/s on 24 GB+ Macs. The earlier 16 GB-MacBook-Air result depended on V11's LRU specifically; with V11 retired, Vision's practical floor is 24 GB.</p>
 
     <h2>Soak verdict — what passed and what didn't</h2>
     <p>From the 2026-05-09 soak verdict on V11 across 9 cycles:</p>
@@ -172,22 +172,22 @@
 
     <h2>How to reproduce</h2>
     <ol>
-      <li>Install Outlier v1.11.71+ (Pro tier or Founders for Plus 397B): <a href="https://outlier.host/">outlier.host</a></li>
-      <li>Open Settings → Engine Mode → confirm <code>v10_streaming</code> for Plus.</li>
+      <li>Install Outlier (Pro tier or Founders for Plus 397B): <a href="https://outlier.host/">outlier.host</a></li>
+      <li>Open Settings → Engine Mode → Plus runs on Capacity (V9 paged). Any stored V10/V11 preference auto-migrates to Capacity.</li>
       <li>Run a multi-prompt set; record tok/s from the response footer.</li>
       <li>Sample OS RSS with <code>ps -o pid,rss,command -p $(pgrep -f outlier-cli)</code> during generation.</li>
     </ol>
-    <p>For V11 reproduction (historical): the source-level V11 implementation lives in repo history at commit <code>525298f^</code> (one commit before v1.11.71). Not shipped in current DMGs.</p>
+    <p>For V10/V11 reproduction (historical): the source-level implementations live in repo history before commit <code>525298f</code> (v1.11.71) and the v1.11.73 V10 removal. Neither ships in current DMGs.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <div class="faq-item">
-        <h3>What's Outlier's current streaming engine?</h3>
-        <p>V10. It runs Plus 397B at about 2.9 tok/s with 13 GB peak RAM, and Vision 35B at about 8 tok/s with 3.5 GB.</p>
+        <h3>What engine does Outlier use for Plus now?</h3>
+        <p>V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at about 2.1 tok/s with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired.</p>
       </div>
       <div class="faq-item">
-        <h3>Why was V11 retired?</h3>
-        <p>Its 3% tok/s edge on Plus vanished under multi-turn load, where its cache pinned more memory than the V9 baseline. V10 held headroom more consistently.</p>
+        <h3>Why were the streaming engines retired?</h3>
+        <p>V10 and V11 per-token expert streaming committed 57–58 GB of Metal-wired memory during prefill — enough to crash a 32 GB Mac — for only a 30–40% tok/s gain. V9 paged uses 3.6 GB Wired (15× less), so on a footprint-first tier it wins.</p>
       </div>
       <div class="faq-item">
         <h3>How were the numbers measured?</h3>
@@ -197,7 +197,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B via V10 streaming on 64 GB Macs.</p>
+      <p>Free Nano + Lite. Standard $149 once. Pro $30/mo or $249/yr for Plus 397B on a 64 GB Mac.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=data-v11-streaming-engine-benchmarks">Download for Mac</a>
     </div>
 

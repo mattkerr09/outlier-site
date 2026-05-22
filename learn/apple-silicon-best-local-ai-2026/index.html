@@ -116,7 +116,7 @@
         <li>Apple Silicon's <strong>unified memory architecture</strong> lets the GPU operate directly on weights without PCIe copy overhead.</li>
         <li>On-package NVMe SSDs sustain <strong>5–15 GB/s sequential read</strong>, enabling paged expert streaming for MoE models bigger than RAM.</li>
         <li>Metal-optimized MLX kernels for 4-bit matmul make consumer Macs competitive with NVIDIA-equipped PCs at fraction of the power budget.</li>
-        <li>Result: a 397B-parameter MoE model runs on a <strong>64 GB Mac Studio at ~2.9 tok/s</strong> — impossible on a comparable PC build without 4× the RAM.</li>
+        <li>Result: a 397B-parameter MoE model runs on a <strong>64 GB Mac Studio at ~2.1 tok/s</strong> — impossible on a comparable PC build without 4× the RAM.</li>
       </ul>
     </div>
 
@@ -136,7 +136,7 @@
       <li>Nano 4B: 71.7 tok/s</li>
       <li>Lite 9B: 53.4 tok/s</li>
       <li>Core 27B: 20.7 tok/s</li>
-      <li>Plus 397B (V10 streaming): 2.9 tok/s</li>
+      <li>Plus 397B (V9 paged inference): 2.1 tok/s</li>
     </ul>
     <p>The Nano and Lite numbers are in roughly the same range you'd get on a desktop NVIDIA card at similar precision. The Plus 397B number — running on the same 64 GB Mac that costs about $3,500 — is not achievable on any consumer NVIDIA card without spending an order of magnitude more on RAM and storage.</p>
 
