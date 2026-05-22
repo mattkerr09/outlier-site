@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to run a 397B-parameter model on a 64 GB Mac Studio | Outlier</title>
+  <title>Run a 397B model on a 64 GB Mac Studio | Outlier</title>
   <meta name="description" content="Qwen3.5-397B-A17B normally needs hundreds of GB of RAM. Here's how paged expert streaming runs it on a 64 GB Mac Studio at ~2.9 tokens/sec.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="Qwen3.5-397B-A17B normally needs hundreds of GB of RAM. Here's how paged expert streaming runs it on a 64 GB Mac Studio.">
   <meta property="og:url" content="https://outlier.host/run/run-397b-on-64gb-mac-studio/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to run a 397B-parameter model on a 64 GB Mac Studio">
   <meta name="twitter:description" content="The architecture, the trade-offs, and the actual numbers from Outlier's V10 streaming engine.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"How to run a 397B-parameter model on a 64 GB Mac Studio","description":"Qwen3.5-397B-A17B normally needs hundreds of GB of RAM. Here's how paged expert streaming runs it on a 64 GB Mac Studio at ~2.9 tokens/sec.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/run-397b-on-64gb-mac-studio/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run a 397B-parameter model on a 64 GB Mac Studio", "item": "https://outlier.host/run/run-397b-on-64gb-mac-studio/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you really run a 397B model on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Outlier's V10 streaming engine runs Qwen3.5-397B-A17B on a 64 GB Mac Studio at about 2.9 tokens per second, using roughly 13 GB of peak memory by streaming expert weights from the SSD on demand."}}, {"@type": "Question", "name": "How much disk space does the 397B model need?", "acceptedAnswer": {"@type": "Answer", "text": "About 209 GB for the MLX 4-bit weights. They download once, then inference streams from those local files with no further network use."}}, {"@type": "Question", "name": "Why does a 397B MoE model fit when a 70B dense model might not?", "acceptedAnswer": {"@type": "Answer", "text": "Because a Mixture-of-Experts model activates only a fraction of its parameters per token (17B of 397B here), so the engine keeps active experts in RAM and pages the rest from disk."}}]}
   </script>
 </head>
 <body>
@@ -137,6 +151,22 @@
 
     <h2>When to use it</h2>
     <p>Plus 397B on V10 streaming makes sense when you need the strongest local reasoning the lineup offers and you can wait. Long-form analysis, code review of large diffs, architectural conversations — tasks where a few minutes of generation produces something worth reading. For interactive chat where you want a response in seconds, smaller tiers like Core 27B (20.7 tok/s on M1 Ultra) or Lite 9B (53.4 tok/s) are the right pick. Outlier ships all of them and lets you swap mid-conversation.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can you really run a 397B model on a 64 GB Mac?</h3>
+        <p>Yes. Outlier's V10 streaming engine runs Qwen3.5-397B-A17B on a 64 GB Mac Studio at about 2.9 tokens per second, using roughly 13 GB of peak memory by streaming expert weights from the SSD on demand.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How much disk space does the 397B model need?</h3>
+        <p>About 209 GB for the MLX 4-bit weights. They download once, then inference streams from those local files with no further network use.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does a 397B MoE model fit when a 70B dense model might not?</h3>
+        <p>Because a Mixture-of-Experts model activates only a fraction of its parameters per token (17B of 397B here), so the engine keeps active experts in RAM and pages the rest from disk.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

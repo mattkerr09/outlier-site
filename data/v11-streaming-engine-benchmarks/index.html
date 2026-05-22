@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon | Outlier</title>
-  <meta name="description" content="Raw tok/s data for Outlier's paged-MoE streaming engines. V11 (retired May 2026) and V10 (current) benchmarks for Plus 397B and Vision 35B, with 5-run methodology disclosure.">
+  <title>Streaming engine benchmarks (Plus + Vision) | Outlier</title>
+  <meta name="description" content="Raw tok/s and memory data for Outlier's paged-MoE streaming engines on Plus 397B and Vision 35B, with the V11-to-V10 transition and 5-run methodology.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/data/v11-streaming-engine-benchmarks/">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="Raw tok/s data for Outlier's V11 (retired) and V10 (current) streaming engines.">
   <meta property="og:url" content="https://outlier.host/data/v11-streaming-engine-benchmarks/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Streaming engine benchmarks — Plus + Vision tok/s">
   <meta name="twitter:description" content="V11 + V10 raw data, methodology, why V11 was retired.">
@@ -68,11 +72,21 @@
     footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Raw decode tok/s and OS-level RSS data for Outlier's V11 (retired) and V10 (current) paged-MoE streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-05-20","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"https://creativecommons.org/licenses/by/4.0/"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon", "item": "https://outlier.host/data/v11-streaming-engine-benchmarks/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What's Outlier's current streaming engine?", "acceptedAnswer": {"@type": "Answer", "text": "V10. It runs Plus 397B at about 2.9 tok/s with 13 GB peak RAM, and Vision 35B at about 8 tok/s with 3.5 GB."}}, {"@type": "Question", "name": "Why was V11 retired?", "acceptedAnswer": {"@type": "Answer", "text": "Its 3% tok/s edge on Plus vanished under multi-turn load, where its cache pinned more memory than the V9 baseline. V10 held headroom more consistently."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
   </script>
 </head>
 <body>
@@ -164,6 +178,22 @@
       <li>Sample OS RSS with <code>ps -o pid,rss,command -p $(pgrep -f outlier-cli)</code> during generation.</li>
     </ol>
     <p>For V11 reproduction (historical): the source-level V11 implementation lives in repo history at commit <code>525298f^</code> (one commit before v1.11.71). Not shipped in current DMGs.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What's Outlier's current streaming engine?</h3>
+        <p>V10. It runs Plus 397B at about 2.9 tok/s with 13 GB peak RAM, and Vision 35B at about 8 tok/s with 3.5 GB.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why was V11 retired?</h3>
+        <p>Its 3% tok/s edge on Plus vanished under multi-turn load, where its cache pinned more memory than the V9 baseline. V10 held headroom more consistently.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How were the numbers measured?</h3>
+        <p>5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

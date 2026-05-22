@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Private local AI on a Mac — no cloud, no telemetry, no usage limits | Outlier</title>
+  <title>Private local AI on a Mac, no cloud | Outlier</title>
   <meta name="description" content="What 'private local AI' actually guarantees on a Mac: the data path, the telemetry surface, the usage model, and where the boundary really sits.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="What 'private local AI' actually guarantees on a Mac, and where the boundary really sits.">
   <meta property="og:url" content="https://outlier.host/run/private-local-ai-mac-no-cloud/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Private local AI on a Mac — no cloud, no telemetry, no usage limits">
   <meta name="twitter:description" content="What 'private' actually means when the model lives on your disk.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"Private local AI on a Mac — no cloud, no telemetry, no usage limits","description":"What 'private local AI' actually guarantees on a Mac: the data path, the telemetry surface, the usage model, and where the boundary really sits.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/private-local-ai-mac-no-cloud/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Private local AI on a Mac — no cloud, no telemetry, no usage limits", "item": "https://outlier.host/run/private-local-ai-mac-no-cloud/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does local AI really keep my data private?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Prompts, file contents, and chat history stay on your Mac. The simplest proof is that inference still works with wifi off."}}, {"@type": "Question", "name": "Does a local AI app ever touch the network?", "acceptedAnswer": {"@type": "Answer", "text": "Only for first-time model downloads, app updates, and any cloud connectors you explicitly enable. None of those send your prompts."}}, {"@type": "Question", "name": "What does 'no usage limits' mean here?", "acceptedAnswer": {"@type": "Answer", "text": "No vendor message cap, token cap, or rate limit. The only limit is your Mac's speed and power."}}]}
   </script>
 </head>
 <body>
@@ -139,6 +153,22 @@
     <h2>What this is worth for a developer</h2>
     <p>For someone working under any kind of data-handling policy — finance, healthcare, legal, defense, anyone with customer PII — the local guarantee changes what you can put through the tool. Code that includes real credentials, customer data in a debugging session, internal architectural docs, the contents of a private repo: all of it can sit in the chat without ever leaving the machine.</p>
     <p>For someone outside those regulated domains, "private local AI" is more about not being subject to a vendor's policy changes, model deprecations, and rate-limit surprises. Your tool keeps working tomorrow even if the cloud provider changes the rules tonight.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Does local AI really keep my data private?</h3>
+        <p>Yes. Prompts, file contents, and chat history stay on your Mac. The simplest proof is that inference still works with wifi off.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does a local AI app ever touch the network?</h3>
+        <p>Only for first-time model downloads, app updates, and any cloud connectors you explicitly enable. None of those send your prompts.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does 'no usage limits' mean here?</h3>
+        <p>No vendor message cap, token cap, or rate limit. The only limit is your Mac's speed and power.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
