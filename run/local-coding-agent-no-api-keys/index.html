@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to set up a local coding agent on macOS without API keys | Outlier</title>
+  <title>Local coding agent on macOS, no API keys | Outlier</title>
   <meta name="description" content="A coding agent that edits files, runs tests, and reads your project — no API key, no cloud, no rate limit. Setup, the MCP layer, and what it can and can't do.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="A coding agent that edits files, runs tests, and reads your project — no API key, no cloud, no rate limit.">
   <meta property="og:url" content="https://outlier.host/run/local-coding-agent-no-api-keys/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="A local coding agent without API keys, on macOS">
   <meta name="twitter:description" content="MCP, filesystem, no cloud trip.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"How to set up a local coding agent on macOS without API keys","description":"A coding agent that edits files, runs tests, and reads your project — no API key, no cloud, no rate limit.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/local-coding-agent-no-api-keys/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to set up a local coding agent on macOS without API keys", "item": "https://outlier.host/run/local-coding-agent-no-api-keys/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a coding agent run without any API key?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A local agent runs the model on your Mac, so there is no cloud API and no key to configure."}}, {"@type": "Question", "name": "What can the local agent do?", "acceptedAnswer": {"@type": "Answer", "text": "Read and write files, run shell commands, search your project, and use web search, each behind an approval gate via MCP."}}, {"@type": "Question", "name": "Which model should power the agent?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B or Code 27B for daily multi-file work (HumanEval pass@1 0.8659); Plus 397B for the hardest cases on a 64 GB Mac."}}]}
   </script>
 </head>
 <body>
@@ -142,6 +156,22 @@
       <li><strong>Research-grade reasoning.</strong> For genuinely novel problems or 50k+ token contexts, the cloud flagships still edge out. For the 95% of day-to-day coding work, Outlier scored 98.9% parity on a 54-test bench against Claude Opus.</li>
     </ul>
     <p>What you trade those gaps for: no API token bill, no rate limit, no cloud trip with your repo. For developers in regulated industries, behind corporate firewalls, or just tired of metered tools, that's usually the trade worth making.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can a coding agent run without any API key?</h3>
+        <p>Yes. A local agent runs the model on your Mac, so there is no cloud API and no key to configure.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What can the local agent do?</h3>
+        <p>Read and write files, run shell commands, search your project, and use web search, each behind an approval gate via MCP.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which model should power the agent?</h3>
+        <p>Core 27B or Code 27B for daily multi-file work (HumanEval pass@1 0.8659); Plus 397B for the hardest cases on a 64 GB Mac.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

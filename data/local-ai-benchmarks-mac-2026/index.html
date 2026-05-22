@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio | Outlier</title>
-  <meta name="description" content="Tok/s, MMLU, HumanEval, and memory footprint data for the major local-AI options on Apple Silicon in 2026. Outlier numbers measured; Ollama and LM Studio from public benchmarks.">
+  <title>Local AI benchmarks for Mac (2026) | Outlier</title>
+  <meta name="description" content="Tok/s, MMLU, HumanEval and memory data for local AI on Apple Silicon in 2026: Outlier measured, Ollama and LM Studio from public benchmarks.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="Tok/s, MMLU, HumanEval, memory footprint for major local-AI options on Apple Silicon.">
   <meta property="og:url" content="https://outlier.host/data/local-ai-benchmarks-mac-2026/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Local AI benchmarks for Mac (2026)">
   <meta name="twitter:description" content="Outlier vs Ollama vs LM Studio raw numbers.">
@@ -67,11 +71,21 @@
     footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Dataset","name":"Local AI benchmarks on Mac, 2026 — Outlier, Ollama, LM Studio","description":"Decode tok/s, MMLU, HumanEval, and memory footprint data for the major local-AI options on Apple Silicon in 2026.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-04-30","dateModified":"2026-05-20","measurementTechnique":"Outlier numbers measured on M1 Ultra; Ollama and LM Studio referenced from public benchmark posts","license":"https://creativecommons.org/licenses/by/4.0/"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio", "item": "https://outlier.host/data/local-ai-benchmarks-mac-2026/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.9 in streaming. Nano hits about 32 tok/s on an M4 Air."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "Similar tok/s on shared 7B to 27B model classes; Outlier uniquely runs MoE models bigger than RAM via streaming."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B: MMLU 0.8511, HumanEval 0.8659. Nano 4B: MMLU 0.7437, a 1.87 point gain at 3.54 sigma over its base."}}]}
   </script>
 </head>
 <body>
@@ -169,6 +183,22 @@
       <li>LM Studio: chat REPL shows tok/s in the response footer.</li>
       <li>MMLU / HumanEval: use lm-evaluation-harness with each model loaded via its native backend.</li>
     </ol>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>How fast is Outlier on a Mac?</h3>
+        <p>On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.9 in streaming. Nano hits about 32 tok/s on an M4 Air.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How does Outlier compare to Ollama and LM Studio?</h3>
+        <p>Similar tok/s on shared 7B to 27B model classes; Outlier uniquely runs MoE models bigger than RAM via streaming.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What are Outlier's accuracy numbers?</h3>
+        <p>Core 27B: MMLU 0.8511, HumanEval 0.8659. Nano 4B: MMLU 0.7437, a 1.87 point gain at 3.54 sigma over its base.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

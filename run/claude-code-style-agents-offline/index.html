@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to run Claude-Code-style agents offline on a Mac | Outlier</title>
-  <meta name="description" content="Claude Code is a coding agent that edits files and runs commands. Here's how to get the same workflow with a local model on macOS — what works, what trails, what's identical.">
+  <title>Claude-Code-style agents, offline on Mac | Outlier</title>
+  <meta name="description" content="Claude Code is a coding agent that edits files and runs commands. Here's how to get the same workflow with a local model on macOS, fully offline.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
   <link rel="canonical" href="https://outlier.host/run/claude-code-style-agents-offline/">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="Same workflow, local model, no cloud — what works, what trails.">
   <meta property="og:url" content="https://outlier.host/run/claude-code-style-agents-offline/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to run Claude-Code-style agents offline on a Mac">
   <meta name="twitter:description" content="Local coding agent with file edits, shell, project memory — no cloud.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"How to run Claude-Code-style agents offline on a Mac","description":"Claude Code is a coding agent that edits files and runs commands. Here's how to get the same workflow with a local model on macOS.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/claude-code-style-agents-offline/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Claude-Code-style agents offline on a Mac", "item": "https://outlier.host/run/claude-code-style-agents-offline/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you run a Claude-Code-style agent offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The plan, act, verify loop runs locally with a model like Core 27B plus MCP tools; no cloud connection is required."}}, {"@type": "Question", "name": "How close is the local experience to Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "The workflow shape is the same: plan, file edits, approval gates, and project context. The differences are speed and the underlying model's ceiling."}}, {"@type": "Question", "name": "What does the local version give up?", "acceptedAnswer": {"@type": "Answer", "text": "Mainly speed (about 4x slower end to end) and the very top of research-grade reasoning. On common coding tasks the bench parity is 98.9%."}}]}
   </script>
 </head>
 <body>
@@ -151,6 +165,22 @@
       <li><strong>Tier swap is free.</strong> Claude doesn't physically swap models between requests. Outlier's cold-load on a tier change is ~74s.</li>
     </ul>
     <p>On the parity bench (54 head-to-head tests against Claude Opus 4.7 in mid-2026), Outlier scored 98.9% overall and 100% on the 9 hardest additions (chess engine, raft/paxos, ZK proofs, needle-in-context, etc.). For the 95% of coding work where output quality matters more than speed, the local version closes the gap.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can you run a Claude-Code-style agent offline?</h3>
+        <p>Yes. The plan, act, verify loop runs locally with a model like Core 27B plus MCP tools; no cloud connection is required.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How close is the local experience to Claude Code?</h3>
+        <p>The workflow shape is the same: plan, file edits, approval gates, and project context. The differences are speed and the underlying model's ceiling.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does the local version give up?</h3>
+        <p>Mainly speed (about 4x slower end to end) and the very top of research-grade reasoning. On common coding tasks the bench parity is 98.9%.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

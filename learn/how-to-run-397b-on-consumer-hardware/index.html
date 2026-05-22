@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How a 397B model runs on consumer hardware — the architecture | Outlier</title>
+  <title>How a 397B model runs on consumer hardware | Outlier</title>
   <meta name="description" content="Four design choices that put a 397-billion-parameter MoE model on a 64 GB Mac: MoE routing, 4-bit quantization, expert streaming, and Apple unified memory.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="The four design choices that put a 397B MoE on a 64 GB Mac.">
   <meta property="og:url" content="https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How a 397B model runs on consumer hardware">
   <meta name="twitter:description" content="The architecture, layer by layer.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"How a 397B model runs on consumer hardware — the architecture","description":"Four design choices that put a 397-billion-parameter MoE model on a 64 GB Mac.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How a 397B model runs on consumer hardware — the architecture", "item": "https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does a 397B model fit on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Four stacked choices: MoE routing, 4-bit quantization, paged expert streaming, and Apple's unified memory. Each cuts the requirement by roughly an order of magnitude."}}, {"@type": "Question", "name": "Why does Apple Silicon help specifically?", "acceptedAnswer": {"@type": "Answer", "text": "Unified memory means SSD-streamed expert weights land directly in GPU-accessible memory with no PCIe copy step, which a PC build would need."}}, {"@type": "Question", "name": "Is it as fast as the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. About 2.9 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill."}}]}
   </script>
 </head>
 <body>
@@ -140,6 +154,22 @@
 
     <h2>The honest tradeoff</h2>
     <p>This setup is slower than the same model in the cloud on a server with 8 H100 GPUs. Plus 397B at 2.9 tok/s locally vs ~50–80 tok/s on a dedicated server is a real gap. What you trade speed for: no API key, no rate limit, no cloud trip with your code, no recurring bill after the model is on disk. For long-form coding, architecture review, or any task where you can wait, the trade is often worth it.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>How does a 397B model fit on a 64 GB Mac?</h3>
+        <p>Four stacked choices: MoE routing, 4-bit quantization, paged expert streaming, and Apple's unified memory. Each cuts the requirement by roughly an order of magnitude.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does Apple Silicon help specifically?</h3>
+        <p>Unified memory means SSD-streamed expert weights land directly in GPU-accessible memory with no PCIe copy step, which a PC build would need.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is it as fast as the cloud?</h3>
+        <p>No. About 2.9 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

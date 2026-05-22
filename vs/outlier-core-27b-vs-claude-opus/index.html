@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head | Outlier</title>
+  <title>Outlier Core 27B vs Claude Opus benchmark | Outlier</title>
   <meta name="description" content="Same prompts, two models, both apps. 54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks. The full result.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks.">
   <meta property="og:url" content="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Outlier Core 27B vs Claude Opus — 54-prompt head-to-head">
   <meta name="twitter:description" content="The full bench result.">
@@ -70,11 +74,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head","description":"Same prompts, two models, both apps. 54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head", "item": "https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How did Outlier Core 27B score against Claude Opus?", "acceptedAnswer": {"@type": "Answer", "text": "98.9% overall on a 54-prompt benchmark, with all 9 hardest additions (chess engine, raft/paxos, ZK proofs, and more) at 100%."}}, {"@type": "Question", "name": "Is the benchmark reproducible?", "acceptedAnswer": {"@type": "Answer", "text": "The raw side-by-side outputs and the scoring rubric are saved to disk. Outputs are non-deterministic so re-runs vary, but the rubric keeps comparison stable."}}, {"@type": "Question", "name": "Where does Claude still win?", "acceptedAnswer": {"@type": "Answer", "text": "Speed (about 4x), 50k+ token contexts, and vision quality, which wasn't rigorously bench-tested."}}]}
   </script>
 </head>
 <body>
@@ -153,6 +167,22 @@
 
     <h2>Reproducibility</h2>
     <p>The raw side-by-side outputs are on the Outlier dev machine at <code>/private/tmp/parity/*_claude.txt</code> and <code>*_outlier.{txt,sse}</code>. The grading rubric is at <code>parity_bench/outputs/last_score.json</code>. Numbers in this article all trace to those artifacts.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>How did Outlier Core 27B score against Claude Opus?</h3>
+        <p>98.9% overall on a 54-prompt benchmark, with all 9 hardest additions (chess engine, raft/paxos, ZK proofs, and more) at 100%.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is the benchmark reproducible?</h3>
+        <p>The raw side-by-side outputs and the scoring rubric are saved to disk. Outputs are non-deterministic so re-runs vary, but the rubric keeps comparison stable.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Where does Claude still win?</h3>
+        <p>Speed (about 4x), 50k+ token contexts, and vision quality, which wasn't rigorously bench-tested.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

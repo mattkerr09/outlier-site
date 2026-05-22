@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>What is ternary quantization (and what it isn't) | Outlier</title>
-  <meta name="description" content="Ternary quantization stores model weights as {-1, 0, +1}. The promise: 16× smaller models. The reality: a research idea that hasn't replaced 4-bit at the production level. Here's where it actually stands in 2026.">
+  <meta name="description" content="Ternary quantization stores weights as -1, 0, or +1. The promise is 16x smaller models; the reality is a research idea that hasn't replaced 4-bit.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
   <link rel="canonical" href="https://outlier.host/learn/what-is-ternary-quantization/">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="Ternary quantization stores weights as {-1, 0, +1}. Where it stands vs 4-bit in 2026.">
   <meta property="og:url" content="https://outlier.host/learn/what-is-ternary-quantization/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="What is ternary quantization (and what it isn't)">
   <meta name="twitter:description" content="Where it stands vs 4-bit in 2026.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"What is ternary quantization (and what it isn't)","description":"Ternary quantization stores weights as {-1, 0, +1}. Where it stands vs 4-bit in 2026.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/what-is-ternary-quantization/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is ternary quantization (and what it isn't)", "item": "https://outlier.host/learn/what-is-ternary-quantization/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is ternary quantization?", "acceptedAnswer": {"@type": "Answer", "text": "Storing each model weight as one of three values (-1, 0, +1), about 1.58 bits per weight, roughly 10x smaller than 16-bit floats."}}, {"@type": "Question", "name": "Is ternary better than 4-bit for local AI?", "acceptedAnswer": {"@type": "Answer", "text": "Not in 2026. Ternary needs quantization-aware training and lacks mature tooling; 4-bit is the production sweet spot with near-zero quality loss."}}, {"@type": "Question", "name": "When will ternary quantization matter?", "acceptedAnswer": {"@type": "Answer", "text": "Likely for mobile and edge accelerators where memory bandwidth and power are tightly constrained, as hardware support matures."}}]}
   </script>
 </head>
 <body>
@@ -141,6 +155,22 @@
 
     <h2>The short answer</h2>
     <p>Ternary quantization is a real research direction that may matter in the next 2–3 years as mobile and edge accelerators mature. It is not a free lunch you can apply to existing pretrained models to make them 4× smaller than 4-bit without quality loss. For local AI on a Mac today, 4-bit is the right format — which is what Outlier and most other Mac-native local-AI tools ship.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What is ternary quantization?</h3>
+        <p>Storing each model weight as one of three values (-1, 0, +1), about 1.58 bits per weight, roughly 10x smaller than 16-bit floats.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is ternary better than 4-bit for local AI?</h3>
+        <p>Not in 2026. Ternary needs quantization-aware training and lacks mature tooling; 4-bit is the production sweet spot with near-zero quality loss.</p>
+      </div>
+      <div class="faq-item">
+        <h3>When will ternary quantization matter?</h3>
+        <p>Likely for mobile and edge accelerators where memory bandwidth and power are tightly constrained, as hardware support matures.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

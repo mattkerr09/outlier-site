@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Why local AI keeps your code private | Outlier</title>
-  <meta name="description" content="A specific, technical walkthrough of what 'private code' actually means with a local AI tool: which paths touch the network, which don't, and where the boundary really sits.">
+  <meta name="description" content="A technical walkthrough of what private code means with a local AI tool: which paths touch the network, which don't, and where the boundary sits.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
   <link rel="canonical" href="https://outlier.host/learn/why-local-ai-keeps-code-private/">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="A technical walkthrough of what 'private code' actually means with a local AI tool.">
   <meta property="og:url" content="https://outlier.host/learn/why-local-ai-keeps-code-private/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Why local AI keeps your code private">
   <meta name="twitter:description" content="The technical walkthrough.">
@@ -69,11 +73,21 @@
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Article","headline":"Why local AI keeps your code private","description":"A technical walkthrough of what 'private code' actually means with a local AI tool.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/why-local-ai-keeps-code-private/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Why local AI keeps your code private", "item": "https://outlier.host/learn/why-local-ai-keeps-code-private/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is local AI more private than cloud AI?", "acceptedAnswer": {"@type": "Answer", "text": "Because the model runs on your Mac, your prompts and code never travel to a third-party server. With wifi off, the workflow still runs."}}, {"@type": "Question", "name": "Does a local AI tool ever send my code anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "Not for inference. Networks are used only for model downloads, app updates, and any cloud connectors you opt into."}}, {"@type": "Question", "name": "Who needs local AI most?", "acceptedAnswer": {"@type": "Answer", "text": "Anyone under data-handling rules in healthcare, finance, legal, or defense, and anyone working with pre-public IP or secrets."}}]}
   </script>
 </head>
 <body>
@@ -162,6 +176,22 @@
       <li><strong>Pre-public IP.</strong> Code that hasn't been released yet, algorithms representing a competitive edge, secrets management implementations. Sending these to a cloud AI for "just a quick refactor" is often what the legal team wants you to stop doing.</li>
     </ul>
     <p>For developers outside those categories, the local-vs-cloud choice becomes more about insurance: today's cloud provider may change its terms next year. Today's local tool keeps working unchanged.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Why is local AI more private than cloud AI?</h3>
+        <p>Because the model runs on your Mac, your prompts and code never travel to a third-party server. With wifi off, the workflow still runs.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does a local AI tool ever send my code anywhere?</h3>
+        <p>Not for inference. Networks are used only for model downloads, app updates, and any cloud connectors you opt into.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Who needs local AI most?</h3>
+        <p>Anyone under data-handling rules in healthcare, finance, legal, or defense, and anyone working with pre-public IP or secrets.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
