@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlier vs Claude — 54-prompt benchmark results (May 2026) | Outlier</title>
-  <meta name="description" content="Raw side-by-side bench data: 54 prompts sent to Outlier Core 27B and Claude Opus 4.7, scored against objective rubrics. Outlier scored 98.9% overall, 100% on the 9 hardest tests.">
+  <title>Outlier vs Claude: 54-prompt benchmark | Outlier</title>
+  <meta name="description" content="Raw side-by-side data: 54 prompts sent to Outlier Core 27B and Claude Opus 4.7, scored by rubric. Outlier scored 98.9% overall, 100% on the 9 hardest.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-20">
   <link rel="canonical" href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">
@@ -13,6 +13,10 @@
   <meta property="og:description" content="Raw side-by-side bench: 54 prompts, 98.9% overall parity.">
   <meta property="og:url" content="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">
   <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Outlier vs Claude — 54-prompt benchmark (May 2026)">
   <meta name="twitter:description" content="Raw bench data, methodology, full rubric.">
@@ -66,11 +70,21 @@
     footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
     footer a { color: var(--text-dim); }
     footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Dataset","name":"Outlier Core 27B vs Claude Opus 4.7 — 54-prompt parity benchmark","description":"Side-by-side benchmark of Outlier Core 27B (local) and Claude Opus 4.7 (cloud) across 54 prompts spanning reasoning, knowledge, writing, translation, code, and adversarial tasks.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-19","dateModified":"2026-05-20","measurementTechnique":"Identical prompts sent to both apps; outputs scored against objective per-category rubrics","license":"https://creativecommons.org/licenses/by/4.0/"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Claude — 54-prompt benchmark results (May 2026)", "item": "https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What did the 54-prompt benchmark measure?", "acceptedAnswer": {"@type": "Answer", "text": "Output quality of Outlier Core 27B versus Claude Opus 4.7 on identical prompts, scored against objective per-category rubrics."}}, {"@type": "Question", "name": "What was the result?", "acceptedAnswer": {"@type": "Answer", "text": "98.9% overall parity, with all 9 hardest additions at 100%. The remaining 1.1% was non-deterministic rubric noise."}}, {"@type": "Question", "name": "Did the benchmark measure speed?", "acceptedAnswer": {"@type": "Answer", "text": "No. It measured output quality only. Claude is roughly 4x faster on raw decode."}}]}
   </script>
 </head>
 <body>
@@ -186,6 +200,22 @@
       <li>Score against the rubric in <code>parity_bench/outputs/last_score.json</code> (or build your own)</li>
     </ol>
     <p>Reproducibility caveat: model outputs are non-deterministic. Re-running these prompts will produce slightly different responses each time; the rubric is what makes the comparison stable.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What did the 54-prompt benchmark measure?</h3>
+        <p>Output quality of Outlier Core 27B versus Claude Opus 4.7 on identical prompts, scored against objective per-category rubrics.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What was the result?</h3>
+        <p>98.9% overall parity, with all 9 hardest additions at 100%. The remaining 1.1% was non-deterministic rubric noise.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Did the benchmark measure speed?</h3>
+        <p>No. It measured output quality only. Claude is roughly 4x faster on raw decode.</p>
+      </div>
+    </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
