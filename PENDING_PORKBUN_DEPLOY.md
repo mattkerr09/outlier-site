@@ -104,3 +104,23 @@ Add this block at top of body for each:
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.181
 Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.181)
+
+## 2026-05-25 v1.11.183 — launch-walk polish (mode-picker rollback + MCP failure-logs)
+
+**Bump:** v1.11.181 → v1.11.183 (skipped v182 — built locally, found suppression edge bug, never shipped publicly).
+
+**What's in this DMG:**
+- **Universal upgrade-modal `onDismiss` rollback** — picking a Pro mode (Compare / Computer / Deep research / Autonomous) from the mode picker as a free user now snaps the mode pill back to whatever was selected before, instead of leaving it stuck. Works on "Not now" click + Escape + backdrop click + 24h-suppressed modal (flashes a "Pro feature — upgrade in settings" toast).
+- **MCP failure-logs (MCP-A8)** — when an MCP connector spawn fails (missing brew dep, bad dyld, etc.), the Logs panel now shows the captured stderr instead of "server not started". Lets users self-diagnose without filing bug reports.
+
+**Live-verified on v1.11.183:**
+- /health = 1.11.183, model_loaded nano
+- Mode picker rollback works on a 24h-suppressed click
+- Backend healthy, chat still streams cleanly
+
+**Site:** 9 hardcoded version refs bumped (pill, hero subtitle, DMG download URLs ×3, timeline "Now ·", headline-numbers, phase-num).
+
+**To deploy:** upload pending_website/index.html + privacy.html + terms.html to Porkbun web root.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.183
+Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.183)
