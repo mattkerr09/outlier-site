@@ -303,3 +303,14 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 **Live-verified:** Sent "what is 2+2" → status pill showed "● Deliberating..." within 1 second of click (was previously several seconds of dead silence).
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.198
+
+## 2026-05-25 v1.11.199 — Compare panel template-marker strip (Bug #-M)
+
+**Bump:** v1.11.198 → v1.11.199. Single frontend fix (split_chat.js).
+
+**What's in this DMG:**
+- Walked Compare mode on v197 in person and caught it: Outlier Nano panel was showing "/no_think assistant" below the actual answer ("10"). Nano (4B) was failing to emit EOS after its response and kept generating into the next-turn template prefix. Code (27B) was clean. Display side strips: `/no_think`, `<|im_end|>`, `<|im_start|>`, standalone `user|assistant|system` role markers — truncate from first match to end-of-text.
+
+**Live-verified on v1.11.199:** Compare with "what is 5+5" → Nano returned "10" cleanly. No template leak. Code panel rendered cleanly as before.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.199
