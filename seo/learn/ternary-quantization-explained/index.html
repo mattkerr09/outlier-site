@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What is ternary quantization? | Outlier</title>
+<meta name="description" content="Ternary quantization stores model weights as three values (typically -1, 0, +1) plus a per-channel scale. The compression is aggressive (around 1.6 bits per weight) and the matmul becomes a sign-and-add instead of a multiply, which is friendly to commodity hardware.">
+<link rel="canonical" href="https://outlier.host/seo/learn/ternary-quantization-explained/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is ternary quantization? | Outlier">
+<meta property="og:description" content="Ternary quantization stores model weights as three values (typically -1, 0, +1) plus a per-channel scale. The compression is aggressive (around 1.6 bits per weight) and the matmul becomes a sign-and-add instead of a multiply, which is friendly to commodity hardware.">
+<meta property="og:url" content="https://outlier.host/seo/learn/ternary-quantization-explained/">
+<meta property="og:site_name" content="Outlier">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What is ternary quantization? | Outlier">
+<meta name="twitter:description" content="Ternary quantization stores model weights as three values (typically -1, 0, +1) plus a per-channel scale. The compression is aggressive (around 1.6 bits per weight) and the matmul becomes a sign-and-add instead of a multiply, which is friendly to commodity hardware.">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"What is ternary quantization?","item":"https://outlier.host/seo/learn/ternary-quantization-explained/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is ternary quantization? | Outlier","description":"Ternary quantization stores model weights as three values (typically -1, 0, +1) plus a per-channel scale. The compression is aggressive (around 1.6 bits per weight) and the matmul becomes a sign-and-add instead of a multiply, which is friendly to commodity hardware.","url":"https://outlier.host/seo/learn/ternary-quantization-explained/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does this affect which tier I should choose?","acceptedAnswer":{"@type":"Answer","text":"Yes. Concept-level differences map directly to tier choice; the run pages on this site work the mapping out for the common Mac SKUs in the lineup."}},{"@type":"Question","name":"Is the shipping Outlier model based on this?","acceptedAnswer":{"@type":"Answer","text":"Read the body above for the specific answer; some of these concepts ship today and some are research directions covered by the April 2026 patent filings."}},{"@type":"Question","name":"Where can I see the raw provenance?","acceptedAnswer":{"@type":"Answer","text":"Every benchmark on the site links to a source file path in the public Outlier repo, with the original command and stderr preserved."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/seo/learn/">Concept</a> &rsaquo; <span>What is ternary quantization?</span>
+</nav>
+<span class="tag">Concept</span>
+<h1>What is ternary quantization?</h1>
+<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+
+<div class="qa"><strong>Quick answer</strong><p>Ternary quantization stores model weights as three values (typically -1, 0, +1) plus a per-channel scale. The compression is aggressive (around 1.6 bits per weight) and the matmul becomes a sign-and-add instead of a multiply, which is friendly to commodity hardware.</p></div>
+
+<h2>Why does what is ternary quantization matter for local AI on Apple Silicon?</h2>
+<p>The decision to run a model locally on a Mac comes down to three numbers: weight size on disk, peak generation memory, and the memory bandwidth feeding the decode loop. The concept above bears directly on each of those.</p>
+<p>Ternary quantization replaces each floating-point weight with one of three values (commonly &minus;1, 0, +1) plus a per-channel or per-group scale factor. The storage footprint drops to roughly 1.6 bits per weight, and the multiply-accumulate kernel becomes a sign-and-add &mdash; friendly to commodity CPUs without dedicated matmul hardware.</p><p>The distillation pipeline that recovers quality after the round-down to ternary is the research direction Outlier&rsquo;s 3 provisional patents (April 2026) cover.</p>
+<h2>What is the concrete number?</h2>
+<p>Outlier&rsquo;s shipping models are MLX 4-bit, not ternary; ternary is a research direction covered by 3 provisional patents filed in April 2026.</p>
+<h2>How does this play out in the Outlier shipping lineup?</h2>
+<p>Today&rsquo;s shipping Outlier tiers are MLX 4-bit, not ternary. Ternary is the next research milestone, not the current shipping format.</p>
+<h2>What is the v1.9 implication?</h2>
+<p>Patents: USPTO #64/026,886, #64/030,368, #64/034,028 (3 provisional, 61 claims, filed April 3, 6, 9 of 2026).</p>
+<h2>What does &ldquo;what is ternary quantization&rdquo; <em>not</em> mean?</h2>
+<p>This concept is sometimes invoked as a marketing word for &ldquo;what is ternary quantization&rdquo;. The number cited above &mdash; Outlier&rsquo;s shipping models are MLX 4-bit, not ternary; ternary is a researc&hellip; &mdash; is the empirically measured one. If a cleaner number appears in someone&rsquo;s pitch deck, ask for the provenance file that produced it; if there is no provenance file, treat the number as marketing.</p>
+<h2>Where can I read more about what is ternary quantization?</h2>
+<p>The provisional patent texts (USPTO #64/026,886, #64/030,368, #64/034,028) are the canonical reference for the ternary direction. The shipping app source does not implement ternary today.</p>
+<h2>Why does ternary matter on consumer hardware?</h2><p>The matmul kernel for ternary weights is structurally different from a 4-bit kernel. Where 4-bit needs an integer multiply per element (against the dequantized scale), ternary reduces to a sign flip plus an accumulation. That is friendly to vector units without dedicated low-precision matmul (Apple&rsquo;s P-cores, ARM Neoverse, x86 AVX2).</p><p>The catch is quality. Naive round-to-ternary loses several points of MMLU. The patent filings cover a distillation pipeline that recovers most of the lost quality at training time. The shipping Outlier tiers are MLX 4-bit precisely because the ternary research is not yet at parity for the 27B class on which Core/Code ride.</p>
+<h2>How does &ldquo;what is ternary quantization&rdquo; connect to specific tiers?</h2>
+<p>Today this concept does not ship in any Outlier tier. The shipping tiers are MLX 4-bit. The ternary direction is research and is what the three April-2026 patent filings cover.</p>
+<h2>What is the smallest configuration that exercises this concept?</h2>
+<p>None of the shipping Outlier tiers run ternary. To exercise the concept today you would run a separate ternary-quantized checkpoint outside Outlier; the shipping app does not surface this.</p>
+<h2>One unique number</h2>
+<p>Outlier&rsquo;s shipping models are MLX 4-bit, not ternary; ternary is a research direction covered by 3 provisional patents filed in April 2026.</p>
+
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/seo/learn/mlx-explained/">What is MLX?</a></li><li><a href="/seo/learn/what-is-unified-memory/">What is unified memory?</a></li><li><a href="/seo/learn/paged-moe-explained/">What is a paged MoE model?</a></li><li><a href="/seo/learn/k-override-explained/">What is K_override?</a></li>
+</ul>
+</div>
+
+<div class="foot">
+<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">Back to home</a>.</p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

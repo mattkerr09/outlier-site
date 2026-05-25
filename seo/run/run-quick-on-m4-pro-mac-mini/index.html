@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Run Outlier Quick on Mac mini M4 Pro — Local AI on Apple Silicon | Outlier</title>
+<meta name="description" content="How Outlier Quick (26B MoE / 4B active, 15.61 GB) runs on Mac mini M4 Pro (24|48|64 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
+<link rel="canonical" href="https://outlier.host/seo/run/run-quick-on-m4-pro-mac-mini/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Run Outlier Quick on Mac mini M4 Pro — Local AI on Apple Silicon | Outlier">
+<meta property="og:description" content="How Outlier Quick (26B MoE / 4B active, 15.61 GB) runs on Mac mini M4 Pro (24|48|64 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
+<meta property="og:url" content="https://outlier.host/seo/run/run-quick-on-m4-pro-mac-mini/">
+<meta property="og:site_name" content="Outlier">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Run Outlier Quick on Mac mini M4 Pro — Local AI on Apple Silicon | Outlier">
+<meta name="twitter:description" content="How Outlier Quick (26B MoE / 4B active, 15.61 GB) runs on Mac mini M4 Pro (24|48|64 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Run on your Mac","item":"https://outlier.host/seo/run/"},{"@type":"ListItem","position":3,"name":"Run Outlier Quick on Mac mini M4 Pro","item":"https://outlier.host/seo/run/run-quick-on-m4-pro-mac-mini/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Run Outlier Quick on Mac mini M4 Pro — Local AI on Apple Silicon | Outlier","description":"How Outlier Quick (26B MoE / 4B active, 15.61 GB) runs on Mac mini M4 Pro (24|48|64 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.","url":"https://outlier.host/seo/run/run-quick-on-m4-pro-mac-mini/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will Outlier Quick actually fit on a Mac mini M4 Pro?","acceptedAnswer":{"@type":"Answer","text":"It needs at least 16 GB of unified memory. The base Mac mini M4 Pro ships with 24|48|64 GB."}},{"@type":"Question","name":"How fast is Outlier Quick on Mac mini M4 Pro?","acceptedAnswer":{"@type":"Answer","text":"M1 Ultra reference is 14.6 tok/s. Bandwidth-scaled estimate for Mac mini M4 Pro: ~5.0 tok/s [estimated from family-bandwidth ratio]."}},{"@type":"Question","name":"Does Outlier send any data off the Mac?","acceptedAnswer":{"@type":"Answer","text":"No prompts or responses leave the device during chat. Model downloads are one-time HTTPS pulls from Hugging Face."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/seo/run/">Run on your Mac</a> &rsaquo; <span>Run Outlier Quick on Mac mini M4 Pro</span>
+</nav>
+<span class="tag">Run on your Mac</span>
+<h1>Run Outlier Quick on Mac mini M4 Pro</h1>
+<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+
+<div class="qa"><strong>Quick answer</strong><p><strong>Outlier Quick</strong> on <strong>Mac mini M4 Pro</strong>: fits comfortably. Minimum unified memory required: <strong>16 GB</strong>. Disk size: <strong>15.61 GB</strong>. Default context window: <strong>32K tokens</strong>. On Mac mini M4 Pro the Outlier Quick bandwidth-scaled estimate is <strong>~5.0 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 14.6 tok/s on M1 Ultra &times; (273&nbsp;/&nbsp;800) bus ratio for the Apple M4 Pro. Treat as a first-order projection &mdash; the Outlier Quick number on this 2024 machine has not been formally measured.</p></div>
+
+<h2>What does Outlier Quick run like on Mac mini M4 Pro?</h2>
+<p>The pairing under examination is <strong>Outlier Quick</strong> (15.61 GB MLX 4-bit, Gemma-4-26B-a4b-it base, 32K default context, 16 GB unified memory minimum) on a <strong>Mac mini M4 Pro</strong> (Apple M4 Pro, 12-14 CPU cores, 16-20 GPU cores, 24|48|64 GB unified memory, 273 GB/s, 2024). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact Mac mini M4 Pro scales as the ratio 273&nbsp;/&nbsp;800 = <strong>0.34&times;</strong> the published M1 Ultra number.</p>
+<h2>How much memory does the model take during generation?</h2>
+<p>Outlier&rsquo;s Outlier Quick has a measured peak generation footprint of about 16 GB. The Mac mini M4 Pro base configuration ships with 24|48|64 GB unified, and the rule of thumb is to leave roughly 4 GB for the OS and one open browser tab. On Mac mini M4 Pro the Outlier Quick bandwidth-scaled estimate is <strong>~5.0 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 14.6 tok/s on M1 Ultra &times; (273&nbsp;/&nbsp;800) bus ratio for the Apple M4 Pro. Treat as a first-order projection &mdash; the Outlier Quick number on this 2024 machine has not been formally measured.</p>
+<h2>What is the install path on Mac mini M4 Pro for Outlier Quick?</h2>
+<p>The 2024 Mac mini M4 Pro ships with 24|48|64 GB of unified memory, so headroom for the 16 GB Outlier Quick requirement is 8 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M4 Pro machine is that the 15.61 GB pull from <code>Outlier-Ai/Outlier-Quick-26B-MLX-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/quick/</code> and download time is bandwidth-limited by the network, not by the 12-14-core Apple M4 Pro CPU.</p>
+<h2>What context window can I use on a 24 GB Mac?</h2>
+<p>The Outlier Quick tier defaults to 32K context and caps at 256K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 24|48|64 GB Mac mini M4 Pro, the default context is the safe starting point.</p>
+<h2>What works well on this pairing, and what is still rough?</h2>
+<ul><li>The Mac mini M4 Pro (Apple M4 Pro, 273 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Quick on this exact machine is approximately 273 divided by 15.61 GB tokens per second.</li><li>The Apple M4 Pro (273 GB/s, 16-20 GPU cores) is current Apple Store silicon as of 2025; new-purchase tok-per-second-per-dollar is best in the lineup at the Outlier Quick tier.</li><li>Cold boot of Outlier on a 12-14-core Apple M4 Pro is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
+<h2>What is the unique number for Outlier Quick on Mac mini M4 Pro?</h2>
+<p>15.61 GB on disk against 24|48|64 GB unified memory means the weights alone consume about <strong>65%</strong> of the base SKU&rsquo;s RAM on the Mac mini M4 Pro.</p>
+<h2>Should I pick a different tier?</h2>
+<p>For lighter-weight work on this Apple M4 Pro, the Lite tier is the next step down and runs visibly faster. For heavier work, the Core tier is the next step up; check that the 24|48|64 GB SKU you have can fit its weights before installing. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for Mac mini M4 Pro is 0.34&times; M1 Ultra reference.</p>
+
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/seo/learn/what-is-unified-memory/">What is unified memory on Apple Silicon?</a></li><li><a href="/seo/learn/mlx-explained/">What is MLX and why does Outlier use it?</a></li><li><a href="/seo/how-to/install-outlier-on-mac/">How to install Outlier on a Mac</a></li><li><a href="/seo/vs/cloud-coding-assistants-for-code-review/">Outlier vs cloud-based coding assistants for code review</a></li><li><a href="/seo/learn/k-override-explained/">What is K_override on the Plus tier?</a></li>
+</ul>
+</div>
+
+<div class="foot">
+<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">Back to home</a>.</p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

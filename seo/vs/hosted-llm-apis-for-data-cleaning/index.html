@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Outlier vs hosted LLM APIs for data cleaning | Outlier</title>
+<meta name="description" content="How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is data cleaning. Throughput, privacy, and friction compared.">
+<link rel="canonical" href="https://outlier.host/seo/vs/hosted-llm-apis-for-data-cleaning/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Outlier vs hosted LLM APIs for data cleaning | Outlier">
+<meta property="og:description" content="How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is data cleaning. Throughput, privacy, and friction compared.">
+<meta property="og:url" content="https://outlier.host/seo/vs/hosted-llm-apis-for-data-cleaning/">
+<meta property="og:site_name" content="Outlier">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Outlier vs hosted LLM APIs for data cleaning | Outlier">
+<meta name="twitter:description" content="How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is data cleaning. Throughput, privacy, and friction compared.">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compared to","item":"https://outlier.host/seo/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs hosted LLM APIs for data cleaning","item":"https://outlier.host/seo/vs/hosted-llm-apis-for-data-cleaning/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs hosted LLM APIs for data cleaning | Outlier","description":"How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is data cleaning. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/hosted-llm-apis-for-data-cleaning/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Outlier a drop-in alternative to hosted LLM APIs for data cleaning?","acceptedAnswer":{"@type":"Answer","text":"Outlier is positioned as an alternative to hosted LLM APIs when the user wants the prompt to stay on the Mac. Whether it fully covers a given workflow depends on tooling integrations the user already relies on."}},{"@type":"Question","name":"Does Outlier work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the one-time model download, no network is required for chat or generation."}},{"@type":"Question","name":"Which Mac do I need?","acceptedAnswer":{"@type":"Answer","text":"Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/seo/vs/">Compared to</a> &rsaquo; <span>Outlier vs hosted LLM APIs for data cleaning</span>
+</nav>
+<span class="tag">Compared to</span>
+<h1>Outlier vs hosted LLM APIs for data cleaning</h1>
+<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+
+<div class="qa"><strong>Quick answer</strong><p>Pandas-style transforms on a small dataframe. The hosted LLM APIs category answers this with a remote model and an account; Outlier answers it with the on-device lite tier. This page is the side-by-side specifically for data cleaning workloads.</p></div>
+
+<h2>What is the core difference for data cleaning?</h2>
+<p>For data cleaning, the deciding axis between Outlier and hosted LLM APIs is the data path. Pay-per-token APIs where each request is logged on the provider side. Outlier holds the prompt and response for data cleaning on the Mac and delivers tokens at the local memory bandwidth of the chip; on the lite-recommended tier, that means working out of the on-disk checkpoint without a network round-trip per turn.</p>
+<h2>How does the data path differ for data cleaning on hosted LLM APIs?</h2>
+<p>Network round-trip every prompt. For a data cleaning workflow against hosted LLM APIs, the practical consequences are tail-latency variance (the network adds unbounded variance per turn) and exposure to provider-side logging of the data cleaning prompts. Outlier&rsquo;s chat path on the lite tier issues no outbound HTTPS once the model is on disk; the only network request in the lifecycle is the one-time 5.04 GB tier download from Hugging Face.</p>
+<h2>Which Outlier tier handles data cleaning best as an alternative to hosted LLM APIs?</h2>
+<p>If you are coming from hosted LLM APIs for data cleaning, the right starting point on Outlier is the <strong>lite</strong> tier &mdash; 5.04 GB on disk, sitting at the quality-vs-speed inflection point for data cleaning-shaped prompts. hosted LLM APIs users typically want what they had plus privacy; the lite tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s 0.128 HumanEval rules it out for code-shaped data cleaning.</p>
+<h2>What is the switching friction from hosted LLM APIs?</h2>
+<p>Moving a data cleaning workflow from hosted LLM APIs to Outlier is a one-time DMG install plus a 5.04 GB pull for the lite tier. The sign-in step that hosted LLM APIs typically requires has no equivalent on the Outlier side: there is no account, no per-token meter, and no rate-limit page to redirect through. The data cleaning loop after install is open-prompt to local-decode.</p>
+<h2>What about quality at the lite tier for data cleaning?</h2>
+<p>For a data cleaning workload moving off hosted LLM APIs onto the lite tier: Lite scores MMLU 0.7846 at 2.22&sigma; over its 9B base, with HumanEval pass@1 0.6951 (n=164). See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier table; benchmarks were run on full MMLU and HumanEval, dated 2026-04-30.</p>
+<h2>What is the shape of data cleaning as a workload?</h2>
+<p>Pandas-style work is interactive: try a transform, inspect, refine. Local decode keeps the loop tight; round-trip variance drops.</p>
+<h2>How does the hosted LLM APIs category look operationally for data cleaning?</h2>
+<p>For data cleaning specifically, hosted LLM APIs tools share a common operational shape: a sign-in, an auth token bound to that sign-in, some kind of metered usage, and a content policy that applies to the data cleaning prompts you submit. Outlier&rsquo;s local-only chat path does not surface any of those: the data cleaning workflow runs against the on-disk lite tier, no token leaves the device.</p>
+<h2>What does Outlier <em>not</em> claim about data cleaning versus hosted LLM APIs?</h2>
+<p>This page positions Outlier as an <em>alternative</em> to hosted LLM APIs for data cleaning workflows, not as a drop-in replacement. Specific product surfaces in the hosted LLM APIs category &mdash; IDE-integrated suggestions, web-based shared sessions, team-managed prompt libraries &mdash; are out of scope for the local app loop and we do not claim equivalence for those when data cleaning is part of a larger team workflow.</p>
+<h2>One-line summary</h2>
+<p>For data cleaning: one network round-trip per prompt with hosted LLM APIs versus zero round-trips with Outlier on the lite tier &mdash; the difference is unbounded latency variance against bandwidth-bound, repeatable local throughput.</p>
+
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/seo/learn/mlx-explained/">What is MLX?</a></li><li><a href="/seo/learn/paged-moe-explained/">What is a paged Mixture-of-Experts model?</a></li><li><a href="/seo/run/run-lite-on-m4-air-13/">Run the Lite tier on a 16 GB M4 Air</a></li><li><a href="/seo/how-to/install-outlier-on-mac/">How to install Outlier on a Mac</a></li><li><a href="/seo/learn/what-is-unified-memory/">What is unified memory?</a></li>
+</ul>
+</div>
+
+<div class="foot">
+<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">Back to home</a>.</p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

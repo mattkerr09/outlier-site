@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What is a paged Mixture-of-Experts model? | Outlier</title>
+<meta name="description" content="A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.">
+<link rel="canonical" href="https://outlier.host/seo/learn/paged-moe-explained/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is a paged Mixture-of-Experts model? | Outlier">
+<meta property="og:description" content="A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.">
+<meta property="og:url" content="https://outlier.host/seo/learn/paged-moe-explained/">
+<meta property="og:site_name" content="Outlier">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What is a paged Mixture-of-Experts model? | Outlier">
+<meta name="twitter:description" content="A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"What is a paged Mixture-of-Experts model?","item":"https://outlier.host/seo/learn/paged-moe-explained/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is a paged Mixture-of-Experts model? | Outlier","description":"A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.","url":"https://outlier.host/seo/learn/paged-moe-explained/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does this affect which tier I should choose?","acceptedAnswer":{"@type":"Answer","text":"Yes. Concept-level differences map directly to tier choice; the run pages on this site work the mapping out for the common Mac SKUs in the lineup."}},{"@type":"Question","name":"Is the shipping Outlier model based on this?","acceptedAnswer":{"@type":"Answer","text":"Read the body above for the specific answer; some of these concepts ship today and some are research directions covered by the April 2026 patent filings."}},{"@type":"Question","name":"Where can I see the raw provenance?","acceptedAnswer":{"@type":"Answer","text":"Every benchmark on the site links to a source file path in the public Outlier repo, with the original command and stderr preserved."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/seo/learn/">Concept</a> &rsaquo; <span>What is a paged Mixture-of-Experts model?</span>
+</nav>
+<span class="tag">Concept</span>
+<h1>What is a paged Mixture-of-Experts model?</h1>
+<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+
+<div class="qa"><strong>Quick answer</strong><p>A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.</p></div>
+
+<h2>Why does what is a paged mixture-of-experts model matter for local AI on Apple Silicon?</h2>
+<p>The decision to run a model locally on a Mac comes down to three numbers: weight size on disk, peak generation memory, and the memory bandwidth feeding the decode loop. The concept above bears directly on each of those.</p>
+<p>A Mixture-of-Experts model splits its feed-forward block into many small experts; the router picks a small subset per token. Qwen3.5-397B-A17B has 60 layers, 512 experts per layer, and a configured top-k of 10. That means the active path through a single decode step touches 10 experts out of 512 at each of the 60 layers, even though all 512 are weights on disk.</p><p>Paging is the trick that makes this fit on a 64 GB Mac. The engine keeps the K most recently used experts resident, reads the rest from the safetensors shards on demand, and serves the routed selection out of that mix.</p>
+<h2>What is the concrete number?</h2>
+<p>On Outlier&rsquo;s Plus tier, K is locked at 20 because a 5-prompt sweep showed K=4 fails coherence (3/5), K=32 regresses speed by 2.5%, and K=48 only adds 1.3% which is within noise.</p>
+<h2>How does this play out in the Outlier shipping lineup?</h2>
+<p>Outlier&rsquo;s Plus tier sets <code>K_override=20</code>, <code>cache_gb=8.0</code>, <code>OUTLIER_MMAP_EXPERTS=0</code>, and lazy-loads the full state dict.</p>
+<h2>What is the v1.9 implication?</h2>
+<p>Page-aligned <code>pread()</code> fanout with libdispatch groups is the Flash-MoE technique that closes the gap from 1.59 tok/s (Outlier today) to 4.36 tok/s (Flash-MoE on M3 Max). It is on the v1.9 backlog.</p>
+<h2>What does &ldquo;what is a paged mixture-of-experts model&rdquo; <em>not</em> mean?</h2>
+<p>This concept is sometimes invoked as a marketing word for &ldquo;what is a paged mixture-of-experts model&rdquo;. The number cited above &mdash; On Outlier&rsquo;s Plus tier, K is locked at 20 because a 5-prompt sweep showed &hellip; &mdash; is the empirically measured one. If a cleaner number appears in someone&rsquo;s pitch deck, ask for the provenance file that produced it; if there is no provenance file, treat the number as marketing.</p>
+<h2>Where can I read more about what is a paged mixture-of-experts model?</h2>
+<p>The Plus-tier paging logic and the K_override sweep that produced the locked configuration live in <code>sprints/v18_plus_ship/artifacts/K_SWEEP_RESULTS.md</code> and <code>K_SWEEP_RESULTS</code> JSON files; the engine code is in <code>desktop_app/backend/engine_v9_loader.py</code>.</p>
+<h2>How does the Outlier paged engine actually fetch experts?</h2><p>The V9 paged loader patches the SwitchGLU forward pass so that on the routing step, the IDs of the top-K experts are computed first, then the weights for any expert not currently in the LRU cache are pulled from the safetensors shard files via standard <code>seek</code>+<code>read</code> calls. Memory-mapped reads were tried and rejected (<code>OUTLIER_MMAP_EXPERTS=1</code> caused an 8&times; throughput regression in our 2026-04 testing).</p><p>The cache is keyed on (layer, expert_id). At <code>cache_gb=8.0</code> the LRU holds roughly 240 expert tensors at the model&rsquo;s 4-bit quantization. Cache hits are free; cache misses pay the disk-read latency, which is why NVMe is mandatory.</p>
+<h2>How does &ldquo;what is a paged mixture-of-experts model&rdquo; connect to specific tiers?</h2>
+<p>This concept is what makes the Plus tier possible at all. The other six tiers (Nano through Vision) are dense or small-MoE and load entirely into unified memory; only Plus needs the paged loader.</p>
+<h2>What is the smallest configuration that exercises this concept?</h2>
+<p>You need a 32 GB or larger Mac plus 209 GB of free disk to load the Plus tier and reproduce the paging behavior. There is no smaller-tier proxy for the routed-expert page-fault path.</p>
+<h2>One unique number</h2>
+<p>On Outlier&rsquo;s Plus tier, K is locked at 20 because a 5-prompt sweep showed K=4 fails coherence (3/5), K=32 regresses speed by 2.5%, and K=48 only adds 1.3% which is within noise.</p>
+
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/seo/learn/mlx-explained/">What is MLX?</a></li><li><a href="/seo/learn/what-is-unified-memory/">What is unified memory?</a></li><li><a href="/seo/learn/ternary-quantization-explained/">What is ternary quantization?</a></li><li><a href="/seo/learn/k-override-explained/">What is K_override?</a></li>
+</ul>
+</div>
+
+<div class="foot">
+<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">Back to home</a>.</p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
