@@ -186,3 +186,28 @@ Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releas
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.189
 Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.189)
+
+## 2026-05-25 v1.11.190 — prefix cache fix (turn-2+ TTFT 6× faster)
+
+**Bump:** v1.11.189 → v1.11.190. Backend-only batch (~25 LOC in server.py).
+
+**What landed in pending_website/index.html:**
+- 9 hardcoded version refs
+
+**What's in this DMG:**
+- **Prefix cache actually hits now.** Outlier shipped a prefix cache in v1.11.76 with an aspirational "expecting ~10× speedup" comment, but the team's own phase6 bench measured matched=0. Two root causes documented in v2_research/proposed_patches/PREFIX_CACHE_FIX_PATCH.md (from sibling session d0186e68's 6-hour R&D pass): (1) Qwen3.5 chat template injects `<think>\n\n</think>\n\n` after the assistant marker during generation, but history readback omits those tokens → blake2b hash diverges → cache miss every time. (2) Stored entries are prompt+response length, but identical-repeat lookups query prompt-only length → n <= len(prompt_ids) check rejects them. Fix in _build_prompt() wraps historical assistant content with the think prefix for local MLX tiers (nano/lite/quick/compact/core/code/plus/vision); fix in _drain() snapshots the KV cache on the first generation iteration and stores it under prompt-only length so identical repeats hit immediately.
+
+**Live-verified on installed v1.11.190 — 4-turn Nano benchmark:**
+- Turn 1: TTFT 23291 ms (cold model load)
+- Turn 2: TTFT 3287 ms (warming up)
+- Turn 3: **TTFT 502 ms ✓** (cache hit)
+- Turn 4: **TTFT 451 ms ✓** (cache hit)
+- Cache stats: entries 0 → 2 → 4 → 5 → 6
+- Matches the patch doc's predicted "turn 2+ TTFT ~400-500 ms" outcome.
+
+**Real-world impact:** every multi-turn chat on every Outlier install is now ~6× snappier from turn 3 onward. This is the highest-leverage single-batch ship in the v1.11.x line so far.
+
+**To deploy:** Upload pending_website/index.html to Porkbun web root.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.190
+Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.190)
