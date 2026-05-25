@@ -147,3 +147,23 @@ Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releas
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.187
 Autoupdate: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (1.11.187)
+
+## 2026-05-25 v1.11.188 — dev_unlock honors pro entitlement + MCP crash names server
+
+**Bump:** v1.11.187 → v1.11.188.
+
+**What landed in pending_website/index.html:**
+- 9 hardcoded version refs (pill, hero subtitle, DMG download URLs ×3, "Now ·" timeline marker, headline-numbers line, phase-num, "Shipped ·" phase marker)
+
+**What's in this DMG:**
+- **Bug #-G** Dev-unlock file (~/.outlier/dev_unlock.v1) now grants pro entitlement end-to-end in entitlement/resolver.py. Pre-188 /health reported `dev_unlock:true` but the resolver had no idea — so require_model('plus') kept returning 402 Payment Required, and the model picker fell back to Nano silently. Now resolves the dev_unlock file as step 0 (before Polar/Pro/Standard/trial/grandfathered/free) and short-circuits to "pro". Affects developer/test installs only — paid users were unaffected.
+- **Bug #-E** MCP crash error now names the actual server. Pre-188 mcp_client.py's mid-call crash path read `getattr(self, 'name', '?')` because `name` was never assigned on `_StdioClient` — backend.log was full of "MCP server '?' crashed mid-call". Now pulls `cfg['name']` onto `self.name` at construction.
+
+**Live-verified on installed v1.11.188:** `/entitlement` returns tier=pro with plus in models list, `POST /models/plus/activate` returns 200 (was 402), `/health.model_name=plus`, `/chat` SSE with model=plus streams `context_resolved` + `prefill_started` events. Backend.log now reads "MCP server 'filesystem' crashed mid-call" (was '?').
+
+**To deploy:**
+1. Upload `pending_website/index.html` to Porkbun web root
+2. Confirm browser title bar shows "v1.11.188" on first load (cache-bust if needed)
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.188
+Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.188)
