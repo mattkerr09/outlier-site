@@ -259,3 +259,15 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - **Live-verified:** mode picker dropdown now shows exactly 5 entries, Auto's "(chat / agent / research)" description, Agent's "reads & edits files, runs shell commands, drives the Mac UI, or self-prompts" description matches the v1.10.0 ship.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.194
+
+## 2026-05-25 v1.11.196 — 🚨 LAUNCH BLOCKER #19 closed: Founder license activation works (Darius)
+
+**Bump:** v1.11.195 → v1.11.196. Single backend fix in entitlement/license.py:_polar_activate.
+
+**Root cause:** Polar configures Founder lifetime keys as VALIDATE-ONLY (no activation slots). Hitting /activate returns 403 NotPermitted with detail "This license key does not support activations. Use the /validate endpoint instead." Pre-196 our catch-all collapsed every 4xx to "invalid or inactive license key" — every paying Founder customer was blocked from activating. Diagnosed by hitting Polar's API directly with matt's own founder key.
+
+**Fix:** On 403 NotPermitted, _polar_activate returns a sentinel `{"_skip_activation": True, "id": None}` so activate() proceeds to /validate without an activation_id. Polar's /validate returns 200 status=granted, derive_tier maps benefit_id 3a2bb24c... → founding_200. Diagnostic logging now writes the actual Polar status + body to backend.log for any other 4xx so future regressions are debuggable.
+
+**Live-verified on installed v1.11.196:** POST /license/activate with matt's real founder key → 200 `{"ok": true, "tier": "founding_200", "masked_key": "••••D09D"}`. (matt's /entitlement still shows "pro" because of his dev_unlock.v1 file taking step-0 in the resolver; Darius and other real customers without dev_unlock will see "founding_200" via the polar step.)
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.196
