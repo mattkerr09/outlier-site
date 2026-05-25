@@ -124,3 +124,17 @@ Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releas
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.183
 Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.183)
+
+## 2026-05-25 v1.11.185 — memory writes actually persist (natural-language auto-save)
+
+**Bump:** v1.11.183 → v1.11.185 (skipped v184 — built locally, found unreliable on Nano, never shipped publicly).
+
+**What's in this DMG:**
+- **Backend auto-persist for natural-language remember-X.** Pre-185 the model would say "I've noted that…" when users typed "remember teal" but `memory.db` had no entry — next-chat recall failed. Now the backend `/chat` handler matches conservative remember-patterns, calls `memory_mod.add_fact()` (same code path as `/remember` slash), and mutates the user message to `[MEMORY-SAVED: …]` so the model acknowledges naturally without re-claiming to store. Skips when memory disabled or incognito.
+
+**Live-verified:** `curl /chat` with "remember favorite color is forest green" → 2s later memory.db contains the fact.
+
+**Site:** 9 hardcoded version refs bumped.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.185
+Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.185)
