@@ -271,3 +271,24 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 **Live-verified on installed v1.11.196:** POST /license/activate with matt's real founder key → 200 `{"ok": true, "tier": "founding_200", "masked_key": "••••D09D"}`. (matt's /entitlement still shows "pro" because of his dev_unlock.v1 file taking step-0 in the resolver; Darius and other real customers without dev_unlock will see "founding_200" via the polar step.)
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.196
+
+## 2026-05-25 v1.11.197 — bundled Node 22 LTS (MCP works for every user, no homebrew required)
+
+**Bump:** v1.11.196 → v1.11.197. Eliminates the entire class of "your homebrew Node is broken" failures for MCP servers.
+
+**Background:** Pre-197, MCP servers (Filesystem, GitHub, Slack, Notion, Linear, Puppeteer, Memory) spawned via `npx` from whatever Node was on the user's PATH — usually homebrew. When that Node was broken (e.g. homebrew updated simdjson without re-linking Node — exact reproducer on matt's machine), the MCP subprocess crashed with dyld errors and the connector silently disappeared from the agent's tool catalog.
+
+**Fix:** Outlier now ships its own statically-linked Node 22.20 LTS from nodejs.org (zero homebrew dylib deps — only macOS system frameworks) at `Outlier.app/Contents/Resources/node-bundled/`. mcp_client.py prepends the bundled bin dir to subprocess PATH so npx always resolves to the Outlier copy, regardless of user system state.
+
+**Gotcha caught in build:** Tauri's `bundle.resources` dereferences symlinks when copying. The first v197 build shipped `bin/npx` as the dereferenced JS file at the wrong path, so npx failed with "Cannot find module '../lib/cli.js'". Build script now overwrites Tauri's broken copy with an rsync that preserves symlinks.
+
+**DMG size:** 399 MB → 441 MB (+42 MB after Tauri compression).
+
+**Live-verified on installed v1.11.197:**
+- `bin/npx` and `bin/npm` are proper symlinks ✓
+- `/mcp/tools/filesystem` returns 14 tools (read_file, write_file, edit_file, list_directory, search_files, ...)
+- `/agent/tools` total: **25 tools** (11 built-in + 14 MCP) — exactly the catalog the self-make agent needs
+
+**Impact:** every new install gets a working MCP catalog on day 1. The class of bug that gave Darius / matt the "filesystem MCP is broken" experience is closed at the install level for all platforms.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.197
