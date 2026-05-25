@@ -249,3 +249,13 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - **Status: PARTIAL** — even 7.5s of retries isn't always enough on slow swaps. The 503 still fires with v192's honest "tokenizer not yet initialized" message; users can retry manually. Deeper root-cause fix (find where _tokenizer is set asynchronously and gate on it) deferred to v194+.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.193
+
+## 2026-05-25 v1.11.194 — restore v1.10.0 Agent-pill consolidation (Bug #-I)
+
+**Bump:** v1.11.193 → v1.11.194. Single frontend fix (main.js MODES array).
+
+**What's in this DMG:**
+- **Bug #-I LAUNCH BLOCKER:** mode picker showed the pre-v1.10.0 7-mode list (Auto / Chat / Code / Deep research / Compare / Computer / Autonomous) — the v1.10.0 Agent consolidation that matt explicitly directed had regressed off the feat/v18 branch. Re-applied: MODES trimmed to 5 (Auto / Chat / Agent / Deep research / Compare), Agent description matches matt's v1.10.0 wording, LEGACY_MODE_REDIRECT remaps code/computer/autonomy → agent so existing user state survives.
+- **Live-verified:** mode picker dropdown now shows exactly 5 entries, Auto's "(chat / agent / research)" description, Agent's "reads & edits files, runs shell commands, drives the Mac UI, or self-prompts" description matches the v1.10.0 ship.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.194
