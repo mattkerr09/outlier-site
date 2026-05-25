@@ -87,3 +87,20 @@ Add this block at top of body for each:
 - No frontier* tags, no claude-tier tags, no unlocks tags
 
 ---
+
+## 2026-05-25 v1.11.181 — EMERGENCY classifier-abort fix (THE actual chat root cause)
+
+**Bump:** v1.11.178 → v1.11.181 (skipped v179/v180 — both built locally but not shipped; v180 dist artifact discarded since classifier-abort kept reproducing on it)
+
+**ROOT CAUSE matt was hitting:** Auto-mode classifier sent `/chat` to Nano with 1.2s budget; on timeout it POSTed `/chat/abort`. That set `_abort_event` globally and the disconnect-watcher set it again 500ms later. The user's REAL `/chat`, sent immediately after, landed inside that abort window, saw `_abort_event` set, and bailed with `_(stopped before any output)_` in under 100ms. **Removed the `/chat/abort` POST from the classifier timeout** — local `ac.abort()` alone is enough; the backend disconnect-watcher handles cleanup at its own pace without cross-killing the user's real turn.
+
+**Verified live on v1.11.181:**
+- Reproduction chat ("A chess app") that had 2 stacked user msgs + `_(stopped before any output)_` now generates clean responses
+- Send "respond with exactly two words" → "Hello world" at 82.6 tok/s, 8 tokens, no abort
+
+**Site:** 9 hardcoded version refs bumped (pill, hero, DMG URLs ×3, timeline, headline, phase-num).
+
+**To deploy:** upload `pending_website/index.html` + privacy.html + terms.html to Porkbun web root.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.181
+Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.181)
