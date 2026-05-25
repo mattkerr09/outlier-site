@@ -314,3 +314,17 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 **Live-verified on v1.11.199:** Compare with "what is 5+5" → Nano returned "10" cleanly. No template leak. Code panel rendered cleanly as before.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.199
+
+## 2026-05-25 v1.11.200 — memory recall regression fix (Bug #-O)
+
+**Bump:** v1.11.199 → v1.11.200. Single backend fix (server.py _build_prompt factual_simple branch).
+
+**Root cause:** v1.11.191's modular prompt router INTENTIONALLY skipped memory injection on the factual_simple path ("keep factual path lean"). But "what is my dog named?" is the EXACT query shape that triggers factual_simple AND most needs the [MEMORY] block — without it, the model answers "I don't know" even though the fact is in memory.db. A regression I introduced in v191.
+
+**Fix:** Inject memory on factual_simple path too. Memory facts are small (~100-400 tok typical), don't blow the lean-prompt budget. CSL / project / app-build stay skipped (those are the actually-heavy injections).
+
+**Live-verified on v1.11.200:** "remember my dog is named raptor" → fact persists. "what is my dog named?" → model now sees + references the fact (no more "I don't know").
+
+**Carry-over: Bug #-N (meta-narration) still active.** Model wraps memory answers in "The user is asking..." narration. The memory preamble's first sentence reads as a narration trigger on Nano. Fix targeted for v201.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.200
