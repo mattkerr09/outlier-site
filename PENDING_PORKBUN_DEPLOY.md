@@ -228,3 +228,14 @@ Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releas
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.191
 Autoupdate: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.191)
+
+## 2026-05-25 v1.11.192 — model-swap error message clarity (Bug H partial)
+
+**Bump:** v1.11.191 → v1.11.192. Single backend fix (~10 LOC server.py).
+
+**What's in this DMG:**
+- **Bug #-H partial fix:** /chat post Plus↔Vision swap was 503-ing with the contradictory message "wanted 'vision', loaded 'vision' — still swapping". Root cause: `_tokenizer` was None even though `_loaded_model_id == req.model` — the OR clause caught the tokenizer-None case but the message blamed the swap. v192 distinguishes the two states: "Backend is still swapping" only fires when wanted != loaded; "loaded but tokenizer not yet initialized" fires when the model is right but tokenizer hasn't been set. Adds one inline 500ms retry before raising either error. Underlying tokenizer-None race deferred to v193 (task #18).
+
+**Live-verified:** Plus → Vision swap now returns the honest "tokenizer not yet initialized" error instead of the contradictory one. Users + API consumers can now tell it's a transient initialization issue and retry.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.192
