@@ -328,3 +328,16 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 **Carry-over: Bug #-N (meta-narration) still active.** Model wraps memory answers in "The user is asking..." narration. The memory preamble's first sentence reads as a narration trigger on Nano. Fix targeted for v201.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.200
+
+## 2026-05-25 v1.11.202 — memory route fix + preamble polish (Bug #-N partial)
+
+**Bump:** v1.11.200 → v1.11.202 (skipped v201 — that ship made narration worse and wasn't pushed publicly).
+
+**What's in this DMG:**
+- **Route memory queries away from lean prompt.** When a query matches factual_simple AND has relevant memory facts, fall through to the FULL SYSTEM_PROMPT instead of the lean one. Full prompt's Rule 8 (memory-is-silent-context, not tasks) keeps Nano from doing "1. Analyze the Request..." chain-of-thought structure.
+- **Memory preamble rewritten** to terse imperative ("Use the matching Fact below to answer... Answer in one short sentence using second-person... Do NOT preface with 'The user is asking'..."). Removed the negative-example script that Nano was mirroring.
+- **Known limitation:** Nano (4B) still narrates on memory recall ("The user is asking about their dog's name. I have a fact in memory..."). Bigger tiers (Core 27B, Plus) won't do this. This is a model-quality limitation, not a code bug — the response IS usable (fact is visible), just verbose. Future work: post-processing strip or auto-route memory queries to Core.
+
+**Live-verified on v1.11.202:** "what is my dog named?" → response includes "my dog is named raptor" but wraps in narration. Was "I don't know your dog's name" pre-v200. Was "1. Analyze the Request..." in v201.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.202
