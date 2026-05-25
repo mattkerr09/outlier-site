@@ -167,3 +167,22 @@ Autoupdate: https://github.com/Outlier-host/outlier-app-releases/releases/latest
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.188
 Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.188)
+
+## 2026-05-25 v1.11.189 — chat title strip + MCP placeholder + View logs actionable hint
+
+**Bump:** v1.11.188 → v1.11.189. Pure frontend batch (3 fixes in main.js).
+
+**What landed in pending_website/index.html:**
+- 9 hardcoded version refs
+
+**What's in this DMG:**
+- **Bug #-A** Chat title regex now strips multi-word "write me / make me / build me / create me" before single-word fallbacks. Pre-189 "write me a haiku" → chat titled "Me a haiku" (capitalized leftover pronoun). Now → "A haiku".
+- **Bug #-C** MCP card tool-count placeholder no longer stays "… tools" forever when the upstream server is down. Now flips to "(stopped)" on HTTP error from /mcp/tools/{name} or "(error)" on network failure. Click View logs to diagnose why.
+- **Bug #-F** View logs modal now shows an actionable hint above the raw stderr for 6 common failure shapes: simdjson dyld lib missing → "brew reinstall node"; generic dyld lib missing; port already in use; npx not on PATH; EACCES; auth/token failure. The generic backend hint ("Common causes…") buried the actual fix — this surfaces it.
+
+**Live-verified on installed v1.11.189:** new chat "write me a haiku about coffee" → title generated as "A haiku about coffee". Connectors panel Filesystem card reads "(error)" (server crashed on simdjson). View logs modal shows purple-bordered "Looks like: Your Homebrew Node is missing a simdjson dylib (Homebrew bumped simdjson without relinking Node). Fix: brew reinstall node" above the raw dyld trace.
+
+**To deploy:** Upload pending_website/index.html to Porkbun web root; confirm browser title bar shows v1.11.189.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.189
+Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.189)
