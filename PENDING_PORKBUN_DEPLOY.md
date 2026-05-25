@@ -239,3 +239,13 @@ Autoupdate: https://github.com/Outlier-host/outlier-app-releases/releases/latest
 **Live-verified:** Plus → Vision swap now returns the honest "tokenizer not yet initialized" error instead of the contradictory one. Users + API consumers can now tell it's a transient initialization issue and retry.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.192
+
+## 2026-05-25 v1.11.193 — tokenizer race retry bump (partial)
+
+**Bump:** v1.11.192 → v1.11.193. Single backend fix (~5 LOC server.py).
+
+**What's in this DMG:**
+- Bumped the model-swap inline retry from 1×500ms to 3×2500ms (7.5s total). After Plus→Vision swap the tokenizer init genuinely lags the model load; the v192 message was honest but the retry was too short.
+- **Status: PARTIAL** — even 7.5s of retries isn't always enough on slow swaps. The 503 still fires with v192's honest "tokenizer not yet initialized" message; users can retry manually. Deeper root-cause fix (find where _tokenizer is set asynchronously and gate on it) deferred to v194+.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.193
