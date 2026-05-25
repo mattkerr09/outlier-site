@@ -138,3 +138,12 @@ Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releas
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.185
 Autoupdate manifest: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (now serves 1.11.185)
+
+## 2026-05-25 v1.11.187 — UI auto-persist for natural-language remember-X
+
+**Bump:** v1.11.185 → v1.11.187 (skipped v186 — built but never shipped).
+
+**Live-verified:** UI chat "remember that my favorite spice is paprika" → backend.log `[outlier-mem] PERSISTED: 'my favorite spice is paprika'` → memory.db has the entry.
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.187
+Autoupdate: https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json (1.11.187)
