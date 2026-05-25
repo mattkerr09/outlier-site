@@ -292,3 +292,14 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 **Impact:** every new install gets a working MCP catalog on day 1. The class of bug that gave Darius / matt the "filesystem MCP is broken" experience is closed at the install level for all platforms.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.197
+
+## 2026-05-25 v1.11.198 — instant rotator latency fix (Bug #-L)
+
+**Bump:** v1.11.197 → v1.11.198. Single frontend fix (main.js sendMessage).
+
+**What's in this DMG:**
+- Matt's report: "still takes awhile for outlier to say things like 'thinking, pondering, working the problem' etc." Pre-198, the witty rotator didn't fire until line ~11172 in sendMessage — after ~500 lines of pre-work (history packaging, project ctx, memory fetch, classifyIntent). User pressed Send, saw nothing for hundreds of ms. v198 calls updateStatus("loading", "thinking…") IMMEDIATELY at the top of sendMessage so rotator phrases fire within a frame of click. Later status calls (loading model / agent running / generating) refine as the pipeline progresses.
+
+**Live-verified:** Sent "what is 2+2" → status pill showed "● Deliberating..." within 1 second of click (was previously several seconds of dead silence).
+
+GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.198
