@@ -341,3 +341,11 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 **Live-verified on v1.11.202:** "what is my dog named?" → response includes "my dog is named raptor" but wraps in narration. Was "I don't know your dog's name" pre-v200. Was "1. Analyze the Request..." in v201.
 
 GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.202
+
+## v1.11.203 — 2026-05-27 02:39 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.203
+- latest.json: AUTOUPDATER LIVE (correct name in gh release assets)
+- outlier-site/index.html: bumped v202→v203 (9 refs)
+- pending_website/index.html: staged
+- Site change: version pill + DMG URL bumped to v1.11.203
+- Notes: Code-tier deadline 300→900s; chess/dashboard/multi-file artifacts ship cleanly now
