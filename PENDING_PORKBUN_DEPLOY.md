@@ -438,3 +438,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.222
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AQ /mobile/status filter parity with memory.py (widened regex + 12-char min length) — no more stub/test-fact leakage to paired phone
+
+## v1.11.224 — 2026-05-27 22:15 UTC — LAUNCH BUILD
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.224
+- latest.json: AUTOUPDATER LIVE
+- Notes: Agent mode actually works (default-off broken v2 planner, route to proven v1). Bundles all v223 codebase wins (BFS, 5-bit KV, tiered limits, Vision HF cache). DR-v3 hidden from picker pending fix.
