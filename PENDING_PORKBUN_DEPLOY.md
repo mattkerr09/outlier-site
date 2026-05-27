@@ -388,3 +388,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.212
 - latest.json: AUTOUPDATER LIVE (had to manually mark --latest after create)
 - Notes: BUG #-AB self-upgrade Run cycle skips empty proposals
+
+## v1.11.213 — 2026-05-27 09:00 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.213
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AC Knowledge Stacks label "Add text..." → "Add file..."
