@@ -373,3 +373,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.209
 - latest.json: AUTOUPDATER LIVE
 - Notes: visible 🥷 incognito chip in chat footer (BUG #-Z resolution — incognito was silently persisting, no UI indicator)
+
+## v1.11.211 — 2026-05-27 07:34 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.211
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AA defensive fix (Vision image dispatch — id-direct vision-capable fallback + start-of-send-locked image ref)
