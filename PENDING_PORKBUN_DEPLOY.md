@@ -443,3 +443,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.224
 - latest.json: AUTOUPDATER LIVE
 - Notes: Agent mode actually works (default-off broken v2 planner, route to proven v1). Bundles all v223 codebase wins (BFS, 5-bit KV, tiered limits, Vision HF cache). DR-v3 hidden from picker pending fix.
+
+## v1.11.226 — 2026-05-27 — LAUNCH POLISH
+- gh release: PENDING
+- latest.json: PENDING
+- Notes: Reverted v1.11.225's speculative DR-v3 plan-hang fix (didn't resolve — empirical 0.2% CPU stall persisted). Deep research stays hidden in picker. Ships the v224-25 R&D wins that actually work: prefill_step_size=4096 (faster prompt processing), KV-5bit on small tiers (~30% memory savings, math floor preserved), spotlighting delimiter on tool results (anti-injection), smalltalk gate in /agent/chat (no codebase reads for "hi"), BFS codebase walk + hardware-tiered limits (50K files on 64GB host), agent_v2 default-off (broken planner), Combined-fused Nano on HuggingFace (math/translate/QA all up).
