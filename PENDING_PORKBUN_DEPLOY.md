@@ -428,3 +428,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.220
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AO memory_recalled stat now actually counts surfaced facts (writes facts.last_used)
+
+## v1.11.221 — 2026-05-27 17:20 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.221
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AP ARTIFACT scaffold tag added to _SCAFFOLD_TAG_RE so [/ARTIFACT] no longer leaks into chat bubble
