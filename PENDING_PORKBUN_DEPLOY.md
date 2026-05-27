@@ -349,3 +349,10 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - pending_website/index.html: staged
 - Site change: version pill + DMG URL bumped to v1.11.203
 - Notes: Code-tier deadline 300→900s; chess/dashboard/multi-file artifacts ship cleanly now
+
+## v1.11.204 — 2026-05-27 03:02 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.204
+- latest.json: AUTOUPDATER LIVE (correct name)
+- outlier-site/index.html: bumped v203→v204 (9 refs)
+- pending_website/index.html: staged
+- Notes: newChat confirm dialog (appears, dismiss-polish queued for v205); topic stopwords expanded; OpenAI default placeholder → gpt-5
