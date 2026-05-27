@@ -368,3 +368,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - latest.json: AUTOUPDATER LIVE
 - outlier-site: bumped v206→v207
 - Notes: BUG #-X slash command rotator reset
+
+## v1.11.209 — 2026-05-27 06:24 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.209
+- latest.json: AUTOUPDATER LIVE
+- Notes: visible 🥷 incognito chip in chat footer (BUG #-Z resolution — incognito was silently persisting, no UI indicator)
