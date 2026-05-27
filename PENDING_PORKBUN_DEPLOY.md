@@ -423,3 +423,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.219
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AL "The user is asking" preamble + BUG #-AM memory morphology stem
+
+## v1.11.220 — 2026-05-27 16:40 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.220
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AO memory_recalled stat now actually counts surfaced facts (writes facts.last_used)
