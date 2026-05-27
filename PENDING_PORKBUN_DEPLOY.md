@@ -403,3 +403,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.215
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AF codebase indexing skips PyInstaller/ML build artifacts; 45s walk budget
+
+## v1.11.216 — 2026-05-27 14:50 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.216
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AJ preamble suppressor catches "Thinking about" chain-of-thought patterns
