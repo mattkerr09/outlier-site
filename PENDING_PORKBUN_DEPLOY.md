@@ -408,3 +408,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.216
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AJ preamble suppressor catches "Thinking about" chain-of-thought patterns
+
+## v1.11.217 — 2026-05-27 15:20 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.217
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AJ-deeper preamble suppressor catches markdown-bold numbered self-narration
