@@ -433,3 +433,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.221
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AP ARTIFACT scaffold tag added to _SCAFFOLD_TAG_RE so [/ARTIFACT] no longer leaks into chat bubble
+
+## v1.11.222 — 2026-05-27 18:30 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.222
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AQ /mobile/status filter parity with memory.py (widened regex + 12-char min length) — no more stub/test-fact leakage to paired phone
