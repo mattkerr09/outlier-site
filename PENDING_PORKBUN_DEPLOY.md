@@ -383,3 +383,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.212
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AB self-upgrade cycle skips empty proposals
+
+## v1.11.212 — 2026-05-27 08:32 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.212
+- latest.json: AUTOUPDATER LIVE (had to manually mark --latest after create)
+- Notes: BUG #-AB self-upgrade Run cycle skips empty proposals
