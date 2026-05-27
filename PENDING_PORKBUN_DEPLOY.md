@@ -378,3 +378,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.211
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AA defensive fix (Vision image dispatch — id-direct vision-capable fallback + start-of-send-locked image ref)
+
+## v1.11.212 — 2026-05-27 08:20 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.212
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AB self-upgrade cycle skips empty proposals
