@@ -362,3 +362,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - latest.json: AUTOUPDATER LIVE
 - outlier-site: bumped v203→v206 (9 refs)
 - Notes: + New chat in-app modal (working dismiss); memory min-length 12; OpenAI default gpt-5; topic stopword expansion
+
+## v1.11.207 — 2026-05-27 04:48 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.207
+- latest.json: AUTOUPDATER LIVE
+- outlier-site: bumped v206→v207
+- Notes: BUG #-X slash command rotator reset
