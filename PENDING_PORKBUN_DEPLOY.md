@@ -356,3 +356,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - outlier-site/index.html: bumped v203→v204 (9 refs)
 - pending_website/index.html: staged
 - Notes: newChat confirm dialog (appears, dismiss-polish queued for v205); topic stopwords expanded; OpenAI default placeholder → gpt-5
+
+## v1.11.206 — 2026-05-27 04:25 UTC (skipped v204/v205 publicly)
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.206
+- latest.json: AUTOUPDATER LIVE
+- outlier-site: bumped v203→v206 (9 refs)
+- Notes: + New chat in-app modal (working dismiss); memory min-length 12; OpenAI default gpt-5; topic stopword expansion
