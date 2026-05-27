@@ -393,3 +393,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.213
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AC Knowledge Stacks label "Add text..." → "Add file..."
+
+## v1.11.214 — 2026-05-27 13:30 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.214
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AE project chat anti-hallucination — model honestly says "I cannot see this file" instead of fabricating values like APP_VERSION
