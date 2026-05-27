@@ -448,3 +448,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: PENDING
 - latest.json: PENDING
 - Notes: Reverted v1.11.225's speculative DR-v3 plan-hang fix (didn't resolve — empirical 0.2% CPU stall persisted). Deep research stays hidden in picker. Ships the v224-25 R&D wins that actually work: prefill_step_size=4096 (faster prompt processing), KV-5bit on small tiers (~30% memory savings, math floor preserved), spotlighting delimiter on tool results (anti-injection), smalltalk gate in /agent/chat (no codebase reads for "hi"), BFS codebase walk + hardware-tiered limits (50K files on 64GB host), agent_v2 default-off (broken planner), Combined-fused Nano on HuggingFace (math/translate/QA all up).
+
+## v1.11.227 — 2026-05-27 — chat snappiness pass
+- gh release: PENDING
+- latest.json: PENDING
+- Notes: Instant "Thinking…" placeholder (no more 1-2s gap during Auto-mode classify). Weather/news/stock queries fire parallel /search and chat answers using live results inline (Deep Research stays hidden). Answer Convergence early-stop (R&D note 112) — 5× faster decode on factual queries on nano/lite/quick/compact, math gated off. Env kill: OUTLIER_ANSWER_CONVERGENCE=0.
