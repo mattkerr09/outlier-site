@@ -398,3 +398,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.214
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AE project chat anti-hallucination — model honestly says "I cannot see this file" instead of fabricating values like APP_VERSION
+
+## v1.11.215 — 2026-05-27 14:10 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.215
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AF codebase indexing skips PyInstaller/ML build artifacts; 45s walk budget
