@@ -418,3 +418,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.218
 - latest.json: AUTOUPDATER LIVE
 - Notes: BUG #-AK agent v1 _ToolTagStripper hides <tool>/<args> markers from user-visible stream
+
+## v1.11.219 — 2026-05-27 16:20 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.219
+- latest.json: AUTOUPDATER LIVE
+- Notes: BUG #-AL "The user is asking" preamble + BUG #-AM memory morphology stem
