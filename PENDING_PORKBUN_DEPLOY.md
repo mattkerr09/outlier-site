@@ -463,3 +463,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: PENDING
 - latest.json: PENDING
 - Notes: BUG #-AZ trafilatura deps bundled (web search returns real content), Answer Convergence warmup=8→80 (R&D note 120; ship-Nano accuracy 0→10/10), sysprompt cache reordering (R&D note 74; cold TTFT 3041→76ms target), mlx-whisper 0.4.3 installed + bundled (mic + /transcribe work), BUG #-AX agent memory shortcut for personal-pronoun queries, "Thinking…" placeholder on every Send. Banned phrase "unlocks" scrubbed from site copy (3 instances).
+
+## v1.11.229 — autoupdater latest.json UPLOADED 2026-05-28 03:40 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.229
+- latest.json: LIVE at /releases/latest/download/latest.json — existing users on v224 (last with latest.json attached) will pull v229 on next app launch via Tauri updater
+- Critical fix: latest.json was last attached to v224, so v225-228 didn't propagate via autoupdate. Now corrected.
