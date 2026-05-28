@@ -468,3 +468,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.229
 - latest.json: LIVE at /releases/latest/download/latest.json — existing users on v224 (last with latest.json attached) will pull v229 on next app launch via Tauri updater
 - Critical fix: latest.json was last attached to v224, so v225-228 didn't propagate via autoupdate. Now corrected.
+
+## v1.11.230 — agent + MCP fixes 2026-05-28 04:35 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.230
+- latest.json: LIVE — autoupdater serves v230 to existing users
+- Notes: BUG #-BD CRITICAL — agent mode was 500 on every non-greeting prompt since v225 due to Python scope bug (StreamingResponse import inside smalltalk branch). Fixed by hoisting import. BUG #-BB MCP /tools 500 cleanup. mlx-whisper now bundled (voice transcription works).
