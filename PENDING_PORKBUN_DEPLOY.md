@@ -473,3 +473,8 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.230
 - latest.json: LIVE — autoupdater serves v230 to existing users
 - Notes: BUG #-BD CRITICAL — agent mode was 500 on every non-greeting prompt since v225 due to Python scope bug (StreamingResponse import inside smalltalk branch). Fixed by hoisting import. BUG #-BB MCP /tools 500 cleanup. mlx-whisper now bundled (voice transcription works).
+
+## v1.11.231 — memory safety + voice fallback 2026-05-28 05:40 UTC
+- gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.231
+- latest.json: LIVE — autoupdater serves v231 to v229/v230 users
+- Notes: BUG #-BL data-safety (empty POST to /memory/clear no longer wipes all facts — caught LIVE during overnight walks, restored from backup). BUG #-BG /transcribe load_npz error returns user-friendly 503 instead of raw 500. Other v231 backlog: -BH/-BI/-BJ/-BK/-AI deferred to v232+ as tuning issues.
