@@ -453,3 +453,13 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: PENDING
 - latest.json: PENDING
 - Notes: Instant "Thinking…" placeholder (no more 1-2s gap during Auto-mode classify). Weather/news/stock queries fire parallel /search and chat answers using live results inline (Deep Research stays hidden). Answer Convergence early-stop (R&D note 112) — 5× faster decode on factual queries on nano/lite/quick/compact, math gated off. Env kill: OUTLIER_ANSWER_CONVERGENCE=0.
+
+## v1.11.228 — 2026-05-27 — web search actually works
+- gh release: PENDING
+- latest.json: PENDING
+- Notes: BUG #-AZ — trafilatura deps (courlan, htmldate, justext, charset_normalizer, urllib3) were missing from every prior PyInstaller bundle → _HAS_TRAFILATURA=False → web scraper returned snippets only → weather/news/RAG queries got URL pointers instead of live data. Fixed by adding deps to spec hiddenimports + collect_data_files. Also: "Thinking…" placeholder now fires on every Send (not just Auto-mode), so input always feels registered. Voice transcription follow-up: needs `pip install mlx-whisper` in bundler venv before next ship.
+
+## v1.11.229 — 2026-05-27 — launch consolidation (web search + voice + sysprompt cache)
+- gh release: PENDING
+- latest.json: PENDING
+- Notes: BUG #-AZ trafilatura deps bundled (web search returns real content), Answer Convergence warmup=8→80 (R&D note 120; ship-Nano accuracy 0→10/10), sysprompt cache reordering (R&D note 74; cold TTFT 3041→76ms target), mlx-whisper 0.4.3 installed + bundled (mic + /transcribe work), BUG #-AX agent memory shortcut for personal-pronoun queries, "Thinking…" placeholder on every Send. Banned phrase "unlocks" scrubbed from site copy (3 instances).
