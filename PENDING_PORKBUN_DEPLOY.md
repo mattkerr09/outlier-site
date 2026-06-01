@@ -485,3 +485,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - pending_website/index.html: staged (no version pill in that file — no change needed)
 - ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds in this env)
 - Change: agent-v2 auto-routes by goal (question/edit→ReAct, build→plan-once). No regressions (router + injection + leak gates green).
+
+## v1.11.291 — 2026-06-01T19:17:01Z
+- GH release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.291 (DMG + tarball + sig + latest.json; auto-update endpoint verified serving 1.11.291)
+- outlier-site: index.html bumped 290→291
+- ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds in this env)
+- Change: agent big-codebase fixes — filesystem.* on project paths route to project-scoped built-ins (no 'access denied'); ReAct/plan gate resolves read-only tool aliases (list_directory→list_dir) so the agent discovers files in subdirs before editing. Full 4-pass gate green (router/injection/version, fs-fix/build/edit-discovery, leak 2%/empty 4%, chat/memory/DR sweep).
