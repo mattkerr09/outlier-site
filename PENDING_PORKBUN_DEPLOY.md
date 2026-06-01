@@ -478,3 +478,10 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - gh release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.231
 - latest.json: LIVE — autoupdater serves v231 to v229/v230 users
 - Notes: BUG #-BL data-safety (empty POST to /memory/clear no longer wipes all facts — caught LIVE during overnight walks, restored from backup). BUG #-BG /transcribe load_npz error returns user-friendly 503 instead of raw 500. Other v231 backlog: -BH/-BI/-BJ/-BK/-AI deferred to v232+ as tuning issues.
+
+## v1.11.290 — 2026-06-01T18:46:56Z
+- GH release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.290 (DMG + tarball + sig + latest.json attached; auto-update endpoint verified serving 1.11.290)
+- outlier-site: PUSHED (mattkerr09/outlier-site @ 63e278c) — index.html bumped 289→290, DMG button → releases/download/v1.11.290/Outlier-1.11.290-arm64.dmg
+- pending_website/index.html: staged (no version pill in that file — no change needed)
+- ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds in this env)
+- Change: agent-v2 auto-routes by goal (question/edit→ReAct, build→plan-once). No regressions (router + injection + leak gates green).
