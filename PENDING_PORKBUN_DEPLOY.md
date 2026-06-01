@@ -491,3 +491,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - outlier-site: index.html bumped 290→291
 - ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds in this env)
 - Change: agent big-codebase fixes — filesystem.* on project paths route to project-scoped built-ins (no 'access denied'); ReAct/plan gate resolves read-only tool aliases (list_directory→list_dir) so the agent discovers files in subdirs before editing. Full 4-pass gate green (router/injection/version, fs-fix/build/edit-discovery, leak 2%/empty 4%, chat/memory/DR sweep).
+
+## v1.11.292 — 2026-06-01T21:00:58Z
+- GH release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.292 (DMG+tarball+sig+latest.json; auto-update verified serving 1.11.292)
+- outlier-site: index.html bumped 291→292
+- ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds here)
+- Change: agent big-codebase reliability — read_file/edit_file auto-resolve a bare filename to its unique subdir match (no more flail on src/X.py); router 100% on 46-case set (filler-prefix + in-clause + walk/document). Gate green (router/injection/version, edit-resolve subdir, leak 2%).
