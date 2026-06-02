@@ -497,3 +497,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - outlier-site: index.html bumped 291→292
 - ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds here)
 - Change: agent big-codebase reliability — read_file/edit_file auto-resolve a bare filename to its unique subdir match (no more flail on src/X.py); router 100% on 46-case set (filler-prefix + in-clause + walk/document). Gate green (router/injection/version, edit-resolve subdir, leak 2%).
+
+## v1.11.294 — 2026-06-02T01:21:28Z
+- GH release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.294 (DMG+tarball+sig+latest.json; auto-update verified serving 1.11.294, tarball HTTP 200 407MB)
+- outlier-site: index.html bumped 292→294 (v293 built but never published — superseded)
+- ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds here)
+- Change: (1) auto-update INSTALL fix — download_and_install now passes the required {rid, onEvent} args (was bare → Tauri rejected it before download; in-app install had never worked, only detection). Fixes matt's "Update failed — check your connection". Existing users must reinstall v294's DMG once; then in-app updates work. (2) agent big-app completeness cap 6→40 — a 24-file Flask package build lands 23/23 files. Gate green (router 100%, leak 0/8, version, codesign).
