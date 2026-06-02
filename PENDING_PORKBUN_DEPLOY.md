@@ -507,7 +507,7 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 ## v1.11.295 — 2026-06-02T02:11:22Z
 - GH release: https://github.com/Outlier-host/outlier-app-releases/releases/tag/v1.11.295 (DMG+tarball+sig+latest.json; auto-update verified serving 1.11.295)
 - outlier-site: index.html bumped 294→295
-- ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds here) — live site is still behind; users should grab the DMG from the GH releases page directly until deployed
+- ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds here). Production is serving v295.
 - Change: agent build code-quality — strip stray ``` fences + two-phase compile-retry (create all files, then fix non-compiling .py with leftover budget). 24-file stress: 23/23 files, compile 8/21→15/21.
 
 - COPY AUDIT (post-v295): removed banned "Frontier-class" → "High-end quality"; "Pro unlock" → "Pro upgrade". Tier names/model IDs verified against backend catalog (accurate). Re-deploy index.html.
@@ -515,3 +515,5 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - COPY/MESSAGING PASS (post-v295): hero → "private, offline alternative to Claude. No caps."; eco section adds money+environment+cloud-cost-overrun hook (CloudZero State of AI Costs, qualitative); fixed stale v1.8 refs (5); title/meta/OG/twitter aligned to Claude-alternative + privacy positioning. Re-deploy index.html.
 
 - FIX (post-8a901fe): hardware grid said 64GB runs "all tiers except Plus" — WRONG (64GB Studio runs Plus per catalog + line 1681). Now "All tiers, incl. Plus 397B"; 96+ reframed to "more headroom"; stale Compact→Core. Eco: added sourced 80-900nference-energy stat (MIT Tech Review 2025). Re-deploy index.html.
+
+- CLEANUP (post-v295): deleted stale `pending_website/index.html` (it was frozen at v1.11.259 with 9 version pills — an earlier note here wrongly claimed it had "no version pill"). The canonical page to deploy is `outlier-site/index.html` (v295). `pending_website/privacy.html` + `pending_website/terms.html` were left in place (not stale). Do NOT deploy a v259 page.
