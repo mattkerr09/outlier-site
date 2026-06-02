@@ -511,3 +511,5 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - Change: agent build code-quality — strip stray ``` fences + two-phase compile-retry (create all files, then fix non-compiling .py with leftover budget). 24-file stress: 23/23 files, compile 8/21→15/21.
 
 - COPY AUDIT (post-v295): removed banned "Frontier-class" → "High-end quality"; "Pro unlock" → "Pro upgrade". Tier names/model IDs verified against backend catalog (accurate). Re-deploy index.html.
+
+- COPY/MESSAGING PASS (post-v295): hero → "private, offline alternative to Claude. No caps."; eco section adds money+environment+cloud-cost-overrun hook (CloudZero State of AI Costs, qualitative); fixed stale v1.8 refs (5); title/meta/OG/twitter aligned to Claude-alternative + privacy positioning. Re-deploy index.html.
