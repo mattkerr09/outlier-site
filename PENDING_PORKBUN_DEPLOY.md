@@ -509,3 +509,5 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - outlier-site: index.html bumped 294→295
 - ACTION FOR OPERATOR: upload outlier-site/index.html to Porkbun (no creds here) — live site is still behind; users should grab the DMG from the GH releases page directly until deployed
 - Change: agent build code-quality — strip stray ``` fences + two-phase compile-retry (create all files, then fix non-compiling .py with leftover budget). 24-file stress: 23/23 files, compile 8/21→15/21.
+
+- COPY AUDIT (post-v295): removed banned "Frontier-class" → "High-end quality"; "Pro unlock" → "Pro upgrade". Tier names/model IDs verified against backend catalog (accurate). Re-deploy index.html.
