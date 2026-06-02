@@ -513,3 +513,5 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - COPY AUDIT (post-v295): removed banned "Frontier-class" → "High-end quality"; "Pro unlock" → "Pro upgrade". Tier names/model IDs verified against backend catalog (accurate). Re-deploy index.html.
 
 - COPY/MESSAGING PASS (post-v295): hero → "private, offline alternative to Claude. No caps."; eco section adds money+environment+cloud-cost-overrun hook (CloudZero State of AI Costs, qualitative); fixed stale v1.8 refs (5); title/meta/OG/twitter aligned to Claude-alternative + privacy positioning. Re-deploy index.html.
+
+- FIX (post-8a901fe): hardware grid said 64GB runs "all tiers except Plus" — WRONG (64GB Studio runs Plus per catalog + line 1681). Now "All tiers, incl. Plus 397B"; 96+ reframed to "more headroom"; stale Compact→Core. Eco: added sourced 80-900nference-energy stat (MIT Tech Review 2025). Re-deploy index.html.
