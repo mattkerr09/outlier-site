@@ -540,3 +540,6 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 
 ## 2026-06-05T15:09:59Z - v1.11.315
 - outlier-site bumped 1.11.314 -> 1.11.315 (Porkbun operator-pending)
+
+## 2026-06-05T17:39:45Z - v1.11.316
+- outlier-site bumped 1.11.315 -> 1.11.316 (Porkbun operator-pending)
