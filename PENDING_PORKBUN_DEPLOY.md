@@ -517,3 +517,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - FIX (post-8a901fe): hardware grid said 64GB runs "all tiers except Plus" — WRONG (64GB Studio runs Plus per catalog + line 1681). Now "All tiers, incl. Plus 397B"; 96+ reframed to "more headroom"; stale Compact→Core. Eco: added sourced 80-900nference-energy stat (MIT Tech Review 2025). Re-deploy index.html.
 
 - CLEANUP (post-v295): deleted stale `pending_website/index.html` (it was frozen at v1.11.259 with 9 version pills — an earlier note here wrongly claimed it had "no version pill"). The canonical page to deploy is `outlier-site/index.html` (v295). `pending_website/privacy.html` + `pending_website/terms.html` were left in place (not stale). Do NOT deploy a v259 page.
+
+## v1.11.311 — 2026-06-05 (pending Porkbun upload)
+- index.html bumped 1.11.310 → 1.11.311 (9 refs), committed + pushed to mattkerr09/outlier-site.
+- GH release v1.11.311 live on Outlier-host/outlier-app-releases (DMG + .app.tar.gz + .sig + latest.json; marked Latest). Auto-updater served.
+- Changes: smarter web search (anaphoric follow-ups like "which of those is fastest?" + drafting tasks like "write a cover letter" no longer trigger a junk web search — #-DP/#-DO); tagline scaffold-spiral fix (Rule 3 reworded so "just the X" no longer makes Nano deliberate about fenced blocks — gate-caught; tagline leak 20%→0%).
+- ACTION: operator upload outlier-site/index.html to Porkbun (outlier.host) to publish the version pill + DMG link.
