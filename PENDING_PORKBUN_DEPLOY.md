@@ -523,3 +523,9 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - GH release v1.11.311 live on Outlier-host/outlier-app-releases (DMG + .app.tar.gz + .sig + latest.json; marked Latest). Auto-updater served.
 - Changes: smarter web search (anaphoric follow-ups like "which of those is fastest?" + drafting tasks like "write a cover letter" no longer trigger a junk web search — #-DP/#-DO); tagline scaffold-spiral fix (Rule 3 reworded so "just the X" no longer makes Nano deliberate about fenced blocks — gate-caught; tagline leak 20%→0%).
 - ACTION: operator upload outlier-site/index.html to Porkbun (outlier.host) to publish the version pill + DMG link.
+
+## v1.11.312 — 2026-06-05 (pending Porkbun upload)
+- index.html bumped 1.11.311 → 1.11.312; GH release v1.11.312 live (DMG+tarball+sig+latest.json, Latest) → auto-updater served.
+- Change: #-DQ — "just the slogan"/"just the tagline" now returns exactly one line (no out-loud brainstorming). (Backend suppressor brainstorm-opener catch.)
+- NOTE: a multi-turn project-chat history fix (#-DR) was attempted but its frontend fallback did NOT engage in testing — NOT claimed in v312; remains open for live-frontend debugging.
+- ACTION: operator upload outlier-site/index.html to Porkbun (outlier.host).
