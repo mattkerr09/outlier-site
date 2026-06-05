@@ -534,3 +534,6 @@ GitHub release: https://github.com/Outlier-host/outlier-app-releases/releases/ta
 - index.html → 1.11.313; GH release v1.11.313 live (DMG+tarball+sig+latest.json, Latest) → auto-updater served.
 - 🎯 #-DR FIXED (the real root cause): follow-up questions in PROJECT chats ("which of those is biggest?") now correctly use the conversation instead of a junk web search. Root: the backend follow-up detector had a 160-char cap, and project chats prepend a [PRIOR_CHATS] context block that pushed the question past it → strip injected context blocks before the check. HTTP-verified: prefixed follow-up went sources=10 → sources=0.
 - ACTION: operator upload outlier-site/index.html to Porkbun (outlier.host).
+
+## 2026-06-05T14:39:55Z — v1.11.314
+- outlier-site/index.html bumped 1.11.313 -> 1.11.314 (Porkbun upload pending operator)
