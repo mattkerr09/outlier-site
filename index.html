@@ -702,6 +702,17 @@
     .nav-toggle.active span:nth-child(2) { opacity: 0; }
     .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+    /* EMAIL LIST (Buttondown signup) */
+    .bd-form { display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; max-width:520px; margin:1.5rem auto 0; }
+    .bd-form input[type=email] { flex:1 1 240px; min-width:200px; padding:0.72rem 0.95rem; border-radius:10px;
+      border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text); font-size:1rem; outline:none; transition:border-color 0.2s; }
+    .bd-form input[type=email]:focus { border-color:var(--green); }
+    .bd-form input[type=email]::placeholder { color:var(--text-muted,#9ca3af); }
+    .bd-form button { flex:0 0 auto; white-space:nowrap; }
+    .bd-note { max-width:520px; margin:0.55rem auto 0; font-size:0.82rem; color:var(--text-muted,#9ca3af); text-align:center; }
+    .bd-success { max-width:520px; margin:1.5rem auto 0; padding:0.85rem 1rem; border-radius:10px;
+      border:1px solid var(--green); background:rgba(52,211,153,0.10); color:var(--green-light,#6ee7b7); text-align:center; font-weight:600; }
+
     /* RESPONSIVE */
     @media (max-width: 960px) {
       .pain-grid { grid-template-columns: 1fr; }
@@ -884,7 +895,7 @@
       <li><a href="#energy">Impact</a></li>
       <li><a href="#proof">Proof</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><span class="ship-pill">v1.11.327</span></li>
+      <li><span class="ship-pill">v1.11.328</span></li>
       <li><a href="#support" class="nav-cta">Fund the build</a></li>
     </ul>
   </div>
@@ -902,7 +913,7 @@
   <div class="wrap">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      v1.11.327 · notarized Mac DMG · community-funded
+      v1.11.328 · notarized Mac DMG · community-funded
     </div>
     <h1>A private, offline <span class="gradient">alternative to cloud AI like Claude.</span><br/>No caps. <span class="green-g">All on your Mac.</span></h1>
     <p class="hero-sub">
@@ -917,10 +928,16 @@
       🔒 Your prompts and files never leave your Mac. No telemetry on inference. Open-weight models you can audit on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">HuggingFace</a>.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.327/Outlier-1.11.327-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.328/Outlier-1.11.328-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
       <a class="btn btn-accent" href="#support">Become a Founder</a>
       <a class="btn btn-ghost" href="#roadmap">See what we’re building</a>
     </div>
+    <!-- EMAIL LIST (Buttondown) — capture people not ready to download yet -->
+    <form class="bd-form" data-bd aria-label="Get launch updates by email">
+      <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address" />
+      <button type="submit" class="btn btn-green">Get launch updates →</button>
+    </form>
+    <div class="bd-note">Not ready to install? Get launch news + major updates by email — no spam, unsubscribe anytime.</div>
     <div class="req">Apple Silicon · macOS 12+ · Free Nano + Lite · Pro $20/mo or $149/yr adds everything incl. Plus · lifetime from $99 · local by default · performance varies by hardware</div>
     <div class="req" style="max-width:720px;margin:0.6rem auto 0;line-height:1.6;">
       Outlier is actively under development. “Unlimited” means no API token meter from Outlier for local models; speed, context, model fit, and battery life depend on your Mac.
@@ -1107,7 +1124,7 @@
           <li>No account required</li>
           <li>No token bill</li>
         </ul>
-        <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.327/Outlier-1.11.327-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+        <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.328/Outlier-1.11.328-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
       </div>
 
       <div class="price-card featured">
@@ -1161,7 +1178,7 @@
 
     <div class="phase-grid">
       <div class="roadmap-card">
-        <div class="num">Now · v1.11.327</div>
+        <div class="num">Now · v1.11.328</div>
         <h3>Local Mac AI foundation</h3>
         <p>Signed, notarized Mac app. Streaming chat, local sessions, seven model tiers,
         model downloads, memory, project files, web research, vision support, and a Pro gate
@@ -1507,7 +1524,7 @@
     </div>
 
     <p class="provenance" style="margin-top: 2rem;">
-      Current site-safe headline numbers: v1.11.327 shipped as a notarized Mac DMG; Free includes Nano + Lite;
+      Current site-safe headline numbers: v1.11.328 shipped as a notarized Mac DMG; Free includes Nano + Lite;
       Pro ($20/mo or $149/yr) adds everything including Plus 397B; lifetime Pro from $99 (Founding 200) or $200
       (Founders 500); local generation has no Outlier API token meter.
     </p>
@@ -1527,7 +1544,7 @@
 
     <div class="phase-grid">
       <div class="phase-card shipping">
-        <div class="phase-num">Shipped · v1.11.327</div>
+        <div class="phase-num">Shipped · v1.11.328</div>
         <h3>Mac-native local foundation</h3>
         <p>Notarized DMG, seven model tiers, local chat, sessions, downloads, memory, project context, research, vision, and Pro upgrade.</p>
         <span class="phase-status shipping">● Live beta</span>
@@ -1710,7 +1727,7 @@
       that runs locally, belongs to the user, and has no API token cap from Outlier mid-sprint.
     </p>
     <div class="final-cta-actions">
-      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.327/Outlier-1.11.327-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.328/Outlier-1.11.328-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
       <a class="btn btn-accent" href="https://buy.polar.sh/polar_cl_ZmNbIbVkQlAAsaLmphepqtUAxcshOJ09f2lhw1EXYD5" target="_blank" rel="noopener noreferrer">Become a Founder</a>
       <a class="btn btn-ghost" href="https://buy.polar.sh/polar_cl_RvmkI5ZFwi5BYFQMgdYHHRk3b8rxOrMpTpZB61xkXuT" target="_blank" rel="noopener noreferrer">Get Pro $20/mo</a>
       <a class="btn btn-ghost" href="https://buy.polar.sh/polar_cl_7yHHBx7s3qyD6A2DQ3wlfCLAUR6VUYGJUmwtx2munvs" target="_blank" rel="noopener noreferrer">Chip in any amount</a>
@@ -1723,7 +1740,7 @@
     <div class="foot">
       <div>Outlier — Kerr &amp; Company LLC · Grand Rapids, MI · © 2026</div>
       <div class="foot-links">
-        <a href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.327/Outlier-1.11.327-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+        <a href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.328/Outlier-1.11.328-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
         <a href="#support">Fund</a>
         <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer">HuggingFace</a>
         <a href="https://github.com/Outlier-host/outlier-app-releases" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -1749,6 +1766,44 @@
       document.querySelector('.nav-toggle').classList.remove('active');
     }
   });
+</script>
+
+<script>
+  // EMAIL LIST (Buttondown embed). Replace OUTLIER_BD_USER with the real Buttondown
+  // username once the account exists. Uses a no-cors POST so the signup works from
+  // a static page; Buttondown emails a confirm link, so we optimistically show success.
+  (function () {
+    var BD_USER = "OUTLIER_BD_USER";
+    // Until the real Buttondown username is filled in, hide the signup entirely so
+    // it never falsely confirms a subscribe. (Sentinel split so a sed that fills the
+    // username above does NOT also rewrite this comparison.)
+    if (BD_USER === ("OUTLIER_" + "BD_USER")) {
+      document.querySelectorAll('form[data-bd], .bd-note').forEach(function (el) { el.style.display = 'none'; });
+      return;
+    }
+    document.querySelectorAll('form[data-bd]').forEach(function (f) {
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var input = f.querySelector('input[name=email]');
+        var email = (input && input.value || '').trim();
+        if (!email || email.indexOf('@') < 1) { if (input) input.focus(); return; }
+        var btn = f.querySelector('button'); var orig = btn.textContent;
+        btn.disabled = true; btn.textContent = 'Joining…';
+        var body = new URLSearchParams({ email: email, embed: '1' });
+        fetch('https://buttondown.com/api/emails/embed-subscribe/' + BD_USER, { method: 'POST', mode: 'no-cors', body: body })
+          .then(function () {
+            var ok = document.createElement('p'); ok.className = 'bd-success';
+            ok.textContent = "✓ You're on the list — check your inbox to confirm.";
+            f.parentNode.insertBefore(ok, f); f.remove();
+            var note = document.querySelector('.bd-note'); if (note) note.remove();
+          })
+          .catch(function () {
+            btn.disabled = false; btn.textContent = orig;
+            window.open('https://buttondown.com/' + BD_USER, '_blank');
+          });
+      });
+    });
+  })();
 </script>
 
 <!-- PRICING-V3 founding 200 live seat counter — degrades to "200 seats" if data/seats.json is missing -->
