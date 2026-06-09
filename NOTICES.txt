@@ -1,0 +1,144 @@
+Outlier
+Copyright 2026 Outlier (mattkerr09@gmail.com)
+
+This product includes software developed by third parties. Their licenses
+and required NOTICE files are reproduced below in compliance with the
+applicable license terms (notably Apache License 2.0 §4(d)).
+
+================================================================================
+Bundled language models
+================================================================================
+
+Outlier does not bundle model weights in the application. It lets the user
+download and run derivatives of the models below. Each model's specific
+license is displayed in-app, in the model picker, BEFORE download; the user
+is responsible for complying with the license of any model they download.
+
+Models based on the Qwen family — base weights licensed under the Apache
+License, Version 2.0:
+
+  - Qwen3.5-4B          (Outlier-Nano)
+  - Qwen3.5-9B          (Outlier-Lite)
+  - Qwen3.6-27B         (Outlier-Core, Outlier-Code config variant)
+  - Qwen 397B MoE       (Outlier-Plus)
+  - Qwen3.6-35B-A3B     (Outlier-Vision)
+
+  Source:  https://huggingface.co/Qwen
+  License: https://www.apache.org/licenses/LICENSE-2.0
+
+  Outlier-* derivatives are distributed under the same Apache-2.0 terms
+  on Hugging Face: https://huggingface.co/Outlier-Ai
+
+Models based on Google's Gemma family — governed NOT by Apache-2.0 but by the
+Gemma Terms of Use (a separate license with its own use restrictions):
+
+  - Gemma 4 (26B-a4b-it config variant)
+
+  License: https://ai.google.dev/gemma/terms
+
+Users who bring their own model (BYOM) are responsible for verifying and
+complying with that model's license.
+
+================================================================================
+Bundled Python runtime dependencies
+================================================================================
+
+The shipped backend (outlier-cli) is a PyInstaller-frozen application that
+embeds the following major dependencies. Full per-package version + license
+metadata is generated at build time via `pip-licenses` and reproduced in
+`NOTICES_FULL.txt` (see repo root). The licenses below cover the dependencies
+used at runtime by the bundled backend.
+
+  - mlx, mlx_lm                     MIT
+  - fastapi, starlette, pydantic    MIT
+  - uvicorn, h11, httptools         BSD-3-Clause / MIT
+  - huggingface_hub                 Apache 2.0
+  - requests                        Apache 2.0
+  - httpx, httpcore, anyio          BSD-3-Clause
+  - charset-normalizer              MIT
+  - certifi                         MPL-2.0
+  - urllib3                         MIT
+  - beautifulsoup4                  MIT
+  - python-multipart                Apache 2.0
+  - PyInstaller                     GPL-2.0+ with bootloader exception
+                                    (commercial-use exception covers shipping
+                                    the frozen .app per upstream terms)
+  - pyinstaller-hooks-contrib       Apache 2.0
+
+------ NOTICE: Requests ------------------------------------------------------
+
+Requests
+Copyright 2019 Kenneth Reitz
+
+------ NOTICE: yarl, propcache (aio-libs) -----------------------------------
+
+Copyright 2016-2021, Andrew Svetlov and aio-libs team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+------ NOTICE: huggingface_hub ----------------------------------------------
+
+Copyright 2020 The HuggingFace Team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+================================================================================
+Tauri shell + Rust dependencies
+================================================================================
+
+The desktop shell is built on Tauri 2 (Apache-2.0 / MIT dual). All Rust
+crates pulled in transitively are MIT or Apache-2.0 licensed; full audit
+generated via `cargo about generate` and reproduced in
+`NOTICES_RUST.txt` (see repo root).
+
+================================================================================
+Frontend dependencies
+================================================================================
+
+The bundled JavaScript frontend (desktop/outlier-desktop/src/) uses only
+Tauri's official @tauri-apps plugins (Apache-2.0 / MIT) for its runtime.
+Dev-only dependencies (Playwright, vitest, eslint, axe-core) are not shipped
+to end users.
+
+KaTeX font files (woff2) bundled at desktop/outlier-desktop/src/vendor/fonts/
+are licensed under the SIL Open Font License (OFL-1.1):
+https://github.com/KaTeX/KaTeX/blob/main/LICENSE
+
+The source code for these font files and the KaTeX project is available at:
+https://github.com/KaTeX/KaTeX
+
+================================================================================
+Apache License, Version 2.0 (full text)
+================================================================================
+
+The text of the Apache License, Version 2.0 is available at:
+https://www.apache.org/licenses/LICENSE-2.0
+
+In summary (this summary does not replace the License terms):
+  - You may use, reproduce, modify, and distribute the Work, with or
+    without modification, subject to the conditions in §4.
+  - You must retain a copy of the License with any redistribution.
+  - You must cause any modified files to carry prominent notices.
+  - You must retain copyright, patent, trademark, and attribution notices
+    from the Source form, including this NOTICES file.
+
+================================================================================
+Reporting
+================================================================================
+
+If you believe a license attribution is missing or incorrect, please open
+an issue at: https://github.com/Outlier-host/Outlier/issues
