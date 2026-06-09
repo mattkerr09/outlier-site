@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to install local AI on a Mac (step by step) | Outlier</title>
+  <meta name="description" content="Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-09">
+  <link rel="canonical" href="https://outlier.host/how-to/install-local-ai-on-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to install local AI on a Mac (step by step)">
+  <meta property="og:description" content="Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.">
+  <meta property="og:url" content="https://outlier.host/how-to/install-local-ai-on-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to install local AI on a Mac (step by step)">
+  <meta name="twitter:description" content="Install local AI on your Mac in ~5 minutes.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    .disclaim { margin-top: 1.6rem; font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to install local AI on a Mac (step by step)", "description": "Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/install-local-ai-on-mac/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to install local AI on a Mac (step by step)", "item": "https://outlier.host/how-to/install-local-ai-on-mac/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need an account to use it?", "acceptedAnswer": {"@type": "Answer", "text": "No. The free tier works with no account and no API key. You only sign in if you upgrade to a paid Pro plan."}}, {"@type": "Question", "name": "Why does the first launch need internet?", "acceptedAnswer": {"@type": "Answer", "text": "Only to download the model weights once. After the model is on your disk, the app runs fully offline — no connection needed for chat or agent work."}}, {"@type": "Question", "name": "Will it run on an Intel Mac?", "acceptedAnswer": {"@type": "Answer", "text": "No. Outlier requires Apple Silicon (M1 or newer) because it uses Apple's MLX framework and the Mac's unified memory. Intel Macs are not supported."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">how-to</a></div>
+    <h1>How to install local AI on a Mac (step by step)</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-06-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Download the notarized DMG from <strong>outlier.host</strong>, drag it to Applications, open it.</li>
+        <li>First launch downloads the Nano model (~2.4 GB); after that it runs offline.</li>
+        <li>Requirements: Apple Silicon Mac (M1 or newer), macOS 12+, ~3 GB free disk.</li>
+        <li>No account, no API key — the free tier works immediately.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Installing local AI on a Mac takes about five minutes and no account. You download a signed app, drag it to Applications, and on first launch it pulls a small model so you can start chatting offline. Here's the exact process with Outlier, plus the requirements and a quick sanity check.</p>
+
+    <h2>Before you start: requirements</h2>
+    <ul>
+      <li><strong>Apple Silicon Mac</strong> (M1, M2, M3, or M4). Intel Macs are not supported.</li>
+      <li><strong>macOS 12 (Monterey) or newer.</strong></li>
+      <li><strong>16 GB RAM</strong> recommended (the free tiers run here); more for larger models.</li>
+      <li><strong>~3 GB free disk</strong> for the first model; more if you add bigger tiers.</li>
+    </ul>
+    <h2>Step by step</h2>
+    <ol>
+      <li><strong>Download.</strong> Go to <a href="https://outlier.host/">outlier.host</a> and click Download. You'll get a notarized <code>.dmg</code> (~150 MB).</li>
+      <li><strong>Open the DMG</strong> and drag the Outlier app into your Applications folder.</li>
+      <li><strong>Launch it.</strong> The first open may prompt a macOS Gatekeeper confirmation — it's notarized, so click Open.</li>
+      <li><strong>First model download.</strong> On first launch the app pulls Nano (~2.4 GB) so it has something to run. This needs a connection once.</li>
+      <li><strong>Start chatting.</strong> Type a prompt. You're now running AI locally — no account, no key.</li>
+    </ol>
+    <h2>Confirm it's actually local</h2>
+    <p>The proof that it's running on your Mac and not in the cloud: after the first model has downloaded, <strong>turn off wifi</strong> and send a prompt. It still answers. Chat, model switching, and project memory all keep working offline.</p>
+    <h2>Adding bigger models</h2>
+    <p>The free Nano and Lite tiers cover everyday use. For serious coding or document work, switch to Core 27B (needs a 24 GB+ Mac) — the app downloads it on first use. The largest model, Plus 397B, needs a 64 GB+ Mac. Bigger models mean bigger downloads, so keep an eye on disk space.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Do I need an account to use it?</h3>
+        <p>No. The free tier works with no account and no API key. You only sign in if you upgrade to a paid Pro plan.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does the first launch need internet?</h3>
+        <p>Only to download the model weights once. After the model is on your disk, the app runs fully offline — no connection needed for chat or agent work.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Will it run on an Intel Mac?</h3>
+        <p>No. Outlier requires Apple Silicon (M1 or newer) because it uses Apple's MLX framework and the Mac's unified memory. Intel Macs are not supported.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=install-local-ai-on-mac">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need?</a> · <a href="https://outlier.host/how-to/fix-local-ai-wont-load-mac/">Fix: model won't load</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
