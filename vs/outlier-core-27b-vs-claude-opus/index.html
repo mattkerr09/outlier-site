@@ -114,20 +114,20 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Same 54 prompts, both apps, side-by-side outputs at <code>/private/tmp/parity/</code>.</li>
-        <li>Outlier Core 27B scored <strong>98.9% overall</strong>; all 9 brutal additions 100%.</li>
-        <li>Brutal additions included chess engine, raft/paxos, ZK proofs, race-condition refactor.</li>
-        <li>Where Claude still wins: speed (~4×), long-context (50k+), vision quality.</li>
+        <li>Same 54 prompts. Both apps. Side-by-side outputs sitting at <code>/private/tmp/parity/</code>.</li>
+        <li>Outlier Core 27B scored <strong>98.9% overall</strong>. All 9 brutal additions landed at 100%.</li>
+        <li>The brutal ones: a chess engine, raft/paxos, ZK proofs, a race-condition refactor.</li>
+        <li>Claude still wins on speed (~4×), long contexts (50k+), and vision quality.</li>
       </ul>
     </div>
 
-    <p class="lead">In May 2026, the same 54 prompts were sent to Outlier Core 27B (running locally on a Mac) and Claude Opus 4.7 (running in the cloud). The raw outputs from both models were saved to disk and graded side by side. This is what the bench found, including the 9 hardest tests where the gap could have shown up.</p>
+    <p class="lead">I ran the same 54 prompts through two models in May 2026. Outlier Core 27B on a Mac, locally. Claude Opus 4.7 in the cloud. Every raw output got saved to disk and graded against the other, including the 9 hardest tests, the ones where a small local model should fall apart if it's going to fall apart anywhere. Here's what actually came back.</p>
 
     <h2>The setup</h2>
-    <p>Each prompt went through both apps with the same wording. Outputs were captured to <code>/private/tmp/parity/*.txt</code> and graded against an objective rubric per category — for code, things like "valid HTML doctype," "closed script tag," "WebAudio chime present," "keyboard shortcuts wired." Grading was not subjective vibes; it was checklist-based pass/fail.</p>
+    <p>Same wording into both apps, every time. Outputs landed in <code>/private/tmp/parity/*.txt</code> and got graded against a fixed rubric per category. For code that meant concrete checks: "valid HTML doctype," "closed script tag," "WebAudio chime present," "keyboard shortcuts wired." No vibes. Either a check passed or it didn't.</p>
 
     <h2>The 6-prompt warm-up battery</h2>
-    <p>Six initial tests across the canonical categories:</p>
+    <p>Six tests to start, one per canonical category:</p>
     <table>
       <thead><tr><th>Test</th><th>Claude</th><th>Outlier Core 27B</th><th>Notes</th></tr></thead>
       <tbody>
@@ -141,32 +141,32 @@
     </table>
 
     <h2>The 54-test expansion</h2>
-    <p>After the warm-up went green, the bench expanded. Cycle 2 hit 45 tests at 100%. Cycle 3 added 9 brutal tasks:</p>
+    <p>Once the warm-up came back clean, I widened it. Cycle 2 ran 45 tests and hit 100%. Then cycle 3 piled on 9 brutal ones:</p>
     <ul>
-      <li>Chess engine with full rules — castling, en-passant, promotion, check, checkmate</li>
-      <li>Paint canvas — brush, color picker, clear</li>
-      <li>Hard combinatorics problem</li>
-      <li>Geometry proof</li>
-      <li>Raft vs Paxos consensus explanation</li>
+      <li>A chess engine with the full rule set: castling, en-passant, promotion, check, checkmate</li>
+      <li>A paint canvas with brush, color picker, and clear</li>
+      <li>A nasty combinatorics problem</li>
+      <li>A geometry proof</li>
+      <li>Raft vs Paxos, explained</li>
       <li>Zero-knowledge proofs — soundness, completeness, SNARKs</li>
-      <li>6-section blameless post-mortem</li>
-      <li>Race-condition refactor</li>
-      <li>Needle-in-context retrieval (long-context recall)</li>
+      <li>A 6-section blameless post-mortem</li>
+      <li>A race-condition refactor</li>
+      <li>Needle-in-context retrieval, i.e. long-context recall</li>
     </ul>
-    <p>All 9 hit 100% on Outlier Core 27B. The overall 54-test score was <strong>98.9%</strong>. The ~1% slack came from 4 non-deterministic regex misses — model wrote "thread" instead of "single-thread," missed one of multiple SAMHSA helpline phrasings, etc. Not capability gaps; rubric noise.</p>
+    <p>Core 27B took all 9 at 100%. Overall, across the full 54, it landed at <strong>98.9%</strong>. That missing ~1%? Four non-deterministic regex misses. The model wrote "thread" where the rubric wanted "single-thread," picked one valid SAMHSA helpline phrasing the regex didn't list, that kind of thing. Rubric noise, not capability gaps.</p>
 
     <h2>The honest takeaway</h2>
-    <p>From the bench's own concluding line:</p>
+    <p>The bench closed with a line I'll just quote directly:</p>
     <blockquote>"If you came from Claude for everyday coding / writing / explaining / translating, you would not feel a downgrade on Outlier. The 98.9% bench score reflects that — across 45 real tasks, output quality is indistinguishable."</blockquote>
-    <p>Where Claude still wins:</p>
+    <p>Claude still beats it in a few spots, and I'm not going to pretend otherwise:</p>
     <ul>
-      <li><strong>Speed.</strong> Core 27B at ~22 tok/s vs Claude at ~80–100 tok/s. A 5,000-token output takes ~4 minutes locally, ~60 seconds in the cloud.</li>
-      <li><strong>Novel research questions or 50k+ token contexts.</strong> The cloud flagships hold an edge here. The bench tested up to ~10k tokens; longer contexts weren't covered.</li>
-      <li><strong>Vision quality.</strong> Not bench-tested rigorously yet. Claude's image stack is currently better.</li>
+      <li><strong>Speed.</strong> Core 27B runs around 22 tok/s. Claude does ~80–100. So a 5,000-token answer is about 4 minutes on your Mac versus roughly 60 seconds in the cloud.</li>
+      <li><strong>Novel research questions or 50k+ token contexts.</strong> The big cloud models still pull ahead here. I only pushed the bench to about 10k tokens, so anything longer is untested.</li>
+      <li><strong>Vision quality.</strong> I haven't put this through a real bench yet. For now, Claude's image stack is the better one.</li>
     </ul>
 
     <h2>Reproducibility</h2>
-    <p>The raw side-by-side outputs are on the Outlier dev machine at <code>/private/tmp/parity/*_claude.txt</code> and <code>*_outlier.{txt,sse}</code>. The grading rubric is at <code>parity_bench/outputs/last_score.json</code>. Numbers in this article all trace to those artifacts.</p>
+    <p>None of this is hand-waving. The raw side-by-side outputs live on the Outlier dev machine at <code>/private/tmp/parity/*_claude.txt</code> and <code>*_outlier.{txt,sse}</code>, and the grading rubric sits at <code>parity_bench/outputs/last_score.json</code>. Every number you just read traces back to those files.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -186,7 +186,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-core-27b-vs-claude-opus">Download for Mac</a>
     </div>
 

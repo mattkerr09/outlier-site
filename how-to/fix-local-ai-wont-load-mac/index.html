@@ -112,29 +112,29 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>Most common cause:</strong> the model needs more RAM than your Mac has — pick a smaller tier.</li>
-        <li>Second: not enough free disk for the model's weights.</li>
-        <li>Third: an incomplete or corrupted download — re-download the tier.</li>
-        <li>For Vision/Plus, a Metal GPU memory limit can block load on tight-RAM Macs.</li>
+        <li><strong>Most common cause:</strong> the model wants more RAM than your Mac has. Pick a smaller tier.</li>
+        <li>Next likeliest: you don't have enough free disk for the weights.</li>
+        <li>After that: the download came down partial or corrupted. Re-download the tier.</li>
+        <li>On tight-RAM Macs running Vision or Plus, a Metal GPU memory limit can block the load.</li>
       </ul>
     </div>
 
-    <p class="lead">When a local AI model won't load on a Mac, it's almost always one of three things: the model needs more RAM than your Mac has, you're low on disk, or the download didn't finish. Here's how to tell which one it is and fix it.</p>
+    <p class="lead">A model that won't load on a Mac is rarely a mystery. Nine times out of ten it's RAM. The tier you picked wants more memory than your Mac has. The other two suspects are a full disk and a download that quietly never finished. This walks through how to tell which one you're hitting, then fix it.</p>
 
     <h2>Cause 1: the model is too big for your RAM</h2>
-    <p>This is the usual one. Each tier has a memory floor, and Apple Silicon shares RAM between CPU and GPU. If you ask for a model your Mac can't hold, it refuses to load rather than crash.</p>
+    <p>Start here, because it's almost always the answer. Every tier has a memory floor it won't go below. Apple Silicon makes it tighter because the CPU and GPU share the same pool of RAM, so a big model is competing with everything else for that space. Ask for a model your Mac can't physically hold and it declines to load. Better that than a hard crash mid-answer.</p>
     <table><thead><tr><th>Model</th><th>Needs</th></tr></thead><tbody>
       <tr><td>Nano 4B / Lite 9B</td><td>16 GB</td></tr>
       <tr><td>Core / Code / Vision (27B–35B)</td><td>24–32 GB</td></tr>
       <tr><td>Plus 397B</td><td>64 GB</td></tr>
     </tbody></table>
-    <p><strong>Fix:</strong> switch to a tier your Mac supports. On 16 GB, stay on Nano/Lite. On 32 GB, Core 27B is the ceiling for comfortable use.</p>
+    <p><strong>Fix:</strong> drop to a tier your Mac can actually run. Got 16 GB? Stay on Nano or Lite. On a 32 GB machine, Core 27B is about as high as I'd push it before things get sluggish.</p>
     <h2>Cause 2: not enough disk space</h2>
-    <p>A model can't load if its weights didn't fully download, and they won't download if the disk is full. Core-class models need ~15 GB; Plus needs ~209 GB. <strong>Fix:</strong> free up space (see <a href="https://outlier.host/how-to/free-up-disk-space-for-ai-models/">freeing disk space for AI models</a>), then retry the download.</p>
+    <p>Weights that didn't finish downloading can't load. And they won't finish if your disk is full. The numbers add up fast: Core-class models run about 15 GB, and Plus alone wants roughly 209 GB sitting free. <strong>Fix:</strong> clear out some room first (our guide to <a href="https://outlier.host/how-to/free-up-disk-space-for-ai-models/">freeing disk space for AI models</a> covers the where and how), then kick off the download again.</p>
     <h2>Cause 3: incomplete or corrupted download</h2>
-    <p>If a download was interrupted, the model may be partial and fail to load. <strong>Fix:</strong> remove the tier in the app's model manager and re-download it on a stable connection. Your chats and settings are unaffected.</p>
+    <p>Sometimes the download gets cut off partway. Wi-Fi drops, the laptop sleeps, whatever. What you're left with is a half-finished model that looks present but won't load. <strong>Fix:</strong> open the app's model manager, delete the tier, and pull it down again on a connection you trust to stay up. Your chats and settings don't go anywhere when you do this.</p>
     <h2>Cause 4: Metal GPU memory limit (Vision / Plus)</h2>
-    <p>On Macs near the RAM floor for the big multimodal or 397B models, macOS's Metal GPU memory limit can block a load even when disk is fine. <strong>Fix:</strong> close other heavy apps to free memory, restart the app, and if it persists, use a smaller tier. The largest models simply want a roomier Mac.</p>
+    <p>This last one is sneaky, and it fooled me the first time. You've got the disk space and you're right at the RAM floor for one of the big multimodal models or the 397B Plus tier, yet it still won't load. The culprit is macOS itself. Its Metal GPU memory limit can slam the door even when everything else checks out. <strong>Fix:</strong> quit the other memory-hungry apps, relaunch Outlier, and try again. If it keeps refusing, step down a tier. The biggest models just want a roomier Mac, and there's no talking them out of it.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">

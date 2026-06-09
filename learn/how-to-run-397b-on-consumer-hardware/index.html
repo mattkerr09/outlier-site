@@ -113,34 +113,34 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Four stacked design choices: MoE routing + 4-bit quantization + paged streaming + Apple unified memory.</li>
-        <li>Each step buys ~10× — combined they take 800 GB naive down to <strong>11 GB peak RAM</strong>.</li>
-        <li>Apple unified memory removes the PCIe copy step a PC build would need.</li>
-        <li>Result: 397B-parameter MoE model runs on a 64 GB Mac at ~2.1 tok/s.</li>
+        <li>Four design choices stacked: MoE routing, 4-bit quantization, paged streaming, Apple unified memory.</li>
+        <li>Each one buys roughly 10×. Stack them and 800 GB naive collapses to <strong>11 GB peak RAM</strong>.</li>
+        <li>Apple unified memory kills the PCIe copy step a PC build is stuck with.</li>
+        <li>End result: a 397B-parameter MoE model running on a 64 GB Mac at ~2.1 tok/s.</li>
       </ul>
     </div>
 
-    <p class="lead">Running a 397-billion-parameter model on a 64 GB Mac sounds implausible because, in the standard architecture, it is. Four design choices stack together to make it work: MoE routing in the model, 4-bit quantization in the weight format, paged expert streaming in the runtime, and Apple's unified memory in the hardware. Pull any one out and the math stops working.</p>
+    <p class="lead">Running 397 billion parameters on a 64 GB Mac sounds impossible. In the standard architecture it is. What makes it work is four design choices stacked on top of each other: MoE routing in the model, 4-bit quantization in the weight format, paged expert streaming in the runtime, and Apple's unified memory underneath it all. Pull any single one out and the math falls apart.</p>
 
     <h2>Choice 1: the model is MoE, not dense</h2>
-    <p>A 397B dense model passes every token through every parameter. For Qwen3.5-397B-A17B (a Mixture-of-Experts model), each token uses 10 of 512 experts at each layer. The "A17B" tells you the active count per token: about 17 billion parameters' worth of compute, even though the total knowledge capacity is 397B.</p>
-    <p>Without MoE, paged inference doesn't help — a dense model needs all its weights every token, so you can't keep them on disk. MoE is what creates the opportunity to keep most weights idle.</p>
+    <p>A dense 397B model runs every token through every parameter. Qwen3.5-397B-A17B doesn't. It's a Mixture-of-Experts model, so each token only touches 10 of 512 experts at each layer. That "A17B" in the name is the giveaway: about 17 billion parameters of compute fire per token, even though the model holds 397B worth of knowledge total.</p>
+    <p>This is the whole reason paging works. A dense model wants all its weights on every token, so you can't park any of them on disk. MoE keeps most of the weights idle most of the time, and that's the gap everything else exploits.</p>
 
     <h2>Choice 2: 4-bit quantization</h2>
-    <p>The original Qwen weights are 16-bit floats. At full precision, 397B parameters is about 800 GB on disk and would need similar RAM to load. Quantizing to 4-bit integers (with a small floating-point scaling factor per group of weights) cuts that to about 209 GB.</p>
-    <p>The quality cost of 4-bit quantization in 2026 is small for well-quantized models. MLX-format 4-bit quantization, which Outlier ships, preserves the underlying model's reasoning quality within rounding noise. The savings are real: 4× smaller on disk, 4× smaller in memory.</p>
+    <p>Qwen ships its weights as 16-bit floats. At that precision, 397B parameters lands at roughly 800 GB on disk, and you'd need about that much RAM just to load it. Drop the weights to 4-bit integers (with a small floating-point scaling factor per group) and the same model shrinks to around 209 GB.</p>
+    <p>People worry about quality here, and in 2026 they mostly shouldn't. Done well, 4-bit barely moves the needle. The MLX-format quantization Outlier ships keeps the model's reasoning intact to within rounding noise, and you walk away 4× smaller on disk and 4× smaller in memory.</p>
 
     <h2>Choice 3: paged expert streaming</h2>
-    <p>Even at 209 GB, the model is bigger than a 64 GB Mac's RAM. Paged expert streaming keeps the model's shared backbone resident, plus a bounded cache of recently-used experts, and streams the rest from SSD on demand. The router decides which experts to read for each token; the runtime keeps a queue of concurrent SSD reads to hide latency.</p>
-    <p>Outlier's V9 paged engine implements this. Measured on M1 Ultra 64 GB: peak OS-level RSS ~11 GB, decode speed ~2.1 tok/s, sustained.</p>
+    <p>209 GB still doesn't fit in 64 GB of RAM. So you don't load all of it. Paged expert streaming keeps the shared backbone resident, holds a bounded cache of the experts you've used recently, and pulls the rest off the SSD only when a token actually calls for them. The router picks the experts for each token, and the runtime fires off a queue of concurrent SSD reads so the latency hides behind the compute.</p>
+    <p>That's what Outlier's V9 paged engine does. On an M1 Ultra with 64 GB, here's what it measures out to: peak OS-level RSS around 11 GB, decode holding steady at about 2.1 tok/s.</p>
 
     <h2>Choice 4: Apple unified memory + fast SSD</h2>
-    <p>The Mac's architecture is unusually well suited to this pattern. Two reasons:</p>
+    <p>The Mac happens to be built for exactly this pattern. Two reasons stand out.</p>
     <ul>
-      <li><strong>Unified memory.</strong> The GPU and CPU share the same RAM. When the streaming runtime reads an expert from SSD into a buffer, that buffer is immediately accessible to the GPU for the matmul — no PCIe copy step, no CPU↔GPU memory shuffle. On a PC build with discrete GPUs, you'd add a multi-hundred-millisecond copy cost per expert; the architecture would be roughly 10× slower.</li>
-      <li><strong>Fast on-package SSD.</strong> Modern Apple Silicon Macs sustain 5–15 GB/s sequential read off the internal NVMe. That's enough to deliver a few hundred MB of expert weights in the budget needed for ~3 tok/s generation.</li>
+      <li><strong>Unified memory.</strong> The GPU and CPU share one pool of RAM. When the streaming runtime reads an expert off the SSD into a buffer, the GPU can use that buffer for the matmul right away. No PCIe copy step. No shuffling memory back and forth between CPU and GPU. A PC build with a discrete GPU pays a multi-hundred-millisecond copy cost per expert, which drags the whole thing down by roughly 10×.</li>
+      <li><strong>Fast on-package SSD.</strong> A modern Apple Silicon Mac sustains 5–15 GB/s sequential read off its internal NVMe. That's fast enough to hand over a few hundred MB of expert weights inside the time budget you need for ~3 tok/s generation.</li>
     </ul>
-    <p>This is also why external Thunderbolt SSDs are slower (typically 2–3 GB/s sustained) and why Intel Macs aren't supported — they don't have the unified memory architecture that makes the SSD→GPU path direct.</p>
+    <p>Same logic explains the rest. External Thunderbolt SSDs lag (usually 2–3 GB/s sustained), and Intel Macs aren't supported at all because they don't have the unified memory that makes the SSD→GPU path direct.</p>
 
     <h2>The combined math</h2>
     <table>
@@ -150,10 +150,10 @@
         <tr><td>Need 800 GB RAM</td><td>Still need all 397B somewhere</td><td>Total ~209 GB on disk</td><td>Total ~209 GB on disk, ~11 GB peak in RAM</td></tr>
       </tbody>
     </table>
-    <p>Each step buys an order of magnitude. The combination is what makes the model viable on hardware most developers can actually own.</p>
+    <p>Every step knocks off an order of magnitude. No single trick gets you there. Stacked together, they put the model on hardware a working developer can actually buy.</p>
 
     <h2>The honest tradeoff</h2>
-    <p>This setup is slower than the same model in the cloud on a server with 8 H100 GPUs. Plus 397B at 2.1 tok/s locally vs ~50–80 tok/s on a dedicated server is a real gap. What you trade speed for: no API key, no rate limit, no cloud trip with your code, no recurring bill after the model is on disk. For long-form coding, architecture review, or any task where you can wait, the trade is often worth it.</p>
+    <p>None of this beats the cloud on raw speed. Run the same model on a server with 8 H100 GPUs and it's far quicker. Plus 397B does about 2.1 tok/s on your Mac against ~50–80 tok/s on a dedicated server, and that's a real gap, not a rounding error. So what do you get back? No API key. No rate limit. Your code never leaves the machine. No bill once the weights are on disk. For long-form coding, architecture review, anything where waiting a bit is fine, that trade tends to pay off.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -173,7 +173,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=how-to-run-397b-on-consumer-hardware">Download for Mac</a>
     </div>
 

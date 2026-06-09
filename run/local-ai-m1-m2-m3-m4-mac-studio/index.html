@@ -113,21 +113,21 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>M1 Max 32 GB Studio</strong> runs Nano + Lite + Quick + Core + Code 27B.</li>
-        <li><strong>M2 Ultra 64 GB</strong> adds Vision 35B and Plus 397B (V9 paged inference).</li>
-        <li><strong>96 GB+ Studio</strong> runs Plus 397B in capacity mode for higher tok/s.</li>
+        <li><strong>M1 Max 32 GB Studio</strong> handles Nano, Lite, Quick, Core, and Code 27B.</li>
+        <li><strong>M2 Ultra 64 GB</strong> adds Vision 35B. It also runs Plus 397B (V9 paged inference).</li>
+        <li><strong>96 GB+ Studio</strong> runs Plus 397B in capacity mode, which means higher tok/s.</li>
         <li>Measured M1 Ultra tok/s: Nano 71.7, Lite 53.4, Core 20.7, Plus 2.1.</li>
       </ul>
     </div>
 
-    <p class="lead">The Mac Studio line is a uniquely good fit for local AI: lots of unified memory, fast SSDs, no thermal throttling. This guide walks through which model tiers run comfortably on each Mac Studio generation, what to expect on tok/s, and where the actual cliffs are.</p>
+    <p class="lead">The Mac Studio is about the best machine you can buy for local AI. It packs a huge pool of unified memory next to a genuinely fast SSD, and it never throttles under load. Below I break down which model tiers actually run on each Studio generation, the tok/s you should expect from them, and where the real cliffs hide.</p>
 
     <h2>Why Mac Studio matters for local AI</h2>
-    <p>Unified memory on Apple Silicon means the GPU and CPU share the same RAM. There is no model-loading step that copies weights across a PCIe bus to a separate GPU. The whole model — or a streamed slice of it — lives in unified memory and the GPU operates on it in place. That removes one of the bottlenecks PC builds have to engineer around.</p>
-    <p>The Mac Studio Ultra configurations (M1, M2, M3 Ultra) ship with 64 GB to 192 GB of unified memory and sustained SSD reads of 5–15 GB/s. That combination is what makes a 397B-parameter MoE model viable on a single desktop.</p>
+    <p>On Apple Silicon the GPU and CPU share the same RAM. So there's no model-loading step that shoves weights across a PCIe bus into a separate GPU. The whole model (or a streamed slice of it) sits in unified memory and the GPU works on it right where it is. One of the big bottlenecks PC builds have to design around just isn't there.</p>
+    <p>The Mac Studio Ultra configs (M1, M2, M3 Ultra) ship with 64 GB to 192 GB of unified memory. Sustained SSD reads land between 5 and 15 GB/s. Put those two together and a 397B-parameter MoE model becomes viable on one desktop.</p>
 
     <h2>Tier-by-Mac-Studio cheat sheet</h2>
-    <p>Outlier's lineup is seven model tiers. What runs:</p>
+    <p>Outlier ships seven model tiers. This is what each Studio can actually load.</p>
     <table>
       <thead><tr><th>Mac Studio</th><th>RAM</th><th>Recommended tiers</th></tr></thead>
       <tbody>
@@ -137,10 +137,10 @@
         <tr><td>M1 / M2 / M3 Ultra (max)</td><td>128–192 GB</td><td>All tiers in capacity mode, full headroom for long context</td></tr>
       </tbody>
     </table>
-    <p>The 64 GB tier is the inflection point. Below 64 GB you're constrained to Core 27B and smaller. At 64 GB you can run Plus 397B (the strongest model in the lineup) via the V9 paged engine. Above 96 GB you stop having to stream.</p>
+    <p>64 GB is the line everything pivots on. Stay below it and you're capped at Core 27B and down. Hit 64 GB and Plus 397B opens up, the strongest model Outlier makes, running through the V9 paged engine. Go past 96 GB and the streaming disappears entirely.</p>
 
     <h2>Measured tok/s on M1 Ultra</h2>
-    <p>From the Outlier Mac bench on a 192 GB M1 Ultra, batch size 1, 4096-token prefill, 256-token decode:</p>
+    <p>These come straight off the Outlier Mac bench. A 192 GB M1 Ultra, batch size 1, 4096-token prefill, 256-token decode.</p>
     <table>
       <thead><tr><th>Tier</th><th>Decode tok/s</th></tr></thead>
       <tbody>
@@ -150,16 +150,16 @@
         <tr><td>Plus 397B (V9 paged inference, K=20)</td><td>2.1</td></tr>
       </tbody>
     </table>
-    <p>For comparison, an M4 MacBook Air 16 GB hits ~32 tok/s on Nano 4B in clean-boot conditions. M2/M3/M4 Ultra Studios will run higher than the M1 numbers (newer SoC + faster memory) but the order of magnitude holds.</p>
+    <p>To put that in context, an M4 MacBook Air 16 GB does about 32 tok/s on Nano 4B from a clean boot. Newer Ultra Studios (M2, M3, M4) beat these M1 figures thanks to a faster SoC and quicker memory. The order of magnitude per tier stays the same, though.</p>
 
     <h2>What to buy if you're starting from scratch</h2>
-    <p>For a coding-focused local AI build:</p>
+    <p>Building one mainly for coding? This is how I'd spend.</p>
     <ul>
-      <li><strong>Budget pick:</strong> M1 Max Mac Studio 32 GB (used market ~$1,400). Runs Core 27B at ~20 tok/s — enough for daily refactor + agent work.</li>
-      <li><strong>Sweet spot:</strong> M2 Ultra Mac Studio 64 GB (~$3,500 new or refurb). Adds Plus 397B via streaming for the cases you need the strongest local model.</li>
-      <li><strong>Headroom:</strong> M2/M3 Ultra 96+ GB (~$5,000+). Plus 397B runs in capacity mode without streaming overhead.</li>
+      <li><strong>Budget pick:</strong> M1 Max Mac Studio 32 GB, around $1,400 on the used market. It'll run Core 27B at roughly 20 tok/s, which is plenty for daily refactors and agent work.</li>
+      <li><strong>Sweet spot:</strong> M2 Ultra Mac Studio 64 GB, about $3,500 new or refurbished. This tier adds Plus 397B via streaming, for when you genuinely need the strongest local model.</li>
+      <li><strong>Headroom:</strong> M2/M3 Ultra 96+ GB, $5,000 and up. Plus 397B runs in capacity mode here, no streaming overhead.</li>
     </ul>
-    <p>For comparison, a $200/month cloud AI subscription costs $4,800 over two years. A used M1 Max Studio plus Outlier Pro ($20/mo, or lifetime from $99) lands well under that for an equivalent-quality coding workflow on the common 95% of tasks, with no recurring bill and no usage cap.</p>
+    <p>Run the math against the cloud. A $200/month AI subscription is $4,800 over two years. A used M1 Max Studio paired with Outlier Pro ($20/mo, or lifetime from $99) comes in well under that, and it gives you the same coding-quality workflow on the 95% of tasks that matter. No recurring bill. No usage cap.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -179,7 +179,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-m1-m2-m3-m4-mac-studio">Download for Mac</a>
     </div>
 

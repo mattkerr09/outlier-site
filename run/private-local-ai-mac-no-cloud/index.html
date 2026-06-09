@@ -113,46 +113,46 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Local AI keeps prompts, file contents, and chat history <strong>on your disk only</strong>.</li>
-        <li>Verification: turn off wifi — inference, agent, memory all still work.</li>
-        <li>Networks still touch for first-time model downloads and optional cloud connectors.</li>
-        <li>Plausible analytics is on the marketing site only, not the app inference path.</li>
+        <li>Local AI keeps your prompts, file contents, and chat history <strong>on your disk only</strong>.</li>
+        <li>Want proof? Kill your wifi. Inference still runs, so does the agent, so does memory.</li>
+        <li>The network still gets touched for first-time model downloads and any cloud connectors you turn on.</li>
+        <li>Plausible analytics runs on the marketing site. It never sees the app's inference path.</li>
       </ul>
     </div>
 
-    <p class="lead">"Private" is a word that gets used carelessly in AI marketing. This article is about what it actually means when an AI tool says it runs locally on your Mac — what crosses the network, what doesn't, and where the boundaries between local-by-default and cloud-by-default sit in practice.</p>
+    <p class="lead">AI marketing throws the word "private" around like confetti. So let's get specific about what it actually means when a tool claims it runs locally on your Mac. What crosses the network, what stays put, and where the line between local-by-default and cloud-by-default really falls.</p>
 
     <h2>What "local" really means</h2>
-    <p>For a model to run on your Mac, three things have to be there:</p>
+    <p>Running a model on your Mac takes three pieces:</p>
     <ol>
-      <li>The model weights, as a file on your disk.</li>
-      <li>A runtime that loads those weights into unified memory and computes a forward pass against your input.</li>
-      <li>An app that hands the runtime your prompts and shows you the output.</li>
+      <li>The model weights, sitting as a file on your disk.</li>
+      <li>A runtime that loads those weights into unified memory and runs a forward pass over your input.</li>
+      <li>An app that feeds the runtime your prompts and shows you what comes back.</li>
     </ol>
-    <p>If those three pieces don't reach the network during inference, your prompts and the model's outputs never leave the device. That's the technical definition of "local." Tools like Outlier, Ollama, LM Studio, and Jan all satisfy it for the core inference path.</p>
+    <p>If none of those three reach the network while inference happens, your prompts and the model's answers never leave the device. That's the whole technical definition of "local." Outlier, Ollama, LM Studio, Jan: they all clear that bar for the core inference path.</p>
 
     <h2>Where networks usually still touch</h2>
-    <p>Most local AI apps still talk to the internet for legitimate reasons. Worth knowing what those are so you can decide where the boundary matters:</p>
+    <p>Almost every local AI app still talks to the internet sometimes, and for good reasons. Knowing which reasons helps you decide where you actually care about the boundary:</p>
     <ul>
-      <li><strong>Model downloads.</strong> The first time you use a model, the app fetches the weights — typically from HuggingFace. After that, no network is required to use that model. Outlier downloads Nano (~3 GB) on first launch and other tiers on demand.</li>
-      <li><strong>App updates.</strong> The app checks for new versions and notifies you. You can usually disable this in settings.</li>
-      <li><strong>Analytics.</strong> Some apps phone home with anonymous usage stats. Outlier uses Plausible (privacy-friendly, no cookies, no individual tracking) on the website but not from inside the app's inference path.</li>
-      <li><strong>Optional cloud connectors.</strong> If you opt into a Slack integration, a web search tool, or a cloud MCP server, those make their own network calls. They are clearly labeled and require explicit setup.</li>
+      <li><strong>Model downloads.</strong> The first time you reach for a model, the app pulls the weights down, usually from HuggingFace. Once that's done, you never need the network to use that model again. Outlier grabs Nano (~3 GB) on first launch and fetches the other tiers when you ask for them.</li>
+      <li><strong>App updates.</strong> The app checks for new versions and tells you when one's ready. Settings usually let you switch that off.</li>
+      <li><strong>Analytics.</strong> Some apps phone home with anonymous usage stats. Outlier runs Plausible (privacy-friendly, no cookies, nothing that tracks you as an individual) on the website. It's nowhere near the app's inference path.</li>
+      <li><strong>Optional cloud connectors.</strong> Opt into a Slack integration, a web search tool, or a cloud MCP server and those make their own calls out. Each one is clearly labeled and won't do anything until you set it up.</li>
     </ul>
-    <p>The thing to look for in any "local AI" tool: when you turn off your wifi, does the app still work? For Outlier, the answer is yes — chat, agent mode, project memory, and file editing all run without network access once models are downloaded.</p>
+    <p>So there's a simple test for any "local AI" tool. Flip off your wifi. Does it still work? With Outlier, yes. Chat, agent mode, project memory, file editing. All of it runs with no network at all once the models are on disk.</p>
 
     <h2>"No usage limits" — the honest version</h2>
-    <p>Cloud AI tools meter you because they're paying compute by the second. Local AI doesn't have that meter because the compute is your machine, which you already paid for. What "no usage limits" means in practice:</p>
+    <p>Cloud AI meters you because the provider is paying for compute by the second. Local AI has no meter. The compute is your own machine, and you already paid for that. So in practice, "no usage limits" comes down to this:</p>
     <ul>
-      <li>No per-day or per-month token cap from the vendor.</li>
-      <li>No rate limit that throttles you at the 100th request of the hour.</li>
-      <li>No "fair use" clause that suspends you for using the tool too much.</li>
+      <li>No per-day or per-month token cap handed down by the vendor.</li>
+      <li>No rate limit that throttles you on your 100th request of the hour.</li>
+      <li>No "fair use" clause waiting to suspend you for using the thing too much.</li>
     </ul>
-    <p>What it doesn't mean: your Mac will run faster, or that batteries are infinite. Long agent runs on Plus 397B at 2.1 tok/s will use real wattage. The economics are different — you're trading watts for tokens instead of dollars for tokens — but they aren't free.</p>
+    <p>It does not mean your Mac suddenly runs faster, or that your battery is bottomless. A long agent run on Plus 397B at 2.1 tok/s pulls real wattage. You're just trading watts for tokens now instead of dollars for tokens. Cheaper, sure. Not free.</p>
 
     <h2>What this is worth for a developer</h2>
-    <p>For someone working under any kind of data-handling policy — finance, healthcare, legal, defense, anyone with customer PII — the local guarantee changes what you can put through the tool. Code that includes real credentials, customer data in a debugging session, internal architectural docs, the contents of a private repo: all of it can sit in the chat without ever leaving the machine.</p>
-    <p>For someone outside those regulated domains, "private local AI" is more about not being subject to a vendor's policy changes, model deprecations, and rate-limit surprises. Your tool keeps working tomorrow even if the cloud provider changes the rules tonight.</p>
+    <p>Say you work under a data-handling policy. Finance, healthcare, legal, defense, anyone sitting on customer PII. The local guarantee changes what you're allowed to feed the tool. Code with real credentials in it. Customer data you're picking apart in a debugging session. Internal architecture docs. A whole private repo. All of it can live in the chat and never once leave the machine.</p>
+    <p>Outside those regulated worlds, the pitch shifts. Private local AI mostly means you're not at the mercy of a vendor's policy changes, model deprecations, and surprise rate limits. The cloud provider can rewrite the rules tonight and your tool still works exactly the same tomorrow.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -172,7 +172,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=private-local-ai-mac-no-cloud">Download for Mac</a>
     </div>
 

@@ -113,35 +113,35 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Claude Code's loop is plan → tool calls → execute → loop; nothing requires cloud.</li>
-        <li>Local version: <strong>Core 27B or Code 27B</strong> as the model, MCP tools, on-disk memory.</li>
-        <li>Outlier ships this in one app; Claude Desktop + filesystem MCP is another option.</li>
-        <li>Trades ~4× speed feel for offline operation and zero API token cost.</li>
+        <li>Claude Code's loop is plan → tool calls → execute → loop. None of it needs the cloud.</li>
+        <li>Run it locally with <strong>Core 27B or Code 27B</strong>, MCP tools, and on-disk memory.</li>
+        <li>Outlier bundles the whole thing in one app. Claude Desktop plus a filesystem MCP also works.</li>
+        <li>You give up roughly 4× in speed feel. You get offline operation and zero API token cost.</li>
       </ul>
     </div>
 
-    <p class="lead">Claude Code is a terminal-resident coding agent that reads your files, edits them, runs shell commands, and asks for approval at the right moments. Its core loop has no requirement to be cloud-hosted. With a local model and the right tooling you can run the same shape of workflow with no network — here's how.</p>
+    <p class="lead">Claude Code lives in your terminal. It reads your files, edits them, runs shell commands, and stops to ask before it does anything risky. None of that loop actually depends on a cloud. Give it a local model and the right tooling and you get the same workflow with the network unplugged. This is how.</p>
 
     <h2>The agent loop, decomposed</h2>
-    <p>A coding agent has three moving pieces:</p>
+    <p>Strip a coding agent down and you find three moving pieces.</p>
     <ol>
-      <li><strong>A model</strong> that can produce structured tool calls (read this file, write this diff, run this test).</li>
-      <li><strong>A tool executor</strong> that runs those calls against your filesystem and shell, with appropriate approval gates.</li>
-      <li><strong>A conversation manager</strong> that feeds tool results back to the model and keeps a turn-by-turn log.</li>
+      <li><strong>A model</strong> that emits structured tool calls. Read this file. Write this diff. Run this test.</li>
+      <li><strong>A tool executor</strong> that actually runs those calls against your filesystem and shell, with approval gates in the right spots.</li>
+      <li><strong>A conversation manager</strong> that feeds the tool results back to the model and keeps a turn-by-turn log.</li>
     </ol>
-    <p>Claude Code's cloud version uses Claude Opus 4.7 for piece 1 and a slick terminal UI for pieces 2 and 3. The local version swaps the model for one that runs on your Mac, keeps the tool executor running locally, and lives in a Mac-native UI rather than a terminal.</p>
+    <p>The cloud version of Claude Code uses Claude Opus 4.7 for piece one and a slick terminal UI for the other two. The local version just swaps piece one for a model that runs on your Mac. The tool executor stays local. The whole thing lives in a Mac-native UI instead of a terminal.</p>
 
     <h2>What you need locally</h2>
-    <p>For piece 1: a model fine-tuned to produce structured tool calls. Outlier's Core 27B and Code 27B do this; pass@1 on HumanEval is 0.8659 — high enough that the model holds its own on real refactors. For piece 2: a sandboxed shell, a filesystem driver, and approval gates. For piece 3: a project-aware UI with persistent chat history. Outlier ships all of this in one app, gated behind MCP (Model Context Protocol) so the tool surface is portable.</p>
+    <p>Piece one needs a model that's been fine-tuned to emit structured tool calls. Outlier's Core 27B and Code 27B both do this. Their pass@1 on HumanEval is 0.8659, which is high enough that the model holds its own on real refactors instead of folding on the first hard diff. Piece two wants a sandboxed shell, a filesystem driver, and approval gates. Piece three wants a project-aware UI that remembers your chat history. Outlier ships all of it in one app, sitting behind MCP (Model Context Protocol) so the tool surface stays portable.</p>
 
     <h2>Setting it up</h2>
     <ol>
-      <li>Download the Outlier DMG from <a href="https://outlier.host/">outlier.host</a> and install.</li>
-      <li>First-launch downloads Nano 4B as the chat default. For coding, switch to Core 27B (any paid Pro tier) — first use triggers a ~16 GB download.</li>
-      <li>Open a project folder. The app indexes it (filenames, source structure, optional content embedding).</li>
-      <li>Switch to "Agent" mode. The model now has tools available — file read, file write, shell, project search, web search if you enabled it. Each first-use of a tool prompts you for approval.</li>
+      <li>Grab the Outlier DMG from <a href="https://outlier.host/">outlier.host</a> and install it.</li>
+      <li>First launch pulls down Nano 4B as the chat default. For coding you'll want Core 27B (any paid Pro tier). The first time you use it, that's a ~16 GB download.</li>
+      <li>Open a project folder. The app indexes it: filenames, source structure, and optionally the file contents as embeddings.</li>
+      <li>Flip to "Agent" mode. Now the model has tools. File read, file write, shell, project search, plus web search if you turned it on. The first time it reaches for any tool, you get an approval prompt.</li>
     </ol>
-    <p>What you see resembles Claude Code: the agent describes a plan, executes it step by step, and reports what happened. The shape of the conversation, the approval gates, the project context — all there.</p>
+    <p>It looks a lot like Claude Code. The agent lays out a plan, works through it step by step, and tells you what it did. The conversation shape carries over, the approval gates are where you'd expect, and the project context is right there too.</p>
 
     <h2>What's different in practice</h2>
     <table>
@@ -158,13 +158,13 @@
     </table>
 
     <h2>Where Claude Code still wins</h2>
-    <p>Honest list:</p>
+    <p>I'm not going to pretend it's a tie. The cloud version still beats the local one in a few places.</p>
     <ul>
-      <li><strong>Raw model strength.</strong> Claude Opus 4.7 is one of the strongest cloud-only models available in 2026. On novel research problems or 50k+ token contexts, it still has a real edge over Core 27B.</li>
-      <li><strong>Throughput.</strong> A 5,000-token diff takes ~60s in Claude and ~4 minutes on Core 27B locally. The output ends up the same; the wait is real.</li>
-      <li><strong>Tier swap is free.</strong> Claude doesn't physically swap models between requests. Outlier's cold-load on a tier change is ~74s.</li>
+      <li><strong>Raw model strength.</strong> Claude Opus 4.7 is one of the strongest cloud-only models you can hit in 2026. Throw a novel research problem at it, or a 50k+ token context, and it still pulls ahead of Core 27B.</li>
+      <li><strong>Throughput.</strong> A 5,000-token diff lands in about 60s on Claude. On Core 27B locally it's closer to 4 minutes. Same output at the end. The wait is real.</li>
+      <li><strong>Tier swap is free.</strong> Claude never has to physically swap models between requests. Outlier does, and a cold-load on a tier change runs you about 74s.</li>
     </ul>
-    <p>On the parity bench (54 head-to-head tests against Claude Opus 4.7 in mid-2026), Outlier scored 98.9% overall and 100% on the 9 hardest additions (chess engine, raft/paxos, ZK proofs, needle-in-context, etc.). For the 95% of coding work where output quality matters more than speed, the local version closes the gap.</p>
+    <p>Now the other side. On the parity bench, 54 head-to-head tests against Claude Opus 4.7 in mid-2026, Outlier landed 98.9% overall and a clean 100% on the 9 hardest additions (chess engine, raft/paxos, ZK proofs, needle-in-context, that tier of problem). For the 95% of coding work where the output matters more than how fast it arrives, the local version basically catches up.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -184,7 +184,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=claude-code-style-agents-offline">Download for Mac</a>
     </div>
 

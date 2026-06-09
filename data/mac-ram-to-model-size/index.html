@@ -112,14 +112,14 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>16 GB</strong> runs Nano 4B + Lite 9B; <strong>32 GB</strong> adds the 27B coding models; <strong>64 GB</strong> adds Plus 397B.</li>
-        <li>Disk sizes: Nano 2.4 GB, Core 27B 15.1 GB, Vision 35B 19 GB, Plus 397B 209 GB.</li>
-        <li>Measured M1 Ultra speed: Nano 71.7 tok/s, Core 27B 20.7, Plus 397B 2.1.</li>
-        <li>Rule of thumb: usable model size ≈ unified RAM minus a few GB for macOS.</li>
+        <li><strong>16 GB</strong> handles Nano 4B and Lite 9B. <strong>32 GB</strong> gets you the 27B coding models. <strong>64 GB</strong> is where Plus 397B becomes an option.</li>
+        <li>On disk: Nano is 2.4 GB, Core 27B is 15.1 GB, Vision 35B is 19 GB. Plus 397B wants 209 GB.</li>
+        <li>Speed on my M1 Ultra: Nano hits 71.7 tok/s, Core 27B does 20.7, Plus 397B crawls at 2.1.</li>
+        <li>Quick math: usable model size is about your unified RAM minus a few GB for macOS.</li>
       </ul>
     </div>
 
-    <p class="lead">This table maps Mac unified memory to which local AI models actually run, how big each model is on disk, and the measured generation speed on an M1 Ultra. Use it to decide what your current Mac can handle — or how much RAM to buy.</p>
+    <p class="lead">Your Mac's unified memory decides which local models you can actually run. The table below maps it all out: what fits in your RAM, how big each model is on disk, plus the generation speed I measured on an M1 Ultra. Use it to size up the Mac you own, or the one you're about to buy.</p>
 
     <h2>RAM → what you can run</h2>
     <table><thead><tr><th>Unified RAM</th><th>Typical Mac</th><th>Models that run</th></tr></thead><tbody>
@@ -138,9 +138,9 @@
       <tr><td>Vision</td><td>35B MoE</td><td>19 GB</td><td>16.3</td></tr>
       <tr><td>Plus</td><td>397B MoE</td><td>209 GB</td><td>2.1</td></tr>
     </tbody></table>
-    <p class="disclaim" style="margin-top:-0.6rem">tok/s measured on an M1 Ultra, MLX 4-bit, batch size 1. Newer chips (M2/M3/M4) run faster; the relative order holds.</p>
+    <p class="disclaim" style="margin-top:-0.6rem">Numbers are from an M1 Ultra, MLX 4-bit, batch size 1. Newer chips (M2/M3/M4) run faster, but the ranking stays the same.</p>
     <h2>How a 209 GB model runs on a 64 GB Mac</h2>
-    <p>Plus 397B is 209 GB on disk — far more than 64 GB of RAM. It runs because it's a Mixture-of-Experts model: only a fraction of its parameters are active per token. Outlier's V9 paged engine keeps the active experts in memory and streams the rest from the SSD, so peak memory stays around 11 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
+    <p>Plus 397B is 209 GB on disk. That's way past 64 GB of RAM, and yet it runs. The trick is that it's a Mixture-of-Experts model, so only a slice of its parameters fire on any given token. Outlier's V9 paged engine holds the active experts in memory and streams the rest off the SSD, which keeps peak memory hovering around 11 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">

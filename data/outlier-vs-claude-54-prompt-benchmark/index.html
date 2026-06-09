@@ -110,14 +110,14 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>Outlier Core 27B (local) scored 98.9% overall</strong> vs Claude Opus 4.7 (cloud) on 54 head-to-head prompts.</li>
-        <li><strong>All 9 brutal additions hit 100%</strong> — chess engine, raft/paxos, ZK proofs, race-condition refactor, needle-in-context, and more.</li>
-        <li><strong>5/6 warm-up tests identical output</strong>; Pomodoro test reached parity after 3 iterations.</li>
-        <li>Remaining 1.1% slack was non-deterministic regex misses (rubric noise), not capability gaps.</li>
+        <li>Run locally on my own Mac, <strong>Outlier Core 27B scored 98.9% overall</strong> against Claude Opus 4.7 in the cloud across 54 head-to-head prompts.</li>
+        <li><strong>All 9 brutal additions hit 100%.</strong> Chess engine, raft/paxos, ZK proofs, race-condition refactor, needle-in-context. The whole nasty set.</li>
+        <li><strong>5 of 6 warm-up tests gave identical output.</strong> The Pomodoro one caught up after 3 iterations.</li>
+        <li>That last 1.1%? Non-deterministic regex misses. Rubric noise, not a capability gap.</li>
       </ul>
     </div>
 
-    <p class="lead">This page is the raw benchmark data behind Outlier's parity claims. Same prompts sent to both apps, outputs captured to disk, scored against checklists, no subjective vibes. Methodology, full rubric, and what the bench does and doesn't cover.</p>
+    <p class="lead">This is the raw data behind Outlier's parity claims. No vibes. I fired the same prompts at both apps, dumped every output to disk, then graded each one against a checklist. Below you'll find the methodology and the full rubric, plus an honest list of what the bench does and doesn't cover.</p>
 
     <h2>Methodology</h2>
     <table>
@@ -162,7 +162,7 @@
     </table>
 
     <h2>Sample full-rubric scoring</h2>
-    <p>From <code>parity_bench/outputs/last_score.json</code>, the Pomodoro test breakdown:</p>
+    <p>The Pomodoro test, criterion by criterion, pulled straight from <code>parity_bench/outputs/last_score.json</code>.</p>
     <table>
       <thead><tr><th>Criterion</th><th>Pass</th></tr></thead>
       <tbody>
@@ -181,25 +181,25 @@
         <tr><td>Keyboard shortcuts</td><td>✓</td></tr>
       </tbody>
     </table>
-    <p>Score: 100/100. Word count: 1,283. Tokens: 4,123. Elapsed: 199.1s on Outlier Core 27B.</p>
+    <p>Perfect score. 100/100. That run was 1,283 words and 4,123 tokens, and it took 199.1s on Outlier Core 27B.</p>
 
     <h2>What this benchmark doesn't cover</h2>
     <ul>
-      <li><strong>Speed.</strong> Bench measured output quality, not tok/s. Claude is 3–5× faster end-to-end.</li>
-      <li><strong>Long context.</strong> Prompts capped at ~10k tokens. 50k+ token contexts (where cloud flagships still lead) not tested.</li>
-      <li><strong>Vision.</strong> Image input not bench-tested rigorously. Claude's vision stack is currently better.</li>
-      <li><strong>Multi-turn agent runs.</strong> Tested single-turn outputs, not extended agentic loops with tool use.</li>
-      <li><strong>Sample size.</strong> 54 prompts is a sanity bar, not a publication-grade evaluation. Per-category n is small.</li>
+      <li><strong>Speed.</strong> This was about output quality, not tok/s. Claude is 3–5× faster end-to-end and I'm not pretending otherwise.</li>
+      <li><strong>Long context.</strong> I capped prompts at roughly 10k tokens. Anything past 50k (where the cloud models still pull ahead) never got tested.</li>
+      <li><strong>Vision.</strong> I didn't put image input through its paces. Claude's vision stack is better right now.</li>
+      <li><strong>Multi-turn agent runs.</strong> Single-turn outputs only. No extended agentic loops with tool use.</li>
+      <li><strong>Sample size.</strong> 54 prompts is a sanity check, not a publication-grade study. The per-category n is small.</li>
     </ul>
 
     <h2>How to reproduce</h2>
     <ol>
-      <li>Install Outlier (any paid Pro tier for Core 27B — Free includes Nano + Lite only): <a href="https://outlier.host/">outlier.host</a></li>
-      <li>Have Claude API access or Claude.ai Pro account</li>
-      <li>Use the same prompts; capture both outputs to disk</li>
-      <li>Score against the rubric in <code>parity_bench/outputs/last_score.json</code> (or build your own)</li>
+      <li>Grab Outlier. Core 27B needs a paid Pro tier (Free only ships Nano + Lite): <a href="https://outlier.host/">outlier.host</a></li>
+      <li>Line up Claude API access or a Claude.ai Pro account</li>
+      <li>Send the same prompts to both and save every output to disk</li>
+      <li>Grade it against the rubric in <code>parity_bench/outputs/last_score.json</code>, or write your own</li>
     </ol>
-    <p>Reproducibility caveat: model outputs are non-deterministic. Re-running these prompts will produce slightly different responses each time; the rubric is what makes the comparison stable.</p>
+    <p>One caveat. Model outputs aren't deterministic, so rerunning these prompts gives you slightly different responses every time. The rubric is the thing that keeps the comparison honest.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -219,7 +219,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=data-outlier-vs-claude-54-prompt-benchmark">Download for Mac</a>
     </div>
 

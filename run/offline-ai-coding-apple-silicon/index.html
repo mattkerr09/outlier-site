@@ -113,26 +113,26 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Apple Silicon (M1+) with 16 GB+ RAM runs a complete offline AI coding workflow.</li>
-        <li><strong>Core 27B's HumanEval pass@1 is 0.8659</strong> — high enough for real refactors.</li>
-        <li>Turn off wifi and the workflow still runs: chat, agent, file edits, project memory.</li>
-        <li>Trades ~4× speed vs cloud for zero API cost, zero rate limit, zero data exfil.</li>
+        <li>Any Apple Silicon Mac (M1+) with 16 GB+ RAM runs the whole offline coding workflow.</li>
+        <li><strong>Core 27B's HumanEval pass@1 is 0.8659.</strong> That's enough for real refactors.</li>
+        <li>Kill the wifi and it keeps working. Chat, agent, file edits, project memory.</li>
+        <li>You give up about 4× the speed of cloud. You get back zero API cost, no rate limit, no data leaving the box.</li>
       </ul>
     </div>
 
-    <p class="lead">If you have an M-series Mac and 16 GB or more of RAM, you can run a real AI coding workflow with no internet, no API key, and no cloud. This is what that actually looks like in 2026 — the stack, the tradeoffs, and where local AI still loses to the cloud.</p>
+    <p class="lead">Got an M-series Mac with 16 GB of RAM or more? Then you can run a real AI coding workflow with no internet, no API key, nothing touching the cloud. This is what that actually looks like in 2026: the stack I run, the tradeoffs I've lived with, and the spots where local still loses to the cloud.</p>
 
     <h2>The 30-second setup</h2>
-    <p>The shortest path: download a Mac-native app that bundles a local inference runtime, model weights, and a chat / agent UI. Outlier is one such app. The full sequence:</p>
+    <p>Shortest path is a Mac-native app that bundles the inference runtime, the model weights, and a chat / agent UI in one download. Outlier is one of those. The whole sequence:</p>
     <ol>
-      <li>Download the signed Mac DMG from <a href="https://outlier.host/">outlier.host</a> (~150 MB installer).</li>
-      <li>On first launch, the app pulls Nano 4B (~3 GB) from HuggingFace. After that, no network calls are required for inference.</li>
-      <li>Turn off your wifi if you want to prove it. Local chat, agent runs, file edits, and project memory all work offline.</li>
+      <li>Grab the signed Mac DMG from <a href="https://outlier.host/">outlier.host</a>. The installer is about 150 MB.</li>
+      <li>First launch pulls Nano 4B (~3 GB) from HuggingFace. After that one download, inference never touches the network again.</li>
+      <li>Want proof? Switch off your wifi. Chat, agent runs, file edits, project memory. All of it still runs.</li>
     </ol>
-    <p>Other options exist — Ollama, LM Studio, Jan, llama.cpp directly. They differ in defaults, UI polish, and which models they make easy. The "offline" property is shared across all of them.</p>
+    <p>You've got other choices here. Ollama, LM Studio, Jan, llama.cpp straight up. They differ on defaults, on how polished the UI is, on which models they make painless to load. The offline part is the same no matter which one you pick.</p>
 
     <h2>What runs on what hardware</h2>
-    <p>Apple Silicon's unified memory means the GPU and CPU share RAM. So the rule of thumb is: <strong>your RAM is your usable model size, minus a few GB for the OS and the app.</strong></p>
+    <p>Apple Silicon shares one pool of RAM between the GPU and CPU. That's the unified memory thing. So the rule is dead simple: <strong>your RAM is your usable model size, minus a few GB for the OS and the app.</strong></p>
     <table>
       <thead><tr><th>RAM</th><th>What runs comfortably</th></tr></thead>
       <tbody>
@@ -142,18 +142,18 @@
         <tr><td>96+ GB</td><td>Plus 397B in Speed mode (fully resident in RAM) for higher throughput</td></tr>
       </tbody>
     </table>
-    <p>For coding specifically, Core 27B is the workhorse. Its HumanEval pass@1 is 0.8659 — high enough that the 6-test head-to-head against Claude Opus came out indistinguishable on refactor, reasoning, knowledge, writing, and translation tasks.</p>
+    <p>For coding, Core 27B is the workhorse. HumanEval pass@1 of 0.8659. That number is high enough that when I ran the 6-test head-to-head against Claude Opus, I genuinely couldn't tell the outputs apart on refactors, reasoning, knowledge questions, writing, or translation.</p>
 
     <h2>What the offline workflow gives up</h2>
-    <p>Two real things:</p>
+    <p>Two things, and they're both real:</p>
     <ul>
-      <li><strong>Speed feel.</strong> Local Core 27B on an M1 Ultra runs ~22 tok/s. Claude Opus or GPT-5 in the cloud run ~80–100 tok/s. On a 5,000-token response that's roughly 4 minutes locally vs ~1 minute in the cloud. The output ends up the same; the wait is real.</li>
-      <li><strong>Research-grade ceiling.</strong> For truly novel research questions, 50k+ token contexts, or PhD-level multi-hop reasoning, the cloud flagships still hold an edge. For the common 95% of asks — code refactors, explanations, comparisons, debugging — Outlier's bench scored 98.9% parity with Claude on 54 tests, with all 9 hardest additions (chess engine, raft/paxos explanation, ZK proofs, etc.) at 100%.</li>
+      <li><strong>Speed feel.</strong> Core 27B on my M1 Ultra runs about 22 tok/s. Claude Opus or GPT-5 in the cloud do 80 to 100. On a 5,000-token reply that works out to roughly 4 minutes locally against about 1 minute online. Same answer at the end. The wait is the price.</li>
+      <li><strong>Research-grade ceiling.</strong> Truly novel research, 50k+ token contexts, PhD-level multi-hop reasoning. The cloud flagships still win those. But for the everyday 95% (refactors, explanations, comparisons, debugging) Outlier's bench hit 98.9% parity with Claude across 54 tests, and all 9 of the hardest additions I threw in (chess engine, raft/paxos explanation, ZK proofs, that kind of thing) came back at 100%.</li>
     </ul>
 
     <h2>What it gives you back</h2>
-    <p>Nothing leaves the Mac. No rate limit. No API token bill. No model deprecation surprise emails. Code, repos, and chat history stay on your disk. The app works on a plane, behind a corporate firewall, in a coffee shop with bad wifi. Local context retention is essentially unbounded — start a chat in March and pick it up in June without "the context window reset."</p>
-    <p>For developers under a strict data-handling policy, the offline guarantee is the whole point. For everyone else it's an insurance policy against the day your cloud provider changes the terms.</p>
+    <p>Nothing leaves the Mac. No rate limit. No token bill. No surprise email telling you your model got deprecated. Your code, your repos, your chat history all sit on your own disk. It works on a plane. Behind a corporate firewall. In a coffee shop running on garbage wifi. And the context basically never resets. I've started a chat in March and picked it right back up in June, no "your context window has been cleared."</p>
+    <p>If you work under a strict data-handling policy, the offline guarantee is the entire reason to do this. For everyone else, it's insurance against the day your cloud provider quietly rewrites the terms.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -173,7 +173,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=offline-ai-coding-apple-silicon">Download for Mac</a>
     </div>
 

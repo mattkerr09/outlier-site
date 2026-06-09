@@ -113,22 +113,22 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>LM Studio is a polished chat GUI + OpenAI-compatible API.</li>
+        <li>LM Studio is a polished chat GUI plus an OpenAI-compatible API.</li>
         <li>Outlier ships a <strong>built-in agent loop</strong> with MCP tools and project memory.</li>
-        <li>LM Studio is better for chat + as a backend for external tools.</li>
-        <li>Outlier is better for Mac-native coding agents and oversized-MoE models.</li>
+        <li>Pick LM Studio for chat, or as a backend other tools talk to.</li>
+        <li>Pick Outlier for Mac-native coding agents and oversized-MoE models.</li>
       </ul>
     </div>
 
-    <p class="lead">LM Studio is a free, polished local-LLM GUI. It handles model downloads, chat, and an OpenAI-compatible API beautifully. What it doesn't ship is an agent loop — no built-in filesystem tools, no project memory, no MCP. Outlier is the opposite trade: less general-purpose, more opinionated, agent-first. Here's where each one is the right pick.</p>
+    <p class="lead">LM Studio is free, and it's a genuinely lovely local-LLM GUI. Model downloads, chat, an OpenAI-compatible API: all of it just works. What you won't find is an agent loop. No built-in filesystem tools, no project memory, no MCP. Outlier made the opposite bet. It's less general-purpose and a lot more opinionated, with the agent front and center. So which one do you actually want? Depends what you're building.</p>
 
     <h2>LM Studio's design center</h2>
-    <p>LM Studio is a chat client and model manager. You browse a model catalog (GGUF and MLX), download what you want, and chat with it. It exposes an OpenAI-compatible HTTP server so external tools (Continue.dev, Cursor's local mode, Open Interpreter, your own scripts) can hit the local model the same way they'd hit GPT-4. That last property is what makes LM Studio a great backend in a larger toolchain.</p>
-    <p>LM Studio does <em>not</em> ship with: a project-aware agent loop, filesystem tools, MCP integration, persistent project memory, or a coding-focused UI. You assemble those on top using a separate tool.</p>
+    <p>At its core, LM Studio is a chat client and a model manager. Browse the catalog (GGUF and MLX), grab what you want, start chatting. The clever bit is the OpenAI-compatible HTTP server. Point external tools at it (Continue.dev, Cursor's local mode, Open Interpreter, a script you wrote yourself) and they talk to your local model exactly like they'd talk to GPT-4. That's the property that makes LM Studio such a good backend inside a bigger toolchain.</p>
+    <p>So what's missing? A project-aware agent loop. Filesystem tools. MCP integration. Persistent project memory. A coding-focused UI. None of that ships in the box. You bolt it on with a separate tool.</p>
 
     <h2>Outlier's design center</h2>
-    <p>Outlier is a Mac-native AI app where the agent loop is the headline feature. The chat UI is one mode; the Agent mode is the other. Agent mode has built-in tools: read file, write file (with approval), run shell, search project, web search, and a growing list of MCP-based connectors. Each tool has an approval gate; each project gets persistent on-disk memory.</p>
-    <p>The model lineup is curated rather than catalog-style: Nano 4B for fast chat, Lite 9B for slightly stronger chat, Quick / Core / Code 27B for the daily coding work, Vision 35B for image input, Plus 397B for the heaviest reasoning. Core 27B's HumanEval pass@1 is 0.8659 — the lineup is calibrated for coherent quality across all 7 tiers.</p>
+    <p>Outlier is a Mac-native AI app, and the agent loop is the whole point. Chat is one mode. Agent is the other, and it's where the real work happens. Agent mode ships with built-in tools: read file, write file (with approval), run shell, search project, web search, plus a growing list of MCP-based connectors. Every tool sits behind an approval gate. Every project keeps its own memory on disk.</p>
+    <p>The model lineup is curated, not a sprawling catalog. Nano 4B handles fast chat. Lite 9B is a slightly stronger chat option. Quick, Core, and Code 27B carry the daily coding load. Vision 35B takes image input, and Plus 397B is there for the heaviest reasoning. Core 27B posts a HumanEval pass@1 of 0.8659. The point of curating it this way is coherent quality across all 7 tiers, instead of a thousand models of wildly varying quality.</p>
 
     <h2>Comparison</h2>
     <table>
@@ -147,14 +147,14 @@
 
     <h2>Which one to pick</h2>
     <ul>
-      <li><strong>You want the cleanest local chat GUI with a wide model catalog</strong> → LM Studio. It is genuinely well-built and the OpenAI-compatible API makes it composable.</li>
-      <li><strong>You want a Mac-native coding agent that edits files, runs commands, and remembers your project across sessions</strong> → Outlier. The agent loop is the product.</li>
-      <li><strong>You need to run an MoE model bigger than your RAM</strong> → Outlier. V9 paged expert streaming runs Plus 397B with ~11 GB peak OS RSS on a 64 GB Mac.</li>
-      <li><strong>You're on Linux or Windows</strong> → LM Studio. Outlier is Apple Silicon only.</li>
+      <li><strong>You want the cleanest local chat GUI with a wide model catalog</strong> → LM Studio. It's genuinely well-built, and that OpenAI-compatible API makes it easy to compose with other things.</li>
+      <li><strong>You want a Mac-native coding agent that edits files, runs commands, and remembers your project across sessions</strong> → Outlier. The whole product is built around that agent loop.</li>
+      <li><strong>You need to run an MoE model bigger than your RAM</strong> → Outlier. V9 paged expert streaming runs Plus 397B at roughly 11 GB peak OS RSS on a 64 GB Mac.</li>
+      <li><strong>You're on Linux or Windows</strong> → LM Studio. Outlier is Apple Silicon only, so this one's not close.</li>
     </ul>
 
     <h2>Can you use both</h2>
-    <p>Yes. They're orthogonal. Many Mac developers run LM Studio as a quick chat client and OpenAI-compatible backend for scripts, and run Outlier for project-aware agent work. The two tools don't conflict on the same Mac, though each pulls its own model files so disk usage doubles for any model both apps have downloaded.</p>
+    <p>Yes, and plenty of people do. The two barely overlap. A lot of Mac developers keep LM Studio around as a quick chat client and an OpenAI-compatible backend for scripts, then reach for Outlier when they want project-aware agent work. Running both on one Mac causes no conflict. The one catch: each app downloads its own copy of the model files, so if both have the same model, you're paying for that disk space twice.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -174,7 +174,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-lm-studio">Download for Mac</a>
     </div>
 

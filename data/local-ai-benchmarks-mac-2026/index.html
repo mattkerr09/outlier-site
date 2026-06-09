@@ -111,14 +111,14 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>On 7B-class chat: <strong>~70 tok/s</strong> on M1 Ultra for Outlier Nano 4B; comparable Ollama / LM Studio numbers in the 60–110 tok/s range depending on model.</li>
-        <li>On 27B-class coding: <strong>Outlier Core 27B = 20.7 tok/s</strong>, HumanEval pass@1 = <strong>0.8659</strong> (highest in lineup).</li>
-        <li>On 397B-class MoE: <strong>only Outlier runs it on 64 GB Macs</strong> (V9 paged engine, ~2.1 tok/s, ~11 GB RSS); Ollama and LM Studio can't fit the model.</li>
-        <li>Outlier MMLU numbers σ-qualified vs base: Nano +1.87pp (3.54σ), Lite +1.10pp (2.22σ); Core +0.44pp (1.04σ sub-σ).</li>
+        <li>7B-class chat runs <strong>~70 tok/s</strong> on an M1 Ultra with Outlier Nano 4B. Ollama and LM Studio land in the 60–110 tok/s range, depending which model you load.</li>
+        <li>For 27B coding, <strong>Outlier Core 27B does 20.7 tok/s</strong> and posts a HumanEval pass@1 of <strong>0.8659</strong>, the highest in the lineup.</li>
+        <li>397B-class MoE? <strong>Only Outlier runs it on a 64 GB Mac</strong> (V9 paged engine, ~2.1 tok/s, ~11 GB RSS). Ollama and LM Studio just can't fit the thing.</li>
+        <li>Every Outlier MMLU number is σ-qualified against its base. Nano gains +1.87pp (3.54σ), Lite +1.10pp (2.22σ). Core is +0.44pp (1.04σ), which is sub-σ.</li>
       </ul>
     </div>
 
-    <p class="lead">This is the raw benchmark data behind comparing the major local-AI options on Apple Silicon in 2026. Outlier numbers are measured on the dev M1 Ultra; Ollama and LM Studio numbers reference public benchmark posts where appropriate.</p>
+    <p class="lead">Raw numbers, not vibes. This is the benchmark data behind every major local-AI option on Apple Silicon in 2026. Outlier's figures come off my dev M1 Ultra. Ollama and LM Studio numbers cite public benchmark posts where it makes sense.</p>
 
     <h2>Outlier lineup — measured (M1 Ultra, MLX 4-bit, batch 1, 4096 prefill, 256 decode)</h2>
     <table>
@@ -132,7 +132,7 @@
         <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~11 GB (V9 paged)</td><td><strong>2.1 (V9)</strong></td><td>(pending)</td><td>(pending)</td></tr>
       </tbody>
     </table>
-    <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code> (2026-04-30 cluster eval, M1 Ultra Mac bench 2026-04-29); MMLU n=14,042; HumanEval n=164.</p>
+    <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code>. Cluster eval ran 2026-04-30, the M1 Ultra Mac bench a day earlier on 2026-04-29. MMLU n=14,042, HumanEval n=164.</p>
 
     <h2>Cross-tool comparison (Mac, comparable 7B/13B/27B models)</h2>
     <table>
@@ -149,7 +149,7 @@
         <tr><td>LM Studio</td><td>any 397B model</td><td>—</td><td>64 GB Mac</td><td><strong>won't load (RAM)</strong></td></tr>
       </tbody>
     </table>
-    <p class="source">Source: Outlier numbers measured locally; Ollama and LM Studio ranges from publicly-shared benchmark posts as of 2026-05. Different prompts, prefill sizes, and batch settings make exact apples-to-apples comparison hard; ranges shown are typical.</p>
+    <p class="source">Source: Outlier numbers measured locally. The Ollama and LM Studio ranges come from publicly-shared benchmark posts as of 2026-05. Exact apples-to-apples is genuinely hard here. Prompts differ, prefill sizes differ, batch settings differ. The ranges shown are what's typical.</p>
 
     <h2>Cost comparison (24 months, single Mac developer)</h2>
     <table>
@@ -169,19 +169,19 @@
 
     <h2>What the bench doesn't measure</h2>
     <ul>
-      <li><strong>Prompt prefill / TTFT.</strong> Decode tok/s is steady-state; first-token latency for long prompts can be several seconds even on fast tiers.</li>
-      <li><strong>Tier swap cost.</strong> Cold-loading a tier you haven't used recently takes 10s–74s depending on size.</li>
-      <li><strong>Quality on agentic loops.</strong> Bench tested single-turn outputs; multi-turn agent quality varies more by app than by model.</li>
-      <li><strong>Vision tasks rigorously.</strong> Vision 35B numbers are language-only; image-task quality bench is forthcoming.</li>
-      <li><strong>Long-context (50k+).</strong> Bench prompts capped at 4096 prefill; longer contexts are where cloud flagships still lead meaningfully.</li>
+      <li><strong>Prompt prefill / TTFT.</strong> Decode tok/s is the steady-state figure. Feed a long prompt and your first token can still be several seconds out, even on the fast tiers.</li>
+      <li><strong>Tier swap cost.</strong> Switch to a tier you haven't touched in a while and the cold load runs 10s–74s, scaling with size.</li>
+      <li><strong>Quality on agentic loops.</strong> The bench tested single-turn outputs. Multi-turn agent quality swings more on the app than the model.</li>
+      <li><strong>Vision tasks rigorously.</strong> Those Vision 35B numbers are language-only. A real image-task quality bench is still coming.</li>
+      <li><strong>Long-context (50k+).</strong> Every bench prompt was capped at 4096 prefill. Push past that and the cloud flagships still pull ahead by a real margin.</li>
     </ul>
 
     <h2>How to reproduce</h2>
     <ol>
-      <li>Outlier: download from <a href="https://outlier.host/">outlier.host</a>, use the bundled benchmark harness in the app's developer console.</li>
-      <li>Ollama: <code>ollama run &lt;model&gt; --verbose</code> reports tok/s per response.</li>
-      <li>LM Studio: chat REPL shows tok/s in the response footer.</li>
-      <li>MMLU / HumanEval: use lm-evaluation-harness with each model loaded via its native backend.</li>
+      <li>Outlier: grab it from <a href="https://outlier.host/">outlier.host</a>, then run the bundled benchmark harness in the app's developer console.</li>
+      <li>Ollama: <code>ollama run &lt;model&gt; --verbose</code> prints tok/s for every response.</li>
+      <li>LM Studio: the chat REPL shows tok/s right in the response footer.</li>
+      <li>MMLU / HumanEval: reach for lm-evaluation-harness, loading each model through its native backend.</li>
     </ol>
 
     <h2>Frequently asked questions</h2>
@@ -202,7 +202,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=data-local-ai-benchmarks-mac-2026">Download for Mac</a>
     </div>
 
