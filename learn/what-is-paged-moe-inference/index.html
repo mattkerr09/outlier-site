@@ -113,31 +113,31 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>MoE = only <em>k</em> of N experts active per token (e.g. 10 of 512 in Qwen3.5-397B-A17B).</li>
-        <li>Paged inference keeps active experts in RAM, streams the rest from SSD.</li>
-        <li>Structurally similar to OS virtual memory: bounded working set, on-demand paging.</li>
+        <li>MoE means only <em>k</em> of N experts fire per token (10 of 512 in Qwen3.5-397B-A17B).</li>
+        <li>Paged inference keeps the active experts in RAM and streams the rest off your SSD.</li>
+        <li>Same trick as OS virtual memory. Bounded working set, pages pulled on demand.</li>
         <li>Outlier's V10 engine runs Plus 397B at <strong>~11 GB RAM, ~2.1 tok/s</strong> on a 64 GB Mac.</li>
       </ul>
     </div>
 
-    <p class="lead">A paged MoE inference engine runs Mixture-of-Experts models without keeping all the weights in memory at once. It uses the property that MoE models only activate a few experts per token, keeps the active ones in RAM, and streams the others from disk on demand. That's how a 397B-parameter model fits on a 64 GB Mac.</p>
+    <p class="lead">A paged MoE inference engine runs Mixture-of-Experts models without holding every weight in memory at once. It leans on one fact about MoE: only a handful of experts fire per token. So it parks the active ones in RAM and pulls the rest off disk when they're needed. That's the whole reason a 397B-parameter model fits on a 64 GB Mac.</p>
 
     <h2>What MoE actually is</h2>
-    <p>A standard ("dense") language model passes every token through every parameter. A 70B dense model does 70B parameters' worth of work for each token, no matter what.</p>
-    <p>A Mixture-of-Experts (MoE) model splits each layer into many small "expert" sub-networks plus a router. For each token, the router picks <em>k</em> experts (typically 2 or 8) out of the total pool, and only those <em>k</em> do work. The rest sit idle for that token.</p>
-    <p>Qwen3.5-397B-A17B is an MoE: 397B total parameters, 17B active per token. The "A17B" tells you how much compute each token requires (about the same as a 17B dense model). The "397B" is the total knowledge capacity.</p>
+    <p>Start with a normal model. A standard ("dense") network runs every token through every parameter. A 70B dense model burns 70B parameters' worth of compute on each token, every time, no exceptions.</p>
+    <p>MoE breaks that pattern. A Mixture-of-Experts model chops each layer into a bunch of small "expert" sub-networks and adds a router. The router looks at the token, picks <em>k</em> experts (usually 2 or 8) from the pool, and only those <em>k</em> do anything. Everyone else sits idle for that token.</p>
+    <p>Take Qwen3.5-397B-A17B. 397B total parameters, but only 17B active per token. That "A17B" is your compute bill per token, roughly what a 17B dense model costs. The "397B" is how much the thing actually knows.</p>
 
     <h2>The opportunity for paging</h2>
-    <p>If only 17B of 397B parameters are active for any given token, you don't strictly need all 397B in RAM. You need:</p>
+    <p>So if only 17B of those 397B parameters do anything on a given token, why hold all 397B in RAM? You don't have to. What you actually need is:</p>
     <ul>
-      <li>The shared backbone — attention layers, embedding, the router itself.</li>
-      <li>A cache of recently-used experts, sized to your available RAM.</li>
-      <li>An on-disk store of all experts, available to the cache.</li>
+      <li>The shared backbone (attention layers, embedding, the router itself).</li>
+      <li>A cache of recently-used experts, sized to whatever RAM you've got.</li>
+      <li>An on-disk store holding all the experts, ready for the cache to pull from.</li>
     </ul>
-    <p>This is structurally the same idea as virtual memory in an operating system: don't keep the whole working set resident, swap in pages on demand. The pages here are entire expert tensor blocks, typically a few hundred MB each.</p>
+    <p>Operating systems have done this forever. It's virtual memory: don't keep the whole working set resident, page things in when you need them. The pages here just happen to be entire expert tensor blocks, usually a few hundred MB apiece.</p>
 
     <h2>The engine, step by step</h2>
-    <p>For each generated token:</p>
+    <p>Walk through one generated token:</p>
     <ol>
       <li>Embed the new token, run the attention layers (always resident).</li>
       <li>Router picks <em>k</em> experts to use for this token's MLP.</li>
@@ -145,33 +145,33 @@
       <li>Compute the expert MLPs, combine, produce next-token logits.</li>
       <li>Sample the next token, repeat.</li>
     </ol>
-    <p>The honest performance story: cache hits are fast (it's just a memory access); cache misses are SSD-bandwidth-bound. On a modern Apple Silicon SSD that sustains 5–15 GB/s, a single expert read is a few tens of milliseconds. Over many tokens, hot experts stay cached and the average cost amortizes down.</p>
+    <p>Where does the time go? Cache hits are basically free, just a memory access. Misses are bound by SSD bandwidth. A modern Apple Silicon SSD sustains 5–15 GB/s, which puts a single expert read at a few tens of milliseconds. Run enough tokens and the hot experts settle into cache, so the average read cost keeps dropping.</p>
 
     <h2>The numbers, in practice</h2>
-    <p>Outlier's V9 paged engine running Qwen3.5-397B-A17B on a 64 GB Mac Studio M1 Ultra:</p>
+    <p>Numbers from Outlier's V9 paged engine running Qwen3.5-397B-A17B on a 64 GB Mac Studio M1 Ultra:</p>
     <ul>
-      <li>Peak OS-level RSS: about <strong>11 GB</strong> (capacity engine for the same model would need ~209 GB plus headroom)</li>
+      <li>Peak OS-level RSS: about <strong>11 GB</strong> (the capacity engine would want ~209 GB plus headroom for the same model)</li>
       <li>Decode speed: about <strong>2.1 tokens per second</strong></li>
       <li>SSD read pattern: concurrent <code>pread</code> with queue depth 24, sustained</li>
     </ul>
-    <p>2.1 tok/s is real. It's slower than the in-RAM capacity engine (which would need 192+ GB of RAM and isn't an option on most consumer hardware). It's faster than not being able to run the model at all.</p>
+    <p>2.1 tok/s is a measured number, not a brochure figure. Sure, it's slower than the in-RAM capacity engine. But that engine wants 192+ GB of RAM, which most people simply don't have. The alternative isn't a faster run. It's no run.</p>
 
     <h2>Where paged MoE wins and loses</h2>
     <p>Wins:</p>
     <ul>
-      <li>Runs models that wouldn't otherwise fit on your hardware.</li>
-      <li>Memory footprint stays bounded — you can use the rest of the machine.</li>
-      <li>Cache locality means common usage patterns stay fast.</li>
+      <li>Runs models that flat-out wouldn't fit on your hardware otherwise.</li>
+      <li>The memory footprint stays bounded, so the rest of your machine is still yours to use.</li>
+      <li>Cache locality means your common usage patterns stay quick.</li>
     </ul>
     <p>Loses:</p>
     <ul>
-      <li>Cold expert misses are SSD-bound, not memory-bound. First response is slowest.</li>
-      <li>Dense (non-MoE) models can't be paged this way — they actually need all the weights every token.</li>
-      <li>External SSDs over Thunderbolt are half the throughput of internal NVMe, so paging is correspondingly slower.</li>
+      <li>Cold expert misses hit the SSD, not memory. Your first response is the slowest one.</li>
+      <li>Dense (non-MoE) models get no benefit here. They genuinely touch every weight on every token.</li>
+      <li>An external SSD over Thunderbolt runs about half the throughput of internal NVMe, so paging slows down to match.</li>
     </ul>
 
     <h2>Why this matters for local AI</h2>
-    <p>Before paged MoE inference, running a flagship-class MoE model locally meant buying a $7,000+ Mac Studio Ultra with 192 GB of unified memory. With paged MoE, the same model runs on a 64 GB Mac Studio that costs about half as much. The architectural specialty is what makes Plus 397B viable for individual developers rather than only well-funded labs.</p>
+    <p>This changes who gets to run these models. Before paged MoE, a flagship-class MoE model meant shelling out for a $7,000+ Mac Studio Ultra with 192 GB of unified memory. Now the same model runs on a 64 GB Mac Studio at roughly half the price. That architectural trick is the reason Plus 397B is something an individual developer can actually run, not just a well-funded lab.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -191,7 +191,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=what-is-paged-moe-inference">Download for Mac</a>
     </div>
 

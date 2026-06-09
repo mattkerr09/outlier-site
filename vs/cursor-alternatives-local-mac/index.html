@@ -113,23 +113,23 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Closest in-editor Cursor analog: <strong>Continue.dev + a local backend</strong> (Ollama / LM Studio).</li>
-        <li>For an out-of-editor full agent: Outlier (separate Mac app, MCP tools, project memory).</li>
-        <li>Predictive-completion latency is where local trails cloud most visibly.</li>
-        <li>Newer option: Zed editor with configurable local LLM endpoint.</li>
+        <li>Want Cursor's in-editor feel? <strong>Continue.dev + a local backend</strong> (Ollama / LM Studio) gets you closest.</li>
+        <li>Want a full agent that lives outside the editor? Outlier. Separate Mac app, MCP tools, project memory.</li>
+        <li>Predictive completion is the one thing local still does worse than the cloud.</li>
+        <li>Zed is the newer pick: an editor with a configurable local LLM endpoint.</li>
       </ul>
     </div>
 
-    <p class="lead">Cursor is a VS Code fork with strong AI integration: in-editor chat, multi-file edits, predictive completion. It's cloud-backed. If you want the same shape of workflow with a local model — for privacy, cost, or because you work where the cloud doesn't reach — here are the actual options on a Mac.</p>
+    <p class="lead">Cursor is a VS Code fork with serious AI baked in: in-editor chat, multi-file edits, predictive completion. The catch is it's cloud-backed. Maybe you care about privacy. Maybe it's the cost, or maybe you just work somewhere the cloud doesn't reach. If you want that same workflow running on a local model, these are your real options on a Mac.</p>
 
     <h2>What Cursor actually does</h2>
-    <p>Three core things that make Cursor feel different from raw VS Code:</p>
+    <p>Strip away the branding and three things make Cursor feel different from plain VS Code:</p>
     <ol>
-      <li>An always-available chat sidebar with project context.</li>
+      <li>A chat sidebar that's always there and knows your project.</li>
       <li>Multi-file diff-based edits ("change this and update all the call sites").</li>
-      <li>Predictive completion that goes beyond next-token autocomplete.</li>
+      <li>Predictive completion that goes well past next-token autocomplete.</li>
     </ol>
-    <p>The first two are bottlenecked by model quality, not the editor. The third is bottlenecked by latency — Cursor's predictive completion uses fast cloud models tuned for sub-100ms first-token latency. That last property is the hardest to replicate locally.</p>
+    <p>The first two come down to model quality, not the editor. The third comes down to latency. Cursor's predictive completion runs on fast cloud models tuned for sub-100ms first-token latency, and that's the property nobody has cracked locally yet.</p>
 
     <h2>The honest local options on a Mac</h2>
     <table>
@@ -144,28 +144,28 @@
 
     <h2>What each tradeoff looks like</h2>
     <h3>Continue.dev (in-editor)</h3>
-    <p>The closest in-editor Cursor analog. Sidebar chat, slash commands, multi-file edits, all wired into VS Code or JetBrains. Pair with Ollama or LM Studio as the local backend. Predictive autocomplete works but is noticeably slower than Cursor's cloud version because the model is local.</p>
+    <p>If you want Cursor's feel without leaving the editor, this is it. Sidebar chat, slash commands, multi-file edits, all wired straight into VS Code or JetBrains. Point it at Ollama or LM Studio for the local backend and you're set. Predictive autocomplete works. It's just noticeably slower than Cursor's cloud version, because the model lives on your machine.</p>
 
     <h3>Outlier (separate app)</h3>
-    <p>Outlier is a Mac-native AI app, not an editor plugin. The agent loop is the headline: it reads your project, edits files, runs commands, asks for approval at the right moments. You bounce between your editor and Outlier rather than having AI inline in the editor. Trade: less "AI in your face," more "real agent doing structured work." Core 27B's HumanEval pass@1 is 0.8659 — high enough that the local agent holds its own on real refactors.</p>
+    <p>Outlier isn't an editor plugin. It's a Mac-native AI app, and the agent loop is the whole point. It reads your project, edits files, runs commands, and pauses for approval when it should. You hop between your editor and Outlier instead of getting AI inline. So it's less "AI in your face" and more "an agent quietly doing structured work." Core 27B's HumanEval pass@1 sits at 0.8659. That's high enough for the local agent to hold its own on real refactors.</p>
 
     <h3>Zed</h3>
-    <p>Newer editor, lightweight, configurable to hit any LLM API endpoint (including a local Ollama / LM Studio). The integration is lighter than Cursor or Continue.dev but the editor itself is fast and the trajectory is interesting.</p>
+    <p>Zed is the new kid. Lightweight, and you can point it at any LLM API endpoint, a local Ollama or LM Studio included. The integration is thinner than Cursor or Continue.dev. But the editor is genuinely fast, and the direction it's heading is worth watching.</p>
 
     <h2>The predictive-completion gap</h2>
-    <p>This is where local trails cloud most visibly. Cursor's "tab completion" produces multi-line, context-aware suggestions in under 100ms. To match that locally you need:</p>
+    <p>This is the part where local really shows its seams. Cursor's "tab completion" fires off multi-line, context-aware suggestions in under 100ms. Matching that on your own machine takes two things:</p>
     <ul>
-      <li>A small, fast model (Outlier Nano 4B is in the right size class) that can produce a multi-line completion in under 100ms.</li>
-      <li>An editor integration that surfaces it without flicker.</li>
+      <li>A small, fast model (Outlier Nano 4B is in the right size class) that can spit out a multi-line completion in under 100ms.</li>
+      <li>An editor integration that shows it without flicker.</li>
     </ul>
-    <p>Continue.dev does this with small local models but the experience is rougher than Cursor's cloud version. For now, predictive completion is the one area where Cursor's cloud advantage is real and meaningful in daily use.</p>
+    <p>Continue.dev pulls this off with small local models, but the experience is rougher than Cursor's cloud version. Predictive completion is the one spot where Cursor's cloud edge is real and you feel it every day.</p>
 
     <h2>Picking your setup</h2>
     <ul>
       <li><strong>You want as close to Cursor as possible, in-editor</strong> → Continue.dev + a local backend (Ollama, LM Studio, or Outlier's HTTP endpoint).</li>
-      <li><strong>You want a real local coding agent, willing to leave the editor</strong> → Outlier app.</li>
+      <li><strong>You want a real local coding agent and don't mind leaving the editor</strong> → Outlier app.</li>
       <li><strong>You want a fast modern editor with optional local AI</strong> → Zed.</li>
-      <li><strong>You need predictive completion as good as Cursor's</strong> → Honestly, stay on Cursor for now, or accept the gap.</li>
+      <li><strong>You need predictive completion as good as Cursor's</strong> → stay on Cursor for now, or live with the gap. No shame in either.</li>
     </ul>
 
     <h2>Frequently asked questions</h2>
@@ -186,7 +186,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=cursor-alternatives-local-mac">Download for Mac</a>
     </div>
 

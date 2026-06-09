@@ -113,39 +113,39 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Apple Silicon's <strong>unified memory architecture</strong> lets the GPU operate directly on weights without PCIe copy overhead.</li>
-        <li>On-package NVMe SSDs sustain <strong>5–15 GB/s sequential read</strong>, enabling paged expert streaming for MoE models bigger than RAM.</li>
-        <li>Metal-optimized MLX kernels for 4-bit matmul make consumer Macs competitive with NVIDIA-equipped PCs at fraction of the power budget.</li>
-        <li>Result: a 397B-parameter MoE model runs on a <strong>64 GB Mac Studio at ~2.1 tok/s</strong> — impossible on a comparable PC build without 4× the RAM.</li>
+        <li>Apple's <strong>unified memory architecture</strong> means the GPU reads weights in place. No PCIe copy.</li>
+        <li>On-package NVMe SSDs hold <strong>5–15 GB/s sequential read</strong>, fast enough to page experts in for MoE models that don't fit in RAM.</li>
+        <li>Metal-optimized MLX kernels handle 4-bit matmul, so a consumer Mac keeps up with an NVIDIA PC on a fraction of the power.</li>
+        <li>The payoff: a 397B-parameter MoE model runs on a <strong>64 GB Mac Studio at ~2.1 tok/s</strong>. You can't do that on a comparable PC without 4× the RAM.</li>
       </ul>
     </div>
 
-    <p class="lead">Apple Silicon is the best consumer hardware for local AI in 2026. Not because Macs are faster than NVIDIA H100 servers (they aren't), but because the M-series architecture removes the bottlenecks that make local AI hard on every other consumer platform. Three architectural choices stack to produce this result.</p>
+    <p class="lead">If you want to run AI locally in 2026, buy a Mac. Not because an M-series chip beats an NVIDIA H100 server (it doesn't), but because the architecture gets rid of the bottlenecks that make local AI painful on everything else. Three design choices stack up to make it work, and I'll walk through each one.</p>
 
     <h2>Unified memory eliminates the PCIe bottleneck</h2>
-    <p>On a typical PC build, the GPU has its own VRAM, separate from the CPU's system RAM, connected over a PCIe bus. To run a model you copy weights from system RAM (or disk) into VRAM over PCIe — a step that costs tens of milliseconds per gigabyte. For a 30 GB model you spend several seconds just moving data before inference can start.</p>
-    <p>Apple Silicon doesn't work this way. The GPU, CPU, and Neural Engine share the same unified memory pool. Weights loaded into "RAM" are already accessible to the GPU; there is no copy step. For paged inference (where you're constantly bringing fresh expert weights into the working set), this matters enormously — an expert read from SSD lands directly in GPU-accessible memory, ready for matmul.</p>
+    <p>On a normal PC, the GPU has its own VRAM that sits apart from the CPU's system RAM, bridged by a PCIe bus. Want to run a model? You copy the weights from system RAM (or disk) into VRAM across PCIe, and that copy costs tens of milliseconds per gigabyte. A 30 GB model burns several seconds just shuffling data around before inference even starts.</p>
+    <p>Apple Silicon skips all of that. The GPU, CPU, and Neural Engine all share one unified memory pool. Load weights into "RAM" and the GPU can already see them. No copy. That's a big deal for paged inference, where you're forever pulling fresh expert weights into the working set. An expert read off the SSD lands straight in GPU-accessible memory, ready for the matmul.</p>
 
     <h2>On-package SSD delivers the bandwidth paged inference needs</h2>
-    <p>Modern Apple Silicon Macs ship with NVMe SSDs that sustain 5–15 GB/s of sequential read on the internal device. M1 Ultra sits around 7 GB/s; M2 and M3 Ultra are higher. This is fast enough that paged MoE inference can stream individual expert tensors from disk in the budget required for ~3 tok/s generation.</p>
-    <p>On PCs, fast NVMe SSDs are available but usually connected through fewer PCIe lanes, capped at lower sustained throughput, and competing for bus time with the GPU. The architectural choice Apple makes — on-package SSD with privileged path to unified memory — produces a noticeably different paging performance.</p>
+    <p>Recent Macs come with NVMe SSDs that hold 5–15 GB/s of sequential read on the internal drive. M1 Ultra lands around 7 GB/s. M2 and M3 Ultra go higher. That's quick enough for paged MoE inference to stream individual expert tensors off disk inside the budget you need for ~3 tok/s generation.</p>
+    <p>PCs can get fast NVMe SSDs too. The catch is they usually run through fewer PCIe lanes and top out at lower sustained throughput, all while fighting the GPU for bus time. Apple wires the SSD on-package with a privileged path to unified memory, and the paging performance you get out of it feels noticeably different.</p>
 
     <h2>Metal + MLX make 4-bit matmul fast on the GPU</h2>
-    <p>The MLX framework (Apple's array library for ML on Mac) ships Metal-optimized kernels for low-precision matmul. 4-bit weight × 16-bit activation operations run at speeds competitive with NVIDIA Tensor Cores per watt. Outlier's lineup runs in MLX 4-bit across all 7 tiers; measured tok/s on M1 Ultra:</p>
+    <p>MLX is Apple's array library for ML on the Mac, and it ships Metal-optimized kernels for low-precision matmul. Run a 4-bit weight against a 16-bit activation and it keeps pace with NVIDIA Tensor Cores on a per-watt basis. Outlier's whole lineup runs MLX 4-bit across all 7 tiers. These are the tok/s I measured on an M1 Ultra:</p>
     <ul>
       <li>Nano 4B: 71.7 tok/s</li>
       <li>Lite 9B: 53.4 tok/s</li>
       <li>Core 27B: 20.7 tok/s</li>
       <li>Plus 397B (V9 paged inference): 2.1 tok/s</li>
     </ul>
-    <p>The Nano and Lite numbers are in roughly the same range you'd get on a desktop NVIDIA card at similar precision. The Plus 397B number — running on the same 64 GB Mac that costs about $3,500 — is not achievable on any consumer NVIDIA card without spending an order of magnitude more on RAM and storage.</p>
+    <p>Nano and Lite land in roughly the range a desktop NVIDIA card gives you at the same precision. The Plus 397B figure is the interesting one. It's running on that same 64 GB Mac that runs about $3,500, and no consumer NVIDIA card touches it without spending an order of magnitude more on RAM and storage.</p>
 
     <h2>Power efficiency makes this practical to leave running</h2>
-    <p>A Mac Studio Ultra under full inference load draws ~100W. An equivalent-RAM PC with a discrete GPU draws 350–500W. For developers who run local AI agents most of their work day, that adds up to real money on the electric bill — and to real heat in a home office.</p>
-    <p>This is the reason "leave the model loaded between sessions" is realistic on Mac and uncomfortable on PC. Outlier's auto-unload and tier-swap behavior assume a thermal budget you actually have on Apple Silicon.</p>
+    <p>Push a Mac Studio Ultra to full inference load and it pulls ~100W. A PC with the same RAM and a discrete GPU pulls 350–500W. If you keep a local AI agent running through most of your workday, that gap turns into real money on the power bill. Real heat in the home office, too.</p>
+    <p>So "leave the model loaded between sessions" is a perfectly normal thing to do on a Mac and a sweaty proposition on a PC. Outlier's auto-unload and tier-swap behavior lean on a thermal budget that Apple Silicon actually gives you.</p>
 
     <h2>What this doesn't mean</h2>
-    <p>Apple Silicon is not the right choice if you need: maximum raw throughput (NVIDIA H100 clusters win), maximum model variety (CUDA has the largest ecosystem), or cross-platform support (Apple Silicon is Mac-only). For consumer-grade local AI on a single machine in 2026, it's the most pragmatic option by a meaningful margin.</p>
+    <p>None of this makes Apple Silicon the answer for everyone. Need maximum raw throughput? NVIDIA H100 clusters win. Want the widest pile of models to choose from? CUDA still has the biggest ecosystem. And if you need something that isn't Mac-only, well, this is Mac-only. But for consumer local AI on a single machine in 2026, nothing else comes this close to making sense.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -165,7 +165,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=apple-silicon-best-local-ai-2026">Download for Mac</a>
     </div>
 

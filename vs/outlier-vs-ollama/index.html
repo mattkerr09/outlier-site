@@ -113,34 +113,34 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Ollama is cross-platform OSS GGUF runtime; Outlier is Mac-native MLX app.</li>
-        <li>Outlier's specialty: <strong>paged MoE streaming runs Plus 397B on 64 GB</strong>; Ollama can't.</li>
-        <li>Ollama wins on cross-platform, OSS, and largest model catalog.</li>
-        <li>Outlier wins on bundled agent loop, project memory, and oversized-MoE handling.</li>
+        <li>Ollama runs everywhere and is open-source GGUF. Outlier is a Mac-native MLX app.</li>
+        <li>Outlier's trick: <strong>paged MoE streaming runs Plus 397B on 64 GB</strong>. Ollama can't.</li>
+        <li>Pick Ollama if you need cross-platform support or the biggest open-source catalog.</li>
+        <li>Pick Outlier for the built-in agent loop, project memory, oversized MoE models.</li>
       </ul>
     </div>
 
-    <p class="lead">Ollama is the most popular local-LLM runner. It's free, open source, and supports a huge model library through GGUF. Outlier is more focused: Mac-only, MLX-native, with a custom paged-MoE streaming engine that runs Plus 397B on a 64 GB Mac. Different design centers — here's where each one wins.</p>
+    <p class="lead">Ollama is the most popular way to run a model on your own machine. It's free, it's open source, and the GGUF library is enormous. Outlier picks a narrower fight. It's Mac-only and MLX-native, and its paged-MoE engine runs Plus 397B on a 64 GB Mac. Two very different design centers. Below is where each one actually wins.</p>
 
     <h2>What each one is</h2>
-    <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local LLMs, with a model registry, a chat REPL, and an OpenAI-compatible API. Backend is llama.cpp (GGUF format). Cross-platform: macOS, Linux, Windows. Free and open source under the MIT license. The "ollama pull" / "ollama run" workflow is the cleanest local-LLM UX you can get.</p>
-    <p><strong>Outlier</strong> is a Mac-native desktop app with a chat UI, an agent loop with MCP tools, a project memory layer, and a custom inference backend built on Apple's MLX framework. Model format is MLX-native (4-bit quantization). Apple Silicon only. Free tier (Nano + Lite) is fully usable; paid tiers unlock larger models.</p>
+    <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local models. You get a model registry and a chat REPL, plus an OpenAI-compatible API. The backend is llama.cpp, so the format is GGUF. It runs on macOS, Linux, and Windows, and it's free and open source under the MIT license. Honestly, the "ollama pull" then "ollama run" loop is about as clean as local-LLM setup gets.</p>
+    <p><strong>Outlier</strong> is a Mac desktop app. There's a chat UI, an agent loop wired to MCP tools, a project memory layer, and an inference backend built on Apple's MLX framework. Models are MLX-native and 4-bit quantized. Apple Silicon only. The free tier covers Nano and Lite and it's genuinely usable, while paid tiers open up the bigger models.</p>
 
     <h2>Where Ollama wins</h2>
     <ul>
-      <li><strong>Cross-platform.</strong> Linux, Windows, Mac. If you're not on a Mac, Outlier isn't for you.</li>
-      <li><strong>Open source.</strong> MIT licensed. Auditable, self-hostable, no vendor risk.</li>
-      <li><strong>Free.</strong> Always. No paid tiers.</li>
-      <li><strong>Model variety.</strong> Anything in GGUF works. Llama family, Mistral, Phi, Gemma — a huge library.</li>
-      <li><strong>Composable.</strong> Designed as a backend for other tools (Open WebUI, LangChain, your own scripts).</li>
+      <li><strong>Cross-platform.</strong> Linux, Windows, Mac. Not on a Mac? Then Outlier isn't even an option for you, and Ollama is.</li>
+      <li><strong>Open source.</strong> MIT licensed. You can audit it, self-host it, and you're not betting on one vendor sticking around.</li>
+      <li><strong>Free.</strong> Always has been. No paid tiers lurking.</li>
+      <li><strong>Model variety.</strong> If it's in GGUF, it runs. The Llama family, Mistral, Phi, Gemma. The library is huge.</li>
+      <li><strong>Composable.</strong> It's built to sit behind other tools. Open WebUI, LangChain, whatever scripts you've got.</li>
     </ul>
 
     <h2>Where Outlier wins</h2>
     <ul>
-      <li><strong>Running models bigger than your RAM.</strong> Ollama on a 64 GB Mac can run models up to about 50 GB after OS overhead. Plus 397B at 209 GB simply doesn't fit. Outlier's V9 paged engine runs the full 397B model with ~11 GB peak OS RSS by streaming individual expert tensors from SSD on demand. That's the architectural specialty.</li>
-      <li><strong>Apple Silicon native.</strong> MLX backend exploits unified memory and Metal directly. For models that fit, it's competitive with or slightly faster than llama.cpp on the same hardware.</li>
-      <li><strong>Bundled UX.</strong> Chat, agent mode, project memory, file editing, vision — one app, no Open WebUI to wire up.</li>
-      <li><strong>Models tuned for the lineup.</strong> Outlier's Core 27B HumanEval pass@1 is 0.8659; the lineup is calibrated for a coherent experience across all 7 tiers.</li>
+      <li><strong>Running models bigger than your RAM.</strong> On a 64 GB Mac, Ollama tops out around 50 GB once you account for OS overhead. Plus 397B weighs 209 GB, so it just won't fit. The V9 paged engine runs the whole 397B model at roughly 11 GB peak OS RSS, streaming individual expert tensors off the SSD as they're needed. This is the thing Outlier was built to do.</li>
+      <li><strong>Apple Silicon native.</strong> The MLX backend talks to unified memory and Metal directly. For a model that fits in RAM, it'll match llama.cpp on the same machine, sometimes edge slightly ahead.</li>
+      <li><strong>Bundled UX.</strong> Chat, agent mode, project memory, file editing, vision. It's all one app. Nothing to wire up.</li>
+      <li><strong>Models tuned for the lineup.</strong> Core 27B scores 0.8659 on HumanEval pass@1, and every tier is calibrated so the experience stays coherent across all 7.</li>
     </ul>
 
     <h2>Comparison table</h2>
@@ -159,7 +159,7 @@
     </table>
 
     <h2>Which one to pick</h2>
-    <p>If you're cross-platform, want OSS, and your hardware can run the model you actually need at full size — Ollama is the right answer. If you're on a Mac, you want a polished bundled experience, and you want the option to run larger MoE models than your RAM would normally allow — Outlier is the right answer. They can coexist: many developers use Ollama as a scripting backend and Outlier as their daily-driver app.</p>
+    <p>Need cross-platform, want open source, and your hardware can already load the model you need at full size? Ollama is your answer. On a Mac, want the polished all-in-one app, and want the option to run MoE models bigger than your RAM should allow? That's Outlier. And you don't have to choose. Plenty of developers keep Ollama running as a scripting backend and use Outlier as the app they actually sit in front of all day.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -179,7 +179,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-ollama">Download for Mac</a>
     </div>
 

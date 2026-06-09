@@ -113,69 +113,69 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Local AI processes prompts on your Mac; no third-party server sees the prompt or response.</li>
-        <li>Networks still touch for model downloads, app updates, and opted-in cloud connectors.</li>
-        <li>Verification: airplane mode — chat, agent, file edits, project memory all still work.</li>
-        <li>Matters most for regulated industries (HIPAA, finance, defense) and pre-public IP.</li>
+        <li>The model runs on your Mac. No third-party server ever sees your prompt or the response.</li>
+        <li>Networks get touched for three things only: model downloads, app updates, and connectors you opt into.</li>
+        <li>Want proof? Flip on airplane mode. Chat, agent, file edits, and project memory keep working.</li>
+        <li>This matters most if you're in a regulated industry (HIPAA, finance, defense) or sitting on pre-public IP.</li>
       </ul>
     </div>
 
-    <p class="lead">When you ask a cloud AI tool to refactor a function, your code travels across the internet to a server you don't control, gets processed there, and the response travels back. When you ask a local AI tool to do the same thing, none of that happens. Same workflow, completely different data path. Here's what that actually means for code privacy in practice.</p>
+    <p class="lead">Ask a cloud AI to refactor a function and your code leaves your machine. It crosses the internet to a server you don't control, gets processed, and the answer comes back. Ask a local AI to do the exact same thing and none of that happens. The workflow looks identical. The data path isn't even close. This is what that difference actually buys you for code privacy.</p>
 
     <h2>What "your code" means in this context</h2>
-    <p>In an AI coding workflow, "your code" includes more than just the source you pasted. It's typically:</p>
+    <p>"Your code" is bigger than the snippet you pasted. In a real AI coding session it usually means:</p>
     <ul>
-      <li>The prompt text you typed (which may include credentials, customer names, or business logic).</li>
-      <li>The file contents the agent read while working (which is often most of a feature or module).</li>
-      <li>The shell command output the agent processed (which can include environment variables, log lines, error messages with PII).</li>
-      <li>The conversation history (which the next turn references).</li>
+      <li>The prompt you typed. That text can carry credentials, customer names, or business logic.</li>
+      <li>Whatever files the agent read while working, which is often most of a feature or an entire module.</li>
+      <li>Shell output the agent chewed through. Think environment variables, log lines, error messages with PII baked in.</li>
+      <li>The conversation history, because the next turn refers back to it.</li>
     </ul>
-    <p>Every cloud call sends some subset of these. Even a tool that "only sends prompts to the cloud" is sending the prompts that contain your code excerpts.</p>
+    <p>Every cloud call ships some slice of that. A tool that swears it "only sends prompts to the cloud" is still sending prompts stuffed with your code excerpts.</p>
 
     <h2>The cloud path</h2>
-    <p>A cloud AI tool's data flow for a single refactor:</p>
+    <p>Walk through one refactor on a cloud tool and here's the trip your code takes:</p>
     <ol>
       <li>You select a function locally.</li>
-      <li>The tool packages it into a prompt along with project context (often dozens of files).</li>
-      <li>The prompt is sent over TLS to the provider's API.</li>
-      <li>The provider's inference server processes it and may log it. Most retain prompts for some period for abuse monitoring, sometimes for training.</li>
+      <li>The tool wraps it in a prompt along with project context, often dozens of files.</li>
+      <li>That prompt gets sent over TLS to the provider's API.</li>
+      <li>Their inference server processes it and may log it. Most keep prompts around for a while for abuse monitoring, sometimes for training.</li>
       <li>The response comes back.</li>
-      <li>The conversation may be retained on the server for resumption.</li>
+      <li>The conversation may stick around on the server so you can resume it.</li>
     </ol>
-    <p>Reputable cloud providers (Anthropic, OpenAI) have specific policies about what they do with prompts. Enterprise customers can usually opt out of training. But the data physically traverses someone else's network and lives on their disks for some period. For regulated industries (healthcare, finance, defense, legal) that often makes cloud AI either prohibited or so heavily reviewed that it isn't worth the friction.</p>
+    <p>The reputable providers like Anthropic and OpenAI publish real policies about what happens to prompts, and enterprise customers can usually opt out of training. Fine. But the data still physically crosses someone else's network and sits on their disks for some stretch of time. In healthcare, finance, defense, or legal, that alone is often enough to make cloud AI either flat-out banned or so heavily reviewed it stops being worth the friction.</p>
 
     <h2>The local path</h2>
-    <p>A local AI tool's data flow for the same refactor:</p>
+    <p>Same refactor, local tool. The trip is a lot shorter:</p>
     <ol>
       <li>You select a function locally.</li>
-      <li>The tool packages it into a prompt.</li>
-      <li>The prompt goes to the local inference runtime running on your Mac.</li>
-      <li>The model's weights, loaded from your disk, process it in your unified memory.</li>
+      <li>The tool wraps it in a prompt.</li>
+      <li>The prompt goes to the inference runtime running right there on your Mac.</li>
+      <li>The model weights, loaded straight off your disk, process it in your unified memory.</li>
       <li>The response comes back.</li>
-      <li>The conversation is stored in <code>~/.outlier/</code> on your disk.</li>
+      <li>The conversation gets written to <code>~/.outlier/</code> on your disk.</li>
     </ol>
-    <p>No external network call. No third party touches the prompt or response. If your Mac is offline, the entire workflow still works.</p>
+    <p>Zero external calls. Nothing third-party ever touches the prompt or the response. Pull the plug on your network and the whole thing keeps running.</p>
 
     <h2>Where local tools do still talk to networks</h2>
-    <p>Honest list of things local AI tools still touch the internet for, none of which involve your code:</p>
+    <p>Let's be straight about it. Local tools do hit the internet for a few things. None of them involve your code:</p>
     <ul>
-      <li><strong>Initial model download.</strong> First time you use a model, the weights are fetched from HuggingFace. After that, no network is required for inference. Outlier downloads Nano (~3 GB) on first launch and bigger tiers on demand.</li>
-      <li><strong>App updates.</strong> The app checks for new versions periodically. You can disable this.</li>
-      <li><strong>Website analytics.</strong> Outlier's marketing site uses Plausible (privacy-friendly, no cookies). The app itself doesn't phone home with usage data.</li>
-      <li><strong>Optional connectors.</strong> If you opt into a web-search MCP tool, a Slack integration, or any cloud MCP server, those make their own clearly-labeled network calls. Off by default.</li>
+      <li><strong>Initial model download.</strong> The first time you use a model, its weights come down from HuggingFace. Once they're on disk, inference needs no network at all. Outlier grabs Nano (~3 GB) on first launch and pulls bigger tiers only when you ask for them.</li>
+      <li><strong>App updates.</strong> The app checks for new versions now and then. You can switch that off.</li>
+      <li><strong>Website analytics.</strong> The marketing site runs Plausible, which is privacy-friendly and cookie-free. The app itself never phones home with usage data.</li>
+      <li><strong>Optional connectors.</strong> Opt into a web-search MCP tool, a Slack integration, or some cloud MCP server and those make their own calls, all clearly labeled. They're off until you turn them on.</li>
     </ul>
 
     <h2>The verification test</h2>
-    <p>The cleanest way to verify a local AI tool actually keeps your code local: turn off your Mac's wifi and Bluetooth, then use the tool. Chat should work. Agent should work. File edits should work. Project memory should work. If any of those fail in airplane mode, that piece is calling out to the cloud and you should know exactly which one.</p>
-    <p>Outlier passes this test. After the first-launch model download, the entire inference + agent + memory workflow runs with the network disabled.</p>
+    <p>Don't take anyone's word for it. The cleanest way to check whether a local tool really keeps your code local is to kill your Mac's wifi and Bluetooth, then go use it. Chat should work. Agent should work. File edits should work. Project memory should work. Anything that breaks in airplane mode is reaching for the cloud, and now you know exactly which piece.</p>
+    <p>Outlier passes. Once that first-launch download is done, the whole inference, agent, and memory workflow runs with the network completely off.</p>
 
     <h2>Where this matters most</h2>
-    <p>Two categories of work where local AI is the only viable option:</p>
+    <p>For some work, local AI isn't the nice-to-have option. It's the only one. Two kinds stand out:</p>
     <ul>
-      <li><strong>Regulated code.</strong> If your contract, customer agreement, or regulator prohibits sending code to a third-party AI provider, local is the only option. This includes most healthcare PHI, financial trading code, defense contractor work, and law-firm document automation.</li>
-      <li><strong>Pre-public IP.</strong> Code that hasn't been released yet, algorithms representing a competitive edge, secrets management implementations. Sending these to a cloud AI for "just a quick refactor" is often what the legal team wants you to stop doing.</li>
+      <li><strong>Regulated code.</strong> When your contract, your customer agreement, or your regulator forbids handing code to a third-party AI provider, that's the end of the discussion. Think most healthcare PHI, financial trading code, defense contractor work, law-firm document automation.</li>
+      <li><strong>Pre-public IP.</strong> Unreleased code. Algorithms that are your competitive edge. Your secrets-management implementation. Firing those off to a cloud AI for "just a quick refactor" is usually the exact habit your legal team is begging you to drop.</li>
     </ul>
-    <p>For developers outside those categories, the local-vs-cloud choice becomes more about insurance: today's cloud provider may change its terms next year. Today's local tool keeps working unchanged.</p>
+    <p>Outside those buckets, picking local over cloud is really about insurance. Your cloud provider might rewrite its terms next year. A local tool just keeps working, unchanged, on your terms.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -195,7 +195,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=why-local-ai-keeps-code-private">Download for Mac</a>
     </div>
 

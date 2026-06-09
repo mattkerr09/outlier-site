@@ -113,53 +113,53 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>MCP</strong> = Model Context Protocol; a standard for connecting AI agents to tools.</li>
-        <li><strong>MoE</strong> = Mixture-of-Experts; only some sub-networks activate per token.</li>
-        <li><strong>Paged inference</strong> = streaming weights from SSD on demand, like OS virtual memory.</li>
-        <li><strong>MLX</strong> = Apple's GPU array library; the local-AI backend on Mac.</li>
+        <li><strong>MCP</strong> = Model Context Protocol. One standard so agents can talk to tools.</li>
+        <li><strong>MoE</strong> = Mixture-of-Experts. Only a few sub-networks fire per token.</li>
+        <li><strong>Paged inference</strong> = weights stream off the SSD on demand, like OS virtual memory.</li>
+        <li><strong>MLX</strong> = Apple's GPU array library. What runs local AI on a Mac.</li>
       </ul>
     </div>
 
-    <p class="lead">Local AI tooling collected a vocabulary that didn't exist three years ago. This glossary defines the terms in plain language, in the order you're likely to meet them. Use it as a reference when you hit a phrase you don't know.</p>
+    <p class="lead">Three years ago, none of these words existed. Local AI grew its own jargon fast, and most of it never gets explained. This page does that, in plain English, roughly in the order you'll hit each term. Keep it open and ctrl-F whatever tripped you up.</p>
 
     <h2>MCP — Model Context Protocol</h2>
-    <p>An open standard (introduced by Anthropic in 2024) for connecting AI agents to external tools. An MCP server exposes a list of callable functions (read file, query database, send Slack message) plus a schema. An MCP client (the agent app) discovers them and calls them when the model produces a tool call. The point: tools become portable across agent apps. The same filesystem-MCP works in Outlier, Claude Desktop, Continue.dev, and others.</p>
+    <p>Anthropic shipped this open standard in 2024. It's how agents reach real tools. An MCP server publishes a list of functions it can run (read a file, query a database, fire off a Slack message) plus a schema for each. The agent app is the client. It discovers those functions and calls them when the model emits a tool call. The payoff: tools stop being locked to one app. That same filesystem MCP runs in Outlier, Claude Desktop, Continue.dev, and more.</p>
 
     <h2>MoE — Mixture of Experts</h2>
-    <p>A neural network architecture where each layer contains many "expert" sub-networks plus a router. For each token, the router picks <em>k</em> experts (for example, 10 of 512 in Qwen3.5-397B) to activate; the rest sit idle. Total parameter count is the sum of all experts; active parameters per token is just the <em>k</em> chosen. Qwen3.5-397B-A17B is MoE: 397B total, 17B active per token.</p>
+    <p>Picture a layer stuffed with "expert" sub-networks and a little router out front. Every token, the router taps <em>k</em> of those experts (say 10 out of 512 in Qwen3.5-397B) and leaves the rest asleep. Sum every expert and you get total parameters. Count only the <em>k</em> that fired and you get active parameters per token. The gap is huge: Qwen3.5-397B-A17B carries 397B total but lights up just 17B per token.</p>
 
     <h2>Paged inference</h2>
-    <p>Running a model whose weights are bigger than RAM by keeping only the actively-used parts resident and reading the rest from SSD on demand. Most useful for MoE models because only a small fraction of weights are needed per token. Outlier's V9 paged engine implements paged inference for Plus 397B on 64 GB Macs.</p>
+    <p>Your model is bigger than your RAM. Paged inference handles that: keep only the parts in use resident, pull the rest off the SSD on demand. It pays off most with MoE, since each token touches just a sliver of the weights. That's how Outlier's V9 paged engine fits Plus 397B onto a 64 GB Mac.</p>
 
     <h2>MLX</h2>
-    <p>Apple's array framework for ML, equivalent to PyTorch / NumPy but optimized for Apple Silicon's unified memory and Metal GPU. Models distributed in "MLX 4-bit" format are quantized for MLX's matmul kernels. All Outlier tiers ship in MLX 4-bit.</p>
+    <p>Apple's answer to PyTorch and NumPy, built from scratch for their own silicon. It leans hard on Apple Silicon's unified memory and Metal GPU. A model labeled "MLX 4-bit" has been quantized to fit MLX's matmul kernels. Every Outlier tier ships in MLX 4-bit.</p>
 
     <h2>GGUF</h2>
-    <p>A model file format used by llama.cpp and tools built on it (Ollama, LM Studio's default backend). Designed for efficient quantization and broad cross-platform support. Different from MLX format; conversions exist but the formats target different inference runtimes.</p>
+    <p>The format llama.cpp uses, plus everything built on it like Ollama and LM Studio's default backend. Tuned for tight quantization, runs basically everywhere. GGUF is not MLX, though. You can convert between them, but each targets a different runtime, so it's rarely worth the round trip.</p>
 
     <h2>4-bit quantization</h2>
-    <p>Storing model weights as 4-bit integers (with a small floating-point scaling factor per group) instead of 16-bit floats. About 4× smaller on disk and in memory. Quality regression vs the original 16-bit model is small enough to be invisible on most tasks.</p>
+    <p>Store each weight as a 4-bit integer instead of a 16-bit float, with one tiny floating-point scaling factor per group. The model shrinks roughly 4× smaller, on disk and in memory. The quality you give up? On most real tasks you genuinely can't see it.</p>
 
     <h2>KV cache</h2>
-    <p>The cache of key/value tensors from attention layers, kept across generated tokens so each new token's attention doesn't have to re-read every prior token. Memory cost grows with context length. For long contexts the KV cache can be larger than the model itself.</p>
+    <p>Attention layers produce key and value tensors, and the KV cache holds them across tokens so each new one doesn't re-scan every word before it. Skip it and generation crawls. The catch: the cache grows with your context length. Push context far enough and the KV cache outgrows the model weights themselves.</p>
 
     <h2>Tok/s (tokens per second)</h2>
-    <p>The speed metric for inference. Decode tok/s = how many output tokens the model generates per second after the initial prompt prefill. Outlier Core 27B = ~22 tok/s on M1 Ultra; Plus 397B in V9 paged inference = ~2.1 tok/s.</p>
+    <p>The number you watch for raw speed. Decode tok/s is how many output tokens stream out per second after prefill. Core 27B hits about 22 tok/s on an M1 Ultra; Plus 397B on the V9 paged engine lands around 2.1 tok/s. Bigger model, slower stream. That's the trade.</p>
 
     <h2>TTFT — time to first token</h2>
-    <p>How long after you hit send before the first token of the response appears. Dominated by prefill (processing the prompt context). For long prompts, TTFT can be several seconds even on fast models. The prefill heartbeat feature in Outlier surfaces this so the UI doesn't go silent.</p>
+    <p>The wait between hitting send and the first token landing. Almost all of it is prefill, the model chewing through your prompt before it answers. Long prompt? TTFT can stretch to several seconds, even on a quick model. Outlier's prefill heartbeat exists for that moment, so the UI keeps a pulse instead of freezing.</p>
 
     <h2>Cold start / cold load</h2>
-    <p>The time required to load a model's weights into unified memory when it hasn't been used recently. For Plus 397B this is ~74 seconds; for Core 27B it's a few seconds. Hot models respond immediately.</p>
+    <p>Call an idle model and its weights have to load into unified memory first. That's the cold start. Plus 397B takes about 74 seconds to wake up. Core 27B, a few. Once it's hot it answers right away, so the cold load is a one-time tax.</p>
 
     <h2>Quantization-aware training (QAT)</h2>
-    <p>Training a model with the eventual low-bit precision in mind, so it learns to be representable in that precision without quality loss. Distinct from post-training quantization, which compresses an already-trained 16-bit model. Ternary models typically use QAT; 4-bit models often don't need it.</p>
+    <p>With QAT the model trains already knowing it'll end up at low precision, so it learns weights that survive the squeeze without losing quality. The opposite of post-training quantization, which compresses a finished 16-bit model after the fact. Ternary models usually need QAT. 4-bit models mostly get away without it.</p>
 
     <h2>Speculative decoding</h2>
-    <p>An inference optimization where a small "draft" model proposes several tokens, then the big model verifies them in one parallel pass. When the draft is right (often!), you generate multiple tokens per big-model pass. Architecturally blocked for Qwen3's hybrid attention setup, which is why Outlier doesn't ship it for Plus / Vision / Core tiers.</p>
+    <p>A clever speed trick. A small "draft" model guesses the next several tokens, then the big model checks them all in one parallel pass. When the draft is right, and it often is, you bank several tokens for one big-model step. Catch is, Qwen3's hybrid attention blocks it at the architecture level. So Outlier can't ship it on the Plus, Vision, or Core tiers.</p>
 
     <h2>Agent loop</h2>
-    <p>The control flow of a coding agent: receive user message → run model → parse tool calls out of the response → execute tools (with approval) → feed results back to model → repeat until done. Outlier's agent loop is the headline of the app's Agent mode; Claude Code's loop is similar.</p>
+    <p>The engine under any coding agent, and it's just a cycle: take the user's message, run the model, pull the tool calls out of what it wrote, run them once you've approved them, feed the results back, repeat until it's done. That loop is the whole point of Outlier's Agent mode. Claude Code runs on essentially the same one.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -179,7 +179,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mcp-moe-paged-inference-glossary">Download for Mac</a>
     </div>
 

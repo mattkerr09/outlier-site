@@ -113,45 +113,45 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Computer use = AI sees screenshots + clicks/types via macOS Accessibility.</li>
-        <li><strong>Vision 35B</strong> handles screen perception locally on a 24 GB+ Mac (~16 tok/s on the V9 engine).</li>
-        <li>Approval gate on every action by default; can scope-grant for an entire workflow.</li>
-        <li>Local trades visual reasoning quality vs cloud for everything-stays-on-screen privacy.</li>
+        <li>Computer use means the AI reads screenshots and then clicks or types through macOS Accessibility.</li>
+        <li><strong>Vision 35B</strong> does the screen-reading locally on a 24 GB+ Mac (~16 tok/s on the V9 engine).</li>
+        <li>By default it asks before every action. You can scope-grant a whole workflow so it stops asking.</li>
+        <li>You give up some visual-reasoning quality versus cloud. You get nothing on your screen ever leaving the machine.</li>
       </ul>
     </div>
 
-    <p class="lead">"Computer use" is the family of AI capabilities where the model sees a screenshot of your desktop, decides what to click or type, and then does it. Anthropic's cloud version is well known. The local version is less well known and trails on a few axes, but it works — here's what that actually looks like on a Mac.</p>
+    <p class="lead">"Computer use" is the AI capability where the model looks at a screenshot of your desktop, decides what to click or type, then does it. Anthropic's cloud version gets most of the attention. The local version is quieter and it does lag on a few things. But it works, and this is what it actually looks like on a Mac.</p>
 
     <h2>The three primitives</h2>
-    <p>Computer use needs:</p>
+    <p>Three things have to be in place.</p>
     <ol>
-      <li><strong>Screen perception.</strong> A model that can take a screenshot as input and describe or reason about it. For Outlier, this is the Vision 35B-A3B tier — a multimodal MoE that handles image + text.</li>
-      <li><strong>Action emission.</strong> The model produces structured tool calls like "click at (x, y)" or "type 'hello'." Outlier's agent loop accepts these and forwards them to a sandboxed executor.</li>
-      <li><strong>Action execution.</strong> A small driver that actually moves the mouse, presses keys, or types. macOS makes this available through the Accessibility framework; the user has to grant the app Accessibility permission once.</li>
+      <li><strong>Screen perception.</strong> A model that can take a screenshot as input and actually reason about what's in it. In Outlier that's the Vision 35B-A3B tier, a multimodal MoE that handles image plus text.</li>
+      <li><strong>Action emission.</strong> The model emits structured tool calls. Things like "click at (x, y)" or "type 'hello'." Outlier's agent loop takes those and hands them to a sandboxed executor.</li>
+      <li><strong>Action execution.</strong> A small driver that does the physical part: moves the mouse, presses keys, types. macOS exposes this through the Accessibility framework. You grant the app Accessibility permission once and you're done.</li>
     </ol>
-    <p>None of those three pieces requires a network call. The screenshot is captured locally, the model runs locally, the actions execute locally.</p>
+    <p>Not one of those steps touches the network. The screenshot is captured on your machine, the model runs on your machine, the clicks happen on your machine.</p>
 
     <h2>What Vision 35B sees and decides</h2>
-    <p>Vision 35B is a 35-billion-parameter Mixture-of-Experts model (3.6B active per token) with an image encoder. It needs a 24 GB+ Mac and runs on the V9 paged engine at roughly 16 tok/s. On a 64 GB Mac Studio there's ample headroom for image-heavy sessions.</p>
-    <p>For computer-use tasks the model is asked: "Here's a screenshot of my desktop. The user wants to find the export-to-PDF button in this app. Where should I click?" The model returns an annotated answer with rough coordinates or a description of the UI element. The Outlier agent then either clicks, asks for confirmation, or hands control back to you.</p>
+    <p>Vision 35B is a 35-billion-parameter Mixture-of-Experts model with an image encoder, and only 3.6B of those parameters fire per token. You need a 24 GB+ Mac. It runs on the V9 paged engine at roughly 16 tok/s. On a 64 GB Mac Studio you've got plenty of room left over for long image-heavy sessions.</p>
+    <p>The prompt for a computer-use task looks about like this. "Here's a screenshot of my desktop. The user wants the export-to-PDF button in this app. Where do I click?" The model hands back rough coordinates or a description of the element it found. Then the Outlier agent does one of three things: clicks it, asks you first, or gives control back.</p>
 
     <h2>Where the local version trails</h2>
-    <p>Honest:</p>
+    <p>No point pretending it's even with cloud. It isn't, in three places.</p>
     <ul>
-      <li><strong>Visual reasoning quality.</strong> Vision 35B is good but it's smaller than Claude's vision stack. On crowded, low-contrast, or unusual UIs (older Mac apps, dense data tables, custom themes), it makes more mistakes.</li>
-      <li><strong>Latency.</strong> Each "look + decide + act" loop is on the order of seconds because the model has to encode the screenshot, reason, and emit the action. The cloud version isn't dramatically faster but the gap is real on long sequences.</li>
-      <li><strong>Tool ergonomics.</strong> Outlier's computer-use surface is newer than the chat / agent surfaces. Expect rougher edges and more approval prompts.</li>
+      <li><strong>Visual reasoning quality.</strong> Vision 35B is genuinely good, but it's a smaller model than Claude's vision stack. Hand it a crowded or low-contrast UI (older Mac apps, dense data tables, custom themes) and it slips up more often.</li>
+      <li><strong>Latency.</strong> Each look-then-decide-then-act loop runs in seconds, because every time the model has to encode the screenshot, reason about it, then emit the action. Cloud isn't wildly faster, but over a long sequence the gap shows.</li>
+      <li><strong>Tool ergonomics.</strong> The computer-use surface is newer than the chat and agent surfaces. Rougher edges. More approval prompts than you'd like.</li>
     </ul>
 
     <h2>What the local version gives back</h2>
     <ul>
-      <li><strong>Nothing on screen leaves your machine.</strong> Whatever's visible — open emails, password managers, customer data, internal dashboards — stays local. This is the entire point of running computer use locally.</li>
-      <li><strong>No per-action billing.</strong> Computer-use cloud APIs charge per screenshot processed. Local has no such meter.</li>
-      <li><strong>Works offline.</strong> Useful for on-device automation that needs to keep running without a network — backup workflows, scheduled scripted operations, kiosk-style setups.</li>
+      <li><strong>Nothing on screen leaves your machine.</strong> Your open emails, a password manager, customer data, an internal dashboard. Whatever's visible stays local. This is the whole reason to run computer use locally.</li>
+      <li><strong>No per-action billing.</strong> Cloud computer-use APIs bill you for every screenshot they process. There's no meter running here.</li>
+      <li><strong>Works offline.</strong> Handy for on-device automation that has to keep going with no network. Backup workflows, scheduled scripted jobs, a kiosk-style setup left running on its own.</li>
     </ul>
 
     <h2>How to try it</h2>
-    <p>In the Outlier app, switch to Vision 35B (any Pro tier — $20/mo, $149/yr, or $99 lifetime via Founding 200 includes it). Open the Agent mode. Grant the app Accessibility permission when prompted. Ask the agent something like "open Calculator and compute the square root of 169." The agent takes a screenshot, decides what to do, asks for approval, and acts. The approval gate is on by default for any action with side effects; you can scope-grant it for a single workflow if you want it to run uninterrupted.</p>
+    <p>Open the Outlier app and switch to Vision 35B. Any Pro tier includes it ($20/mo, $149/yr, or $99 lifetime via Founding 200). Go into Agent mode. Grant Accessibility permission when it asks. Then try something small: "open Calculator and compute the square root of 169." The agent grabs a screenshot, works out what to do, asks for your OK, and acts. That approval gate is on by default for anything with side effects. If you'd rather it run start to finish without interrupting, scope-grant the workflow.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -171,7 +171,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-agent-computer-use-offline">Download for Mac</a>
     </div>
 

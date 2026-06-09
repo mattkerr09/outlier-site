@@ -113,44 +113,44 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Qwen3.5-397B-A17B is a <strong>209 GB MoE model</strong> at MLX 4-bit.</li>
+        <li>Qwen3.5-397B-A17B is a <strong>209 GB MoE model</strong> at MLX 4-bit. Big.</li>
         <li>Outlier's V10 paged streaming engine runs it on a <strong>64 GB Mac Studio at ~2.1 tok/s</strong>.</li>
-        <li>Peak OS-level RSS during generation is <strong>~11 GB</strong>, not 209 GB.</li>
-        <li>Apple Silicon required (M1+); SSD bandwidth is the practical bottleneck.</li>
+        <li>Generation peaks at <strong>~11 GB</strong> of OS-level RSS. Not 209 GB.</li>
+        <li>You need Apple Silicon (M1+). SSD bandwidth is what actually holds you back.</li>
       </ul>
     </div>
 
-    <p class="lead">A 397-billion-parameter model has no business running on a 64 GB Mac. The full Qwen3.5-397B-A17B weights are about 209 GB on disk. By the usual rules of thumb you need a server with hundreds of GB of RAM and at least one big GPU. Outlier ships a streaming inference engine that says: not necessarily.</p>
+    <p class="lead">A 397-billion-parameter model has no business running on a 64 GB Mac. The full Qwen3.5-397B-A17B weights eat about 209 GB on disk, and every rule of thumb says you want a server with hundreds of GB of RAM and a fat GPU to touch it. Then you actually try it on the Mac, and it runs anyway.</p>
 
     <h2>The naive math</h2>
-    <p>Take the Qwen3.5-397B-A17B model at MLX 4-bit quantization. The HuggingFace repo (<code>mlx-community/Qwen3.5-397B-A17B-4bit</code>) weighs in at ~209 GB. To load every parameter into unified memory at once you need a Mac with at least that much RAM, plus headroom for the KV cache, the activation tensors, and the operating system. In practice that means a 192 GB or 256 GB Mac Studio Ultra — which is a $7,000–$10,000 machine.</p>
-    <p>On a 64 GB Mac Studio there's no way to hold the whole model resident. The capacity engine (the straight load-everything-into-RAM path) refuses to start. So either you don't run the model, or you change the rules.</p>
+    <p>Start with the obvious approach. Qwen3.5-397B-A17B at MLX 4-bit quantization. The HuggingFace repo (<code>mlx-community/Qwen3.5-397B-A17B-4bit</code>) weighs in at ~209 GB. Loading every parameter into unified memory at once means a Mac with at least that much RAM, plus a real margin on top for the KV cache and the activation tensors. The OS needs to breathe too. In practice you're looking at a 192 GB or 256 GB Mac Studio Ultra. That's a $7,000–$10,000 machine.</p>
+    <p>A 64 GB Mac Studio can't hold the whole thing resident. No chance. The capacity engine, which is the blunt load-everything-into-RAM path, just refuses to start. So you've got two options. Don't run the model, or change the rules.</p>
 
     <h2>Why MoE makes this tractable</h2>
-    <p>Qwen3.5-397B-A17B is a Mixture-of-Experts model. The "397B" is the total parameter count across all experts; the "A17B" is the active count per token. At inference time, for each token, a router picks 10 of 512 experts and only those 10 do work. The other 502 sit idle for that token.</p>
-    <p>That means at any given moment the model only <em>needs</em> about 17B parameters worth of weights to compute the next token. The rest of the 397B is dormant. The question becomes: can we keep only the experts we need in memory, and stream the rest from SSD on demand?</p>
+    <p>The trick is in how the model is built. Qwen3.5-397B-A17B is a Mixture-of-Experts model. The "397B" counts every parameter across all the experts. The "A17B" is how many are actually active per token. So for each token a router picks 10 of 512 experts, and only those 10 do any work. The other 502 just sit there.</p>
+    <p>So at any given moment the model only <em>needs</em> about 17B parameters worth of weights to compute the next token. The rest of the 397B is dead weight, for that token at least. Which raises a question. What if you kept only the experts you need in memory and streamed the rest off the SSD when the router asks for them?</p>
 
     <h2>Paged expert streaming, in plain terms</h2>
-    <p>That's exactly what Outlier's V9 paged engine does. The model's expert tensors stay on disk as memory-mapped <code>safetensors</code> files. When the router picks an expert for a given token, the engine reads only that expert's slice from disk — a few hundred MB at a time — multiplies it through the activations, and lets the OS page it back out.</p>
-    <p>Concretely on a 64 GB Mac Studio M1 Ultra running Plus 397B in V9 paged inference:</p>
+    <p>That's the whole idea behind Outlier's V9 paged engine. The expert tensors live on disk as memory-mapped <code>safetensors</code> files and stay there. When the router calls for an expert on a given token, the engine reads just that expert's slice off the disk, a few hundred MB at a time, runs it through the activations, and lets the OS page it straight back out. Nothing lingers.</p>
+    <p>Here are the numbers from a 64 GB Mac Studio M1 Ultra running Plus 397B in V9 paged inference.</p>
     <ul>
       <li>Peak OS-level RSS: about <strong>11 GB</strong></li>
       <li>Generation speed: about <strong>2.1 tokens per second</strong></li>
-      <li>SSD read pressure: noticeable but bounded — concurrent <code>pread</code> with queue depth 24</li>
+      <li>SSD read pressure: real but capped, via concurrent <code>pread</code> at queue depth 24</li>
     </ul>
-    <p>2.1 tok/s is not fast. The honest comparison is Claude Opus at ~80–100 tok/s in the cloud. But the model is doing real work — every token actually goes through the full 397B routing logic, just with experts streamed on demand instead of all resident.</p>
+    <p>2.1 tok/s is slow. No way around it. Claude Opus runs ~80–100 tok/s in the cloud, and that's the comparison people will reach for. But this model is doing the full job. Every token routes through the real 397B logic. The only difference is that the experts arrive from disk instead of already sitting in RAM.</p>
 
     <h2>Hardware floor and tradeoffs</h2>
-    <p>V9 paged inference works because Apple Silicon has fast unified-memory bandwidth and (on M1 Pro/Max/Ultra and newer) NVMe SSDs that sustain several GB/s of sequential read. The minimums Outlier targets for Plus:</p>
+    <p>None of this works without the hardware underneath it. Apple Silicon gives you fast unified-memory bandwidth, and on M1 Pro/Max/Ultra and newer the NVMe SSDs hold several GB/s of sequential read. That's what makes paging fast enough to bother with. So what does Outlier actually ask for to run Plus?</p>
     <ul>
-      <li><strong>RAM:</strong> 64 GB unified memory. 32 GB doesn't have enough headroom for the active expert set plus the KV cache during long conversations.</li>
-      <li><strong>Storage:</strong> 250 GB free for the model download. Outlier downloads the full 209 GB of weights once; streaming is from those local files, not from the network.</li>
-      <li><strong>CPU/GPU:</strong> Apple Silicon M1/M2/M3/M4. Intel Macs are not supported by the MLX backend.</li>
+      <li><strong>RAM:</strong> 64 GB unified memory. 32 GB runs out of headroom once the active expert set and the KV cache both grow during a long conversation.</li>
+      <li><strong>Storage:</strong> 250 GB free for the model download. The full 209 GB of weights comes down once, and after that everything streams from those local files. The network's out of the loop.</li>
+      <li><strong>CPU/GPU:</strong> Apple Silicon M1/M2/M3/M4. The MLX backend won't touch an Intel Mac.</li>
     </ul>
-    <p>The tradeoff against the capacity engine (the all-in-RAM path) is straightforward: V9 paged inference uses ~10× less peak memory but is bound by SSD bandwidth instead of memory bandwidth. On a long context with high cache reuse the gap narrows; on a fresh prompt with cold experts it widens.</p>
+    <p>Set this against the capacity engine and the trade is clean. V9 paged inference burns ~10× less peak memory, but now SSD bandwidth is your ceiling instead of memory bandwidth. Long context with lots of cache reuse, and the gap shrinks. Fresh prompt with cold experts, and it opens right back up.</p>
 
     <h2>When to use it</h2>
-    <p>Plus 397B on the V9 paged engine makes sense when you need the strongest local reasoning the lineup offers and you can wait. Long-form analysis, code review of large diffs, architectural conversations — tasks where a few minutes of generation produces something worth reading. For interactive chat where you want a response in seconds, smaller tiers like Core 27B (20.7 tok/s on M1 Ultra) or Lite 9B (53.4 tok/s) are the right pick. Outlier ships all of them and lets you swap mid-conversation.</p>
+    <p>Reach for Plus 397B on the V9 paged engine when you want the strongest local reasoning in the lineup and you're willing to wait for it. Long-form analysis. Code review across a big diff. The kind of architectural back-and-forth where a few minutes of generation buys you something actually worth reading. If you want a reply in seconds, this is the wrong tool. Drop down to Core 27B (20.7 tok/s on M1 Ultra) or Lite 9B (53.4 tok/s) instead. Outlier ships all of them, and you can swap mid-conversation without losing your place.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -170,7 +170,7 @@
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr unlocks everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=run-397b-on-64gb-mac-studio">Download for Mac</a>
     </div>
 
