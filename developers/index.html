@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outlier for developers — a local, private OpenAI-compatible engine</title>
+  <meta name="description" content="Point Cursor, LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 860px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; }
+    main { max-width: 860px; margin: 0 auto; padding: 48px 24px 96px; }
+    h1 { font-size: 2rem; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .lede { color: var(--text-mid); font-size: 1.1rem; margin-bottom: 40px; }
+    h2 { font-size: 1.3rem; margin: 44px 0 10px; letter-spacing: -0.01em; }
+    p { color: var(--text-mid); margin: 10px 0; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.55; color: var(--text); margin: 14px 0; }
+    code { font-family: var(--mono); font-size: 0.92em; color: var(--accent-light); }
+    pre code { color: var(--text); }
+    .pill { display: inline-block; background: rgba(52,211,153,0.12); color: var(--green); border-radius: 999px; padding: 2px 12px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+    .note { background: var(--surface-2); border-left: 3px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; padding: 12px 16px; color: var(--text-mid); font-size: 15px; margin: 14px 0; }
+  </style>
+</head>
+<body>
+  <nav><div class="nav-inner">
+    <a class="nav-brand" href="/">Outlier</a>
+    <span><a href="/#models">Models</a> &nbsp;·&nbsp; <a href="/#pricing">Pricing</a></span>
+  </div></nav>
+  <main>
+    <span class="pill">OpenAI-compatible · function calling · 100% local</span>
+    <h1>Use Outlier as the engine behind your tools</h1>
+    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point Cursor, LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it — same code you already have, but the model runs locally and nothing leaves your machine.</p>
+
+    <h2>1 · Turn it on</h2>
+    <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>) — nothing is exposed to your network.</p>
+
+    <h2>2 · OpenAI SDK — drop-in</h2>
+    <pre><code>from openai import OpenAI
+
+client = OpenAI(
+    base_url="http://127.0.0.1:8766/v1",
+    api_key="YOUR-OUTLIER-KEY",   # Settings → Developer
+)
+
+r = client.chat.completions.create(
+    model="outlier-nano",          # or outlier-lite / core / code / plus
+    messages=[{"role": "user", "content": "Three taglines for a coffee truck"}],
+)
+print(r.choices[0].message.content)</code></pre>
+    <p>Streaming, <code>max_tokens</code>, <code>temperature</code>, and <code>finish_reason</code> behave like the reference API.</p>
+
+    <h2>3 · Function calling (tools)</h2>
+    <pre><code>r = client.chat.completions.create(
+    model="outlier-nano",
+    messages=[{"role": "user", "content": "What's the weather in Paris?"}],
+    tools=[{
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+                "type": "object",
+                "properties": {"city": {"type": "string"}},
+                "required": ["city"],
+            },
+        },
+    }],
+)
+tc = r.choices[0].message.tool_calls[0]
+print(tc.function.name, tc.function.arguments)
+# → get_weather {"city": "Paris"}</code></pre>
+    <p>Run your function, then send the result back as a <code>role:"tool"</code> message — multi-turn tool loops work the way the OpenAI docs describe, including streaming (<code>delta.tool_calls</code>, <code>finish_reason:"tool_calls"</code>).</p>
+
+    <h2>4 · LangChain</h2>
+    <pre><code>from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(
+    base_url="http://127.0.0.1:8766/v1",
+    api_key="YOUR-OUTLIER-KEY",
+    model="outlier-nano",
+).bind_tools(my_tools)
+
+msg = llm.invoke("What's the weather in Berlin?")
+print(msg.tool_calls)</code></pre>
+
+    <h2>5 · Cursor / Continue</h2>
+    <p>In the model settings, add a custom OpenAI-compatible model: base URL <code>http://127.0.0.1:8766/v1</code>, your Outlier key, model <code>outlier-code</code> (the coding tier) or <code>outlier-nano</code> for speed.</p>
+
+    <h2>6 · Codex CLI</h2>
+    <pre><code># ~/.codex/config.toml
+model = "outlier-code"
+model_provider = "outlier"
+
+[model_providers.outlier]
+name = "Outlier (local)"
+base_url = "http://127.0.0.1:8766/v1"
+env_key = "OUTLIER_API_KEY"
+wire_api = "chat"   # Outlier serves chat completions, not the Responses API</code></pre>
+    <pre><code>export OUTLIER_API_KEY="YOUR-OUTLIER-KEY"
+codex</code></pre>
+
+    <h2>7 · LiteLLM</h2>
+    <pre><code>import litellm
+r = litellm.completion(
+    model="openai/outlier-nano",
+    api_base="http://127.0.0.1:8766/v1",
+    api_key="YOUR-OUTLIER-KEY",
+    messages=[{"role": "user", "content": "hi"}],
+)</code></pre>
+
+    <div class="note">Privacy note: requests to this endpoint are handled entirely on your Mac by the locally-running model. Your prompts, code, and tool results never leave your machine.</div>
+
+    <p style="margin-top:40px"><a href="/">← outlier.host</a></p>
+  </main>
+</body>
+</html>
