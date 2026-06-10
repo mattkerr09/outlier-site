@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI data centers and water: the numbers | Outlier</title>
+  <meta name="description" content="Cooling AI datacenters consumes billions of gallons of water a year; researchers estimated GPT-3's training alone at ~700,000 liters. Sourced numbers, plus the waterless alternative.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-09">
+  <link rel="canonical" href="https://outlier.host/learn/ai-data-center-water-usage/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI data centers and water — the numbers nobody markets">
+  <meta property="og:description" content="Cooling AI datacenters consumes billions of gallons of water a year; researchers estimated GPT-3's training alone at ~700,000 liters. Sourced numbers, plus the waterless alternative.">
+  <meta property="og:url" content="https://outlier.host/learn/ai-data-center-water-usage/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI data centers and water — the numbers nobody markets">
+  <meta name="twitter:description" content="AI's water bill, sourced. Your Mac doesn't have one.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "AI data centers and water — the numbers nobody markets", "description": "Cooling AI datacenters consumes billions of gallons of water a year; researchers estimated GPT-3's training alone at ~700,000 liters. Sourced numbers, plus the waterless alternative.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/ai-data-center-water-usage/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "AI data centers and water — the numbers nobody markets", "item": "https://outlier.host/learn/ai-data-center-water-usage/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much water does one AI conversation use?", "acceptedAnswer": {"@type": "Answer", "text": "UC Riverside researchers estimated roughly a 500ml bottle of water per few dozen medium-length queries once cooling and power-plant water are counted, varying widely by datacenter site and season. Small per chat, large at billions of chats per day."}}, {"@type": "Question", "name": "Why do data centers use fresh water instead of recycling it?", "acceptedAnswer": {"@type": "Answer", "text": "Evaporative cooling consumes the water — it leaves as vapor and can't be returned to the supply. Some sites use closed-loop or air cooling, which trades water for more electricity. Every design pays the heat bill somewhere."}}, {"@type": "Question", "name": "Does local AI really use no water?", "acceptedAnswer": {"@type": "Answer", "text": "The device itself, effectively none — a Mac is air-cooled. Upstream electricity generation can consume water depending on your grid. What disappears entirely is the datacenter's own evaporative cooling draw, which is the number in the headlines."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>AI data centers and water — the numbers nobody markets</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-06-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Google reported consuming about 5+ billion gallons of water in 2023, the large majority for datacenter cooling, per its own environmental report.</li>
+        <li>UC Riverside researchers estimated training GPT-3 evaporated roughly <strong>700,000 liters</strong> of fresh water, and put everyday usage at roughly a 500ml bottle per few dozen queries.</li>
+        <li>Datacenter water draw is local: the impact lands on whichever county hosts the building, including drought-prone ones.</li>
+        <li>A Mac running a local model is air-cooled at your desk. Its marginal water use is zero.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Electricity gets the headlines, but datacenters also drink. Cooling the racks that serve AI queries evaporates fresh water at industrial scale, often in regions that don't have it to spare. The numbers come from the companies' own environmental reports and from university researchers, and they're worth knowing before the next time someone calls the cloud weightless.</p>
+
+    <h2>Where the water goes</h2>
+    <p>Datacenters shed heat, and the cheapest way to shed heat at scale is evaporative cooling: fresh water in, vapor out. The water consumed this way doesn't return to the local supply. On top of on-site cooling, the power plants feeding the datacenter consume water too, so the true footprint per query includes both the building and its electricity.</p>
+    <h2>The numbers, with their sources</h2>
+    <table><thead><tr><th>Claim</th><th>Source</th></tr></thead><tbody>
+      <tr><td>Google consumed ~5+ billion gallons of water in 2023, predominantly for datacenter cooling</td><td>Google Environmental Report (2024)</td></tr>
+      <tr><td>Microsoft's disclosed water consumption rose sharply in the years it scaled AI infrastructure</td><td>Microsoft sustainability reporting</td></tr>
+      <tr><td>Training GPT-3 evaporated an estimated ~700,000 liters; everyday inference roughly a 500ml bottle per few dozen medium-length queries</td><td>UC Riverside, "Making AI Less Thirsty" (research estimates)</td></tr>
+    </tbody></table>
+    <p>These are estimates and disclosures, not meters on your specific prompt — per-query water math varies by site, season, and cooling design. The direction is not in dispute, including by the companies reporting it.</p>
+    <h2>Why the impact is local even when the cloud isn't</h2>
+    <p>"The cloud" sounds placeless, but the cooling tower has a street address. Datacenter water is drawn from specific watersheds, and the buildout has repeatedly landed in dry regions where land and power are cheap — which is precisely where the marginal gallon matters most. Communities from Arizona to Chile have pushed back on datacenter siting over exactly this. Whatever your prompt was about, its water bill was paid by someone's county.</p>
+    <h2>The waterless version of everyday AI</h2>
+    <p>A Mac running a local model is cooled by a fan, or by nothing. Its marginal water consumption is zero, full stop. The fair scope note: your electricity still comes from somewhere, and some generation consumes water upstream. But the datacenter's own evaporative draw (the billions of gallons in the reports above) simply isn't attached to a query that never leaves your desk.</p>
+    <p>Outlier exists for the slice of AI use that doesn't need the building: drafting, summarizing, everyday coding on models from 4B to 397B parameters, running on the machine in front of you. The footprint argument isn't the only reason to run local. It's just the one with cooling towers in it.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>How much water does one AI conversation use?</h3>
+        <p>UC Riverside researchers estimated roughly a 500ml bottle of water per few dozen medium-length queries once cooling and power-plant water are counted, varying widely by datacenter site and season. Small per chat, large at billions of chats per day.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why do data centers use fresh water instead of recycling it?</h3>
+        <p>Evaporative cooling consumes the water — it leaves as vapor and can't be returned to the supply. Some sites use closed-loop or air cooling, which trades water for more electricity. Every design pays the heat bill somewhere.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does local AI really use no water?</h3>
+        <p>The device itself, effectively none — a Mac is air-cooled. Upstream electricity generation can consume water depending on your grid. What disappears entirely is the datacenter's own evaporative cooling draw, which is the number in the headlines.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=ai-data-center-water-usage">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/how-much-energy-does-ai-use/">How much energy does AI use?</a> · <a href="https://outlier.host/learn/is-local-ai-greener/">Is local AI actually greener?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
