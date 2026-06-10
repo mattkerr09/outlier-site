@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Is local AI actually greener? Honest look | Outlier</title>
-  <meta name="description" content="Local AI skips datacenter overhead, idle fleets, and cooling water — but grids, hardware, and model size complicate the math. The honest version, both directions.">
+  <meta name="description" content="Local AI skips datacenter overhead, idle fleets, and cooling water, but grids and hardware complicate the math. The honest version, both directions.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-06-09">
   <link rel="canonical" href="https://outlier.host/learn/is-local-ai-greener/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Is local AI actually greener? An honest accounting">
-  <meta property="og:description" content="Local AI skips datacenter overhead, idle fleets, and cooling water — but grids, hardware, and model size complicate the math. The honest version, both directions.">
+  <meta property="og:description" content="Local AI skips datacenter overhead, idle fleets, and cooling water, but grids and hardware complicate the math. The honest version, both directions.">
   <meta property="og:url" content="https://outlier.host/learn/is-local-ai-greener/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -30,8 +30,9 @@
     .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
     nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
     .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
     .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -81,19 +82,19 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Is local AI actually greener? An honest accounting", "description": "Local AI skips datacenter overhead, idle fleets, and cooling water — but grids, hardware, and model size complicate the math. The honest version, both directions.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/is-local-ai-greener/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Is local AI actually greener? An honest accounting", "description": "Local AI skips datacenter overhead, idle fleets, and cooling water, but grids and hardware complicate the math. The honest version, both directions.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/is-local-ai-greener/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Is local AI actually greener? An honest accounting", "item": "https://outlier.host/learn/is-local-ai-greener/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is running AI locally better for the environment?", "acceptedAnswer": {"@type": "Answer", "text": "Often, for everyday tasks: a local query carries no datacenter cooling, water, idle capacity, or transmission. But grid mix, hardware efficiency, and model size can flip individual comparisons, so the honest claim is directional rather than absolute."}}, {"@type": "Question", "name": "Doesn't my Mac use electricity too?", "acceptedAnswer": {"@type": "Answer", "text": "Of course — roughly 100W on a Mac Studio under full generation load, far less on laptops, and only while generating. What it doesn't carry is the infrastructure overhead attached to every cloud query: cooling plants, conversion losses, idle fleets, and the network in between."}}, {"@type": "Question", "name": "Why doesn't Outlier just claim it's green?", "acceptedAnswer": {"@type": "Answer", "text": "Because the math honestly depends on your grid, your hardware, and the model you pick, and pretending otherwise would be marketing. The claim that holds: everyday inference doesn't need a datacenter, and moving it on-device removes that overhead entirely."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is running AI locally better for the environment?", "acceptedAnswer": {"@type": "Answer", "text": "Often, for everyday tasks: a local query carries no datacenter cooling, water, idle capacity, or transmission. But grid mix, hardware efficiency, and model size can flip individual comparisons, so the honest claim is directional rather than absolute."}}, {"@type": "Question", "name": "Doesn't my Mac use electricity too?", "acceptedAnswer": {"@type": "Answer", "text": "Of course: roughly 100W on a Mac Studio under full generation load, far less on laptops, and only while generating. What it doesn't carry is the infrastructure overhead attached to every cloud query: cooling plants, conversion losses, idle fleets, and the network in between."}}, {"@type": "Question", "name": "Why doesn't Outlier just claim it's green?", "acceptedAnswer": {"@type": "Answer", "text": "Because the math honestly depends on your grid, your hardware, and the model you pick, and pretending otherwise would be marketing. The claim that holds: everyday inference doesn't need a datacenter, and moving it on-device removes that overhead entirely."}}]}
   </script>
 </head>
 <body>
 <nav>
   <div class="wrap nav-inner">
-    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
     <ul class="nav-links">
       <li><a href="https://outlier.host/learn/">Learn</a></li>
       <li><a href="https://outlier.host/#pricing">Pricing</a></li>
@@ -123,14 +124,14 @@
     <p class="lead">The tempting version of this article says: run AI on your Mac, save the planet. We're not writing that one, because it isn't quite true, and the people who'd catch it are exactly the people this page is for. The defensible version is more interesting anyway: local AI deletes whole categories of overhead the cloud can't avoid, while losing some efficiencies the cloud genuinely has. Here's both columns.</p>
 
     <h2>The column where local wins</h2>
-    <p>Every cloud query carries infrastructure that a local query simply doesn't have. Cooling plants (with their water draw). Power conversion losses on the way to the rack. Idle GPU capacity kept warm for peak demand. Network transmission both directions. Industry-standard datacenter efficiency (PUE) means meaningful overhead on top of every chip-second, and that's at the well-run sites. A query answered by the chip on your desk skips all of it. Apple Silicon helps the case: an M1 Ultra under full inference load draws around 100W, a MacBook much less, and idle cost is effectively zero because it's your computer — it was on anyway.</p>
+    <p>Every cloud query carries infrastructure that a local query simply doesn't have. Cooling plants (with their water draw). Power conversion losses on the way to the rack. Idle GPU capacity kept warm for peak demand. Network transmission both directions. Industry-standard datacenter efficiency (PUE) means meaningful overhead on top of every chip-second, and that's at the well-run sites. A query answered by the chip on your desk skips all of it. Apple Silicon helps the case: an M1 Ultra under full inference load draws around 100W, a MacBook much less, and idle cost is effectively zero because it's your computer; it was on anyway.</p>
     <h2>The column where the cloud wins</h2>
     <p>Honesty requires this column. Hyperscalers run the newest, most efficient accelerators at high utilization, and a busy H100 doing batch inference squeezes more tokens per joule than a consumer chip doing one user's work. Several big providers buy cleaner electricity than the average household grid. And a small, well-routed cloud model can beat a large local model on energy per answer outright. If your grid is coal-heavy and your local model is oversized for the task, the cloud query may genuinely be cleaner.</p>
     <h2>So which is it?</h2>
     <p>It depends on three things, none of which fit on a badge: your electricity mix, your hardware's efficiency, and how well the model is sized to the task. A 4B model answering an email on an M-series laptop in a hydro-powered region is about as light as inference gets. A 397B local model on a dirty grid for a question a small model could handle is not. The same honesty applies to cloud marketing: "we buy renewables" doesn't erase cooling water, idle fleets, or the buildout the IEA projects will more than double datacenter electricity by 2030.</p>
     <div class="receipts"><strong>Receipts:</strong> inference's 80–90% share of AI compute is from <a href="https://www.technologyreview.com/2025/05/20/1116327/ai-energy-usage-climate-footprint-big-tech/" target="_blank" rel="noopener">MIT Technology Review (2025)</a>; the doubling projection is the IEA's <em>Energy and AI</em> report; water figures come from company environmental reports and UC Riverside research, detailed in our <a href="https://outlier.host/learn/ai-data-center-water-usage/">water article</a>.</div>
     <h2>The claim we're comfortable making</h2>
-    <p>Not "local is always greener." This one: <strong>most everyday AI work is routine inference that doesn't need datacenter infrastructure, and every query that moves to a device someone already owns removes its share of the overhead — cooling, water, idle capacity, transmission — permanently.</strong> Since inference is now 80–90% of AI compute, that slice is the whole ballgame. The best environmental feature isn't a green badge; it's a model good enough and small enough that you actually choose to run it at your desk. That's the product Outlier is trying to build, and you can judge whether it's there yet for free.</p>
+    <p>Not "local is always greener." This one: <strong>most everyday AI work is routine inference that doesn't need datacenter infrastructure, and every query that moves to a device someone already owns removes its share of the overhead (cooling, water, idle capacity, transmission) permanently.</strong> Since inference is now 80–90% of AI compute, that slice is the whole ballgame. The best environmental feature isn't a green badge; it's a model good enough and small enough that you actually choose to run it at your desk. That's the product Outlier is trying to build, and you can judge whether it's there yet for free.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -140,7 +141,7 @@
       </div>
       <div class="faq-item">
         <h3>Doesn't my Mac use electricity too?</h3>
-        <p>Of course — roughly 100W on a Mac Studio under full generation load, far less on laptops, and only while generating. What it doesn't carry is the infrastructure overhead attached to every cloud query: cooling plants, conversion losses, idle fleets, and the network in between.</p>
+        <p>Of course: roughly 100W on a Mac Studio under full generation load, far less on laptops, and only while generating. What it doesn't carry is the infrastructure overhead attached to every cloud query: cooling plants, conversion losses, idle fleets, and the network in between.</p>
       </div>
       <div class="faq-item">
         <h3>Why doesn't Outlier just claim it's green?</h3>

@@ -30,8 +30,9 @@
     .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
     nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
     .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
     .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -93,7 +94,7 @@
 <body>
 <nav>
   <div class="wrap nav-inner">
-    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
     <ul class="nav-links">
       <li><a href="https://outlier.host/learn/">Learn</a></li>
       <li><a href="https://outlier.host/#pricing">Pricing</a></li>
@@ -114,19 +115,19 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Consumer ChatGPT conversations are stored on OpenAI's servers and, by default, can be used to train future models unless you opt out.</li>
-        <li>In 2025, a federal court order in the New York Times copyright case forced OpenAI to preserve user chats — <strong>including ones users had deleted</strong>.</li>
+        <li>In 2025, a federal court order in the New York Times copyright case forced OpenAI to preserve user chats, <strong>including ones users had deleted</strong>.</li>
         <li>"Delete" on a cloud service is a request, not a guarantee. Legal holds outrank your settings.</li>
         <li>A local model has no server side: the conversation never leaves your Mac in the first place.</li>
       </ul>
     </div>
 
-    <p class="lead">Most people type things into ChatGPT they'd never put in an email. Health questions, money problems, half-formed business ideas, code they don't own. So it's worth knowing exactly where that text goes after you hit enter. The short version: to OpenAI's servers, where it's stored, possibly used for training, and — as a 2025 court order demonstrated — sometimes kept even after you delete it.</p>
+    <p class="lead">Most people type things into ChatGPT they'd never put in an email. Health questions, money problems, half-formed business ideas, code they don't own. So it's worth knowing exactly where that text goes after you hit enter. The short version: to OpenAI's servers, where it's stored, possibly used for training, and (as a 2025 court order demonstrated) sometimes kept even after you delete it.</p>
 
     <h2>The default path of a ChatGPT message</h2>
     <p>You type, it travels to OpenAI's infrastructure, the model answers, and the exchange is stored in your chat history server-side. On consumer plans, conversations can also feed model training unless you find the toggle and switch it off (Settings, Data Controls). That's not a scandal; it's in the documentation. But documentation is read by approximately nobody, so the practical default is: your words become part of the company's data estate.</p>
     <p>Enterprise and API tiers carry stronger commitments, including no training on customer data by default. The protections scale with how much you pay, which tells you something about which direction the incentives point.</p>
     <h2>What the 2025 court order proved</h2>
-    <p>During the New York Times' copyright lawsuit against OpenAI, a federal magistrate ordered the company to preserve ChatGPT output logs as potential evidence — sweeping in conversations users believed they had deleted. OpenAI objected publicly, calling it at odds with its privacy commitments, and the order was later narrowed. But the lesson stands on its own: <strong>data held by a third party is subject to that third party's legal exposure, not your intentions.</strong> Your delete button lost to someone else's lawsuit.</p>
+    <p>During the New York Times' copyright lawsuit against OpenAI, a federal magistrate ordered the company to preserve ChatGPT output logs as potential evidence, sweeping in conversations users believed they had deleted. OpenAI objected publicly, calling it at odds with its privacy commitments, and the order was later narrowed. But the lesson stands on its own: <strong>data held by a third party is subject to that third party's legal exposure, not your intentions.</strong> Your delete button lost to someone else's lawsuit.</p>
     <div class="receipts"><strong>Receipts:</strong> the preservation order and OpenAI's public response were reported across major outlets in mid-2025 and acknowledged by OpenAI directly. Training-by-default on consumer chats (with opt-out) is described in OpenAI's own data-controls documentation.</div>
     <h2>This isn't a ChatGPT problem. It's a cloud problem</h2>
     <p>Anthropic moved in 2025 to training on consumer Claude chats unless users opt out, with multi-year retention for those who opt in. Google's Gemini documentation discloses that human reviewers may read sampled conversations. Every cloud assistant works this way to some degree because the architecture demands it: your text has to land on their machines for the model to run. Once it's there, it lives under their policies, their retention schedules, and their subpoenas.</p>
