@@ -30,8 +30,9 @@
     .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
     nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
     .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
     .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -93,7 +94,7 @@
 <body>
 <nav>
   <div class="wrap nav-inner">
-    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
     <ul class="nav-links">
       <li><a href="https://outlier.host/learn/">Learn</a></li>
       <li><a href="https://outlier.host/#pricing">Pricing</a></li>
@@ -114,7 +115,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Cloud models retire on the provider's schedule: GPT-4 left ChatGPT in April 2025; older GPT and Claude models are formally deprecated.</li>
-        <li>Your prompts, workflows, and habits don't transfer cleanly — successor models behave differently.</li>
+        <li>Your prompts, workflows, and habits don't transfer cleanly; successor models behave differently.</li>
         <li>API deprecations break production apps on a timeline you don't control.</li>
         <li>An open-weight model on your disk has no retirement date. It runs identically in 2030.</li>
       </ul>
@@ -129,10 +130,10 @@
     <p>Successors are usually stronger on benchmarks. They are also different. Different writing voice, different instruction-following quirks, different failure modes. The prompts you spent months refining behave differently overnight, and entire workflows built on one model's behavior quietly degrade. The recurring "did it get worse?" complaint threads after every silent model swap are this exact phenomenon: not weaker models, moved ones.</p>
     <p>For API users it's sharper. A deprecated endpoint is a production incident with a countdown attached, and re-validating an app against a new model is real engineering work you didn't schedule.</p>
     <h2>The version of this that can't happen to you</h2>
-    <p>An open-weight model is a stack of files. Outlier's tiers, Nano through Plus 397B, are exactly that: weights on your disk (published openly on HuggingFace), run by an engine on your Mac. Nobody can retire them, because there is no server to turn off. The model that writes a certain way today writes the same way in five years, unless <em>you</em> decide to swap it. Upgrades exist — new tiers ship and Pro seats include them — but they arrive as an option you choose, not a migration you're forced through.</p>
+    <p>An open-weight model is a stack of files. Outlier's tiers, Nano through Plus 397B, are exactly that: weights on your disk (published openly on HuggingFace), run by an engine on your Mac. Nobody can retire them, because there is no server to turn off. The model that writes a certain way today writes the same way in five years, unless <em>you</em> decide to swap it. Upgrades exist (new tiers ship and Pro seats include them), but they arrive as an option you choose, not a migration you're forced through.</p>
     <div class="receipts"><strong>Receipts:</strong> GPT-4's ChatGPT retirement (April 2025) was announced by OpenAI; both OpenAI and Anthropic publish living deprecation pages for their model lineups. Outlier's weights are downloadable and auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>.</div>
     <h2>What this means for how you choose tools</h2>
-    <p>If your AI use is casual, retirements are a shrug: you adapt in an afternoon. If you've built anything durable on a model — a writing voice, a coding workflow, an app, a research process — the deprecation schedule is a risk you're carrying whether you priced it or not. The hedge is cheap: keep the workflows that matter on weights you control, and rent the cloud for the jobs where its ceiling genuinely matters. Stability where you need it, novelty where you want it.</p>
+    <p>If your AI use is casual, retirements are a shrug: you adapt in an afternoon. If you've built anything durable on a model (a writing voice, a coding workflow, an app, a research process), the deprecation schedule is a risk you're carrying whether you priced it or not. The hedge is cheap: keep the workflows that matter on weights you control, and rent the cloud for the jobs where its ceiling genuinely matters. Stability where you need it, novelty where you want it.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">

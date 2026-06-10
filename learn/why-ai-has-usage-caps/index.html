@@ -30,8 +30,9 @@
     .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
     nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
     .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
     .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -93,7 +94,7 @@
 <body>
 <nav>
   <div class="wrap nav-inner">
-    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
     <ul class="nav-links">
       <li><a href="https://outlier.host/learn/">Learn</a></li>
       <li><a href="https://outlier.host/#pricing">Pricing</a></li>
@@ -130,7 +131,7 @@
     <p>So the provider has two choices: price the plan for the heaviest users (and lose everyone else), or cap usage so the heaviest users can't sink the pool. Every provider picked the cap. Anthropic added weekly limits on top of Claude's rolling five-hour windows in 2025 specifically because, in their own words, a small number of users were running Claude continuously. OpenAI meters its top models by message count and downgrades you when you run out.</p>
     <h2>Why paying more doesn't remove the cap</h2>
     <p>The $100 and $200 tiers raise the limit because they cover more compute. They don't remove it, because the arithmetic never goes away. Whatever the fee, there's a usage level where you cost more than you pay, and the provider has to protect against it. That's why the fine print on every tier, including Max and Pro, keeps the throttle clause.</p>
-    <div class="receipts"><strong>Receipts:</strong> Anthropic's help center documents the rolling reset windows; the 2025 weekly-cap change was announced by Anthropic and widely reported, with the company citing users running Claude "continuously in the background." OpenAI publishes per-plan message limits in its own documentation. None of this is hidden — it's just rarely added up.</div>
+    <div class="receipts"><strong>Receipts:</strong> Anthropic's help center documents the rolling reset windows; the 2025 weekly-cap change was announced by Anthropic and widely reported, with the company citing users running Claude "continuously in the background." OpenAI publishes per-plan message limits in its own documentation. None of this is hidden; it's just rarely added up.</div>
     <h2>The one architecture with nothing to cap</h2>
     <p>Run the model on your own machine and the marginal cost of a token lands on hardware you already own. There's no provider absorbing your GPU time, so there's no pool to protect and nothing to cap. This isn't a pricing decision a local tool gets to brag about. It's structural. Outlier doesn't cap usage for the same reason your text editor doesn't: your Mac does the work.</p>
     <p>The honest other side: your Mac is slower than a rack of H100s. Local Core 27B runs about 20.7 tok/s where cloud flagships run 80 to 100. You trade speed for a meter that doesn't exist. For long sessions and agent work, that trade usually wins. For quick one-off questions, it may not matter either way.</p>

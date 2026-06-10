@@ -30,8 +30,9 @@
     .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
     nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
     .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
     .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -87,13 +88,13 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI for journalists — source protection by architecture", "item": "https://outlier.host/for/journalists/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI chat logs be subpoenaed?", "acceptedAnswer": {"@type": "Answer", "text": "Data stored by a provider is reachable by legal process directed at that provider, and the 2025 preservation order against OpenAI showed even deleted conversations can be retained as evidence. Material that never leaves your own machine has no provider copy to reach."}}, {"@type": "Question", "name": "Is local AI safe for source material?", "acceptedAnswer": {"@type": "Answer", "text": "It removes the third-party exposure: nothing is transmitted or stored off your device. It does not protect a physically compromised laptop, so disk encryption and device security still matter. For most newsroom threat models, removing the cloud provider is the big win."}}, {"@type": "Question", "name": "Will it work somewhere with no internet?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, everything runs offline — chat, summarization, document work. That's useful in the field and anywhere uploading material would itself be a risk."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI chat logs be subpoenaed?", "acceptedAnswer": {"@type": "Answer", "text": "Data stored by a provider is reachable by legal process directed at that provider, and the 2025 preservation order against OpenAI showed even deleted conversations can be retained as evidence. Material that never leaves your own machine has no provider copy to reach."}}, {"@type": "Question", "name": "Is local AI safe for source material?", "acceptedAnswer": {"@type": "Answer", "text": "It removes the third-party exposure: nothing is transmitted or stored off your device. It does not protect a physically compromised laptop, so disk encryption and device security still matter. For most newsroom threat models, removing the cloud provider is the big win."}}, {"@type": "Question", "name": "Will it work somewhere with no internet?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, everything runs offline: chat, summarization, document work. That's useful in the field and anywhere uploading material would itself be a risk."}}]}
   </script>
 </head>
 <body>
 <nav>
   <div class="wrap nav-inner">
-    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
     <ul class="nav-links">
       <li><a href="https://outlier.host/learn/">Learn</a></li>
       <li><a href="https://outlier.host/#pricing">Pricing</a></li>
@@ -113,9 +114,9 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Source material typed into cloud AI is stored by the provider and reachable by legal process — the 2025 OpenAI preservation order swept in even deleted chats.</li>
+        <li>Source material typed into cloud AI is stored by the provider and reachable by legal process: the 2025 OpenAI preservation order swept in even deleted chats.</li>
         <li>Local AI runs on your Mac: notes, transcripts, and drafts never touch a third party's servers.</li>
-        <li>Works fully offline — usable in the field, on planes, in places where uploading material is itself a risk.</li>
+        <li>Works fully offline: usable in the field, on planes, in places where uploading material is itself a risk.</li>
         <li>Free tier handles drafting and summarizing on a 16 GB Mac; verification of facts stays your job.</li>
       </ul>
     </div>
@@ -123,10 +124,10 @@
     <p class="lead">Reporters are trained to protect notes, sources, and unpublished drafts. Then AI showed up, and suddenly half the newsroom is pasting exactly that material into a chatbot that stores it on a tech company's servers. The problem isn't hypothetical: data held by a provider is reachable by subpoena, preservation order, and breach, no matter what your intentions were. Local AI removes the provider from the chain entirely.</p>
 
     <h2>The chain-of-custody problem with cloud AI</h2>
-    <p>When you summarize an interview or clean up notes in a cloud assistant, you've added a third party to your chain of custody. That party stores the material under its retention policies, may use it for training depending on your settings, and must comply with legal process you'll never see. The 2025 court order requiring OpenAI to preserve user conversations — deleted ones included — was about a copyright case, but it demonstrated the mechanism that should worry any reporter: <strong>your delete button is subordinate to their litigation.</strong></p>
+    <p>When you summarize an interview or clean up notes in a cloud assistant, you've added a third party to your chain of custody. That party stores the material under its retention policies, may use it for training depending on your settings, and must comply with legal process you'll never see. The 2025 court order requiring OpenAI to preserve user conversations (deleted ones included) was about a copyright case, but it demonstrated the mechanism that should worry any reporter: <strong>your delete button is subordinate to their litigation.</strong></p>
     <p>Shield laws protect you in some jurisdictions. They protect material sitting on a tech company's servers considerably less.</p>
     <h2>What local AI changes</h2>
-    <p>Run the model on your own Mac and the third party disappears. Interview transcripts get summarized on your hardware. Draft passes happen on your disk. Sensitive documents get analyzed without ever being uploaded. There is no provider copy to subpoena, no server logs of what you asked, no training pipeline your material could leak into. After the one-time model download, Outlier runs with the network off — which in the field is a feature twice over, once for privacy and once for the places where connectivity doesn't exist.</p>
+    <p>Run the model on your own Mac and the third party disappears. Interview transcripts get summarized on your hardware. Draft passes happen on your disk. Sensitive documents get analyzed without ever being uploaded. There is no provider copy to subpoena, no server logs of what you asked, no training pipeline your material could leak into. After the one-time model download, Outlier runs with the network off, which in the field is a feature twice over, once for privacy and once for the places where connectivity doesn't exist.</p>
     <p>Scope honestly stated: this protects against third-party exposure. A seized or unlocked laptop is a different threat, and FileVault plus good device hygiene remain on you.</p>
     <h2>What it's actually useful for in reporting</h2>
     <ul>
@@ -144,7 +145,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Can AI chat logs be subpoenaed?</h3>
-        <p>Can they be? Yes — data stored by a provider is reachable by legal process directed at that provider, and the 2025 preservation order against OpenAI showed even deleted conversations can be retained as evidence. Material that never leaves your own machine has no provider copy to reach.</p>
+        <p>Can they be? Yes: data stored by a provider is reachable by legal process directed at that provider, and the 2025 preservation order against OpenAI showed even deleted conversations can be retained as evidence. Material that never leaves your own machine has no provider copy to reach.</p>
       </div>
       <div class="faq-item">
         <h3>Is local AI safe for source material?</h3>
@@ -152,7 +153,7 @@
       </div>
       <div class="faq-item">
         <h3>Will it work somewhere with no internet?</h3>
-        <p>Yes. After the first model download, everything runs offline — chat, summarization, document work. That's useful in the field and anywhere uploading material would itself be a risk.</p>
+        <p>Yes. After the first model download, everything runs offline: chat, summarization, document work. That's useful in the field and anywhere uploading material would itself be a risk.</p>
       </div>
     </div>
     <div class="cta">

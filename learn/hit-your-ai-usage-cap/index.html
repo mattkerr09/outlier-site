@@ -30,8 +30,9 @@
     .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
     nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
     .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
     .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
     .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
     .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--text); text-decoration: none; }
@@ -93,7 +94,7 @@
 <body>
 <nav>
   <div class="wrap nav-inner">
-    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
     <ul class="nav-links">
       <li><a href="https://outlier.host/learn/">Learn</a></li>
       <li><a href="https://outlier.host/#pricing">Pricing</a></li>
@@ -115,7 +116,7 @@
       <ul>
         <li>Cloud AI caps reset on a timer (Claude Pro's window resets roughly every 5 hours), so option one is just waiting.</li>
         <li>Paying more raises the cap but doesn't remove it. Even the $100–$200/mo tiers throttle heavy use.</li>
-        <li>A local model has <strong>no meter at all</strong> — the only limit is your Mac's speed.</li>
+        <li>A local model has <strong>no meter at all</strong>. The only limit is your Mac's speed.</li>
         <li>Outlier runs free local models (Nano 4B, Lite 9B) on a 16 GB Mac, today, while your cloud cap resets.</li>
       </ul>
     </div>
