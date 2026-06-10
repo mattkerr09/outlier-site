@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI without usage limits: what exists (2026) | Outlier</title>
+  <meta name="description" content="Every cloud AI subscription has a cap, and APIs meter by the token. The only truly unmetered AI in 2026 runs on your own hardware. The honest list.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-09">
+  <link rel="canonical" href="https://outlier.host/learn/ai-without-usage-limits/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI without usage limits — what actually exists in 2026">
+  <meta property="og:description" content="Every cloud AI subscription has a cap, and APIs meter by the token. The only truly unmetered AI in 2026 runs on your own hardware. The honest list.">
+  <meta property="og:url" content="https://outlier.host/learn/ai-without-usage-limits/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI without usage limits — what actually exists in 2026">
+  <meta name="twitter:description" content="The only unmetered AI runs on your hardware. The list.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "AI without usage limits — what actually exists in 2026", "description": "Every cloud AI subscription has a cap, and APIs meter by the token. The only truly unmetered AI in 2026 runs on your own hardware. The honest list.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/ai-without-usage-limits/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "AI without usage limits — what actually exists in 2026", "item": "https://outlier.host/learn/ai-without-usage-limits/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there any truly unlimited cloud AI plan?", "acceptedAnswer": {"@type": "Answer", "text": "Not at a flat price. Every flat-fee plan reserves throttling and the major ones enforce caps. Pay-per-token APIs have no hard wall but bill every call. The only unmetered AI is the kind running on hardware you own."}}, {"@type": "Question", "name": "What's the catch with unmetered local AI?", "acceptedAnswer": {"@type": "Answer", "text": "Speed and ceiling. Local models run slower than cloud flagships and the biggest cloud models still win the hardest reasoning. You also need an Apple Silicon Mac with enough RAM (16 GB for small models, 64 GB for the largest)."}}, {"@type": "Question", "name": "Which unmetered tool should I pick?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier if you want a turnkey Mac app with a coding agent and project memory. Ollama if you want free, open source, and maximum flexibility. LM Studio or Jan if you mainly want chat. They're all genuinely unmetered."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>AI without usage limits — what actually exists in 2026</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-06-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>No flat-price cloud plan is truly unlimited — all reserve throttling, and the big ones enforce it.</li>
+        <li>Pay-per-token APIs have no wall but meter every call. That's a tab, not freedom.</li>
+        <li>Local tools (Outlier, Ollama, LM Studio, Jan) are genuinely unmetered: your hardware, your limit.</li>
+        <li>The trade is speed — local models run slower than cloud flagships. Nothing else resets at 2am.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Search for “unlimited AI” and you'll find a pile of marketing pages that all turn out to have a fair-use clause in paragraph nine. Worth being precise about this: in 2026 there is no unlimited cloud AI at a flat price, and there can't be, because cloud tokens cost the provider money. What does exist is unmetered local AI. Different thing, real thing.</p>
+
+    <h2>The cloud 'unlimited' that isn't</h2>
+    <p>Read the terms on any flat-fee AI plan and you'll find the same machinery: rolling windows, message counts, model downgrades, fair-use clauses. Claude resets a usage window roughly every five hours and added weekly ceilings in 2025. ChatGPT counts messages on its best models. The $100–200 tiers stretch the numbers without deleting them. None of this is scandalous. It's what a flat fee on top of metered compute has to look like. But it means the word "unlimited" doesn't belong on any cloud plan, and the reputable providers mostly stopped using it.</p>
+    <h2>APIs: no wall, but a meter on everything</h2>
+    <p>The pay-per-token API is the closest cloud gets to uncapped, and it's honest about the trade: you can send as much as you want, and you pay for every token both directions, with per-minute rate limits on top. For occasional use that's fine. For agent workloads it adds up brutally; a single long agent run can consume tens of thousands of tokens, and heavy months on a flagship API land in the hundreds of dollars. Unmetered it is not.</p>
+    <h2>The local list: actually unmetered</h2>
+    <p>Four tools in 2026 run models on your own machine with no meter of any kind:</p>
+    <table><thead><tr><th>Tool</th><th>What it is</th><th>Cost</th></tr></thead><tbody>
+      <tr><td>Outlier</td><td>Mac app: chat + coding agent + project memory, 7 curated tiers up to 397B</td><td>Free tier; Pro $20/mo, $149/yr, or $99 lifetime</td></tr>
+      <tr><td>Ollama</td><td>Open-source CLI runtime, huge model catalog</td><td>Free</td></tr>
+      <tr><td>LM Studio</td><td>Polished chat GUI + local API server</td><td>Free for personal use</td></tr>
+      <tr><td>Jan</td><td>Open-source chat app</td><td>Free</td></tr>
+    </tbody></table>
+    <p>All four pass the same test: run them for twelve hours straight and nothing throttles, because nothing is being billed. The compute is yours.</p>
+    <h2>What 'unmetered' costs you instead</h2>
+    <p>The trade is real and worth stating plainly. Local models are slower (Outlier's Core 27B does about 20.7 tok/s on an M1 Ultra; cloud flagships do 80–100), the very largest cloud models are still stronger on the hardest problems, and your Mac draws real wattage during long runs. What you get back is a workflow where the limit never interrupts you, your costs are fixed, and a heavy week looks exactly like a light one on your bank statement.</p>
+    <p>For people who hit cloud caps once a month, none of this matters. For people who hit them weekly, the unmetered option usually pays for itself in not-being-interrupted alone.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is there any truly unlimited cloud AI plan?</h3>
+        <p>Not at a flat price. Every flat-fee plan reserves throttling and the major ones enforce caps. Pay-per-token APIs have no hard wall but bill every call. The only unmetered AI is the kind running on hardware you own.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the catch with unmetered local AI?</h3>
+        <p>Speed and ceiling. Local models run slower than cloud flagships and the biggest cloud models still win the hardest reasoning. You also need an Apple Silicon Mac with enough RAM (16 GB for small models, 64 GB for the largest).</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which unmetered tool should I pick?</h3>
+        <p>Outlier if you want a turnkey Mac app with a coding agent and project memory. Ollama if you want free, open source, and maximum flexibility. LM Studio or Jan if you mainly want chat. They're all genuinely unmetered.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=ai-without-usage-limits">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/why-ai-has-usage-caps/">Why every cloud AI has usage caps</a> · <a href="https://outlier.host/best/free-local-ai-mac/">Best free local AI for Mac</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

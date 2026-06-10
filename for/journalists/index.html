@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI for journalists: protect sources | Outlier</title>
+  <meta name="description" content="Notes, drafts, and source material typed into cloud AI sit on someone else's servers, reachable by legal process. Local AI keeps the reporting on your Mac.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-09">
+  <link rel="canonical" href="https://outlier.host/for/journalists/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI for journalists — source protection by architecture">
+  <meta property="og:description" content="Notes, drafts, and source material typed into cloud AI sit on someone else's servers, reachable by legal process. Local AI keeps the reporting on your Mac.">
+  <meta property="og:url" content="https://outlier.host/for/journalists/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI for journalists — source protection by architecture">
+  <meta name="twitter:description" content="AI for reporters that never sends source material anywhere.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Local AI for journalists — source protection by architecture", "description": "Notes, drafts, and source material typed into cloud AI sit on someone else's servers, reachable by legal process. Local AI keeps the reporting on your Mac.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/for/journalists/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI for journalists — source protection by architecture", "item": "https://outlier.host/for/journalists/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI chat logs be subpoenaed?", "acceptedAnswer": {"@type": "Answer", "text": "Data stored by a provider is reachable by legal process directed at that provider, and the 2025 preservation order against OpenAI showed even deleted conversations can be retained as evidence. Material that never leaves your own machine has no provider copy to reach."}}, {"@type": "Question", "name": "Is local AI safe for source material?", "acceptedAnswer": {"@type": "Answer", "text": "It removes the third-party exposure: nothing is transmitted or stored off your device. It does not protect a physically compromised laptop, so disk encryption and device security still matter. For most newsroom threat models, removing the cloud provider is the big win."}}, {"@type": "Question", "name": "Will it work somewhere with no internet?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, everything runs offline — chat, summarization, document work. That's useful in the field and anywhere uploading material would itself be a risk."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">for</a></div>
+    <h1>Local AI for journalists — source protection by architecture</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-06-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Source material typed into cloud AI is stored by the provider and reachable by legal process — the 2025 OpenAI preservation order swept in even deleted chats.</li>
+        <li>Local AI runs on your Mac: notes, transcripts, and drafts never touch a third party's servers.</li>
+        <li>Works fully offline — usable in the field, on planes, in places where uploading material is itself a risk.</li>
+        <li>Free tier handles drafting and summarizing on a 16 GB Mac; verification of facts stays your job.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Reporters are trained to protect notes, sources, and unpublished drafts. Then AI showed up, and suddenly half the newsroom is pasting exactly that material into a chatbot that stores it on a tech company's servers. The problem isn't hypothetical: data held by a provider is reachable by subpoena, preservation order, and breach, no matter what your intentions were. Local AI removes the provider from the chain entirely.</p>
+
+    <h2>The chain-of-custody problem with cloud AI</h2>
+    <p>When you summarize an interview or clean up notes in a cloud assistant, you've added a third party to your chain of custody. That party stores the material under its retention policies, may use it for training depending on your settings, and must comply with legal process you'll never see. The 2025 court order requiring OpenAI to preserve user conversations — deleted ones included — was about a copyright case, but it demonstrated the mechanism that should worry any reporter: <strong>your delete button is subordinate to their litigation.</strong></p>
+    <p>Shield laws protect you in some jurisdictions. They protect material sitting on a tech company's servers considerably less.</p>
+    <h2>What local AI changes</h2>
+    <p>Run the model on your own Mac and the third party disappears. Interview transcripts get summarized on your hardware. Draft passes happen on your disk. Sensitive documents get analyzed without ever being uploaded. There is no provider copy to subpoena, no server logs of what you asked, no training pipeline your material could leak into. After the one-time model download, Outlier runs with the network off — which in the field is a feature twice over, once for privacy and once for the places where connectivity doesn't exist.</p>
+    <p>Scope honestly stated: this protects against third-party exposure. A seized or unlocked laptop is a different threat, and FileVault plus good device hygiene remain on you.</p>
+    <h2>What it's actually useful for in reporting</h2>
+    <ul>
+      <li>Summarizing long interviews, hearings, and document dumps</li>
+      <li>First-pass structure and edits on drafts that aren't public yet</li>
+      <li>Plain-language readings of dense filings and reports</li>
+      <li>Reviewing scanned documents with the Vision model (24 GB+ Mac)</li>
+      <li>Working through FOIA hauls without uploading them anywhere</li>
+    </ul>
+    <p>What it's not: a fact-checker. Language models invent details with total confidence. Treat output as a draft from an eager intern who never cites correctly, and verify everything against the record. That's true of cloud models too; local just means the intern works in your office instead of someone else's.</p>
+    <h2>Cost, which matters in this industry</h2>
+    <p>The free tier (Nano 4B + Lite 9B) covers summarizing and drafting on any 16 GB Apple Silicon Mac, no account. Pro is $20/month, $149/year, or $99 once for lifetime access (Founding 200, first 200 seats), which adds the stronger models including Vision for documents. There's no per-seat enterprise negotiation because there's no enterprise anything. Download, work.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can AI chat logs be subpoenaed?</h3>
+        <p>Can they be? Yes — data stored by a provider is reachable by legal process directed at that provider, and the 2025 preservation order against OpenAI showed even deleted conversations can be retained as evidence. Material that never leaves your own machine has no provider copy to reach.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is local AI safe for source material?</h3>
+        <p>It removes the third-party exposure: nothing is transmitted or stored off your device. It does not protect a physically compromised laptop, so disk encryption and device security still matter. For most newsroom threat models, removing the cloud provider is the big win.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Will it work somewhere with no internet?</h3>
+        <p>Yes. After the first model download, everything runs offline — chat, summarization, document work. That's useful in the field and anywhere uploading material would itself be a risk.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=journalists">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/where-chatgpt-conversations-go/">Where your ChatGPT conversations go</a> · <a href="https://outlier.host/for/lawyers/">Local AI for lawyers</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why every cloud AI has usage caps | Outlier</title>
+  <meta name="description" content="Usage caps aren't a bug. Every token a cloud AI generates costs the provider GPU time, so flat subscriptions need limits to stay profitable. The math, plainly.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-09">
+  <link rel="canonical" href="https://outlier.host/learn/why-ai-has-usage-caps/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Why every cloud AI has usage caps (the unit economics)">
+  <meta property="og:description" content="Usage caps aren't a bug. Every token a cloud AI generates costs the provider GPU time, so flat subscriptions need limits to stay profitable. The math, plainly.">
+  <meta property="og:url" content="https://outlier.host/learn/why-ai-has-usage-caps/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why every cloud AI has usage caps (the unit economics)">
+  <meta name="twitter:description" content="The unit economics behind every AI usage cap.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Why every cloud AI has usage caps (the unit economics)", "description": "Usage caps aren't a bug. Every token a cloud AI generates costs the provider GPU time, so flat subscriptions need limits to stay profitable. The math, plainly.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/why-ai-has-usage-caps/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Why every cloud AI has usage caps (the unit economics)", "item": "https://outlier.host/learn/why-ai-has-usage-caps/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will AI usage caps go away as compute gets cheaper?", "acceptedAnswer": {"@type": "Answer", "text": "They'll loosen, but the structure stays. As long as a flat fee covers a non-zero per-token cost, there's a usage level that loses the provider money, and they'll cap against it. Cheaper compute raises the cap; it doesn't delete it."}}, {"@type": "Question", "name": "Isn't the API 'uncapped'?", "acceptedAnswer": {"@type": "Answer", "text": "The API has no hard usage wall, but it meters every token and bills you for it, plus rate limits per minute. It trades a cap for a variable bill. Heavy agent use through an API routinely costs hundreds of dollars a month."}}, {"@type": "Question", "name": "How does Outlier afford to be uncapped?", "acceptedAnswer": {"@type": "Answer", "text": "Because your Mac supplies the compute. Outlier sells the software once (or $20/month); it doesn't pay for your GPU time, so heavy use costs it nothing. That's the structural difference between local and cloud, not a promotional choice."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Why every cloud AI has usage caps (the unit economics)</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-06-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Cloud inference costs the provider real money per token: GPU time, power, cooling, datacenter overhead.</li>
+        <li>A flat monthly fee plus unlimited usage would mean heavy users cost more than they pay. Caps close that gap.</li>
+        <li>That's why caps survive every pricing tier, including the $200/month ones.</li>
+        <li>Local AI has no marginal token cost, so there's nothing to cap. The economics, not generosity.</li>
+      </ul>
+    </div>
+
+    <p class="lead">People talk about usage caps like they're a temporary annoyance the providers will eventually fix. They won't, and it's worth understanding why. The cap is not a bug or a capacity hiccup. It's arithmetic. Every token a cloud model generates burns GPU-seconds someone has to pay for, and a flat $20 subscription only buys so many of them.</p>
+
+    <h2>What a token actually costs</h2>
+    <p>When a cloud model answers you, a rack of GPUs spends real seconds computing your tokens. Those GPUs cost tens of thousands of dollars each, draw kilowatts, and sit in datacenters with cooling and networking overhead. The provider pays for all of it whether you notice or not.</p>
+    <p>Nobody outside the labs knows the exact per-token cost, and it keeps falling. But it is not zero, and at flagship-model quality it's not close to zero. Multiply a non-zero cost by millions of subscribers and the arithmetic gets serious fast.</p>
+    <h2>Why the flat subscription forces a cap</h2>
+    <p>A subscription is a bet: the provider bets the average user consumes less compute than the fee covers. Light users subsidize heavy users. That works until the heavy users get too heavy, and AI made them very heavy. One person running coding agents all day can burn hundreds of times the compute of someone asking three questions a week.</p>
+    <p>So the provider has two choices: price the plan for the heaviest users (and lose everyone else), or cap usage so the heaviest users can't sink the pool. Every provider picked the cap. Anthropic added weekly limits on top of Claude's rolling five-hour windows in 2025 specifically because, in their own words, a small number of users were running Claude continuously. OpenAI meters its top models by message count and downgrades you when you run out.</p>
+    <h2>Why paying more doesn't remove the cap</h2>
+    <p>The $100 and $200 tiers raise the limit because they cover more compute. They don't remove it, because the arithmetic never goes away. Whatever the fee, there's a usage level where you cost more than you pay, and the provider has to protect against it. That's why the fine print on every tier, including Max and Pro, keeps the throttle clause.</p>
+    <div class="receipts"><strong>Receipts:</strong> Anthropic's help center documents the rolling reset windows; the 2025 weekly-cap change was announced by Anthropic and widely reported, with the company citing users running Claude "continuously in the background." OpenAI publishes per-plan message limits in its own documentation. None of this is hidden — it's just rarely added up.</div>
+    <h2>The one architecture with nothing to cap</h2>
+    <p>Run the model on your own machine and the marginal cost of a token lands on hardware you already own. There's no provider absorbing your GPU time, so there's no pool to protect and nothing to cap. This isn't a pricing decision a local tool gets to brag about. It's structural. Outlier doesn't cap usage for the same reason your text editor doesn't: your Mac does the work.</p>
+    <p>The honest other side: your Mac is slower than a rack of H100s. Local Core 27B runs about 20.7 tok/s where cloud flagships run 80 to 100. You trade speed for a meter that doesn't exist. For long sessions and agent work, that trade usually wins. For quick one-off questions, it may not matter either way.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Will AI usage caps go away as compute gets cheaper?</h3>
+        <p>They'll loosen, but the structure stays. As long as a flat fee covers a non-zero per-token cost, there's a usage level that loses the provider money, and they'll cap against it. Cheaper compute raises the cap; it doesn't delete it.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Isn't the API 'uncapped'?</h3>
+        <p>The API has no hard usage wall, but it meters every token and bills you for it, plus rate limits per minute. It trades a cap for a variable bill. Heavy agent use through an API routinely costs hundreds of dollars a month.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How does Outlier afford to be uncapped?</h3>
+        <p>Because your Mac supplies the compute. Outlier sells the software once (or $20/month); it doesn't pay for your GPU time, so heavy use costs it nothing. That's the structural difference between local and cloud, not a promotional choice.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=why-ai-has-usage-caps">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/hit-your-ai-usage-cap/">Hit your AI usage cap? Your options</a> · <a href="https://outlier.host/learn/what-no-usage-caps-means/">What 'no usage caps' actually means</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
