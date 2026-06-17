@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outlier vs Claude Code (offline coding agent) | Outlier</title>
-  <meta name="description" content="Head-to-head: Outlier (local, Mac, no API key) vs Claude Code (cloud, terminal, Claude Opus). Speed, output quality, cost, privacy. With bench numbers.">
+  <meta name="description" content="Head-to-head: Outlier (local, Mac, no API key) vs Claude Code (cloud, terminal, Claude Opus). Speed, output quality, cost, and privacy compared.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-claude-code/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs Claude Code — an offline alternative for coding agents">
-  <meta property="og:description" content="Head-to-head: local Mac coding agent vs cloud terminal coding agent. With actual bench numbers.">
+  <meta property="og:description" content="Head-to-head: local Mac coding agent vs cloud terminal coding agent — speed, quality, cost, privacy.">
   <meta property="og:url" content="https://outlier.host/vs/outlier-vs-claude-code/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -88,7 +88,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Claude Code — an offline alternative for coding agents", "item": "https://outlier.host/vs/outlier-vs-claude-code/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Outlier a replacement for Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "For the common 95% of coding tasks, a 54-prompt bench showed a 98.9% match on the rubric. Claude Code stays ahead on speed and the hardest reasoning."}}, {"@type": "Question", "name": "What does Outlier do that Claude Code can't?", "acceptedAnswer": {"@type": "Answer", "text": "Run fully offline, with no API key, no usage cap, persistent on-disk project memory, and a one-time pricing option."}}, {"@type": "Question", "name": "Which is faster, Outlier or Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code, by roughly 4x. A 5,000-token diff is about 60 seconds in Claude versus 4 minutes on local Core 27B."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Outlier a replacement for Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "For the common 95% of coding tasks the outputs are hard to tell apart. Claude Code stays ahead on speed and the hardest reasoning."}}, {"@type": "Question", "name": "What does Outlier do that Claude Code can't?", "acceptedAnswer": {"@type": "Answer", "text": "Run fully offline, with no API key, no usage cap, persistent on-disk project memory, and a one-time pricing option."}}, {"@type": "Question", "name": "Which is faster, Outlier or Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code, by roughly 4x. A 5,000-token diff is about 60 seconds in Claude versus 4 minutes on local Core 27B."}}]}
   </script>
 </head>
 <body>
@@ -115,7 +115,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Outlier runs local on your Mac with no API key. Claude Code is cloud, running Claude Opus 4.7.</li>
-        <li>On a <strong>54-test bench</strong> they matched on 98.9% of the rubric overall, and 100% on the 9 brutal tasks.</li>
+        <li>On the common 95% of coding tasks their outputs are <strong>hard to tell apart</strong>.</li>
         <li>Claude is the faster one (~80–100 tok/s) and its reasoning ceiling is higher.</li>
         <li>Outlier keeps your code private, never rate-limits you, works offline, and can be paid for once.</li>
       </ul>
@@ -124,7 +124,7 @@
     <p class="lead">Two coding agents, two completely different bets. Claude Code lives in your terminal and runs Claude Opus 4.7 up in Anthropic's cloud. Outlier is the Mac-native one, and it runs models that sit on your own machine: Core 27B and Code 27B handle daily work, Plus 397B takes the heavy lifts. Same basic shape, very different priorities. So I put them side by side and kept the numbers.</p>
 
     <h2>The honest summary</h2>
-    <p>Claude Code is faster, and the model underneath it is stronger. No argument there. Outlier's pitch is different: it's local, there's no API key, there's no usage cap, and on a 54-test bench against Claude Opus the local Core 27B landed at 98.9% on the 54-prompt rubric. For maybe 95% of the coding you do day to day, you can't tell the two outputs apart. The other 5% is the hard stuff (novel research, contexts that run very long), and Claude still takes that.</p>
+    <p>Claude Code is faster, and the model underneath it is stronger. No argument there. Outlier's pitch is different: it's local, there's no API key, there's no usage cap, and on everyday coding the local Core 27B holds its own against Claude Opus. For maybe 95% of the coding you do day to day, you can't tell the two outputs apart. The other 5% is the hard stuff (novel research, contexts that run very long), and Claude still takes that.</p>
 
     <h2>Feature-by-feature</h2>
     <table>
@@ -146,8 +146,8 @@
       </tbody>
     </table>
 
-    <h2>The 54-test bench, what it found</h2>
-    <p>Around mid-2026 Outlier ran a 54-prompt head-to-head against Claude Opus 4.7. Same prompts, both apps. Nine of those prompts were deliberately brutal:</p>
+    <h2>How the two compare in practice</h2>
+    <p>We put them side by side on the same kinds of work — including the deliberately hard cases, the ones where a local model should fall apart if it's going to fall apart anywhere:</p>
     <ul>
       <li>A chess engine that actually knows the rules: castling, en-passant, promotion, check, checkmate</li>
       <li>Explaining Raft vs Paxos consensus</li>
@@ -158,7 +158,7 @@
       <li>Needle-in-context retrieval to test long-context recall</li>
       <li>A paint canvas: a little drawing app with brush, color, and clear</li>
     </ul>
-    <p>Overall it scored <strong>98.9%</strong>. On all 9 of the brutal additions, <strong>100%</strong>. And that missing ~1%? It wasn't the model failing. It was the grading regex tripping over wording, like the model writing "thread" when the check wanted "single-thread". Not a capability gap.</p>
+    <p>Core 27B handles far more of this than its size suggests, and on the everyday coding underneath it the two outputs are hard to tell apart. It isn't flawless — the very hardest, most novel problems still go to the cloud — but for day-to-day work the quality gap is small. The real differences live elsewhere: speed, where your code goes, and what it costs you to keep using it.</p>
 
     <h2>Where Claude Code legitimately wins</h2>
     <ul>
@@ -182,7 +182,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Is Outlier a replacement for Claude Code?</h3>
-        <p>For the common 95% of coding tasks, a 54-prompt bench showed a 98.9% match on the rubric. Claude Code stays ahead on speed and the hardest reasoning.</p>
+        <p>For the common 95% of coding tasks the outputs are hard to tell apart. Claude Code stays ahead on speed and the hardest reasoning.</p>
       </div>
       <div class="faq-item">
         <h3>What does Outlier do that Claude Code can't?</h3>
@@ -200,7 +200,7 @@
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-claude-code">Download for Mac</a>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">Outlier Core 27B vs Claude Opus — 54-prompt head-to-head</a> · <a href="https://outlier.host/run/claude-code-style-agents-offline/">Run Claude-Code-style agents offline</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">Outlier Core 27B vs Claude Opus — local vs cloud, by task</a> · <a href="https://outlier.host/run/claude-code-style-agents-offline/">Run Claude-Code-style agents offline</a> · <a href="https://outlier.host/learn/">All articles</a></div>
   </div>
 </article>
 <footer>

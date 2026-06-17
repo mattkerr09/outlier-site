@@ -11,12 +11,14 @@
 <meta property="og:description" content="How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is code review. Throughput, privacy, and friction compared.">
 <meta property="og:url" content="https://outlier.host/seo/vs/cloud-coding-assistants-for-code-review/">
 <meta property="og:site_name" content="Outlier">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Outlier vs cloud-based coding assistants for code review | Outlier">
 <meta name="twitter:description" content="How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is code review. Throughput, privacy, and friction compared.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compared to","item":"https://outlier.host/seo/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs cloud-based coding assistants for code review","item":"https://outlier.host/seo/vs/cloud-coding-assistants-for-code-review/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs cloud-based coding assistants for code review | Outlier","description":"How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is code review. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/cloud-coding-assistants-for-code-review/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs cloud-based coding assistants for code review | Outlier","description":"How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is code review. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/cloud-coding-assistants-for-code-review/","datePublished":"2026-06-17","dateModified":"2026-06-17","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Outlier a drop-in alternative to cloud-based coding assistants for code review?","acceptedAnswer":{"@type":"Answer","text":"Outlier is positioned as an alternative to cloud-based coding assistants when the user wants the prompt to stay on the Mac. Whether it fully covers a given workflow depends on tooling integrations the user already relies on."}},{"@type":"Question","name":"Does Outlier work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the one-time model download, no network is required for chat or generation."}},{"@type":"Question","name":"Which Mac do I need?","acceptedAnswer":{"@type":"Answer","text":"Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -52,7 +54,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Compared to</span>
 <h1>Outlier vs cloud-based coding assistants for code review</h1>
-<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.466</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Catching bugs and style drift before a pull request lands. The cloud-based coding assistants category answers this with a remote model and an account; Outlier answers it with the on-device code tier. This page is the side-by-side specifically for code review workloads.</p></div>
 
@@ -61,11 +63,11 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>How does the data path differ for code review on cloud-based coding assistants?</h2>
 <p>Network round-trip every prompt. For a code review workflow against cloud-based coding assistants, the practical consequences are tail-latency variance (the network adds unbounded variance per turn) and exposure to provider-side logging of the code review prompts. Outlier&rsquo;s chat path on the code tier issues no outbound HTTPS once the model is on disk; the only network request in the lifecycle is the one-time 15.13 GB tier download from Hugging Face.</p>
 <h2>Which Outlier tier handles code review best as an alternative to cloud-based coding assistants?</h2>
-<p>If you are coming from cloud-based coding assistants for code review, the right starting point on Outlier is the <strong>code</strong> tier &mdash; 15.13 GB on disk, sitting at the quality-vs-speed inflection point for code review-shaped prompts. cloud-based coding assistants users typically want what they had plus privacy; the code tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s 0.128 HumanEval rules it out for code-shaped code review.</p>
+<p>If you are coming from cloud-based coding assistants for code review, the right starting point on Outlier is the <strong>code</strong> tier &mdash; 15.13 GB on disk, sitting at the quality-vs-speed inflection point for code review-shaped prompts. cloud-based coding assistants users typically want what they had plus privacy; the code tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s weak code performance rules it out for code-shaped code review.</p>
 <h2>What is the switching friction from cloud-based coding assistants?</h2>
 <p>Moving a code review workflow from cloud-based coding assistants to Outlier is a one-time DMG install plus a 15.13 GB pull for the code tier. The sign-in step that cloud-based coding assistants typically requires has no equivalent on the Outlier side: there is no account, no per-token meter, and no rate-limit page to redirect through. The code review loop after install is open-prompt to local-decode.</p>
 <h2>What about quality at the code tier for code review?</h2>
-<p>For a code review workload moving off cloud-based coding assistants onto the code tier: Code shares Core's weights; HumanEval pass@1 is 0.8659 at the base level. See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier table; benchmarks were run on full MMLU and HumanEval, dated 2026-04-30.</p>
+<p>For a code review workload moving off cloud-based coding assistants onto the code tier: Code shares Core's weights; the difference is configuration (wider default context, code-first prompt), not model quality. See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier breakdown. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set).</p>
 <h2>What is the shape of code review as a workload?</h2>
 <p>A code review pass is structurally short-prompt, long-context: many small files with one focused question. Local decoding wins on tail latency and on never having to redact secrets out of the diff first.</p>
 <h2>How does the cloud-based coding assistants category look operationally for code review?</h2>
@@ -75,7 +77,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>One-line summary</h2>
 <p>For code review: one network round-trip per prompt with cloud-based coding assistants versus zero round-trips with Outlier on the code tier &mdash; the difference is unbounded latency variance against bandwidth-bound, repeatable local throughput.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.466/Outlier-1.11.466-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 
 <div class="related">
 <h3>Related pages</h3>

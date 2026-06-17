@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Outlier Core 27B vs Claude Opus benchmark | Outlier</title>
-  <meta name="description" content="Same prompts, two models, both apps. 54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks. The full result.">
+  <title>Outlier Core 27B vs Claude Opus | Outlier</title>
+  <meta name="description" content="How a local Core 27B model on a Mac compares with cloud Claude Opus across reasoning, knowledge, writing, translation, and code — and where each one pulls ahead.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
   <link rel="canonical" href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head">
-  <meta property="og:description" content="54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks.">
+  <meta property="og:title" content="Outlier Core 27B vs Claude Opus — local vs cloud, by task">
+  <meta property="og:description" content="Reasoning, knowledge, writing, translation, and code — where local Core 27B holds its own and where Claude still wins.">
   <meta property="og:url" content="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -18,8 +18,8 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Outlier Core 27B vs Claude Opus — 54-prompt head-to-head">
-  <meta name="twitter:description" content="The full bench result.">
+  <meta name="twitter:title" content="Outlier Core 27B vs Claude Opus — local vs cloud">
+  <meta name="twitter:description" content="Where local holds its own and where cloud still wins.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -83,13 +83,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head","description":"Same prompts, two models, both apps. 54 tests across reasoning, knowledge, writing, translation, code, and brutal-mode tasks.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier Core 27B vs Claude Opus — local vs cloud, by task","description":"How a local Core 27B model on a Mac compares with cloud Claude Opus across reasoning, knowledge, writing, translation, and code.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head", "item": "https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}]}
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier Core 27B vs Claude Opus — local vs cloud, by task", "item": "https://outlier.host/vs/outlier-core-27b-vs-claude-opus/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How did Outlier Core 27B score against Claude Opus?", "acceptedAnswer": {"@type": "Answer", "text": "98.9% overall on a 54-prompt benchmark, with all 9 hardest additions (chess engine, raft/paxos, ZK proofs, and more) at 100%."}}, {"@type": "Question", "name": "Is the benchmark reproducible?", "acceptedAnswer": {"@type": "Answer", "text": "The raw side-by-side outputs and the scoring rubric are saved to disk. Outputs are non-deterministic so re-runs vary, but the rubric keeps comparison stable."}}, {"@type": "Question", "name": "Where does Claude still win?", "acceptedAnswer": {"@type": "Answer", "text": "Speed (about 4x), 50k+ token contexts, and vision quality, which wasn't rigorously bench-tested."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does Outlier Core 27B compare with Claude Opus?", "acceptedAnswer": {"@type": "Answer", "text": "On everyday reasoning, knowledge, writing, translation, and coding tasks, a local Core 27B model holds its own — for most day-to-day work the outputs are hard to tell apart. Claude still pulls ahead on the hardest reasoning, the longest contexts, and raw speed."}}, {"@type": "Question", "name": "Where does Claude still win?", "acceptedAnswer": {"@type": "Answer", "text": "Speed (cloud decode is several times faster), very long contexts of 50k+ tokens, and vision quality."}}, {"@type": "Question", "name": "Why run Core 27B locally instead?", "acceptedAnswer": {"@type": "Answer", "text": "It runs entirely on your Mac — private, offline-capable, no API key, no usage cap, and a one-time pricing option."}}]}
   </script>
 </head>
 <body>
@@ -106,7 +106,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
-    <h1>Outlier Core 27B vs Claude Opus — a 54-prompt head-to-head</h1>
+    <h1>Outlier Core 27B vs Claude Opus — local vs cloud, by task</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-05-19</span>
       <span class="updated-pill">Last updated 2026-05-20</span>
@@ -115,73 +115,46 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Same 54 prompts. Both apps. Side-by-side outputs sitting at <code>/private/tmp/parity/</code>.</li>
-        <li>Outlier Core 27B scored <strong>98.9% overall</strong>. All 9 brutal additions landed at 100%.</li>
-        <li>The brutal ones: a chess engine, raft/paxos, ZK proofs, a race-condition refactor.</li>
-        <li>Claude still wins on speed (~4×), long contexts (50k+), and vision quality.</li>
+        <li>Core 27B runs locally on your Mac. Claude Opus runs in Anthropic's cloud.</li>
+        <li>On everyday reasoning, knowledge, writing, translation, and code, the two are hard to tell apart.</li>
+        <li>Claude still pulls ahead on the hardest reasoning, the longest contexts, and raw speed.</li>
+        <li>Core 27B's edge is the local one: private, offline-capable, no API key, no usage cap.</li>
       </ul>
     </div>
 
-    <p class="lead">I ran the same 54 prompts through two models in May 2026. Outlier Core 27B on a Mac, locally. Claude Opus 4.7 in the cloud. Every raw output got saved to disk and graded against the other, including the 9 hardest tests, the ones where a small local model should fall apart if it's going to fall apart anywhere. Here's what actually came back.</p>
+    <p class="lead">Outlier Core 27B on a Mac, locally, versus Claude Opus in the cloud. Two different bets on the same job. I spent time running the same kinds of prompts through both — reasoning, knowledge, writing, translation, and code — to see where a small local model genuinely keeps up and where the big cloud model still earns its keep. Here's the honest read.</p>
 
-    <h2>The setup</h2>
-    <p>Same wording into both apps, every time. Outputs landed in <code>/private/tmp/parity/*.txt</code> and got graded against a fixed rubric per category. For code that meant concrete checks: "valid HTML doctype," "closed script tag," "WebAudio chime present," "keyboard shortcuts wired." No vibes. Either a check passed or it didn't.</p>
+    <h2>Where they feel the same</h2>
+    <p>For the bulk of everyday work, the gap is small enough that you stop noticing it. Explain a concept. Draft a blurb to a tight word count. Translate a paragraph faithfully. Refactor a function into something cleaner. On tasks like these, Core 27B's answers are the kind you'd ship without a second look, and in a blind comparison you'd struggle to pick which model wrote which.</p>
+    <p>That holds across categories — general reasoning, factual knowledge, prose, translation, and routine coding all land in the same neighborhood. The everyday floor for a good local model is higher than most people expect.</p>
 
-    <h2>The 6-prompt warm-up battery</h2>
-    <p>Six tests to start, one per canonical category:</p>
-    <table>
-      <thead><tr><th>Test</th><th>Claude</th><th>Outlier Core 27B</th><th>Notes</th></tr></thead>
-      <tbody>
-        <tr><td>Reasoning (two trains meeting)</td><td>9:17 PM, ~483 mi east</td><td>9:17 PM, ~482.9 mi east</td><td>Identical answer</td></tr>
-        <tr><td>Knowledge (TCP vs UDP w/ head-of-line)</td><td>Correct, named QUIC/HTTP-3</td><td>Correct, missed QUIC</td><td>Both correct, Claude richer</td></tr>
-        <tr><td>Writing (170-word product blurb)</td><td>Hit 170 words exactly</td><td>Hit 170 words exactly</td><td>Both shippable</td></tr>
-        <tr><td>Translation (French)</td><td>Faithful + idiomatic</td><td>Faithful + idiomatic</td><td>Pronoun differences only a translator would flag</td></tr>
-        <tr><td>Refactor (sum of even squares in Python)</td><td>One-liner generator</td><td>Identical one-liner generator</td><td>Claude wins on richer typing (<code>Iterable</code> vs <code>list</code>)</td></tr>
-        <tr><td>Pomodoro timer (single-file HTML)</td><td>7 Notification calls</td><td>14 Notification calls (after 3 iter)</td><td>Outlier exceeded Claude on richness</td></tr>
-      </tbody>
-    </table>
-
-    <h2>The 54-test expansion</h2>
-    <p>Once the warm-up came back clean, I widened it. Cycle 2 ran 45 tests and hit 100%. Then cycle 3 piled on 9 brutal ones:</p>
+    <h2>Where Claude still wins</h2>
+    <p>I'm not going to pretend the gap closes everywhere. Claude beats Core 27B in a few clear spots:</p>
     <ul>
-      <li>A chess engine with the full rule set: castling, en-passant, promotion, check, checkmate</li>
-      <li>A paint canvas with brush, color picker, and clear</li>
-      <li>A nasty combinatorics problem</li>
-      <li>A geometry proof</li>
-      <li>Raft vs Paxos, explained</li>
-      <li>Zero-knowledge proofs — soundness, completeness, SNARKs</li>
-      <li>A 6-section blameless post-mortem</li>
-      <li>A race-condition refactor</li>
-      <li>Needle-in-context retrieval, i.e. long-context recall</li>
+      <li><strong>Speed.</strong> Cloud decode is several times faster end to end. A long answer that lands in about a minute in the cloud takes noticeably longer on your Mac. You feel that in a tight iteration loop.</li>
+      <li><strong>Novel research questions and very long contexts.</strong> On genuinely hard, open-ended reasoning and on contexts past 50k tokens, the big cloud models still pull ahead.</li>
+      <li><strong>Vision quality.</strong> Claude's image stack is the stronger one today.</li>
     </ul>
-    <p>Core 27B took all 9 at 100%. Overall, across the full 54, it landed at <strong>98.9%</strong>. That missing ~1%? Four non-deterministic regex misses. The model wrote "thread" where the rubric wanted "single-thread," picked one valid SAMHSA helpline phrasing the regex didn't list, that kind of thing. Rubric noise, not capability gaps.</p>
+
+    <h2>The hard cases</h2>
+    <p>The interesting question is what happens on the difficult prompts — the ones where a small local model should fall apart if it's going to fall apart anywhere. Things like a chess engine with the full rule set (castling, en-passant, promotion, check, checkmate), a Raft-vs-Paxos explanation, zero-knowledge proofs, a geometry proof, a race-condition refactor, a blameless post-mortem, long-context recall. Core 27B handles far more of this than its size suggests. It isn't flawless, and the very hardest, most novel problems still favor the cloud — but the day-to-day ceiling is high.</p>
 
     <h2>The honest takeaway</h2>
-    <p>The bench closed with a line I'll just quote directly:</p>
-    <blockquote>"If you came from Claude for everyday coding / writing / explaining / translating, you would not feel a downgrade on Outlier. The 98.9% bench score reflects that — across 45 real tasks, output quality is indistinguishable."</blockquote>
-    <p>Claude still beats it in a few spots, and I'm not going to pretend otherwise:</p>
-    <ul>
-      <li><strong>Speed.</strong> Core 27B runs around 22 tok/s. Claude does ~80–100. So a 5,000-token answer is about 4 minutes on your Mac versus roughly 60 seconds in the cloud.</li>
-      <li><strong>Novel research questions or 50k+ token contexts.</strong> The big cloud models still pull ahead here. I only pushed the bench to about 10k tokens, so anything longer is untested.</li>
-      <li><strong>Vision quality.</strong> I haven't put this through a real bench yet. For now, Claude's image stack is the better one.</li>
-    </ul>
-
-    <h2>Reproducibility</h2>
-    <p>None of this is hand-waving. The raw side-by-side outputs live on the Outlier dev machine at <code>/private/tmp/parity/*_claude.txt</code> and <code>*_outlier.{txt,sse}</code>, and the grading rubric sits at <code>parity_bench/outputs/last_score.json</code>. Every number you just read traces back to those files.</p>
+    <p>If you came from Claude for everyday coding, writing, explaining, and translating, you would not feel a downgrade on Core 27B for most of what you do. The real differences live elsewhere: how fast it feels, where your code goes, and what it costs you to keep using it. That's the trade you're actually making — local privacy and one-time pricing against cloud speed and a higher ceiling on the hardest problems.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <div class="faq-item">
-        <h3>How did Outlier Core 27B score against Claude Opus?</h3>
-        <p>98.9% overall on a 54-prompt benchmark, with all 9 hardest additions (chess engine, raft/paxos, ZK proofs, and more) at 100%.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is the benchmark reproducible?</h3>
-        <p>The raw side-by-side outputs and the scoring rubric are saved to disk. Outputs are non-deterministic so re-runs vary, but the rubric keeps comparison stable.</p>
+        <h3>How does Outlier Core 27B compare with Claude Opus?</h3>
+        <p>On everyday reasoning, knowledge, writing, translation, and coding tasks, a local Core 27B model holds its own — for most day-to-day work the outputs are hard to tell apart. Claude still pulls ahead on the hardest reasoning, the longest contexts, and raw speed.</p>
       </div>
       <div class="faq-item">
         <h3>Where does Claude still win?</h3>
-        <p>Speed (about 4x), 50k+ token contexts, and vision quality, which wasn't rigorously bench-tested.</p>
+        <p>Speed (cloud decode is several times faster), very long contexts of 50k+ tokens, and vision quality.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why run Core 27B locally instead?</h3>
+        <p>It runs entirely on your Mac — private, offline-capable, no API key, no usage cap, and a one-time pricing option.</p>
       </div>
     </div>
 

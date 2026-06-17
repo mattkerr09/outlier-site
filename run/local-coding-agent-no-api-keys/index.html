@@ -88,7 +88,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to set up a local coding agent on macOS without API keys", "item": "https://outlier.host/run/local-coding-agent-no-api-keys/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a coding agent run without any API key?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A local agent runs the model on your Mac, so there is no cloud API and no key to configure."}}, {"@type": "Question", "name": "What can the local agent do?", "acceptedAnswer": {"@type": "Answer", "text": "Read and write files, run shell commands, search your project, and use web search, each behind an approval gate via MCP."}}, {"@type": "Question", "name": "Which model should power the agent?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B or Code 27B for daily multi-file work (HumanEval pass@1 0.8659); Plus 397B for the hardest cases on a 64 GB Mac."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a coding agent run without any API key?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A local agent runs the model on your Mac, so there is no cloud API and no key to configure."}}, {"@type": "Question", "name": "What can the local agent do?", "acceptedAnswer": {"@type": "Answer", "text": "Read and write files, run shell commands, search your project, and use web search, each behind an approval gate via MCP."}}, {"@type": "Question", "name": "Which model should power the agent?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B or Code 27B — the strongest coding tier — for daily multi-file work; Plus 397B for the hardest cases on a 64 GB Mac."}}]}
   </script>
 </head>
 <body>
@@ -126,7 +126,7 @@
     <h2>The pieces you need</h2>
     <p>Three things. All of them can live on your Mac.</p>
     <ol>
-      <li><strong>A local language model</strong> that's actually good at code. Outlier's Core 27B posts a HumanEval pass@1 of 0.8659, which is plenty for most real refactors. Quick 26B and Code 27B run the same code-tuned config.</li>
+      <li><strong>A local language model</strong> that's actually good at code. Outlier's Core 27B is the strongest coding tier, plenty for most real refactors. Quick 26B and Code 27B run the same code-tuned config.</li>
       <li><strong>An agent loop</strong>. It takes your message, runs the model, pulls the tool calls out of the response, runs those tools, and feeds the results back in. Outlier ships it as "Agent" mode.</li>
       <li><strong>Tools</strong> the model is allowed to call. The usual suspects: read a file, write a file, run a shell command, search the project, hit the web. Outlier wires these up through MCP (the Model Context Protocol).</li>
     </ol>
@@ -154,7 +154,7 @@
     <ul>
       <li><strong>Speed feel.</strong> Core 27B runs around 22 tok/s. Cloud Claude does ~80–100. A 5,000-token diff that Claude Code finishes in 60s takes you about 4 minutes here. You feel it.</li>
       <li><strong>Tier-swap latency.</strong> Jump from Nano to Plus mid-session and you wait roughly 74 seconds for the cold load. Claude never pays this because it isn't physically swapping a model in and out of memory.</li>
-      <li><strong>Research-grade reasoning.</strong> Truly novel problems, or contexts past 50k tokens? The cloud flagships still pull ahead. But on the 95% that is ordinary day-to-day coding, Outlier matched Claude Opus on 98.9% of the rubric across a 54-test bench.</li>
+      <li><strong>Research-grade reasoning.</strong> Truly novel problems, or contexts past 50k tokens? The cloud flagships still pull ahead. But on the 95% that is ordinary day-to-day coding, Outlier's local Core 27B holds its own against Claude Opus on output quality.</li>
     </ul>
     <p>And what do you get for living with those gaps? No token bill. No rate limit. No round trip that ships your repo off to someone else's servers. If you're in a regulated industry, stuck behind a corporate firewall, or just done paying by the meter, that's a trade that usually pays off.</p>
 
@@ -170,7 +170,7 @@
       </div>
       <div class="faq-item">
         <h3>Which model should power the agent?</h3>
-        <p>Core 27B or Code 27B for daily multi-file work (HumanEval pass@1 0.8659); Plus 397B for the hardest cases on a 64 GB Mac.</p>
+        <p>Core 27B or Code 27B — the strongest coding tier — for daily multi-file work; Plus 397B for the hardest cases on a 64 GB Mac.</p>
       </div>
     </div>
 

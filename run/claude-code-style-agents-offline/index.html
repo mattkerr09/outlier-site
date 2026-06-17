@@ -88,7 +88,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Claude-Code-style agents offline on a Mac", "item": "https://outlier.host/run/claude-code-style-agents-offline/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you run a Claude-Code-style agent offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The plan, act, verify loop runs locally with a model like Core 27B plus MCP tools; no cloud connection is required."}}, {"@type": "Question", "name": "How close is the local experience to Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "The workflow shape is the same: plan, file edits, approval gates, and project context. The differences are speed and the underlying model's ceiling."}}, {"@type": "Question", "name": "What does the local version give up?", "acceptedAnswer": {"@type": "Answer", "text": "Mainly speed (about 4x slower end to end) and the very top of research-grade reasoning. On common coding tasks the rubric match was 98.9%."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you run a Claude-Code-style agent offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The plan, act, verify loop runs locally with a model like Core 27B plus MCP tools; no cloud connection is required."}}, {"@type": "Question", "name": "How close is the local experience to Claude Code?", "acceptedAnswer": {"@type": "Answer", "text": "The workflow shape is the same: plan, file edits, approval gates, and project context. The differences are speed and the underlying model's ceiling."}}, {"@type": "Question", "name": "What does the local version give up?", "acceptedAnswer": {"@type": "Answer", "text": "Mainly speed (about 4x slower end to end) and the very top of research-grade reasoning. On common coding tasks the output quality is close."}}]}
   </script>
 </head>
 <body>
@@ -133,7 +133,7 @@
     <p>The cloud version of Claude Code uses Claude Opus 4.7 for piece one and a slick terminal UI for the other two. The local version just swaps piece one for a model that runs on your Mac. The tool executor stays local. The whole thing lives in a Mac-native UI instead of a terminal.</p>
 
     <h2>What you need locally</h2>
-    <p>Piece one needs a model that's been fine-tuned to emit structured tool calls. Outlier's Core 27B and Code 27B both do this. Their pass@1 on HumanEval is 0.8659, which is high enough that the model holds its own on real refactors instead of folding on the first hard diff. Piece two wants a sandboxed shell, a filesystem driver, and approval gates. Piece three wants a project-aware UI that remembers your chat history. Outlier ships all of it in one app, sitting behind MCP (Model Context Protocol) so the tool surface stays portable.</p>
+    <p>Piece one needs a model that's been fine-tuned to emit structured tool calls. Outlier's Core 27B and Code 27B both do this. They're the strongest coding tier, which means the model holds its own on real refactors instead of folding on the first hard diff. Piece two wants a sandboxed shell, a filesystem driver, and approval gates. Piece three wants a project-aware UI that remembers your chat history. Outlier ships all of it in one app, sitting behind MCP (Model Context Protocol) so the tool surface stays portable.</p>
 
     <h2>Setting it up</h2>
     <ol>
@@ -165,7 +165,7 @@
       <li><strong>Throughput.</strong> A 5,000-token diff lands in about 60s on Claude. On Core 27B locally it's closer to 4 minutes. Same output at the end. The wait is real.</li>
       <li><strong>Tier swap is free.</strong> Claude never has to physically swap models between requests. Outlier does, and a cold-load on a tier change runs you about 74s.</li>
     </ul>
-    <p>Now the other side. On the benchmark, 54 head-to-head tests against Claude Opus 4.7 in mid-2026, Outlier landed 98.9% overall and a clean 100% on the 9 hardest additions (chess engine, raft/paxos, ZK proofs, needle-in-context, that tier of problem). For the 95% of coding work where the output matters more than how fast it arrives, the local version basically catches up.</p>
+    <p>Now the other side. In head-to-head testing against Claude Opus 4.7 in mid-2026, Outlier held its own on output quality, including the hardest cases (chess engine, raft/paxos, ZK proofs, needle-in-context, that tier of problem). For the 95% of coding work where the output matters more than how fast it arrives, the local version basically catches up.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -179,7 +179,7 @@
       </div>
       <div class="faq-item">
         <h3>What does the local version give up?</h3>
-        <p>Mainly speed (about 4x slower end to end) and the very top of research-grade reasoning. On common coding tasks the rubric match was 98.9%.</p>
+        <p>Mainly speed (about 4x slower end to end) and the very top of research-grade reasoning. On common coding tasks the output quality is close.</p>
       </div>
     </div>
 

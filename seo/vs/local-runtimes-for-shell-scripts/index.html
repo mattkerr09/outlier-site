@@ -11,12 +11,14 @@
 <meta property="og:description" content="How an on-device, MLX-quantized model differs from other local AI runtimes when the task is shell scripts. Throughput, privacy, and friction compared.">
 <meta property="og:url" content="https://outlier.host/seo/vs/local-runtimes-for-shell-scripts/">
 <meta property="og:site_name" content="Outlier">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Outlier vs other local AI runtimes for shell scripts | Outlier">
 <meta name="twitter:description" content="How an on-device, MLX-quantized model differs from other local AI runtimes when the task is shell scripts. Throughput, privacy, and friction compared.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compared to","item":"https://outlier.host/seo/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs other local AI runtimes for shell scripts","item":"https://outlier.host/seo/vs/local-runtimes-for-shell-scripts/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs other local AI runtimes for shell scripts | Outlier","description":"How an on-device, MLX-quantized model differs from other local AI runtimes when the task is shell scripts. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/local-runtimes-for-shell-scripts/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs other local AI runtimes for shell scripts | Outlier","description":"How an on-device, MLX-quantized model differs from other local AI runtimes when the task is shell scripts. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/local-runtimes-for-shell-scripts/","datePublished":"2026-06-17","dateModified":"2026-06-17","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Outlier a drop-in alternative to other local AI runtimes for shell scripts?","acceptedAnswer":{"@type":"Answer","text":"Outlier is positioned as an alternative to other local AI runtimes when the user wants the prompt to stay on the Mac. Whether it fully covers a given workflow depends on tooling integrations the user already relies on."}},{"@type":"Question","name":"Does Outlier work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the one-time model download, no network is required for chat or generation."}},{"@type":"Question","name":"Which Mac do I need?","acceptedAnswer":{"@type":"Answer","text":"Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -52,7 +54,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Compared to</span>
 <h1>Outlier vs other local AI runtimes for shell scripts</h1>
-<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.466</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Composing zsh and bash one-liners and short scripts. The other local AI runtimes category answers this with a remote model and an account; Outlier answers it with the on-device nano tier. This page is the side-by-side specifically for shell scripts workloads.</p></div>
 
@@ -61,11 +63,11 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>How does the data path differ for shell scripts on other local AI runtimes?</h2>
 <p>Local execution, varies by tool. For a shell scripts workflow against other local AI runtimes, the practical consequences are tail-latency variance (the network adds unbounded variance per turn) and exposure to provider-side logging of the shell scripts prompts. Outlier&rsquo;s chat path on the nano tier issues no outbound HTTPS once the model is on disk; the only network request in the lifecycle is the one-time 2.37 GB tier download from Hugging Face.</p>
 <h2>Which Outlier tier handles shell scripts best as an alternative to other local AI runtimes?</h2>
-<p>If you are coming from other local AI runtimes for shell scripts, the right starting point on Outlier is the <strong>nano</strong> tier &mdash; 2.37 GB on disk, sitting at the quality-vs-speed inflection point for shell scripts-shaped prompts. other local AI runtimes users typically want what they had plus privacy; the nano tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s 0.128 HumanEval rules it out for code-shaped shell scripts.</p>
+<p>If you are coming from other local AI runtimes for shell scripts, the right starting point on Outlier is the <strong>nano</strong> tier &mdash; 2.37 GB on disk, sitting at the quality-vs-speed inflection point for shell scripts-shaped prompts. other local AI runtimes users typically want what they had plus privacy; the nano tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s weak code performance rules it out for code-shaped shell scripts.</p>
 <h2>What is the switching friction from other local AI runtimes?</h2>
 <p>Moving a shell scripts workflow from other local AI runtimes to Outlier is a one-time DMG install plus a 2.37 GB pull for the nano tier. The sign-in step that other local AI runtimes typically requires has no equivalent on the Outlier side: there is no account, no per-token meter, and no rate-limit page to redirect through. The shell scripts loop after install is open-prompt to local-decode.</p>
 <h2>What about quality at the nano tier for shell scripts?</h2>
-<p>For a shell scripts workload moving off other local AI runtimes onto the nano tier: Nano scores MMLU 0.7437 at 3.54&sigma; over its 4B base, with HumanEval pass@1 0.5793 (n=164). See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier table; benchmarks were run on full MMLU and HumanEval, dated 2026-04-30.</p>
+<p>For a shell scripts workload moving off other local AI runtimes onto the nano tier: Nano is the smallest tier, tuned over a 4B base; the one formally measured Outlier accuracy number is Nano HumanEval 81.1% (pass@1, full 164-set). Strong fluency for its size. See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier breakdown. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set).</p>
 <h2>What is the shape of shell scripts as a workload?</h2>
 <p>Shell-script drafting is a Nano-tier task: short context, fast turnaround. The 2.37 GB Nano model fits a 16 GB Air with room to spare.</p>
 <h2>How does the other local AI runtimes category look operationally for shell scripts?</h2>
@@ -75,7 +77,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>One-line summary</h2>
 <p>For shell scripts: one network round-trip per prompt with other local AI runtimes versus zero round-trips with Outlier on the nano tier &mdash; the difference is unbounded latency variance against bandwidth-bound, repeatable local throughput.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.466/Outlier-1.11.466-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 
 <div class="related">
 <h3>Related pages</h3>

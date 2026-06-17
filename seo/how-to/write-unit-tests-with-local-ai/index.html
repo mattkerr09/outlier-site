@@ -11,13 +11,15 @@
 <meta property="og:description" content="Use the Lite or Core tier for focused unit-test scaffolding without sending the function under test to a cloud API.">
 <meta property="og:url" content="https://outlier.host/seo/how-to/write-unit-tests-with-local-ai/">
 <meta property="og:site_name" content="Outlier">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How to write unit tests with a local AI model | Outlier">
 <meta name="twitter:description" content="Use the Lite or Core tier for focused unit-test scaffolding without sending the function under test to a cloud API.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"How-to","item":"https://outlier.host/seo/how-to/"},{"@type":"ListItem","position":3,"name":"How to write unit tests with a local AI model","item":"https://outlier.host/seo/how-to/write-unit-tests-with-local-ai/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to write unit tests with a local AI model | Outlier","description":"Use the Lite or Core tier for focused unit-test scaffolding without sending the function under test to a cloud API.","url":"https://outlier.host/seo/how-to/write-unit-tests-with-local-ai/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"No. The free tiers (Nano, Lite) work without any account or unlock code."}},{"@type":"Question","name":"Will my code or prompts be sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. After the one-time model download, the chat path makes no network requests."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"The DMG itself is around 460 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to write unit tests with a local AI model | Outlier","description":"Use the Lite or Core tier for focused unit-test scaffolding without sending the function under test to a cloud API.","url":"https://outlier.host/seo/how-to/write-unit-tests-with-local-ai/","datePublished":"2026-06-17","dateModified":"2026-06-17","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"No. The free tiers (Nano, Lite) work without any account or Polar license key."}},{"@type":"Question","name":"Will my code or prompts be sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. After the one-time model download, the chat path makes no network requests."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"The DMG itself is around 460 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
 *{box-sizing:border-box}
@@ -52,12 +54,12 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">How-to</span>
 <h1>How to write unit tests with a local AI model</h1>
-<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.466</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Use the Lite or Core tier for focused unit-test scaffolding without sending the function under test to a cloud API. The whole sequence below stays on the Mac.</p></div>
 
 <h2>What you need first for &ldquo;how to write unit tests with a local ai model&rdquo;</h2>
-<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 64 GB for Plus). Internet is required only for the one-time model download.</p>
+<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 32 GB for Plus). Internet is required only for the one-time model download.</p>
 <h2>Steps</h2>
 <ol>
 <li><strong>Open the function under test.</strong> Drag the file onto the chat window or use the project chip.</li>
@@ -66,24 +68,22 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <li><strong>Pin the tier to Lite or Core.</strong> Quick is faster but its HumanEval pass@1 is much lower; not the right choice for code-shaped tasks.</li>
 </ol>
 <h2>What is the specific thing to know about this guide?</h2>
-<p>The Lite tier scores HumanEval 0.6951 (n=164); Core scores 0.8659. For test scaffolding the Lite tier is usually the right speed-quality balance on a 16 GB Mac, with Core reserved for trickier or long-context work.</p>
+<p>For test scaffolding the Lite tier is usually the right speed-quality balance on a 16 GB Mac, with Core reserved for trickier or long-context work.</p>
 <h2>What can go wrong with this guide?</h2>
-<ul><li>Lite&rsquo;s HumanEval 0.6951 is good, not great; tricky tests sometimes need a manual second pass.</li><li>Long batches of tests in one prompt drop quality; break them up.</li></ul>
+<ul><li>Lite&rsquo;s code quality is good, not great; tricky tests sometimes need a manual second pass.</li><li>Long batches of tests in one prompt drop quality; break them up.</li></ul>
 <h2>How does this guide differ from the cloud equivalent?</h2>
 <p>Hosted test-writing tools log your function-under-test alongside the prompt. Outlier&rsquo;s local path leaves no log on a third-party server.</p>
-<p><p>The Lite tier scores HumanEval 0.6951 (n=164); Core scores 0.8659. For test scaffolding the Lite tier is usually the right speed-quality balance on a 16 GB Mac, with Core reserved for trickier or long-context work.</p></p>
+<p><p>For test scaffolding the Lite tier is usually the right speed-quality balance on a 16 GB Mac, with Core reserved for trickier or long-context work.</p></p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to write unit tests with a local ai model&rdquo;?</h2>
-<p>The Lite tier scores HumanEval 0.6951 (n=164); Core scores 0.8659. For test scaffolding the Lite tier is usually the right speed-quality balance on a 16 GB Mac, with Core reserved for trickier or long-context work.</p>
-<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to write unit tests with a local ai model&rdquo;. Specifically, the product surface in v1.8.1 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
-<h2>What is the right tier for test writing?</h2><p>Lite at 5 GB, 12 GB RAM minimum, 53.4 tok/s on M1 Ultra reference, HumanEval pass@1 0.6951. That is the baseline. If the function under test is short and the test framework is well-known (pytest, vitest, jest), Lite handles it. For tricky fixtures or property-based testing, Core (HumanEval 0.8659, 24 GB RAM) is the upgrade.</p>
-<h2>What changed for this guide in v1.8.1?</h2>
-<p>v1.8.1 disabled marked.js GFM autolink so generated test files no longer get bare filenames like <code>test_foo.py</code> wrapped in spurious <code>http://</code> hrefs in the chat preview.</p>
+<p>For test scaffolding the Lite tier is usually the right speed-quality balance on a 16 GB Mac, with Core reserved for trickier or long-context work.</p>
+<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to write unit tests with a local ai model&rdquo;. Specifically, the product surface in v1.11.466 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
+<h2>What is the right tier for test writing?</h2><p>Lite at 5 GB, 12 GB RAM minimum, 53.4 tok/s on M1 Ultra reference. That is the baseline. If the function under test is short and the test framework is well-known (pytest, vitest, jest), Lite handles it. For tricky fixtures or property-based testing, Core (24 GB RAM) is the upgrade.</p>
 <h2>Where does this guide fit in the rest of the lineup?</h2>
-<p>Lite&rsquo;s 0.6951 HumanEval is good enough for most pytest scaffolds; Core&rsquo;s 0.8659 is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.</p>
+<p>Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.</p>
 <h2>One unique number</h2>
 <p>4 steps, zero network requests after the model is downloaded. Recommended pattern: one test per turn, paste the failure into the next turn, iterate until green.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.466/Outlier-1.11.466-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 
 <div class="related">
 <h3>Related pages</h3>

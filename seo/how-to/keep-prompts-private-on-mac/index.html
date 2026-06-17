@@ -11,13 +11,15 @@
 <meta property="og:description" content="Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.">
 <meta property="og:url" content="https://outlier.host/seo/how-to/keep-prompts-private-on-mac/">
 <meta property="og:site_name" content="Outlier">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="How to keep prompts private on a Mac | Outlier">
 <meta name="twitter:description" content="Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"How-to","item":"https://outlier.host/seo/how-to/"},{"@type":"ListItem","position":3,"name":"How to keep prompts private on a Mac","item":"https://outlier.host/seo/how-to/keep-prompts-private-on-mac/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to keep prompts private on a Mac | Outlier","description":"Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.","url":"https://outlier.host/seo/how-to/keep-prompts-private-on-mac/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"No. The free tiers (Nano, Lite) work without any account or unlock code."}},{"@type":"Question","name":"Will my code or prompts be sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. After the one-time model download, the chat path makes no network requests."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"The DMG itself is around 460 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to keep prompts private on a Mac | Outlier","description":"Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.","url":"https://outlier.host/seo/how-to/keep-prompts-private-on-mac/","datePublished":"2026-06-17","dateModified":"2026-06-17","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to create an account?","acceptedAnswer":{"@type":"Answer","text":"No. The free tiers (Nano, Lite) work without any account or Polar license key."}},{"@type":"Question","name":"Will my code or prompts be sent anywhere?","acceptedAnswer":{"@type":"Answer","text":"No. After the one-time model download, the chat path makes no network requests."}},{"@type":"Question","name":"How big is the download?","acceptedAnswer":{"@type":"Answer","text":"The DMG itself is around 460 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
 *{box-sizing:border-box}
@@ -52,12 +54,12 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">How-to</span>
 <h1>How to keep prompts private on a Mac</h1>
-<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.466</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device. The whole sequence below stays on the Mac.</p></div>
 
 <h2>What you need first for &ldquo;how to keep prompts private on a mac&rdquo;</h2>
-<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 64 GB for Plus). Internet is required only for the one-time model download.</p>
+<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 32 GB for Plus). Internet is required only for the one-time model download.</p>
 <h2>Steps</h2>
 <ol>
 <li><strong>Install Outlier.</strong> Apple-signed and notarized; bundle includes the entire inference stack.</li>
@@ -66,24 +68,22 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <li><strong>Audit the bundle.</strong> The signed binary is reproducible from the public commit on GitHub.</li>
 </ol>
 <h2>What is the specific thing to know about this guide?</h2>
-<p>The chat path in v1.8.1 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
+<p>The chat path in v1.11.466 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
 <h2>What can go wrong with this guide?</h2>
 <ul><li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: Plausible analytics on the website and the Tauri auto-updater both make external calls; turn the auto-updater off if you want strict no-network.</li></ul>
 <h2>How does this guide differ from the cloud equivalent?</h2>
 <p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;packets do not leave the device&rsquo;, which is verifiable with a network monitor.</p>
-<p><p>The chat path in v1.8.1 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p></p>
+<p><p>The chat path in v1.11.466 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p></p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to keep prompts private on a mac&rdquo;?</h2>
-<p>The chat path in v1.8.1 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
-<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to keep prompts private on a mac&rdquo;. Specifically, the product surface in v1.8.1 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
+<p>The chat path in v1.11.466 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
+<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to keep prompts private on a mac&rdquo;. Specifically, the product surface in v1.11.466 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How can I prove no prompt is leaving the device?</h2><p>Run Outlier with the network monitor of your choice (Little Snitch, LuLu, <code>pktap</code>). Once the model is downloaded, send a chat message with web search disabled. The expected packet count to any non-loopback destination is zero. The loopback traffic on <code>127.0.0.1:8766</code> is the front end speaking to the local FastAPI sidecar; that is the entire chat path.</p>
-<h2>What changed for this guide in v1.8.1?</h2>
-<p>v1.8.1 added a deep-research search-toggle gate so research mode now returns an explicit error instead of a silent spinner when search is disabled. The privacy posture is the same; the failure mode is now legible.</p>
 <h2>Where does this guide fit in the rest of the lineup?</h2>
 <p>If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and avoid the web-search toggle. Once both are off, the running app touches only loopback for the chat path.</p>
 <h2>One unique number</h2>
 <p>4 steps, zero network requests after the model is downloaded. Disabling search drops outbound traffic to zero on the chat path; the only remaining network is the model-download check, which can be paused.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.466/Outlier-1.11.466-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 
 <div class="related">
 <h3>Related pages</h3>

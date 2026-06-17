@@ -11,12 +11,14 @@
 <meta property="og:description" content="How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is writing documentation. Throughput, privacy, and friction compared.">
 <meta property="og:url" content="https://outlier.host/seo/vs/cloud-coding-assistants-for-documentation/">
 <meta property="og:site_name" content="Outlier">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Outlier vs cloud-based coding assistants for writing documentation | Outlier">
 <meta name="twitter:description" content="How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is writing documentation. Throughput, privacy, and friction compared.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compared to","item":"https://outlier.host/seo/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs cloud-based coding assistants for writing documentation","item":"https://outlier.host/seo/vs/cloud-coding-assistants-for-documentation/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs cloud-based coding assistants for writing documentation | Outlier","description":"How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is writing documentation. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/cloud-coding-assistants-for-documentation/","datePublished":"2026-05-04","dateModified":"2026-05-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs cloud-based coding assistants for writing documentation | Outlier","description":"How an on-device, MLX-quantized model differs from cloud-based coding assistants when the task is writing documentation. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/cloud-coding-assistants-for-documentation/","datePublished":"2026-06-17","dateModified":"2026-06-17","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Outlier a drop-in alternative to cloud-based coding assistants for writing documentation?","acceptedAnswer":{"@type":"Answer","text":"Outlier is positioned as an alternative to cloud-based coding assistants when the user wants the prompt to stay on the Mac. Whether it fully covers a given workflow depends on tooling integrations the user already relies on."}},{"@type":"Question","name":"Does Outlier work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the one-time model download, no network is required for chat or generation."}},{"@type":"Question","name":"Which Mac do I need?","acceptedAnswer":{"@type":"Answer","text":"Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -52,7 +54,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Compared to</span>
 <h1>Outlier vs cloud-based coding assistants for writing documentation</h1>
-<p class="byline">Last updated 2026-05-04 &middot; Outlier v1.8.1</p>
+<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.466</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Drafting README sections and runbook outlines. The cloud-based coding assistants category answers this with a remote model and an account; Outlier answers it with the on-device compact tier. This page is the side-by-side specifically for writing documentation workloads.</p></div>
 
@@ -61,11 +63,11 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>How does the data path differ for writing documentation on cloud-based coding assistants?</h2>
 <p>Network round-trip every prompt. For a writing documentation workflow against cloud-based coding assistants, the practical consequences are tail-latency variance (the network adds unbounded variance per turn) and exposure to provider-side logging of the writing documentation prompts. Outlier&rsquo;s chat path on the compact tier issues no outbound HTTPS once the model is on disk; the only network request in the lifecycle is the one-time 15.13 GB tier download from Hugging Face.</p>
 <h2>Which Outlier tier handles writing documentation best as an alternative to cloud-based coding assistants?</h2>
-<p>If you are coming from cloud-based coding assistants for writing documentation, the right starting point on Outlier is the <strong>compact</strong> tier &mdash; 15.13 GB on disk, sitting at the quality-vs-speed inflection point for writing documentation-shaped prompts. cloud-based coding assistants users typically want what they had plus privacy; the compact tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s 0.128 HumanEval rules it out for code-shaped writing documentation.</p>
+<p>If you are coming from cloud-based coding assistants for writing documentation, the right starting point on Outlier is the <strong>compact</strong> tier &mdash; 15.13 GB on disk, sitting at the quality-vs-speed inflection point for writing documentation-shaped prompts. cloud-based coding assistants users typically want what they had plus privacy; the compact tier is the closest match for that without giving up answer quality. Heavier work moves up to the higher tiers in the same app; the Quick tier&rsquo;s weak code performance rules it out for code-shaped writing documentation.</p>
 <h2>What is the switching friction from cloud-based coding assistants?</h2>
 <p>Moving a writing documentation workflow from cloud-based coding assistants to Outlier is a one-time DMG install plus a 15.13 GB pull for the compact tier. The sign-in step that cloud-based coding assistants typically requires has no equivalent on the Outlier side: there is no account, no per-token meter, and no rate-limit page to redirect through. The writing documentation loop after install is open-prompt to local-decode.</p>
 <h2>What about quality at the compact tier for writing documentation?</h2>
-<p>For a writing documentation workload moving off cloud-based coding assistants onto the compact tier: Core scores MMLU 0.8511 and HumanEval pass@1 0.8659 (best in the lineup, n=164). See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier table; benchmarks were run on full MMLU and HumanEval, dated 2026-04-30.</p>
+<p>For a writing documentation workload moving off cloud-based coding assistants onto the compact tier: Core is the best general-purpose tier in the lineup for code and reasoning quality. See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier breakdown. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set).</p>
 <h2>What is the shape of writing documentation as a workload?</h2>
 <p>Documentation generation is throughput-friendly: the model emits tokens steadily, no need for multi-turn corrections. Local decode tok/s is the visible quality of life.</p>
 <h2>How does the cloud-based coding assistants category look operationally for writing documentation?</h2>
@@ -75,7 +77,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>One-line summary</h2>
 <p>For writing documentation: one network round-trip per prompt with cloud-based coding assistants versus zero round-trips with Outlier on the compact tier &mdash; the difference is unbounded latency variance against bandwidth-bound, repeatable local throughput.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/Outlier.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.466/Outlier-1.11.466-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 
 <div class="related">
 <h3>Related pages</h3>
