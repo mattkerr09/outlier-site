@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>People are fighting data centers — and the one lever you have | Outlier</title>
+  <meta name="description" content="Americans don't know how to fight AI, so they're fighting data centers. You can't stop the buildout — but every everyday query you move on-device is one that never routes through a server farm.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-13">
+  <link rel="canonical" href="https://outlier.host/learn/fighting-data-centers/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="People are fighting data centers. Here's the lever you actually have.">
+  <meta property="og:description" content="Americans don't know how to fight AI, so they're fighting data centers. You can't stop the buildout — but every everyday query you move on-device is one that never routes through a server farm.">
+  <meta property="og:url" content="https://outlier.host/learn/fighting-data-centers/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="People are fighting data centers. Here's the lever you actually have.">
+  <meta name="twitter:description" content="You can't stop the buildout. You can stop routing your everyday questions through it.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "People are fighting data centers. Here's the lever you actually have.", "description": "Americans don't know how to fight AI, so they're fighting data centers. You can't stop the buildout — but every everyday query you move on-device is one that never routes through a server farm.", "datePublished": "2026-06-13", "dateModified": "2026-06-13", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/fighting-data-centers/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "People are fighting data centers. Here's the lever you actually have.", "item": "https://outlier.host/learn/fighting-data-centers/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I actually do anything about AI data centers?", "acceptedAnswer": {"@type": "Answer", "text": "You can't stop a buildout. The one personal lever you have is where your everyday questions get answered. Each one you run on your own machine instead of a cloud service is a request that never routes through a server farm. It's small and it's real, and it's the only part of the equation you personally control."}}, {"@type": "Question", "name": "Does using local AI 'help' the environment?", "acceptedAnswer": {"@type": "Answer", "text": "We won't make that claim. Local AI isn't a green badge and it isn't a planetary fix. The honest, structural version: a question answered on your Mac needs no data center, and its marginal cost is your wall socket. That's an opt-out from one part of the demand, not an offset for the rest. Sell it to yourself as an exit, not a cure."}}, {"@type": "Question", "name": "Do data centers really use that much water?", "acceptedAnswer": {"@type": "Answer", "text": "By the published figures, yes. UC Riverside's 'Making AI Less Thirsty' estimated training GPT-3 used around 700,000 litres of fresh water, roughly a 500ml bottle for every few dozen queries. Google's 2024 environmental report disclosed 5+ billion gallons of water in 2023. A June 2026 headline put the data-center total at 264 billion gallons while drought hit nearly 63% of the US. The numbers are large; the point of this piece is what one person can do about it."}}, {"@type": "Question", "name": "What does moving on-device not fix?", "acceptedAnswer": {"@type": "Answer", "text": "It doesn't undo the training run that already happened — that was a one-time factory build, and it's done. It doesn't shut down a single data center or change what other people route through the cloud. What it changes is your own daily routing: the steady stream of small questions that otherwise keeps a building busy. That's the part you can opt out of, and the only part."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>People are fighting data centers. Here's the lever you actually have.</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-13</span>
+      <span class="updated-pill">Last updated 2026-06-13</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>A June 2026 headline summed up the mood: people don't know how to fight AI, so they're fighting the data centers it gets built in.</li>
+        <li>You can't vote a server farm off the grid. The one personal lever is where your everyday questions get answered.</li>
+        <li>Every routine query you run on the Mac you already own is a request that never routes through a data center. No data center required.</li>
+        <li>Honest scope: this is one lever, not a movement. It opts you out of the daily routing — it doesn't undo the buildout.</li>
+      </ul>
+    </div>
+
+    <p class="lead">On June 2, 2026, a headline made the rounds: "Americans don't know how to fight AI so they're fighting data centers." It landed because it's true. The anger is real and it has nowhere obvious to go, so it pools at the nearest concrete thing — the windowless building going up on the edge of town, the one that hums and drinks. This piece isn't going to tell you that anger is wrong. It's going to hand you the one lever that's actually in your hand.</p>
+
+    <h2>The anger that has nowhere to go</h2>
+    <p>Most political fights have an address. A factory you can picket, a bill you can call about, a ballot line. AI doesn't feel like that. It arrives as a chat box, a quiet feature bolted onto your phone, a thing your boss now expects you to use. There's no door to knock on. So people aim at the part they can see and stand next to: the data center.</p>
+    <p>And the data center is a fair target to be angry at. A June 7, 2026 headline reported that data centers consumed 264 billion gallons of water while drought gripped nearly 63% of the US. The next day, June 8, brought another: the majority of the country's new AI data centers are slated to be built on drought-hit land. On May 27, the activist Erin Brockovich launched a national map for tracking these sites — a literal who's-building-what-near-me. The fight is organizing. It is also, for most individuals, a fight you watch rather than win.</p>
+
+    <h2>Why every cloud question feeds a building</h2>
+    <p>Here's the mechanism, because it matters for the lever. There are two separate costs to a cloud AI model, and they get blurred together. The first is training — the one-time factory run that built the model. The second is inference: the cost of answering, every single time you hit send. By MIT Technology Review's 2025 reporting, inference accounts for roughly 80 to 90 percent of AI's compute. The IEA's "Energy and AI" report projects data-center electricity to more than double by 2030, and it's the daily answering — billions of small questions — that drives that curve, not the training that already happened.</p>
+    <p>So when you ask a cloud model to rename some files, or summarize an email, or fix a typo in a function, that trivial request leaves your device, travels to a server farm, gets answered by a building, and comes back. Multiply by everyone, all day. The building stays busy because we keep feeding it small things. That's the part nobody talks about at the protest, and it's the part you can actually change.</p>
+
+    <h2>The one thing you can actually do</h2>
+    <p>Move your everyday questions on-device. That's it. That's the lever.</p>
+    <p>An on-device model runs on the Mac you already own — no server round-trip, no data center in the loop. <a href="https://outlier.host/">Outlier</a> is a Mac-native app that does exactly this: one signed download, no account, no terminal, no Docker, and it works with Wi-Fi off. The free Nano and Lite tiers handle the bread-and-butter — drafting, rewriting, summarizing, quick code. A patent-pending paged inference engine even runs models far bigger than your Mac's RAM, so a 397B-parameter model fits on a 64 GB Mac if you want the heavy tier. The weights are open and published on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>. When the answer is computed on your chip, its marginal cost is your wall socket — and no part of that query touched a server farm.</p>
+    <p>This isn't about being smarter than the cloud. It's about ownership: the subscription you stop needing for the great majority of your daily work, and the request you stop sending to a building you'd rather not feed. Most of what people ask AI all day does not need a 400-billion-parameter cloud model. It needs a model on your desk.</p>
+
+    <h2>What moving on-device fixes — and what it doesn't</h2>
+    <p>Be honest about scope, or the lever isn't worth selling. Moving on-device does not shut down a data center. It does not reverse the training run — that GPT-3-scale factory build (UC Riverside's "Making AI Less Thirsty" estimated training one early model at around 700,000 litres of water; Google's 2024 environmental report disclosed 5+ billion gallons in 2023) already happened, and it's done. It does not change what your neighbor, or your employer, routes through the cloud tomorrow.</p>
+    <p>What it does is take your daily routing out of the system. The steady drip of small questions — the part that's 80 to 90 percent of the compute, the part that keeps the building humming — that's the part you can opt out of, query by query. It's one lever. It moves one thing: yours. That's not a movement and it's not a cure, and you should distrust anyone who tells you a download saves the planet. It's an exit, and it's a real one.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The water and drought figures are from June 2026 reporting — "264 billion gallons" (June 7) and the drought-land buildout (June 8) — plus Erin Brockovich's national data-center tracking map (May 27). The inference share (≈80–90% of AI compute) is MIT Technology Review (2025); the doubling-by-2030 projection is the IEA's "Energy and AI" report. Training-water figures: UC Riverside, "Making AI Less Thirsty" (≈700,000 L for an early model), and Google's 2024 environmental report (5+ billion gallons in 2023). Outlier's weights are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can I actually do anything about AI data centers?</h3>
+        <p>You can't stop a buildout. The one personal lever you have is where your everyday questions get answered. Each one you run on your own machine instead of a cloud service is a request that never routes through a server farm. It's small and it's real, and it's the only part of the equation you personally control.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does using local AI 'help' the environment?</h3>
+        <p>We won't make that claim. Local AI isn't a green badge and it isn't a planetary fix. The honest, structural version: a question answered on your Mac needs no data center, and its marginal cost is your wall socket. That's an opt-out from one part of the demand, not an offset for the rest. Sell it to yourself as an exit, not a cure.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do data centers really use that much water?</h3>
+        <p>By the published figures, yes. UC Riverside's "Making AI Less Thirsty" estimated training GPT-3 used around 700,000 litres of fresh water, roughly a 500ml bottle for every few dozen queries. Google's 2024 environmental report disclosed 5+ billion gallons of water in 2023. A June 2026 headline put the data-center total at 264 billion gallons while drought hit nearly 63% of the US. The numbers are large; the point of this piece is what one person can do about it.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What does moving on-device not fix?</h3>
+        <p>It doesn't undo the training run that already happened — that was a one-time factory build, and it's done. It doesn't shut down a single data center or change what other people route through the cloud. What it changes is your own daily routing: the steady stream of small questions that otherwise keeps a building busy. That's the part you can opt out of, and the only part.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=fighting-data-centers">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/ai-data-center-water-usage/">AI data center water usage</a> · <a href="https://outlier.host/learn/how-much-energy-does-ai-use/">How much energy does AI use?</a> · <a href="https://outlier.host/learn/own-your-ai/">What owning your AI actually means</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
