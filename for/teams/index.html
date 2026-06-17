@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI for small teams — five Macs instead of five seats | Outlier</title>
+  <meta name="description" content="Per-seat AI bills only grow. Outlier is a one-time per-Mac tool — five Macs instead of five seats. Flat cost, data stays on each machine, no shared cap.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/for/teams/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI for small teams — five Macs instead of five seats">
+  <meta property="og:description" content="Per-seat AI bills only grow. Outlier is a one-time per-Mac tool — five Macs instead of five seats. Flat cost, data stays on each machine, no shared cap.">
+  <meta property="og:url" content="https://outlier.host/for/teams/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI for small teams — five Macs instead of five seats">
+  <meta name="twitter:description" content="A team AI tool with no per-seat meter. Each Mac owns its AI; data stays on the device.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1.2rem 1.4rem; background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); margin: 1.6rem 0 2rem; font-size: 0.95rem; }
+    .receipts .r-label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.6rem; font-weight: 600; font-family: var(--mono); }
+    .receipts p { margin-bottom: 0.6rem; color: var(--text-mid); }
+    .receipts p:last-child { margin-bottom: 0; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    .disclaim { margin-top: 1.6rem; font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Local AI for small teams — five Macs instead of five seats", "description": "Per-seat AI bills only grow. Outlier is a one-time per-Mac tool — five Macs instead of five seats. Flat cost, data stays on each machine, no shared cap.", "datePublished": "2026-06-17", "dateModified": "2026-06-17", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/for/teams/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI for small teams — five Macs instead of five seats", "item": "https://outlier.host/for/teams/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is there an AI tool for teams without per-seat pricing?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Outlier is a one-time, per-machine cost rather than a renewing seat. Each teammate installs the Mac app and owns it. The free Nano and Lite tiers need no account at all; Pro is $20/mo, $149/yr, or lifetime from $99 per person. There is no per-seat meter and no shared usage pool."}}, {"@type": "Question", "name": "Does each person need their own license?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier installs on each Mac. The free Nano and Lite tiers are free per machine with no account. For the stronger models, each person who needs Pro pays once for their own machine — $20/mo, $149/yr, or lifetime from $99. There is no central admin console or seat manager; this is a tool each teammate owns, which is the point for a small shop."}}, {"@type": "Question", "name": "Is our data shared across the team or with the vendor?", "acceptedAnswer": {"@type": "Answer", "text": "No. Each install runs the model on that person's Mac. Their prompts, code, and client files are processed locally and stay on their disk. Nothing is pooled into a shared team workspace and nothing is sent to a vendor's servers or training set. After the first model download, it runs with wifi off, which anyone can verify."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">for</a></div>
+    <h1>Local AI for small teams</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-17</span>
+      <span class="updated-pill">Last updated 2026-06-17</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Per-seat cloud AI is a bill that <strong>only grows</strong> — $20 to $200 a month times your headcount, repriceable mid-stream.</li>
+        <li>Outlier is a <strong>one-time per-Mac</strong> tool. Five teammates means five Macs, not five renewing seats.</li>
+        <li>Each person's prompts, code, and client files stay on <strong>their own machine</strong> — not in a vendor's training set.</li>
+        <li>No shared, rationed pool. Nobody hits a team cap in the middle of a deadline.</li>
+      </ul>
+    </div>
+
+    <p class="lead">A five-person studio adds a sixth person and the AI bill goes up again. That's how per-seat pricing works: every hire is another monthly line item, and the price can change without your say-so. Buying the tool once, per Mac, breaks that pattern. Outlier runs language models on each teammate's own machine, so it's a cost you pay once, not a seat that renews forever.</p>
+
+    <h2>The per-seat problem</h2>
+    <p>Cloud AI is priced like a chair at a desk. You rent one per person, every month, and the meter never stops. For a 2-to-15-person shop that math compounds fast: a handful of seats at $20 to $200 each grows with every hire and can be repriced at the vendor's discretion. Whole departments are feeling it. Axios called it "AI sticker shock" in May 2026, and a May 30 report described corporate America starting to <em>ration</em> AI as cost skyrockets. A May 17 piece put it plainly: AI subscriptions are "a ticking time bomb for enterprise."</p>
+    <p>The part that stings for a small team is that you're paying on terms you don't set. Cancel a seat and the work behind it is gone. Keep it and the bill rides up with payroll.</p>
+
+    <h2>What changes when each Mac owns its AI</h2>
+    <p>Outlier is a Mac-native app. One signed download, no account, no terminal, no Docker. The model runs on the machine in front of you, so the cost is tied to the machine, not to a renewing seat. Hand a teammate a Mac and the AI comes with it, no monthly per-head charge behind them. Three things shift for a small team:</p>
+    <ul>
+      <li><strong>Flat, predictable cost.</strong> You buy it once per Mac. The free Nano and Lite tiers cost nothing and need no account; Pro is a one-time lifetime option from $99, or $20/mo if you'd rather. The number doesn't climb every time you hire.</li>
+      <li><strong>Data residency by default.</strong> Each person's prompts, code, and client files are processed on their own machine and stay on their disk. Nothing routes through a vendor, so there's no business-associate chain to manage and nothing landing in someone else's training set.</li>
+      <li><strong>No caps mid-deadline.</strong> Nobody is drawing from a shared, rationed pool. One person running a long job at 11pm doesn't burn the team's quota, because there isn't one. A real Hacker News thread is literally titled "Optimizing my sleep around Claude usage limits." That's the world you leave behind.</li>
+    </ul>
+
+    <h2>The math: five seats vs five Macs</h2>
+    <p>Take a five-person team, illustratively. On a mid-tier cloud plan around $30 a month per seat, that's roughly $150 a month, or about $1,800 a year, and it renews every year, climbing as you add people or as the vendor adjusts pricing.</p>
+    <p>The same five people on Outlier can each start free on Nano and Lite. For the stronger models, lifetime Pro is a one-time $99 per person while the Founding 200 seats last, then $200. Five installs is a one-time cost in the few-hundred-dollar range, and next year it's $0. The cloud line item, by contrast, shows up again every January.</p>
+    <div class="receipts">
+      <span class="r-label">Why the rented model is shaky</span>
+      <p>This isn't only about price. GPT-4 was removed from ChatGPT in April 2025, a model people had built habits around, gone on the vendor's schedule. Meta has moved to paywall tiers across Instagram, Facebook, and WhatsApp, and Shutterstock was fined $35M by the US FTC over hard-to-cancel subscriptions. Renting means the terms, the model, and the price are all someone else's call.</p>
+      <p>An owned tool answers to your hardware instead. Outlier's open-weight models are published on HuggingFace, and after the first download the app runs with wifi off.</p>
+    </div>
+
+    <h2>What stays on each machine</h2>
+    <p>Because there's no API call, there's no third party in the loop. The prompt, the document, the response, the whole history all stay on that person's Mac. For a consultancy handling client material, that means no vendor terms of service to read on behalf of every client, and no central workspace pooling everyone's work into one breach surface.</p>
+    <p>Want proof? Any teammate can turn off wifi and keep working. Chat, document analysis, and project memory all run offline once the model has downloaded the first time. Outlier runs zero telemetry on inference and publishes its weights openly on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>, so this is checkable rather than promised.</p>
+
+    <h2>The honest limits</h2>
+    <p>This is not an enterprise IT product. There's no central admin console, no SSO, no MDM fleet management. It's a tool each teammate installs and owns, which is the right shape for a 2-to-15-person shop and the wrong shape for a 500-seat rollout. If you need centralized provisioning, this isn't it.</p>
+    <p>The hardest frontier tasks still favor the big cloud models. If one person does deep research or heavy reasoning all day, keep a single cloud seat for them. The argument here isn't "drop the cloud entirely." It's "stop renting five seats for work that runs fine on the five Macs you already own." On an M1 Ultra, Core 27B runs around 20.7 tokens per second where cloud flagships land near 80 to 100, so it's a usable drafting speed, not the quickest thing on the market.</p>
+    <p>For most of that daily work, the owned tool holds up. In a 54-prompt comparison, Outlier's local Core 27B matched Claude Opus on 98.9% of the rubric checks overall, and on all nine of the hardest tests: a chess engine, Raft and Paxos, zero-knowledge proofs. You can <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">read the full benchmark</a> and decide for the work your team actually does.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is there an AI tool for teams without per-seat pricing?</h3>
+        <p>Yes. Outlier is a one-time, per-machine cost rather than a renewing seat. Each teammate installs the Mac app and owns it. The free Nano and Lite tiers need no account at all; Pro is $20/mo, $149/yr, or lifetime from $99 per person. There's no per-seat meter and no shared usage pool.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does each person need their own license?</h3>
+        <p>Outlier installs on each Mac. The free Nano and Lite tiers are free per machine with no account. For the stronger models, each person who needs Pro pays once for their own machine — $20/mo, $149/yr, or lifetime from $99. There's no central admin console or seat manager; this is a tool each teammate owns, which is the point for a small shop.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is our data shared across the team or with the vendor?</h3>
+        <p>No. Each install runs the model on that person's Mac. Their prompts, code, and client files are processed locally and stay on their disk. Nothing is pooled into a shared team workspace and nothing is sent to a vendor's servers or training set. After the first model download, it runs with wifi off, which anyone can verify.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=for-teams">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/for/startups/">Local AI for startups</a> · <a href="https://outlier.host/for/consultants/">Local AI for consultants</a> · <a href="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">Cloud AI vs local AI cost</a></div>
+    <p class="disclaim">Pricing figures for other AI tools are illustrative, used to show the per-seat math, and not a specific competitor quote. Confirm current prices with each vendor.</p>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

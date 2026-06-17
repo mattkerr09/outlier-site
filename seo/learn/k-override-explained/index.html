@@ -54,7 +54,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Concept</span>
 <h1>What is K_override on the Plus tier?</h1>
-<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.467</p>
+<p class="byline">Last updated 2026-06-17 &middot; Outlier v1.11.468</p>
 
 <div class="qa"><strong>Quick answer</strong><p>K_override sets how many experts the paged engine keeps resident in RAM at any moment. Higher K reduces cache misses but inflates RAM and can regress decode speed if the model is compute-bound rather than I/O-bound.</p></div>
 
@@ -71,7 +71,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <p>This concept is sometimes invoked as a marketing word for &ldquo;what is k_override on the plus tier&rdquo;. The number cited above &mdash; On Outlier&rsquo;s Plus tier, K=20 produces 1.59 tok/s with a 14.04 GB peak gene&hellip; &mdash; is the empirically measured one. If a cleaner number appears in someone&rsquo;s pitch deck, ask for the provenance file that produced it; if there is no provenance file, treat the number as marketing.</p>
 <h2>Where can I read more about what is k_override on the plus tier?</h2>
 <p>The K-sweep raw artifacts (k_sweep_K4.json, K20.json, K32.json, K48.json plus matching .log files) live under <code>sprints/v18_plus_ship/artifacts/</code>; the harness is <code>k_sweep.py</code> in the same directory.</p>
-<h2>What other knobs were tested alongside K?</h2><p>The 2026-04-30 Plus-tier work also probed <code>cache_gb</code> (4, 8, 12), <code>OUTLIER_MMAP_EXPERTS</code> (0, 1), and <code>lazy_load</code> (True, False). <code>cache_gb=8</code> dominated 4 (cold-miss penalties) and tied 12 (no cache-hit lift at 8-prompt agg). <code>OUTLIER_MMAP_EXPERTS=1</code> regressed throughput 8&times; on macOS and was retired. <code>lazy_load=True</code> was kept because the streaming-loader fix (commit <code>95c8cc8</code> on the v17 branch) made it strictly better.</p><p>The locked Plus-tier configuration is therefore <code>K_override=20, cache_gb=8.0, OUTLIER_MMAP_EXPERTS=0, lazy_load=True</code>; this is what ships in v1.11.467.</p>
+<h2>What other knobs were tested alongside K?</h2><p>The 2026-04-30 Plus-tier work also probed <code>cache_gb</code> (4, 8, 12), <code>OUTLIER_MMAP_EXPERTS</code> (0, 1), and <code>lazy_load</code> (True, False). <code>cache_gb=8</code> dominated 4 (cold-miss penalties) and tied 12 (no cache-hit lift at 8-prompt agg). <code>OUTLIER_MMAP_EXPERTS=1</code> regressed throughput 8&times; on macOS and was retired. <code>lazy_load=True</code> was kept because the streaming-loader fix (commit <code>95c8cc8</code> on the v17 branch) made it strictly better.</p><p>The locked Plus-tier configuration is therefore <code>K_override=20, cache_gb=8.0, OUTLIER_MMAP_EXPERTS=0, lazy_load=True</code>; this is what ships in v1.11.468.</p>
 <h2>How does &ldquo;what is k_override on the plus tier&rdquo; connect to specific tiers?</h2>
 <p>K_override is Plus-tier-only. The other six tiers either load entirely into unified memory or need not page experts; their inference path does not even consult the K_override knob.</p>
 <h2>What is the smallest configuration that exercises this concept?</h2>
@@ -79,7 +79,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>One unique number</h2>
 <p>On Outlier&rsquo;s Plus tier, K=20 produces 1.59 tok/s with a 14.04 GB peak generation footprint, locked in by a 4-point sweep on 2026-05-01.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.467/Outlier-1.11.467-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.468/Outlier-1.11.468-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 
 <div class="related">
 <h3>Related pages</h3>

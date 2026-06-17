@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI for therapists and counselors — private by design | Outlier</title>
+  <meta name="description" content="Draft progress notes and intake summaries without sending session content to a cloud vendor. Outlier runs AI on your Mac — nothing leaves the device.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-16">
+  <link rel="canonical" href="https://outlier.host/for/therapists/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI for therapists and counselors — private by design">
+  <meta property="og:description" content="Draft progress notes and intake summaries without sending session content to a cloud vendor. Outlier runs AI on your Mac — nothing leaves the device.">
+  <meta property="og:url" content="https://outlier.host/for/therapists/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI for therapists and counselors — private by design">
+  <meta name="twitter:description" content="AI for clinical notes that keeps session content on your Mac, not in the cloud.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1.2rem 1.4rem; background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); margin: 1.8rem 0; }
+    .receipts .r-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .receipts p:last-child { margin-bottom: 0; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    .disclaim { margin-top: 1.6rem; font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Local AI for therapists and counselors", "description": "Draft progress notes and intake summaries without sending session content to a cloud vendor. Outlier runs AI on your Mac — nothing leaves the device.", "datePublished": "2026-06-16", "dateModified": "2026-06-16", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/for/therapists/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI for therapists and counselors", "item": "https://outlier.host/for/therapists/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it HIPAA-safe to use AI for therapy notes?", "acceptedAnswer": {"@type": "Answer", "text": "Local AI keeps session content on your Mac, so no third-party AI vendor ever receives the protected health information in your notes, which removes one business-associate relationship from the picture. It does not make your practice HIPAA compliant on its own. You still own device encryption, access control, and your own policies, and you should confirm the workflow against your obligations."}}, {"@type": "Question", "name": "Does this send my session notes to the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. Outlier runs the model on your Mac. Your shorthand, your notes, and the drafted output are processed locally and stored on your disk. After the first model download, it works with wifi off, which you can verify yourself by turning the network off and watching it keep going."}}, {"@type": "Question", "name": "Can I use it offline between sessions?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Once the model has downloaded the first time, drafting, summarizing, and editing all run with no network connection. You can write up a note in the ten minutes between clients on a plane, in a rural office, or anywhere with no wifi, and nothing leaves the laptop."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">for</a></div>
+    <h1>Local AI for therapists and counselors</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-16</span>
+      <span class="updated-pill">Last updated 2026-06-16</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Session notes stay <strong>on your Mac</strong>. Nothing about a client is sent to a third-party AI vendor.</li>
+        <li>No outside party touches the content, so no AI vendor joins your <strong>business-associate chain</strong> for that work.</li>
+        <li>It runs offline once you're set up. Draft a note between clients with wifi off and check for yourself.</li>
+        <li>It's a privacy story, not clinical advice or a compliance certificate. You still own your HIPAA and ethics obligations.</li>
+      </ul>
+    </div>
+
+    <p class="lead">A therapist's notes are about as sensitive as records get. They hold what someone said in the one room they expected it to stay in. Cloud AI tools quietly move that material to a server you don't run. Local AI keeps it where it belongs: Outlier runs the model on your own Mac, so progress notes and intake summaries are drafted on-device and never leave the laptop.</p>
+
+    <h2>Why therapy notes are the hard case</h2>
+    <p>Most clinical text is sensitive. Therapy notes are a step past that. A progress note can carry a client's trauma history, a custody dispute, a substance-use disclosure, a diagnosis they haven't told their own family. Paste that into a cloud chatbot and it travels to the provider's servers, may sit under a retention window you didn't pick, and on some plans may feed the next model.</p>
+    <p>Even a signed agreement and a no-training clause don't undo the basic fact that the data physically left the room. For everyday writing that's fine. For the contents of a counseling session, "we promise not to look" is a thinner guarantee than "it never left the building." That gap is why a lot of counselors keep AI away from anything tied to a client and re-type every note by hand.</p>
+
+    <h2>What on-device changes: the data stays on your Mac</h2>
+    <p>Local AI runs the model on the clinician's own machine. Your shorthand goes in, the drafted note comes out, and the whole exchange stays on your Mac's disk: prompt, content, response, history. There's no API call, so no third party receives the material and there's no AI vendor added to your business-associate chain for that processing.</p>
+    <p>Want proof rather than a promise? Turn off wifi and use it. Drafting keeps working, summarizing keeps working, editing keeps working, all of it offline once the model has downloaded the first time. Outlier publishes its open-weight models on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a> and runs no telemetry on inference, so the claim is one you can verify.</p>
+
+    <div class="receipts">
+      <span class="r-label">Why this matters now</span>
+      <p>The cost and exposure of cloud AI keep making headlines. Axios ran "AI sticker shock" in May 2026, and reporting like "Corporate America Is Starting to Ration AI as Cost Skyrockets" (May 30, 2026) describes teams metering access by the seat. A separate worry runs underneath it: where your text ends up and what it trains. On-device inference sidesteps both. There's no usage meter on a model you own outright, and no upload to a vendor's logs.</p>
+    </div>
+
+    <h2>What a counselor can use it for</h2>
+    <p>The realistic, everyday work — always with the clinician writing and reviewing the final record:</p>
+    <ul>
+      <li>Turning your own session shorthand into a clean first-draft progress note</li>
+      <li>Summarizing a long intake into a tidy treatment-plan starting point</li>
+      <li>Reframing or tightening language you've already written</li>
+      <li>Drafting psychoeducation handouts and between-session worksheets</li>
+      <li>Routine admin email and scheduling notes, kept off the cloud</li>
+    </ul>
+    <p>In a 54-prompt comparison, Outlier's local Core 27B matched Claude Opus on 98.9% of the rubric checks, so on plain drafting and summarizing the output lands close to the cloud flagships, with none of it leaving your desk (<a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">see the benchmark</a>). Outlier writes the draft; you make it a clinical record.</p>
+
+    <h2>What hardware a practice needs</h2>
+    <p>Core 27B handles note-drafting and summarization comfortably and wants a 24 GB+ Apple Silicon Mac. On a 16 GB Mac, the free Nano and Lite tiers cover the lighter writing. Pro ($20/mo, $149/yr, or $99 lifetime via Founding 200) opens every tier, including the Vision model for reading a scanned intake form and Plus 397B for the longest files.</p>
+    <table><thead><tr><th>Need</th><th>Tier</th><th>Mac</th></tr></thead><tbody>
+      <tr><td>Drafting notes, summaries, handouts</td><td>Core 27B (Pro)</td><td>24 GB+</td></tr>
+      <tr><td>Reading scanned intake forms</td><td>Vision 35B (Pro)</td><td>24 GB+</td></tr>
+      <tr><td>Lightweight drafting, free</td><td>Nano + Lite</td><td>16 GB+</td></tr>
+    </tbody></table>
+
+    <h2>The honest scope: you still own compliance</h2>
+    <p>Here's the part that has to be said plainly. This is a data-handling argument, not clinical advice, and not a compliance certification. Outlier is a general-purpose language model app, not a medical device, and nothing here is therapy guidance. Keeping session content on your Mac removes one big exposure, the upload to an AI vendor, but it doesn't make your practice HIPAA compliant by itself. You still own disk encryption, access control, your records policy, and your professional and ethical duties. Verify the workflow against your own obligations. Outlier's role is narrow and specific: the data never leaves the device.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is it HIPAA-safe to use AI for therapy notes?</h3>
+        <p>Local AI keeps session content on your Mac, so no third-party AI vendor receives the protected health information in your notes, which removes one business-associate relationship. It does not make your practice HIPAA compliant on its own. You still own device encryption, access control, and your own policies, and you should confirm the workflow against your obligations.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does this send my session notes to the cloud?</h3>
+        <p>No. Outlier runs the model on your Mac. Your shorthand, your notes, and the drafted output are processed locally and stored on your disk. After the first model download, it works with wifi off, which you can verify yourself by turning the network off and watching it keep going.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use it offline between sessions?</h3>
+        <p>Yes. Once the model has downloaded the first time, drafting, summarizing, and editing all run with no network connection. You can write up a note in the ten minutes between clients (on a plane, in a rural office, anywhere with no wifi) and nothing leaves the laptop.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=for-therapists">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/for/healthcare/">HIPAA-conscious local AI for healthcare</a> · <a href="https://outlier.host/for/lawyers/">Local AI for lawyers</a> · <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your data private</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <p class="disclaim">General information only, not clinical, legal, or compliance advice. Confirm any HIPAA or ethics decisions against your jurisdiction's rules and your own privacy/security practices.</p>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

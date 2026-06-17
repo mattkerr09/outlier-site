@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI for accountants and CPAs — client data stays put | Outlier</title>
+  <meta name="description" content="Tax returns, payroll, pre-close financials — an accountant handles the most sensitive numbers there are. Outlier runs AI on your Mac, so client data never leaves the device.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-13">
+  <link rel="canonical" href="https://outlier.host/for/accountants/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI for accountants and CPAs">
+  <meta property="og:description" content="Tax returns, payroll, pre-close financials — an accountant handles the most sensitive numbers there are. Outlier runs AI on your Mac, so client data never leaves the device.">
+  <meta property="og:url" content="https://outlier.host/for/accountants/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI for accountants and CPAs">
+  <meta name="twitter:description" content="AI for tax and accounting work that keeps client data on your Mac.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .receipts .r-label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.6rem; font-weight: 600; font-family: var(--mono); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    .disclaim { margin-top: 1.6rem; font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Local AI for accountants and CPAs", "description": "Tax returns, payroll, pre-close financials — an accountant handles the most sensitive numbers there are. Outlier runs AI on your Mac, so client data never leaves the device.", "datePublished": "2026-06-13", "dateModified": "2026-06-13", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/for/accountants/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI for accountants and CPAs", "item": "https://outlier.host/for/accountants/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it safe to use AI on client tax data?", "acceptedAnswer": {"@type": "Answer", "text": "With local AI the data stays on your Mac and is never sent to a third-party vendor, so you don't add an AI company to the chain that touches a return. That handles the transmission risk. You still own your own confidentiality duties, IRS safeguards and written information security plan, and the review of every figure — the tool supports those obligations, it doesn't certify them."}}, {"@type": "Question", "name": "Does this send financial data to the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. Outlier runs the model on your Mac. Prompts, documents, and the conversation history are processed locally and stored on your disk. After the first model download it works with wifi off, which you can verify yourself by switching the network off and using it."}}, {"@type": "Question", "name": "Is there a free option for a solo CPA?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The Nano and Lite tiers are free, local, and need no account — enough for everyday drafting and summarizing. Pro ($20/mo or $149/yr), or lifetime from $99, adds the stronger models. There are no usage caps, which matters during a busy filing season."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">for</a></div>
+    <h1>Local AI for accountants and CPAs</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-13</span>
+      <span class="updated-pill">Last updated 2026-06-13</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Tax returns, SSNs and EINs, payroll, pre-close financials: all of it stays <strong>on your Mac</strong>, never uploaded to an AI vendor.</li>
+        <li>No new third party is added to the data chain, and nothing lands in someone's training set.</li>
+        <li>It works offline once it's set up, with no usage caps, which is the point during filing season.</li>
+        <li>Nano and Lite are free with no account; Pro ($20/mo or $149/yr), or lifetime from $99, adds the strongest models.</li>
+      </ul>
+    </div>
+
+    <p class="lead">An accountant holds other people's most sensitive numbers: tax returns, SSNs and EINs, payroll, the pre-close figures a company hasn't announced yet. Paste any of that into a cloud chatbot and it leaves your office. Local AI doesn't. Outlier runs the models on your own Mac, so client data stays on the device and never reaches a vendor's servers.</p>
+
+    <h2>The data an accountant can't upload</h2>
+    <p>Think about what sits in a working file during a busy week. A 1040 with a spouse's SSN. A client's full general ledger. A payroll register with everyone's pay and bank routing numbers. Quarter-end financials that aren't public yet. This is data you would never email unencrypted, and a consumer chatbot is the same exposure with a nicer interface.</p>
+    <p>The catch is that cloud AI is built around uploading. The prompt and the attachment travel to the provider, sit on their infrastructure, and depending on the plan may feed the next model. Sending a client's return that way adds a party to the chain of custody and widens the surface you're responsible for protecting.</p>
+
+    <h2>What on-device changes — it stays on your Mac</h2>
+    <p>Run the model locally and there's no upload step to worry about. Outlier does the processing on your machine. The return, the ledger, the draft email, the whole chat history live on your disk and nowhere else. No API call leaves the building, so no AI company joins the chain and no client number ends up in a training set.</p>
+    <p>You don't have to take that on faith. Switch wifi off and keep working: chat, document summarizing, and project memory all run offline once the model has downloaded once. Outlier publishes its open-weight models on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a> and runs no telemetry on inference, so it's a claim you can check, not one you're asked to trust.</p>
+
+    <div class="receipts">
+      <span class="r-label">Why the rented model is shaky right now</span>
+      <p>Renting AI also means the terms aren't yours. GPT-4 was removed from ChatGPT in April 2025, a model people had built a workflow around, gone on the vendor's schedule. The reporting this spring went further: Fortune ran "Corporate America Is Starting to Ration AI as Cost Skyrockets" (May 30, 2026), and Axios called it "AI sticker shock" (May 28, 2026). For a practice that needs the tool there in March and April, that's the wrong kind of uncertainty.</p>
+      <p>A tool that runs on hardware you own answers to you instead. The weights are public, it works with the network off, and there's no seat metering, no rate limit, and no notice that the model you relied on is being retired.</p>
+    </div>
+
+    <h2>What it's good for — and you review every number</h2>
+    <p>The realistic task list is everyday drafting and reading work, all under your eye:</p>
+    <ul>
+      <li>Drafting client emails and engagement-letter language</li>
+      <li>Summarizing a long ledger, bank statement, or financial report</li>
+      <li>Reconciling notes and reasoning through cleanup before you tie it out</li>
+      <li>Explaining a tax position or a dense form in plain language</li>
+      <li>First-pass workpaper prose and review-note write-ups</li>
+      <li>Reading a scanned statement or receipt with the Vision model</li>
+    </ul>
+    <p>One rule sits above all of it: check the figures. A language model can miscalculate or misread a number, and it has no idea whether a position is right for a client. Use it to move faster on work you were going to review anyway, never as a calculator or an authority you trust blind.</p>
+
+    <h2>What hardware a practice needs</h2>
+    <p>Most accounting drafting and summarizing runs comfortably on a 24 GB Mac. Heavy reasoning and long files are where the larger tiers earn their keep.</p>
+    <table><thead><tr><th>Need</th><th>Tier</th><th>Mac</th></tr></thead><tbody>
+      <tr><td>Everyday email, summaries, notes</td><td>Nano / Lite (free)</td><td>16 GB+</td></tr>
+      <tr><td>Client-ready drafting, reconciliation prose</td><td>Core 27B (Pro)</td><td>24 GB+</td></tr>
+      <tr><td>Scanned statements, receipts, image review</td><td>Vision 35B (Pro)</td><td>24 GB+</td></tr>
+      <tr><td>Hardest reasoning, long ledgers and reports</td><td>Plus 397B (Pro)</td><td>64 GB+</td></tr>
+    </tbody></table>
+    <p>It's a flat cost, not a metered bill that climbs every time someone uses it. For a solo preparer, the free Nano and Lite tiers cover a real slice of the daily work with no account.</p>
+
+    <h2>The honest scope — you still own compliance</h2>
+    <p>Keeping the data on your Mac handles one specific thing: it removes the cloud transmission and the third-party AI vendor. That's the data-handling argument, and it's a real one. It is not tax or accounting advice, and not a compliance certification.</p>
+    <p>You still own your confidentiality duties, your IRS safeguards and written information security plan obligations, and the review of every figure that goes out under your name. On-device AI supports those duties by shrinking what leaves your control. It doesn't replace your judgment.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is it safe to use AI on client tax data?</h3>
+        <p>With local AI the data stays on your Mac and is never sent to a third-party vendor, so you don't add an AI company to the chain that touches a return. That handles the transmission risk. You still own your confidentiality duties, IRS safeguards and written information security plan, and the review of every figure. The tool supports those obligations; it doesn't certify them.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does this send financial data to the cloud?</h3>
+        <p>No. Outlier runs the model on your Mac. Prompts, documents, and the conversation history are processed locally and stored on your disk. After the first model download it works with wifi off, which you can verify yourself by switching the network off and using it.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is there a free option for a solo CPA?</h3>
+        <p>Yes. The Nano and Lite tiers are free, local, and need no account, which is enough for everyday drafting and summarizing. Pro ($20/mo or $149/yr), or lifetime from $99, adds the stronger models. There are no usage caps, which matters during a busy filing season.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=for-accountants">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/for/finance/">Private local AI for finance</a> · <a href="https://outlier.host/for/consultants/">Local AI for consultants</a> · <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your data private</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <p class="disclaim">General information only, not tax, accounting, legal, or compliance advice. Confirm your own confidentiality and safeguards obligations, and review every figure.</p>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
