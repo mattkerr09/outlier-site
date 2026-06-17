@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is local AI? A plain-English guide (2026) | Outlier</title>
+  <meta name="description" content="Local AI runs entirely on your own device — the model files live on your computer and the computation happens on your chip, with nothing sent to a server. What it is, how it differs from cloud AI, and what you need.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-11">
+  <link rel="canonical" href="https://outlier.host/learn/what-is-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is local AI? A plain-English guide (2026)">
+  <meta property="og:description" content="Local AI runs entirely on your own device — the model files live on your computer and the computation happens on your chip, with nothing sent to a server. What it is, how it differs from cloud AI, and what you need.">
+  <meta property="og:url" content="https://outlier.host/learn/what-is-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What is local AI? A plain-English guide (2026)">
+  <meta name="twitter:description" content="AI that runs on the Mac you already own. Here's what that actually means.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "What is local AI? A plain-English guide (2026)", "description": "Local AI runs entirely on your own device — the model files live on your computer and the computation happens on your chip, with nothing sent to a server. What it is, how it differs from cloud AI, and what you need.", "datePublished": "2026-06-11", "dateModified": "2026-06-11", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-local-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is local AI?", "item": "https://outlier.host/learn/what-is-local-ai/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is local AI free?", "acceptedAnswer": {"@type": "Answer", "text": "It can be. Open-weight models run free through tools like Ollama, LM Studio, and Jan, and Outlier's Nano and Lite tiers are free with no account. Bigger or batteries-included setups cost money: Outlier Pro is $20/mo or $149/yr, or a one-time lifetime seat from $99. Either way there's no per-message meter. Once a model is on your disk, running it costs only your own electricity."}}, {"@type": "Question", "name": "Is local AI as good as ChatGPT?", "acceptedAnswer": {"@type": "Answer", "text": "For most everyday work, it's close. On a 54-prompt comparison, Outlier's Core 27B model matched Claude Opus on 98.9% of rubric checks. But cloud flagships are faster (roughly 80–100 tokens per second versus about 20.7 for Core 27B on an M1 Ultra) and still win the very hardest frontier reasoning. Local AI is the better fit when privacy, no usage caps, offline access, and ownership matter more than squeezing out the last few percent."}}, {"@type": "Question", "name": "Do I need a powerful computer for local AI?", "acceptedAnswer": {"@type": "Answer", "text": "Less than you'd think. A small model runs fine on a 16 GB Apple Silicon Mac. RAM has historically been the ceiling, because a model has to fit in memory, so bigger models needed more RAM. Outlier's patent-pending paged inference engine streams a model's experts from disk, so it runs models bigger than the Mac's RAM: a 397-billion-parameter model peaks at about 11 GB of memory on a 64 GB Mac."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>What is local AI?</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-11</span>
+      <span class="updated-pill">Last updated 2026-06-11</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Local AI is AI that runs entirely on your own device — the model files live on your computer and the computation happens on your chip, with nothing sent to a server.</li>
+        <li>Cloud AI sends your prompt to someone else's data center; local AI never leaves your machine, so it works with Wi-Fi off and has no per-message limits.</li>
+        <li>People use it for privacy, no usage caps, offline access, ownership, and a fixed cost instead of a monthly meter.</li>
+        <li>The honest trade-off: cloud models are faster and still win the very hardest reasoning. Local wins everything else for most daily work.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Local AI is AI that runs entirely on your own device — the model files live on your computer and the computation happens on your chip, with nothing sent to a server. No round-trip to a data center, no account, no per-message quota. You type a question, your laptop does the math, and the answer appears. The same way a calculator works: the machine in front of you does the thinking.</p>
+
+    <h2>How is local AI different from cloud AI?</h2>
+    <p>It comes down to where the model lives and where the computing happens. Cloud AI (ChatGPT, Claude, Gemini) keeps the model on a company's servers; you send text up, they run it, they send an answer back. Local AI keeps both the model and the work on your machine. That one difference cascades into everything else: your data, your internet dependency, your bill.</p>
+
+    <table>
+      <thead>
+        <tr><th>&nbsp;</th><th>Local AI</th><th>Cloud AI</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Where it runs</strong></td><td>On your own chip</td><td>On a company's servers</td></tr>
+        <tr><td><strong>Your data</strong></td><td>Never leaves the device</td><td>Sent to and processed by a third party</td></tr>
+        <tr><td><strong>Internet needed</strong></td><td>No; works with Wi-Fi off</td><td>Yes, every request</td></tr>
+        <tr><td><strong>Cost model</strong></td><td>One-time or fixed; no per-message meter</td><td>Monthly subscription or per-token billing</td></tr>
+        <tr><td><strong>Main limit</strong></td><td>Your hardware (RAM / chip)</td><td>Usage caps, price changes, model retirements</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Why do people use local AI?</h2>
+    <p>Five reasons keep showing up, and most of them got louder in 2026:</p>
+    <ul>
+      <li><strong>Privacy.</strong> Your prompts and files stay on your disk. Nothing is logged on a server or used to train a future model. That matters when the work is a client contract, a medical note, or unreleased code. See <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">why local AI keeps code private</a>.</li>
+      <li><strong>No usage caps.</strong> There's no meter to hit. People have literally written about scheduling their day around cloud limits; a popular Hacker News thread is titled "Optimizing my sleep around Claude usage limits." A local model just runs.</li>
+      <li><strong>Offline.</strong> It works on a plane, in a basement, in a country with bad Wi-Fi. The model is already on your machine, so there's nothing to connect to.</li>
+      <li><strong>Ownership.</strong> The weights are files you keep. They can't be deprecated, repriced, or quietly changed mid-project, unlike GPT-4, which OpenAI removed from ChatGPT in April 2025.</li>
+      <li><strong>Cost.</strong> Subscriptions stack up and prices are moving. Axios ran a piece called "AI sticker shock" in May 2026, and "Corporate America Is Starting to Ration AI as Cost Skyrockets" landed on May 30. A model you already have costs only the electricity to run it.</li>
+    </ul>
+
+    <h2>What do you need to run local AI?</h2>
+    <p>Two things: a capable chip and enough memory. Apple Silicon Macs (the M1 chip from 2020 or newer) are well suited because the chip and memory share one fast pool, which is exactly what running a model wants. The size of model you can run scales with RAM: 16 GB handles small, fast models comfortably, and more RAM opens up bigger ones. If you want the deeper version, our <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">Apple Silicon guide</a> walks through chips and memory.</p>
+    <p>RAM is usually the hard ceiling: a model has to fit in memory to run, and the best models are large. Outlier works around that with a patent-pending paged inference engine that streams a model's experts from disk instead of loading the whole thing into RAM at once. That's how a 397-billion-parameter model runs at roughly 11 GB peak memory on a 64 GB Mac, weights that total around 209 GB on disk. If the mechanics interest you, see <a href="https://outlier.host/learn/what-is-paged-moe-inference/">what paged MoE inference is</a>.</p>
+
+    <h2>What's the honest trade-off?</h2>
+    <p>Cloud still wins the hardest frontier reasoning, and it's faster. Cloud flagships run roughly 80–100 tokens per second; Outlier's Core 27B runs about 20.7 on an M1 Ultra. For a single tricky math proof or the absolute bleeding edge, the giant rented models have the lead. The case for local isn't that it beats the cloud on raw IQ. It's that it's private, has no caps, works offline, and can't be taken away: the subscription you stop needing for most daily work, not a benchmark trophy.</p>
+
+    <h2>What tools run local AI?</h2>
+    <p>A few good ones, and they're not all the same kind of thing. <strong>Ollama</strong> is a free, open-source command-line runner that's a developer favorite. <strong>LM Studio</strong> and <strong>Jan</strong> are free desktop apps with a chat window for people who don't live in a terminal. All three run open-weight models and are bound by one rule: the model must fit in your RAM. <strong>Outlier</strong> is the Mac-native, batteries-included option: one signed download, no terminal or Docker, with chat, a coding agent, deep research, and vision in the box, plus the paged engine that runs models bigger than RAM. Its open-weight models are <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">published on HuggingFace</a>, and you can import your own MLX model too.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The 54-prompt comparison where Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks is published in full at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">the benchmark page</a>. GPT-4's April 2025 removal from ChatGPT is documented by OpenAI. The June-2026 cost headlines named above ("AI sticker shock," Axios, May 28; "Corporate America Is Starting to Ration AI," May 30) ran in their respective outlets.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is local AI free?</h3>
+        <p>It can be. Open-weight models run free through tools like Ollama, LM Studio, and Jan, and Outlier's Nano and Lite tiers are free with no account. Bigger or batteries-included setups cost money: Outlier Pro is $20/mo or $149/yr, or a one-time lifetime seat from $99. Either way there's no per-message meter. Once a model is on your disk, running it costs only your own electricity.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is local AI as good as ChatGPT?</h3>
+        <p>For most everyday work, it's close. On a 54-prompt comparison, Outlier's Core 27B model matched Claude Opus on 98.9% of rubric checks. But cloud flagships are faster (roughly 80–100 tokens per second versus about 20.7 for Core 27B on an M1 Ultra) and still win the very hardest frontier reasoning. Local AI is the better fit when privacy, no usage caps, offline access, and ownership matter more than squeezing out the last few percent.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do I need a powerful computer for local AI?</h3>
+        <p>Less than you'd think. A small model runs fine on a 16 GB Apple Silicon Mac. RAM has historically been the ceiling, because a model has to fit in memory, so bigger models needed more RAM. Outlier's patent-pending paged inference engine streams a model's experts from disk, so it runs models bigger than the Mac's RAM: a 397-billion-parameter model peaks at about 11 GB of memory on a 64 GB Mac.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=what-is-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/own-your-ai/">What owning your AI actually means</a> · <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps code private</a> · <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">Best Apple Silicon for local AI in 2026</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

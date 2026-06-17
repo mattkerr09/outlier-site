@@ -686,6 +686,17 @@
       color: var(--text-dim); margin-top: 1.2rem; line-height: 1.7;
       padding-top: 1.2rem; border-top: 1px solid var(--border);
     }
+    /* FOOTER GUIDES + PROOF DATA LINKS (SEO internal-linking to content hubs) */
+    .foot-guides { margin-bottom: 1.6rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--border); }
+    .foot-guides-label { display: block; font-size: 0.72rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.85rem; font-weight: 600; }
+    .foot-guides-links { display: flex; gap: 0.55rem 1.4rem; flex-wrap: wrap; }
+    .foot-guides-links a { color: var(--text-dim); font-size: 0.9rem; }
+    .foot-guides-links a:hover { color: var(--accent-light); }
+    .proof-data { margin-top: 1.8rem; }
+    .proof-data-label { display: block; font-size: 0.72rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.7rem; font-weight: 600; }
+    .proof-data ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+    .proof-data a { color: var(--text-dim); font-size: 0.92rem; }
+    .proof-data a:hover { color: var(--accent-light); }
 
     /* INLINE CODE BOX (for Code disclosure) */
     .code-disclosure {
@@ -878,7 +889,11 @@
     "name": "Outlier",
     "url": "https://outlier.host/",
     "logo": "https://outlier.host/logo.png",
-    "description": "Outlier is a private, offline alternative to cloud AI like Claude and ChatGPT — local AI that runs on your Mac, with no caps and no data centers."
+    "description": "Outlier is a private, offline alternative to cloud AI like Claude and ChatGPT — local AI that runs on your Mac, with no caps and no data centers.",
+    "sameAs": [
+      "https://huggingface.co/Outlier-Ai",
+      "https://github.com/Outlier-host"
+    ]
   }
   </script>
   <script type="application/ld+json">
@@ -947,8 +962,9 @@
       <li><a href="#energy">Impact</a></li>
       <li><a href="#proof">Proof</a></li>
       <li><a href="#faq">FAQ</a></li>
+      <li><a href="/learn/">Guides</a></li>
       <li><a href="/developers/">Developers</a></li>
-      <li><span class="ship-pill">v1.11.468</span></li>
+      <li><span class="ship-pill">v1.11.469</span></li>
       <li><a href="#support" class="nav-cta">Fund the build</a></li>
     </ul>
   </div>
@@ -966,7 +982,7 @@
   <div class="wrap">
     <div class="hero-badge">
       <span class="hero-badge-dot"></span>
-      v1.11.468 · notarized Mac DMG · community-funded
+      v1.11.469 · notarized Mac DMG · community-funded
     </div>
     <h1>A private, offline <span class="gradient">alternative to cloud AI like Claude and ChatGPT.</span><br/>No caps. No data centers. <span class="green-g">All on your Mac.</span></h1>
     <p class="hero-sub">
@@ -981,7 +997,7 @@
       🔒 Your prompts and files never leave your Mac. Local models run fully offline — only model downloads and optional web search ever touch the network, and only when you choose. No telemetry on inference. Open-weight models you can audit on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;">HuggingFace</a>.
     </p>
     <div class="hero-actions">
-      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.468/Outlier-1.11.468-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.469/Outlier-1.11.469-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
       <a class="btn btn-accent" href="#support">Become a Founder</a>
       <a class="btn btn-ghost" href="#roadmap">See what we’re building</a>
     </div>
@@ -1177,7 +1193,7 @@
           <li>No account required</li>
           <li>No token bill</li>
         </ul>
-        <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.468/Outlier-1.11.468-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+        <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.469/Outlier-1.11.469-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
       </div>
 
       <div class="price-card featured">
@@ -1231,7 +1247,7 @@
 
     <div class="phase-grid">
       <div class="roadmap-card">
-        <div class="num">Now · v1.11.468</div>
+        <div class="num">Now · v1.11.469</div>
         <h3>Local Mac AI foundation</h3>
         <p>Signed, notarized Mac app. Streaming chat, local sessions, seven model tiers,
         model downloads, memory, project files, web research, vision support, and a Pro gate
@@ -1577,10 +1593,20 @@
     </div>
 
     <p class="provenance" style="margin-top: 2rem;">
-      Current site-safe headline numbers: v1.11.468 shipped as a notarized Mac DMG; Free includes Nano + Lite;
+      Current site-safe headline numbers: v1.11.469 shipped as a notarized Mac DMG; Free includes Nano + Lite;
       Pro ($20/mo or $149/yr) adds everything including Plus 397B; lifetime Pro from $99 (Founding 200) or $200
       (Founders 500); local generation has no Outlier API token meter.
     </p>
+
+    <div class="proof-data">
+      <span class="proof-data-label">See the data</span>
+      <ul>
+        <li><a href="/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: the 54-prompt benchmark — raw side-by-side outputs</a></li>
+        <li><a href="/data/local-ai-benchmarks-mac-2026/">Local AI benchmarks for Mac (2026): tok/s, MMLU, HumanEval, memory footprint</a></li>
+        <li><a href="/data/v11-streaming-engine-benchmarks/">Streaming-engine benchmarks: Plus 397B + Vision tok/s, 5-run methodology</a></li>
+        <li><a href="/data/mac-ram-to-model-size/">Mac RAM → model-size reference table</a></li>
+      </ul>
+    </div>
   </div>
 </section>
 
@@ -1597,7 +1623,7 @@
 
     <div class="phase-grid">
       <div class="phase-card shipping">
-        <div class="phase-num">Shipped · v1.11.468</div>
+        <div class="phase-num">Shipped · v1.11.469</div>
         <h3>Mac-native local foundation</h3>
         <p>Notarized DMG, seven model tiers, local chat, sessions, downloads, memory, project context, research, vision, and Pro upgrade.</p>
         <span class="phase-status shipping">● Live beta</span>
@@ -1780,7 +1806,7 @@
       that runs locally, belongs to the user, and has no API token cap from Outlier mid-sprint.
     </p>
     <div class="final-cta-actions">
-      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.468/Outlier-1.11.468-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+      <a class="btn btn-green" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.469/Outlier-1.11.469-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
       <a class="btn btn-accent" href="https://buy.polar.sh/polar_cl_ZmNbIbVkQlAAsaLmphepqtUAxcshOJ09f2lhw1EXYD5" target="_blank" rel="noopener noreferrer">Become a Founder</a>
       <a class="btn btn-ghost" href="https://buy.polar.sh/polar_cl_RvmkI5ZFwi5BYFQMgdYHHRk3b8rxOrMpTpZB61xkXuT" target="_blank" rel="noopener noreferrer">Get Pro $20/mo</a>
       <a class="btn btn-ghost" href="https://buy.polar.sh/polar_cl_7yHHBx7s3qyD6A2DQ3wlfCLAUR6VUYGJUmwtx2munvs" target="_blank" rel="noopener noreferrer">Chip in any amount</a>
@@ -1790,10 +1816,24 @@
 
 <footer>
   <div class="wrap">
+    <nav class="foot-guides" aria-label="Guides and resources">
+      <span class="foot-guides-label">Guides &amp; Resources</span>
+      <div class="foot-guides-links">
+        <a href="/learn/">Learn: how local AI works</a>
+        <a href="/vs/">Compare: Outlier vs Claude, Ollama &amp; more</a>
+        <a href="/for/">Local AI for your profession</a>
+        <a href="/best/">Best local AI &amp; LLM picks</a>
+        <a href="/how-to/">How-to: install &amp; run local AI</a>
+        <a href="/run/">Run big models on your Mac</a>
+        <a href="/data/">Benchmarks &amp; data</a>
+        <a href="/developers/">Developers: local API</a>
+        <a href="/about/">About Outlier</a>
+      </div>
+    </nav>
     <div class="foot">
       <div>Outlier — Kerr &amp; Company LLC · Grand Rapids, MI · © 2026</div>
       <div class="foot-links">
-        <a href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.468/Outlier-1.11.468-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
+        <a href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.469/Outlier-1.11.469-arm64.dmg" target="_blank" rel="noopener noreferrer">Download beta app</a>
         <a href="#support">Fund</a>
         <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer">HuggingFace</a>
         <a href="https://github.com/Outlier-host/outlier-app-releases" target="_blank" rel="noopener noreferrer">GitHub</a>

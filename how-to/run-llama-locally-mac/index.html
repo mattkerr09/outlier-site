@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to run Llama locally on a Mac (2026) | Outlier</title>
+  <meta name="description" content="Yes — Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio. Step-by-step setup, plus a size-to-RAM table so you pick a model that fits.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-14">
+  <link rel="canonical" href="https://outlier.host/how-to/run-llama-locally-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to run Llama locally on a Mac">
+  <meta property="og:description" content="Yes — Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio. Step-by-step setup, plus a size-to-RAM table so you pick a model that fits.">
+  <meta property="og:url" content="https://outlier.host/how-to/run-llama-locally-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to run Llama locally on a Mac">
+  <meta name="twitter:description" content="The honest, terminal-or-not path to running Meta's Llama models offline on Apple Silicon.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Llama locally on a Mac", "description": "Yes — Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio. Step-by-step setup, plus a size-to-RAM table so you pick a model that fits.", "datePublished": "2026-06-14", "dateModified": "2026-06-14", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-llama-locally-mac/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Llama locally on a Mac", "item": "https://outlier.host/how-to/run-llama-locally-mac/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I run Llama on a MacBook?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on any Apple Silicon MacBook (M1 or newer). The unified memory is shared between CPU and GPU, so a 16 GB MacBook Air runs smaller Llama sizes as quantized GGUF comfortably. Larger Llama models want a 32–64 GB machine. Intel Macs technically work but are far slower and not recommended."}}, {"@type": "Question", "name": "Which Llama size fits my RAM?", "acceptedAnswer": {"@type": "Answer", "text": "Pick a model whose quantized file leaves several gigabytes of headroom under your total RAM. As a rule of thumb: smaller Llama sizes run well on 16 GB, mid-sized models want 32 GB, and the largest open Llama models want 64 GB or more. A 4-bit quant roughly halves the file versus higher precision, which is why most people on a Mac run 4-bit GGUF."}}, {"@type": "Question", "name": "Do I need the terminal to run Llama?", "acceptedAnswer": {"@type": "Answer", "text": "No. Ollama is command-line first, but LM Studio gives you a full graphical chat window, a built-in model browser, and a local server with no typing of commands. If you want zero setup and no model-juggling at all, a Mac-native app like Outlier ships ready-to-run models and a chat UI out of the box."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How to run Llama locally on a Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-14</span>
+      <span class="updated-pill">Last updated 2026-06-14</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Yes — Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio, sized to your RAM.</li>
+        <li>Meta publishes Llama as open-weight files, so you download once and run it offline, on your own chip.</li>
+        <li>Match the model to memory: smaller Llama sizes run on a 16 GB Mac; larger sizes want 32–64 GB or more.</li>
+        <li>No terminal required — LM Studio is fully graphical; Ollama is the command-line route if you prefer it.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Yes — Llama runs locally on an Apple Silicon Mac, no cloud account and no internet once it's downloaded. Meta releases its Llama models as open weights, which means the actual model file is yours to keep on disk. The catch is size: a Llama model has to fit in your Mac's memory, so the whole game is picking a quantized version that leaves room to breathe. Here's the honest path, terminal or not.</p>
+
+    <h2>Why a Mac is a good place to run Llama</h2>
+    <p>Apple Silicon has one trait that makes it punch above its price for local AI: unified memory. The CPU and GPU share the same pool, so a model loaded into RAM is already sitting where the GPU can use it — no copying across a separate video-card boundary. A 16 GB MacBook Air can run a small Llama model while you keep a browser and your editor open. The trade-off is that you're capped by total RAM, the same wall every local runner hits.</p>
+    <p>Two things you do <em>not</em> need: a discrete GPU, or a new machine. The Mac you already own (M1 or newer) is the target. If memory is the question, the <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide</a> goes deeper.</p>
+
+    <h2>Step by step: Llama via Ollama (command line)</h2>
+    <p>Ollama is the developer favorite — free, open-source, and built to pull and run open models in one command. It runs GGUF model files through llama.cpp under the hood.</p>
+    <ol>
+      <li>Install Ollama from its official site (a normal Mac app, drag to Applications).</li>
+      <li>Open Terminal and run <code>ollama run llama3.2</code> (swap in whichever Llama tag you want). Ollama downloads a quantized build automatically.</li>
+      <li>Wait for the pull. The model lands on your disk; the prompt is now live and offline.</li>
+      <li>Type to chat. Use <code>/bye</code> to exit. Next time it loads from disk in seconds — no re-download.</li>
+    </ol>
+    <p>That's the whole thing. The model is a file now; it works with Wi-Fi off and answers to nobody's quota.</p>
+
+    <h2>Step by step: Llama via LM Studio (no terminal)</h2>
+    <p>If a command line isn't your idea of fun, LM Studio is a free desktop app with a real chat window. It also runs GGUF (and MLX builds on Mac), browses models for you, and can expose a local OpenAI-compatible server.</p>
+    <ol>
+      <li>Download and open LM Studio.</li>
+      <li>Use the in-app model browser to search for a Llama model. It flags which quantized builds fit your Mac's RAM before you download.</li>
+      <li>Pick a 4-bit build that fits, then download it inside the app.</li>
+      <li>Open the chat tab, load the model, and start typing. No commands, ever.</li>
+    </ol>
+
+    <h2>Which Llama size fits your RAM?</h2>
+    <p>Llama ships in a range of sizes, from laptop-friendly to very large. On a Mac the number that matters is total unified memory — the model file plus its working memory has to fit, with headroom left for macOS and your apps. Most people run 4-bit quants, which roughly halve the file versus higher precision at a small quality cost. General sizing:</p>
+    <table>
+      <thead>
+        <tr><th>Mac RAM</th><th>Llama size that's comfortable</th><th>What it's good for</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>8 GB</td><td>Only the smallest Llama builds, tightly quantized</td><td>Light Q&amp;A; expect to close other apps</td></tr>
+        <tr><td>16 GB</td><td>Small Llama sizes (4-bit GGUF)</td><td>Everyday chat, writing, summaries, light coding</td></tr>
+        <tr><td>32 GB</td><td>Mid-sized Llama models</td><td>Stronger reasoning and longer context</td></tr>
+        <tr><td>64 GB+</td><td>The largest open Llama models</td><td>Heavier coding and analysis at slower speeds</td></tr>
+      </tbody>
+    </table>
+    <p>Rule of thumb: choose a build whose quantized file leaves several gigabytes free under your total RAM. If a model won't load or your Mac starts swapping hard, you've picked one size too big — drop to a smaller build or a heavier quant. (Stuck on a load error? The <a href="https://outlier.host/how-to/fix-local-ai-wont-load-mac/">won't-load fix</a> walks through it.)</p>
+    <div class="receipts"><strong>Receipts:</strong> Llama is an open-weight family from Meta; Ollama and LM Studio both run it locally as quantized GGUF via llama.cpp, and both are free. The unified-memory ceiling is real — a model that exceeds available RAM either refuses to load or falls back to disk swap and crawls. None of these figures are model-specific promises; check the exact file size on the model's page before you download.</div>
+
+    <h2>Where this gets annoying — and the batteries-included option</h2>
+    <p>Running Llama yourself means you become the sysadmin: you pick the quant, watch the RAM ceiling, swap files when one's too big, and update by hand. For developers that control is the point. For everyone else it's friction. And every GGUF runner shares the same hard limit — if the model doesn't fit in RAM, you can't run it.</p>
+    <p>Outlier is the Mac-native app for people who'd rather skip all that. One signed download, no account, no terminal, no Docker — it ships ready-to-run open-weight models (its own Qwen-family tiers, Nano through Plus) that cover the same daily work most people want Llama for: chat, writing, coding, research. It's also the one tool here that runs models <em>bigger</em> than your RAM — a patent-pending paged inference engine streams a 397B model at about 11 GB peak memory on a 64 GB Mac, where a GGUF runner would simply refuse. And if you specifically want your own model, Outlier supports importing a bring-your-own MLX model. To be clear: Outlier doesn't ship Meta's Llama by name — for that exact model, Ollama or LM Studio above is the route.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can I run Llama on a MacBook?</h3>
+        <p>Yes, on any Apple Silicon MacBook (M1 or newer). The unified memory is shared between CPU and GPU, so a 16 GB MacBook Air runs smaller Llama sizes as quantized GGUF comfortably. Larger Llama models want a 32–64 GB machine. Intel Macs technically work but are far slower and not recommended.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which Llama size fits my RAM?</h3>
+        <p>Pick a model whose quantized file leaves several gigabytes of headroom under your total RAM. As a rule of thumb: smaller Llama sizes run well on 16 GB, mid-sized models want 32 GB, and the largest open Llama models want 64 GB or more. A 4-bit quant roughly halves the file versus higher precision, which is why most people on a Mac run 4-bit GGUF.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do I need the terminal to run Llama?</h3>
+        <p>No. Ollama is command-line first, but LM Studio gives you a full graphical chat window, a built-in model browser, and a local server with no typing of commands. If you want zero setup and no model-juggling at all, a Mac-native app like Outlier ships ready-to-run models and a chat UI out of the box.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=run-llama-locally-mac">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/how-to/install-local-ai-on-mac/">Install local AI on Mac</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compare Outlier with other local &amp; cloud AI | Outlier</title>
+  <meta name="description" content="Honest, side-by-side comparisons — Outlier vs Claude, Ollama, LM Studio, Jan, Apple Intelligence, and cloud AI. Bench numbers and real tradeoffs, no spin.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/vs/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Compare Outlier with other local &amp; cloud AI | Outlier">
+  <meta property="og:description" content="Honest, side-by-side comparisons — Outlier vs Claude, Ollama, LM Studio, Jan, Apple Intelligence, and cloud AI. Bench numbers and real tradeoffs, no spin.">
+  <meta property="og:url" content="https://outlier.host/vs/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(880px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .hero { padding: 3rem 0 2rem; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 4.5vw, 2.8rem); line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .hero p { color: var(--text-mid); font-size: 1.1rem; max-width: 620px; margin: 0 auto; }
+    section { padding: 1.5rem 0 2.5rem; }
+    section > h2 { font-size: 1.05rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 1.3rem; font-weight: 600; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .card { padding: 1.2rem 1.3rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .card:hover { border-color: rgba(168,85,247,0.30); transform: translateY(-1px); text-decoration: none; }
+    .card h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.3; }
+    .card p { color: var(--text-mid); font-size: 0.9rem; line-height: 1.5; margin-bottom: 0; }
+    .data-card { background: rgba(168,85,247,0.06); border-color: rgba(168,85,247,0.22); }
+    .data-card .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .cta-band { margin: 3rem 0 1rem; padding: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta-band h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .cta-band p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Compare Outlier with other local &amp; cloud AI","url":"https://outlier.host/vs/","description":"Honest, side-by-side comparisons — Outlier vs Claude, Ollama, LM Studio, Jan, Apple Intelligence, and cloud AI. Bench numbers and real tradeoffs, no spin.","isPartOf":{"@type":"WebSite","name":"Outlier","url":"https://outlier.host/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Comparisons", "item": "https://outlier.host/vs/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Compare Outlier with other local &amp; cloud AI</h1>
+    <p>Honest, side-by-side comparisons — Outlier vs Claude, Ollama, LM Studio, Jan, Apple Intelligence, and cloud AI. Bench numbers and real tradeoffs, no spin.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Comparisons</h2>
+    <div class="cards">
+      <a class="card" href="https://outlier.host/vs/apple-intelligence-vs-local-ai/">
+        <h3>Apple Intelligence vs local AI apps — what&#x27;s the difference?</h3>
+        <p>Apple Intelligence is built-in and convenient, but it&#x27;s Apple&#x27;s model and some requests leave your Mac for Private Cloud Compute. A dedicated local-AI…</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/best-chatgpt-alternative-mac-offline/">
+        <h3>Best offline ChatGPT alternative for Mac</h3>
+        <p>What a Mac-native ChatGPT alternative actually needs in 2026: offline operation, no subscription, no API key, comparable output. Plus honest tradeoffs.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/cursor-alternatives-local-mac/">
+        <h3>Cursor alternatives — local AI for coding on a Mac</h3>
+        <p>Cursor&#x27;s IDE AI is great. If you want the same coding workflow with a local model on a Mac, here are the real alternatives and where each one fits.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/jan-vs-ollama/">
+        <h3>Jan vs Ollama (2026) — open-source local AI compared</h3>
+        <p>Jan vs Ollama, compared honestly. Jan is an MIT desktop chat app with an OpenAI-compatible API; Ollama is a CLI-first runner with a huge model library.…</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/local-ai-vs-claude-code/">
+        <h3>Local AI vs Claude Code: which is better</h3>
+        <p>Local AI and Claude Code solve the same problem from opposite directions. A by-task breakdown of which one wins on speed, quality, privacy, and cost.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/local-ai-vs-cloud-ai/">
+        <h3>Local AI vs cloud AI — the honest 2026 comparison</h3>
+        <p>Cloud AI is stronger at the hardest frontier tasks. Local AI wins on privacy, cost, no usage caps, and working offline. For ~90% of daily work, local…</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/mac-native-ai-comparison/">
+        <h3>Mac AI: Outlier vs Jan vs Ollama vs LM Studio</h3>
+        <p>Four serious local-AI options for Mac in 2026. How they differ on backend, models, agent features, pricing, and where each is the right pick.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/ollama-vs-lm-studio/">
+        <h3>Ollama vs LM Studio (2026) — which local AI tool to use</h3>
+        <p>Ollama is the CLI-first, scriptable developer tool. LM Studio is the polished GUI with a model browser and no terminal. Here&#x27;s an honest side-by-side…</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-core-27b-vs-claude-opus/">
+        <h3>Outlier Core 27B vs Claude Opus</h3>
+        <p>How a local Core 27B model on a Mac compares with cloud Claude Opus across reasoning, knowledge, writing, translation, and code — and where each one…</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-vs-claude-code/">
+        <h3>Outlier vs Claude Code (offline coding agent)</h3>
+        <p>Head-to-head: Outlier (local, Mac, no API key) vs Claude Code (cloud, terminal, Claude Opus). Speed, output quality, cost, and privacy compared.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-vs-jan/">
+        <h3>Outlier vs Jan — two takes on local AI for Mac</h3>
+        <p>Jan is a free, open-source, cross-platform local AI app that runs GGUF models. Outlier is a Mac-native app that streams models bigger than your RAM.…</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-vs-lm-studio/">
+        <h3>Outlier vs LM Studio for agentic workflows</h3>
+        <p>LM Studio is a polished local-LLM GUI. Outlier is a local AI app with a built-in agent loop and MCP tools. Where each one fits for real coding workflows.</p>
+      </a>
+      <a class="card" href="https://outlier.host/vs/outlier-vs-ollama/">
+        <h3>Outlier vs Ollama: models bigger than RAM</h3>
+        <p>Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run. Here&#x27;s where each one fits.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="cta-band">
+    <h2>Try Outlier free</h2>
+    <p>Free Nano + Lite. Pro $20/mo or $149/yr adds everything (Plus 397B included). Lifetime Pro from $99 (Founding 200) or $200 (Founders 500). Apple Silicon only.</p>
+    <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=learn-hub">Download for Mac</a>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

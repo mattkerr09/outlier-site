@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can local AI see images? Vision AI on Mac, tested (2026) | Outlier</title>
+  <meta name="description" content="Yes — local vision models run on Apple Silicon and Outlier supports drag-and-drop image analysis with nothing uploaded. Here's how VLMs work, which models are available, and what they can and can't do.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-18">
+  <link rel="canonical" href="https://outlier.host/learn/local-ai-vision-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can local AI see images? Vision AI on Mac, tested (2026)">
+  <meta property="og:description" content="Yes — local vision models run on Apple Silicon and Outlier supports drag-and-drop image analysis with nothing uploaded. Here's how VLMs work, which models are available, and what they can and can't do.">
+  <meta property="og:url" content="https://outlier.host/learn/local-ai-vision-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can local AI see images? Vision AI on Mac, tested (2026)">
+  <meta name="twitter:description" content="Local vision AI on Mac: how VLMs work, which open models are available, and what I tested on my M1 Ultra — with nothing uploaded.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Can local AI see images? Vision AI on Mac, tested", "description": "Yes — local vision models run on Apple Silicon and Outlier supports drag-and-drop image analysis with nothing uploaded. Here's how VLMs work, which models are available, and what they can and can't do.", "datePublished": "2026-06-18", "dateModified": "2026-06-18", "author": {"@type": "Person", "name": "Matt Kerr"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/local-ai-vision-mac/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can local AI see images?", "item": "https://outlier.host/learn/local-ai-vision-mac/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Can local AI see images? Vision AI on Mac, tested</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-06-18</span>
+      <span class="updated-pill">Last updated 2026-06-18</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Yes — multiple local vision models run on Apple Silicon. Outlier supports vision via drag-and-drop: images are analyzed on your Mac with nothing uploaded. Quality is solid for screenshots, documents, and everyday images; complex visual reasoning is where cloud still has an edge.</p>
+    </div>
+
+    <p class="lead">When most people think of AI that can "see," they think of GPT-4o or Claude Sonnet — cloud tools where images get sent to a server somewhere and analyzed there. What isn't as widely known is that the same capability now runs locally on a MacBook. I've been testing this in Outlier on an M1 Ultra, dragging in receipts, error screenshots, charts, and personal photos. This article covers how it works, which models are available, what you can actually do with it, and where it's still not as capable as cloud vision.</p>
+
+    <h2>How vision AI works</h2>
+    <p>A vision-language model (VLM) is a standard language model with one extra component: a <strong>visual encoder</strong> bolted to the front. When you send an image, the encoder divides it into a grid of small patches — think of it as tiling the image into hundreds of squares — and converts each patch into a set of numbers called tokens. Those image tokens get fed into the language model alongside your text prompt, and the model reasons over the combined input just as it would over a long document.</p>
+    <p>From the model's point of view, "look at this image and tell me what's in it" isn't fundamentally different from "read this document and summarize it." The visual encoder is what transforms pixels into something a language model can work with. The quality of that encoder — and how well it was trained alongside the language model — is what separates good VLMs from mediocre ones.</p>
+    <p>One practical consequence: <strong>image encoding takes time before any text is generated</strong>. On my M1 Ultra, that encoding step typically takes 1–3 seconds regardless of model size. Once encoding finishes, generation starts at the normal speed. That pause is normal and expected — it's not a stall.</p>
+
+    <h2>Which local vision models are available</h2>
+    <p>The open-source vision model landscape has moved quickly. Here are the ones worth knowing about:</p>
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Made by</th><th>Sizes</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Qwen2-VL</strong></td><td>Alibaba</td><td>7B, 72B</td><td>Strong text-in-image; what Outlier ships</td></tr>
+        <tr><td><strong>LLaMA 3.2 Vision</strong></td><td>Meta</td><td>11B, 90B</td><td>Good general understanding; wide community support</td></tr>
+        <tr><td><strong>LLaVA</strong></td><td>Open (UW/Microsoft)</td><td>Various</td><td>Early open VLM; spawned many fine-tunes</td></tr>
+        <tr><td><strong>Phi-3 Vision</strong></td><td>Microsoft</td><td>4B</td><td>Small and efficient; decent for documents</td></tr>
+        <tr><td><strong>Pixtral</strong></td><td>Mistral</td><td>12B</td><td>Native high-res; good at charts and diagrams</td></tr>
+      </tbody>
+    </table>
+    <p>For comparison, ChatGPT (GPT-4o), Claude Sonnet and Opus, and Gemini Pro all have vision built in — but all of them send your image to their servers to process it. The models above run the entire pipeline on your own hardware.</p>
+
+    <h2>What you can actually do with local vision</h2>
+    <p>I ran through a range of tasks over several weeks. Here's what worked well:</p>
+    <ul>
+      <li><strong>Reading error screenshots.</strong> Drag in a terminal or browser error, ask what's wrong. This is where I use it most — it's faster than typing out a stack trace and the model handles the full context of the screenshot.</li>
+      <li><strong>Parsing receipts.</strong> Extract line items, totals, and merchant names from a photo of a paper receipt. Accuracy is high when the text is legible; it stumbles on blurry or crumpled paper.</li>
+      <li><strong>Analyzing charts and graphs.</strong> Describe trends, read axis values, summarize what a bar chart is showing. Works well for standard chart types; more unusual visualizations are hit or miss.</li>
+      <li><strong>Describing photos.</strong> General scene description, identifying objects, reading visible text in the frame.</li>
+      <li><strong>OCR-style text extraction.</strong> Pulling text out of images where copy-paste isn't available — scanned pages, screenshots of PDFs, images with embedded text. This is one of the stronger use cases for local VLMs.</li>
+      <li><strong>Understanding UI mockups.</strong> Feed in a design screenshot and ask questions about layout, what components are present, or how a flow works. Useful when reviewing someone else's Figma exports.</li>
+    </ul>
+    <p>In Outlier specifically: drag an image into the chat window, or paste with <code>⌘V</code>. No setup, no extra steps. The model that handles vision is selected automatically.</p>
+
+    <h2>The privacy argument for local vision</h2>
+    <p>Here's the thing that doesn't get enough attention: when you send an image to a cloud AI, that image travels to a data center. The provider's terms govern what happens to it from there — how long it's retained, whether it's used for training, who can access it.</p>
+    <p>Most of the time that's fine. But think about what kinds of images people actually want AI help with: <strong>medical records, prescription labels, financial documents, legal paperwork, personal photos, work documents marked confidential</strong>. These are exactly the images you'd probably rather not upload anywhere.</p>
+    <p>With local vision, the image never leaves your device. There's no upload, no server-side copy, no retention question. You can run it with Wi-Fi off and it works identically — that's the clearest proof nothing is going out. For sensitive images in particular, local vision removes an entire category of exposure that cloud-based vision carries by design.</p>
+
+    <h2>Where local vision is not as capable</h2>
+    <p>Being honest here matters. Local VLMs are not on par with GPT-4o for every task:</p>
+    <ul>
+      <li><strong>Complex scene understanding.</strong> Detailed images with many objects, overlapping contexts, or unusual compositions — cloud vision models handle these more reliably. Local models can miss details or misread spatial relationships.</li>
+      <li><strong>Fine-grained visual reasoning.</strong> Tasks like "which of these two graphs shows a higher variance" or "what is wrong with this circuit diagram" require deep visual reasoning that larger cloud models handle better. Local 7B–11B VLMs are adequate for common tasks but not deep analysis.</li>
+      <li><strong>Highly stylized or artistic images.</strong> Abstract art, unusual visual styles, and ambiguous compositions are where local models tend to under-describe or guess wrong more often.</li>
+    </ul>
+    <p>The realistic framing: local vision is strong for <em>practical, document-oriented tasks</em> — reading text in images, parsing structured information, describing scenes, understanding UI. It's less reliable for tasks that demand nuanced interpretation of complex visuals. If that's your use case, cloud vision still has a practical advantage. If it's receipts, screenshots, and everyday images — local handles it well and your images stay on your machine.</p>
+
+    <h2>How to use vision in Outlier</h2>
+    <p>There's no setup. Open Outlier, start a chat, and either drag an image into the window or paste one from your clipboard with <code>⌘V</code>. The vision-capable model — Qwen2-VL on my setup — activates automatically when an image is attached. Type your question alongside the image, or just drop it in and hit return to get a description.</p>
+    <p>The 1–3 second encoding pause happens before the first token appears; after that, streaming continues at normal speed. You can attach images alongside text prompts, follow up with more questions about the same image, or clear the context and start fresh. Everything stays on-device throughout.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Vision examples in this article were run on my own M1 Ultra using Outlier's Qwen2-VL model locally. Images were processed on-device; no images were uploaded to any external service during testing.</div>
+
+    <div class="cta">
+      <h3>Try vision in Outlier</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds all model tiers including vision models. Lifetime Pro from $99 (Founding 200, first 200 seats). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-vision-mac">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps code private</a> &middot; <a href="https://outlier.host/learn/is-local-ai-safe/">Is local AI safe?</a> &middot; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
+    </div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier. Solo-built in Grand Rapids.</span>
+    <span><a href="https://outlier.host/learn/">Learn</a> &middot; <a href="https://outlier.host/privacy/">Privacy</a> &middot; <a href="https://outlier.host/terms/">Terms</a></span>
+  </div>
+</footer>
+</body>
+</html>

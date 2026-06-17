@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is Ollama? A plain-English guide for Mac users | Outlier</title>
+  <meta name="description" content="Ollama is an open-source tool for running LLMs locally on your Mac via Terminal and a local API. Great for developers. Here's what it does, what it doesn't, and who it's really for.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-20">
+  <link rel="canonical" href="https://outlier.host/learn/what-is-ollama/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is Ollama? A plain-English guide for Mac users">
+  <meta property="og:description" content="Ollama is an open-source tool for running LLMs locally on your Mac via Terminal and a local API. Great for developers. Here's what it does, what it doesn't, and who it's really for.">
+  <meta property="og:url" content="https://outlier.host/learn/what-is-ollama/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What is Ollama? A plain-English guide for Mac users">
+  <meta name="twitter:description" content="Ollama runs AI models locally on your Mac — mostly via Terminal. Here's what it actually does and whether it's right for you.">
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "What is Ollama? A plain-English guide for Mac users",
+        "description": "Ollama is an open-source tool for running LLMs locally on your Mac via Terminal and a local API. Great for developers. Here's what it does, what it doesn't, and who it's really for.",
+        "url": "https://outlier.host/learn/what-is-ollama/",
+        "datePublished": "2026-06-20",
+        "dateModified": "2026-06-20",
+        "author": {
+          "@type": "Person",
+          "name": "Matt Kerr"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Outlier",
+          "url": "https://outlier.host"
+        },
+        "image": "https://outlier.host/og-card.png",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://outlier.host/learn/what-is-ollama/"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://outlier.host/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Learn",
+            "item": "https://outlier.host/learn/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "What is Ollama?",
+            "item": "https://outlier.host/learn/what-is-ollama/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/icon.png" alt="Outlier logo" class="nav-logo">
+      Outlier
+    </a>
+    <ul class="nav-links">
+      <li><a href="/learn/">Learn</a></li>
+      <li><a href="/vs/">Compare</a></li>
+      <li><a href="https://outlier.host/download">Download</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <article>
+    <p class="crumb"><a href="/">Outlier</a> / <a href="/learn/">Learn</a> / What is Ollama?</p>
+
+    <h1>What is Ollama? A plain-English guide for Mac users</h1>
+
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr &mdash; June 20, 2026</span>
+      <span class="updated-pill">Updated Jun 2026</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Ollama is an open-source tool that runs AI models locally on your Mac &mdash; mostly via Terminal and a local API. It's genuinely useful for developers. If you want a full chat app with a native GUI, agents, vision, and web search built in, you want something like Outlier.</p>
+    </div>
+
+    <p class="lead">If you spend any time in AI communities, you've probably seen Ollama recommended constantly. It's popular, it's free, and it works. But what it actually is &mdash; and what it isn't &mdash; often gets glossed over. Here's a clear-eyed look at what Ollama does, where it stops, and who it's genuinely right for.</p>
+
+    <h2>What Ollama actually does</h2>
+
+    <p>Ollama is an open-source tool (MIT license) for running large language models locally on Mac, Linux, and Windows. At its core it does three things:</p>
+
+    <ul>
+      <li><strong>Downloads and manages model files.</strong> Run <code>ollama pull llama3</code> and it fetches the quantized model weights to your machine.</li>
+      <li><strong>Runs inference locally.</strong> On Apple Silicon Macs, Ollama uses Metal &mdash; Apple's GPU compute API &mdash; so models run on your GPU rather than burning through CPU cycles.</li>
+      <li><strong>Hosts a local API server</strong> on port 11434 with an OpenAI-compatible interface, so other tools can call your local models the same way they'd call a cloud API.</li>
+    </ul>
+
+    <p>That API compatibility is Ollama's real superpower for developers. A huge ecosystem of tools &mdash; code editors, automation scripts, open-source chatbots &mdash; can point at <code>http://localhost:11434</code> and just work.</p>
+
+    <h2>How to use Ollama</h2>
+
+    <p>Install it from <a href="https://ollama.com" target="_blank" rel="noopener">ollama.com</a>. The installer sets up a background service that starts automatically. From there, everything happens in Terminal:</p>
+
+    <ul>
+      <li><code>ollama run llama3</code> &mdash; pulls the model if needed, then starts an interactive chat session right in your terminal window</li>
+      <li><code>ollama list</code> &mdash; shows which models you've downloaded</li>
+      <li><code>ollama pull mistral</code> &mdash; downloads a model without starting a chat</li>
+    </ul>
+
+    <p>The API server starts automatically with the background service, so once Ollama is running, any app that supports the OpenAI API format can connect to it locally. No internet required after the initial model download.</p>
+
+    <p>This is worth being precise about: Ollama is primarily a command-line tool. There's no native chat interface. The Terminal session you get with <code>ollama run</code> is functional but bare &mdash; no conversation history sidebar, no file attachments, no model switching mid-session. It's a REPL, not an app.</p>
+
+    <h2>Which models run on Ollama</h2>
+
+    <p>Ollama's model library is genuinely broad. Some popular options as of mid-2026:</p>
+
+    <ul>
+      <li><strong>Llama 3</strong> (Meta) &mdash; strong general-purpose model, widely used</li>
+      <li><strong>Mistral</strong> &mdash; efficient, good for instruction-following tasks</li>
+      <li><strong>Qwen2.5</strong> (Alibaba) &mdash; standout for coding, available in multiple sizes</li>
+      <li><strong>DeepSeek-R1</strong> &mdash; reasoning-focused, popular for technical problem-solving</li>
+      <li><strong>Phi-3</strong> (Microsoft) &mdash; small and fast, useful on constrained hardware</li>
+      <li><strong>Gemma</strong> (Google) &mdash; another strong small-model option</li>
+    </ul>
+
+    <p>Most of these are available in multiple quantizations. A 7B model at 4-bit typically runs at reasonable speed on an M-series Mac with 16GB of memory. Larger models (32B, 70B) need more RAM &mdash; 32GB or more.</p>
+
+    <h2>What Ollama doesn't include</h2>
+
+    <p>Being honest about gaps is how you make a good decision. Ollama, out of the box, doesn't have:</p>
+
+    <ul>
+      <li><strong>A native GUI.</strong> Third-party options like Open WebUI or Ollama UI exist, but they're separate installs with their own setup. The core Ollama tool is Terminal-only.</li>
+      <li><strong>Vision support</strong> (as of mid-2026 without additional tooling). You can't drop in a screenshot and ask about it.</li>
+      <li><strong>Built-in web search or deep research.</strong> Models run from their training data only, with no live retrieval unless you build a pipeline around it yourself.</li>
+      <li><strong>An agent loop.</strong> There's no task planner, no multi-step reasoning with tool use wired up by default.</li>
+      <li><strong>System tray integration or a Mac companion window.</strong> Ollama lives in the background service; there's no menubar presence or persistent companion UI.</li>
+    </ul>
+
+    <p>These aren't criticisms &mdash; Ollama is infrastructure, not an end-user application. But it's worth being clear about what you're getting.</p>
+
+    <h2>Ollama vs Outlier</h2>
+
+    <p>These two sit at different layers of the stack, which is why comparing them is actually useful rather than reductive:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Ollama</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Interface</td>
+          <td>Terminal / local API</td>
+          <td>Native Mac chat app</td>
+        </tr>
+        <tr>
+          <td>Vision (image input)</td>
+          <td>Not built in</td>
+          <td>Built in</td>
+        </tr>
+        <tr>
+          <td>Agent loop</td>
+          <td>Not built in</td>
+          <td>Built in</td>
+        </tr>
+        <tr>
+          <td>Deep research / web search</td>
+          <td>Not built in</td>
+          <td>Built in</td>
+        </tr>
+        <tr>
+          <td>Model curation</td>
+          <td>Open library (you pick)</td>
+          <td>Curated tiers (quality-gated)</td>
+        </tr>
+        <tr>
+          <td>Local / offline</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td>Free to use</td>
+          <td>Yes</td>
+          <td>Yes (base tier)</td>
+        </tr>
+        <tr>
+          <td>Target user</td>
+          <td>Developers, self-hosters</td>
+          <td>Mac users wanting a finished app</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="receipts">
+      <strong>Receipts:</strong> I've run Ollama on my M1 Ultra. These comparisons are based on direct use, not spec sheets. The Terminal workflow is genuinely smooth once you're used to it; the gap shows up when you want to do something beyond a straight chat exchange &mdash; paste an image, kick off a research run, or switch contexts without losing your place.
+    </div>
+
+    <h2>Who Ollama is for vs who Outlier is for</h2>
+
+    <p>Ollama is a developer tool. If you're building applications on top of LLMs, scripting automations, experimenting with model behavior, or self-hosting for a team, Ollama is a solid, well-maintained choice. Its API compatibility means it drops into existing developer workflows without friction. The open model library gives you real flexibility.</p>
+
+    <p>Outlier is for people who want a finished application. If your goal is to have a capable AI on your Mac that you can actually use &mdash; chat with, ask to research things, analyze images, write code interactively &mdash; without building a stack around it, that's a different need. The integration work (vision, web retrieval, agent loops, a real GUI) is already done.</p>
+
+    <p>Neither is the wrong answer &mdash; they're answers to different questions.</p>
+
+    <h2>Can you use both?</h2>
+
+    <p>Yes, and they're not exclusive at all. Ollama's local API server means it can act as a backend for apps that support it. If you want to run a specific model that Outlier doesn't offer, you can run it via Ollama's API and point compatible front-ends at it.</p>
+
+    <p>In practice, the typical split looks like this: developers reach for Ollama because it gives them API control and flexibility. General users who want a polished experience reach for a dedicated app. Some people use both depending on the task &mdash; Ollama for scripting and automation, a native app for daily chat and research work.</p>
+
+    <p>The underlying technology is similar: local inference on your hardware, quantized models, no data leaving your machine. The difference is entirely in the layer above that &mdash; how much work you want to do yourself.</p>
+
+    <div class="cta">
+      <h3>Want local AI without the Terminal setup?</h3>
+      <p>Outlier is a native Mac app with chat, vision, deep research, and a coding agent &mdash; all running locally on your machine.</p>
+      <a href="https://outlier.host/download" class="btn">Download Outlier free</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="/vs/ollama-vs-lm-studio/">Ollama vs LM Studio</a> &middot; <a href="/vs/outlier-vs-ollama/">Outlier vs Ollama</a> &middot; <a href="/learn/what-is-local-ai/">What is local AI?</a></p>
+    </div>
+  </article>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &mdash; Local AI for Mac</span>
+    <span><a href="/privacy/">Privacy</a> &middot; <a href="/learn/">Learn</a> &middot; <a href="https://outlier.host/download">Download</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

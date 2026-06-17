@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Intelligence vs local AI apps — what's the difference? | Outlier</title>
+  <meta name="description" content="Apple Intelligence is built-in and convenient, but it's Apple's model and some requests leave your Mac for Private Cloud Compute. A dedicated local-AI app lets you pick the model and stay fully offline. Here's the honest difference.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-16">
+  <link rel="canonical" href="https://outlier.host/vs/apple-intelligence-vs-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Apple Intelligence vs local AI: what's the difference?">
+  <meta property="og:description" content="Apple Intelligence is Apple's built-in AI; some requests go to Private Cloud Compute. A local-AI app lets you own the model and stay fully offline.">
+  <meta property="og:url" content="https://outlier.host/vs/apple-intelligence-vs-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apple Intelligence vs local AI: what's the difference?">
+  <meta name="twitter:description" content="Built-in convenience vs owning the model and staying offline. Honestly.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1.2rem 1.4rem; background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); margin: 1.6rem 0; font-size: 0.95rem; }
+    .receipts .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.6rem; font-weight: 600; font-family: var(--mono); }
+    .receipts p { margin-bottom: 0.5rem; color: var(--text-mid); }
+    .receipts p:last-child { margin-bottom: 0; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Apple Intelligence vs local AI: what's the difference?","description":"Apple Intelligence is Apple's built-in AI; some requests stay on-device and heavier ones go to Private Cloud Compute. A dedicated local-AI app lets you pick the model and stay fully offline. Here's the honest difference.","datePublished":"2026-06-16","dateModified":"2026-06-16","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/apple-intelligence-vs-local-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Apple Intelligence vs local AI: what's the difference?", "item": "https://outlier.host/vs/apple-intelligence-vs-local-ai/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Apple Intelligence run on-device?", "acceptedAnswer": {"@type": "Answer", "text": "Some of it. Apple Intelligence runs lighter tasks on-device using Apple's on-device model, and routes heavier requests to Apple's Private Cloud Compute servers. So not every request stays on your Mac."}}, {"@type": "Question", "name": "Is Apple Intelligence private?", "acceptedAnswer": {"@type": "Answer", "text": "Apple designed it with privacy in mind: on-device requests never leave the device, and Private Cloud Compute is built to not retain your data. But heavier requests do leave the Mac for Apple's servers. A dedicated local-AI app can keep every request on the machine, even with Wi-Fi off."}}, {"@type": "Question", "name": "Can I use a bigger AI model than Apple Intelligence on my Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Apple Intelligence uses Apple's own compact models. A local-AI app like Outlier lets you run far larger open-weight models — its paged inference engine runs a 397B-parameter model on a 64 GB Mac, entirely on-device."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
+    <h1>Apple Intelligence vs local AI: what's the difference?</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-16</span>
+      <span class="updated-pill">Last updated 2026-06-16</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li><strong>Apple Intelligence is Apple's built-in AI; a local-AI app is one you install and own.</strong> Apple Intelligence runs some tasks on-device and routes heavier ones to Apple's Private Cloud Compute servers. A dedicated local-AI app keeps every request on the Mac and lets you choose the model.</li>
+        <li>Apple Intelligence wins on convenience: it's free, baked into macOS, and wired into Mail, Notes, and Siri with nothing to install.</li>
+        <li>A local-AI app wins on control and reach: pick the model, run it fully offline with Wi-Fi off, and run models far larger than Apple's — a 397B-parameter model on a 64 GB Mac.</li>
+        <li>They're different tools. Apple Intelligence is OS-level writing help; an app like Outlier adds a coding agent, deep research, and vision.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Apple Intelligence is the AI Apple built into macOS and iOS — writing tools, summaries, a smarter Siri, baked into the apps you already use. A local-AI app is one you install on top, like Outlier. The honest difference is three things: who owns the model, whether every request stays on your machine, and how big a model you can run. Apple Intelligence is convenient and free; a local-AI app trades that convenience for control.</p>
+
+    <h2>What each one is</h2>
+    <p><strong>Apple Intelligence</strong> is Apple's set of AI features built into macOS and iOS. It powers Writing Tools (rewrite, proofread, summarize), notification and mail summaries, image features, and a more capable Siri. It runs on Apple Silicon, it's free with a recent OS, and there's nothing to download or set up. Architecturally, Apple Intelligence runs lighter tasks on-device with Apple's own compact model and routes heavier requests to Apple's Private Cloud Compute servers — Apple-run hardware designed so your data isn't retained. The model is Apple's, and you use what Apple exposes through the system.</p>
+    <p><strong>A local-AI app</strong> is a separate program you install — Outlier is one example. You pick the model, the app loads it onto your Mac, and it runs there. Because the whole model lives on the machine, it can work with Wi-Fi switched off. You're not limited to one vendor's model or one menu of features; instead of OS-level writing tools, an app like Outlier gives you a full chat workspace plus a coding agent, deep research, and vision. The trade is that you install and manage it yourself rather than it just being there.</p>
+
+    <h2>The honest contrast</h2>
+    <p>This isn't a "which is smarter" question — it's a "which job" question. Apple Intelligence is built for the quick, in-context stuff: tidy up this email, summarize this thread, ask Siri to do a thing. It's right there, it's free, and most people will never need to think about it. That convenience is real.</p>
+    <p>Where a local-AI app pulls ahead is control and capability. With Apple Intelligence, the model is Apple's, the feature set is what Apple ships, and some requests leave the device for Private Cloud Compute. With a dedicated app, you pick the model, every request can stay on the Mac, and you can run models in a weight class Apple's compact on-device model doesn't reach. <a href="https://outlier.host/learn/own-your-ai/">Owning the model</a> instead of renting access to one is the whole point.</p>
+
+    <h2>Apple Intelligence vs local AI — the comparison</h2>
+    <table>
+      <thead><tr><th>Dimension</th><th>Apple Intelligence</th><th>Local-AI app (e.g. Outlier)</th></tr></thead>
+      <tbody>
+        <tr><td>Who makes the model</td><td>Apple</td><td>You choose (open-weight models; import your own MLX model)</td></tr>
+        <tr><td>Fully on-device?</td><td>Some tasks on-device; heavier ones go to Private Cloud Compute</td><td>Yes — every request stays on the Mac</td></tr>
+        <tr><td>Works with Wi-Fi off?</td><td>Only the on-device tasks</td><td>Yes — fully offline</td></tr>
+        <tr><td>Model size / power</td><td>Apple's compact on-device + cloud models</td><td>Up to a 397B-parameter model on a 64 GB Mac (paged inference)</td></tr>
+        <tr><td>Openness</td><td>Closed — Apple's model and feature set</td><td>Open-weight models, published on HuggingFace</td></tr>
+        <tr><td>What it does</td><td>Writing tools, summaries, Siri, OS-level features</td><td>Chat, coding agent, deep research, vision, computer use</td></tr>
+        <tr><td>Price</td><td>Free (built into a recent macOS)</td><td>Free Nano + Lite; Pro $20/mo or $149/yr; lifetime from $99</td></tr>
+      </tbody>
+    </table>
+
+    <h2>So which one should you use?</h2>
+    <p>For most people the answer is both — they barely overlap. Keep Apple Intelligence on for the in-line writing help and Siri; it's free and already there. Reach for a local-AI app when the job is bigger than "rewrite this paragraph": you want a specific model, you need the work to never leave your Mac (legal drafts, client files, source code), or you want a coding agent and research Apple doesn't put in the OS.</p>
+    <p>The privacy line matters most for sensitive work. Apple designed Apple Intelligence carefully, but its heavier requests still travel to Apple's servers. A local app that runs entirely on-device means the question never leaves the room — which is exactly <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">why people keep code and confidential work on a local model</a>. Files on your disk don't have a terms-of-service page.</p>
+
+    <div class="receipts">
+      <span class="qa-label">Receipts</span>
+      <p><strong>Model size:</strong> Outlier's patent-pending paged inference engine runs a 397B-parameter open-weight model at roughly 11 GB peak memory on a 64 GB Mac Studio, streaming individual experts off the SSD. Model weights span about 2.4–209 GB across tiers.</p>
+      <p><strong>Capability, with a source:</strong> in a 54-prompt comparison, Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks overall and 100% on 9 hard tests (a chess engine, raft/paxos, ZK proofs). Full method and results: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">the 54-prompt benchmark</a>.</p>
+      <p><strong>Speed, honestly:</strong> Core 27B runs at about 20.7 tok/s on an M1 Ultra; cloud flagships land nearer 80–100 tok/s. Local trades some speed for staying on your machine.</p>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Does Apple Intelligence run on-device?</h3>
+        <p>Some of it. Apple Intelligence runs lighter tasks on-device using Apple's own compact model, and routes heavier requests to Apple's Private Cloud Compute servers. So not every request stays on your Mac. A dedicated local-AI app can keep every request on the machine, even with Wi-Fi off.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is Apple Intelligence private?</h3>
+        <p>Apple designed it with privacy in mind: on-device requests never leave the device, and Private Cloud Compute is built so your data isn't retained. But heavier requests do leave the Mac for Apple's servers. If you need a guarantee that nothing leaves the machine — for legal, health, or source-code work — a local-AI app that runs fully on-device gives you that.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use a bigger AI model than Apple Intelligence on my Mac?</h3>
+        <p>Yes. Apple Intelligence uses Apple's own compact on-device model. A local-AI app like Outlier lets you run far larger open-weight models — its paged inference engine runs a 397B-parameter model on a 64 GB Mac, entirely on-device, by streaming experts off the SSD.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=apple-intelligence-vs-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">Best local AI for Apple Silicon in 2026</a> · <a href="https://outlier.host/learn/own-your-ai/">Own your AI</a> · <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your code private</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

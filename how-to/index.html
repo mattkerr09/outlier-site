@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How-to guides for local AI on Mac | Outlier</title>
+  <meta name="description" content="Install, run, and get the most out of local AI on Apple Silicon — step by step, no terminal required.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/how-to/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="How-to guides for local AI on Mac | Outlier">
+  <meta property="og:description" content="Install, run, and get the most out of local AI on Apple Silicon — step by step, no terminal required.">
+  <meta property="og:url" content="https://outlier.host/how-to/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(880px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    .hero { padding: 3rem 0 2rem; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 4.5vw, 2.8rem); line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .hero p { color: var(--text-mid); font-size: 1.1rem; max-width: 620px; margin: 0 auto; }
+    section { padding: 1.5rem 0 2.5rem; }
+    section > h2 { font-size: 1.05rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 1.3rem; font-weight: 600; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .card { padding: 1.2rem 1.3rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.2s, transform 0.2s; display: flex; flex-direction: column; }
+    .card:hover { border-color: rgba(168,85,247,0.30); transform: translateY(-1px); text-decoration: none; }
+    .card h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 600; line-height: 1.3; }
+    .card p { color: var(--text-mid); font-size: 0.9rem; line-height: 1.5; margin-bottom: 0; }
+    .data-card { background: rgba(168,85,247,0.06); border-color: rgba(168,85,247,0.22); }
+    .data-card .tag { display: inline-block; font-family: var(--mono); font-size: 0.7rem; color: var(--accent-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+    .cta-band { margin: 3rem 0 1rem; padding: 2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta-band h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .cta-band p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"How-to guides for local AI on Mac","url":"https://outlier.host/how-to/","description":"Install, run, and get the most out of local AI on Apple Silicon — step by step, no terminal required.","isPartOf":{"@type":"WebSite","name":"Outlier","url":"https://outlier.host/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to guides", "item": "https://outlier.host/how-to/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>How-to guides for local AI on Mac</h1>
+    <p>Install, run, and get the most out of local AI on Apple Silicon — step by step, no terminal required.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How-to guides</h2>
+    <div class="cards">
+      <a class="card" href="https://outlier.host/how-to/cancel-ai-subscriptions/">
+        <h3>How to cancel your AI subscriptions (without losing the work)</h3>
+        <p>Cancelling ChatGPT, Claude, Cursor and Copilot can save $90+/mo. How to add up the bill, move the ~90% of daily work to an owned on-device tool, and…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/fix-local-ai-wont-load-mac/">
+        <h3>Fix: local AI model won&#x27;t load on Mac</h3>
+        <p>A local AI model that won&#x27;t load on a Mac is almost always RAM, disk, or an incomplete download. Here&#x27;s how to diagnose and fix each cause.</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/free-up-disk-space-for-ai-models/">
+        <h3>Free up disk space for local AI models on Mac</h3>
+        <p>Local AI models range from 2.4 GB to 209 GB. Here&#x27;s how much each Outlier tier needs, where they&#x27;re stored, and how to free up space on your Mac.</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/how-much-ram-for-local-ai/">
+        <h3>How much RAM to run local AI on a Mac?</h3>
+        <p>A clear RAM guide for local AI on Mac: 16 GB runs small models, 32 GB runs coding models, 64 GB runs a 397B model. Plus the rule of thumb that decides it.</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/install-local-ai-on-mac/">
+        <h3>How to install local AI on a Mac (step by step)</h3>
+        <p>Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/move-from-chatgpt-to-local-ai/">
+        <h3>How to switch from ChatGPT to local AI (a practical guide)</h3>
+        <p>You can move most of your ChatGPT use to a local AI app on your Mac — drafting, summarizing, and coding run fine offline. A five-step migration, with…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/run-ai-on-16gb-mac/">
+        <h3>How much AI can you run on a 16 GB Mac? (2026)</h3>
+        <p>16 GB is the most common Mac config — and it runs real local AI well. What the free Nano and Lite tiers do comfortably, what to skip, and how to get…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/run-deepseek-locally-mac/">
+        <h3>How to run DeepSeek locally on a Mac (2026)</h3>
+        <p>Yes, DeepSeek runs locally on an Apple Silicon Mac. The simplest path is a quantized GGUF through Ollama or LM Studio, sized to your RAM. Steps, a…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/run-llama-locally-mac/">
+        <h3>How to run Llama locally on a Mac (2026)</h3>
+        <p>Yes — Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio. Step-by-step setup, plus a size-to-RAM table so you pick…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/run-qwen-locally-mac/">
+        <h3>How to run Qwen locally on a Mac (2026)</h3>
+        <p>Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/stop-chatgpt-training-on-your-data/">
+        <h3>How to stop ChatGPT (and others) training on your data</h3>
+        <p>You can opt out of AI training in most tools&#x27; privacy settings — but the toggles vary and can change. The only guaranteed way: AI that never uploads…</p>
+      </a>
+      <a class="card" href="https://outlier.host/how-to/use-ai-offline-mac/">
+        <h3>How to use AI offline on your Mac (no internet, no account)</h3>
+        <p>Most AI dies the second Wi-Fi drops — it&#x27;s a thin client for a server. Here&#x27;s the genuinely offline path on a Mac: one signed download, a model on your…</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="cta-band">
+    <h2>Try Outlier free</h2>
+    <p>Free Nano + Lite. Pro $20/mo or $149/yr adds everything (Plus 397B included). Lifetime Pro from $99 (Founding 200) or $200 (Founders 500). Apple Silicon only.</p>
+    <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=learn-hub">Download for Mac</a>
+  </div>
+</div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

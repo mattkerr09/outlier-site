@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI for teachers and educators — private and free to start | Outlier</title>
+  <meta name="description" content="Draft lesson plans, quizzes, rubrics, and feedback on your Mac. Outlier runs AI locally, so grades, IEP notes, and student work never leave your device. Free to start.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/for/educators/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI for teachers and educators — private, free to start">
+  <meta property="og:description" content="Draft lesson plans, quizzes, rubrics, and feedback on your Mac. Outlier runs AI locally, so grades, IEP notes, and student work never leave your device. Free to start.">
+  <meta property="og:url" content="https://outlier.host/for/educators/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI for teachers and educators — private, free to start">
+  <meta name="twitter:description" content="AI for teaching that keeps student data on your Mac. Free to start.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1.2rem 1.4rem; background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); margin: 1.8rem 0; font-size: 0.95rem; }
+    .receipts .r-label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.6rem; font-weight: 600; font-family: var(--mono); }
+    .receipts p { margin-bottom: 0.5rem; color: var(--text-mid); }
+    .receipts p:last-child { margin-bottom: 0; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    .disclaim { margin-top: 1.6rem; font-size: 0.82rem; color: var(--text-dim); font-style: italic; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Local AI for teachers and educators — private, free to start", "description": "Draft lesson plans, quizzes, rubrics, and feedback on your Mac. Outlier runs AI locally, so grades, IEP notes, and student work never leave your device. Free to start.", "datePublished": "2026-06-17", "dateModified": "2026-06-17", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/for/educators/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI for teachers and educators — private, free to start", "item": "https://outlier.host/for/educators/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it safe to use AI with student data?", "acceptedAnswer": {"@type": "Answer", "text": "Local AI is safer for student data than cloud chatbots because nothing you type — grades, IEP notes, names, written work — is sent to an AI vendor's servers or training set. It stays on your Mac. That said, on-device tools do not make you FERPA-compliant on their own. You still own your district's or institution's data policies, and you should follow them. Outlier reduces the exposure; it doesn't replace your obligations."}}, {"@type": "Question", "name": "Is there free AI for teachers?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Outlier's Nano (4B) and Lite (9B) tiers are free, with no account and no usage caps, because they run on your own Mac instead of a paid cloud server. For teachers paying out of pocket, that covers most lesson planning, quiz drafting, and feedback first-drafts at no cost. Pro adds the larger models if you want them."}}, {"@type": "Question", "name": "Can it work offline in the classroom?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, Outlier runs fully offline. It works on a locked-down school network, in a room with no wifi, or at home with the connection off. Turn off wifi and check for yourself."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">for</a></div>
+    <h1>Local AI for teachers and educators</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-17</span>
+      <span class="updated-pill">Last updated 2026-06-17</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Local AI keeps student data — grades, feedback, IEP notes, names — <strong>on your Mac</strong>, not on an AI vendor's servers or in its training set.</li>
+        <li>The free tier (Nano 4B + Lite 9B) covers lesson plans, quizzes, rubrics, and feedback drafts. No account, no subscription.</li>
+        <li>No usage caps. Grade and draft for a whole prep period without hitting a wall.</li>
+        <li>It reduces your data exposure. It does <strong>not</strong> make you FERPA-compliant on its own — your district's policy still rules.</li>
+      </ul>
+    </div>
+
+    <p class="lead">A teacher's afternoon is 32 essays, three lesson plans for next week, and a parent email that needs to be careful. Cloud AI can help with all of it — but the moment you paste a student's writing or a grade into a chatbot, that text lands on a company's servers. Local AI keeps it on your laptop instead. Outlier runs the model on your Mac, so the sensitive parts of teaching never leave the room.</p>
+
+    <h2>Why student data and cloud AI don't mix</h2>
+    <p>Paste a struggling student's paragraph into a cloud chatbot to draft feedback, and that text travels to the provider's servers. Same for a grade you're explaining, an IEP note you're rewording, or a roster you're sorting. Depending on the plan and terms of service, it may sit there, and it may feed the vendor's next model. For records tied to a named student, that's a transmission you probably don't want to make without thinking hard about it. Enterprise no-training clauses help, but the data still leaves your control. "We promise not to train on it" is a weaker guarantee than "it never left the laptop."</p>
+
+    <h2>How local AI keeps it on your machine</h2>
+    <p>Local AI runs the model on your own Mac. The prompt, the student's text, the rubric, the response — all of it stays on your disk. There's no API call, so no AI vendor receives the data and no retention policy to decode. Outlier publishes its model weights openly on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a> and runs zero telemetry on inference.</p>
+    <p>One honest caveat: this is a data-handling argument, not a compliance certificate. Keeping student records off a vendor's servers is a real reduction in exposure. It does not, by itself, make you or your school FERPA-compliant — you still own your institution's policies, your IT rules, and your own judgment about what belongs in any tool. Outlier shrinks the surface; it doesn't sign off on it for you.</p>
+
+    <h2>What it handles in a teacher's week</h2>
+    <p>The realistic, time-eating stuff — always with the teacher reviewing the output before it reaches a student or a parent:</p>
+    <ul>
+      <li>Drafting lesson plans and pacing for a unit</li>
+      <li>Generating quizzes, worksheets, and practice problems</li>
+      <li>Writing a rubric from a set of objectives</li>
+      <li>First-draft feedback you then edit into your own voice</li>
+      <li>Differentiating a reading or assignment for different reading levels</li>
+      <li>Drafting a careful parent email and softening the tone</li>
+    </ul>
+
+    <div class="receipts">
+      <span class="r-label">Receipts</span>
+      <p>In a 54-prompt comparison, Outlier's local Core 27B matched Claude Opus on 98.9% of rubric checks overall, and 100% on nine of the hardest tests. So for everyday planning, drafting, and feedback, the output lands close to the cloud flagships. <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">See the benchmark</a>.</p>
+      <p>This isn't a claim of equal IQ — it's that for roughly 90% of the daily grind, a model on your own machine is enough, and it's private by construction. You still read and sign off on everything; AI drafts, you teach.</p>
+    </div>
+
+    <h2>Free matters when you're paying out of pocket</h2>
+    <p>Plenty of teachers buy their own supplies, and plenty would be buying their own AI subscription too. The strong cloud models run about $20/month — roughly $240 a year out of a paycheck that doesn't have it to spare. Outlier's Nano (4B) and Lite (9B) tiers are free, with no account and no usage caps, because they run on your Mac instead of a metered server. For the bulk of lesson planning and feedback drafting, that's the whole bill: nothing. If you want the larger models, Pro is $20/month or $149/year, or a one-time $99 (Founding 200, first 200 seats) for lifetime access. <a href="https://outlier.host/best/free-local-ai-mac/">More on the free local options for Mac</a>.</p>
+
+    <h2>No caps on a stack of grading</h2>
+    <p>Grading 120 short answers isn't ten prompts — it's a long, repetitive haul. Cloud free tiers cut you off partway, or quietly drop you to a weaker model right when you're in the rhythm of it. Local AI has no meter, because there's nobody to bill the tokens; the compute is your wall socket. Draft feedback for a whole class, generate a week of warm-ups, rework three worksheets in a row — the number you can ask stays the same. <a href="https://outlier.host/learn/what-no-usage-caps-means/">What no usage caps actually means</a>.</p>
+
+    <h2>It works where the network doesn't</h2>
+    <p>School networks block things. Some classrooms have no reliable wifi, and plenty of grading happens at the kitchen table at 9 p.m. on a flaky connection. A cloud tool is dead weight in all of those. Outlier downloads the model once, then runs entirely on-device — open the lid on a locked-down network and it works exactly as it did at your desk. Want proof? Turn off wifi and use it.</p>
+
+    <h2>What tier a teacher needs</h2>
+    <p>Most teaching tasks run fine on the free tiers; a 24 GB+ Mac adds the stronger drafting models.</p>
+    <table><thead><tr><th>Task</th><th>How it helps</th><th>What stays private</th></tr></thead><tbody>
+      <tr><td>Lesson plans &amp; pacing</td><td>First-draft structure and timing you refine</td><td>Your curriculum and unit notes</td></tr>
+      <tr><td>Quizzes &amp; worksheets</td><td>Generates items and answer keys to vet</td><td>Stays on your Mac, no vendor copy</td></tr>
+      <tr><td>Rubrics</td><td>Turns objectives into criteria and levels</td><td>Your assignment design</td></tr>
+      <tr><td>Feedback first-drafts</td><td>Drafts comments you edit into your voice</td><td>Student writing, names, scores</td></tr>
+      <tr><td>Differentiation</td><td>Rewrites a text for different reading levels</td><td>Student needs and IEP context</td></tr>
+      <tr><td>Parent emails</td><td>Drafts a careful, professional message</td><td>The family's situation and details</td></tr>
+    </tbody></table>
+    <p>Nano and Lite are free. Pro ($20/month or $149/year, or $99 lifetime for the Founding 200) adds Core 27B and the larger models for heavier drafting on a 24 GB+ Mac. No per-seat metering, no usage caps.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is it safe to use AI with student data?</h3>
+        <p>Local AI is safer for student data than cloud chatbots because nothing you type — grades, IEP notes, names, written work — is sent to an AI vendor's servers or training set. It stays on your Mac. That said, on-device tools don't make you FERPA-compliant on their own. You still own your district's or institution's data policies, and you should follow them. Outlier reduces the exposure; it doesn't replace your obligations.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is there free AI for teachers?</h3>
+        <p>Yes. Outlier's Nano (4B) and Lite (9B) tiers are free, with no account and no usage caps, because they run on your own Mac instead of a paid cloud server. For teachers paying out of pocket, that covers most lesson planning, quiz drafting, and feedback first-drafts at no cost. Pro adds the larger models if you want them.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can it work offline in the classroom?</h3>
+        <p>Yes. After the first model download, Outlier runs fully offline. It works on a locked-down school network, in a room with no wifi, or at home with the connection off. Turn off wifi and check for yourself.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=for-educators">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/for/students/">Free local AI for students</a> · <a href="https://outlier.host/for/researchers/">Local AI for researchers</a> · <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your data private</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <p class="disclaim">This page is general information, not legal or compliance advice. Confirm your obligations with your district, institution, and applicable student-privacy rules such as FERPA.</p>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

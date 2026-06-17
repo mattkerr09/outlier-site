@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI vs cloud AI — the honest 2026 comparison | Outlier</title>
+  <meta name="description" content="Cloud AI is stronger at the hardest frontier tasks. Local AI wins on privacy, cost, no usage caps, and working offline. For ~90% of daily work, local is enough. The honest breakdown.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-11">
+  <link rel="canonical" href="https://outlier.host/vs/local-ai-vs-cloud-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI vs cloud AI — which is right for what">
+  <meta property="og:description" content="Cloud wins the frontier. Local wins privacy, cost, no caps, and offline. Here's the honest split, with real numbers.">
+  <meta property="og:url" content="https://outlier.host/vs/local-ai-vs-cloud-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI vs cloud AI — which is right for what">
+  <meta name="twitter:description" content="The honest 2026 comparison: where each one actually wins.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Local AI vs cloud AI: which is right for what", "description": "Cloud AI is stronger at the hardest frontier tasks. Local AI wins on privacy, cost, no usage caps, and working offline. For ~90% of daily work, local is enough.", "datePublished": "2026-06-11", "dateModified": "2026-06-11", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/vs/local-ai-vs-cloud-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI vs cloud AI: which is right for what", "item": "https://outlier.host/vs/local-ai-vs-cloud-ai/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is local AI better than cloud AI?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the task. Cloud AI is stronger at the hardest frontier work and runs faster. Local AI wins on privacy, cost, no usage caps, and working offline. For roughly 90% of daily work — drafting, summarizing, coding, Q&A — a good local model is enough, and on a 54-prompt comparison Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks."}}, {"@type": "Question", "name": "Is cloud AI more powerful?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at the extreme high end. The largest frontier models in the cloud lead on the very hardest reasoning, math, and research tasks, and they generate faster — roughly 80 to 100 tokens per second versus about 20.7 for a 27B model running locally on an M1 Ultra. The gap matters most on a thin slice of work and barely shows on everyday tasks."}}, {"@type": "Question", "name": "Can local AI replace ChatGPT?", "acceptedAnswer": {"@type": "Answer", "text": "For most daily work, yes. Drafting, rewriting, summarizing, everyday coding, and Q&A all run well on a local model with no account, no subscription, and no usage caps. Keep a cloud tool around for the occasional frontier task where you want the strongest possible model. The point of local isn't to win a benchmark — it's that nobody can retire, throttle, or reprice it."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
+    <h1>Local AI vs cloud AI: which is right for what</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-11</span>
+      <span class="updated-pill">Last updated 2026-06-11</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Cloud AI is stronger at the hardest frontier tasks; local AI wins on privacy, cost, no usage caps, and working offline — for ~90% of daily work, local is enough.</li>
+        <li>Cloud runs faster: roughly <strong>80–100 tokens/sec</strong> versus about <strong>20.7 tok/s</strong> for a 27B model on an M1 Ultra. On everyday tasks you don't feel it.</li>
+        <li>On a 54-prompt comparison, a local Core 27B matched Claude Opus on <strong>98.9%</strong> of rubric checks — close enough that the gap rarely shows in normal use.</li>
+        <li>Local means a model file on your disk: no account, no meter, no internet, nothing to deprecate. That's the real trade, not IQ.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Here's the honest split. Cloud AI is stronger at the very hardest tasks and it generates faster. Local AI keeps your data on your machine, costs nothing per query, never hits a usage cap, and works with the Wi-Fi off. For the roughly 90% of work most people do all day — drafting, summarizing, everyday coding, Q&A — a good local model is enough. The decision isn't "which is smarter." It's how much of your work actually lives at the frontier, and how much you care about owning the thing versus renting it.</p>
+
+    <h2>What "local" and "cloud" actually mean</h2>
+    <p>Cloud AI runs in someone else's data center. You send your prompt over the internet, a remote GPU does the work, the answer comes back. You're renting access by the month or the token, and the provider controls the model, the price, and the rules. ChatGPT, Claude, Gemini — all cloud.</p>
+    <p>Local AI runs on your own hardware. The model weights are files on your disk, and inference happens on your CPU and GPU. No prompt leaves the machine. No account. The model can't be changed out from under you, because there's no "under you" — it's just a file, and files don't have terms of service. Outlier is the local side of this on a Mac; Ollama and LM Studio are other ways in.</p>
+
+    <h2>The honest comparison</h2>
+    <p>Both directions, no spin. Here's where each one lands on the dimensions that actually decide it.</p>
+    <table>
+      <thead><tr><th>Dimension</th><th>Local AI</th><th>Cloud AI</th></tr></thead>
+      <tbody>
+        <tr><td>Where it runs</td><td>Your own machine</td><td>A remote data center</td></tr>
+        <tr><td>Privacy</td><td>Prompts never leave the device</td><td>Prompts sent to a provider's servers</td></tr>
+        <tr><td>Internet</td><td>Works fully offline</td><td>Required — no connection, no answer</td></tr>
+        <tr><td>Usage caps</td><td>None; run it all day</td><td>Rate limits, message caps, rationing</td></tr>
+        <tr><td>Cost model</td><td>One-time, or free; no per-query meter</td><td>Monthly subscription and/or per-token</td></tr>
+        <tr><td>Peak capability</td><td>Strong on ~90% of daily work</td><td>Leads on the hardest frontier tasks</td></tr>
+        <tr><td>Speed</td><td>~20.7 tok/s (Core 27B, M1 Ultra)</td><td>~80–100 tok/s</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where cloud genuinely wins</h2>
+    <p>Cloud AI is faster and it's stronger at the extreme high end. The largest frontier models — hundreds of billions of parameters running on racks of datacenter GPUs — still lead on the very hardest reasoning, novel math, and deep multi-step research. And they're quicker: a cloud flagship streams at roughly 80–100 tokens per second, while a 27B model on an M1 Ultra runs about 20.7 tok/s. If your work lives at that frontier every day, the cloud earns its keep. Nobody honest tells you a local model beats a frontier model on the frontier. It doesn't.</p>
+
+    <h2>Where local genuinely wins</h2>
+    <p>Everything that isn't raw peak capability. Privacy is the obvious one: your prompts, your code, your client files never leave the machine, so there's nothing to leak, subpoena, or train on. Then there's the meter. Cloud AI is metered AI, and 2026 has made that visible — Axios ran a piece called "AI sticker shock" on May 28, and outlets reported "Corporate America Is Starting to Ration AI as Cost Skyrockets" on May 30. There was even a popular Hacker News thread, "Optimizing my sleep around Claude usage limits." A model on your disk has no cap to optimize your sleep around.</p>
+    <p>Local also keeps working when the connection doesn't — on a plane, in a basement, during an outage. And it can't be taken away. When GPT-4 was removed from ChatGPT in April 2025, anyone who'd built around it lost it overnight; a file on your disk doesn't get deprecated. The case for local isn't a benchmark win. It's <a href="https://outlier.host/learn/own-your-ai/">ownership</a>: no account, no meter, no remote off-switch.</p>
+
+    <div class="receipts">
+      <strong>The receipts.</strong> On a 54-prompt head-to-head, Outlier's Core 27B matched Claude Opus on <strong>98.9%</strong> of rubric checks overall and 100% on 9 hard tests including a chess engine, raft/paxos, and zero-knowledge proofs (<a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">full benchmark</a>). Nano scores <strong>81.1%</strong> on HumanEval and 0.793 on a quick MMLU run (n=300). And the paged inference engine runs <strong>209 GB of weights at ~11 GB peak RSS</strong> on a 64 GB Mac Studio — a 397B-parameter model on hardware that could never hold it in RAM.
+    </div>
+
+    <h2>So which do you actually pick?</h2>
+    <p>Start with your work, not the spec sheet. If most of your day is drafting, rewriting, summarizing, everyday coding, and asking questions, local handles it — and you stop paying a subscription, stop hitting <a href="https://outlier.host/learn/why-ai-has-usage-caps/">usage caps</a>, and keep your data home. If a real slice of your work is genuinely frontier-hard and speed-critical, keep a cloud tool for that slice. Plenty of people run both: local as the daily driver they sit in front of all day, cloud as the specialist they reach for now and then. The honest framing isn't local-versus-cloud as a war. It's deciding how much of your AI you want to <em>own</em> versus rent — and for most work, owning it is the better deal. If you want the full dollar math, the <a href="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">cloud vs local cost breakdown</a> runs the numbers.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is local AI better than cloud AI?</h3>
+        <p>It depends on the task. Cloud is stronger at the hardest frontier work and runs faster. Local wins on privacy, cost, no usage caps, and working offline. For roughly 90% of daily work, a good local model is enough — on a 54-prompt comparison, a local Core 27B matched Claude Opus on 98.9% of rubric checks.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is cloud AI more powerful?</h3>
+        <p>Yes, at the extreme high end. The largest frontier models lead on the very hardest reasoning, math, and research, and they generate faster — about 80–100 tokens per second versus roughly 20.7 for a 27B model on an M1 Ultra. The gap matters most on a thin slice of work and barely shows on everyday tasks.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can local AI replace ChatGPT?</h3>
+        <p>For most daily work, yes. Drafting, rewriting, summarizing, everyday coding, and Q&A all run well locally with no account, no subscription, and no caps. Keep a cloud tool for the occasional frontier task where you want the strongest possible model. The point of local isn't to win a benchmark — it's that nobody can retire, throttle, or reprice it.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-vs-cloud-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/cloud-ai-vs-local-ai-cost/">Cloud AI vs local AI — the real cost</a> · <a href="https://outlier.host/learn/own-your-ai/">What owning your AI actually means</a> · <a href="https://outlier.host/learn/ai-rationing/">When companies start rationing AI</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

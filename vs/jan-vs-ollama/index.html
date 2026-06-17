@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jan vs Ollama (2026) — open-source local AI compared | Outlier</title>
+  <meta name="description" content="Jan vs Ollama, compared honestly. Jan is an MIT desktop chat app with an OpenAI-compatible API; Ollama is a CLI-first runner with a huge model library. Where each one fits.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-13">
+  <link rel="canonical" href="https://outlier.host/vs/jan-vs-ollama/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Jan vs Ollama — two open-source ways to run local AI">
+  <meta property="og:description" content="Jan is an MIT desktop GUI with an OpenAI-compatible API. Ollama is a CLI-first engine other apps build on. Where each one fits.">
+  <meta property="og:url" content="https://outlier.host/vs/jan-vs-ollama/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jan vs Ollama — two open-source ways to run local AI">
+  <meta name="twitter:description" content="Click-and-chat vs script-and-integrate. Where each tool fits, honestly.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1.2rem 1.4rem; background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); margin: 1.6rem 0; font-size: 0.95rem; }
+    .receipts .r-label { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.6rem; font-weight: 600; font-family: var(--mono); }
+    .receipts p { margin-bottom: 0.6rem; color: var(--text-mid); }
+    .receipts p:last-child { margin-bottom: 0; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Jan vs Ollama: two open-source ways to run local AI","description":"Jan is an MIT desktop chat app with an OpenAI-compatible API; Ollama is a CLI-first runner with a huge model library. A fair comparison of where each one fits.","datePublished":"2026-06-13","dateModified":"2026-06-13","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/jan-vs-ollama/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Jan vs Ollama: two open-source ways to run local AI", "item": "https://outlier.host/vs/jan-vs-ollama/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Jan built on Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "No. Jan is its own desktop app and isn't a front-end for Ollama. They're separate projects that happen to share the same underlying engine family: both run GGUF models through a llama.cpp-style backend. You can run Jan without Ollama installed, and vice versa."}}, {"@type": "Question", "name": "Are Jan and Ollama free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Both are free and open source. Jan is MIT licensed; Ollama is also open source. Neither charges for the software, and both run models locally so there's no per-token or subscription cost for inference."}}, {"@type": "Question", "name": "Which is more private, Jan or Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Both keep inference on your machine, so for the actual chat there's no meaningful privacy gap. Models run locally and prompts don't leave the device unless you wire in a remote provider. Either tool can run fully offline."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">vs</a></div>
+    <h1>Jan vs Ollama: two open-source ways to run local AI</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-13</span>
+      <span class="updated-pill">Last updated 2026-06-13</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Jan gives you a clean desktop chat app with a built-in GUI; Ollama is a CLI-first engine that other apps build on — pick Jan to click-and-chat, Ollama to script and integrate.</li>
+        <li>Both are <strong>free, open-source, and run models locally</strong>. Jan is MIT licensed; Ollama is open source with a large model library.</li>
+        <li>Under the hood they overlap: both run GGUF models through a llama.cpp-style engine, and both expose an OpenAI-compatible local API.</li>
+        <li>Both are RAM-bound — the model has to fit in memory. Pick based on workflow, not on which one is "better."</li>
+      </ul>
+    </div>
+
+    <p class="lead">Want to run an AI model on your own machine without paying per token? Jan and Ollama are two of the most popular ways to do it — and they answer different questions. Jan is a desktop app you download, open, and chat in, like a local ChatGPT. Ollama is a command-line engine you pull a model into and run, and that other tools wire into. Both are free, both keep the model on your hardware, and both are good at what they aim for. Here's the honest breakdown.</p>
+
+    <h2>What is Jan?</h2>
+    <p>Jan is an open-source desktop app, MIT licensed, that runs on macOS, Windows, and Linux. You install it, browse a model list, download one, and start chatting in a clean GUI — no terminal involved. It runs GGUF models through a llama.cpp-style backend, and it ships an OpenAI-compatible local server, so any app expecting the OpenAI API format can point at Jan instead. Privacy is a stated design goal: by default the model runs on your machine and conversations stay there. For people who want a local chat window that just opens and works, that's the appeal.</p>
+
+    <h2>What is Ollama?</h2>
+    <p>Ollama is a CLI-first local runner, also open source. You install it, then <code>ollama pull</code> a model and <code>ollama run</code> it from the terminal. It's cross-platform — macOS, Linux, Windows — and runs GGUF models via a llama.cpp backend. Two things make it a developer favorite: the model library is large and easy to pull from, and it exposes a clean HTTP API (with an OpenAI-compatible mode) that countless other tools build on top of. Want a GUI on Ollama? You bolt one on — Open WebUI and similar projects exist precisely because Ollama is meant to be the engine, not the face.</p>
+
+    <h2>Jan vs Ollama: the comparison</h2>
+    <table>
+      <thead><tr><th>Dimension</th><th>Jan</th><th>Ollama</th></tr></thead>
+      <tbody>
+        <tr><td>Primary interface</td><td>Desktop chat app</td><td>Command line + API</td></tr>
+        <tr><td>Built-in GUI</td><td>Yes (ships a chat UI)</td><td>No (BYO front-end)</td></tr>
+        <tr><td>Local API</td><td>OpenAI-compatible</td><td>HTTP API + OpenAI-compatible mode</td></tr>
+        <tr><td>Platforms</td><td>Mac, Windows, Linux</td><td>Mac, Linux, Windows</td></tr>
+        <tr><td>License / openness</td><td>Open source (MIT)</td><td>Open source</td></tr>
+        <tr><td>Model format</td><td>GGUF (llama.cpp)</td><td>GGUF (llama.cpp)</td></tr>
+        <tr><td>Model library</td><td>Curated in-app browser</td><td>Large, easy <code>pull</code> registry</td></tr>
+        <tr><td>Runs models &gt; RAM</td><td>No (RAM-bound)</td><td>No (RAM-bound)</td></tr>
+        <tr><td>Cost</td><td>Free</td><td>Free</td></tr>
+        <tr><td>Best for</td><td>Click-and-chat users</td><td>Scripting, integration, backends</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where they actually differ</h2>
+    <p>The headline split is interface, not capability. They share an engine family — GGUF through llama.cpp — so on the same model and same machine, raw output quality is going to be similar. What differs is the shape of the work.</p>
+    <p>Reach for <strong>Jan</strong> when you want a finished app: open it, pick a model, type. There's a window, a chat history, a settings panel. No commands to remember. If "local AI" to you means "a private ChatGPT I can double-click," Jan is built for that.</p>
+    <p>Reach for <strong>Ollama</strong> when the model is a component in something larger. You're writing a script, building an app, running an agent, or you just live in the terminal. Its bigger pull-able library and its role as a standard backend mean a lot of tooling already speaks Ollama out of the box. The trade-off is that out of the box it has no graphical chat — you bring your own.</p>
+
+    <div class="receipts">
+      <span class="r-label">The shared reality</span>
+      <p>Both Jan and Ollama keep inference on your machine, which matters more than usual right now. Local models don't draw on the cloud's water and power footprint: MIT Technology Review reported in 2025 that inference is roughly 80–90% of AI compute, and the IEA's "Energy and AI" report projects data-center electricity to more than double by 2030. A model running on your own laptop has none of that marginal draw — its energy is just your wall socket.</p>
+      <p>Both are also RAM-bound. The model has to fit in memory, so on a 16 GB or 32 GB machine you're picking from quantized small-to-mid models, not the big ones.</p>
+    </div>
+
+    <h2>Which should you pick?</h2>
+    <p>If you want to download one thing and start chatting in a real window, pick <strong>Jan</strong>. If you want to script against a model, integrate it into other software, or run it headless as a backend, pick <strong>Ollama</strong> — and put a GUI like Open WebUI on top if you later want one. Plenty of people run both: Ollama humming as the engine, a separate app as the face. Neither is a wrong answer; they're answers to different questions.</p>
+    <p>One shared limit is worth naming: both cap out at what fits in your RAM. If you specifically want to run a model <em>bigger</em> than your Mac's memory, that's a different architecture. <a href="https://outlier.host/">Outlier</a> is one Mac-native option there — a single signed app whose patent-pending paged inference engine streams expert tensors off the SSD, so a 397B-parameter model runs at roughly 11 GB peak RSS on a 64 GB Mac instead of needing 209 GB of RAM. It's Apple-Silicon-only and not open source, so it's a different trade than Jan or Ollama — but if "won't fit in RAM" is your blocker, it's worth knowing it exists.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is Jan built on Ollama?</h3>
+        <p>No. Jan is its own desktop app and isn't a front-end for Ollama. They're separate projects that happen to share the same underlying engine family — both run GGUF models through a llama.cpp-style backend. You can run Jan without Ollama installed, and run Ollama without Jan.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Are Jan and Ollama free?</h3>
+        <p>Yes. Both are free and open source. Jan is MIT licensed; Ollama is also open source. Neither charges for the software, and because both run models locally there's no per-token or subscription cost for the actual inference.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which is more private, Jan or Ollama?</h3>
+        <p>Both keep inference on your machine, so for the chat itself there's no meaningful privacy gap — prompts don't leave the device unless you deliberately wire in a remote provider. Either tool can run fully offline. The practical difference is interface, not privacy.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=jan-vs-ollama">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-jan/">Outlier vs Jan</a> · <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/vs/mac-native-ai-comparison/">Mac-native AI compared</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

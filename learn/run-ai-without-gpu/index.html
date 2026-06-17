@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to run AI on Mac without a discrete GPU (2026) | Outlier</title>
+  <meta name="description" content="Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-18">
+  <link rel="canonical" href="https://outlier.host/learn/run-ai-without-gpu/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to run AI on Mac without a discrete GPU (2026)">
+  <meta property="og:description" content="Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.">
+  <meta property="og:url" content="https://outlier.host/learn/run-ai-without-gpu/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to run AI on Mac without a discrete GPU (2026)">
+  <meta name="twitter:description" content="No discrete GPU? No problem. Here's why your Mac already has everything it needs.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI on Mac without a discrete GPU (2026)","description":"Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.","datePublished":"2026-06-18","dateModified":"2026-06-18","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Run AI without a GPU","item":"https://outlier.host/learn/run-ai-without-gpu/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How to run AI on Mac without a discrete GPU</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier &mdash; Jun 18, 2026</span>
+      <span class="updated-pill">Updated Jun 18, 2026</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Yes &mdash; Apple Silicon Macs have GPU cores built directly into the chip, sharing unified memory with the CPU. You don't need a separate graphics card. Even an M4 MacBook Air can run a 7B model at 20+ tokens per second.</p>
+    </div>
+
+    <p class="lead">If you've looked into running AI locally on a PC, you've probably run into the GPU wall: most guides assume you have an NVIDIA card with dedicated VRAM. The Mac story is different, and it comes down to how Apple Silicon is physically built.</p>
+
+    <h2>Why AI usually needs a GPU</h2>
+
+    <p>On a typical Windows or Linux desktop, the CPU and GPU are separate chips connected by a PCIe bus. The GPU has its own pool of dedicated video RAM (VRAM) &mdash; 8 GB, 16 GB, 24 GB depending on the card. LLM inference is essentially a huge sequence of matrix multiplications, and GPUs are built to execute those in parallel across thousands of cores.</p>
+
+    <p>The catch: a model has to fit inside that dedicated VRAM. An RTX 4090 has 24 GB. A 70B-parameter model in 4-bit quantization needs roughly 35 GB. It won't load. You're either paying for multiple high-end cards or you're stuck with smaller models.</p>
+
+    <p>The other catch is the software stack. GPU-accelerated inference on PC relies almost entirely on NVIDIA's <code>CUDA</code> platform. AMD GPUs have <code>ROCm</code>, but driver and library coverage is narrower. Intel integrated graphics on Windows &mdash; the kind most laptops ship with &mdash; offer very limited acceleration for LLM workloads. Running a 7B+ model on integrated Intel or AMD graphics on a Windows laptop is possible but slow enough to be frustrating in practice.</p>
+
+    <h2>Why Mac is different</h2>
+
+    <p>Apple Silicon uses a <strong>unified memory architecture</strong>: the CPU, GPU, Neural Engine, and all the other processors share a single pool of fast on-package memory. There is no separate VRAM, no PCIe bus, no memory copy from system RAM to GPU RAM. Everything is the same memory.</p>
+
+    <p>This changes the math for local AI entirely. When a model loads on Apple Silicon, it lands in unified memory where both the CPU and GPU can read it directly. The GPU cores in the chip perform the matrix multiplications that drive inference &mdash; the same work a discrete GPU does on a PC &mdash; but they're operating on memory that's already shared. No transfer overhead, no 24 GB ceiling imposed by a separate card.</p>
+
+    <h2>What the M-series chip actually contains</h2>
+
+    <p>Apple Silicon isn't just a CPU with a small integrated GPU bolted on. Every M-series chip packs several compute engines onto one die:</p>
+
+    <ul>
+      <li><strong>CPU cores</strong> (performance + efficiency clusters) &mdash; handles the OS, scheduling, non-matrix work</li>
+      <li><strong>GPU cores</strong> &mdash; M4 MacBook Air has 10; M4 Max has 40; M1 Ultra has 64. These do the heavy matrix math for inference.</li>
+      <li><strong>Neural Engine</strong> &mdash; a dedicated ML accelerator. The M4's Neural Engine runs at 38 TOPS. Used for certain model operations and on-device CoreML tasks.</li>
+      <li><strong>Unified memory</strong> &mdash; shared by all of the above, with high-bandwidth access across the whole chip</li>
+    </ul>
+
+    <p>The GPU cores are real GPU cores. They're not a watered-down integrated graphics chip; they're the same tile-based deferred renderer Apple uses for gaming and creative workloads. For LLM inference, frameworks like MLX and llama.cpp's Metal backend route matrix operations directly to these cores.</p>
+
+    <h2>What this means for local AI performance</h2>
+
+    <p>The practical result is that a Mac without any discrete GPU can run local AI at speeds that would have required a dedicated workstation GPU a couple of years ago.</p>
+
+    <p>Measured on real hardware with Outlier:</p>
+
+    <ul>
+      <li><strong>Outlier Nano (1.5B)</strong> on M4 MacBook Air: ~32 tokens/second</li>
+      <li><strong>Outlier Core (27B)</strong> on M1 Ultra: ~20 tokens/second</li>
+      <li><strong>Outlier Plus (397B)</strong> on M1 Ultra via paged MoE inference: ~2.1 tokens/second</li>
+    </ul>
+
+    <p>Memory bandwidth is the real limiting factor for LLM inference &mdash; more so than raw GPU core count. The GPU has to read model weights on every forward pass, and how fast it can do that determines throughput. The M2 Ultra delivers 800 GB/s of memory bandwidth. The M4 Max delivers 546 GB/s. An RTX 4090 hits 1,008 GB/s, but only across 24 GB of VRAM. Once your model exceeds that 24 GB, the entire setup breaks down; on Apple Silicon, larger models just use more of the shared pool.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Spec</th>
+          <th>M4 MacBook Air</th>
+          <th>RTX 4090 gaming PC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GPU cores</td>
+          <td>10-core GPU (on-chip)</td>
+          <td>16,384 CUDA cores (discrete)</td>
+        </tr>
+        <tr>
+          <td>Memory pool</td>
+          <td>16–32 GB unified memory</td>
+          <td>24 GB VRAM (system RAM separate)</td>
+        </tr>
+        <tr>
+          <td>Memory bandwidth</td>
+          <td>120 GB/s (16 GB) / 273 GB/s (32 GB)</td>
+          <td>1,008 GB/s</td>
+        </tr>
+        <tr>
+          <td>Max model size</td>
+          <td>Up to available RAM (7B–13B on 16 GB)</td>
+          <td>Capped at 24 GB VRAM</td>
+        </tr>
+        <tr>
+          <td>Approximate price</td>
+          <td>$1,099 (complete laptop)</td>
+          <td>~$1,600 (GPU only)</td>
+        </tr>
+        <tr>
+          <td>Discrete GPU required</td>
+          <td>No</td>
+          <td>Yes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The catch: you still need enough RAM</h2>
+
+    <p>Unified memory solves the VRAM ceiling problem, but it doesn't eliminate the memory requirement. A model has to fit in your Mac's RAM. Here's a rough guide by RAM tier:</p>
+
+    <ul>
+      <li><strong>8 GB</strong> &mdash; Small models only (1B–3B). Usable for quick tasks; macOS needs ~4 GB, leaving little headroom for a 7B model.</li>
+      <li><strong>16 GB</strong> &mdash; Comfortable for 7B models in 4-bit quantization (~4.5 GB), with room for the OS and other apps. A practical everyday setup.</li>
+      <li><strong>32 GB</strong> &mdash; Opens up 13B–27B models. Good for serious local AI work without compromise.</li>
+      <li><strong>64 GB+</strong> &mdash; Runs 70B models, or with paged MoE inference, models far larger than the chip's RAM through streaming from disk.</li>
+    </ul>
+
+    <p>If you're buying a Mac for local AI, 16 GB is the practical floor for everyday use. If budget allows, 32 GB gives you substantially more model range without needing any special software tricks.</p>
+
+    <h2>Getting started on Mac without a GPU</h2>
+
+    <p>The minimum you need: any M1 or newer Mac, macOS 13 Ventura or later, and model weights that fit in your available RAM. No discrete GPU, no CUDA, no NVIDIA driver setup.</p>
+
+    <p>From there, you have a few paths:</p>
+
+    <ul>
+      <li><strong>Outlier</strong> &mdash; native Mac app that manages models, runs inference via MLX and Metal, and supports models from 1.5B up to 397B with paged inference. Nano tier is free.</li>
+      <li><strong>Ollama</strong> &mdash; command-line tool with a local HTTP API. Pulls models from a registry, uses llama.cpp with Metal acceleration under the hood.</li>
+      <li><strong>LM Studio</strong> &mdash; GUI application, good for browsing and testing models without writing any code.</li>
+    </ul>
+
+    <p>All three use the Metal GPU backend on Apple Silicon, meaning they route matrix operations to your chip's GPU cores automatically. You don't configure anything; the Mac just works.</p>
+
+    <div class="receipts">
+      <strong>On the numbers:</strong> Speed figures in this article (32 tok/s on M4 Air, ~20 tok/s on M1 Ultra for Core 27B, 2.1 tok/s for Plus 397B) come from my own measured runs using Outlier on those machines. Your results may vary by model quantization and system load.
+    </div>
+
+    <div class="cta">
+      <h3>Try local AI on your Mac</h3>
+      <p>Outlier runs on any M1 or newer Mac. Download the app, pick a model, and start running inference on your own hardware &mdash; no GPU, no cloud account required.</p>
+      <a class="btn" href="https://outlier.host/#app">Download Outlier</a>
+    </div>
+
+    <div class="related">
+      <p>Related reading:
+        <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;&middot;&nbsp;
+        <a href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">Running 397B on a 64 GB Mac Studio</a> &nbsp;&middot;&nbsp;
+        <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a>
+      </p>
+    </div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier. Local AI for Mac.</span>
+    <span>
+      <a href="https://outlier.host/learn/">Learn</a> &nbsp;&middot;&nbsp;
+      <a href="https://outlier.host/privacy/">Privacy</a> &nbsp;&middot;&nbsp;
+      <a href="https://outlier.host/terms/">Terms</a>
+    </span>
+  </div>
+</footer>
+</body>
+</html>

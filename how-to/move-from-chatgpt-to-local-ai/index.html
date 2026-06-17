@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to switch from ChatGPT to local AI (a practical guide) | Outlier</title>
+  <meta name="description" content="You can move most of your ChatGPT use to a local AI app on your Mac — drafting, summarizing, and coding run fine offline. A five-step migration, with an honest task-by-task table.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/how-to/move-from-chatgpt-to-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to move from ChatGPT to local AI">
+  <meta property="og:description" content="You can move most of your ChatGPT use to a local AI app on your Mac — drafting, summarizing, and coding run fine offline. A five-step migration, with an honest task-by-task table.">
+  <meta property="og:url" content="https://outlier.host/how-to/move-from-chatgpt-to-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to move from ChatGPT to local AI">
+  <meta name="twitter:description" content="Replace your ChatGPT habit with a local tool on your Mac. The practical five-step migration.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to move from ChatGPT to local AI", "description": "You can move most of your ChatGPT use to a local AI app on your Mac — drafting, summarizing, and coding run fine offline. A five-step migration, with an honest task-by-task table.", "datePublished": "2026-06-17", "dateModified": "2026-06-17", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/move-from-chatgpt-to-local-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to move from ChatGPT to local AI", "item": "https://outlier.host/how-to/move-from-chatgpt-to-local-ai/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can local AI replace ChatGPT?", "acceptedAnswer": {"@type": "Answer", "text": "For most daily work, yes. Drafting, summarizing, rewriting, everyday coding, and quick Q&A all run fine on a local model on an Apple Silicon Mac, with no account and no internet. On a 54-prompt comparison, Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks. Where local doesn't fully replace ChatGPT is the hardest frontier reasoning, where the biggest cloud models still lead. Many people keep one cloud seat for that last 10% and move everything else local."}}, {"@type": "Question", "name": "Will I lose my ChatGPT history if I switch?", "acceptedAnswer": {"@type": "Answer", "text": "No. Switching apps doesn't delete your ChatGPT account or its history. You can export your data from ChatGPT settings (Settings, then Data controls, then Export) before you cancel anything, and you can keep the account on the free tier indefinitely as an archive. Your new local conversations live on your own disk."}}, {"@type": "Question", "name": "What's the catch with switching to local AI?", "acceptedAnswer": {"@type": "Answer", "text": "Two honest trade-offs. Local models run slower than cloud flagships — Outlier's Core 27B does about 20.7 tok/s on an M1 Ultra versus roughly 80 to 100 for cloud — and the very hardest reasoning still favors the biggest cloud models. You also need an Apple Silicon Mac (M1 or newer). In exchange you get privacy, no usage caps, no monthly bill, and a tool that keeps working with Wi-Fi off."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How to move from ChatGPT to local AI</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-17</span>
+      <span class="updated-pill">Last updated 2026-06-17</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>You can move most of your ChatGPT use to a local AI app on your Mac — the everyday drafting, summarizing, and coding runs fine offline; keep a cloud seat only for the hardest frontier tasks.</li>
+        <li>Five steps: audit what you really use ChatGPT for, export your data, install a local app and pick a model that fits your Mac, run a week in parallel, then cancel or downgrade what's left.</li>
+        <li>The honest split is roughly 90/10: most daily prompts are routine; the cloud still wins the top 10% of hard reasoning.</li>
+        <li>This is an ownership and privacy move, not a claim that local is smarter. The pitch is no caps, no bill, no data leaving your Mac.</li>
+      </ul>
+    </div>
+
+    <p class="lead">You don't have to quit ChatGPT cold turkey to stop renting it. Most of what people actually open ChatGPT for (fixing an email, summarizing a PDF, naming a function, asking a quick "how do I") is routine work a local model handles on the Mac you already own. The trick isn't a heroic switch. It's moving the boring 90% off the meter, running both side by side for a week so you trust it, and keeping one cloud seat only if the hardest 10% still needs it.</p>
+
+    <h2>Step 1: Figure out what you actually use ChatGPT for</h2>
+    <p>Before installing anything, look at your real usage. Open your ChatGPT history and scroll a month back. Most people find the same handful of jobs over and over: drafting and rewriting text, summarizing something long, explaining or fixing code, translating, and quick factual Q&A. That's the everyday bucket, and it's the part that runs fine on a local model. The other bucket (multi-step research across dozens of live sources, or a genuinely hard proof or architecture problem) is smaller than it feels. Name your top five recurring tasks. That list is your migration checklist.</p>
+
+    <h2>Step 2: Export your ChatGPT data (if you want it)</h2>
+    <p>Switching apps doesn't touch your account, but exporting first is cheap insurance. In ChatGPT, go to Settings → Data controls → Export data; OpenAI emails you a downloadable archive of your conversations. Keep it in a folder, or feed old threads into your new tool as reference. You can leave the ChatGPT account on the free tier as a read-only archive — there's no rule that says cancelling the subscription deletes the history. <a href="https://outlier.host/learn/where-chatgpt-conversations-go/">Where your ChatGPT conversations actually live</a> covers what's stored and where.</p>
+
+    <h2>Step 3: Install a local AI app and pick a model that fits your Mac</h2>
+    <p>On a Mac, the local options split into runners and apps. Ollama and LM Studio are free and capable: you pick a GGUF model, and it loads as long as it fits in RAM. Outlier takes the batteries-included route: one signed download, no account, no terminal, no Docker, and a patent-pending paged inference engine that streams a model's experts from disk, so it can run a model bigger than your Mac's RAM (a 397B-parameter model peaks at roughly 11 GB on a 64 GB Mac). Pick a tier sized to your machine: start on the free Nano or Lite, step up to Core 27B for heavier work. The <a href="https://outlier.host/how-to/install-local-ai-on-mac/">install guide</a> and <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM sizing guide</a> walk through the choice.</p>
+
+    <h2>Step 4: Run a week in parallel to build trust</h2>
+    <p>Don't cancel anything yet. For one week, send every prompt to both tools: paste it into ChatGPT and into your local app, and compare. You'll learn fast where local is indistinguishable (most prompts) and where the cloud still pulls ahead (the gnarly ones). This is the step that actually breaks the habit. Once you've watched a local model nail a week of your real work, the subscription stops feeling load-bearing. On a 54-prompt side-by-side, Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks and hit 100% on nine of the hardest tests, and that <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">comparison is public</a> so you can check the rubric yourself.</p>
+
+    <h2>Step 5: Keep one cloud sub only if you need the frontier 10%</h2>
+    <p>Be honest about the last slice. The biggest cloud models are faster and still stronger at the hardest reasoning, and some workflows lean on them daily. If yours does, keep one seat; that's a fine outcome. Most people don't: they find the local tool covers the day, and the cloud bill was paying for a 10% they rarely hit. If you're stacking several AI subscriptions, <a href="https://outlier.host/learn/ai-subscription-stacking/">the math on the stack</a> and the <a href="https://outlier.host/how-to/cancel-ai-subscriptions/">cancel-without-losing-anything walkthrough</a> show how to keep exactly the one you need and drop the rest.</p>
+
+    <h2>ChatGPT task → local replacement (honest verdict)</h2>
+    <table>
+      <thead>
+        <tr><th>What you use ChatGPT for</th><th>Local replacement</th><th>Honest verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Drafting &amp; rewriting email/text</td><td>Local chat (Nano/Lite/Core)</td><td>Fully replaceable</td></tr>
+        <tr><td>Summarizing long docs/PDFs</td><td>Local chat with the file</td><td>Fully replaceable</td></tr>
+        <tr><td>Everyday coding &amp; bug fixes</td><td>Local model + coding agent</td><td>Fully replaceable for most tasks</td></tr>
+        <tr><td>Quick factual Q&amp;A</td><td>Local chat (offline)</td><td>Replaceable; no live web unless you add it</td></tr>
+        <tr><td>Translating text</td><td>Local chat</td><td>Fully replaceable</td></tr>
+        <tr><td>Multi-source live research</td><td>Deep-research mode</td><td>Workable locally; cloud still broader</td></tr>
+        <tr><td>Hardest reasoning / novel proofs</td><td>Largest local tier</td><td>Keep a cloud seat; frontier still leads</td></tr>
+      </tbody>
+    </table>
+
+    <div class="receipts"><strong>Receipts:</strong> The 54-prompt result (Core 27B matched Claude Opus on 98.9% of checks; 100% on nine hard tests) is published with its rubric at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">the benchmark page</a>. Outlier's open-weight models are inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>. Why people are doing this now: the trade press has spent the spring on AI costs. Axios ran "AI sticker shock" (May 28, 2026), and "Corporate America Is Starting to Ration AI as Cost Skyrockets" landed May 30, 2026. The everyday work runs on your wall socket; no data center required.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can local AI replace ChatGPT?</h3>
+        <p>For most daily work, yes. Drafting, summarizing, rewriting, everyday coding, and quick Q&amp;A all run fine on a local model on an Apple Silicon Mac, with no account and no internet. On a 54-prompt comparison, Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks. Where local doesn't fully replace ChatGPT is the hardest frontier reasoning, where the biggest cloud models still lead — so many people keep one cloud seat for that last 10% and move everything else local.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Will I lose my ChatGPT history if I switch?</h3>
+        <p>No. Switching apps doesn't delete your ChatGPT account or its history. Export your data first from Settings → Data controls → Export, then keep the account on the free tier indefinitely as an archive if you like. Your new local conversations live on your own disk, in your own backups.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the catch with switching to local AI?</h3>
+        <p>Two honest trade-offs. Local models run slower than cloud flagships — Outlier's Core 27B does about 20.7 tok/s on an M1 Ultra versus roughly 80 to 100 for cloud — and the very hardest reasoning still favors the biggest cloud models. You also need an Apple Silicon Mac (M1 or newer). In exchange you get privacy, no usage caps, no monthly bill, and a tool that keeps working with Wi-Fi off.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=move-from-chatgpt-to-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/how-to/cancel-ai-subscriptions/">How to cancel your AI subscriptions</a> · <a href="https://outlier.host/vs/best-chatgpt-alternative-mac-offline/">Best ChatGPT alternative for Mac (offline)</a> · <a href="https://outlier.host/learn/own-your-ai/">What owning your AI means</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

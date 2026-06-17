@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Is local AI safe? What to actually check (2026) | Outlier</title>
+  <meta name="description" content="Local AI is safe when the app is signed and the weights come from a reputable source — and it's safer for your data than cloud AI, because nothing you type leaves your Mac.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-16">
+  <link rel="canonical" href="https://outlier.host/learn/is-local-ai-safe/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Is local AI safe? What to actually check (2026)">
+  <meta property="og:description" content="Local AI is safe when the app is signed and the weights come from a reputable source — and it's safer for your data than cloud AI, because nothing you type leaves your Mac.">
+  <meta property="og:url" content="https://outlier.host/learn/is-local-ai-safe/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Is local AI safe? What to actually check (2026)">
+  <meta name="twitter:description" content="The honest safety checklist for running AI on your own Mac: where models come from, software trust, and data safety.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Is local AI safe? What to actually check (2026)", "description": "Local AI is safe when the app is signed and the weights come from a reputable source — and it's safer for your data than cloud AI, because nothing you type leaves your Mac.", "datePublished": "2026-06-16", "dateModified": "2026-06-16", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/is-local-ai-safe/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Is local AI safe?", "item": "https://outlier.host/learn/is-local-ai-safe/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is it safe to run AI models locally?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, when you get the app and the model from a trusted source. Local AI runs entirely on your own machine, so your prompts never upload and there's no cloud account or server to breach. The two things to check are that the app is signed and notarized (so macOS has verified its origin) and that the model weights come from a reputable host like HuggingFace."}}, {"@type": "Question", "name": "Can a local AI model contain malware?", "acceptedAnswer": {"@type": "Answer", "text": "A model weights file is data, not executable code, so the weights themselves don't run programs. The real risk is the app that loads them: a sketchy third-party runner could do anything any app can. Mitigate it the normal way — install only signed, notarized apps, and pull weights from a reputable source. Outlier ships as a notarized Mac app with open weights you can inspect on HuggingFace."}}, {"@type": "Question", "name": "Is local AI safer than ChatGPT for privacy?", "acceptedAnswer": {"@type": "Answer", "text": "For your data, yes. With local AI nothing you type ever leaves your machine, so there's no cloud copy of your conversations, no account, and no provider that can be breached or change its retention policy. Cloud tools like ChatGPT send every prompt to a server by design. Cloud has its own strengths, but on data exposure local AI removes the entire surface."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Is local AI safe?</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-16</span>
+      <span class="updated-pill">Last updated 2026-06-16</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Local AI is safe when you get the app and model from a trusted source — and it's safer for your data than cloud AI, because nothing you type ever leaves your machine.</li>
+        <li>Two things to check: the app is signed and notarized, and the model weights come from a reputable host (e.g. HuggingFace).</li>
+        <li>The model file is data; the app running it is software like any other — so source matters for the app, not magic in the weights.</li>
+        <li>Honest risk: a sketchy third-party app or tampered weights. The fix is notarization plus open weights you can inspect.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Local AI is safe when you get the app and the model from a trusted source — and for your data it's the safer choice, because the prompts never leave your Mac. That's the whole verdict. The longer answer is a three-part checklist: where the model comes from, whether the app that runs it can be trusted, and what actually happens to your data. Two of those are about software trust you already practice every time you install anything. The third is the part where local quietly wins.</p>
+
+    <h2>The big win: your data never leaves the machine</h2>
+    <p>Start with the part that's not a trade-off. When AI runs on your own chip, the text you type is processed in memory and stays there. No prompt is sent to a server. There's no cloud copy of your conversation to leak, no account tied to your name, and no provider whose retention policy can change next quarter. You can run it with Wi-Fi off and it works the same — which is the clearest proof there's nothing phoning home.</p>
+    <p>That removes an entire category of risk that cloud tools carry by design. Every prompt you send to a hosted model is a request to someone else's data center, logged on someone else's infrastructure, governed by terms you didn't write. None of that is automatically dangerous. But "nothing left the building" is a stronger guarantee than any privacy policy, because there's no building to break into.</p>
+
+    <h2>Local AI vs cloud AI, by risk dimension</h2>
+    <p>Safety isn't one number. Here's how the two models compare on the dimensions that actually matter, with no spin:</p>
+    <table>
+      <thead>
+        <tr><th>Risk dimension</th><th>Local AI</th><th>Cloud AI</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Data exposure</td><td>Prompts stay on-device; nothing uploads</td><td>Every prompt sent to a provider's servers</td></tr>
+        <tr><td>Breach surface</td><td>No server-side copy to breach</td><td>Stored logs and history can be breached</td></tr>
+        <tr><td>Account required</td><td>None — no sign-in, no identity attached</td><td>Account and login required</td></tr>
+        <tr><td>Software-source risk</td><td>Real: trust the app + weights you install</td><td>Lower for you: provider runs vetted infra</td></tr>
+        <tr><td>Works offline</td><td>Yes — runs with Wi-Fi off</td><td>No — needs a connection every time</td></tr>
+      </tbody>
+    </table>
+    <p>The honest read: cloud takes the software-trust burden off you (you're not installing the model), and local removes the data and breach surface entirely. If your concern is what happens to the words you type, local is the safer place to put them.</p>
+
+    <h2>Software trust: the model is data, the app is software</h2>
+    <p>Here's the distinction that clears up most of the fear. A model's weights are a file — a big grid of numbers. Numbers don't execute. What runs is the application that loads those numbers and does math with them, and that app has the same powers as any program on your Mac. So the safety question for local AI is the ordinary one you ask of all software: do I trust where this came from?</p>
+    <p>On a Mac you have a built-in answer. <strong>Code signing and notarization</strong> mean Apple has verified the developer's identity and scanned the app for known malware before it's allowed to launch cleanly. An unsigned app from a random link is the thing to avoid — not because it's "AI," but because it's unvetted software. The same caution that keeps you off sketchy downloads is the entire local-AI safety practice.</p>
+    <p>For the weights, the rule is just as simple: <strong>get them from a reputable source.</strong> HuggingFace is the standard public registry where open-weight models are published, versioned, and downloaded by millions — a tampered file there gets noticed fast. Open weights have a second benefit cloud can't offer: they're inspectable. You can see exactly which model you're running, because it's sitting in a folder on your disk rather than behind an API you have to take on faith.</p>
+
+    <h2>The honest risks (and how they're handled)</h2>
+    <p>Local AI is not risk-free, and pretending otherwise would be the dishonest version of this page. Two things can genuinely go wrong:</p>
+    <ul>
+      <li><strong>A sketchy third-party app.</strong> A malicious "AI runner" could mishandle files or include unwanted code — same as any untrusted download. Mitigation: install only signed, notarized apps; skip anything that won't pass macOS's own checks.</li>
+      <li><strong>Tampered weights.</strong> A model pulled from an unknown mirror could be altered. Mitigation: download from a reputable host like HuggingFace, where files are versioned and publicly visible, and prefer open weights you (or the community) can inspect.</li>
+    </ul>
+    <p>Notice both fixes are about <em>source</em>, not about the technology being unsafe. Do the same checks you'd do for any Mac app and the residual risk is small — and you still keep the data win that cloud can't match.</p>
+    <div class="receipts"><strong>Receipts:</strong> Outlier ships as a single signed, notarized Mac app — macOS verifies its origin before it runs — and its open-weight models are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>. No account, no terminal, no cloud round-trip; it works with Wi-Fi off. The model file is data on your disk; the app is software you can verify.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is it safe to run AI models locally?</h3>
+        <p>Yes, when you get the app and the model from a trusted source. Local AI runs entirely on your own machine, so your prompts never upload and there's no cloud account or server to breach. The two things to check are that the app is signed and notarized (so macOS has verified its origin) and that the model weights come from a reputable host like HuggingFace.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can a local AI model contain malware?</h3>
+        <p>A model weights file is data, not executable code, so the weights themselves don't run programs. The real risk is the app that loads them: a sketchy third-party runner could do anything any app can. Mitigate it the normal way — install only signed, notarized apps, and pull weights from a reputable source. Outlier ships as a notarized Mac app with open weights you can inspect on HuggingFace.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is local AI safer than ChatGPT for privacy?</h3>
+        <p>For your data, yes. With local AI nothing you type ever leaves your machine, so there's no cloud copy of your conversations, no account, and no provider that can be breached or change its retention policy. Cloud tools like ChatGPT send every prompt to a server by design. Cloud has its own strengths, but on data exposure local AI removes the entire surface.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=is-local-ai-safe">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your code private</a> · <a href="https://outlier.host/best/private-ai-no-cloud/">Private AI with no cloud</a> · <a href="https://outlier.host/learn/own-your-ai/">What owning your AI means</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

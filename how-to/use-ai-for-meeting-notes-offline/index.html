@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to take AI meeting notes without the cloud | Outlier</title>
+  <meta name="description" content="Record locally, transcribe with Whisper offline, paste into Outlier. Zero audio or text uploaded. Here's the exact workflow for private AI meeting notes on your Mac.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-19">
+  <link rel="canonical" href="https://outlier.host/how-to/use-ai-for-meeting-notes-offline/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to take AI meeting notes without the cloud">
+  <meta property="og:description" content="Record locally, transcribe with Whisper offline, paste into Outlier. Zero audio or text uploaded. Here's the exact workflow for private AI meeting notes on your Mac.">
+  <meta property="og:url" content="https://outlier.host/how-to/use-ai-for-meeting-notes-offline/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to take AI meeting notes without the cloud">
+  <meta name="twitter:description" content="Record locally → Whisper → Outlier. Zero audio uploaded. The offline meeting notes workflow.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "How to take AI meeting notes without the cloud",
+        "description": "Record locally, transcribe with Whisper offline, paste into Outlier. Zero audio or text uploaded. The complete workflow for private AI meeting notes on Mac.",
+        "datePublished": "2026-06-19",
+        "dateModified": "2026-06-19",
+        "url": "https://outlier.host/how-to/use-ai-for-meeting-notes-offline/",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Outlier",
+          "url": "https://outlier.host"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Outlier"
+        },
+        "image": "https://outlier.host/og-card.png"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Outlier",
+            "item": "https://outlier.host/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "How-to",
+            "item": "https://outlier.host/how-to/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "How to take AI meeting notes without the cloud",
+            "item": "https://outlier.host/how-to/use-ai-for-meeting-notes-offline/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="https://outlier.host/" class="nav-brand">
+      <img src="https://outlier.host/icon.png" alt="Outlier logo" class="nav-logo">
+      Outlier
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/how-to/">How-to</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/how-to/">How-to</a></div>
+    <h1>How to take AI meeting notes without the cloud</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · published 2026-06-19</span>
+      <span class="updated-pill">Last updated 2026-06-19</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Record locally → transcribe with Whisper (offline, open-source) → paste into Outlier → ask for summary + action items. Zero audio or text uploaded. Takes about 5 minutes per hour of meeting.</p>
+    </div>
+
+    <p class="lead">Most AI meeting note tools upload your audio — straight to a server, in the background, before you've finished the call. If you've ever used Otter.ai, Fireflies, or Zoom's AI Companion, that's the deal you implicitly agreed to. Here's how to get the same output without it.</p>
+
+    <h2>Why cloud meeting AI is a privacy trade-off</h2>
+    <p>Tools like Otter.ai, Fireflies, Zoom AI Companion, and Microsoft Copilot for Teams all have the same architecture: your audio (or the video stream) goes to their servers, where it's transcribed and processed. Enterprise plans come with data processing agreements, but the audio still travels. Some services store transcripts indefinitely by default; the free tier of Otter.ai includes 300 minutes of storage per month at no charge but your recordings live on their infrastructure.</p>
+    <p>That's a reasonable trade for general meetings. It's a less comfortable one when the call involves client strategy, pricing, HR conversations, legal discussions, or anything you'd hesitate to cc a stranger on. Meeting recordings are dense with the kind of detail that's hard to unring once it's left the building.</p>
+    <p>The alternative isn't to go back to handwritten notes. It's to run the transcription locally, then use a local AI to do the analysis. The result is identical output with zero upload.</p>
+
+    <h2>The two-step local workflow: Whisper + Outlier</h2>
+    <p>The workflow has two distinct phases. Whisper handles speech-to-text on your Mac — it's an open-source model from OpenAI that runs entirely locally, with no API call. Outlier handles everything after: summarization, action items, follow-up drafts. Neither step sends anything anywhere.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Step</th>
+          <th>Tool</th>
+          <th>What leaves your Mac</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Record audio</td>
+          <td>Any local recorder (QuickTime, Audacity, etc.)</td>
+          <td>Nothing</td>
+        </tr>
+        <tr>
+          <td>Speech-to-text</td>
+          <td>Whisper (local, open-source)</td>
+          <td>Nothing</td>
+        </tr>
+        <tr>
+          <td>Summarize / extract</td>
+          <td>Outlier (local AI)</td>
+          <td>Nothing</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>The whole pipeline runs on your chip. Your audio file sits in a local folder. The transcript never leaves your machine. This is what 100% offline looks like in practice.</p>
+
+    <h2>How to transcribe with Whisper on Mac</h2>
+    <p>Whisper is available as a command-line tool and as several GUI wrappers. The easiest path on macOS uses Homebrew to install <code>whisper-cpp</code>, a C++ port that runs efficiently on Apple Silicon.</p>
+    <ol>
+      <li><strong>Install via Homebrew:</strong> <code>brew install whisper-cpp</code></li>
+      <li><strong>Download a model.</strong> Whisper Large v3 gives near-human accuracy on English and fits in 4–6 GB of RAM. For shorter, simpler calls, the <code>medium</code> model is faster and lighter: <code>whisper-download-ggml-model large-v3</code></li>
+      <li><strong>Point it at your audio file:</strong> <code>whisper-cli -m /path/to/model.bin -f meeting.mp3 -otxt</code></li>
+      <li><strong>Wait.</strong> On an M-series chip, a 60-minute meeting typically transcribes in a few minutes. The output is a <code>.txt</code> file alongside your audio.</li>
+    </ol>
+    <p>If you prefer a GUI, apps like Whisper Transcription (available on the Mac App Store) wrap the same model in a drag-and-drop interface. Either way, no audio leaves your machine.</p>
+    <p>Whisper accuracy on standard English is strong. It handles multiple speakers adequately, though it doesn't always label who said what — you may want to make a quick note of attendees before you run the transcript through Outlier.</p>
+
+    <h2>Prompts that work for meeting notes in Outlier</h2>
+    <p>Once you have the transcript, paste it into Outlier and ask directly. These prompts work well for typical meeting output:</p>
+
+    <h3>Summary + action items (the workhorse)</h3>
+    <p><code>Summarize this meeting transcript in bullet points, then list all action items with owners and deadlines.</code></p>
+    <p>Outlier Core 27B handles long context well — you can paste 10,000+ word transcripts and it stays coherent. If you're on Nano or Lite, very long transcripts may get cut off; break them into sections if needed.</p>
+
+    <h3>Decisions only</h3>
+    <p><code>From this transcript, list only the decisions that were made. Don't include discussion or action items — just decisions and who made them.</code></p>
+
+    <h3>Follow-up email draft</h3>
+    <p><code>Write a follow-up email based on this meeting transcript. Include: what was decided, action items with owners, and next meeting date if mentioned. Keep it under 200 words, professional tone.</code></p>
+
+    <h3>Specific attendee's commitments</h3>
+    <p><code>From this transcript, extract every commitment or action item attributed to [Name]. List them with any deadlines mentioned.</code></p>
+
+    <p>Outlier can also reformat notes into a specific structure if your team uses a template — just describe the format in the prompt.</p>
+
+    <h2>What to do with the notes</h2>
+    <p>Outlier's output is plain text. Copy it and drop it wherever your notes live. Common destinations:</p>
+    <ul>
+      <li><strong>Notion or Obsidian:</strong> Paste directly; both handle markdown formatting Outlier produces naturally.</li>
+      <li><strong>Email:</strong> For follow-up drafts, copy the output into your mail client and send. No export step needed.</li>
+      <li><strong>Plain text file:</strong> For archiving, save the transcript and the Outlier summary as <code>.txt</code> or <code>.md</code> in a local folder alongside the audio.</li>
+      <li><strong>Shared doc:</strong> If the meeting has multiple attendees who need the notes, paste into a Google Doc or Notion page and share — just the text, not the audio.</li>
+    </ul>
+    <p>There's no export button to click because there's nothing to export from — the content is already in your clipboard, already on your machine, already yours.</p>
+
+    <h2>Limitations worth knowing</h2>
+    <p><strong>Whisper and crosstalk.</strong> When two people speak at the same time, accuracy drops. On calls with clear turn-taking (video calls with mute discipline), transcripts are clean. On chaotic in-room meetings with multiple voices overlapping, expect some garbled segments. A quick skim before pasting into Outlier catches the worst of it.</p>
+    <p><strong>Heavy accents and acronyms.</strong> Whisper Large v3 handles most accents on English well, but domain-specific jargon and acronyms — especially technical abbreviations — sometimes get phonetically mangled. A post-edit pass for company-specific terminology (product names, team names, abbreviations) takes a minute and saves confusion later.</p>
+    <p><strong>Speaker labeling.</strong> Whisper doesn't reliably label who said what. The transcript is sequential text, not attributed dialogue. If you need attribution, add a short note before pasting into Outlier: "The speakers are Alice (PM), Bob (Engineering lead), and Carol (Client)." Outlier can use that context when extracting commitments.</p>
+    <p><strong>Long transcripts and model tier.</strong> Outlier Core 27B handles multi-thousand-word transcripts in one pass. Nano and Lite have shorter context windows and will struggle with a 90-minute meeting transcript as a single paste. If you're on a smaller model tier, chunk the transcript into sections (first 30 minutes, second 30 minutes) and run summaries separately, then ask Outlier to combine them.</p>
+
+    <div class="receipts"><strong>Real-world note:</strong> This workflow is what I actually use for client calls and team syncs. Record with QuickTime Audio, run Whisper locally, paste into Outlier, done. The transcript file lives in the same folder as the recording; nothing else goes anywhere. It takes about as long as the cloud version and the output is identical — the only difference is the audio stayed on my machine.</div>
+
+    <div class="cta">
+      <h3>Run the whole workflow locally</h3>
+      <p>Outlier runs on your Mac. No account required, no audio uploaded, no subscription needed for the base tier. Download once, use offline.</p>
+      <a href="https://outlier.host/#app" class="btn">Download Outlier</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/learn/where-chatgpt-conversations-go/">Where ChatGPT conversations go</a> · <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps code private</a> · <a href="https://outlier.host/for/teams/">Outlier for teams</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Outlier · local AI for Mac</span>
+    <span>
+      <a href="https://outlier.host/privacy/">Privacy</a> ·
+      <a href="https://outlier.host/terms/">Terms</a> ·
+      <a href="https://outlier.host/learn/">Learn</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

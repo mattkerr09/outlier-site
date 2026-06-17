@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to run Qwen locally on a Mac (2026) | Outlier</title>
+  <meta name="description" content="Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps + a RAM table.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-15">
+  <link rel="canonical" href="https://outlier.host/how-to/run-qwen-locally-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to run Qwen locally on a Mac">
+  <meta property="og:description" content="Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps + a RAM table.">
+  <meta property="og:url" content="https://outlier.host/how-to/run-qwen-locally-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to run Qwen locally on a Mac">
+  <meta name="twitter:description" content="The honest path: quantized GGUF in Ollama or LM Studio, sized to your RAM — plus the Mac-native option.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac", "description": "Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps plus a RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-06-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Qwen locally on a Mac", "item": "https://outlier.host/how-to/run-qwen-locally-mac/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Qwen good for coding?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Qwen is open-weight and one of the stronger open families at coding and multilingual work, which is why it's a common pick for a local coding assistant. Outlier's own models are built on the Qwen family; on a 54-prompt comparison Outlier's Core 27B matched Claude Opus on 98.9 percent of rubric checks. For local coding, run a code-tuned Qwen variant in Ollama or LM Studio sized to your RAM, or use Outlier's Code 27B."}}, {"@type": "Question", "name": "How much RAM do you need to run Qwen on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the size you pick. As a rough guide for quantized GGUF: a 7-8B Qwen runs on 8 GB (16 GB comfortable), a 14B wants 16 GB, a 32B wants about 32 GB, and 70B-class models want 64 GB or more. The model plus its context has to fit in unified memory. Outlier is the exception, since its paged inference engine runs a 397B-class Qwen-based model at about 11 GB peak RSS on a 64 GB Mac."}}, {"@type": "Question", "name": "What's the easiest way to run Qwen on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "For a no-terminal install, LM Studio gives you a model browser and chat window: search Qwen, pick a quant that fits your RAM, download, chat. Ollama is the developer favorite if you're comfortable with one command. Outlier is the batteries-included Mac-native route: one signed download, no terminal or Docker, and its own models are Qwen-based, including a 397B-class tier that runs on a 64 GB Mac."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How to run Qwen locally on a Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-15</span>
+      <span class="updated-pill">Last updated 2026-06-15</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Yes — Qwen runs locally on an Apple Silicon Mac. Use a quantized GGUF in Ollama or LM Studio, or a Mac-native app like Outlier (whose own models are Qwen-based).</li>
+        <li>Pick a size that fits your RAM: a 7-8B model runs on 8 GB, a 32B wants ~32 GB, a 70B wants 64 GB+.</li>
+        <li>Quantization (GGUF, usually Q4) shrinks the weights so a big model fits in your unified memory.</li>
+        <li>Everything runs offline once downloaded: no account, no cloud, Wi-Fi can be off.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Qwen, Alibaba's open-weight model family, is one of the better open options for coding and multilingual work — and it runs entirely on your Mac. No data center, no subscription. Download a quantized copy of the weights, point a local runner at it, and you have a private assistant that works with the Wi-Fi off. The only real decision is which size your RAM can hold.</p>
+
+    <h2>Why Qwen, and why local</h2>
+    <p>Qwen ships as open weights, so anyone can download the files and run them. The family is known for solid coding and strong multilingual coverage, which makes it a popular base for a local code assistant. Running it on your own machine means prompts never leave the laptop, there's no monthly meter, and the model can't be retired out from under you, the way OpenAI pulled GPT-4 out of ChatGPT in April 2025. A file on your disk doesn't get deprecated on someone else's schedule.</p>
+
+    <h2>What you need first</h2>
+    <p>An Apple Silicon Mac (M1 or newer) carries the load. The GPU and unified memory do the work, so the model and its context share one RAM pool. That makes sizing simple: the quantized model plus a working context window has to fit in your RAM, with headroom for macOS and your other apps. Quantization is what makes it fit. A raw 32B model is huge; a 4-bit GGUF quant is a fraction of the size with little quality loss for everyday work.</p>
+
+    <h2>How much RAM for which Qwen size</h2>
+    <p>Use this as a sizing guide for quantized (roughly Q4) GGUF weights. Bigger is smarter and slower; pick the largest row your Mac can hold with room to spare.</p>
+    <table>
+      <thead>
+        <tr><th>Qwen size</th><th>Quantized file (~Q4)</th><th>Mac RAM</th><th>Good for</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1.5-3B</td><td>~1-2 GB</td><td>8 GB</td><td>Quick chat, autocomplete, drafts</td></tr>
+        <tr><td>7-8B</td><td>~4-5 GB</td><td>8 GB (16 GB comfortable)</td><td>Everyday assistant, light coding</td></tr>
+        <tr><td>14B</td><td>~8-9 GB</td><td>16 GB</td><td>Stronger reasoning and code</td></tr>
+        <tr><td>32B</td><td>~18-20 GB</td><td>32 GB</td><td>Serious coding, long context</td></tr>
+        <tr><td>70B-class</td><td>~40+ GB</td><td>64 GB+</td><td>Top open-model quality, slowest</td></tr>
+      </tbody>
+    </table>
+    <p>Sizes are approximate and vary by the exact quant you choose. If a model won't load or your Mac starts swapping, drop to a smaller size or a heavier quant. There's more detail in our <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide for local AI</a>.</p>
+
+    <h2>The general path: Ollama or LM Studio</h2>
+    <p>Two tools cover almost everyone, both free, both running GGUF weights through llama.cpp under the hood.</p>
+    <ol>
+      <li><strong>Ollama (one command).</strong> Install Ollama, then in Terminal run <code>ollama run qwen2.5-coder:7b</code> (swap in the size and variant you want). It pulls the quantized model and drops you into a chat prompt, and exposes a local API for editors and scripts. The developer favorite.</li>
+      <li><strong>LM Studio (no terminal).</strong> Install LM Studio, open the model browser, search "Qwen," and pick a quant the app flags as fitting your RAM. Download, then chat in the built-in window. It runs a local server too. Best if you'd rather skip the command line.</li>
+    </ol>
+    <p>Either way: pick the variant (a code-tuned Qwen for programming), pick a size from the table, download once, and you're offline-capable from then on. Other open runners like Jan (open-source, MIT) and GPT4All follow the same GGUF pattern if you want to shop around, and you can <a href="https://outlier.host/how-to/install-local-ai-on-mac/">walk the full install</a> step by step.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Qwen is published as open weights by Alibaba and runs locally as quantized GGUF through Ollama and LM Studio (both free; LM Studio also runs Apple's MLX format on Mac). Outlier's own models are built on the Qwen family, with a Plus tier that references a Qwen3.5-397B-class model, and the weights are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>.</div>
+
+    <h2>The Mac-native shortcut: Outlier</h2>
+    <p>For the batteries-included version, Outlier is a Mac-native app whose own models are Qwen-based, so the same daily coding and writing work is covered without assembling a stack. One signed download, no account, no terminal, no Docker, and it works with Wi-Fi off. The difference from the runners above is the engine. GGUF tools are RAM-bound, meaning the model has to fit in memory; Outlier's patent-pending paged inference streams experts on demand, so it runs models bigger than your RAM. Its 397B-class Qwen-based Plus tier runs at about 11 GB peak RSS on a 64 GB Mac. Free Nano and Lite run with no account; Pro and lifetime seats add the larger tiers, the coding agent, and deep research, and you can import your own MLX model. The <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">397B-on-a-Mac breakdown</a> shows how the paging works.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is Qwen good for coding?</h3>
+        <p>Yes. Qwen is open-weight and one of the stronger open families at coding and multilingual work, which is why it's a common pick for a local coding assistant. Outlier's own models are built on the Qwen family; on a 54-prompt comparison Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks. For local coding, run a code-tuned Qwen variant in Ollama or LM Studio sized to your RAM, or use Outlier's Code 27B.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How much RAM do you need to run Qwen on a Mac?</h3>
+        <p>It depends on the size you pick. As a rough guide for quantized GGUF: a 7-8B Qwen runs on 8 GB (16 GB comfortable), a 14B wants 16 GB, a 32B wants about 32 GB, and 70B-class models want 64 GB or more. The model plus its context has to fit in unified memory. Outlier is the exception, since its paged inference engine runs a 397B-class Qwen-based model at about 11 GB peak RSS on a 64 GB Mac.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the easiest way to run Qwen on a Mac?</h3>
+        <p>For a no-terminal install, LM Studio gives you a model browser and chat window: search Qwen, pick a quant that fits your RAM, download, chat. Ollama is the developer favorite if you're comfortable with one command. Outlier is the batteries-included Mac-native route: one signed download, no terminal or Docker, and its own models are Qwen-based, including a 397B-class tier that runs on a 64 GB Mac.</p>
+      </div>
+    </div>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=run-qwen-locally-mac">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">Run Qwen3.5-397B on a Mac without 512 GB of RAM</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/best/local-llm-for-coding/">Best local LLM for coding</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

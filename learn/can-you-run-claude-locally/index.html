@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can you run Claude AI locally on your Mac? (2026) | Outlier</title>
+  <meta name="description" content="Claude's weights are closed — you cannot run the real Claude locally. Here's what you can actually run on a Mac, and how close it gets to Claude quality.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/learn/can-you-run-claude-locally/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can you run Claude AI locally on your Mac? (2026)">
+  <meta property="og:description" content="Claude's weights are closed — you cannot run the real Claude locally. Here's what you can actually run on a Mac, and how close it gets to Claude quality.">
+  <meta property="og:url" content="https://outlier.host/learn/can-you-run-claude-locally/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can you run Claude AI locally on your Mac? (2026)">
+  <meta name="twitter:description" content="Claude's weights are closed source. Here's the honest answer on what you can actually run locally, and how close it gets.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://outlier.host/learn/can-you-run-claude-locally/#article",
+        "headline": "Can you run Claude AI locally on your Mac?",
+        "datePublished": "2026-06-17",
+        "dateModified": "2026-06-17",
+        "author": {
+          "@type": "Person",
+          "name": "Matt Kerr"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Outlier",
+          "url": "https://outlier.host"
+        },
+        "url": "https://outlier.host/learn/can-you-run-claude-locally/",
+        "description": "Claude's weights are closed — you cannot run the real Claude locally. Here's what you can actually run on a Mac, and how close it gets to Claude quality."
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Outlier",
+            "item": "https://outlier.host"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Learn",
+            "item": "https://outlier.host/learn/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Can you run Claude locally?",
+            "item": "https://outlier.host/learn/can-you-run-claude-locally/"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-brand">
+      <img src="/icon.png" alt="Outlier" class="nav-logo">
+      Outlier
+    </a>
+    <ul class="nav-links">
+      <li><a href="/learn/">Learn</a></li>
+      <li><a href="/pricing/">Pricing</a></li>
+      <li><a href="/app/">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <article>
+      <p class="crumb"><a href="/">Outlier</a> / <a href="/learn/">Learn</a> / Can you run Claude locally?</p>
+      <h1>Can you run Claude AI locally on your Mac?</h1>
+      <div class="byline-row">
+        <span class="byline">Matt Kerr &mdash; June 17, 2026</span>
+        <span class="updated-pill">Updated June 17, 2026</span>
+      </div>
+
+      <div class="quick-answer">
+        <span class="qa-label">Quick answer</span>
+        <p>No — Claude's weights are closed source. You cannot run the real Claude locally, full stop. But open models that scored 98.9% parity vs Claude Opus on a 54-prompt benchmark do run locally on a Mac, with no data leaving your machine.</p>
+      </div>
+
+      <p class="lead">A lot of people search for "run Claude locally" hoping to get Claude's quality offline, privately, without a subscription. That's a completely reasonable thing to want. This article gives you the honest answer on what's actually possible, and what you'd be settling for — or gaining — if you go the local route.</p>
+
+      <h2>Why Claude can't run locally</h2>
+
+      <p>Claude is made by Anthropic. Unlike some AI companies, Anthropic has not open-sourced Claude's model weights. The weights are the actual neural network — hundreds of billions of parameter files that encode everything the model knows and how it reasons. Without the weights, you can't run the model.</p>
+
+      <p>Anthropic's decision to keep the weights closed is deliberate. Their view is that releasing a frontier model's weights creates risks they're not comfortable with — fine-tuning off safety guardrails, running it for purposes they can't monitor, and similar concerns. You can agree or disagree with that call, but it's their call to make. The weights aren't available, and there's no workaround.</p>
+
+      <p>This is different from Meta's Llama series, or Alibaba's Qwen models, which are <strong>open weights</strong> — meaning the actual parameter files are publicly downloadable. If Anthropic released Claude's weights the same way, you could run it. They haven't, and as of mid-2026, there's no signal they're planning to.</p>
+
+      <h2>Are there "local Claude" tools online?</h2>
+
+      <p>Yes, and they're misleading. If you search the App Store or GitHub, you'll find tools with names like "Claude Local," "Offline Claude," or apps that claim to run Claude on your Mac. None of them are Claude.</p>
+
+      <p>What these tools actually run is a different model entirely — usually Llama, Mistral, or some other open-weight model — packaged behind a UI that trades on Claude's name recognition. The underlying model has no connection to Anthropic. It was not trained by Anthropic. It is not Claude.</p>
+
+      <p>I'm not saying those tools are necessarily bad. Some are fine wrappers around decent open models. But calling them "Claude" is inaccurate, and if you install one expecting Claude's actual behavior and output quality, you're going to be disappointed — and you won't know why, because you don't know what model you're actually running.</p>
+
+      <p>The only way to use the real Claude is through Anthropic's products: Claude.ai, the Claude API, or Claude Pro. All of those run in the cloud. None of them are local.</p>
+
+      <h2>What you can actually run locally on a Mac</h2>
+
+      <p>The honest alternative isn't "fake Claude" — it's open-weight models that are genuinely capable at the same tier. The landscape here has moved a lot. A few options worth knowing:</p>
+
+      <ul>
+        <li><strong>Llama 3 70B</strong> (Meta) — a large open model that runs on Apple Silicon with enough RAM. Solid general-purpose quality.</li>
+        <li><strong>Qwen2.5 72B</strong> (Alibaba) — particularly strong at coding and instruction-following. Runs well on M-series Macs.</li>
+        <li><strong>Outlier Core 27B</strong> — open weights on HuggingFace, runs locally via Outlier's Mac app. I'll say more about this one below, because it's what I've measured directly.</li>
+      </ul>
+
+      <p>All three run fully on-device. Nothing you type is uploaded anywhere. No account required to use the model weights themselves. They run during a network outage. They don't have rate limits or usage caps.</p>
+
+      <h2>How close is it? The honest benchmark</h2>
+
+      <p>I ran a 54-prompt head-to-head test between Outlier Core 27B and Claude Opus. The prompts covered writing, reasoning, coding, math, and adversarial tasks. The results: <strong>98.9% overall parity</strong>.</p>
+
+      <p>On the nine hardest prompts — a chess engine from scratch, Raft consensus protocol implementation, zero-knowledge proof construction — Outlier Core scored 100%. These are the tasks where I expected the biggest gap, and that gap didn't show up.</p>
+
+      <p>Where Claude does pull ahead: very long context tasks (Claude can handle larger context windows in its cloud deployment), real-time web access (Claude has it, local models don't by default), and multimodal tasks that depend on Anthropic's specific vision fine-tuning. Those are real differences. I'm not going to paper over them.</p>
+
+      <p>But for the majority of coding, writing, and reasoning tasks — the day-to-day use cases — the output quality is close enough that most people would not reliably distinguish them in a blind test.</p>
+
+      <div class="receipts">
+        <strong>The numbers:</strong> 54-prompt benchmark, Outlier Core 27B vs Claude Opus — 98.9% overall parity, 100% on the 9 hardest prompts. Full methodology and outputs at <a href="/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>.
+      </div>
+
+      <h2>Claude Pro vs Outlier Pro: a plain comparison</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Claude Pro</th>
+            <th>Outlier Pro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td>$20 / month</td>
+            <td>$20 / month or $149 / year</td>
+          </tr>
+          <tr>
+            <td>Model</td>
+            <td>Claude (Anthropic, closed)</td>
+            <td>Outlier Core 27B (open weights)</td>
+          </tr>
+          <tr>
+            <td>Runs offline</td>
+            <td>No</td>
+            <td>Yes — fully on-device</td>
+          </tr>
+          <tr>
+            <td>Data uploaded</td>
+            <td>Yes — to Anthropic's servers</td>
+            <td>No — stays on your Mac</td>
+          </tr>
+          <tr>
+            <td>Account required</td>
+            <td>Yes</td>
+            <td>No (for local use)</td>
+          </tr>
+          <tr>
+            <td>Usage caps</td>
+            <td>Yes (message limits)</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Weight access</td>
+            <td>Closed — Anthropic only</td>
+            <td>Open — downloadable from HuggingFace</td>
+          </tr>
+          <tr>
+            <td>Real-time web access</td>
+            <td>Yes</td>
+            <td>Optional (via tools)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>What you gain and what you give up</h2>
+
+      <p>Going local is not just a cost decision — it's a different kind of relationship with the software. Here's how I actually think about the trade-off:</p>
+
+      <p><strong>What you gain:</strong> Privacy that's structural, not policy-based. When nothing is uploaded, there's no privacy policy to interpret, no data retention to worry about, and no server to breach. You also get unlimited throughput — no rate limits, no "you've reached your message limit" walls in the middle of a work session. The model runs whether or not you have internet. For code and documents you'd rather keep off cloud infrastructure, that matters.</p>
+
+      <p><strong>What you give up:</strong> Claude is a coherent product with a lot of investment behind it — Claude.ai has artifacts, projects, real-time web access, and integrations that took years to build. A local model doesn't come with all that scaffolding by default. Outlier ships a native Mac app that covers the core use cases, but it's not a feature-for-feature replacement of Claude.ai's entire surface. If you rely heavily on Claude's web browsing or cross-device sync, those specific things won't transfer.</p>
+
+      <p>For most people who mainly use AI as a thinking and coding tool — not as a web-browsing research assistant — the local path covers the actual use cases. For people whose Claude workflow is heavily tied to Claude.ai's specific integrations, the gap is real.</p>
+
+      <div class="cta">
+        <h3>Try Outlier — runs on your Mac, no cloud</h3>
+        <p>Open weights, no account required for local use, no message limits. Available for Apple Silicon Macs.</p>
+        <a href="/app/" class="btn">Download Outlier</a>
+      </div>
+
+      <div class="related">
+        <p>Related reading:</p>
+        <ul>
+          <li><a href="/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude Opus: full 54-prompt benchmark results</a></li>
+          <li><a href="/vs/outlier-vs-claude-code/">Outlier vs Claude Code: side-by-side comparison</a></li>
+          <li><a href="/learn/is-local-ai-safe/">Is local AI safe? What to actually check</a></li>
+        </ul>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 <a href="/">outlier.host</a></span>
+    <span><a href="/faq/">FAQ</a> &middot; <a href="/support/">Support</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is a large language model (LLM)? A plain-English guide (2026) | Outlier</title>
+  <meta name="description" content="A large language model (LLM) is a neural network trained on text that predicts the next token. Here's what parameters, context windows, and quantization actually mean — no jargon.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/learn/what-is-a-large-language-model/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is a large language model (LLM)? A plain-English guide (2026)">
+  <meta property="og:description" content="A large language model is a neural network trained on text that predicts the next token. What parameters, context windows, and quantization actually mean — no jargon.">
+  <meta property="og:url" content="https://outlier.host/learn/what-is-a-large-language-model/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What is a large language model (LLM)? A plain-English guide (2026)">
+  <meta name="twitter:description" content="Parameters, context windows, quantization — what those words actually mean for a model running on your Mac.">
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What is a large language model (LLM)? A plain-English guide (2026)",
+    "datePublished": "2026-06-17",
+    "dateModified": "2026-06-17",
+    "author": {
+      "@type": "Person",
+      "name": "Matt Kerr"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Outlier",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://outlier.host/logo.png"
+      }
+    },
+    "url": "https://outlier.host/learn/what-is-a-large-language-model/",
+    "description": "A large language model (LLM) is a neural network trained on text that predicts the next token. Here's what parameters, context windows, and quantization actually mean — no jargon."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Outlier",
+        "item": "https://outlier.host/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Learn",
+        "item": "https://outlier.host/learn/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "What is a large language model?",
+        "item": "https://outlier.host/learn/what-is-a-large-language-model/"
+      }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a large language model in simple terms?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A large language model is a neural network trained on a large amount of text. It learns statistical patterns from that text, then uses those patterns to predict the next token (word fragment) given whatever you've typed. Do this one token at a time and you get a response."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many parameters does an LLM need to be useful?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Useful is relative to the task. A 1.5B-parameter model like Outlier Nano handles simple Q&A and summarization at 32 tokens per second on an M4 MacBook Air. A 7B or 8B model handles most everyday coding and writing tasks. You only need 70B+ parameters for highly specialized or research-grade work."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I run an LLM on my Mac without a GPU?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Apple Silicon (M1 and later) has a unified memory architecture where the CPU and GPU share the same RAM pool. A model like Outlier Core (27B parameters) runs on a MacBook Pro without any discrete GPU. The neural engine and GPU cores built into the M-series chip handle the matrix math."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a href="https://outlier.host/" class="nav-brand">
+      <img src="https://outlier.host/logo.png" alt="Outlier logo" class="nav-logo">
+      Outlier
+    </a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="wrap">
+  <article>
+    <p class="crumb"><a href="https://outlier.host/">Outlier</a> / <a href="https://outlier.host/learn/">Learn</a> / What is a large language model?</p>
+
+    <h1>What is a large language model (LLM)? A plain-English guide (2026)</h1>
+
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · <time datetime="2026-06-17">June 17, 2026</time></span>
+      <span class="updated-pill">Updated June 2026</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>A large language model is a neural network trained on a large body of text. It learns to predict the next token — a word fragment — given everything that came before it. Do that one token at a time and you get a response. The "large" part refers to the number of parameters (weights) inside the network, which can range from a few billion to hundreds of billions.</p>
+    </div>
+
+    <p class="lead">Every AI assistant you've used in the last few years — whether it's a chatbot in a browser or a model running on your Mac — is built on this same idea. The terminology around LLMs gets complicated fast, so this article unpacks the pieces that actually matter: parameters, training, context windows, and what it takes to run one locally.</p>
+
+    <h2>What does "large" mean?</h2>
+
+    <p>There's no fixed threshold where a language model becomes "large." The term stuck because models in the 2020s were orders of magnitude bigger than what came before. Today "large" is a relative label, not a precise spec.</p>
+
+    <p>In practice, models are described by their parameter count: <strong>1.5B, 7B, 70B, 671B</strong>. The number tells you roughly how much the model learned from training and how much RAM it needs to run. A 7B-parameter model is genuinely capable for everyday work. A 671B model like DeepSeek-R1 (a mixture-of-experts architecture) is far larger — but also requires hardware most people don't own.</p>
+
+    <p>The more useful question isn't "how large?" but "large enough for what?" A 1.5B model handles quick Q&A and summarization. An 8B model handles most coding and writing tasks. You need 70B+ for highly specialized or research-grade work where errors carry real cost.</p>
+
+    <h2>How LLMs actually work</h2>
+
+    <p>Training an LLM is a prediction exercise run at enormous scale. You feed the model a huge corpus of text — web pages, books, code repositories, scientific papers — and teach it one thing: given the tokens so far, what token comes next?</p>
+
+    <p>The model makes a prediction, the prediction is compared to the actual next token in the training data, and the weights (parameters) are adjusted slightly to reduce the error. Repeat this billions of times across trillions of tokens and the network internalizes statistical patterns about language: grammar, facts, reasoning chains, code syntax.</p>
+
+    <p>At inference time — when you type a message — the model runs forward through the network once per token it generates. It looks at your input plus everything it has already written, then produces a probability distribution over possible next tokens and samples from it. That's the whole mechanism. There's no database lookup, no retrieval from a knowledge store by default, and no "understanding" in the philosophical sense — just learned pattern completion, applied very quickly.</p>
+
+    <h2>What are parameters?</h2>
+
+    <p>Parameters are the numbers inside the network — the weights on billions of connections between artificial neurons. After training, these weights are fixed. They encode, in a distributed way, everything the model learned: facts, grammar, code patterns, reasoning heuristics.</p>
+
+    <p>When you load a model, you're loading those weights into RAM. A 7B-parameter model at full 32-bit float precision needs roughly 28 GB of RAM — too much for most consumer hardware. This is where quantization comes in.</p>
+
+    <p><strong>Quantization</strong> compresses weights from 32-bit floats down to 4-bit integers, cutting memory by roughly 8x at modest quality cost. At 4-bit quantization, 7B parameters fit in about 4.5 GB on disk. That's why you can run a capable model on a MacBook Air with 16 GB of RAM.</p>
+
+    <p>Quantization isn't free — you lose some precision in the weights — but for most tasks the quality difference versus full-precision is small enough that you won't notice it in practice.</p>
+
+    <h2>Open vs. closed models</h2>
+
+    <p>Some LLMs are closed: the weights are never released publicly and you access the model only through an API or a chat interface. Others are open: the weights are published and anyone can download and run them.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Access</th>
+          <th>Developer</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GPT-4o</td>
+          <td>Closed</td>
+          <td>OpenAI</td>
+          <td>API + ChatGPT only; weights not released</td>
+        </tr>
+        <tr>
+          <td>Claude Sonnet</td>
+          <td>Closed</td>
+          <td>Anthropic</td>
+          <td>API + Claude.ai only; weights not released</td>
+        </tr>
+        <tr>
+          <td>Llama 3 (8B / 70B)</td>
+          <td>Open</td>
+          <td>Meta</td>
+          <td>Weights published; downloadable and runnable locally</td>
+        </tr>
+        <tr>
+          <td>Qwen2.5 (1.5B – 72B)</td>
+          <td>Open</td>
+          <td>Alibaba</td>
+          <td>Weights published; wide size range for different hardware</td>
+        </tr>
+        <tr>
+          <td>Mistral 7B</td>
+          <td>Open</td>
+          <td>Mistral AI</td>
+          <td>Weights published; compact, efficient for its size</td>
+        </tr>
+        <tr>
+          <td>DeepSeek-R1 (671B)</td>
+          <td>Open</td>
+          <td>DeepSeek</td>
+          <td>Mixture-of-experts; weights published, requires significant hardware</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Closed models are often more capable at the high end, but they require an internet connection, send your prompts to a remote server, and charge per token. Open models run locally, cost nothing per query after you have the weights, and keep your data on your device.</p>
+
+    <h2>Context window explained</h2>
+
+    <p>A context window is how many tokens the model can see at once. Everything inside the window — your system prompt, the conversation so far, any documents you've pasted in — is available to the model when it generates the next token. Everything outside the window is invisible.</p>
+
+    <p>Token counts aren't word counts. English text runs roughly 750 words per 1,000 tokens. A 128k-token context window can hold a short novel.</p>
+
+    <p>Some reference points from published model specs:</p>
+
+    <ul>
+      <li><strong>GPT-4o:</strong> 128k tokens</li>
+      <li><strong>Claude:</strong> 200k tokens</li>
+      <li><strong>Most local open models:</strong> 8k – 128k tokens depending on the model and how much RAM you have</li>
+    </ul>
+
+    <p>A larger context window isn't always better in practice. Models can lose track of information in very long contexts, and a bigger context window uses more RAM and slows down inference. For most tasks — writing, coding, Q&A — 8k to 32k tokens is plenty.</p>
+
+    <h2>Running an LLM on your own Mac</h2>
+
+    <p>Running a model locally means three things: the weight files live on your disk, computation happens on your chip, and nothing leaves the device. No API call. No server. No usage cap.</p>
+
+    <p>Apple Silicon makes this practical for most people. The M-series chips have a unified memory architecture — the CPU, GPU, and neural engine all share the same RAM pool — which means a model that needs 8 GB of memory doesn't require a discrete GPU. A MacBook Air with 16 GB handles 7B and 8B models comfortably. A Mac with 32 GB or 64 GB can run models in the 27B–32B range.</p>
+
+    <p>The Outlier app ships three models for Mac:</p>
+
+    <ul>
+      <li><strong>Outlier Nano (1.5B)</strong> — runs at 32 tokens per second on an M4 MacBook Air; free tier</li>
+      <li><strong>Outlier Lite (3B)</strong> — more capable, still fast on any M-series Mac; free tier</li>
+      <li><strong>Outlier Core (27B)</strong> — serious coding and writing work; requires more RAM</li>
+    </ul>
+
+    <p>The size-to-memory math: at 4-bit quantization, a 7B model is about 4.5 GB on disk and in RAM. A 27B model is roughly 17 GB. That's the number you need to compare against your Mac's unified memory spec.</p>
+
+    <div class="receipts">
+      <strong>Sources and methodology:</strong> The numbers in this article come from published model cards and measured inference runs on my own M-series Macs. Context window figures are from official model documentation as of mid-2026. Quantization math (4-bit ≈ 8x compression vs. 32-bit float) is standard across the open-weights community.
+    </div>
+
+    <h2>Frequently asked questions</h2>
+
+    <h3>What is a large language model in simple terms?</h3>
+    <p>A large language model is a neural network trained on a large amount of text. It learns statistical patterns from that text, then uses those patterns to predict the next token (word fragment) given whatever you've typed. Do this one token at a time and you get a response.</p>
+
+    <h3>How many parameters does an LLM need to be useful?</h3>
+    <p>It depends on the task. A 1.5B-parameter model like Outlier Nano handles simple Q&A and summarization at 32 tokens per second on an M4 MacBook Air. A 7B or 8B model handles most everyday coding and writing tasks. You only need 70B+ parameters for highly specialized or research-grade work where errors carry real cost.</p>
+
+    <h3>Can I run an LLM on my Mac without a GPU?</h3>
+    <p>Yes. Apple Silicon (M1 and later) has a unified memory architecture where the CPU and GPU share the same RAM pool. A model like Outlier Core (27B parameters) runs on a MacBook Pro without any discrete GPU. The neural engine and GPU cores built into the M-series chip handle the matrix math.</p>
+
+    <div class="cta">
+      <h3>Try a local LLM on your Mac — free</h3>
+      <p>Outlier Nano and Lite are free tiers. Download the app, get the weights, and run your first query in under two minutes. Nothing leaves your Mac.</p>
+      <a href="https://outlier.host/#app" class="btn">Download Outlier</a>
+    </div>
+
+    <div class="related">
+      <p>Related reading:</p>
+      <ul>
+        <li><a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> — the broader concept of running AI entirely on your own device</li>
+        <li><a href="https://outlier.host/learn/what-is-paged-moe-inference/">What is paged MoE inference?</a> — how mixture-of-experts models like DeepSeek-R1 run on limited RAM</li>
+        <li><a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> — a practical guide to matching models to your Mac's memory</li>
+      </ul>
+    </div>
+
+  </article>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

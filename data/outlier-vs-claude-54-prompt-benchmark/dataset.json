@@ -1,0 +1,110 @@
+{
+  "name": "Outlier Core 27B vs Claude Opus 4.7 \u2014 54-prompt benchmark",
+  "description": "Side-by-side output-quality benchmark of Outlier Core 27B (local, MLX 4-bit on M1 Ultra) vs Claude Opus 4.7 (cloud), 54 head-to-head prompts scored against per-category objective rubrics.",
+  "url": "https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/",
+  "creator": "Outlier (Matt Kerr)",
+  "license": "CC-BY-4.0",
+  "datePublished": "2026-05-19",
+  "dateModified": "2026-05-20",
+  "methodology": {
+    "models": {
+      "local": "Outlier Core 27B (MLX 4-bit)",
+      "cloud": "Claude Opus 4.7 (cloud API, default settings)"
+    },
+    "hardware": "M1 Ultra Mac Studio, 64-192 GB unified memory, mlx-lm 0.31.3",
+    "date_range": "2026-05-17 to 2026-05-18",
+    "scoring": "Per-category objective rubrics, pass/fail per criterion, points summed",
+    "cycles": "Cycle 1: 6-prompt warm-up; Cycle 2: 45-prompt expansion; Cycle 3: +9 brutal additions = 54 total"
+  },
+  "headline": {
+    "overall_rubric_pass_pct": 98.9,
+    "brutal_additions_pass_pct": 100.0,
+    "prompts_total": 54,
+    "note": "Remaining 1.1% = non-deterministic rubric/regex noise, not a capability gap. Speed not measured (Claude ~4x faster decode)."
+  },
+  "warmup_battery": [
+    {
+      "n": 1,
+      "category": "Reasoning",
+      "test": "Two trains meeting",
+      "verdict": "Identical answer"
+    },
+    {
+      "n": 2,
+      "category": "Knowledge",
+      "test": "TCP vs UDP head-of-line blocking",
+      "verdict": "Both correct; Claude richer (named QUIC/HTTP-3)"
+    },
+    {
+      "n": 3,
+      "category": "Writing",
+      "test": "170-word product blurb",
+      "verdict": "Both shippable, exactly 170 words"
+    },
+    {
+      "n": 4,
+      "category": "Translation",
+      "test": "French passage faithful+idiomatic",
+      "verdict": "Both idiomatic"
+    },
+    {
+      "n": 5,
+      "category": "Refactor",
+      "test": "Python sum of squares of evens",
+      "verdict": "Identical body; Claude richer typing"
+    },
+    {
+      "n": 6,
+      "category": "Code",
+      "test": "Pomodoro timer single-file HTML",
+      "verdict": "Outlier exceeded on richness after 3 iterations"
+    }
+  ],
+  "brutal_additions": [
+    {
+      "n": 1,
+      "test": "Chess engine (castling, en-passant, promotion, check, checkmate)",
+      "score_pct": 100
+    },
+    {
+      "n": 2,
+      "test": "Paint canvas (brush, color picker, clear)",
+      "score_pct": 100
+    },
+    {
+      "n": 3,
+      "test": "Hard combinatorics problem",
+      "score_pct": 100
+    },
+    {
+      "n": 4,
+      "test": "Geometry proof",
+      "score_pct": 100
+    },
+    {
+      "n": 5,
+      "test": "Raft vs Paxos consensus explanation",
+      "score_pct": 100
+    },
+    {
+      "n": 6,
+      "test": "Zero-knowledge proofs (soundness, completeness, SNARKs)",
+      "score_pct": 100
+    },
+    {
+      "n": 7,
+      "test": "6-section blameless post-mortem",
+      "score_pct": 100
+    },
+    {
+      "n": 8,
+      "test": "Race-condition refactor",
+      "score_pct": 100
+    },
+    {
+      "n": 9,
+      "test": "Needle-in-context retrieval (long-context recall)",
+      "score_pct": 100
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Outlier streaming engine benchmarks (V9 paged vs retired V10/V11)",
+  "description": "Decode tok/s, RSS, and Metal wired-memory for Outlier's V9 paged engine vs retired V10/V11 streaming engines, Plus 397B and Vision 35B, M1 Ultra, 5+ run aggregation.",
+  "url": "https://outlier.host/data/v11-streaming-engine-benchmarks/",
+  "creator": "Outlier (Matt Kerr)",
+  "license": "CC-BY-4.0",
+  "datePublished": "2026-05-09",
+  "dateModified": "2026-05-20",
+  "hardware": "M1 Ultra; 5-run mean per config, fresh process per run, OS-level RSS sampled per token",
+  "v9_paged_plus_397b": {
+    "tok_per_sec": 2.1,
+    "rss_gb": 11,
+    "wired_memory_gb": 3.6,
+    "config": "K=20 hot experts/layer + 8 GB LRU cache"
+  },
+  "retired_v10_v11": {
+    "wired_memory_gb_prefill": "57-58",
+    "tok_per_sec_gain_pct": "30-40",
+    "why_retired": "57-58 GB wired during prefill could crash a 32 GB Mac for only 30-40% gain; V9 uses 3.6 GB wired (15x less)"
+  }
+}

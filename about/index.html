@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Outlier — who builds it, and why | Outlier</title>
+  <meta name="description" content="Outlier is local AI for Mac, built solo in Grand Rapids by Matt Kerr. Why it exists, how it's tested first-hand against cloud AI, and the honest state of the beta.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-06-17">
+  <link rel="canonical" href="https://outlier.host/about/">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="About Outlier — who builds it, and why">
+  <meta property="og:description" content="Local AI for Mac, built solo in Grand Rapids. Why it exists, how it's tested first-hand against cloud AI, and the honest state of the beta.">
+  <meta property="og:url" content="https://outlier.host/about/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="About Outlier — who builds it, and why">
+  <meta name="twitter:description" content="Local AI for Mac, built and tested first-hand by a solo founder in Grand Rapids.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "AboutPage", "name": "About Outlier", "url": "https://outlier.host/about/", "description": "Who builds Outlier and why: local AI for Mac, built solo in Grand Rapids and tested first-hand against cloud AI.", "mainEntity": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": "https://outlier.host/logo.png", "foundingLocation": "Grand Rapids, Michigan, USA", "sameAs": ["https://huggingface.co/Outlier-Ai", "https://github.com/Outlier-host"], "founder": {"@type": "Person", "name": "Matt Kerr"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Person", "name": "Matt Kerr", "jobTitle": "Founder", "worksFor": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/"}, "homeLocation": "Grand Rapids, Michigan", "knowsAbout": ["local AI", "Apple Silicon", "Mixture-of-Experts inference", "on-device LLMs", "macOS app development"], "url": "https://outlier.host/about/"}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "About", "item": "https://outlier.host/about/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; about</div>
+    <h1>About Outlier — who builds it, and why</h1>
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr · founder · Grand Rapids, MI · updated 2026-06-17</span>
+      <span class="updated-pill">Solo-built, in public</span>
+    </div>
+
+    <p class="lead">Outlier is local AI for the Mac: a model that lives on your own disk and answers on your own chip, with no account, no usage caps, and nothing leaving the machine. I'm Matt Kerr, and I built it solo in Grand Rapids, Michigan. This page is the honest version of who's behind it and why it exists — because when you run someone's software on your own computer, you should know who made it.</p>
+
+    <h2>Why I built it</h2>
+    <p>The short version: I kept hitting the usage cap. I was paying around $200 a month across cloud AI tools, and the good model would still cut me off at 11 PM and tell me to come back later. The work didn't keep office hours, but the AI did. So I spent a few months building the thing that doesn't stop — a frontier-scale model that runs on the Mac I already owned, offline, with no meter on it.</p>
+    <p>The deeper reason is ownership. Every other tool on my Mac is mine: the editor doesn't phone home to open a file, the terminal doesn't have a monthly quota. AI became the one tool everyone <em>rents</em>, on terms that change while you're using it. Outlier is the argument that you can own it instead — the weights are open files on your disk, and files don't have a terms of service.</p>
+
+    <h2>How it's tested — first-hand, with receipts</h2>
+    <p>I don't ask anyone to take the quality on faith. I run the models myself, on real work, and publish the raw results. The headline test is a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head against Claude Opus</a> with the side-by-side outputs posted in full: Outlier's local Core 27B matched Opus on 98.9% of the rubric checks overall, and 100% on the nine hardest (a chess engine, Raft and Paxos, zero-knowledge proofs). The <a href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">tok/s and memory numbers</a> are measured on my own M1 Ultra, with the method written down.</p>
+    <p>The thing that makes Outlier unusual is the engine underneath: a patent-pending paged Mixture-of-Experts inference runtime that streams expert weights off the SSD, so a <a href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">397-billion-parameter model runs on a 64 GB Mac</a> at about 11 GB of peak memory — a model bigger than the RAM it runs in. The weights are open and <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">published on HuggingFace</a>, so none of this is a black box.</p>
+    <div class="receipts"><strong>First-hand, not secondhand:</strong> the benchmarks on this site are runs I did myself with the commands, sample sizes, and dates recorded. Where the current beta still trails the best cloud coding agents, the site says so plainly. No fabricated parity.</div>
+
+    <h2>The honest state of the beta</h2>
+    <p>Outlier went from idea to a shipped, notarized Mac app in about a month, and it's a real daily-driver for chat, drafting, everyday coding, deep research, and vision — entirely offline. It is also genuinely a beta. The local coding-agent loop isn't yet equal to the strongest cloud agents on the hardest multi-file work, and the cloud still wins the extreme high end of reasoning. I'd rather tell you that than oversell it. What Outlier wins on is the part that doesn't need a data center: ownership, privacy, no caps, and "it just works" on the Mac you already have.</p>
+
+    <h2>Built in public</h2>
+    <p>This is a one-person project funded by people who use it — Pro subscribers, lifetime Founders, and one-time chip-ins. That money goes into specific work: stronger local coding models, faster inference, more reliable agents, and better tests. The process is part of the product, wins and failures both. If you want to follow or kick the tires, the code and models are on <a href="https://github.com/Outlier-host" target="_blank" rel="noopener">GitHub</a> and <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>, and you can reach me directly at <a href="mailto:matt@outlier.host">matt@outlier.host</a>.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=about">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/own-your-ai/">What owning your AI means</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">The 54-prompt benchmark</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
