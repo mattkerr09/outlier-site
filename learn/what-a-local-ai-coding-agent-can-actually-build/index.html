@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What a local AI coding agent can actually build (measured) | Outlier</title>
+  <meta name="description" content="What can an offline 27B AI coding agent actually build and test on its own? Measured results from a real session: a bank class 13/13 tests, a 5-file library system, a sqlite app, a 33-file build — plus the honest failure modes.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-01">
+  <link rel="canonical" href="https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What a local AI coding agent can actually build (measured)">
+  <meta property="og:description" content="Measured results from a real session with an offline 27B agent: what it built and tested on its own, and where it fails.">
+  <meta property="og:url" content="https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What a local AI coding agent can actually build (measured)">
+  <meta name="twitter:description" content="The real apps a local 27B agent built and tested autonomously — with the honest failure modes.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(720px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article pre { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.2rem; overflow-x: auto; margin: 1.2rem 0 1.5rem; }
+    article pre code { background: transparent; padding: 0; color: var(--text); font-size: 0.86em; line-height: 1.55; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.94rem; }
+    article th, article td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .source { font-size: 0.78rem; color: var(--text-dim); margin-top: -0.6rem; margin-bottom: 1.2rem; font-style: italic; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"What a local AI coding agent can actually build (measured)","description":"Measured results from a real session with an offline 27B coding agent: the apps it built and tested on its own, and the honest failure modes.","datePublished":"2026-07-01","dateModified":"2026-07-01","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What a local AI coding agent can actually build", "item": "https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can a local AI coding agent actually build?", "acceptedAnswer": {"@type": "Answer", "text": "Bounded, testable programs. In a real measured session an offline 27B agent built and self-tested a bank account class (13/13 tests passing), a 5-file library management system, a sqlite-backed contacts app, a precedence-correct arithmetic expression evaluator, and a 33-file build where every file compiled."}}, {"@type": "Question", "name": "How good is a local 27B model at coding compared to Claude?", "acceptedAnswer": {"@type": "Answer", "text": "On a blind subset of SWE-bench Verified the offline 27B measured about 45% (18/40). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs it does not match locally."}}, {"@type": "Question", "name": "Does the local agent verify its own work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong — the code or a test asserting a wrong value — with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not compiles or the model approving itself, is the single biggest quality lever."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>What a local AI coding agent can actually build</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-07-01</span>
+      <span class="updated-pill">Last updated 2026-07-01</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Offline, on a Mac, a 27B agent builds <strong>bounded, testable programs</strong> and verifies them by running the tests — not by "the code looks right."</li>
+        <li>In one measured session it shipped a bank account class (<strong>13/13 tests passing</strong>), a 5-file library system, a sqlite contacts app, a precedence-correct math evaluator, and a <strong>33-file build with every file compiling</strong>.</li>
+        <li>On a blind slice of SWE-bench Verified it measured <strong>~45% (18/40)</strong> — real, honest, and not a leaderboard number.</li>
+        <li>Where it doesn't match a cloud flagship: breadth-bound tasks, flawless novel reasoning with no test, and 40+-step autonomous runs. That gap is real and this page doesn't hide it.</li>
+        <li>It is <strong>truthful about failure</strong> — a build with failing tests reports failure rather than claiming a false success.</li>
+      </ul>
+    </div>
+
+    <p class="lead">"What can offline AI actually do for coding?" is usually answered with a demo or a vibe. This page answers it with receipts. Everything below was built by a local 27B coding agent — the "compact" tier running on-device via MLX on an M1 Ultra, no cloud call — during one real engineering session, and every capability claim is verified by the agent running the tests, not by anyone eyeballing the output.</p>
+
+    <h2>The apps it built and tested on its own</h2>
+    <p>These are not prompts I hand-fixed afterward. Each was produced end-to-end by the agent — write the files, run the tests, fix what failed, re-run — offline. What makes them count is the last step: a passing test suite the agent generated and executed itself.</p>
+
+    <table>
+      <thead><tr><th>What it built</th><th>Scope</th><th>Verified how</th></tr></thead>
+      <tbody>
+        <tr><td>Bank <code>Account</code> class</td><td>Deposit / withdraw with overdraft protection</td><td><strong>13/13 tests passing</strong></td></tr>
+        <tr><td>Library management system</td><td>5 files — borrow / return with edge cases</td><td>Correct behavior across edge cases, tests green</td></tr>
+        <tr><td>Contacts app</td><td>sqlite-backed CRUD</td><td>Runs against a real sqlite database</td></tr>
+        <tr><td>Arithmetic expression evaluator</td><td>Operator precedence + parentheses</td><td><code>2+3*4 = 14</code>, <code>(2+3)*4 = 20</code></td></tr>
+        <tr><td>Multi-file build</td><td>33 files</td><td>Every file compiles</td></tr>
+      </tbody>
+    </table>
+    <p class="source">Source: measured autonomous runs in an on-device Outlier session, compact 27B tier (MLX 4-bit) on an M1 Ultra. "Verified" means the agent's own generated test suite ran and passed, offline.</p>
+
+    <p>Two of these deserve a closer look, because they're the kind of thing people assume a small local model can't do reliably.</p>
+
+    <h3>The precedence evaluator</h3>
+    <p>An arithmetic expression evaluator is a classic tripwire. Get the parser wrong and <code>2+3*4</code> comes out <code>20</code> instead of <code>14</code> because you evaluated left-to-right and ignored precedence. The agent got precedence right and got parentheses right — <code>(2+3)*4</code> correctly returns <code>20</code>. That is a small program, but it's exactly the kind of bounded, checkable logic where a local model can hit the correct answer every time, because a test can tell it when it's wrong.</p>
+
+    <h3>The 33-file build</h3>
+    <p>Thirty-three files that all compile is a different kind of achievement than one clever function. It's about coherence across a project — imports resolving, names matching, indentation surviving from file to file. This is the frontier where local agents historically fell apart (an earlier ceiling in Outlier's own testing was around 18 files before indentation drift crept in). Getting to 33 compiling files is the payoff of whole-file edits and self-checking rather than blind diff-patching.</p>
+
+    <h2>It checks its own work — and won't cheat to pass</h2>
+    <p>The reason these builds land isn't a smarter model. It's that the agent verifies itself. When a test fails, it doesn't just re-roll the code and hope. It computes the true expected answer itself, then decides which side is actually wrong:</p>
+    <ul>
+      <li>If the <strong>code</strong> is wrong, it fixes the code.</li>
+      <li>If a <strong>test</strong> asserts a wrong value, it fixes the test.</li>
+    </ul>
+    <p>That second case is dangerous, and there's a guard for it: the agent is blocked from <em>weakening</em> a good test just to force a green run. It can correct a test that genuinely encodes the wrong expected value, but it can't quietly delete an assertion to fake a pass. This is the difference between an agent that tells you the truth and one that games its own scoreboard.</p>
+    <p>Which points at the single biggest lever in local coding: <strong>the execution oracle.</strong> Select the agent's work on <em>run-the-tests</em>, not on "it compiles" and not on "the model approved itself." Compiling is necessary and nowhere near sufficient; a model grading its own homework is worth even less. Running the tests is the only signal that survives contact with reality, and it's why the local agent can be trusted on the tasks above.</p>
+
+    <h2>The honest number: ~45% on a blind SWE-bench slice</h2>
+    <p>Bounded toy programs are one thing; real repository bugs are another. On a blind subset of SWE-bench Verified — the standard "fix this real GitHub issue in a real codebase" benchmark — the local 27B measured <strong>about 45% (18 of 40)</strong>.</p>
+    <p>Read that honestly. Forty tasks is a slice, not the full 500-task Verified set, so <strong>45% is not a leaderboard number</strong> and I won't present it as one. It's a measured, blind, offline data point: a local 27B, no cloud, resolves close to half of a real-bug sample. That's a genuinely useful floor, and it's the number the marketing usually won't give you.</p>
+
+    <h2>Where a local 27B already matches a cloud flagship</h2>
+    <p>On a whole class of work, the gap to a frontier cloud model is small or gone. The common thread is that the task is <strong>bounded, in-distribution, and testable</strong>:</p>
+    <ul>
+      <li>Implementing a well-specified class or module with clear behavior (the bank account, the library system).</li>
+      <li>Parsers, evaluators, and algorithmic logic where a test can confirm correctness (the precedence evaluator).</li>
+      <li>CRUD apps against a real datastore (the sqlite contacts app).</li>
+      <li>Multi-file projects where the goal is coherence and everything compiling (the 33-file build).</li>
+    </ul>
+    <p>When there's a test to check against and the problem lives in familiar territory, the local agent's self-verification loop closes the gap that raw model quality would otherwise leave open.</p>
+
+    <h2>Where it doesn't match — the honest ceiling</h2>
+    <p>I'm not going to pretend the gap closes everywhere. There are tasks where a local 27B does not match a cloud flagship locally, and they cluster into three hard walls:</p>
+    <table>
+      <thead><tr><th>Wall</th><th>Why it's hard for a local 27B</th></tr></thead>
+      <tbody>
+        <tr><td>Per-token slip floor</td><td>Exact enumeration, counting, and arithmetic have a residual error rate that's a structural property of a 4-bit 27B — small, but nonzero, and it shows up on tasks with no test to catch it.</td></tr>
+        <tr><td>Breadth / world &amp; library knowledge</td><td>The long tail of API and library facts is a parameter-count wall. Distillation transfers <em>style</em>, not the full fact long-tail, so obscure-library tasks favor the bigger model.</td></tr>
+        <tr><td>Exact recall from far-back context</td><td>Pulling an exact byte-span out of deep context is where a cloud model with a huge context window and stronger recall pulls ahead.</td></tr>
+      </tbody>
+    </table>
+    <p>Concretely, the tasks a local 27B won't match locally are: <strong>breadth-bound tasks</strong> (they need knowledge the parameters don't hold), <strong>flawless multi-step novel reasoning with no test to verify against</strong> (nothing catches a subtle slip), and <strong>40+-step fully autonomous runs</strong> (errors compound over a long unattended horizon). For those, the right move is escalation, not pretending.</p>
+
+    <h2>How far the local ceiling can move</h2>
+    <p>Today's blind ~45% is a floor, not a wall, and the path up is engineering rather than a bigger model:</p>
+    <ul>
+      <li><strong>Local engineering</strong> — execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission — can push the same 27B into the <strong>mid-50s to low-60s</strong>.</li>
+      <li><strong>Training</strong> — LoRA and distillation on-distribution can reach roughly <strong>70–80% in-distribution</strong>.</li>
+      <li>The <strong>last ~15–20 points</strong> to a cloud flagship's ~65–72% is a genuine ceiling, gated by the three walls above. That final stretch doesn't close by trying harder locally — it closes by routing the hard call up.</li>
+    </ul>
+    <p>The honest framing: a local coding agent isn't a smaller Claude. It's a tool that <em>owns</em> the bounded, testable, private, offline half of the work outright — and knows when to hand off the rest.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What can a local AI coding agent actually build?</h3>
+        <p>Bounded, testable programs. In a real measured session an offline 27B built and self-tested a bank account class (13/13 tests passing), a 5-file library management system, a sqlite-backed contacts app, a precedence-correct arithmetic evaluator, and a 33-file build where every file compiled.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How good is a local 27B at coding compared to Claude?</h3>
+        <p>On a blind slice of SWE-bench Verified it measured ~45% (18/40). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test, and 40+-step autonomous runs, it doesn't match locally — those are the cases to escalate.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does the local agent verify its own work?</h3>
+        <p>Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong — the code, or a test asserting a wrong value — with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not on "compiles" or self-approval, is the single biggest quality lever.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=what-a-local-ai-coding-agent-can-actually-build">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude — 54-prompt benchmark</a> · <a href="https://outlier.host/learn/can-you-run-claude-locally/">Can you run Claude locally?</a> · <a href="https://outlier.host/run/local-coding-agent-no-api-keys/">A local coding agent with no API keys</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

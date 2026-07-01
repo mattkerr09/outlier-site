@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can a local 27B model code like Claude? The measured answer | Outlier</title>
+  <meta name="description" content="The honest, measured reverse-engineering: a local on-device 27B coding agent scores ~45% on SWE-bench Verified (18/40 blind), reaches mid-50s to low-60s with local engineering, and hits a genuine 15–20-point wall below Claude. Where it already matches, the 3 hard walls, and the biggest lever.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-01">
+  <link rel="canonical" href="https://outlier.host/data/can-a-local-27b-model-code-like-claude/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can a local 27B model code like Claude? The measured answer">
+  <meta property="og:description" content="~45% on SWE-bench Verified blind, mid-50s to low-60s with local engineering, and a genuine 15–20-point wall below Claude. Where it matches, the 3 hard walls, and the biggest lever.">
+  <meta property="og:url" content="https://outlier.host/data/can-a-local-27b-model-code-like-claude/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can a local 27B model code like Claude? The measured answer">
+  <meta name="twitter:description" content="The measured gap, where it matches, the 3 hard walls, and the biggest lever.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(820px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.05rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.05rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.9rem; }
+    article th, article td { padding: 0.5rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Can a local 27B model code like Claude? The measured answer","description":"The honest, measured reverse-engineering of how close a local on-device 27B coding agent gets to Claude: ~45% on SWE-bench Verified blind, mid-50s to low-60s with local engineering, and a genuine 15–20-point wall. Where it already matches, the 3 hard walls, and the biggest lever.","datePublished":"2026-07-01","dateModified":"2026-07-01","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/data/can-a-local-27b-model-code-like-claude/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can a local 27B model code like Claude? The measured answer", "item": "https://outlier.host/data/can-a-local-27b-model-code-like-claude/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a local 27B model code like Claude?", "acceptedAnswer": {"@type": "Answer", "text": "On bounded, in-distribution, testable coding tasks a local 27B model already matches Claude — it built and passed the tests for a bank account class (13/13), a 5-file library system, a sqlite contacts app, and a precedence-correct arithmetic evaluator this session. But it does not match Claude everywhere: a genuine 15–20-point gap remains on breadth-bound work, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs."}}, {"@type": "Question", "name": "What did the local 27B score on SWE-bench Verified?", "acceptedAnswer": {"@type": "Answer", "text": "Measured blind, the local 27B agent scored about 45% — 18 of 40 tasks resolved. That is a measured number on real tasks, not a leaderboard entry, and not the full 500-task Verified set."}}, {"@type": "Question", "name": "What is the single biggest lever to close the gap?", "acceptedAnswer": {"@type": "Answer", "text": "An execution oracle: selecting the candidate patch by running the tests, not by whether it compiles and not by letting the model approve its own work. Running the tests turns a small model's noisy best-of-N attempts into a reliable pass, and it is the lever that moves the score most."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">data</a></div>
+    <h1>Can a local 27B model code like Claude? The measured answer</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-07-01</span>
+      <span class="updated-pill">Last updated 2026-07-01</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li><strong>Partly, and I can tell you exactly where.</strong> A local on-device 27B coding agent (the "compact" tier, running in MLX on an M1 Ultra) scored a <strong>measured ~45% on SWE-bench Verified — 18 of 40 blind</strong>.</li>
+        <li><strong>Local engineering, no new training, gets it to mid-50s / low-60s:</strong> execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission.</li>
+        <li><strong>Training (LoRA + distillation) reaches ~70–80% in-distribution.</strong> The last ~15–20 points to Claude's 65–72% is a genuine ceiling, not a tuning knob.</li>
+        <li><strong>It already matches Claude on bounded, testable tasks</strong> — and it is truthful: it reports failure honestly instead of claiming a false pass.</li>
+        <li><strong>The single biggest lever is an execution oracle:</strong> select on running the tests, not on "it compiles" and not on the model approving its own work.</li>
+      </ul>
+    </div>
+
+    <p class="lead">"Can a small local model really code like Claude?" is the question I get most, and the honest answer is neither the hype ("small models are as good as frontier now") nor the dismissal ("a 4-bit 27B is a toy"). It's a specific, measurable gap that I've reverse-engineered into a roadmap. This is that roadmap: the measured starting point, how far pure local engineering carries it, how far training carries it, and the three walls that a local 27B does not cross — with the numbers behind each claim. No vibes.</p>
+
+    <h2>The measured starting point: ~45% on SWE-bench Verified</h2>
+    <p>SWE-bench Verified is the benchmark that actually matters for coding agents — real GitHub issues with hidden tests that either pass or don't. Run blind against a slice of it, the local 27B agent resolved <strong>18 of 40 tasks — about 45%</strong>. That number is measured, not projected, and it comes with the honesty this whole strategy is built on:</p>
+    <ul>
+      <li>It's a <strong>blind</strong> result — the agent didn't see the hidden tests.</li>
+      <li>It's <strong>not a leaderboard number.</strong> 40 tasks is a real, honest slice, not the full 500-task Verified set. Treat it as a measured signal, not a headline rank.</li>
+      <li>The single-shot baseline (one attempt, no scaffold) sits far below this. Most of the ~45% is the <em>agent loop</em> — localization, tool calls, running tests, iterating — not the raw model.</li>
+    </ul>
+
+    <h2>The roadmap: what closes the gap, and what doesn't</h2>
+    <p>Here's the honest ladder, from the measured 45% up to the wall. Each rung is a real, distinct source of gain — and the last rung is a ceiling, not another rung.</p>
+    <table>
+      <thead><tr><th>Stage</th><th>What it adds</th><th>Measured / target band</th></tr></thead>
+      <tbody>
+        <tr><td>Blind baseline</td><td>The agent loop as it stands today</td><td><strong>~45%</strong> (18/40, measured)</td></tr>
+        <tr><td>Local engineering</td><td>Execution-oracle selection, self-verification, verbatim memory, whole-file edits, grammar-constrained tool emission — <em>no new training</em></td><td>mid-50s to low-60s</td></tr>
+        <tr><td>Training</td><td>LoRA + distillation on the target distribution</td><td>~70–80% in-distribution</td></tr>
+        <tr><td>The wall (Claude's band)</td><td>The last ~15–20 points — a genuine ceiling for a 4-bit 27B, not a tuning knob</td><td>Claude 65–72%</td></tr>
+      </tbody>
+    </table>
+    <p>Read that carefully. Local engineering — the part Outlier owns and ships — is worth roughly <strong>ten points</strong> on its own, with no model change at all. Training buys another big jump, but only <em>in-distribution</em>: it makes the agent great at the kind of work it was trained on, not universally smarter. And then there's a wall.</p>
+
+    <h2>The three hard walls</h2>
+    <p>This is the part most "local AI" writeups skip, because it's the part that doesn't flatter the local model. There are three failures a local 27B does not engineer its way out of. They are structural.</p>
+    <table>
+      <thead><tr><th>Wall</th><th>What it is</th><th>Why it's structural</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Per-token slip floor</strong></td><td>Exact enumeration, counting, arithmetic — the "get every one of these 40 items exactly right" tasks</td><td>A structural property of a 4-bit 27B. Quantization noise sets a floor on per-token precision that no scaffold removes.</td></tr>
+        <tr><td><strong>2. Breadth of world &amp; library knowledge</strong></td><td>The long tail of "I just need to know this obscure API / edge case / library quirk"</td><td>A parameter-count wall. Distillation transfers <em>style</em>, not the fact long-tail — you can't distill knowledge the student has no room to store.</td></tr>
+        <tr><td><strong>3. Exact recall of a far-back byte-span</strong></td><td>Reproducing a specific span verbatim from deep in a long context</td><td>Attention over a long window is lossy at small scale; the exact bytes from far back get approximated, not recalled.</td></tr>
+      </tbody>
+    </table>
+    <p>These three are why the wall exists. Claude clears all three because it has the parameters and the precision budget to. A 27B doesn't, and I'm not going to pretend it does.</p>
+
+    <h2>Where a local 27B already matches Claude</h2>
+    <p>Now the flip side, and it's a real one. On <strong>bounded, in-distribution, testable</strong> tasks, the local 27B is already there. This session, running autonomously and verified by <em>running the tests</em>, the local agent built:</p>
+    <table>
+      <thead><tr><th>Build</th><th>Result (verified by running the tests)</th></tr></thead>
+      <tbody>
+        <tr><td>Bank <code>Account</code> class with overdraft protection</td><td><strong>13/13 tests passing</strong></td></tr>
+        <tr><td>5-file library management system</td><td>Correct borrow/return + edge cases</td></tr>
+        <tr><td>Contacts app, sqlite-backed</td><td>Persists and queries correctly</td></tr>
+        <tr><td>Arithmetic expression evaluator</td><td>Precedence-correct: <code>2+3*4=14</code>, <code>(2+3)*4=20</code></td></tr>
+        <tr><td>33-file autonomous build</td><td>Every file compiles</td></tr>
+      </tbody>
+    </table>
+    <p>These aren't cherry-picked one-liners; they're multi-file programs with real edge cases, and they pass the tests. On this class of work — the class most day-to-day coding actually is — you would not feel a downgrade from Claude.</p>
+    <p>And there's a quieter property that matters more than any single build: <strong>it's truthful.</strong> When a build's tests fail, the agent reports the failure honestly instead of declaring a false success. A coding agent that lies about passing is worse than useless; one that tells you the truth about where it stands is one you can actually delegate to.</p>
+
+    <h3>Where it never matches Claude locally</h3>
+    <ul>
+      <li><strong>Breadth-bound tasks</strong> — the ones that hinge on knowing an obscure fact or library quirk (wall #2).</li>
+      <li><strong>Flawless multi-step novel reasoning with no test to check against</strong> — no execution oracle can save you when there's nothing to run.</li>
+      <li><strong>40-plus-step autonomous runs</strong> — error compounds over a long horizon; small models drift where Claude holds the thread.</li>
+    </ul>
+
+    <h2>The biggest lever: an execution oracle</h2>
+    <p>If you take one thing from this page, take this. The single highest-leverage change is <strong>how you select the answer</strong>. There are three ways to pick which of a model's attempts to trust, and they are wildly different in value:</p>
+    <table>
+      <thead><tr><th>Selection method</th><th>What it actually checks</th><th>Trustworthy?</th></tr></thead>
+      <tbody>
+        <tr><td>The model approves itself</td><td>Whether the model <em>thinks</em> it's right</td><td>No — a confident wrong answer looks identical to a right one</td></tr>
+        <tr><td>"It compiles"</td><td>Syntax, not behavior</td><td>Weak — compiling code is routinely wrong</td></tr>
+        <tr><td><strong>Execution oracle (run the tests)</strong></td><td>Whether the behavior is actually correct</td><td><strong>Yes — the ground truth</strong></td></tr>
+      </tbody>
+    </table>
+    <p>Selecting on <em>run-the-tests</em> is what turns a small model's noisy best-of-N attempts into a reliable pass. The model doesn't have to be right on the first try — it has to be right on <em>one</em> try, and the oracle finds it. This is the lever behind most of the local-engineering jump in the roadmap above, and it's the one Outlier leans on hardest.</p>
+
+    <h3>Self-verification: the agent checks its own work</h3>
+    <p>The newest piece extends the oracle inward. When a test fails, the agent now <strong>computes the true answer itself</strong> and fixes whichever side is actually wrong — the code, <em>or</em> a test that asserts a wrong value. Crucially, there's a guard that <strong>blocks weakening a good test to cheat</strong> the check. That guard is the whole game: an agent allowed to edit tests will, if you let it, "fix" a failure by deleting the assertion. Blocking that is what keeps self-verification honest instead of a loophole.</p>
+
+    <h2>The honest takeaway</h2>
+    <p>Can a local 27B model code like Claude? On bounded, in-distribution, testable work — yes, measurably, today. Across the whole surface — no, and there's a real ~15–20-point wall with three structural causes I won't hand-wave away. The interesting truth is how much of the gap is <em>engineering</em> rather than raw capability: roughly ten points sit in selection, memory, and edit strategy that don't touch the model at all. That's the seam a local coding agent lives in — private, offline, free of usage caps, and honest about where it stands. When the task hits a wall, the right move isn't to pretend; it's to escalate. Everywhere else, the local model earns its keep.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can a local 27B model code like Claude?</h3>
+        <p>On bounded, in-distribution, testable coding tasks a local 27B model already matches Claude — it built and passed the tests for a bank account class (13/13), a 5-file library system, a sqlite contacts app, and a precedence-correct arithmetic evaluator this session. But it does not match Claude everywhere: a genuine 15–20-point gap remains on breadth-bound work, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What did the local 27B score on SWE-bench Verified?</h3>
+        <p>Measured blind, the local 27B agent scored about 45% — 18 of 40 tasks resolved. That is a measured number on real tasks, not a leaderboard entry, and not the full 500-task Verified set.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is the single biggest lever to close the gap?</h3>
+        <p>An execution oracle: selecting the candidate patch by running the tests, not by whether it compiles and not by letting the model approve its own work. Running the tests turns a small model's noisy best-of-N attempts into a reliable pass, and it is the lever that moves the score most.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=data-can-a-local-27b-model-code-like-claude">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude — 54-prompt benchmark</a> · <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code (full breakdown)</a> · <a href="https://outlier.host/vs/local-ai-vs-claude-code/">Local AI vs Claude Code by task</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
