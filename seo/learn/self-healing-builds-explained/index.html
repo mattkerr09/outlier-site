@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How Outlier self-heals multi-file builds (and never fakes a green check) | Outlier</title>
+<meta name="description" content="Local models make mechanical slips: a mis-indented method, a near-miss import, a missing helper. Outlier repairs each class deterministically, re-runs the tests, and only claims success it can prove — with rollback when a repair doesn&rsquo;t earn green.">
+<link rel="canonical" href="https://outlier.host/seo/learn/self-healing-builds-explained/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How Outlier self-heals multi-file builds (and never fakes a green check) | Outlier">
+<meta property="og:description" content="Local models make mechanical slips: a mis-indented method, a near-miss import, a missing helper. Outlier repairs each class deterministically, re-runs the tests, and only claims success it can prove.">
+<meta property="og:url" content="https://outlier.host/seo/learn/self-healing-builds-explained/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Outlier self-heals multi-file builds (and never fakes a green check) | Outlier">
+<meta name="twitter:description" content="Outlier repairs mechanical build failures deterministically, re-runs the tests, and only claims success it can prove — with rollback when a repair doesn&rsquo;t earn green.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"How Outlier self-heals multi-file builds","item":"https://outlier.host/seo/learn/self-healing-builds-explained/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How Outlier self-heals multi-file builds (and never fakes a green check) | Outlier","description":"Local models make mechanical slips. Outlier repairs each class deterministically, re-runs the tests, and only claims success it can prove.","datePublished":"2026-07-05","dateModified":"2026-07-05","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/self-healing-builds-explained/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Outlier edit my tests to make them pass?","acceptedAnswer":{"@type":"Answer","text":"No. A dedicated guard rejects any repair attempt that weakens or removes assertions, and a cross-turn monitor flags a build whose passing-test count silently shrinks. Repairs target source files, and every repair must make the real suite pass before the build may claim success."}},{"@type":"Question","name":"What happens when a repair doesn't work?","acceptedAnswer":{"@type":"Answer","text":"The changed file is rolled back to its original contents and the build reports its honest status — failed, or completed (unverified) when nothing objective confirmed the result. Outlier never reports a green check it cannot prove with a real test run."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/seo/learn/">Concept</a> &rsaquo; <span>How Outlier self-heals multi-file builds</span>
+</nav>
+<span class="tag">Concept</span>
+<h1>How Outlier self-heals multi-file builds (and never fakes a green check)</h1>
+<p class="byline">Last updated 2026-07-05 &middot; Outlier v1.11.638</p>
+
+<div class="qa"><strong>Quick answer</strong><p>Small local models occasionally make mechanical slips a big cloud model wouldn&rsquo;t: a method indented into the wrong place, an import of a slightly-misnamed helper, a function a test expects that the module forgot to define. Outlier detects each class from the objective failure signal (a compile error, a collection ImportError, an AttributeError), repairs it deterministically or with a tightly-guarded generation, re-runs the full test suite, and only reports success the tests actually prove. A repair that doesn&rsquo;t earn a real green is rolled back.</p></div>
+
+<h2>Why multi-file builds fail differently on-device</h2>
+<p>A 10-file app has 10 chances for one mechanical slip to break the whole build. On our 64&nbsp;GB test Mac Studio, the on-device Code tier writes a 13-module application whose files all compile and whose tests pass in about 8 minutes &mdash; but roughly one file in six, on a first attempt, used to carry a slip like an indentation drift. Cloud assistants hide this class with raw model strength; a local assistant has to engineer around it. Outlier&rsquo;s answer is a repair ladder: catch each mechanical class with an objective detector, fix it with the narrowest possible transformation, and let the test suite be the judge.</p>
+
+<h2>The repair ladder</h2>
+<table>
+<tr><th>Failure class</th><th>Objective signal</th><th>Repair</th></tr>
+<tr><td>File doesn&rsquo;t compile</td><td>compile check on every written file</td><td>deterministic re-indent, then a full regeneration of just that file</td></tr>
+<tr><td>Statement dedented out of its function</td><td><code>IndentationError</code>, or a <code>return</code> at module level</td><td>snap the statement back into its enclosing function &mdash; proven AST-identical on valid code</td></tr>
+<tr><td>Method indented into the previous method</td><td>tests fail with <code>'X' object has no attribute 'Y'</code></td><td>lift the nested method to class level; the surrounding method must be byte-for-byte unchanged, else reject</td></tr>
+<tr><td>Import of a near-miss name</td><td><code>cannot import name</code> at test collection</td><td>alias the import to the single strong candidate &mdash; only in the safe direction, never guessing between two</td></tr>
+<tr><td>Module genuinely missing a function</td><td>same signal, but no rename candidate exists</td><td>generate exactly that one function, show the added code in the build log, and require the suite to pass for real</td></tr>
+<tr><td>Cross-file import breaks at runtime</td><td>sandboxed import probe of each generated module</td><td>reconcile or honestly flag &mdash; a build with an unverified import never claims a clean success</td></tr>
+</table>
+<p>Every repair follows the same contract: verify before commit (the transformed file must compile and be structurally exactly the intended change), re-run the full suite through the same sandbox as the original test run, and flip the verdict only on a real pass. When a repair doesn&rsquo;t earn green, the file is rolled back to its original contents so the next repair stage diagnoses the true state.</p>
+
+<h2>Honest verdicts: three states, no wishful thinking</h2>
+<p>Every agent build ends in one of three states, derived only from objective signals &mdash; never from the model&rsquo;s own narration:</p>
+<ul>
+<li><strong>succeeded</strong> &mdash; a real test run passed, or the run verifiably had nothing to change.</li>
+<li><strong>failed</strong> &mdash; a step failed, intended writes didn&rsquo;t apply, or tests genuinely failed.</li>
+<li><strong>completed (unverified)</strong> &mdash; the work finished but nothing objective confirmed it: the test run errored, a build request produced no files, or a generated module&rsquo;s imports couldn&rsquo;t be verified.</li>
+</ul>
+<p>Two guards keep the green check meaningful. A repair may never weaken tests: attempts to loosen or delete an assertion to make a suite pass are rejected outright. And across a multi-turn session, Outlier tracks the passing-test count: a turn that stays green while materially fewer tests pass &mdash; because a test file was rewritten and coverage quietly shrank &mdash; is downgraded and labeled with exactly how many previously-passing tests disappeared.</p>
+
+<h2>What the numbers look like</h2>
+<p>Measured on the shipping build (v1.11.638, M1 Ultra, all processing on-device): a 13-module restaurant-management app with cross-module dependency chains builds fully green &mdash; 13 files, all compiling, 13 tests passing &mdash; in 494 seconds. A 13-turn autonomous session grew the same app from 13 to 25 files and 13 to 49 passing tests with zero crashes, and every turn&rsquo;s verdict matched reality: honest greens, an honest &ldquo;unverified&rdquo; where a turn couldn&rsquo;t be confirmed, and honest failures on the two turns the model genuinely broke.</p>
+
+<h2>Why this matters more than a benchmark score</h2>
+<p>An assistant that reports success it cannot prove poisons everything downstream &mdash; your trust, your git history, and any system that learns from its own results. Outlier&rsquo;s build verdicts are engineered adversarially: each repair and each verdict rule ships only after a review process that actively tries to construct false greens and false reds. The result is an on-device agent whose &ldquo;succeeded&rdquo; means something you can act on without re-checking by hand.</p>
+
+<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.638/Outlier-1.11.638-arm64.dmg" data-plausible="dl-selfhealing">Download Outlier for macOS</a>
+<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported.</p>
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/seo/learn/mlx-explained/">What is MLX and why does Outlier use it?</a></li><li><a href="/seo/how-to/write-unit-tests-with-local-ai/">Write unit tests with local AI</a></li><li><a href="/seo/how-to/run-a-local-coding-assistant-on-mac/">Run a local coding assistant on a Mac</a></li>
+</ul>
+</div>
+
+<div class="foot">
+<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">outlier.host</a></p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
