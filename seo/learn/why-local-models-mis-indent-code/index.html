@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The #1 way local AI models break code: indentation drift | Outlier</title>
+<meta name="description" content="Across on-device build tests, the single most common mechanical failure of a local code model isn&rsquo;t bad logic &mdash; it&rsquo;s a few lines of wrong indentation that stop the file compiling. Here&rsquo;s why it happens, why you can&rsquo;t safely just &lsquo;fix the whitespace,&rsquo; and how Outlier handles it without ever faking a green check.">
+<link rel="canonical" href="https://outlier.host/seo/learn/why-local-models-mis-indent-code/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The #1 way local AI models break code: indentation drift | Outlier">
+<meta property="og:description" content="The most common mechanical failure of a local code model is a few lines of wrong indentation. Why it happens, why re-guessing the whitespace is unsafe, and how Outlier stays honest about it.">
+<meta property="og:url" content="https://outlier.host/seo/learn/why-local-models-mis-indent-code/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The #1 way local AI models break code: indentation drift | Outlier">
+<meta name="twitter:description" content="The most common mechanical failure of a local code model is a few lines of wrong indentation. Why it happens, and how Outlier handles it honestly.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"Why local models mis-indent code","item":"https://outlier.host/seo/learn/why-local-models-mis-indent-code/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The #1 way local AI models break code: indentation drift","description":"The most common mechanical failure of a local code model is a few lines of wrong indentation. Why it happens, why re-guessing the whitespace is unsafe, and how Outlier handles it honestly.","datePublished":"2026-07-06","dateModified":"2026-07-06","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/why-local-models-mis-indent-code/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why can't the assistant just fix the wrong indentation automatically?","acceptedAnswer":{"@type":"Answer","text":"Because in Python, indentation is the code's structure. A line at the wrong indent can often be moved to more than one level that all compile, but mean different things &mdash; for example a return inside a loop versus after it. Blindly re-choosing the whitespace can produce a file that compiles but behaves wrong, which is worse than an honest failure. Outlier instead regenerates the file from intent and, if that doesn't earn a real test pass, reports the build honestly as failed rather than guessing."}},{"@type":"Question","name":"Does a mis-indented file ever get reported as a success?","acceptedAnswer":{"@type":"Answer","text":"No. Every file written during a build is compile-checked, and any file that does not compile fails the build's verdict even if no test touches it. Outlier's success state is derived only from objective signals &mdash; a real compile and a real test run &mdash; never from the model's own claim that it finished."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+pre{background:#f6f8f7;border:1px solid var(--bd);border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.45;margin:0 0 20px}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/seo/learn/">Concept</a> &rsaquo; <span>Why local models mis-indent code</span>
+</nav>
+<span class="tag">Concept</span>
+<h1>The #1 way local AI models break code: indentation drift</h1>
+<p class="byline">Last updated 2026-07-06 &middot; Outlier v1.11.642</p>
+
+<div class="qa"><strong>Quick answer</strong><p>When a small on-device model writes code and the build fails, the cause is usually not flawed logic &mdash; it is a few lines of <em>wrong indentation</em> that stop the file compiling. Across Outlier&rsquo;s on-device build tests, indentation drift is the single most common mechanical failure of the local Code tier. It matters because you cannot safely &ldquo;just fix the whitespace&rdquo;: in Python, indentation <em>is</em> the structure, so re-guessing it can silently change what the code means. Outlier detects the failure objectively, regenerates the file from intent, and &mdash; when that can&rsquo;t earn a real test pass &mdash; reports the build honestly rather than faking a green check.</p></div>
+
+<h2>What indentation drift looks like</h2>
+<p>The model gets the logic right and then misplaces the leading spaces on one or two lines. A real example from a build of an arithmetic-expression evaluator &mdash; the tokenizer was correct except for a single over-indented line:</p>
+<pre>        num_str = s[i:j]
+            if has_dot:            # &larr; 12 spaces where 8 belong
+                tokens.append(Token('FLOAT', float(num_str)))</pre>
+<p>Python rejects the whole file with an <code>IndentationError: unexpected indent</code>. The algorithm the model wrote was fine; four stray spaces made it un-runnable. The same class shows up as a statement dedented one space too far, a <code>try:</code> that lost its indentation, or a function body that drifts a level. One slip anywhere in a file breaks the entire file.</p>
+
+<h2>Why it hits local models specifically</h2>
+<p>A frontier cloud model has enough raw capacity to keep indentation perfectly consistent across a long file. A compact, quantized model running on your laptop generates leading whitespace as ordinary tokens, one at a time, and occasionally emits one space too many or too few &mdash; the coding equivalent of a typo. It is not a reasoning failure; it is a precision failure at the token level, and it is the most frequent single reason a first-attempt local build doesn&rsquo;t compile.</p>
+
+<h2>Why you can&rsquo;t just &ldquo;re-indent it&rdquo;</h2>
+<p>This is the subtle part, and it is where a naive assistant quietly goes wrong. Indentation in Python is not cosmetic &mdash; it decides which block a statement belongs to. A misplaced line can frequently be moved to more than one indentation level that <em>all compile</em> but mean different things:</p>
+<pre>for x in items:
+    total += x
+    return total     # returns on the first item
+
+for x in items:
+    total += x
+return total          # returns after the whole loop</pre>
+<p>Both versions compile. Only one is what the author meant. An automatic tool that re-chooses the whitespace has to guess &mdash; and a wrong guess produces a file that <em>compiles but behaves incorrectly</em>. That is worse than an honest error, because it can slip past a weak test and be reported as success. So Outlier deliberately does <strong>not</strong> blindly re-indent broken code. We tested that shortcut, proved it could manufacture a false &ldquo;green,&rdquo; and removed it.</p>
+
+<h2>How Outlier handles it &mdash; honestly</h2>
+<table>
+<tr><th>Step</th><th>What happens</th></tr>
+<tr><td>Detect</td><td>Every file written during a build is compile-checked. A file that doesn&rsquo;t compile fails the verdict &mdash; even if no test imports it.</td></tr>
+<tr><td>Repair from intent</td><td>Rather than re-shuffle whitespace, Outlier regenerates the whole file from its purpose and the surrounding code, then keeps the result only if it compiles.</td></tr>
+<tr><td>Verify</td><td>The full test suite is re-run through the same sandbox. The verdict flips to green only on a real pass.</td></tr>
+<tr><td>Or fail honestly</td><td>If the file still won&rsquo;t compile, the build reports <strong>failed</strong> &mdash; never a success it can&rsquo;t prove. You always know the true state.</td></tr>
+</table>
+<p>And because a stubborn file can send the repair loop into a long grind, every repair and verification step is interruptible: pressing Stop halts the build in a fraction of a second, and no timer ever aborts a build that is genuinely making progress.</p>
+
+<h2>Where this is heading</h2>
+<p>The most durable fix is to make an invalid indent impossible to produce in the first place. Because Outlier controls its own on-device decoder, it can constrain generation so that at the start of every line the model may only choose an indentation level that is structurally valid &mdash; the model still decides which block a statement belongs to (its intent), but a level that would not compile is simply never emitted. In offline validation this constraint rejects exactly the real drift bugs above while allowing every correct choice. It is an engineering answer to a small-model precision problem &mdash; the kind of system-level work that lets an on-device assistant close the gap with a cloud model it can&rsquo;t out-muscle.</p>
+
+<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.642/Outlier-1.11.642-arm64.dmg" data-plausible="dl-indent">Download Outlier for macOS</a>
+<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported.</p>
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/seo/learn/self-healing-builds-explained/">How Outlier self-heals multi-file builds (and never fakes a green check)</a></li><li><a href="/seo/how-to/write-unit-tests-with-local-ai/">Write unit tests with local AI</a></li><li><a href="/seo/how-to/run-a-local-coding-assistant-on-mac/">Run a local coding assistant on a Mac</a></li>
+</ul>
+</div>
+
+<div class="foot">
+<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">outlier.host</a></p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
