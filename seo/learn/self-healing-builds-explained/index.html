@@ -54,7 +54,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Concept</span>
 <h1>How Outlier self-heals multi-file builds (and never fakes a green check)</h1>
-<p class="byline">Last updated 2026-07-05 &middot; Outlier v1.11.643</p>
+<p class="byline">Last updated 2026-07-05 &middot; Outlier v1.11.644</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Small local models occasionally make mechanical slips a big cloud model wouldn&rsquo;t: a method indented into the wrong place, an import of a slightly-misnamed helper, a function a test expects that the module forgot to define. Outlier detects each class from the objective failure signal (a compile error, a collection ImportError, an AttributeError), repairs it deterministically or with a tightly-guarded generation, re-runs the full test suite, and only reports success the tests actually prove. A repair that doesn&rsquo;t earn a real green is rolled back.</p></div>
 
@@ -83,12 +83,12 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <p>Two guards keep the green check meaningful. A repair may never weaken tests: attempts to loosen or delete an assertion to make a suite pass are rejected outright. And across a multi-turn session, Outlier tracks the passing-test count: a turn that stays green while materially fewer tests pass &mdash; because a test file was rewritten and coverage quietly shrank &mdash; is downgraded and labeled with exactly how many previously-passing tests disappeared.</p>
 
 <h2>What the numbers look like</h2>
-<p>Measured on the shipping build (v1.11.643, M1 Ultra, all processing on-device): a 13-module restaurant-management app with cross-module dependency chains builds fully green &mdash; 13 files, all compiling, 13 tests passing &mdash; in 494 seconds. A 13-turn autonomous session grew the same app from 13 to 25 files and 13 to 49 passing tests with zero crashes, and every turn&rsquo;s verdict matched reality: honest greens, an honest &ldquo;unverified&rdquo; where a turn couldn&rsquo;t be confirmed, and honest failures on the two turns the model genuinely broke.</p>
+<p>Measured on the shipping build (v1.11.644, M1 Ultra, all processing on-device): a 13-module restaurant-management app with cross-module dependency chains builds fully green &mdash; 13 files, all compiling, 13 tests passing &mdash; in 494 seconds. A 13-turn autonomous session grew the same app from 13 to 25 files and 13 to 49 passing tests with zero crashes, and every turn&rsquo;s verdict matched reality: honest greens, an honest &ldquo;unverified&rdquo; where a turn couldn&rsquo;t be confirmed, and honest failures on the two turns the model genuinely broke.</p>
 
 <h2>Why this matters more than a benchmark score</h2>
 <p>An assistant that reports success it cannot prove poisons everything downstream &mdash; your trust, your git history, and any system that learns from its own results. Outlier&rsquo;s build verdicts are engineered adversarially: each repair and each verdict rule ships only after a review process that actively tries to construct false greens and false reds. The result is an on-device agent whose &ldquo;succeeded&rdquo; means something you can act on without re-checking by hand.</p>
 
-<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.643/Outlier-1.11.643-arm64.dmg" data-plausible="dl-selfhealing">Download Outlier for macOS</a>
+<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.644/Outlier-1.11.644-arm64.dmg" data-plausible="dl-selfhealing">Download Outlier for macOS</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported.</p>
 
 <div class="related">
