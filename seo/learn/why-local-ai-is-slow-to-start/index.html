@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why local AI is slow to answer — and how we made follow-ups ~13× faster | Outlier</title>
+<meta name="description" content="On-device AI often waits many seconds before the first word, because it re-reads its entire system prompt from scratch every question. Here's why that happens, why the fix is harder than it looks on modern hybrid models, and how Outlier cut follow-up time-to-first-word from ~18s to ~1.3s.">
+<link rel="canonical" href="https://outlier.host/seo/learn/why-local-ai-is-slow-to-start/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why local AI is slow to answer — and how we made follow-ups ~13× faster | Outlier">
+<meta property="og:description" content="On-device AI re-reads its whole system prompt before every reply — several seconds of waiting. Why the fix is hard on hybrid models, and how Outlier cut follow-up time-to-first-word from ~18s to ~1.3s.">
+<meta property="og:url" content="https://outlier.host/seo/learn/why-local-ai-is-slow-to-start/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why local AI is slow to answer — and how we made follow-ups ~13× faster | Outlier">
+<meta name="twitter:description" content="On-device AI re-reads its whole system prompt before every reply. Why the fix is hard on hybrid models, and how Outlier cut follow-up time-to-first-word from ~18s to ~1.3s.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"Why local AI is slow to start","item":"https://outlier.host/seo/learn/why-local-ai-is-slow-to-start/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Why local AI is slow to answer — and how we made follow-ups ~13x faster","description":"On-device AI re-reads its whole system prompt before every reply. Why the fix is hard on hybrid models, and how Outlier cut follow-up time-to-first-word from ~18s to ~1.3s.","datePublished":"2026-07-08","dateModified":"2026-07-08","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/why-local-ai-is-slow-to-start/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why does local AI wait several seconds before answering?","acceptedAnswer":{"@type":"Answer","text":"Before generating a reply, the model has to 'read' its prompt — including a large, fixed system prompt of instructions (often a couple thousand tokens). Reading that is called prefill, and on a quantized local model it can take many seconds. The frustrating part is that the system prompt is the SAME every time, yet a naive setup re-reads it from scratch for every new question. That repeated re-reading is most of the wait before the first word."}},{"@type":"Question","name":"Why not just cache the system prompt and skip re-reading it?","acceptedAnswer":{"@type":"Answer","text":"That is exactly the fix — but it's harder than it sounds on modern hybrid models. Many efficient local models (including the ones Outlier runs) mix standard attention layers with linear-attention / state-space layers that keep a compressed, running memory. You cannot 'rewind' that running memory to an earlier point, so you cannot simply trim a full conversation's cache back to the system-prompt boundary. The correct approach is to prepare the stable system-prompt state once as its own thing and reuse it, which is what Outlier does."}},{"@type":"Question","name":"How much faster did Outlier get?","acceptedAnswer":{"@type":"Answer","text":"On our development machine, follow-up questions went from about 18 seconds to first word down to about 1.3 seconds — roughly 13x faster — with identical answers. The very first question of a session still pays a one-time cost to load the model into memory; the speed-up applies to every question after the model is warm."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:31px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:21px;margin:34px 0 8px}
+p,li{margin:0 0 13px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.big{display:flex;gap:18px;flex-wrap:wrap;margin:20px 0 8px}
+.stat{background:#f6f8f7;border-left:3px solid var(--acc);padding:12px 18px;border-radius:0 8px 8px 0}
+.stat b{display:block;font-size:26px;line-height:1.1}
+.stat span{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:22px 0;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:10px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:44px;border-top:1px solid var(--bd);padding-top:16px}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="/">Home</a> &rsaquo; <a href="/seo/learn/">Learn</a> &rsaquo; <span>Why local AI is slow to start</span></nav>
+<span class="tag">Learn</span>
+<h1>Why local AI is slow to answer &mdash; and how we made follow-ups ~13&times; faster</h1>
+<p class="byline">Last updated 2026-07-08 &middot; Outlier v1.11.645</p>
+
+<div class="big">
+<div class="stat"><b>~18s</b><span>before</span></div>
+<div class="stat"><b>~1.3s</b><span>after (follow-ups)</span></div>
+<div class="stat"><b>~13&times;</b><span>faster to first word</span></div>
+</div>
+<p style="font-size:0.8rem;color:#666;margin-top:0;">Measured on our development Mac (Apple Silicon, on-device coding tier). Same answers &mdash; only the waiting changed.</p>
+
+<div class="qa"><strong>Short version</strong><p>A local model waits before answering because it has to <em>read its prompt</em> first &mdash; and most of that prompt is a big, fixed instruction sheet that never changes. A naive setup re-reads it from scratch on every question. We taught Outlier to prepare that fixed part <em>once</em> and reuse it, so after the model is warm, replies start almost immediately.</p></div>
+
+<h2>What actually happens before the first word</h2>
+<p>When you send a message, the model doesn&rsquo;t start writing right away. First it reads everything it&rsquo;s been given &mdash; your message, the conversation so far, and a hidden <strong>system prompt</strong>: a couple thousand words of standing instructions about how to behave, format code, use tools, and so on. Reading all of that is a step called <strong>prefill</strong>, and on a compressed (quantized) model running on your own hardware, prefill of a large system prompt can take many seconds. The actual writing that follows is fast; the wait you feel is almost entirely prefill.</p>
+<p>The maddening part: that system prompt is <em>identical</em> every single time. Re-reading it for every new question is like re-reading the rulebook of a board game before every turn.</p>
+
+<h2>So why not just remember it?</h2>
+<p>You should &mdash; and that&rsquo;s the fix. But on modern efficient local models it&rsquo;s trickier than it looks. Many of today&rsquo;s fast on-device models are <strong>hybrid</strong>: they mix ordinary attention layers with <em>linear-attention</em> or <em>state-space</em> layers that keep a small, compressed running summary instead of remembering every token individually. That design is a big reason they&rsquo;re fast and fit in memory &mdash; but it has a catch. You can&rsquo;t &ldquo;rewind&rdquo; that running summary to an earlier point. So the tempting trick &mdash; take a full conversation&rsquo;s memory and trim it back to just the system-prompt part &mdash; simply doesn&rsquo;t work; there&rsquo;s nothing to trim back to.</p>
+<p>The approach that <em>does</em> work is to prepare the stable system-prompt state <strong>on its own, once</strong>, and then reuse that prepared state for every new question &mdash; only reading the small, changing part (your actual message) fresh each time.</p>
+
+<h2>The subtle bug that nearly hid the win</h2>
+<p>There was one more twist. Our first attempt still re-read everything, and it took careful measurement to see why: the &ldquo;fixed&rdquo; system prompt wasn&rsquo;t entirely fixed. It quietly included a few <em>personal memory notes</em>, chosen based on what you asked &mdash; so the supposedly-stable part actually changed a little with every question, which broke the shortcut. The fix was to remember only the genuinely-unchanging instructions and treat the personal notes as part of the small, fresh piece. After that, the shortcut hit every time.</p>
+
+<h2>The honest caveats</h2>
+<p>Two things worth being straight about. First, the <strong>very first</strong> question in a session still has a one-time cost to load the model into memory &mdash; the speed-up is for every question after it&rsquo;s warm. Second, the numbers above are from our own machine; your exact timing depends on your Mac and which model tier you run. The <em>shape</em> of the win &mdash; stop re-reading the fixed instructions &mdash; holds regardless.</p>
+
+<h2>Why this matters</h2>
+<p>Responsiveness is most of what makes an assistant feel good to use. A local model that&rsquo;s private and free but makes you wait 18 seconds per question loses to a cloud tool that answers instantly. Closing that gap &mdash; on-device, with nothing leaving your Mac &mdash; is what makes a local assistant one you actually keep using.</p>
+
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.645/Outlier-1.11.645-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1&ndash;M4)</strong>. macOS 12+. Runs on your Mac; nothing leaves the device unless you enable cloud escalation.</p>
+
+<div class="related">
+<h3>Related</h3>
+<ul>
+<li><a href="/seo/learn/mlx-explained/">What is MLX and why does Outlier use it?</a></li><li><a href="/seo/learn/paged-moe-explained/">What is a paged Mixture-of-Experts model?</a></li><li><a href="/seo/vs/cloud-wrapped-local-ai-assistants/">Outlier vs &ldquo;local-first&rdquo; assistants that run in the cloud</a></li><li><a href="/seo/learn/what-is-unified-memory/">Why unified memory lets a Mac run big models</a></li>
+</ul>
+</div>
+<div class="foot"><p>Outlier runs on your Mac. macOS 12+ on Apple Silicon. <a href="/">Back to home</a>.</p></div>
+</div>
+<script>
+(function(){try{var p=new URLSearchParams(location.search);var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});if(pairs.length){var a=document.getElementById('dl-cta');if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}}}catch(e){}})();
+</script>
+</body>
+</html>
