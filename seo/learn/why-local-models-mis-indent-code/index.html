@@ -55,7 +55,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Concept</span>
 <h1>The #1 way local AI models break code: indentation drift</h1>
-<p class="byline">Last updated 2026-07-06 &middot; Outlier v1.11.645</p>
+<p class="byline">Last updated 2026-07-06 &middot; Outlier v1.11.646</p>
 
 <div class="qa"><strong>Quick answer</strong><p>When a small on-device model writes code and the build fails, the cause is usually not flawed logic &mdash; it is a few lines of <em>wrong indentation</em> that stop the file compiling. Across Outlier&rsquo;s on-device build tests, indentation drift is the single most common mechanical failure of the local Code tier. It matters because you cannot safely &ldquo;just fix the whitespace&rdquo;: in Python, indentation <em>is</em> the structure, so re-guessing it can silently change what the code means. Outlier detects the failure objectively, regenerates the file from intent, and &mdash; when that can&rsquo;t earn a real test pass &mdash; reports the build honestly rather than faking a green check.</p></div>
 
@@ -93,7 +93,7 @@ return total          # returns after the whole loop</pre>
 <h2>Where this is heading</h2>
 <p>The most durable fix is to make an invalid indent impossible to produce in the first place. Because Outlier controls its own on-device decoder, it can constrain generation so that at the start of every line the model may only choose an indentation level that is structurally valid &mdash; the model still decides which block a statement belongs to (its intent), but a level that would not compile is simply never emitted. In offline validation this constraint rejects exactly the real drift bugs above while allowing every correct choice. It is an engineering answer to a small-model precision problem &mdash; the kind of system-level work that lets an on-device assistant close the gap with a cloud model it can&rsquo;t out-muscle.</p>
 
-<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.645/Outlier-1.11.645-arm64.dmg" data-plausible="dl-indent">Download Outlier for macOS</a>
+<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.646/Outlier-1.11.646-arm64.dmg" data-plausible="dl-indent">Download Outlier for macOS</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported.</p>
 
 <div class="related">
