@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How much smarter can a local AI model get? The systems that matter more than the weights | Outlier</title>
+<meta name="description" content="A local coding model's benchmark score is usually its FIRST guess (pass@1). But the gap between what a model can do and what it does on the first try is huge — and closing it with agent loops, best-of-N, execution oracles, and escalation is where the real gains are. Here's the honest picture, with every number labeled measured or estimated.">
+<link rel="canonical" href="https://outlier.host/seo/learn/how-local-ai-gets-smarter/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How much smarter can a local AI model get? The systems that matter more than the weights | Outlier">
+<meta property="og:description" content="A benchmark score is usually a model's first guess. The gap to what it CAN do is huge — agent loops, best-of-N, execution oracles, and escalation close it. The honest picture, every number labeled measured or estimated.">
+<meta property="og:url" content="https://outlier.host/seo/learn/how-local-ai-gets-smarter/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How much smarter can a local AI model get?">
+<meta name="twitter:description" content="A benchmark score is usually a model's first guess. Closing the gap to what it CAN do — agent loops, best-of-N, execution oracles, escalation — is where the real gains are. Every number labeled measured or estimated.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"How local AI gets smarter","item":"https://outlier.host/seo/learn/how-local-ai-gets-smarter/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How much smarter can a local AI model get? The systems that matter more than the weights","description":"The gap between what a model can do and what it does on the first try is huge. Agent loops, best-of-N, execution oracles, and escalation close it. Every number labeled measured or estimated.","datePublished":"2026-07-09","dateModified":"2026-07-09","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/how-local-ai-gets-smarter/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why is a benchmark score not the same as how smart a model is?","acceptedAnswer":{"@type":"Answer","text":"Most benchmark scores measure pass@1 — whether the model's very first attempt is correct. But if you let the model try several times, one of those attempts is correct far more often (pass@k). The gap between pass@1 and pass@k is large for local models, which means the model often 'knows' the answer but doesn't rank it first. Systems that recover that gap — running the code to pick the attempt that actually works — make the same model much more capable without changing its weights."}},{"@type":"Question","name":"What makes a local model more capable without a bigger model?","acceptedAnswer":{"@type":"Answer","text":"Inference-time systems, ranked roughly by leverage: (1) an agent loop that localizes, edits, and re-tests instead of one-shotting; (2) best-of-N generation plus an execution oracle that runs tests to select the attempt that passes; (3) retrieval (in-repo for coding, the web for factual questions); (4) escalation to a larger model only for the hard tail the local model can't verify. Each recovers a different chunk of the pass@1-to-pass@k gap."}},{"@type":"Question","name":"Is there a ceiling to how far this goes locally?","acceptedAnswer":{"@type":"Answer","text":"Yes. No selection system can beat the model's pass@k saturation — if even many attempts never contain a correct one, no amount of selecting helps. Past that point, only a better base model (training) or the cloud crosses the remaining gap. That's why the honest design is local-first with optional escalation: capture everything the local model can do, and reach for the cloud only for the genuinely hard tail."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:30px;line-height:1.22;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:21px;margin:34px 0 8px}
+p,li{margin:0 0 13px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:22px 0;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0 8px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}
+th{font-weight:600;background:#fafafa}
+.m{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.04em}
+.meas{background:#dcfce7;color:#166534}
+.est{background:#fef9c3;color:#854d0e}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:10px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:44px;border-top:1px solid var(--bd);padding-top:16px}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+.pledge{border:1px solid var(--bd);border-radius:8px;padding:12px 16px;margin:18px 0;font-size:14px;background:#fbfdfc}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="/">Home</a> &rsaquo; <a href="/seo/learn/">Learn</a> &rsaquo; <span>How local AI gets smarter</span></nav>
+<span class="tag">Learn</span>
+<h1>How much smarter can a local AI model get? The systems that matter more than the weights</h1>
+<p class="byline">Last updated 2026-07-09 &middot; Outlier v1.11.645</p>
+
+<div class="pledge">📏 <strong>Our rule for this page:</strong> every number is labeled <span class="m meas">measured</span> or <span class="m est">estimated</span>. We don't publish benchmarks we haven't run. Measured numbers are from our own machine; estimates are honest projections we're still verifying.</div>
+
+<div class="qa"><strong>The one idea</strong><p>A benchmark score is usually a model's <em>first guess</em>. But the gap between what a model <em>can</em> do (one of several tries is right) and what it <em>does</em> on the first try is large — and closing that gap is where most of the real capability lives. You don't need a bigger model to get there; you need better <strong>systems around</strong> the model.</p></div>
+
+<h2>Pass@1 vs pass@k: the number everyone quotes is the wrong one</h2>
+<p>Most published scores are <strong>pass@1</strong>: is the model's single first attempt correct? But sample the same model several times and one of those attempts is correct far more often — that's <strong>pass@k</strong>. For local coding models the gap is big, which means the model frequently <em>generates</em> a correct solution but doesn't <em>rank</em> it first. Recover that gap and the same weights get much more capable.</p>
+
+<h2>The systems, ranked by leverage</h2>
+<p><strong>1. The agent loop.</strong> Instead of one-shotting, the model localizes the bug, makes a small edit, re-runs the tests, and iterates. This alone is the biggest single jump.</p>
+<p><strong>2. Best-of-N + an execution oracle.</strong> Generate several diverse attempts, then <em>run the tests</em> to pick the one that actually passes. The oracle is the whole game — without running code you can't tell which attempt is right; with it, you capture pass@k instead of pass@1.</p>
+<p><strong>3. Retrieval.</strong> For coding, finding the right file/function in the repo matters more than the web. For factual questions it flips — a small model with great retrieval rivals a big one, because that's recall, not reasoning.</p>
+<p><strong>4. Escalation.</strong> The same oracle that selects also tells you when the local model <em>failed</em> — so you route only that hard tail to a larger model. Local-first, cloud only when it's genuinely needed.</p>
+
+<h2>The honest numbers</h2>
+<table>
+<tr><th>Setup</th><th>Blind SWE-bench (directional)</th><th></th></tr>
+<tr><td>Single-shot (one guess)</td><td>~6%</td><td><span class="m meas">measured</span></td></tr>
+<tr><td>Agent loop (localize → edit → re-test)</td><td>~45%</td><td><span class="m meas">measured</span></td></tr>
+<tr><td>+ best-of-N + execution oracle + retrieval</td><td>~60–65% local</td><td><span class="m est">estimated</span></td></tr>
+<tr><td>+ escalate the hard tail to the cloud</td><td>≈ frontier-cloud level</td><td><span class="m est">estimated</span></td></tr>
+</table>
+<p style="font-size:0.82rem;color:#666;margin-top:2px;">The two measured rows are real (our machine, an on-device 27B coding tier, official Docker grading). The two estimated rows are projections — we're running the measurement now and will replace them with real numbers.</p>
+
+<h2>The ceiling — and why local-first-with-escalation is the honest design</h2>
+<p>There's a real limit: no selection system can beat the model's pass@k <em>saturation</em>. If many attempts still never contain a correct one, selecting doesn't help — only a better base model or the cloud crosses that. That's exactly why the right architecture is <strong>local-first with optional escalation</strong>: capture everything the on-device model can do (privately, for free, offline), and reach for a bigger brain only for the tail it genuinely can't reach.</p>
+
+<h2>Why we're publishing this</h2>
+<p>Most of the local-AI space markets model names and vibes. We think the interesting question — and the honest one — is <em>how much of a model's real capability a system actually recovers</em>, measured, with the estimates called estimates. That rigor is the product. When the best-of-N number lands, it'll show up here as <span class="m meas">measured</span>, whatever it says.</p>
+
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.645/Outlier-1.11.645-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Apple Silicon (M1–M4), macOS 12+. Runs on your Mac; nothing leaves the device unless you enable cloud escalation.</p>
+
+<div class="related">
+<h3>Related</h3>
+<ul>
+<li><a href="/seo/learn/why-local-ai-is-slow-to-start/">Why local AI is slow to answer — and how we made follow-ups ~13× faster</a></li><li><a href="/seo/learn/self-healing-builds-explained/">How an AI agent checks its own work</a></li><li><a href="/seo/vs/cloud-wrapped-local-ai-assistants/">Outlier vs "local-first" assistants that run in the cloud</a></li><li><a href="/seo/learn/mlx-explained/">What is MLX and why does Outlier use it?</a></li>
+</ul>
+</div>
+<div class="foot"><p>Outlier runs on your Mac. macOS 12+ on Apple Silicon. <a href="/">Back to home</a>.</p></div>
+</div>
+<script>
+(function(){try{var p=new URLSearchParams(location.search);var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});if(pairs.length){var a=document.getElementById('dl-cta');if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}}}catch(e){}})();
+</script>
+</body>
+</html>
