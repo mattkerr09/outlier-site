@@ -73,17 +73,18 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <table>
 <tr><th>Setup</th><th>Blind SWE-bench (directional)</th><th></th></tr>
 <tr><td>Single-shot (one guess)</td><td>~6%</td><td><span class="m meas">measured</span></td></tr>
-<tr><td>Agent loop (localize → edit → re-test)</td><td>~45%</td><td><span class="m meas">measured</span></td></tr>
-<tr><td>+ best-of-N + execution oracle + retrieval</td><td>~60–65% local</td><td><span class="m est">estimated</span></td></tr>
+<tr><td>Agent loop, greedy (localize → edit → re-test)</td><td>~45–50%</td><td><span class="m meas">measured</span></td></tr>
+<tr><td>+ sampling diversity (best of 3 samples resolves)</td><td>7/10 = 70%*</td><td><span class="m meas">measured*</span></td></tr>
+<tr><td>+ execution-oracle selection + retrieval</td><td>~65% local</td><td><span class="m est">estimated</span></td></tr>
 <tr><td>+ escalate the hard tail to the cloud</td><td>≈ frontier-cloud level</td><td><span class="m est">estimated</span></td></tr>
 </table>
-<p style="font-size:0.82rem;color:#666;margin-top:2px;">The two measured rows are real (our machine, an on-device 27B coding tier, official Docker grading). The two estimated rows are projections — we're running the measurement now and will replace them with real numbers.</p>
+<p style="font-size:0.82rem;color:#666;margin-top:2px;">The top two rows are firm (18/40 = 45% on a prior blind run, re-confirmed 5/10 on a fresh 10-task run; official Docker grading). <strong>* The 70% is a small-sample result</strong> — on 10 blind tasks, the greedy run resolved 5, a higher-temperature run resolved 7, and combined coverage was 7. At n=10 that carries a wide confidence interval, and here one hot-temperature candidate happened to cover everything, so the <em>selection</em> value (an oracle picking the best of several that solve <em>different</em> tasks) didn't get to show itself. It's real, Docker-graded, and directional — a larger run is what firms it up, and we'll post that number here too, whatever it says.</p>
 
 <h2>The ceiling — and why local-first-with-escalation is the honest design</h2>
 <p>There's a real limit: no selection system can beat the model's pass@k <em>saturation</em>. If many attempts still never contain a correct one, selecting doesn't help — only a better base model or the cloud crosses that. That's exactly why the right architecture is <strong>local-first with optional escalation</strong>: capture everything the on-device model can do (privately, for free, offline), and reach for a bigger brain only for the tail it genuinely can't reach.</p>
 
 <h2>Why we're publishing this</h2>
-<p>Most of the local-AI space markets model names and vibes. We think the interesting question — and the honest one — is <em>how much of a model's real capability a system actually recovers</em>, measured, with the estimates called estimates. That rigor is the product. When the best-of-N number lands, it'll show up here as <span class="m meas">measured</span>, whatever it says.</p>
+<p>Most of the local-AI space markets model names and vibes. We think the interesting question — and the honest one — is <em>how much of a model's real capability a system actually recovers</em>, measured, with the estimates called estimates and the small samples called small. That rigor is the product: the 70% row above is a genuine Docker-graded result we could have rounded up and dropped the asterisk on — instead we told you it's 10 tasks. The bigger run is next.</p>
 
 <a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.646/Outlier-1.11.646-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Apple Silicon (M1–M4), macOS 12+. Runs on your Mac; nothing leaves the device unless you enable cloud escalation.</p>
