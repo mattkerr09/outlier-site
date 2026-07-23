@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why local AI agents narrate instead of acting (27% → 89% with one API field) | Outlier</title>
+<meta name="description" content="In our agent benchmarks, 73% of a local model&rsquo;s turns produced no action &mdash; it wrote &lsquo;Let me search for that&hellip;&rsquo; instead of calling the tool. Here&rsquo;s the failure taxonomy from 63 real traces, and how tool_choice: &lsquo;required&rsquo; raised the action rate from 27% to 89%.">
+<link rel="canonical" href="https://outlier.host/seo/learn/why-ai-agents-narrate-instead-of-acting/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why local AI agents narrate instead of acting | Outlier">
+<meta property="og:description" content="73% of agent turns produced no action in our benchmarks. The taxonomy behind it, and the one API field that took the action rate from 27% to 89%.">
+<meta property="og:url" content="https://outlier.host/seo/learn/why-ai-agents-narrate-instead-of-acting/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why local AI agents narrate instead of acting | Outlier">
+<meta name="twitter:description" content="73% of agent turns produced no action. The measured taxonomy, and the fix that took the action rate from 27% to 89%.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"Why AI agents narrate instead of acting","item":"https://outlier.host/seo/learn/why-ai-agents-narrate-instead-of-acting/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Why local AI agents narrate instead of acting (27% → 89% with one API field)","description":"73% of agent turns produced no action in our benchmarks. The measured taxonomy behind it, and how tool_choice: required raised the action rate from 27% to 89%.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/why-ai-agents-narrate-instead-of-acting/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does tool_choice: required actually do?","acceptedAnswer":{"@type":"Answer","text":"It tells the inference server that the model's next reply must be a tool call, not prose. Outlier implements it at the template level: the prompt is ended with the exact opening syntax of a tool call, so the only thing the model can generate is the rest of one. That guarantee is structural, not an instruction the model can ignore."}},{"@type":"Question","name":"Can the agent still give up or finish if every turn must be a tool call?","acceptedAnswer":{"@type":"Answer","text":"Yes. In a well-designed agent, finishing is itself a tool (for example finish(message=...)). Forcing a tool call every turn still leaves the model free to choose the finish tool, so giving up cleanly remains possible &mdash; it just has to be explicit instead of trailing off into prose."}},{"@type":"Question","name":"Why not just tell the model to always use tools in the system prompt?","acceptedAnswer":{"@type":"Answer","text":"We did &mdash; the system prompt said, in capitals, to emit tool calls only. At 27B scale the model still narrated instead of acting on 73% of its turns. Instruction-following alone does not hold under long agent contexts; structural forcing does."}}]}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p,li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+pre{background:#f6f8f7;border:1px solid var(--bd);border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.45;margin:0 0 20px}
+code{font-family:"SF Mono",Menlo,monospace;font-size:.92em}
+a{color:var(--acc)}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--bd);font-size:14px;color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="/">Outlier</a> › <a href="/seo/learn/">Concepts</a> › Why agents narrate instead of acting</nav>
+
+<h1>Why local AI agents narrate instead of acting (27% → 89% with one API field)</h1>
+<p class="byline">Measured on Outlier's on-device SWE-bench harness · July 2026</p>
+
+<div class="qa"><strong>The short version</strong>
+In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns produced <em>no action</em> — it wrote things like "Let me search for <code>allow_migrate</code> in the autodetector:" and then simply stopped, burning a full inference round-trip for nothing. The fix isn't a better prompt. It's making narration structurally impossible: <code>tool_choice: "required"</code>, which Outlier's OpenAI-compatible API now supports. Measured action rate went from 27% to 89%.</div>
+
+<h2>The measurement</h2>
+<p>A coding agent works in a loop: the model reads the state of a repository, calls a tool (search, read a file, edit a file, run a test), sees the result, and repeats. Every turn that doesn't call a tool is a wasted round-trip — on local hardware, roughly 12 seconds of compute that moves nothing forward.</p>
+<p>We instrumented 63 real agent sessions (SWE-bench Verified tasks, blind, greedy decoding) and counted what each of 8,569 model turns actually did:</p>
+<table>
+<tr><th>What the turn produced</th><th>Share</th></tr>
+<tr><td>A real tool call</td><td>27%</td></tr>
+<tr><td>Prose narration, no action ("Let me search for…")</td><td>~46%</td></tr>
+<tr><td>A single token, then silence ("Let", "I", "```")</td><td>~20%</td></tr>
+<tr><td>A tool call written in shorthand our parser dropped</td><td>~5%</td></tr>
+<tr><td>Other fragments</td><td>~2%</td></tr>
+</table>
+<p>The system prompt already ordered the model — in capitals — to emit tool calls only. It narrated anyway. At 27B scale, instruction-following alone does not survive a long agent context.</p>
+
+<h2>Three different bugs were hiding in that 73%</h2>
+<h3>1. The single-token stutter (a harness bug)</h3>
+<p>The strangest slice: 1,741 turns where the model generated exactly one visible token and stopped. Timing gave the cause away — those turns took 1.2 seconds against 18 for real ones, so the model wasn't being cut off; it was <em>choosing</em> to stop instantly. The trigger: when a turn produced prose and no tool call, our loop appended the text and re-prompted <em>without a user message</em>. The model, asked to speak again immediately after ending its own turn, ends the new turn after one token — and the loop repeats, forever, at 1.2s a spin. The fix is to always respond to a no-action turn with an explicit user message demanding a tool call, and to stop honestly after a few strikes.</p>
+<h3>2. Dropped shorthand tool calls (a parser bug)</h3>
+<p>458 "no-action" turns were actually the model calling a tool — in a shorthand format (<code>&lt;grep_repo&gt;…</code> instead of the canonical <code>&lt;tool_call&gt;&lt;function=grep_repo&gt;…</code>) that our parser threw away. Recovery is now automatic, and safe: shorthand is only recognized for names the request actually declared as tools, so real XML in a code answer can never be misread as a tool call.</p>
+<h3>3. Genuine narration (a model behavior — fixed structurally)</h3>
+<p>The rest is the model doing what chat models do: thinking out loud. No prompt fixes this reliably. What fixes it is removing the option.</p>
+
+<h2>What <code>tool_choice: "required"</code> does</h2>
+<p>OpenAI's API has a field for exactly this, and Outlier's OpenAI-compatible endpoint now implements it. The mechanism is structural: when a request sets <code>tool_choice: "required"</code>, Outlier ends the prompt with the exact opening syntax of a tool call — so the only thing the model <em>can</em> generate is the rest of one.</p>
+<pre>{
+  "model": "outlier-code",
+  "messages": [...],
+  "tools": [...],
+  "tool_choice": "required"
+}</pre>
+<p>The forced-function form (<code>{"type": "function", "function": {"name": "grep_repo"}}</code>) is supported too, and giving up stays possible — finishing is itself a tool, so the model can always choose <code>finish</code> explicitly instead of trailing off.</p>
+
+<h2>The result</h2>
+<table>
+<tr><th></th><th>Before</th><th>After</th></tr>
+<tr><td>Turns producing a real tool call</td><td>27%</td><td><strong>89%</strong></td></tr>
+<tr><td>Single-token wasted turns</td><td>33% of calls</td><td><strong>0</strong></td></tr>
+</table>
+<p>Same model, same weights, same tasks. The difference is that the harness stopped losing actions and the API stopped letting the model narrate.</p>
+
+<h2>The honest caveats</h2>
+<p>Action rate is not task success — whether more actions per budget translates into more solved tasks is a separate measurement we run on the official SWE-bench Docker harness, and we'll publish it the same way we publish everything: with the sample sizes and the misses included. And one methodological note we keep re-learning: <em>most of what looked like model weakness in this investigation was our own code</em>. Before concluding a local model can't do something, verify the harness that measured it.</p>
+
+<div class="foot">
+<p>Outlier runs frontier-class local AI on your own Mac — private, offline, no subscription. The OpenAI-compatible API (including <code>tool_choice: "required"</code>) ships in v1.11.664.</p>
+<p><a href="/">Download Outlier</a> · <a href="/seo/learn/">More concepts</a></p>
+</div>
+</div>
+</body>
+</html>
