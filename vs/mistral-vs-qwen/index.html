@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mistral vs Qwen: open model families compared (2026) | Outlier</title>
-  <meta name="description" content="Mistral vs Qwen open-weight model families: sizes, Apache 2.0 licensing, Mac and MLX support, RAM requirements, and hosted API pricing — written by an interested party who ships Qwen weights.">
+  <title>Mistral vs Qwen: the open model families compared (2026) | Outlier</title>
+  <meta name="description" content="Mistral vs Qwen open-weight families: sizes available, Apache 2.0 licensing, strengths by task, and what actually fits on a Mac at 16GB, 24GB and 64GB. Written by Outlier's founder, who ships Qwen weights.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/mistral-vs-qwen/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Mistral vs Qwen: open model families compared (2026)">
-  <meta property="og:description" content="Sizes, licensing, Mac RAM fit and API pricing across the Mistral and Qwen open-weight families — with a plain disclosure that Outlier ships Qwen-family weights.">
+  <meta property="og:title" content="Mistral vs Qwen: the open model families compared (2026)">
+  <meta property="og:description" content="Sizes, Apache 2.0 licensing, Mac RAM fit and hosted API pricing across the Mistral and Qwen open-weight families — with a plain disclosure that Outlier ships Qwen-family weights.">
   <meta property="og:url" content="https://outlier.host/vs/mistral-vs-qwen/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mistral vs Qwen: open model families compared (2026)">
-  <meta name="twitter:description" content="Apache 2.0 both ways — but the size ladder, the Mac story and the licensing fine print differ. An honest, disclosed comparison.">
+  <meta name="twitter:title" content="Mistral vs Qwen: the open model families compared (2026)">
+  <meta name="twitter:description" content="Apache 2.0 on both sides — but the size ladder, the Mac story and the licensing fine print differ. An honest, disclosed comparison.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -76,7 +76,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Mistral vs Qwen: open model families compared (2026)","description":"Mistral vs Qwen open-weight model families: sizes, Apache 2.0 licensing, Mac and MLX support, RAM requirements, and hosted API pricing — written by an interested party who ships Qwen weights.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mistral-vs-qwen/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Mistral vs Qwen: the open model families compared (2026)","description":"Mistral vs Qwen open-weight families: sizes available, Apache 2.0 licensing, strengths by task, and what actually fits on a Mac at 16GB, 24GB and 64GB.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mistral-vs-qwen/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Mistral vs Qwen","item":"https://outlier.host/vs/mistral-vs-qwen/"}]}
@@ -97,7 +97,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
-    <h1>Mistral vs Qwen: two open model families, compared honestly</h1>
+    <h1>Mistral vs Qwen: the open model families compared</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-07-23</span>
@@ -105,38 +105,34 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Both ship genuine Apache 2.0 open weights, so on the license that decides whether you can ship a commercial product, it's a tie. Qwen covers a wider size ladder — 0.8B through 397B-A17B — and documents Apple Silicon support (mlx-lm and mlx-vlm) in its own README; Mistral's laptop-sized open models stop at Ministral 3 14B, with Mac builds from the community. Mistral wins on jurisdiction and pricing clarity: EU-based, API traffic never used for training, flat list prices instead of region-tiered ones.</p>
+      <p>Mistral and Qwen both ship genuine Apache 2.0 open weights, so either family can be embedded, quantized, fine-tuned and redistributed commercially with no per-seat fee and no vendor approval. Qwen covers the whole size ladder in one family — 0.8B up to 397B-A17B — and documents Apple Silicon support in its own README; Mistral's open lineup runs 3B, 8B and 14B, then jumps to the 119B Mistral Small 4. Neither family's current flagship is open: qwen3.7-max is API-only, and Mistral keeps OCR, Codestral and Moderation as premier models.</p>
     </div>
 
-    <p class="lead">Disclosure first, because this comparison isn't neutral: I build Outlier, a Mac app that ships Qwen-family and Gemma-family weights on-device. Six of its seven tiers are Qwen builds, so I have money riding on one side. What I can offer instead is the checklist I actually use — sizes, license, RAM fit, distribution — and a mark wherever my interest is doing the talking.</p>
+    <p class="lead">I'm Matt Kerr, and I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device. Six of its seven tiers are Qwen-family weights and one is Gemma-family, so I'm an interested party here, not a neutral one — read this knowing that. What I can offer instead of neutrality is the view from someone who has shipped these weights commercially and read the licenses closely enough to sign off on redistribution.</p>
 
-    <h2>What each family actually ships</h2>
-    <p>Qwen's position is blunt: the official repo states that all of its open-weight models are licensed under Apache 2.0. The release list backs it up: Qwen3.5 at 0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B and a 397B-A17B flagship (Feb–Mar 2026), then Qwen3.6 at 35B-A3B and 27B in April. One prompt format from phone-class up to a model that needs 64 GB of unified memory.</p>
+    <h2>Who ships what, and in what sizes</h2>
+    <p>Qwen's open catalogue is the wider of the two: Qwen3.6-27B and Qwen3.6-35B-A3B (April 2026), sitting on top of the Qwen3.5 line — 397B-A17B, 122B-A10B, 35B-A3B, 27B, then 9B, 4B, 2B and 0.8B, all released between February and April 2026. One family, one prompt format, from phone-class up to a 397B mixture-of-experts.</p>
 
-    <p>Mistral's catalogue is shaped differently. Mistral 3, announced 2 December 2025, brought Mistral Large 3 (675B total, 41B active, sparse MoE) and Ministral 3 in 3B, 8B and 14B — all Apache 2.0, in base, instruct and reasoning variants. Mistral Small 4 (v26.03) followed: Apache 2.0, 119B total with 6.5B active across 128 experts, 256k context. Mistral's docs split the catalogue into open weights and premier models; OCR 4, OCR 3, Codestral and Moderation 2 are closed.</p>
+    <p>Mistral is shaped differently. Mistral 3 (December 2025) brought Mistral Large 3 — 675B total, 41B active — plus Ministral 3 at 3B, 8B and 14B, each in base, instruct and reasoning variants. Mistral Small 4 followed in March 2026: 119B total, 6.5B active across 128 experts, 256k context. The gap that matters if you're building locally is 14B to 119B. Mistral has nothing open in that band, and it's exactly the range a 24GB Mac can hold.</p>
 
-    <p>Worth saying loudly: <strong>the current flagship is closed on both sides.</strong> Alibaba serves qwen3.7-max only through Model Studio, <code>github.com/QwenLM/Qwen3.7</code> returns a 404, and the official README lists open weights only through Qwen3.6. "Open family" doesn't mean "the best model is open."</p>
+    <h2>Licensing: the axis that decides what you can ship</h2>
+    <p>Qwen's repo says it flatly — all their open-weight models are Apache 2.0 — and the Qwen3.6-27B card carries the <code>apache-2.0</code> tag. Mistral Small 4 and Ministral-3-8B-Instruct-2512 are Apache 2.0 on their cards too. That means bundling in a paid app, quantizing, fine-tuning and redistributing the result: no revenue trigger, no user-count threshold, nobody to ask.</p>
 
-    <h2>Licensing: the part that decides whether you can ship</h2>
-    <p>This axis gets skipped constantly and it's the one that costs money. Apache 2.0 — confirmed on the model cards for Qwen3.6-27B, Mistral Small 4 and Ministral 3 8B — means you can embed the weights in a commercial app, quantize them, fine-tune them and redistribute the result. No per-seat fee, no vendor approval step, no clause that flips on when you get popular.</p>
+    <p>That isn't the norm. Other open-weight families ship a bespoke community license carrying its own acceptable-use policy and conditions that switch on above a certain scale. Gemma weights come under Google's Gemma Terms of Use rather than a standard open-source license, with restrictions that flow down to whoever you redistribute to. I know that one first-hand: Outlier's Quick tier is a Gemma model, and it's the single tier where I track a vendor license separately from the other six.</p>
 
-    <p>Compare the two other licenses you'll meet here. Meta's Llama models ship under the Llama Community License, Google's Gemma models under the Gemma Terms of Use — bespoke agreements with attached use policies, not standard OSI licenses, and terms that can shift between releases in a way Apache 2.0 can't. I'm not on the sidelines: Outlier's Quick tier is Gemma-family under Gemma Terms of Use, and the other six are Apache 2.0. I know which conversation is shorter.</p>
+    <p>Two caveats. Open weights aren't open training data — neither vendor publishes a corpus or a recipe, so you're getting redistribution rights over a binary, not reproducibility. And licensing is per-model, not per-vendor: as of mid-2026 some third-party write-ups describe one of Mistral's speech models as non-commercial rather than Apache 2.0. I couldn't confirm that from the card, so I won't state it as fact — but open the card for the exact model you intend to ship, every time.</p>
 
-    <p>Caveat on both: open weights are redistribution rights, not reproducibility. Neither vendor publishes its corpus or recipe.</p>
+    <h2>What actually runs on a Mac, and at what RAM</h2>
+    <p>Qwen treats Apple Silicon as a shipping target in its own documentation: the README names mlx-lm and mlx-vlm alongside GGUF/llama.cpp, Ollama, LM Studio, vLLM and SGLang. Community 4-bit MLX builds land immediately — <code>mlx-community/Qwen3.6-27B-4bit</code> is about 16.1 GB and runs from one <code>mlx_lm.server</code> command. Mistral's cards lead with vLLM and datacenter GPUs; the Ministral 3 8B card frames FP8 around a single H200. MLX conversions come from the community instead, and they do arrive — 4-bit Ministral 3 8B is 5.6 GB — but each release is a wait. Ollama shows the same split: Qwen 3.5 and 3.6 are in the library, while the newest Mistral entries are mistral-medium-3.5 and mistral-large-3.</p>
 
-    <h2>What runs on a Mac, and at what RAM</h2>
-    <p>Qwen's lead here is documentation more than architecture. Its README states that both mlx-lm (text) and mlx-vlm (vision + text) support Qwen3.6, alongside GGUF/llama.cpp, Ollama and LM Studio. Ready-made 4-bit MLX conversions land immediately — <code>mlx-community/Qwen3.6-27B-4bit</code> is about 16.1 GB and runs from a one-line <code>mlx_lm.server</code>. Mistral's cards lead with vLLM and datacenter GPUs; the Ministral 3 8B card frames FP8 as running on a single H200. Mac support exists, but on the community's schedule.</p>
+    <p>In practice, on a 16GB Mac that 5.6 GB Ministral 3 8B fits with room for KV cache and is multimodal at 256k context — a genuinely good small-model story. Qwen's 4B and 9B fit the same slot; Outlier ships them at 2.37 GB and 5.04 GB. On 24-32GB, Qwen3.6-27B at 4-bit is the interesting option (our Core tier is that model, 15.13 GB, 24 GB minimum). Mistral Small 4 will not fit 16GB at any useful quantization — 119B total is 119B total, even at 6.5B active. Its sparse shape does flatter a 64GB machine, which is the same bet our Plus tier makes with Qwen3.5-397B-A17B: a 209 GB download that streams experts from SSD at roughly 11 GB peak RSS.</p>
 
-    <p>The naming trips people up. <strong>Mistral Small 4 is not small</strong> — 119B total won't fit a 16 GB Mac at any useful quantization, even with 6.5B active. But <code>mlx-community/Ministral-3-8B-Instruct-2512-4bit</code> is 5.6 GB, Apache 2.0, multimodal (8.4B LM plus a 0.4B vision encoder), 256k context — comfortable on 16 GB. From my own builds: Outlier's Nano (4B) needs 6 GB RAM, Core (27B) needs 24 GB, Plus (397B-A17B) needs 64 GB.</p>
+    <h2>Strengths by task, and the language question</h2>
+    <p>Context favours Qwen at local sizes: Qwen3.6-27B is natively 262,144 tokens, extensible toward about 1,010,000 with RoPE scaling, against 256k for Mistral Small 4 and Ministral 3 8B. On agents, the tooling gap is sharper than any model gap. Both vendors open-source a CLI coding agent under Apache 2.0, but Qwen Code points at local models via Ollama or vLLM and speaks the OpenAI, Anthropic and Gemini protocols, while the mistral-vibe README requires a Mistral API key and documents no local endpoint at all.</p>
 
-    <p>Distribution differs too. Ollama's library carries current Qwen — 3.5 from 0.8B to 122B, plus 3.6 — but has no Ministral 3 or Mistral Small 4 entries; its newest Mistral listings are medium-3.5 and large-3. Local Mistral users fall back to community GGUFs.</p>
+    <p>Mistral's counterweight is specialist breadth — Voxtral for speech and transcription, a dedicated OCR line, Devstral 2 and Codestral for code on the API. Both do vision: Ministral 3 8B bundles a 0.4B encoder into a ~9B package, and Outlier's Vision tier is Qwen3.6-35B-A3B at 19.0 GB.</p>
 
-    <h2>Strengths by task, agents, and languages</h2>
-    <p>I'm not publishing a cross-family leaderboard — I didn't find primary benchmark tables I'd stand behind. What's verifiable is structure. Qwen3.6-27B natively supports a 262,144-token context, extensible toward roughly 1,010,000 with RoPE scaling, useful for whole-repo work on a model you can run locally. Ministral 3 8B puts vision in 5.6 GB, which Qwen matches only at larger sizes.</p>
-
-    <p>Both vendors open-source their agent harness, and the difference matters if you're local-first. Qwen Code is Apache-2.0 and speaks OpenAI, Anthropic, Gemini and Qwen APIs plus "any third-party provider or local model (Ollama / vLLM)." Mistral's <code>mistral-vibe</code> is also Apache-2.0, but its README requires a Mistral API key and documents no local endpoint — that agent experience is cloud-only.</p>
-
-    <p>On languages, both market multilingual capability and I couldn't verify per-language numbers from the model cards, so test on your own text. What <em>is</em> verifiable is jurisdiction, often the real question behind "which languages": Mistral is EU-based, and Alibaba's Model Studio runs in Singapore, US-Virginia, Beijing, Hong Kong, Tokyo and Frankfurt, with non-interchangeable keys and region-specific pricing.</p>
+    <p>On language coverage I'll be straight with you: I found no clean, comparable multilingual benchmark on either vendor's primary pages that I'd be willing to quote, and I won't invent one. Test your own languages on your own prompts. What I can point at is jurisdiction, which is usually the real question underneath — Mistral is a French company operating under EU terms, and Alibaba's Model Studio runs in Singapore, US-Virginia, Beijing, Hong Kong, Tokyo and Frankfurt, with non-interchangeable API keys and region-specific pricing.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -150,83 +146,79 @@
       <tbody>
         <tr>
           <td><strong>Open sizes</strong></td>
-          <td>Ministral 3 3B/8B/14B; Small 4 119B-A6.5B; Large 3 675B-A41B</td>
+          <td>3B, 8B, 14B; 119B-A6.5B; 675B-A41B</td>
           <td>0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B, 397B-A17B</td>
         </tr>
         <tr>
           <td><strong>License</strong></td>
-          <td>Apache 2.0 on the open list; OCR and Codestral closed</td>
-          <td>Apache 2.0 on all open weights; qwen3.7-max API-only</td>
+          <td>Apache 2.0 on the cards checked</td>
+          <td>Apache 2.0 — "all our open-weight models"</td>
         </tr>
         <tr>
-          <td><strong>Fits 16 GB Mac</strong></td>
-          <td>Ministral 3 8B 4-bit = 5.6 GB</td>
-          <td>0.8B–9B; 27B 4-bit = 16.1 GB</td>
+          <td><strong>Flagship open?</strong></td>
+          <td>No — OCR, Codestral, Moderation are premier</td>
+          <td>No — qwen3.7-max is Model Studio only</td>
         </tr>
         <tr>
-          <td><strong>Apple Silicon</strong></td>
-          <td>Community GGUF / MLX</td>
-          <td>mlx-lm + mlx-vlm, vendor-documented</td>
+          <td><strong>16GB Mac</strong></td>
+          <td>Ministral 3 8B, 4-bit MLX, 5.6 GB</td>
+          <td>0.8B–9B (4B ≈ 2.4 GB, 9B ≈ 5.0 GB)</td>
         </tr>
         <tr>
-          <td><strong>Context</strong></td>
-          <td>256k (Small 4, Ministral 3 8B)</td>
-          <td>262k on 3.6-27B, ~1M with RoPE</td>
+          <td><strong>24–32GB Mac</strong></td>
+          <td>Nothing open between 14B and 119B</td>
+          <td>Qwen3.6-27B, 4-bit MLX, ~16.1 GB</td>
         </tr>
         <tr>
-          <td><strong>Ollama library</strong></td>
-          <td>Tops out at medium-3.5 / large-3</td>
-          <td>Qwen 3.5 and 3.6 present</td>
+          <td><strong>Apple Silicon docs</strong></td>
+          <td>Community MLX; cards lead with vLLM</td>
+          <td>mlx-lm and mlx-vlm in the official README</td>
         </tr>
         <tr>
-          <td><strong>Agent CLI</strong></td>
-          <td>mistral-vibe (API key required)</td>
-          <td>Qwen Code (Ollama / vLLM supported)</td>
+          <td><strong>Open agent CLI</strong></td>
+          <td>mistral-vibe — API key required</td>
+          <td>Qwen Code — Ollama / vLLM supported</td>
         </tr>
         <tr>
           <td><strong>Cheapest hosted</strong></td>
-          <td>Ministral 3 3B $0.10 / $0.10 per 1M</td>
-          <td>qwen3.5-flash $0.10 / $0.40 per 1M</td>
-        </tr>
-        <tr>
-          <td><strong>Jurisdiction</strong></td>
-          <td>EU (France)</td>
-          <td>6 regions incl. Frankfurt, Virginia</td>
+          <td>Ministral 3 3B, $0.10 / $0.10 per 1M</td>
+          <td>qwen3.5-flash, $0.10 / $0.40 per 1M</td>
         </tr>
       </tbody>
     </table>
 
     <h2>Where each family genuinely wins</h2>
-    <p><strong>Mistral wins the small multimodal slot.</strong> Ministral 3 8B — Apache 2.0, vision encoder included, 256k context, 5.6 GB at 4-bit — is the cleanest "vision model that fits a MacBook Air" in either family. If that's your requirement, it isn't close.</p>
+    <p><strong>Mistral wins on jurisdiction and on the small multimodal slot.</strong> If a customer objects to Chinese-headquartered infrastructure, Mistral is an EU company with EU consumer terms, and that alone closes deals. Ministral 3 8B is a strong 16GB package: Apache 2.0, vision included, 256k context, 5.6 GB at 4-bit. Mistral is also more legible commercially — published per-model list prices (Small 4 at $0.15/$0.60, Large 3 at $0.50/$1.50, Medium 3.5 at $1.50/$7.50 per million tokens), a 50% batch discount, 90% off cached input, and clear consumer tiers at $14.99 and $24.99. Their data policy is quotable in a way Qwen's consumer side isn't: API traffic isn't used for training, and Vibe Pro, Team and Enterprise conversations aren't either by default.</p>
 
-    <p><strong>Mistral wins on pricing you can quote.</strong> Flat list prices per million tokens: Medium 3.5 $1.50/$7.50, Large 3 $0.50/$1.50, Small 4 $0.15/$0.60, Ministral 3 8B $0.15/$0.15, plus 50% off batch and 90% off cached input. Alibaba uses volume-tiered input pricing, and prices, availability and keys differ per region — a number that's right in Singapore may be wrong in Frankfurt.</p>
+    <p><strong>Qwen wins on the size ladder and on Apple Silicon.</strong> Eight open sizes in one family means a single integration story spans a MacBook Air and a Mac Studio without changing vendors, prompt formats or eval harnesses. MLX support is documented by the vendor at release rather than reconstructed weeks later, which for a Mac app is the difference between shipping on day one and shipping next month. A 262k native context on a 27B you can hold in unified memory is a real advantage. And Qwen Code being provider-neutral suits anyone who doesn't want a cloud key in the loop.</p>
 
-    <p><strong>Mistral wins on stated data terms.</strong> API traffic isn't used for training, and Vibe Pro, Team and Enterprise conversations aren't by default. Alibaba's "never use your data for model training" line is verifiable too, but scoped to Model Studio, the paid API. Mistral's weak spot is its own free tier: Vibe Free conversations can be used to improve the models, with opt-out.</p>
-
-    <p><strong>Qwen wins on the size ladder and the Mac path.</strong> One family from 0.8B to 397B, MLX documented at release, immediate 4-bit builds, first-party Ollama presence. For an app spanning a 16 GB Air and a 64 GB Studio, that's one integration instead of several — and exactly why I ship Qwen weights, so weigh it accordingly. Tooling neutrality goes the same way: Qwen Code points at a local endpoint, mistral-vibe won't.</p>
+    <p><strong>Both lose the same argument.</strong> "Open family" doesn't mean the best model is open — <code>QwenLM/Qwen3.7</code> is a 404, and Mistral's OCR, Codestral and moderation models are closed. Both also move fast enough to hurt: Qwen shipped 3.5, then 3.6, then a closed 3.7 in roughly six months; Mistral went Large 3 to Small 4 to Medium 3.5 in about four. Bundle weights into a product and you inherit a permanent re-quantize-and-revalidate treadmill. I do, and it's the most under-discussed cost of building on open weights.</p>
 
     <h2>Who should pick which</h2>
-    <p><strong>Pick Mistral if</strong> you need a small multimodal model on constrained hardware, you want EU jurisdiction, you need quotable per-token prices for a cloud fallback, or you're already on vLLM where Mistral's docs lead.</p>
+    <p><strong>Pick Qwen if</strong> you're building on a Mac, you need one family to cover several RAM budgets, you want a 27B-class model with a very long context you can hold in memory, or you want an open agent CLI that can point at a local endpoint.</p>
 
-    <p><strong>Pick Qwen if</strong> you're building on Apple Silicon, you need one family that scales across very different machines, or you want an agent CLI that talks to a local endpoint without a vendor key.</p>
+    <p><strong>Pick Mistral if</strong> your buyers care about EU jurisdiction, you need a small multimodal model under a clear commercial license, you want published per-token pricing and a stated no-training-on-API-data policy for the cloud half of a hybrid app, or you need speech and OCR models Qwen doesn't release openly.</p>
 
-    <p><strong>Pick both</strong> if you're integrating seriously — both are Apache 2.0, so route each task to whichever wins your evals. One warning for anyone bundling weights into an app: Qwen went 3.5 to 3.6 to a closed 3.7 in roughly six months. Every release is a re-quantize cycle you inherit.</p>
+    <p><strong>Use both if</strong> you're doing this seriously. They're both Apache 2.0 — nothing stops you running Ministral 3 8B for a fast multimodal path and a Qwen 27B for heavy reasoning inside the same product. That's a licensing luxury you don't get everywhere in this market.</p>
+
+    <p>My own choice is on the record: Outlier runs Qwen3.5-4B, Qwen3.5-9B, Gemma-4-26B-a4b-it, Qwen3.6-27B, Qwen3.6-35B-A3B and Qwen3.5-397B-A17B — six Apache 2.0, one under Gemma's terms. That was driven by the size ladder and the MLX documentation more than by any benchmark. On our measurements the local 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a> and scored about 45% on a blind slice of SWE-bench Verified. I haven't run that harness against Ministral 3 or Mistral Small 4, so don't read those numbers as a verdict on Mistral. They aren't one.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Qwen sizes, licensing and MLX support from the <a href="https://github.com/QwenLM/Qwen3.6">Qwen3.6 repo</a>, <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B</a> and <a href="https://huggingface.co/mlx-community/Qwen3.6-27B-4bit">mlx-community 4-bit</a> cards. Mistral from <a href="https://mistral.ai/news/mistral-3/">mistral.ai/news/mistral-3</a>, <a href="https://docs.mistral.ai/models/overview">docs.mistral.ai</a>, <a href="https://huggingface.co/mistralai/Mistral-Small-4-119B-2603">Small 4</a> and <a href="https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512">Ministral 3 8B</a>. Pricing from <a href="https://mistral.ai/pricing/api">mistral.ai/pricing/api</a> and <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing">Alibaba Model Studio</a> (2026-07-15). Policies from <a href="https://docs.mistral.ai/admin/monitor-comply/privacy-data-controls">Mistral data controls</a>; distribution from <a href="https://ollama.com/search?q=qwen">ollama.com</a>. Outlier tiers measured on an M1 Ultra. <strong>One gap:</strong> Qwen's consumer chat pricing and data policy could not be verified — qwen.ai renders client-side — so nothing here is a claim about Qwen Chat. Competitor terms change without notice.
+      <strong>Sources and receipts:</strong> Qwen sizes, the Apache 2.0 statement and MLX support from <a href="https://github.com/QwenLM/Qwen3.6">github.com/QwenLM/Qwen3.6</a> and the <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B card</a>; 4-bit build sizes from mlx-community. Mistral sizes and licenses from <a href="https://mistral.ai/news/mistral-3/">mistral.ai/news/mistral-3</a>, <a href="https://docs.mistral.ai/models/overview">docs.mistral.ai</a> and the Mistral Small 4 and Ministral 3 8B cards. Pricing from <a href="https://mistral.ai/pricing/api">mistral.ai/pricing/api</a> and <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing">Alibaba Cloud Model Studio</a> (updated 2026-07-15, international deployment). Outlier tier sizes, RAM minimums and benchmark figures measured in-house on an M1 Ultra. <strong>Deliberately omitted:</strong> Qwen Studio's consumer pricing and consumer data-training policy — qwen.ai and chat.qwen.ai render client-side and returned no policy text, so nothing here describes the free Qwen chat app — and the license on Mistral's Voxtral TTS model. Competitor pricing, licenses and privacy policies change without notice; check the primary sources before relying on any figure. I build Outlier and ship Qwen-family and Gemma-family weights, so treat this as informed but interested.
     </div>
 
     <div class="cta">
-      <h3>Want Qwen weights running locally?</h3>
-      <p>Outlier runs Qwen- and Gemma-family models on-device on Apple Silicon. No account, no caps, nothing uploaded. No web search, no image generation, no mobile app.</p>
+      <h3>See a Qwen 27B run entirely on your Mac</h3>
+      <p>Outlier is a native Apple Silicon app. No account, no usage caps, nothing uploaded — the free Nano and Lite tiers work with Wi-Fi off. There's no Windows, Linux or mobile build, and no web search or image generation.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mistral-vs-qwen">Download for Mac</a>
     </div>
 
     <div class="related">
-      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
+      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
     </div>
   </div>
 </article>
+
 
 <footer>
   <div class="wrap">

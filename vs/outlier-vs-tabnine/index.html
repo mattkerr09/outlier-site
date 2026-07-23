@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outlier vs Tabnine: local Mac coding AI vs an enterprise cloud agent platform | Outlier</title>
-  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Tabnine (enterprise cloud coding platform). Where each runs, which models power them, whether your code leaves the machine, cost, and where Tabnine genuinely wins.">
+  <meta name="description" content="Honest comparison of Outlier (local Mac coding AI) vs Tabnine (enterprise IDE plugins + CLI, server-side inference). Where the code runs, what it costs, agents, and where Tabnine genuinely wins.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-tabnine/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs Tabnine: local Mac coding AI vs an enterprise cloud agent platform">
-  <meta property="og:description" content="Tabnine runs on a GPU cluster and starts at $39/user/month. Outlier runs on your own Apple Silicon. Honest comparison with measured coding numbers.">
+  <meta property="og:description" content="Tabnine runs inference on a server cluster and starts at $39/user/month annually. Outlier runs on your Mac for $20/month. An honest look at both, written by Outlier's founder.">
   <meta property="og:url" content="https://outlier.host/vs/outlier-vs-tabnine/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -18,7 +18,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Outlier vs Tabnine: local Mac coding AI vs an enterprise cloud agent platform">
-  <meta name="twitter:description" content="Where each one runs, which model powers it, whether your code leaves the machine, and what it actually costs.">
+  <meta name="twitter:description" content="Server-side enterprise coding agents vs a local Mac app. Pricing, privacy, models, repo context, and honest trade-offs.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -76,7 +76,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Tabnine: local Mac coding AI vs an enterprise cloud agent platform","description":"Honest comparison of Outlier (local Mac AI) vs Tabnine (enterprise cloud coding platform). Where each runs, which models power them, whether your code leaves the machine, cost, and where Tabnine genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-tabnine/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Tabnine: local Mac coding AI vs an enterprise cloud agent platform","description":"Honest comparison of Outlier (local Mac coding AI) vs Tabnine (enterprise IDE plugins and CLI with server-side inference). Where the code runs, what it costs, agentic ability, repo-scale context, and where Tabnine genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-tabnine/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Tabnine","item":"https://outlier.host/vs/outlier-vs-tabnine/"}]}
@@ -105,39 +105,39 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Tabnine is an enterprise coding platform — IDE plugins plus a terminal CLI — with inference on a Tabnine-operated or customer-operated GPU cluster. Its pricing page lists $39 and $59 per user per month, annual only, with no free plan and metered token charges on top. Outlier is a Mac app where the model runs on your own Apple Silicon: no account, no caps, nothing uploaded, free on Nano and Lite, $20/month for all seven tiers. Tabnine can route you to Claude Opus class models no laptop can hold; Outlier's Code 27B is a 15 GB local model that measured about 45% on a blind SWE-bench Verified slice.</p>
+      <p>Tabnine is a commercial, enterprise-oriented coding assistant — IDE plugins plus a terminal CLI — where the model runs on a Tabnine-operated or customer-operated GPU cluster, priced at $39 and $59 per user/month, annual only, with LLM token charges on top. Outlier is a $20/month Mac app that runs the model on your own Apple Silicon: no account, no meter, nothing uploaded. Tabnine can route you to Claude Opus or GPT-5.x class models; Outlier's Code 27B measured HumanEval 0.866 and about 45% on a blind SWE-bench Verified slice, which is below the strongest cloud coding agents.</p>
     </div>
 
-    <p class="lead">I'm Matt Kerr — I build Outlier, so read this as a comparison written by an interested party. I've cited a primary source for every Tabnine claim. Past the phrase "AI coding assistant," these two barely share a category: one is a governed platform sold by the seat, the other is a $20 app that puts a model on your laptop.</p>
+    <p class="lead">Disclosure first: I build Outlier, so read this as a comparison written by an interested party. Every claim about Tabnine comes from its own pricing page and docs, linked at the bottom. These products barely overlap in shape — one is procurement software for engineering organizations, the other is a $20 app you download. The question isn't which is better, it's which constraints you can live with.</p>
 
     <h2>Where each one lives</h2>
-    <p>Tabnine lives inside your editor: VS Code, the full JetBrains family, Eclipse, and Visual Studio 2022 and 2026, on Windows 10+, Linux (kernel 6.2+) and macOS 13+ — x86_64 or aarch64, so Apple Silicon is covered. There's also a terminal CLI, launched with <code>tabnine</code> and installed by a curl-piped script from your Tabnine host; it needs Node.js 22+ plus a host and Agents enabled for your team. Then a web admin console. No mobile app and no standalone desktop app appear in any docs page I reviewed.</p>
+    <p>Tabnine ships as plugins for the editors enterprises actually run: VS Code, the full JetBrains family, Eclipse, and both Visual Studio 2022 and 2026, on Windows 10+, Linux, and macOS 13+. There's also a terminal-native CLI launched with the <code>tabnine</code> command, installed by a curl-piped script from your Tabnine host; it needs Node.js 22+ and Tabnine Agents enabled for your team. Admins get a web console. I found no standalone desktop app and no mobile app documented.</p>
 
-    <p>Outlier is the opposite shape: a standalone Mac app for Apple Silicon (M1 or later, macOS 12+). It isn't an editor extension, and there's no Windows or Linux build — you keep your editor and move code into a separate window. If inline completion inside your own file is what you want, Tabnine does that and Outlier doesn't.</p>
+    <p>Outlier is the opposite shape: a native macOS app for Apple Silicon (M1 or later, macOS 12+). No Windows or Linux build, no mobile app, no editor extension — you work in Outlier's own window. If your whole workflow is inline completion inside PhpStorm, Outlier doesn't do that and Tabnine does.</p>
 
-    <h2>Which model is doing the work, and where</h2>
-    <p>Tabnine is model-agnostic and open about it. Its docs list Anthropic Claude (through 4.8 Opus), OpenAI (through GPT-5.5), Gemini 3.5/3.1/3.0 Pro, and open weights — Devstral, MiniMax-M2.7, GLM-4.7, Qwen-3-Coder-480B-A35B and Qwen-3-30B. Admins can also point it at their own endpoints — Bedrock, Azure, any OpenAI-compatible URL, Vertex AI — and toggle models on or off. Tabnine's own models are closed.</p>
+    <h2>Which model is doing the work</h2>
+    <p>Tabnine is model-agnostic and open about it. Beyond its own proprietary hosted models, the docs list Anthropic Claude (4.8 Opus down through 4 Sonnet), OpenAI (GPT-5.5, GPT-5.3 Codex, GPT-4o), Google Gemini 3.x, plus open weights — Devstral, MiniMax-M2.7, GLM-4.7, Qwen-3-Coder-480B. Enterprise admins can point it at their own endpoints instead: Bedrock, Azure, any OpenAI-compatible URL, Vertex AI.</p>
 
-    <p>All of it runs server-side. The architecture docs are plain: the plugin is local, but "the client queries a remote Tabnine cluster," with inference on a GPU node there; the client requirements list a connection to that cluster on port 443.</p>
+    <p>Outlier ships seven fixed local tiers, Nano 4B up to Plus 397B-a17b. For coding, most people sit on Code 27B: a 15.13 GB download that wants 24 GB of RAM. Six tiers are Apache 2.0 and the weights are published, so you can inspect what you're running.</p>
 
-    <p>Outlier runs the model in your Mac's unified memory. Seven tiers: Nano 4B (2.37 GB, 6 GB RAM) and Lite 9B (5.04 GB, 12 GB) free, up through Core and Code 27B (15.13 GB, 24 GB) and Plus 397B-a17b (209 GB, 64 GB, paging MoE experts off SSD at roughly 11 GB peak RSS). Six tiers are Apache 2.0, Quick is Gemma Terms of Use, and the weights are <a href="https://huggingface.co/Outlier-Ai">published</a>. Core 27B runs 20.7 tokens/sec on an M1 Ultra.</p>
+    <p>Here's the honest number. Code 27B measured <strong>HumanEval 0.866</strong>, and on a blind slice of SWE-bench Verified it resolved <strong>about 45% (18 of 40)</strong> — my own measurement on my own hardware, not a leaderboard submission, and a 40-instance slice is noisy. It sits below the strongest cloud coding agents. If Tabnine hands your hard multi-file refactor to Claude Opus, that's a stronger model than anything fitting in 24 GB of unified memory.</p>
 
     <h2>Does your code leave the machine?</h2>
-    <p>With Tabnine, yes — and the company is unusually clear about what happens next. It states it "does not train its models on your code," and that its completion and Protected chat models are trained only on permissively licensed open source. On retention: "We never retain any code on our servers," with context "deleted immediately after the server returns the answer to the client." That's a better default than most cloud coding tools.</p>
+    <p>With Tabnine, yes, by design. The architecture docs describe the plugin querying a remote cluster with the relevant context window, where a GPU-accelerated inference service does the work over port 443. Four deployment models exist: Secure SaaS, Kubernetes in your own VPC, on-premises Kubernetes, and a fully air-gapped install — the last three Enterprise-only, all requiring Kubernetes. None runs inference on a developer's laptop.</p>
 
-    <p>Two caveats. It's a policy guarantee, not a physical one — the context does travel, and you're trusting a contract. And telemetry still flows: plugin configuration, machine specs, hashed user identifiers, IDE details and per-language completion stats, plus cluster metrics and logs sent every second and kept a week. No opt-out is documented.</p>
+    <p>Tabnine's data policy is genuinely strong for a cloud product, and I'll say so plainly: it does not train on your code, code is never retained on its servers, and context is deleted immediately after the server answers. Its completion model and the "Tabnine Protected" chat model are trained only on permissively licensed open source. But that's a policy, not physics — and telemetry still flows: plugin configuration, machine specs, hashed user identifiers, IDE details, completion stats, with no documented opt-out.</p>
 
-    <p>With Outlier there's no request to retain. No account, no telemetry, no upload — turn Wi-Fi off after the download and it keeps working.</p>
+    <p>Outlier's answer is structural instead of contractual. The model runs on your device. No account, no server, no request; it works with Wi-Fi off. There's nothing to retain.</p>
 
-    <h2>What it costs</h2>
-    <p>Tabnine's pricing page lists two annual plans: Code Assistant Platform at $39/user/month ($468 a year) and Agentic Platform at $59 ($708). No free plan and no monthly option appear there. Seat price isn't the whole bill — with Tabnine-provided model access, reserved token quota is billed at "actual LLM provider prices + 5% handling fee," so spend is variable unless you host your own LLM, where usage is unlimited. Headless Agents is a separately priced add-on, and the Enterprise Context Engine is sold on its own site at a single Enterprise tier listed at $5,800.</p>
+    <h2>What it actually costs</h2>
+    <p>Tabnine's pricing page lists the Code Assistant Platform at $39 per user/month and the Agentic Platform at $59, both annual — $468 or $708 per seat per year, with no free plan, tier, or trial shown. Seat price isn't the whole bill: reserved token consumption is charged "based on actual LLM provider prices + 5% handling fee," and usage is unlimited only if you deploy your own LLM on-premises or via your own endpoints. Headless Agents is a paid add-on, and the Enterprise Context Engine is sold separately at $5,800.</p>
 
-    <p>Outlier: Nano and Lite free, no account. Pro is $20/month or $149/year for all seven tiers; lifetime Pro starts at $99 (Founding 200) or $200 (Founders 500). No token meter — electricity is the marginal cost.</p>
+    <p>Outlier: Nano and Lite are free, no account. Pro is $20/month or $149/year for all seven tiers, and lifetime Pro starts at $99. No token meter, because there's no server to meter.</p>
 
-    <h2>Agentic ability and repo-scale context</h2>
-    <p>Tabnine's agentic tier is the more built-out product. Agents run in the IDE, in the terminal via the CLI, and headlessly in CI/CD as a paid add-on, with agent skills, slash commands, code review, license scanning and provenance. For repo-scale understanding it sells the Enterprise Context Engine separately — an admission that org-wide code context is its own infrastructure problem.</p>
+    <h2>Agents and repo-scale context</h2>
+    <p>This is where Tabnine's higher tier earns its price. The Agentic Platform adds agent workflows in the IDE and CLI, headless execution in CI/CD as a paid add-on, and an admin layer individual-developer tools rarely have: policy enforcement, per-model toggles, code review, license-compliance scanning, provenance and attribution. Repo-scale context is a separate product, the Enterprise Context Engine.</p>
 
-    <p>Outlier's honest coding number: on a blind slice of SWE-bench Verified the local 27B measured about 45% (18 of 40), and Code 27B scores 0.866 on HumanEval. I measured both on my own harness — not leaderboard submissions, and below the strongest cloud coding agents. On general quality, Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest prompts. Context is bounded by unified memory — a 24 GB Mac running Code 27B has a real ceiling, and there's no server-side index of your repos.</p>
+    <p>Outlier has no equivalent: no headless CI agent, no admin console, no org policy layer, no repo index. Its context is bounded by what fits in your Mac's memory. If you need an agent opening pull requests across forty repos overnight under audited policy, Outlier is the wrong tool.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -152,70 +152,75 @@
         <tr>
           <td><strong>Where it lives</strong></td>
           <td>IDE plugins + terminal CLI + web admin console</td>
-          <td>Standalone native Mac app</td>
+          <td>Standalone Mac app; no editor extension</td>
         </tr>
         <tr>
           <td><strong>Model</strong></td>
-          <td>Claude / GPT-5.x / Gemini, open weights, or your endpoint</td>
-          <td>7 local tiers, Nano 4B → Plus 397B-a17b</td>
+          <td>Tabnine's own, plus Claude / GPT-5.x / Gemini 3.x and open weights; bring-your-own endpoint</td>
+          <td>Seven local tiers; Code 27B for coding</td>
         </tr>
         <tr>
-          <td><strong>Code leaves machine</strong></td>
-          <td>Yes; no-train + zero retention are stated policy</td>
-          <td>No</td>
+          <td><strong>Code leaves the machine</strong></td>
+          <td>Yes — remote GPU cluster; no-train, zero-retention policy; telemetry has no documented opt-out</td>
+          <td>No — inference on device</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No documented offline mode</td>
+          <td>Yes, with Wi-Fi off</td>
         </tr>
         <tr>
           <td><strong>Cost</strong></td>
-          <td>$39 or $59/user/mo annual + metered tokens</td>
+          <td>$39 or $59/user/mo, annual; tokens at provider price + 5%; Context Engine $5,800</td>
           <td>Free tier; $20/mo or $149/yr; lifetime from $99</td>
         </tr>
         <tr>
           <td><strong>Agentic ability</strong></td>
-          <td>IDE, CLI and headless CI/CD agents; review, policy</td>
-          <td>Local agent loop; ~45% on a blind SWE-bench slice</td>
+          <td>IDE and CLI agents, headless CI/CD agents, admin policy, code review</td>
+          <td>No headless agents, no CI, no admin console</td>
         </tr>
         <tr>
           <td><strong>Repo-scale context</strong></td>
           <td>Enterprise Context Engine, sold separately</td>
-          <td>Bounded by RAM; no server-side repo index</td>
+          <td>Bounded by local RAM</td>
         </tr>
         <tr>
-          <td><strong>Works offline</strong></td>
-          <td>No</td>
-          <td>Yes</td>
+          <td><strong>Platforms</strong></td>
+          <td>Windows, Linux, macOS 13+</td>
+          <td>macOS 12+, Apple Silicon only</td>
         </tr>
       </tbody>
     </table>
 
     <h2>Where Tabnine genuinely wins</h2>
     <ul>
-      <li><strong>Frontier capability on demand.</strong> Server-side inference lets Tabnine hand you Claude Opus or GPT-5.5 class models — a ceiling above anything that fits in a laptop. On the hardest agentic work that gap is real. My 45% is good for a 15 GB model; it isn't parity.</li>
-      <li><strong>Deployment models a Mac app can't offer an organization.</strong> Secure SaaS, a Kubernetes cluster in your own AWS/GCP/Azure VPC, on-premises, or a fully air-gapped install. For a regulated company that must keep everything inside its perimeter, that's rare. Note that "air-gapped" here means a customer-run Kubernetes cluster with GPUs — a real no-egress guarantee, but enterprise infrastructure, not something an individual switches on.</li>
-      <li><strong>Editor coverage, including the unfashionable ones.</strong> Eclipse and Visual Studio 2022/2026 are supported. Most modern AI coding tools ignore those entirely.</li>
-      <li><strong>Governance.</strong> Admin console with policy enforcement, per-model toggles, license scanning, centralized analytics. Outlier has none of it, by design — it's a single-user app.</li>
-      <li><strong>IP-risk answers.</strong> A "Protected" model trained only on permissively licensed code, plus marketing describing IP indemnification. I couldn't find those terms on a primary contract page, so confirm them with Tabnine's sales team.</li>
-      <li><strong>Live engineering cadence.</strong> Five releases in the first three weeks of July 2026 (v6.4.0 through v6.4.4). And the VS Code client repo, <code>codota/tabnine-vscode</code>, is plain MIT — the extension surface is auditable even if the service isn't.</li>
+      <li><strong>Frontier-model quality on demand.</strong> Server-side inference means a hard problem can go to a Claude Opus or GPT-5.x class model. That ceiling is above anything that fits in a laptop's RAM, including Code 27B at ~45% on my SWE-bench slice.</li>
+      <li><strong>It lives where you already work.</strong> Inline completion in your editor beats copying code into a separate window, and Tabnine covers legacy enterprise IDEs — Eclipse, Visual Studio — that most modern AI coding tools ignore entirely.</li>
+      <li><strong>Deployment options a Mac app can't offer an organization.</strong> SaaS, customer VPC, on-prem Kubernetes, air-gapped. For a regulated company that has to keep everything inside its own perimeter but still wants shared infrastructure, that's rare and real.</li>
+      <li><strong>Governance.</strong> Admin console, per-model toggles, policy enforcement, code review, license scanning, provenance and attribution. Outlier has none of it, and at 300 engineers that's the difference between adoption and a security review that never ends.</li>
+      <li><strong>IP-risk mitigation as a feature.</strong> A model trained only on permissively licensed code answers a legal objection that blocks AI adoption outright in some companies. Tabnine also markets IP indemnification; I couldn't find the exact terms publicly, so confirm those with their sales team.</li>
+      <li><strong>Cross-platform, and actively maintained.</strong> Windows and Linux developers can use it; Outlier's can't. Release notes show five releases in the first three weeks of July 2026.</li>
     </ul>
 
     <h2>Who should pick which</h2>
-    <p><strong>Pick Tabnine if</strong> you're buying for a team, you need governance and audit trails, you want agents in CI/CD, you have legacy editors in the mix, or compliance requires a contractual no-train guarantee with a paper trail. Also pick it if you already run your own LLM endpoints — that's where the metered charges disappear.</p>
+    <p><strong>Pick Tabnine if</strong> you're buying for a team; you need completion inside JetBrains, Eclipse, or Visual Studio; you need agents running in CI; you need policy, license scanning, and audit trails to clear a security review; you have mixed Windows, Linux, and Mac engineers; or you want frontier-model quality with a written no-train, zero-retention commitment on top.</p>
 
-    <p><strong>Pick Outlier if</strong> you're one person on an Apple Silicon Mac, you'd rather your code never travel, you want a fixed cost with no meter, or you object to $468 a year per seat before usage. Be clear-eyed about the trade: no IDE plugin, no CI/CD agents, no team console, no web search, no image generation, no mobile app, no Windows or Linux build, no cloud sync, and a coding ceiling below the frontier models.</p>
+    <p><strong>Pick Outlier if</strong> you're an individual developer or a small shop on Apple Silicon; $468 to $708 per seat plus metered tokens is out of proportion to your work; you want a physical guarantee that client code never leaves the laptop rather than a contractual one; or you'd rather pay $149 a year, or $99 once, with no meter running.</p>
 
-    <p>They coexist fine: a Tabnine seat for org work, Outlier for the code you'd rather not send anywhere.</p>
+    <p><strong>Plenty of people should use both.</strong> I run local models for most of my own work and still reach for a frontier model when a problem is genuinely hard. That's not a concession, it's just how the tools differ.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Plan prices from <a href="https://www.tabnine.com/pricing/">tabnine.com/pricing</a> and <a href="https://context.tabnine.com/pricing/">context.tabnine.com/pricing</a>; architecture, models, privacy and requirements from <a href="https://docs.tabnine.com/main/welcome/readme/architecture">docs.tabnine.com</a>; MIT license from <a href="https://github.com/codota/tabnine-vscode/blob/master/LICENSE">codota/tabnine-vscode</a>. Checked 2026-07-23. <strong>Competitor pricing, plan names and policies change often</strong>, and Tabnine's docs are currently inconsistent about plan naming — confirm on their site before buying. Outlier sizes, RAM floors and tokens/sec measured on an M1 Ultra; the SWE-bench slice (18/40) and HumanEval 0.866 on my own harness, not a leaderboard.
+      <strong>Sources and receipts:</strong> Tabnine plan prices, annual billing, the "actual LLM provider prices + 5% handling fee" charge and the Headless Agents add-on from <a href="https://www.tabnine.com/pricing/">tabnine.com/pricing</a>; the $5,800 Enterprise tier from <a href="https://context.tabnine.com/pricing/">context.tabnine.com/pricing</a>; architecture, deployment, models, privacy and telemetry, editor support and release notes from <a href="https://docs.tabnine.com/">docs.tabnine.com</a>; zero-retention wording from <a href="https://www.tabnine.com/code-privacy/">tabnine.com/code-privacy</a>. Checked 2026-07-23 — <strong>competitor pricing and policies change, so verify before you buy.</strong> Outlier's HumanEval 0.866 and ~45% (18/40) SWE-bench slice were measured by me on my own hardware; Core 27B's 98.9% rubric parity with Claude Opus is in the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>.
     </div>
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite are free forever — no login, no upload. Download, pick a tier, code offline.</p>
+      <p>Nano and Lite are free forever with no login. If you code on an Apple Silicon Mac and want the model to stay on it, this takes about two minutes to find out.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-tabnine">Download for Mac</a>
     </div>
 
     <div class="related">
-      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI?</a></p>
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
     </div>
   </div>
 </article>

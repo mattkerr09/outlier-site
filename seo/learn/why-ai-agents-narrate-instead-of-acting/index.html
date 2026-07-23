@@ -92,8 +92,10 @@ In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns 
 </table>
 <p>Same model, same weights, same tasks. The difference is that the harness stopped losing actions and the API stopped letting the model narrate.</p>
 
-<h2>The honest caveats</h2>
-<p>Action rate is not task success — whether more actions per budget translates into more solved tasks is a separate measurement we run on the official SWE-bench Docker harness, and we'll publish it the same way we publish everything: with the sample sizes and the misses included. And one methodological note we keep re-learning: <em>most of what looked like model weakness in this investigation was our own code</em>. Before concluding a local model can't do something, verify the harness that measured it.</p>
+<h2>The honest caveats — including the one that bit us</h2>
+<p>Action rate is not task success. We promised to publish the resolution measurement with the misses included, and here is the miss: when we made <code>required</code> the <em>default</em> for our own coding agent, the first four benchmark tasks all ended with <strong>empty patches</strong> — including three that the unforced baseline had patched or solved. Forced to act on every turn, the model stopped deliberating and browsed the repository until time ran out.</p>
+<p>The lesson: some of that prose narration was <em>load-bearing thinking</em> — the model's natural pattern is to reason in text, <em>then</em> edit. Deleting the option to think made it act more and accomplish less. So our agent's default is back to <code>auto</code>, with the stutter-loop and dropped-shorthand fixes (which ban waste, not thinking) doing the real work. <code>tool_choice: "required"</code> remains available and correct as an API feature — many agent designs genuinely need it, especially routing and extraction loops where every turn <em>should</em> be a call. Just don't assume a forced action is a useful one.</p>
+<p>And the methodological note we keep re-learning: <em>most of what looked like model weakness in this investigation was our own code</em>. Before concluding a local model can't do something, verify the harness that measured it.</p>
 
 <div class="foot">
 <p>Outlier runs frontier-class local AI on your own Mac — private, offline, no subscription. The OpenAI-compatible API (including <code>tool_choice: "required"</code>) ships in v1.11.664.</p>

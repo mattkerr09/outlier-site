@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon reaches 512GB at up to 819GB/s, an RTX 5090 gives 32GB at roughly 1,792GB/s — so a 120B model runs on the big Mac and won't load on the GPU at all, while on models that fit both the GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
+      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon has shipped up to 512GB at 819GB/s, while NVIDIA publishes 1,792GB/s over 96GB for the RTX PRO 6000 — so a 120B model runs on the big Mac and won't load on a 32GB RTX 5090 at all, while on models that fit both, the discrete GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
     </div>
 
     <p class="lead">Disclosure first: I build Outlier, a local AI app that only runs on Apple Silicon, so I have an obvious interest in one side of this. I've stuck to published specs and public benchmark tables, and labeled every number I couldn't verify at the source. Where a discrete GPU wins, it wins.</p>
@@ -115,7 +115,7 @@
 
     <p>That splits local inference into two problems. <strong>Prompt processing</strong> — reading your question, your files, your codebase — is compute-bound. <strong>Token generation</strong> — the words appearing on screen — tracks memory bandwidth far more closely than TFLOPs. Any comparison quoting one number hides half the story.</p>
 
-    <p>The architecture follows. On Apple silicon the CPU and GPU share one pool — MLX's docs note that arrays live in shared memory, usable by any device without transferring data. A discrete GPU has its own isolated, much faster pool, and everything must cross PCIe into it.</p>
+    <p>On Apple silicon the CPU and GPU share one pool — MLX's docs note arrays live in shared memory, usable by any device without transferring data. A discrete GPU has its own isolated, much faster pool, and everything must cross PCIe into it.</p>
 
     <h2>Capacity: what actually fits</h2>
     <p>Here unified memory sits in a different class. Apple's M3 Ultra configures to 512GB at over 800GB/s (819GB/s per the Mac Studio specs), and Apple claims models over 600 billion parameters run on device. DGX Spark ships 128GB of coherent memory at 273GB/s for inference up to 200B. An RTX 5090 has 32GB; the RTX PRO 6000 has 96GB with ECC.</p>
@@ -173,7 +173,7 @@
     <h2>Where dedicated VRAM genuinely wins</h2>
     <p>If your work looks like this list, buy the GPU.</p>
     <ul>
-      <li><strong>Time to first token.</strong> About 20x on identical llama.cpp runs. For agentic coding or long-context RAG — anything re-reading a big codebase each turn — that's the difference between instant and painful, and it's exactly where unified memory is weakest.</li>
+      <li><strong>Time to first token.</strong> About 20x on identical llama.cpp runs. For agentic coding or long-context RAG — anything re-reading a big codebase each turn — that's the difference between instant and painful.</li>
       <li><strong>Batching and concurrency.</strong> The compute headroom idle during single-stream decode is what serves many requests at once. A Mac serving one user leaves little on the table; a Mac serving eight falls apart.</li>
       <li><strong>Ecosystem depth.</strong> vLLM lists CUDA, ROCm and Intel XPU as GPU platforms; Apple silicon GPU support lives in a separate vllm-metal repo. TensorRT-LLM and new kernels land on CUDA first and Metal later, if ever.</li>
       <li><strong>Training and fine-tuning.</strong> NVIDIA markets the PRO 6000 for local fine-tuning and DGX Spark up to 70B. The Mac story is overwhelmingly an inference story.</li>
@@ -186,7 +186,7 @@
 
     <p><strong>Pick dedicated VRAM if</strong> your models fit in 32–96GB, time-to-first-token is what you feel most, you're serving multiple users, or you plan to fine-tune.</p>
 
-    <p>Both paths are fully on-device, so the privacy questions that apply to cloud services don't apply to either; the weights' licenses are the only policy layer, identical on both. If you land on Apple silicon, prefill is your weak axis — prompt caching and prefix reuse buy more than any spec bump. That's the bet Outlier makes: Apple Silicon only, macOS 12+, no Windows or Linux build, no live web search.</p>
+    <p>Both paths run fully on-device, so cloud privacy questions don't apply to either; the weights' own licenses are the only policy layer. If you land on Apple silicon, prefill is your weak axis — prompt caching and prefix reuse buy more than any spec bump. That's the bet Outlier makes: Apple Silicon only, macOS 12+, no Windows or Linux build, no live web search.</p>
 
     <div class="receipts">
       <strong>Sources and receipts:</strong> Bandwidth-bound decode, <a href="https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/">NVIDIA's inference guide</a>. Shared memory, the <a href="https://github.com/ml-explore/mlx">MLX README</a>. Apple specs, the <a href="https://www.apple.com/newsroom/2025/03/apple-reveals-m3-ultra-taking-apple-silicon-to-a-new-extreme/">M3 Ultra</a>, <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5</a> and <a href="https://www.apple.com/newsroom/2026/03/apple-debuts-m5-pro-and-m5-max-to-supercharge-the-most-demanding-pro-workflows/">M5 Pro/Max</a> posts plus <a href="https://www.apple.com/mac-studio/specs/">Mac Studio specs</a>. NVIDIA specs, the <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">RTX 5090</a>, <a href="https://www.nvidia.com/en-us/products/workstations/professional-desktop-gpus/rtx-pro-6000/">RTX PRO 6000</a> and <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">DGX Spark</a> pages; price change from <a href="https://forums.developer.nvidia.com/t/2-23-2026-price-change-announcement/361713">NVIDIA's forum</a>. Throughput, llama.cpp's benchmark threads for <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">Apple silicon</a> and <a href="https://github.com/ggml-org/llama.cpp/discussions/15013">CUDA</a> plus its <a href="https://raw.githubusercontent.com/ggml-org/llama.cpp/master/benches/dgx-spark/dgx-spark.md">DGX Spark file</a> — community-submitted across different commits and machines on a small, dated workload, so directional, not controlled. DRAM forecast, <a href="https://www.trendforce.com/presscenter/news/20260709-13140.html">TrendForce</a>. <strong>Secondary, unconfirmed at the vendor:</strong> the 5090's 1,792GB/s and $1,999 MSRP, PRO 6000 street pricing, the Mac Studio configuration changes, the 75% Metal working-set figure. Outlier tiers measured on an M1 Ultra; pricing moves fast, so date any figure you quote.

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Outlier vs Continue.dev: local Mac AI vs an open-source coding agent | Outlier</title>
-  <meta name="description" content="Honest comparison of Outlier (local Mac AI, on-device models) and Continue.dev (Apache-2.0, model-agnostic coding agent, acquired by Cursor in June 2026). Where code runs, cost, agentic ability, and where each one wins.">
+  <meta name="description" content="Honest comparison of Outlier (native Mac app, on-device models) and Continue.dev (Apache-2.0, model-agnostic coding agent, acquired by Cursor in June 2026). Where each lives, what powers it, whether code leaves your machine, and real coding numbers.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-continue-dev/">
@@ -18,7 +18,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Outlier vs Continue.dev: local Mac AI vs an open-source coding agent">
-  <meta name="twitter:description" content="Model-agnostic editor extension vs native Mac app with on-device models — code locality, cost, agentic ability, and honest trade-offs.">
+  <meta name="twitter:description" content="Model-agnostic editor extension vs a native Mac app with on-device models — code locality, cost, agentic ability, and honest trade-offs.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -76,7 +76,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Continue.dev: local Mac AI vs an open-source coding agent","description":"Honest comparison of Outlier (local Mac AI, on-device models) and Continue.dev (Apache-2.0, model-agnostic coding agent, acquired by Cursor in June 2026). Where code runs, cost, agentic ability, and where each one wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-continue-dev/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Continue.dev: local Mac AI vs an open-source coding agent","description":"Honest comparison of Outlier (native Mac app, on-device models) and Continue.dev (Apache-2.0, model-agnostic coding agent, acquired by Cursor in June 2026). Where each lives, what powers it, whether code leaves your machine, and real coding numbers.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-continue-dev/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Continue.dev","item":"https://outlier.host/vs/outlier-vs-continue-dev/"}]}
@@ -105,70 +105,62 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Continue is an Apache-2.0, model-agnostic coding agent for VS Code, JetBrains, and the terminal — it ships no model, so whether your code leaves the machine depends on the backend you point it at. Cursor acquired Continue Dev, Inc. in June 2026: the hosted hub is gone and the repo calls itself read-only and no longer maintained. Outlier is a native macOS app for Apple Silicon with its own on-device models, no account, and nothing uploaded — but it's a standalone app, not an editor extension, and its Code 27B tier measured about 45% on a blind SWE-bench Verified slice, below the strongest cloud coding agents.</p>
+      <p>Continue is an Apache-2.0, model-agnostic coding agent for VS Code, JetBrains and the terminal. It ships no model, so whether your code leaves the machine depends on the backend you configure — and after Cursor acquired Continue Dev, Inc. in June 2026, the hosted hub is off and the repository calls itself read-only and no longer maintained. Outlier is a native macOS app with seven on-device tiers, no account and nothing uploaded, but it's a standalone app rather than an editor extension, and its local 27B measured ~45% on a blind SWE-bench Verified slice.</p>
     </div>
 
-    <p class="lead">I'm Matt Kerr, and I build Outlier — so read this as a comparison written by an interested party. These tools solve overlapping problems from opposite directions: Continue is a client you bring a model to; Outlier is a model you bring nothing to.</p>
+    <p class="lead">I'm Matt Kerr and I build Outlier, so read this as a comparison written by an interested party. These two solve overlapping problems from opposite ends: Continue is a client you bring a model to; Outlier is a model you bring nothing to.</p>
 
     <h2>What Continue is, and what happened to it</h2>
-    <p>Continue is an Apache-2.0 coding agent built by Continue Dev, Inc. from 2023 to 2026. It ships as a VS Code extension (Marketplace and OpenVSX), a JetBrains plugin, and a CLI installed from npm as <code>@continuedev/cli</code>. Continue supplies the chat panel, the edit/apply plumbing, and the agent loop; you supply the model — Ollama on localhost, or any cloud API you hold a key for.</p>
+    <p>Continue spent three years as the answer to "I want a coding assistant that doesn't lock me to one model vendor." It's a client, not a model: a VS Code extension, a JetBrains plugin, and a CLI on npm as <code>@continuedev/cli</code>. Continue supplies the chat panel, the edit-and-apply plumbing and the agent loop; you supply the weights — Ollama on localhost, or any cloud API you hold a key for. The license is Apache-2.0.</p>
 
-    <p>Then, in June 2026, Cursor acquired the company. The vendor's homepage now reads "Continue has joined Cursor," and the README calls the repository "no longer actively maintained" and "read-only for all users" after a final 2.0.0 release that removed anonymous telemetry, pulled out authentication, and fixed bugs. The releases confirm it: v2.0.0-vscode and v2.1.0-vscode both landed 2026-06-19, the CLI stopped at 1.5.47 on 2026-06-18, and JetBrains last shipped v1.0.67 on 2026-03-27. The hosted side isn't deprecated but dead — <code>hub.continue.dev</code> no longer resolves in DNS, and the login flow was retired. The code survives: the repo isn't formally archived, still shows roughly 35,000 stars and 5,100 forks, and Apache-2.0 means anyone can fork it.</p>
+    <p>Then Cursor acquired the company. The homepage now reads "Continue has joined Cursor," and the README calls the repository "no longer actively maintained" and "read-only for all users" after a final 2.0.0 that removed anonymous telemetry, pulled out authentication and fixed bugs. VS Code v2.0.0 and v2.1.0 both landed 2026-06-19; the CLI ended at 1.5.47; JetBrains last shipped v1.0.67 on 2026-03-27. <code>hub.continue.dev</code> no longer resolves in DNS. The code survives: the repo isn't archived, and still shows ~35,000 stars and 5,100 forks.</p>
 
-    <h2>What Outlier is</h2>
-    <p>Outlier is a Mac app for Apple Silicon (M1 or later, macOS 12+). It downloads model weights once and runs them on your own GPU. No account, no usage caps, and it works with Wi-Fi off. Seven tiers, from Nano 4B (2.37 GB, 6 GB RAM) to Plus 397B-a17b (209 GB, 64 GB RAM, streaming experts from SSD). For coding, Code 27B is a 15.13 GB download needing 24 GB of RAM. It is not an editor extension — it's a chat app with its own window, the biggest structural difference here.</p>
+    <h2>Where each one lives, and which model does the work</h2>
+    <p>Continue meets you inside the tool you already use, its best design decision — but it needs VS Code, a JetBrains IDE or Node. No native desktop app, no mobile app, and since the hub shut down, no web UI. Which model powers it is whatever you configured; Continue's Ollama guide points at open-weight options like Qwen2.5-Coder, DeepSeek-Coder 6.7B and DeepSeek-R1 32B, budgeting about 32 GB of RAM for a 32B.</p>
 
-    <h2>Where it lives, and where the compute happens</h2>
-    <p>Continue meets you inside the tool you already use — its best design decision. The trade-off: it needs VS Code, a JetBrains IDE, or Node. No native Mac app, no mobile app, and since the hub shut down, no web UI. Outlier is the inverse: a standalone macOS app, Apple Silicon only.</p>
+    <p>Outlier goes the other way: one macOS app, Apple Silicon only (M1 or later, macOS 12+), models included. Seven tiers, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on my M1 Ultra) through Code 27B (15.13 GB, 24 GB RAM) to Plus 397B-a17b, which streams MoE experts from SSD. Six tiers are Apache 2.0 weights; Quick is Gemma Terms of Use. No extension, no plugin, no Windows or Linux build — if you work in an IDE on Linux, Continue wins by default.</p>
 
-    <p>With Continue, where the compute happens is your call — a compliment. Point it at Ollama and the endpoint is <code>http://localhost:11434</code> — nothing leaves your machine, and Continue's docs frame that as privacy-focused offline assistance. Point it at a cloud API and your prompts and code context go to that third party on that vendor's terms. Its official offline guide covers full air-gapped use: disable anonymous telemetry (which otherwise posts to PostHog), configure a local model, install from a <code>.vsix</code>. Outlier has no such setting to get wrong, because there's no remote option. Continue's locality is a configuration; Outlier's is the architecture.</p>
+    <h2>Does your code leave the machine — and what does it cost?</h2>
+    <p>Continue's honest answer is "up to you." Pointed at Ollama the endpoint is <code>http://localhost:11434</code> and nothing leaves; the docs call that privacy-focused offline assistance. Pointed at a cloud provider, your prompts and code go to that third party on their terms. There's an official no-internet guide: disable Allow Anonymous Telemetry (which otherwise posts to PostHog), configure a local model, install from a <code>.vsix</code>. A real air-gapped story, better documented than most commercial assistants manage — but nothing is local by default.</p>
 
-    <p>One gap worth naming: Continue's privacy policy (updated 2026-02-05) says you aren't required to provide personal data to use the open-source software, but it never states whether user inputs or code are used for training, and I found no documented opt-out. It's silent, and silence isn't a yes or a no.</p>
+    <p>One gap worth naming: the privacy policy, updated 2026-02-05, says you aren't required to provide personal data to use the open-source software — but it never states whether user code is used for training, and no opt-out is documented. It's silent, and I won't turn silence into an answer.</p>
 
-    <h2>Cost</h2>
-    <p>The extension and CLI were always free; the paid tiers covered the hosted hub and model credits, not the editor tooling. As snapshotted on 2026-06-03: Starter at $3 per million tokens in and out, pay-as-you-go; Team at $20 per seat per month with $10 of credits per seat, private shared agents, access control, and Gmail/GitHub SSO; Company at custom pricing with SAML/OIDC SSO, bring-your-own-key, and SLAs. All historical — those plans can't be bought. Continue today costs whatever your model provider charges, or nothing on local weights.</p>
-
-    <p>Outlier's free tier is Nano and Lite, no account. Pro is $20/month or $149/year for all seven tiers including Code 27B, with lifetime licenses from $99 (Founding 200) or $200 (Founders 500).</p>
-
-    <h2>Agentic ability and repo-scale context</h2>
-    <p>Here's the honest coding receipt. On a blind slice of SWE-bench Verified — real GitHub issues, resolved by an agent that reads a repo, edits files, and runs tests — the local 27B measured <strong>~45% (18 of 40)</strong>, and Code 27B scores <strong>0.866 on HumanEval</strong>. I measured both on my own hardware; they're not leaderboard entries, and they sit below the strongest cloud coding agents. For hard, multi-file, long-horizon agent work a frontier cloud model still wins, and pointing Continue at one is a sensible way to get there.</p>
-
-    <p>Continue's agentic ceiling isn't Continue's — it's whichever model you configure. That cuts both ways: strong backend, strong agent; small local model, that model's limits. Same for repo-scale context: on Outlier it's bounded by tier and your Mac's RAM, on Continue by your backend.</p>
+    <p>On price, the extension and CLI were always free; the paid tiers covered the hosted hub and credits, not the tooling. Snapshotted 2026-06-03: Starter at $3 per million tokens in and out; Team at $20 per seat per month with $10 of credits and SSO; Company at custom pricing with SAML/OIDC, BYOK and an SLA. All historical — the hub is gone. Continue now costs your provider's rates, or nothing on local weights. Outlier is free on Nano and Lite; Pro is $20/month or $149/year for all seven tiers.</p>
 
     <h2>Side by side</h2>
     <table>
       <thead>
         <tr>
           <th></th>
-          <th>Continue.dev</th>
+          <th>Continue.dev (final 2.x)</th>
           <th>Outlier</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>Where it lives</strong></td>
-          <td>VS Code, JetBrains, npm CLI. No desktop or mobile app</td>
-          <td>Native macOS app, Apple Silicon only. No extension</td>
+          <td>VS Code, JetBrains, npm CLI. No desktop app</td>
+          <td>Native macOS app, Apple Silicon only</td>
         </tr>
         <tr>
           <td><strong>Which model</strong></td>
-          <td>Whatever you configure — Ollama or any cloud API</td>
+          <td>Whatever you configure — Ollama or a cloud API</td>
           <td>Seven built-in tiers, Nano 4B to Plus 397B</td>
         </tr>
         <tr>
           <td><strong>Code leaves machine?</strong></td>
-          <td>Backend-dependent: local no, cloud yes</td>
+          <td>Depends on backend: local no, cloud yes</td>
           <td>No. Works with Wi-Fi off</td>
         </tr>
         <tr>
           <td><strong>Cost</strong></td>
           <td>Free (Apache-2.0); you pay your provider</td>
-          <td>Free tier; Pro $20/mo or $149/yr; lifetime from $99</td>
+          <td>Free tier; Pro $20/mo or $149/yr</td>
         </tr>
         <tr>
           <td><strong>Agentic ability</strong></td>
-          <td>Inherited from your model — up to frontier-class</td>
-          <td>~45% blind SWE-bench Verified slice, local 27B</td>
+          <td>Inherited from your model</td>
+          <td>~45% on a blind SWE-bench Verified slice</td>
         </tr>
         <tr>
           <td><strong>Repo-scale context</strong></td>
@@ -177,37 +169,45 @@
         </tr>
         <tr>
           <td><strong>Maintenance</strong></td>
-          <td>Read-only; ~935 open issues</td>
+          <td>Read-only, ~935 open issues, no patches</td>
           <td>Actively shipping</td>
         </tr>
       </tbody>
     </table>
 
+    <h2>Agentic ability, repo context, and my honest numbers</h2>
+    <p>On a blind slice of SWE-bench Verified — real repositories, real issues, an agent that reads code, edits files and runs tests — Outlier's local 27B measured <strong>about 45%, or 18 of 40</strong>. Code 27B scores <strong>0.866 on HumanEval</strong>. I measured both on my own hardware; they aren't leaderboard placements; read them as a floor for what a 15 GB model on a laptop can do.</p>
+
+    <p>They also sit below the strongest cloud coding agents, and I won't dress that up. Frontier hosted tools resolve a higher share of SWE-bench Verified, carry far larger context windows, and don't slow down because your machine is compiling something else. On sprawling multi-repo refactors a cloud agent does better — that's arithmetic, not modesty.</p>
+
+    <p>Continue has no number of its own, because it ships no model. Its ceiling is whatever you attach: a frontier API outperforms anything I run locally; a 7B model won't. Repo context is the same — Continue indexes your workspace, but the window belongs to your backend, while Outlier's is bounded by tier and Mac RAM.</p>
+
     <h2>Where Continue.dev genuinely wins</h2>
     <ul>
-      <li><strong>It's actually open source.</strong> Apache-2.0 — permissive enough to fork, relicense, and ship commercially. Outlier's app is not (the <a href="https://huggingface.co/Outlier-Ai">weights are public</a>, which isn't the same thing). If client auditability matters, Continue wins outright.</li>
-      <li><strong>Model agnosticism.</strong> Run Qwen2.5-Coder through Ollama today, swap to a frontier API tomorrow, with a config change. A single-vendor app can't match that range.</li>
-      <li><strong>It's in your editor.</strong> Inline edits, selections, the file you're staring at — no window switching. Better ergonomics than a separate app.</li>
-      <li><strong>It runs where Outlier can't.</strong> Windows, Linux, Intel Macs, anything with VS Code or Node.</li>
-      <li><strong>Documented air-gapped operation.</strong> An official offline guide, including <code>.vsix</code> install. Few commercial assistants publish one.</li>
-      <li><strong>Battle-tested.</strong> Roughly 3.72M VS Code installs and 1.18M JetBrains downloads — though the Marketplace rating is a modest 3.31 from 176 ratings.</li>
-      <li><strong>A clean parting artifact.</strong> The final 2.0.0 removed telemetry and auth, making the frozen version a better fork base than the releases before it.</li>
+      <li><strong>It's actually open source.</strong> Apache-2.0 — fork it, relicense it, ship it. Outlier's app isn't; the <a href="https://huggingface.co/Outlier-Ai">weights are published</a>, which isn't the same thing. If auditability is a hard requirement, that settles it.</li>
+      <li><strong>Model agnosticism.</strong> Qwen2.5-Coder locally today, a frontier API tomorrow, one config change. I can't offer that.</li>
+      <li><strong>It's in your editor.</strong> Your selection, your diffs, your terminal, no window switching. Outlier is a separate app you paste into.</li>
+      <li><strong>It runs where Outlier can't:</strong> Windows, Linux, Intel Macs.</li>
+      <li><strong>Documented air-gapped operation,</strong> down to the <code>.vsix</code> install. Few commercial assistants publish that.</li>
+      <li><strong>No markup on inference.</strong> Local costs nothing; cloud costs provider rates.</li>
+      <li><strong>Three years of production use</strong> — roughly 3.72M VS Code installs and 1.18M JetBrains downloads. And the final 2.0.0, stripped of telemetry and auth, is a clean fork base.</li>
     </ul>
+    <p>Two asterisks: the VS Code Marketplace average is a modest 3.31 across 176 ratings, and the docs still present Continue as actively maintained, contradicting the homepage and README.</p>
 
     <h2>Who should pick which</h2>
-    <p><strong>Pick Continue if</strong> you want an open-source client you can read and fork, you need Windows or Linux or an Intel Mac, you live in VS Code or a JetBrains IDE, or you want to route hard problems to a frontier cloud model and easy ones to local weights. Go in knowing you're adopting an unmaintained codebase: no upstream security patches, roughly 935 open issues, stale docs that still present the project as active, and nobody to fix compatibility as model APIs drift.</p>
+    <p><strong>Pick Continue if</strong> you want a client you can read and fork, you're on Windows, Linux or an Intel Mac, you live in VS Code or JetBrains, or you want to route hard problems to a frontier API and routine ones to local weights. Go in clear-eyed: roughly 935 open issues, no upstream security patches, and nobody shipping fixes as model APIs drift. Apache-2.0 means a maintained fork can exist — but that's now a problem with your name on it.</p>
 
-    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac and want capable models installed, updated, and supported as a product, with code that never leaves the device because there's no path for it to take. Know what Outlier lacks: no live web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, no cloud sync, no editor extension.</p>
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac and want local inference to arrive as a product: one download, models included, no config file, no account, no caps. It's the better answer when confidentiality is the constraint — client code, regulated work, anything under NDA — because on-device is the default, not a setting you can get wrong. Know what it lacks: no web search, no image generation, no mobile app, no voice mode, no Windows or Linux, no cloud sync.</p>
 
-    <p><strong>Use both</strong> if that fits: Continue in the editor, Outlier for sensitive or offline work. I'd rather you pick the right tool than mine.</p>
+    <p><strong>Pick a cloud coding agent if</strong> your bottleneck is raw capability on large, gnarly codebases. Plenty of people run both: local for the sensitive and routine, cloud for the hard tenth.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Continue status, license, and releases from <a href="https://continue.dev/">continue.dev</a>, the <a href="https://github.com/continuedev/continue">continuedev/continue</a> README and GitHub API, the <a href="https://registry.npmjs.org/@continuedev/cli">npm registry</a>, the <a href="https://marketplace.visualstudio.com/items?itemName=Continue.continue">VS Code Marketplace</a>, and <a href="https://plugins.jetbrains.com/plugin/22707">JetBrains Marketplace</a>. Local and air-gapped behavior from Continue's Ollama and offline guides on docs.continue.dev; privacy wording from <a href="https://continue.dev/privacy">continue.dev/privacy</a> (updated 2026-02-05). Continue pricing is an archived 2026-06-03 snapshot, no longer purchasable. Outlier tiers, HumanEval 0.866, and the ~45% (18/40) blind SWE-bench Verified slice measured in-house on an M1 Ultra Mac Studio, July 2026; broader quality at the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>. Competitor pricing, policies, and status change — verify anything decision-critical at the source.
+      <strong>Sources and receipts:</strong> Continue's status, license and release dates from <a href="https://continue.dev/">continue.dev</a>, the <a href="https://github.com/continuedev/continue">continuedev/continue</a> README and GitHub API, and <a href="https://registry.npmjs.org/@continuedev/cli">npm</a>, retrieved July 2026. Install counts from the <a href="https://marketplace.visualstudio.com/items?itemName=Continue.continue">VS Code</a> and <a href="https://plugins.jetbrains.com/plugin/22707">JetBrains</a> marketplaces; offline guidance from docs.continue.dev; privacy wording from <a href="https://continue.dev/privacy">continue.dev/privacy</a>. Continue pricing is an archived 2026-06-03 snapshot from before the acquisition, no longer purchasable. Outlier tier sizes and throughput measured on an M1 Ultra Mac Studio; HumanEval 0.866 and the ~45% (18/40) blind SWE-bench Verified slice measured in-house, not leaderboard submissions; more in the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>. Competitor pricing and status change — verify at the source.
     </div>
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite are free forever, no login. Pro adds Code 27B and the other five tiers.</p>
+      <p>Nano and Lite are free forever — no login, no caps. Pro adds Code 27B.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-continue-dev">Download for Mac</a>
     </div>
 

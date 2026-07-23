@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DeepSeek vs Qwen: open model families compared (2026) | Outlier</title>
-  <meta name="description" content="DeepSeek vs Qwen open weights compared: sizes, licensing (MIT vs Apache 2.0), strengths by task, language coverage, and what actually runs on a Mac at what RAM.">
+  <meta name="description" content="DeepSeek vs Qwen open weights: MIT vs Apache 2.0 licensing, sizes from 0.8B to 1.6T, context lengths, strengths by task, and what actually runs on a Mac at what RAM.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/deepseek-vs-qwen/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="DeepSeek vs Qwen: open model families compared (2026)">
-  <meta property="og:description" content="Sizes, licensing, task strengths, and what runs on a Mac. Written by the founder of an app that ships Qwen weights — disclosed up front.">
+  <meta property="og:description" content="MIT vs Apache 2.0, sizes from 0.8B to 1.6T, context length, task strengths, and what fits on a Mac. Written by Outlier's founder, who ships Qwen weights.">
   <meta property="og:url" content="https://outlier.host/vs/deepseek-vs-qwen/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -18,7 +18,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DeepSeek vs Qwen: open model families compared (2026)">
-  <meta name="twitter:description" content="MIT vs Apache 2.0, 0.8B to 1.6T parameters, and which of these actually fits on a Mac.">
+  <meta name="twitter:description" content="MIT vs Apache 2.0, 0.8B to 1.6T parameters, and which of these actually fits on a Mac. Disclosed bias: I ship Qwen weights.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -76,7 +76,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"DeepSeek vs Qwen: open model families compared (2026)","description":"DeepSeek vs Qwen open weights compared: sizes available, licensing (MIT vs Apache 2.0 vs Llama Community License vs Gemma Terms of Use), strengths by task, language coverage, and what runs on a Mac at what RAM.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/deepseek-vs-qwen/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"DeepSeek vs Qwen: open model families compared (2026)","description":"DeepSeek vs Qwen open weights: MIT vs Apache 2.0 licensing, sizes from 0.8B to 1.6T, context lengths, strengths by task, language coverage, and what actually runs on a Mac at what RAM.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/deepseek-vs-qwen/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"DeepSeek vs Qwen","item":"https://outlier.host/vs/deepseek-vs-qwen/"}]}
@@ -96,33 +96,43 @@
 
 <article>
   <div class="wrap">
-    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
-    <h1>DeepSeek vs Qwen: open model families compared</h1>
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&#8250;&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>DeepSeek vs Qwen: open model families compared (2026)</h1>
     <div class="byline-row">
-      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="byline">Matt Kerr &#183; Outlier &#183; published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-07-23</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>DeepSeek and Qwen both publish real open weights under permissive licenses — DeepSeek's V4 models are MIT, every Qwen open-weight model is Apache 2.0 — so both are safe to run, fine-tune and redistribute commercially with no gated request form. The practical difference is size: DeepSeek's open line starts at 284B parameters and tops out at 1.6T, while Qwen ships eight open sizes from 0.8B to 397B. If the question is what runs on your own Mac, the answer is Qwen, not DeepSeek.</p>
+      <p>DeepSeek and Qwen both publish real open weights under permissive licenses &#8212; DeepSeek-V4 under the MIT License, every Qwen open-weight model under Apache 2.0 &#8212; so both allow commercial use, redistribution and fine-tuning with no gated request form. The decisive difference is size: Qwen ships eight open sizes from 0.8B to 397B-A17B, while DeepSeek's open V4 line starts at 284B parameters and tops out at 1.6T. If you want a model that runs on your own Mac, that's Qwen. If you want the lowest hosted price per token, that's DeepSeek.</p>
     </div>
 
-    <p class="lead">Most open-model comparisons stop at benchmark charts. The questions that decide things are duller: what license are the weights under, which sizes exist, and will any of them fit on the machine in front of you? DeepSeek and Qwen answer those three very differently, though both are Chinese-developed families that publish downloadable checkpoints while also selling hosted access to models they never release.</p>
+    <p class="lead">Most comparisons of these two start with benchmark charts. The questions that actually decide things are duller: what license are the weights under, which sizes exist, and will any of them fit on the machine in front of you? Both are Chinese labs that publish downloadable checkpoints while also selling hosted access to models they never release &#8212; and they answer those three questions very differently.</p>
 
-    <p><strong>Disclosure, because it matters:</strong> I build Outlier, a Mac app that runs models on-device, and six of its seven tiers are Qwen weights — the seventh is Gemma. I'm not a neutral party on this axis. Read the Qwen-favorable parts accordingly; I've tried to let the sourced numbers do the work.</p>
+    <p><strong>Disclosure, because it matters here:</strong> I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device, and six of its seven tiers are Qwen weights. The seventh is Gemma. I'm not a neutral party. Check the Qwen-favorable parts against the sources at the bottom &#8212; and I've tried to be equally specific about where DeepSeek is the better answer, because on several axes it plainly is.</p>
 
-    <h2>The size ladders aren't comparable</h2>
-    <p>DeepSeek's open V4 line is two checkpoints, both on Hugging Face under the MIT License. <strong>DeepSeek-V4-Flash</strong> is 284B total parameters with 13B activated per token, mixed FP4/FP8 precision with the MoE experts in FP4, and 1M token context. <strong>DeepSeek-V4-Pro</strong> is 1.6T total with 49B activated, also 1M context. Real weights, no legal strings — and also datacenter artifacts.</p>
+    <h2>Licensing is the under-covered story</h2>
+    <p>Licensing decides whether you can build a business on top of the weights, and hardly anyone writes about it. Both <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro">DeepSeek-V4-Pro</a> and <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash">DeepSeek-V4-Flash</a> state on their model cards that the repository and the weights are under the MIT License. Qwen is equally blunt: "All our open-weight models are licensed under Apache 2.0." Both are OSI-approved, and neither imposes a use policy or an approval form. Apache 2.0 asks for attribution, a copy of the license, and adds an explicit patent grant; MIT asks for even less.</p>
 
-    <p>Qwen's open line is a ladder, shipped in four waves: Qwen3.5-397B-A17B (Feb 16, 2026), the mid sizes 122B-A10B, 35B-A3B and 27B (Feb 24), the small sizes 9B, 4B, 2B and 0.8B (Mar 2), then Qwen3.6-35B-A3B (Apr 16) and Qwen3.6-27B (Apr 22). That last one is dense, 64 layers on a hybrid Gated DeltaNet plus Gated Attention design, with 262,144 tokens of native context extensible to roughly 1,010,000 via YaRN. Alibaba's repo pitches it as "Flagship-Level Coding in a 27B Dense Model."</p>
+    <p>Compare the alternatives you meet elsewhere in open weights. Meta's Llama Community License and Google's Gemma Terms of Use are custom vendor licenses with acceptable-use policies attached, and neither is open source in the OSI sense &#8212; those conditions travel downstream to whoever you redistribute to. I can speak firsthand to the Gemma side: our Quick tier is a Gemma model, and it's the only one of seven where shipping meant reading a use policy and passing terms along instead of dropping in a license header. For a downstream product, MIT and Apache 2.0 are the difference between "publish it" and "call a lawyer first."</p>
 
-    <p>The catch: Qwen's strongest models aren't in the open line. <code>qwen3.7-max</code>, <code>qwen3.7-plus</code> and <code>qwen3.8-max-preview</code> are API-only, so the open family visibly trails the proprietary flagship.</p>
+    <h2>Sizes: a ladder versus two very large rungs</h2>
+    <p>Qwen's open line covers 0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B and 397B-A17B, released in waves between February 16 and April 22, 2026. The ladder isn't cosmetic &#8212; it lets an app match a checkpoint to a customer's hardware instead of accepting one take-it-or-leave-it artifact. <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B</a> is the interesting rung: dense, 64 layers, a hybrid Gated DeltaNet plus Gated Attention architecture, 262,144 tokens of native context extensible to roughly 1,010,000 via YaRN. Its model card bills it as "Flagship-Level Coding in a 27B Dense Model," and 27B dense quantizes onto a 32 GB Mac.</p>
 
-    <h2>Licensing decides what you can build</h2>
-    <p>This is under-covered, and it determines whether a product like mine can legally exist. DeepSeek's V4 repos state the weights are under the MIT License. Qwen states all its open-weight models are Apache 2.0. Both are OSI-approved, both permit commercial use, redistribution and fine-tuning without asking anyone, and Apache 2.0 adds an explicit patent grant that MIT leaves implicit.</p>
+    <p>DeepSeek builds at another scale entirely. V4-Flash is 284B total with 13B activated, 1M token context, mixed FP4/FP8 with the MoE experts in FP4. V4-Pro is 1.6T total with 49B activated and the same 1M context. Sparse MoE keeps activated parameters low, which is genuinely kind to bandwidth-bound machines, but the whole weight set still has to live somewhere. The asymmetry runs the other way too: Qwen's strongest models aren't open at all. <code>qwen3.7-max</code>, <code>qwen3.7-plus</code> and <code>qwen3.8-max-preview</code> are API-only, so the open family visibly trails its own flagship.</p>
 
-    <p>Compare the common alternatives. Meta's Llama Community License and Google's Gemma Terms of Use aren't open source licenses in the OSI sense — they're custom vendor licenses attaching conditions Apache 2.0 and MIT don't, including acceptable-use policies that travel downstream to whoever you redistribute to. I ship one Gemma-based tier, so I live with it: the terms get passed along, and I track a policy a third party can revise. Read the actual text yourself — I'm describing the shape of the obligations, not quoting them. For a downstream product, MIT and Apache 2.0 are the difference between "publish it" and "get a lawyer first."</p>
+    <h2>What runs on a Mac, and at what RAM</h2>
+    <p>Here I can give measured numbers rather than estimates, because these are the exact checkpoints Outlier ships, quantized, on Apple Silicon. Qwen3.5-4B: 2.37 GB download, 6 GB RAM, 71.7 tok/s on an M1 Ultra and about 32 tok/s on an M4 MacBook Air. Qwen3.5-9B: 5.04 GB, 12 GB RAM, 53.4 tok/s. Qwen3.6-27B: 15.13 GB, 24 GB RAM, 20.7 tok/s. Qwen3.6-35B-A3B: 19.0 GB, 24 GB RAM. Qwen3.5-397B-A17B: a 209 GB download needing a 64 GB machine, running at 2.1 tok/s by streaming experts from SSD with paged MoE at roughly 11 GB peak RSS.</p>
+
+    <p>That last tier cuts against my own argument, so I'll say it plainly: expert streaming does let a 397B MoE run on a 64 GB desktop, so "too big for consumer hardware" isn't absolute. But 284B in mixed FP4/FP8 and 1.6T at any precision are past what I'd ship to someone expecting the app to feel usable. On a Mac today, DeepSeek's open weights are a rental-GPU proposition and Qwen's are a local one.</p>
+
+    <h2>Strengths by task, and language coverage</h2>
+    <p>On coding, Qwen is the family I can put numbers behind. Our Code tier &#8212; Qwen3.6-27B &#8212; measures 0.866 on HumanEval, and on a blind slice of SWE-bench Verified the local 27B came in around 45% (18 of 40). In a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head against Claude Opus</a> it matched the rubric on 98.9% of checks. Those are our runs on our quantizations, worth exactly as much as your trust in a founder publishing his own benchmark.</p>
+
+    <p>On breadth, Qwen is clearly ahead: open Qwen3-VL for vision, Qwen3-Omni for text/audio/image/video in with text and audio out, plus ASR, TTS, embedding and image generation models. DeepSeek's public generosity runs a different direction &#8212; DeepGEMM, DeepEP, FlashMLA, 3FS and DeepSeek-OCR are all MIT, and that infrastructure has quietly made other people's inference faster, local inference included.</p>
+
+    <p>On language coverage I'll be honest rather than useful. I have no primary source publishing a verified language list or an apples-to-apples multilingual eval for either family, and I won't invent one. Both labs are Chinese; both treat Chinese and English as first-class. If a specific lower-resource language decides your choice, test both yourself.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -135,7 +145,7 @@
       </thead>
       <tbody>
         <tr>
-          <td><strong>Open-weight license</strong></td>
+          <td><strong>Open license</strong></td>
           <td>MIT</td>
           <td>Apache 2.0</td>
         </tr>
@@ -150,14 +160,33 @@
           <td>262K native on 3.6-27B, ~1.01M with YaRN</td>
         </tr>
         <tr>
-          <td><strong>API price /1M</strong></td>
-          <td>v4-flash $0.14 in / $0.28 out; v4-pro $0.435 / $0.87</td>
-          <td>qwen3.7-plus $0.4 / $1.6; qwen3.7-max $2.5 / $7.5 (promo)</td>
+          <td><strong>Task strengths</strong></td>
+          <td>High-volume server inference, long context, MIT-licensed OCR and infra</td>
+          <td>Coding at small sizes; open vision, audio, ASR, TTS, embeddings</td>
         </tr>
         <tr>
-          <td><strong>Trains on your inputs</strong></td>
-          <td>Yes, with an in-product opt-out toggle</td>
-          <td>Yes (de-identified); no documented toggle</td>
+          <td><strong>Languages</strong></td>
+          <td colspan="2">Chinese and English first-class for both; neither publishes a per-language list I could verify</td>
+        </tr>
+        <tr>
+          <td><strong>16 GB Mac</strong></td>
+          <td>No</td>
+          <td>Yes &#8212; 0.8B to 9B</td>
+        </tr>
+        <tr>
+          <td><strong>24&#8211;32 GB Mac</strong></td>
+          <td>No</td>
+          <td>Yes &#8212; up to 27B dense / 35B-A3B</td>
+        </tr>
+        <tr>
+          <td><strong>64 GB Mac</strong></td>
+          <td>Not practically</td>
+          <td>Yes &#8212; 397B-A17B with SSD expert streaming</td>
+        </tr>
+        <tr>
+          <td><strong>Hosted price /1M</strong></td>
+          <td>v4-flash $0.14 in / $0.28 out; v4-pro $0.435 / $0.87</td>
+          <td>qwen3.7-plus $0.4 / $1.6; qwen3.7-max $2.5 / $7.5 (promo)</td>
         </tr>
         <tr>
           <td><strong>Hosted data location</strong></td>
@@ -165,53 +194,45 @@
           <td>Singapore and Mainland China</td>
         </tr>
         <tr>
-          <td><strong>Native Mac client</strong></td>
-          <td>Not confirmed (iPhone/iPad app only)</td>
-          <td>Yes — macOS, Windows, Web, iOS, Android</td>
-        </tr>
-        <tr>
-          <td><strong>Fits a 16–32 GB Mac</strong></td>
-          <td>No</td>
-          <td>Yes, 0.8B through 27B</td>
+          <td><strong>Training opt-out</strong></td>
+          <td>In-product toggle plus email route</td>
+          <td>No documented toggle; DPO email only</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>What runs on a Mac, and at what RAM</h2>
-    <p>Here I can give measured numbers, because these are the checkpoints Outlier ships. Quantized, on Apple Silicon: Qwen3.5-4B is a 2.37 GB download needing 6 GB of RAM, at 71.7 tok/s on an M1 Ultra and about 32 tok/s on an M4 MacBook Air. Qwen3.5-9B is 5.04 GB and 12 GB RAM at 53.4 tok/s. Qwen3.6-27B is 15.13 GB and wants 24 GB, measured at 20.7 tok/s. Qwen3.6-35B-A3B is 19.0 GB and 24 GB RAM. Qwen3.5-397B-A17B is a 209 GB download needing 64 GB, streaming experts from SSD with paged MoE at roughly 11 GB peak RSS and 2.1 tok/s.</p>
-
-    <p>Neither DeepSeek V4 checkpoint has a Mac story. 284B in mixed FP4/FP8 is already past what 64 GB holds. Sparse MoE helps, but the weights still have to live somewhere. On a Mac, DeepSeek means the browser and their API.</p>
-
-    <h2>Strengths by task, and language coverage</h2>
-    <p>DeepSeek's clearest strength is hosted cost. v4-flash at $0.14 per million input tokens is far below Western providers, and a cache hit drops that to $0.0028 — roughly fifty times cheaper than a miss. The counterweight is churn: DeepSeek's docs announce that the widely-integrated <code>deepseek-chat</code> and <code>deepseek-reasoner</code> names are deprecated as of 2026/07/24 15:59 UTC, and reserve the right to adjust prices.</p>
-
-    <p>Qwen's strength is breadth. Beyond text: Qwen3-VL for vision, Qwen3-Omni for text/audio/image/video in and text/audio out, plus ASR, TTS, embedding and image generation models — all open. Qwen Code, its Apache 2.0 terminal agent, points at OpenAI, Anthropic, Gemini, Qwen or a local Ollama/vLLM endpoint, and states it doesn't train on your prompts or code. On coding, the 27B I ship measures 0.866 on HumanEval and about 45% (18/40) on a blind slice of SWE-bench Verified.</p>
-
-    <p>On language coverage I'll be honest rather than useful: I have no sourced, apples-to-apples multilingual evaluation of these two families, so I won't invent one. Both are developed in China with Chinese and English as first-class targets, and Qwen extends into speech via open ASR and TTS. If multilingual quality decides it, test both on your own languages.</p>
-
     <h2>Where each family genuinely wins</h2>
-    <p><strong>DeepSeek wins on license simplicity at the frontier.</strong> Releasing a 1.6T-parameter model under MIT is genuinely unusual. Nobody else at that scale hands over weights with a license that short.</p>
-    <p><strong>DeepSeek wins on hosted price and on the training opt-out.</strong> It documents a real control — an in-product "Improve the model for everyone" toggle plus an email opt-out — and its terms assign output rights to you. Qwen documents no equivalent toggle; it trains on de-identified User Content and Feedback on a legitimate-interests basis, offering only generic rights to object or withdraw consent via a DPO email.</p>
-    <p><strong>Qwen wins on the size ladder and on shipped software.</strong> Eight open sizes is a real choice, not one take-it-or-leave-it checkpoint, and Qwen Studio ships native clients on Web, iOS, Android, macOS and Windows. As of mid-2026 DeepSeek's App Store listing covers iPhone and iPad only and its downloads URL returns a 404; I couldn't confirm a macOS client either way from a primary source.</p>
-    <p><strong>Both win for the wider ecosystem.</strong> DeepSeek's DeepGEMM, DeepEP, FlashMLA, 3FS and DeepSeek-OCR are MIT, as is Qwen's FlashQLA.</p>
+    <p><strong>DeepSeek wins on license simplicity at the frontier.</strong> Releasing a 1.6T-parameter checkpoint under MIT is unusual. Nobody else at that scale hands over weights with a license that short.</p>
+
+    <p><strong>DeepSeek wins on hosted price, decisively.</strong> deepseek-v4-flash is $0.14 per million input tokens on a cache miss and $0.0028 on a cache hit, with $0.28 output &#8212; the cache-hit path is fifty times cheaper than the miss, which matters a great deal for workloads that repeat a long prefix. deepseek-v4-pro runs $0.435 / $0.003625 / $0.87 on the same axes.</p>
+
+    <p><strong>DeepSeek wins on user data control.</strong> Its terms document an in-product "Improve the model for everyone" toggle plus an email opt-out, and explicitly assign output rights: "We assign any rights, title, and interests&#8212;if any&#8212;in the Outputs of the Services to you." Qwen documents no equivalent toggle; its policy lists training on de-identified User Content and Feedback under a legitimate-interests basis, offering only generic rights to object or withdraw consent through a DPO email.</p>
+
+    <p><strong>Qwen wins on the ladder, the modalities and the cadence.</strong> Eight open sizes across several waves in one quarter means an upgrade path rather than a dead end. Qwen Code, its Apache-2.0 terminal agent, deliberately speaks to "OpenAI, Anthropic, Gemini, and Qwen APIs. Any third-party provider or local model (Ollama / vLLM)," and states it doesn't train on your prompts or code. Qwen Studio ships native clients on Web, iOS, Android, macOS and Windows.</p>
+
+    <p>Both carry caveats worth pricing in. Alibaba's headline rates are limited-time discounts &#8212; 50% off qwen3.7-max, 20% off qwen3.7-plus &#8212; with no published end date, so budget for roughly double; the Qwen Code free tier ended 2026-04-15, and the new-user free quota is 90 days, Singapore region, real-time inference only. DeepSeek's docs mark the widely-integrated <code>deepseek-chat</code> and <code>deepseek-reasoner</code> names deprecated on 2026/07/24 15:59 UTC and reserve the right to adjust prices. As of mid-2026 I could not confirm an official DeepSeek macOS client from a primary source &#8212; its App Store listing covers iPhone and iPad only.</p>
 
     <h2>Who should pick which</h2>
-    <p><strong>Pick DeepSeek</strong> if you run server-side inference at volume and price per token dominates, if you want frontier-scale open weights and have the hardware, or if a documented training opt-out is something your compliance team checks for.</p>
-    <p><strong>Pick Qwen</strong> if you need a model that fits consumer hardware, if Apache 2.0's patent grant matters to your legal review, if you want open multimodal or speech models rather than text alone, or if you want a desktop client today.</p>
-    <p><strong>Pick neither hosted service</strong> if the data can't leave your jurisdiction. DeepSeek stores personal data in the PRC; Qwen stores and processes it in Singapore and Mainland China. Running the weights yourself is the only version where that question doesn't arise — which is why Outlier exists, and why it's Qwen weights inside it. Outlier also has no web search, no image generation, no mobile app and no Windows or Linux build.</p>
+    <p><strong>Pick DeepSeek</strong> if you run server-side inference at volume and price per token dominates, if you want frontier-scale open weights and hardware to serve them, or if a documented training opt-out is something your compliance review looks for.</p>
+
+    <p><strong>Pick Qwen</strong> if you need a model that fits consumer hardware, if Apache 2.0's patent grant matters to your legal team, if you want open vision or speech models rather than text alone, or if you want a desktop client today.</p>
+
+    <p><strong>Pick either to fine-tune a commercial product.</strong> MIT is marginally less paperwork than Apache 2.0, and both are far less than a vendor community license.</p>
+
+    <p><strong>Pick neither hosted service</strong> if the data can't leave your jurisdiction. DeepSeek stores personal data in the PRC; Qwen stores and processes it in Singapore and Mainland China. Running weights on your own machine is the only version where that question doesn't arise &#8212; which is why Outlier exists, and why it's Qwen inside. Equally plainly, what we don't do: no web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, no cloud sync.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> DeepSeek API pricing and the 2026/07/24 deprecation from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 parameter counts and MIT license from the Hugging Face model cards; data location and opt-out wording from DeepSeek's privacy policy and terms of use. Qwen release timeline and the Apache 2.0 statement from <a href="https://github.com/QwenLM/Qwen3.5">github.com/QwenLM/Qwen3.5</a>; Qwen3.6-27B architecture from its model card; hosted pricing from Alibaba Cloud Model Studio (Singapore); privacy terms from qwen.ai (updated 2026-05-19). Checked July 2026 — vendors change prices, deprecate model names and revise privacy terms without notice, and Alibaba's headline rates are "limited-time" with no published end date. Outlier tier sizes, RAM floors and throughput measured on M1 Ultra (64 GB) and an M4 MacBook Air; more at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>.
+      <strong>Sources and receipts:</strong> DeepSeek pricing and the 2026/07/24 deprecation from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 parameter counts, context and the MIT license from the V4-Pro and V4-Flash model cards; data location, training use and opt-out wording from DeepSeek's privacy policy and terms of use. Qwen's Apache 2.0 statement and release timeline from <a href="https://github.com/QwenLM/Qwen3.5">github.com/QwenLM/Qwen3.5</a>; architecture from the Qwen3.6-27B model card; hosted pricing, model list and free quota from Alibaba Cloud Model Studio (Singapore); data location and training basis from <a href="https://qwen.ai/privacypolicy">qwen.ai/privacypolicy</a>, updated 2026-05-19. Outlier tier sizes, RAM floors and throughput measured on an M1 Ultra (64 GB) and an M4 MacBook Air; HumanEval, the SWE-bench slice and the 54-prompt comparison are our own runs on our own quantizations. Checked 2026-07-23 &#8212; competitor pricing, model names and privacy policies change often, and several rates above are labeled limited-time or subject to adjustment, so verify at the source before budgeting against them.
     </div>
 
     <div class="cta">
       <h3>Run Qwen weights on your own Mac</h3>
-      <p>Outlier is a native macOS app for Apple Silicon. Nano and Lite are free: no account, no caps, works with Wi-Fi off.</p>
+      <p>Outlier is a native macOS app for Apple Silicon. Nano and Lite are free: no account, no usage caps, works with Wi-Fi off. Weights at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=deepseek-vs-qwen">Download for Mac</a>
     </div>
 
     <div class="related">
-      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All Outlier comparisons</a></p>
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;&#183;&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies explained</a> &nbsp;&#183;&nbsp; <a href="https://outlier.host/vs/">All Outlier comparisons</a></p>
     </div>
   </div>
 </article>
