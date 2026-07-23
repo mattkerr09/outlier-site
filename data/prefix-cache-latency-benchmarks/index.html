@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prefix cache latency benchmarks — Outlier v659–v662 | Outlier</title>
+  <meta name="description" content="First-party latency data from Outlier v659 through v662 on a Mac Studio M1 Ultra: steady-state TTFT 18.5s → 1.39s, and a 6-step agent loop going from +11.6s per step to flat. Raw tables and method.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-22">
+  <link rel="canonical" href="https://outlier.host/data/prefix-cache-latency-benchmarks/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Prefix cache latency benchmarks — Outlier v659–v662">
+  <meta property="og:description" content="First-party latency data from Outlier v659 through v662 on a Mac Studio M1 Ultra: steady-state TTFT 18.5s → 1.39s, and a 6-step agent loop going from +11.6s per step to flat. Raw tables and method.">
+  <meta property="og:url" content="https://outlier.host/data/prefix-cache-latency-benchmarks/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Prefix cache latency benchmarks — Outlier v659–v662">
+  <meta name="twitter:description" content="Three fixes, three tables, one Mac Studio. Including the number they invalidate.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Dataset", "name": "Prefix cache latency benchmarks — Outlier v659–v662", "description": "First-party time-to-first-token and per-step agent-loop latency measurements for Outlier v659 through v662, taken on a Mac Studio M1 Ultra (Mac13,2) with 64 GB unified memory in July 2026. Covers three prefix-cache fixes: a longest-match ranking bug, a chat-template bug that broke multi-turn reuse, and a memory-recall bug that broke prefix stability in agent loops.", "url": "https://outlier.host/data/prefix-cache-latency-benchmarks/", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "creator": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "license": "https://creativecommons.org/licenses/by/4.0/", "temporalCoverage": "2026-07", "measurementTechnique": "Wall-clock timing of time-to-first-token and per-step agent-loop latency on the installed signed Outlier binary under normal use, plus the runtime's own longest-common-prefix instrumentation for token-level divergence and per-entry cache hit logging. Single machine: Mac Studio M1 Ultra (Mac13,2), 64 GB unified memory, macOS.", "variableMeasured": [{"@type": "PropertyValue", "name": "Time to first token (TTFT)", "unitText": "seconds"}, {"@type": "PropertyValue", "name": "Per-step agent loop latency", "unitText": "seconds"}, {"@type": "PropertyValue", "name": "Prefix divergence position", "unitText": "tokens"}], "keywords": ["prefix cache", "KV cache", "time to first token", "TTFT", "agent loop latency", "local AI", "Apple Silicon", "M1 Ultra", "Outlier", "prefill"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Prefix cache latency benchmarks — Outlier v659–v662", "description": "First-party latency data from Outlier v659 through v662 on a Mac Studio M1 Ultra: steady-state TTFT 18.5s to 1.39s, and a 6-step agent loop going from +11.6s per step to flat.", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/data/prefix-cache-latency-benchmarks/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Data", "item": "https://outlier.host/data/"}, {"@type": "ListItem", "position": 3, "name": "Prefix cache latency benchmarks", "item": "https://outlier.host/data/prefix-cache-latency-benchmarks/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is there still about 25 seconds per step after the v662 fix?", "acceptedAnswer": {"@type": "Answer", "text": "Because most of what's left is decoding, not prefill. Those steps generate about 160 tokens each, and generation time doesn't shrink when prefill gets cheaper. The prefix cache only removes the cost of re-reading the prompt."}}, {"@type": "Question", "name": "Do these numbers transfer to other Macs?", "acceptedAnswer": {"@type": "Answer", "text": "This data can't tell you. Every run was on one Mac Studio M1 Ultra (Mac13,2) with 64 GB of unified memory, in one configuration. The shape of the result — flat per-step latency instead of linear growth — should hold anywhere the cache hits, but the absolute seconds will differ by chip and model tier."}}, {"@type": "Question", "name": "Why did step 1 in the v660 table get slower?", "acceptedAnswer": {"@type": "Answer", "text": "It went from 8.4 s to 10.7 s, and I've left it in the table rather than hiding it. This page doesn't establish why. It's one before-and-after pair on one machine, and nothing measured here isolates the cause."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/data/">data</a></div>
+    <h1>Prefix cache latency benchmarks — Outlier v659–v662</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-22</span>
+      <span class="updated-pill">Last updated 2026-07-22</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Three prefix-cache bugs fixed across Outlier v659–v662 took steady-state time-to-first-token from 18.5 seconds down to 1.39 seconds on a Mac Studio M1 Ultra — roughly 4–14x.</li>
+        <li>In a six-step agent loop, per-step latency stopped growing: it had been climbing about 11.6 seconds per step, and step 6 went from 66.4 s to 16.0 s.</li>
+        <li>All figures are first-party measurements on the installed signed binary, one machine, July 2026. They also invalidate an earlier internal SWE-bench result, which is written up below.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Between v659 and v662 I found three separate bugs that all had the same symptom: the prefix cache existed, looked healthy, and never got used. Every one of them made long conversations get slower and slower. Here are the raw numbers from before and after each fix, the method, and the earlier benchmark these numbers throw out.</p>
+
+    <h2>Table 1 — single-request TTFT, steady state (v659)</h2>
+    <p>v659 was the prefix-cache ranking fix: the lookup was selecting the wrong cached entry, so the cache went unused and the whole prompt was re-read from scratch. Nothing about the cache looked broken from the outside — the only place it showed up was the timings.</p>
+
+    <table>
+      <thead>
+        <tr><th>Condition</th><th>Before</th><th>After</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Varied messages</td><td>18.5 s</td><td>4.71 s, then 1.39 s</td></tr>
+        <tr><td>Identical repeated messages</td><td>~18–20 s</td><td>4.17 / 1.36 / 3.71 / 1.36 s</td></tr>
+      </tbody>
+    </table>
+
+    <p>Net: roughly 4–14x faster steady-state TTFT. The first request is still the slow one; later requests mostly land near 1.4 seconds, though the identical-message run still shows an occasional 3.7 s outlier — see the third value in row 2. Regression check: multi-turn continuation still reused turn 1 at n=2400 with a 120-token suffix.</p>
+
+    <h2>Table 2 — six-step agent loop with growing tool results (v660)</h2>
+    <p>v660 was the chat-template fix, and the ugly one. The template left turn N and turn N+1 diverging at the very end of the prompt, and a divergence anywhere is a total miss. Reuse was zero, and every agent step re-read the entire conversation.</p>
+
+    <table>
+      <thead>
+        <tr><th>Step</th><th>Before</th><th>After</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>8.4 s</td><td>10.7 s</td></tr>
+        <tr><td>3</td><td>30.8 s</td><td>16.1 s</td></tr>
+        <tr><td>6</td><td>66.4 s</td><td>16.0 s</td></tr>
+      </tbody>
+    </table>
+
+    <p>Before the fix, each step cost about 11.6 seconds more than the one before it, growing linearly with conversation length. After, it's flat: 16.1 s at step 3 and 16.0 s at step 6. That's 4.2x at step 6, and the gap keeps widening with every additional step, because one side grows and the other doesn't. Note step 1 got <em>slower</em> — 8.4 s to 10.7 s. I'm leaving that in the table rather than hiding it.</p>
+
+    <h2>Table 3 — five-step agent loop, native tool-calling (v662)</h2>
+    <p>v662 was the memory-recall fix. Recall was changing the prompt from one turn to the next, so the prefix broke again. Divergence showed up at token 314.</p>
+
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Before</th><th>After</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Prefix divergence</td><td>Token 314</td><td>None</td></tr>
+        <tr><td>Step 1</td><td>10.6 s</td><td>—</td></tr>
+        <tr><td>Step 2</td><td>41.3 s</td><td>—</td></tr>
+        <tr><td>Step 3</td><td>45.1 s</td><td>24.3 s</td></tr>
+        <tr><td>Step 4</td><td>25.4 s</td><td>25.9 s</td></tr>
+        <tr><td>Step 5</td><td>26.2 s</td><td>25.5 s</td></tr>
+      </tbody>
+    </table>
+
+    <p>After the fix, steps 3 through 5 sit flat at 24.3, 25.9 and 25.5 seconds while the prompt itself grows from about 7,000 to 9,200 tokens. Flat latency against a growing prompt is the whole point. The cache ended the run with six entries and hits at n=384, n=2506, n=6989 and n=7149, against a final length of 9,231 tokens.</p>
+
+    <p>The residual ~25 s per step is mostly <strong>decoding</strong> about 160 tokens, not prefill. Prefill is what the cache removes; generation cost stays put. Look only at the headline seconds and you'd assume the fix barely helped — which is why the divergence instrumentation matters more than the stopwatch here.</p>
+
+    <h2>Method and caveats</h2>
+    <ul>
+      <li><strong>Hardware:</strong> Mac Studio M1 Ultra (Mac13,2), 64 GB unified memory, macOS. One machine, one configuration. No cross-vendor comparison is claimed or implied.</li>
+      <li><strong>Software:</strong> Outlier v659 through v662, measured on the installed signed binary — not a dev build, and not a synthetic micro-benchmark. These are runs under normal use.</li>
+      <li><strong>Agent-loop steps include model decode time</strong>, so they are not pure prefill measurements. Table 3's discussion above breaks that out.</li>
+      <li><strong>Divergence figures</strong> come from the runtime's own longest-common-prefix instrumentation, not from inference about timings.</li>
+      <li><strong>All figures are first-party measurements</strong> by Matt Kerr, July 2026.</li>
+    </ul>
+
+    <h2>What these numbers invalidate</h2>
+    <p>An earlier internal SWE-bench run scored 0 out of 5 and reported per-step degradation from about 30 seconds to 73 seconds. I read that as a model capability problem. It wasn't.</p>
+    <p>That run measured these three bugs. The per-step degradation is the same linear growth as Table 2, and the failures came from an agent loop that got slower until it was useless. Any conclusion it supported about how well the local model reasons is void. It has to be re-run on v662 or later before it means anything, and until then I'm not quoting the number. Publishing the correction is the point of this page.</p>
+
+    <h2>Why prefix caching matters at all</h2>
+    <p>A model re-reads the whole conversation before writing a single new token. In a chat that's mildly annoying. In an agent loop, where each step appends a tool result and calls the model again, step 6 re-reads everything from steps 1 through 5. A prefix cache keeps the computed state for the shared beginning so only the new tail gets processed. When it works, per-step latency goes flat. When it silently doesn't — what all three of these bugs did — it grows forever, and nothing in the logs looks broken.</p>
+
+    <h2>Questions about these latency measurements</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Why is there still about 25 seconds per step after the v662 fix?</h3>
+        <p>Because most of what's left is decoding, not prefill. Those steps generate about 160 tokens each, and generation time doesn't shrink when prefill gets cheaper. The prefix cache only removes the cost of re-reading the prompt.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do these numbers transfer to other Macs?</h3>
+        <p>This data can't tell you. Every run was on one Mac Studio M1 Ultra (Mac13,2) with 64 GB of unified memory, in one configuration. The shape of the result — flat per-step latency instead of linear growth — should hold anywhere the cache hits, but the absolute seconds will differ by chip and model tier.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why did step 1 in the v660 table get slower?</h3>
+        <p>It went from 8.4 s to 10.7 s, and I've left it in the table rather than hiding it. This page doesn't establish why. It's one before-and-after pair on one machine, and nothing measured here isolates the cause.</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> Every number on this page is a first-hand measurement I took myself on a Mac Studio M1 Ultra (Mac13,2), 64 GB unified memory, running the installed signed Outlier build — v659 through v662, July 2026. TTFT and per-step figures are wall-clock; divergence positions and cache-entry hits come from the runtime's own longest-common-prefix instrumentation. No vendor supplied any of it, no cross-vendor comparison is claimed, and the numbers this run invalidates are named above rather than quietly dropped. Data is published under <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener" target="_blank">CC BY 4.0</a>; the models are <a href="https://huggingface.co/Outlier-Ai" rel="noopener" target="_blank">on HuggingFace</a>.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free tier is Nano 4B + Lite 9B, local and private, no account. Pro is $20/mo or $149/yr for all 7 model tiers including Plus 397B. Lifetime Pro from $99 (Founding 200) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=prefix-cache-latency-benchmarks">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-prefix-caching/">What is prefix caching?</a> · <a href="https://outlier.host/learn/why-ai-gets-slower-in-long-conversations/">Why AI gets slower in long conversations</a> · <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">The 54-prompt benchmark</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

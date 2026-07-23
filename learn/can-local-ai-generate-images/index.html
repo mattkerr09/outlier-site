@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can local AI generate images on a Mac? | Outlier</title>
+  <meta name="description" content="Yes — but image generation uses a diffusion model, not a chat LLM. They're separate downloads with separate architectures. Here's what runs on Apple Silicon, what it costs in memory, and why Outlier reads images but doesn't create them.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-09">
+  <link rel="canonical" href="https://outlier.host/learn/can-local-ai-generate-images/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can local AI generate images on a Mac?">
+  <meta property="og:description" content="Yes — but image generation uses a diffusion model, not a chat LLM. They're separate downloads with separate architectures. Here's what runs on Apple Silicon, what it costs in memory, and why Outlier reads images but doesn't create them.">
+  <meta property="og:url" content="https://outlier.host/learn/can-local-ai-generate-images/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can local AI generate images on a Mac?">
+  <meta name="twitter:description" content="Yes, on your own Mac — with a diffusion model, which is a different thing from the chat model you're picturing.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Can local AI generate images on a Mac?", "description": "Yes — but image generation uses a diffusion model, not a chat LLM. They're separate downloads with separate architectures. Here's what runs on Apple Silicon, what it costs in memory, and why Outlier reads images but doesn't create them.", "datePublished": "2026-07-09", "dateModified": "2026-07-09", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/can-local-ai-generate-images/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can local AI generate images on a Mac?", "item": "https://outlier.host/learn/can-local-ai-generate-images/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can Outlier generate images?", "acceptedAnswer": {"@type": "Answer", "text": "No. Outlier is a text-and-vision app. It can read an image you give it and describe, transcribe, or reason about what's in it, but it does not create images. If you want image generation, install a diffusion tool like Draw Things or DiffusionBee alongside it."}}, {"@type": "Question", "name": "What's the difference between AI vision and AI image generation?", "acceptedAnswer": {"@type": "Answer", "text": "Vision is reading: you hand the model a picture and it gives you words back. Generation is creating: you hand the model words and it gives you a picture back. They're opposite directions, and they use different model architectures. A vision-capable chat model cannot draw, and a diffusion model cannot hold a conversation."}}, {"@type": "Question", "name": "How much memory do I need to generate images locally on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "As a rough shape, SDXL-class models want roughly 8-12 GB of free memory. That's free memory, not total — if a large chat model is already loaded, you may not have room for both at once. Actual usage moves with the model file, resolution, and step count."}}, {"@type": "Question", "name": "Should I use local diffusion or a cloud service like Midjourney or DALL-E 3?", "acceptedAnswer": {"@type": "Answer", "text": "Cloud services are the easier path if you just want a good picture with no setup — DALL-E 3 is built into ChatGPT Plus, Midjourney is a subscription, and Google has Imagen. All of them send your prompt, and any input image, to their servers. Local diffusion trades that convenience for privacy, no ongoing subscription once the model is on your disk, offline use, and full control over models and settings."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Can local AI generate images on a Mac?</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-09</span>
+      <span class="updated-pill">Last updated 2026-07-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Yes. A Mac with Apple Silicon can generate images entirely offline — but it takes a different kind of model from the chat AI you're probably picturing.</li>
+        <li>Text generation uses a language model. Image generation uses a diffusion model. They are separate downloads with separate architectures, and one cannot do the other's job.</li>
+        <li>Outlier does not generate images. Outlier reads images (vision) but doesn't create them. For generation, install a diffusion tool like Draw Things or DiffusionBee — the two can live side by side on the same Mac.</li>
+      </ul>
+    </div>
+
+    <p class="lead">This question almost always carries a hidden assumption: that "the AI" is one thing, and generating a picture is just another thing you ask it to do. It isn't. The model that writes you a paragraph and the model that paints you a picture are built differently and downloaded separately. Once that clicks, the rest of the answer is easy.</p>
+
+    <h2>Vision and generation are not the same feature</h2>
+    <p>These two get mixed up constantly, so let's be precise about the direction of travel.</p>
+    <p><strong>Vision</strong> means reading. You hand the model a screenshot, a photo, a scanned receipt, a chart, and it hands you back words — a description, a transcription, an answer about what's in the frame. Image in, text out.</p>
+    <p><strong>Generation</strong> means creating. You type "a lighthouse in fog, oil painting" and the model hands you back pixels that didn't exist before. Text in, image out.</p>
+    <p>Opposite directions, different machinery. A chat model with vision can look at your design mockup and tell you the button contrast is bad. It cannot draw you a better button. That's not a missing feature someone forgot to add; it's a different model class. If vision is the part you care about, I wrote a separate piece on <a href="https://outlier.host/learn/local-ai-vision-mac/">local AI vision on a Mac</a>.</p>
+
+    <table>
+      <thead>
+        <tr><th>&nbsp;</th><th>Vision (reading)</th><th>Generation (creating)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>You give it</strong></td><td>An image</td><td>A text prompt</td></tr>
+        <tr><td><strong>You get back</strong></td><td>Text</td><td>An image</td></tr>
+        <tr><td><strong>Model type</strong></td><td>Language model with an image encoder</td><td>Diffusion model</td></tr>
+        <tr><td><strong>Measured in</strong></td><td>Tokens per second</td><td>Seconds per image</td></tr>
+        <tr><td><strong>In Outlier?</strong></td><td>Yes</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What actually runs on Apple Silicon</h2>
+    <p>Two open families run on Apple Silicon: <strong>Stable Diffusion</strong> from Stability AI, including its SDXL variants, and <strong>FLUX</strong> from Black Forest Labs.</p>
+    <p>You don't run those raw. You run them through a front-end:</p>
+    <ul>
+      <li><strong>Draw Things</strong> — a Mac app, and a common front-end for someone who wants to type a prompt and get a picture without configuring anything.</li>
+      <li><strong>DiffusionBee</strong> — the other well-known one-download Mac option, built on the same idea of hiding the plumbing.</li>
+      <li><strong>ComfyUI</strong> — the power-user route. Node-graph workflows, control over every stage, and a genuinely steep first hour. Worth it if you're doing this seriously; overkill if you want one image.</li>
+    </ul>
+    <p>All of them do the same fundamental thing: keep the weights on your disk, do the math on your chip, and never send your prompt anywhere.</p>
+
+    <h2>What it costs you in memory and time</h2>
+    <p>Two numbers matter, and they're not the numbers you're used to from chat.</p>
+    <p><strong>Memory:</strong> as a rough shape, SDXL-class models want roughly 8-12 GB of free memory. Emphasis on <em>free</em>. On Apple Silicon the chip and the memory share one pool, which is good for AI generally, but it also means everything competes. If a big chat model is resident and you fire up a diffusion run, you can find there isn't room for both. Plan for one heavy model at a time unless you have headroom to spare.</p>
+    <p><strong>Time:</strong> image generation is measured in seconds per image, not tokens per second. With chat, words stream out and you read along, so the wait feels productive. With diffusion, nothing useful appears until the image resolves — a run either feels instant or feels like a wait. Higher resolutions and more sampling steps cost more seconds. That's the dial you'll spend the most time turning.</p>
+
+    <h2>Local generation vs. the cloud services</h2>
+    <p>I'm not going to pretend local wins on every axis here. It doesn't. Here's the honest split:</p>
+
+    <table>
+      <thead>
+        <tr><th>&nbsp;</th><th>Local diffusion on your Mac</th><th>Cloud image services</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Examples</strong></td><td>Stable Diffusion / SDXL, FLUX via Draw Things, DiffusionBee, ComfyUI</td><td>DALL-E 3 (inside ChatGPT Plus), Midjourney, Google Imagen</td></tr>
+        <tr><td><strong>Your prompt</strong></td><td>Stays on the machine</td><td>Sent to their servers, along with any input image</td></tr>
+        <tr><td><strong>Cost shape</strong></td><td>Your hardware and electricity</td><td>Subscription (DALL-E 3 via ChatGPT Plus, Midjourney)</td></tr>
+        <tr><td><strong>Setup</strong></td><td>Download an app, download a model, wait</td><td>Type in a box you already pay for</td></tr>
+        <tr><td><strong>Offline</strong></td><td>Yes</td><td>No</td></tr>
+        <tr><td><strong>Control</strong></td><td>Full — swap models, tune every setting</td><td>Whatever the service exposes</td></tr>
+      </tbody>
+    </table>
+
+    <p>If you want one good picture this afternoon with zero setup, the cloud services are simply the shorter path, and I'd tell a friend to use them. Local diffusion earns its keep when the input is sensitive, when you'd rather not carry an ongoing subscription once the model is on your disk, when you're offline, or when you want to pin an exact model and keep it forever instead of waking up to a changed service.</p>
+
+    <h2>Outlier doesn't do this, and I want to be clear about it</h2>
+    <p>Outlier is a text-and-vision app. It runs language models locally on Apple Silicon for chat, coding, research, and reading images you hand it. It does not generate images, and there is no hidden setting that turns that on.</p>
+    <p>I'd rather say that flatly than have someone download it, hunt for an image button, and feel misled. Diffusion is a different architecture with a different runtime and its own set of safety questions, and shipping it badly would be worse than not shipping it.</p>
+    <p>The good news is this isn't an either/or. Draw Things or DiffusionBee installs alongside Outlier without either one caring the other exists. A perfectly normal local setup is a chat-and-vision app for words and a diffusion app for pictures — two tools, one Mac, nothing leaving the building. Just remember the memory point above: don't expect a large chat model and an SDXL run to be comfortable at the same instant.</p>
+
+    <h2>How to actually get started</h2>
+    <p>If you're new to generating images locally, the shortest honest path is:</p>
+    <ol>
+      <li>Install Draw Things or DiffusionBee. One download, no terminal.</li>
+      <li>Let it fetch a Stable Diffusion or SDXL model. That's the download that takes a while, not the app itself.</li>
+      <li>Generate at a modest resolution first and watch your memory. Push resolution and step count up until it stops feeling good, then back off a notch.</li>
+      <li>Try the other family (FLUX or Stable Diffusion/SDXL) if the first one isn't giving you what you want, and move to ComfyUI only when the simple apps hit a wall.</li>
+    </ol>
+    <p>And if what you actually wanted was for AI to <em>understand</em> images you already have — screenshots, diagrams, a photo of a whiteboard — that's the vision path, and Outlier does handle that locally. Background on the general idea is in <a href="https://outlier.host/learn/what-is-local-ai/">what local AI is</a>.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The memory figure (roughly 8-12 GB free for SDXL-class models) is a rough planning range, not a vendor spec — real usage moves with the model file, resolution, and step count. That Outlier does not generate images is first-hand: I build it. The families and front-ends named here (Stable Diffusion and SDXL from Stability AI, FLUX from Black Forest Labs, Draw Things, DiffusionBee, ComfyUI) are listed as what exists, with no performance claims attached. Outlier's open-weight text models are published at <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">huggingface.co/Outlier-Ai</a>.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can Outlier generate images?</h3>
+        <p>No. Outlier is a text-and-vision app. It can read an image you give it and describe, transcribe, or reason about what's in it, but it does not create images. If you want image generation, install a diffusion tool like Draw Things or DiffusionBee alongside it.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the difference between AI vision and AI image generation?</h3>
+        <p>Vision is reading: you hand the model a picture and it gives you words back. Generation is creating: you hand the model words and it gives you a picture back. They're opposite directions, and they use different model architectures. A vision-capable chat model cannot draw, and a diffusion model cannot hold a conversation.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How much memory do I need to generate images locally on a Mac?</h3>
+        <p>As a rough shape, SDXL-class models want roughly 8-12 GB of free memory. That's free memory, not total — if a large chat model is already loaded, you may not have room for both at once. Actual usage moves with the model file, resolution, and step count.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Should I use local diffusion or a cloud service like Midjourney or DALL-E 3?</h3>
+        <p>Cloud services are the easier path if you just want a good picture with no setup — DALL-E 3 is built into ChatGPT Plus, Midjourney is a subscription, and Google has Imagen. All of them send your prompt, and any input image, to their servers. Local diffusion trades that convenience for privacy, no ongoing subscription once the model is on your disk, offline use, and full control over models and settings.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Local chat, coding, research, and vision on your Mac. Free tier is Nano 4B + Lite 9B, no account. Pro is $20/mo or $149/yr for all 7 model tiers including Plus 397B. Lifetime Pro from $99 (Founding 200) or $200 (Founders 500). Apple Silicon only. No image generation — that's what a diffusion app is for.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=can-local-ai-generate-images">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/local-ai-vision-mac/">Local AI vision on a Mac</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

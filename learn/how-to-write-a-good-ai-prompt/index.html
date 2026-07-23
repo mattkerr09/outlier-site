@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to write a good AI prompt (that works on local models too) | Outlier</title>
+  <meta name="description" content="A good prompt states the task, states the output format, and shows one example of that format. Put stable context first and the changing question last, ask for measurable constraints, and be more literal with small local models.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-22">
+  <link rel="canonical" href="https://outlier.host/learn/how-to-write-a-good-ai-prompt/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to write a good AI prompt (that works on local models too)">
+  <meta property="og:description" content="A good prompt states the task, states the output format, and shows one example of that format. Put stable context first and the changing question last, ask for measurable constraints, and be more literal with small local models.">
+  <meta property="og:url" content="https://outlier.host/learn/how-to-write-a-good-ai-prompt/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to write a good AI prompt (that works on local models too)">
+  <meta name="twitter:description" content="Say the task. Say the format. Show one example. The rest is detail.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to write a good AI prompt (that works on local models too)", "description": "A good prompt states the task, states the output format, and shows one example of that format. Put stable context first and the changing question last, ask for measurable constraints, and be more literal with small local models.", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/how-to-write-a-good-ai-prompt/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to write a good AI prompt", "item": "https://outlier.host/learn/how-to-write-a-good-ai-prompt/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to write prompts differently for a local model?", "acceptedAnswer": {"@type": "Answer", "text": "The same techniques work, but small models need you to apply them harder. A 1.5B or 3B model follows an explicit format instruction well and infers an implied one poorly, so anything you were leaving to inference — labels, section order, how many items — should be written down. A prompt explicit enough for a small model leaves a large one nothing to guess at."}}, {"@type": "Question", "name": "Does the order of a prompt really affect speed?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on a local runtime it can. Putting stable, reusable context first and the varying question last lets the runtime reuse its cached prefix between turns instead of reprocessing everything. Reorder the same words so the changing part is in the middle and that reuse goes away."}}, {"@type": "Question", "name": "Is a longer prompt a better prompt?", "acceptedAnswer": {"@type": "Answer", "text": "No. Context windows are finite, so padding a prompt with irrelevant text actively costs you: it pushes the useful part further from the answer and burns window you may need later. Length only helps when the added text is the task, the format, an example, or context the model genuinely cannot guess."}}, {"@type": "Question", "name": "My output came back in the wrong format. Is the model too small?", "acceptedAnswer": {"@type": "Answer", "text": "Check the instruction before you blame the model. In July 2026 a batch of multi-file code requests in Outlier came back as one unlabeled blob, and the cause was our own instruction telling the model to emit one fenced code block with nothing around it. With an explicit label-each-file instruction instead, the same model formatted every file correctly."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How to write a good AI prompt (that works on local models too)</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-22</span>
+      <span class="updated-pill">Last updated 2026-07-22</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>A good prompt states the task, states the output format you want, and shows one example of that format. Those three things do more than any clever wording.</li>
+        <li>Put stable, reusable context first and the varying question last, and ask for a measurable constraint ("under 200 words") instead of an adjective ("keep it brief").</li>
+        <li>Smaller local models follow an explicit format instruction well but infer an implied one poorly, so be more literal with them.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Most prompt advice is written like folklore — magic words, secret roles, incantations you're supposed to paste at the top. It isn't that. A prompt is text, the model continues text, and everything that works follows from that one fact. Here's what actually moves the output, in rough order of payoff, plus a bug I shipped that taught me a habit worth more than any of them.</p>
+
+    <h2>What a prompt actually is</h2>
+    <p>A prompt is the text you send the model. The model predicts a continuation of it. That's the whole mechanism — there's a good explainer in <a href="https://outlier.host/learn/what-is-a-large-language-model/">what a large language model is</a> if you want the longer version.</p>
+    <p>The part people underestimate: the model has no memory of you beyond what's in the current context window. It doesn't know what you asked yesterday, what project you're in the middle of, or what "the usual format" means to you. Every request starts from the text in front of it. That's not a bug in the product, it's how the thing works, and it's covered in <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets conversations</a>. Once that clicks, prompting stops feeling mystical and starts feeling like writing a decent ticket for a competent stranger.</p>
+
+    <h2>The five things that actually help</h2>
+    <p>Roughly ordered by how much they change the output:</p>
+    <ol>
+      <li><strong>State the task and the desired output format explicitly.</strong> Not "help me with this function" but "return one fenced Python block". The format instruction is doing at least as much work as the task instruction, and it's the one people leave out.</li>
+      <li><strong>Give one example of the shape you want.</strong> One-shot beats zero-shot for formatting. You don't need five examples; you need one that looks exactly like what you want back.</li>
+      <li><strong>Put stable, reusable context first and the varying question last.</strong> This makes the prompt easier to read, and on a local runtime it also lets the engine reuse its cached prefix between turns — which makes follow-ups faster.</li>
+      <li><strong>Ask for the constraint, not the vibe.</strong> "Under 200 words" beats "keep it brief". "Three bullets, no preamble" beats "be concise". Adjectives are guesses; numbers are checkable.</li>
+      <li><strong>Split a multi-part ask into numbered sub-tasks.</strong> One prompt asking for four things scattered across a paragraph tends to lose one of them. The same four things as 1/2/3/4 tend to all come back.</li>
+    </ol>
+
+    <h2>Rewrites, before and after</h2>
+    <p>Same intent, different odds of getting what you meant:</p>
+
+    <table>
+      <thead>
+        <tr><th>Instead of</th><th>Write</th><th>Why it works</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>"Clean up this function"</td><td>"Rewrite this function. Return one fenced Python block, no explanation."</td><td>Task plus explicit output format</td></tr>
+        <tr><td>"Keep it brief"</td><td>"Under 200 words"</td><td>A checkable constraint instead of an adjective</td></tr>
+        <tr><td>"Summarize and also list risks and suggest next steps"</td><td>"1. Summarize in 3 bullets. 2. List the risks. 3. Suggest next steps."</td><td>Numbered sub-tasks so nothing gets dropped</td></tr>
+        <tr><td>"Format it nicely"</td><td>Paste one example of the exact layout you want</td><td>One-shot beats zero-shot for formatting</td></tr>
+        <tr><td>Question first, then 40 lines of pasted context</td><td>Context first, question last</td><td>Reads better and lets the runtime reuse its cached prefix</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The bug that taught me to suspect the instruction first</h2>
+    <p>On 2026-07-21 I was testing multi-file code requests in Outlier — ask for a small project, get back several files. They kept coming back as one unlabeled blob. No filenames, no separation, just a wall of code you'd have to split by hand. My first instinct was the obvious one: the local model isn't big enough to hold a multi-file structure together.</p>
+    <p>It wasn't the model. It was our own instruction. Somewhere upstream, the app was telling the model to emit "one fenced code block with nothing around it" — a rule that applied to every code answer. The model was following it perfectly. I swapped in an explicit "label each file" instruction and the <em>same</em> model formatted every file correctly.</p>
+    <p>The lesson generalizes past our codebase: <strong>when the output looks wrong, suspect the instruction before the model.</strong> Read the actual prompt that got sent — all of it, including the parts your tool added — before you conclude anything about capability. A format failure is far more often an instruction failure wearing a costume.</p>
+
+    <h2>Small models need you to be more literal</h2>
+    <p>Here's the difference that matters if you're running locally. Smaller models in the 1.5B–3B range are more format-sensitive than large ones. They follow an explicit format instruction well. They infer an implied one poorly.</p>
+    <p>So the failure mode isn't that a small model can't do the task — often it can. It's that you assumed something you never wrote down. A large model will frequently guess your intent from context; a small one takes you at your word. Anything you were leaving to inference — the labels, the section order, how many items, whether to explain or just answer — should be written into the prompt.</p>
+    <p>There's a side effect worth having: a prompt explicit enough for a small model leaves a large one nothing to guess at. Small models are an honest instruction editor.</p>
+
+    <h2>Padding is not free</h2>
+    <p>The instinct to dump everything in "just in case" is the one habit worth breaking. Context windows are finite. Irrelevant text actively costs you twice: it pushes the useful part further from the answer, and it burns window you may need later in the conversation.</p>
+    <p>The test is whether the model could do the task without it. The whole file when the function would do, three pages of background for a one-line question — cut it. Length is only worth spending on the task, the format, one example, and context the model genuinely can't guess.</p>
+
+    <h2>A skeleton you can reuse</h2>
+    <p>Nothing clever, just the five things in an order that works — and because the stable parts sit at the top, the runtime can reuse most of it turn to turn:</p>
+    <ol>
+      <li><strong>Context</strong> — the code, the document, the background. Stable across turns, so it goes first.</li>
+      <li><strong>Task</strong> — one sentence on what you want done.</li>
+      <li><strong>Format</strong> — exactly what the reply should look like. Be specific enough to be checkable.</li>
+      <li><strong>Example</strong> — one short sample of that format, if the shape matters at all.</li>
+      <li><strong>The question</strong> — the varying part, last.</li>
+    </ol>
+    <p>If a reply comes back wrong, don't rewrite from scratch. Change one line — usually the format line — and send it again. You'll learn which line was carrying the weight, which is worth more than any prompt you copy off the internet.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The multi-file formatting failure above is my own first-hand measurement, run against Outlier on 2026-07-21: the same local model, same request, produced one unlabeled blob under our "one fenced code block" instruction and correctly labeled files under an explicit "label each file" instruction. The prefix-reuse point describes how a local runtime's prompt cache works, not a measured speedup. Everything else here is general model behavior, not a benchmark claim.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Do I need to write prompts differently for a local model?</h3>
+        <p>The same techniques work, but small models need you to apply them harder. A 1.5B or 3B model follows an explicit format instruction well and infers an implied one poorly, so anything you were leaving to inference — labels, section order, how many items — should be written down. A prompt explicit enough for a small model leaves a large one nothing to guess at.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does the order of a prompt really affect speed?</h3>
+        <p>Yes, on a local runtime it can. Putting stable, reusable context first and the varying question last lets the runtime reuse its cached prefix between turns instead of reprocessing everything. Reorder the same words so the changing part is in the middle and that reuse goes away.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is a longer prompt a better prompt?</h3>
+        <p>No. Context windows are finite, so padding a prompt with irrelevant text actively costs you: it pushes the useful part further from the answer and burns window you may need later. Length only helps when the added text is the task, the format, an example, or context the model genuinely cannot guess.</p>
+      </div>
+      <div class="faq-item">
+        <h3>My output came back in the wrong format. Is the model too small?</h3>
+        <p>Check the instruction before you blame the model. In July 2026 a batch of multi-file code requests in Outlier came back as one unlabeled blob, and the cause was our own instruction telling the model to emit one fenced code block with nothing around it. With an explicit label-each-file instruction instead, the same model formatted every file correctly.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=how-to-write-a-good-ai-prompt">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/why-ai-forgets-conversations/">Why AI forgets conversations</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

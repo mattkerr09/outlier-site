@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI chat vs Google Search: when to use which | Outlier</title>
+  <meta name="description" content="Search returns ranked sources and knows what is on the live web right now. An AI chat model returns a synthesised answer from its training data. Here is which one to reach for, question type by question type.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-10">
+  <link rel="canonical" href="https://outlier.host/learn/ai-vs-google-search/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="AI chat vs Google Search: when to use which">
+  <meta property="og:description" content="Search returns ranked sources and knows what is on the live web right now. An AI chat model returns a synthesised answer from its training data. Here is which one to reach for, question type by question type.">
+  <meta property="og:url" content="https://outlier.host/learn/ai-vs-google-search/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI chat vs Google Search: when to use which">
+  <meta name="twitter:description" content="One returns sources. One returns an answer. Knowing which you need is most of the skill.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "AI chat vs Google Search: when to use which", "description": "Search returns ranked sources and knows what is on the live web right now. An AI chat model returns a synthesised answer from its training data. Here is which one to reach for, question type by question type.", "datePublished": "2026-07-10", "dateModified": "2026-07-10", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/ai-vs-google-search/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "AI chat vs Google Search", "item": "https://outlier.host/learn/ai-vs-google-search/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can an AI chat model replace Google Search?", "acceptedAnswer": {"@type": "Answer", "text": "Not for the things search is actually good at. Search is authoritative about what exists on the live web right now, and it hands you the citation so you can check it yourself. A chat model answers from what it learned during training and does not know what happened after its cutoff. It replaces search for explaining, drafting, summarising and brainstorming — not for prices, news, schedules, availability, or anything where you need the primary source."}}, {"@type": "Question", "name": "Why do AI models make things up?", "acceptedAnswer": {"@type": "Answer", "text": "Because they generate a plausible continuation rather than looking anything up. The output is optimised to read like a correct answer, and a wrong one reads exactly the same as a right one. In my own code evaluation on a hard novel-composition set, 12 of 12 outputs compiled and 10 of 12 were correct when executed. The two failures were not reasoning failures — they were API-name failures, like writing heappoppop instead of heappushpop. That compiles fine and only breaks at run time."}}, {"@type": "Question", "name": "Does a local AI model have web access?", "acceptedAnswer": {"@type": "Answer", "text": "By default, no. A local model runs entirely on your own machine, which is the point, but it means the model has the same training-cutoff problem as a cloud model with none of the live web behind it. For anything time-sensitive you still go to search. Local is the right tool for private, uncapped, offline synthesis over text you already have."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>AI chat vs Google Search: when to use which</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-10</span>
+      <span class="updated-pill">Last updated 2026-07-10</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Use Google Search when you need a source: anything time-sensitive, official, local, or expensive to get wrong. Search returns ranked sources and is authoritative about what's on the live web right now.</li>
+        <li>Use an AI chat model when you need synthesis: explaining a concept at your level, drafting, rewriting, summarising text you paste in, code you can run, brainstorming, translation.</li>
+        <li>A chat model answers from training data and doesn't know what happened after its cutoff — so it can be fluent, confident and wrong in a way that looks identical to being right.</li>
+      </ul>
+    </div>
+
+    <p class="lead">These two get treated as rivals, and they aren't. They answer different shapes of question. Search hands you ranked sources and lets you decide. A chat model hands you one synthesised answer and asks you to trust it. Once you see the split that way, picking stops being a preference and starts being obvious.</p>
+
+    <h2>They answer different shapes of question</h2>
+    <p>Search is a retrieval system. It points at pages that exist on the live web at this moment, ranked, with the source attached. Its authority comes from the fact that it isn't making anything — it's indexing what's out there. If the price changed this morning, search knows.</p>
+    <p>A chat model is a synthesis system. It produces an answer out of patterns learned during training. That's why it can explain a thing three different ways until one lands, and it's also why it has a hard edge in time: it does not know what happened after its training cutoff. Asking it for today's news isn't a bug you can prompt around. There's nothing there to retrieve.</p>
+    <p>Retrieval versus synthesis. That's the whole distinction, and everything below falls out of it.</p>
+
+    <h2>Reach for search when you need a source</h2>
+    <p>Go to search for anything time-sensitive — prices, news, availability, schedules — and any time you need the primary source rather than someone's paraphrase of it. Official documentation belongs here too, because docs change and the current version is the one that matters. Local and business information — hours, addresses, whether the place is still open — is search territory by definition.</p>
+    <p>One more category has nothing to do with topic: <strong>anything where being wrong is expensive.</strong> If the answer is going into a contract, a prescription, a build, or a payment, you don't want an answer — you want the citation, so you can go look at it.</p>
+
+    <h2>Reach for a chat model when you need synthesis</h2>
+    <p>The other list is just as concrete. Chat models are good at explaining a concept at your level — the same idea, pitched for a beginner or for someone who already knows three adjacent things. They're good at drafting and rewriting, summarising a wall of text you paste in, brainstorming when you want twenty options and will throw away eighteen, translation, and turning messy notes into structure.</p>
+    <p>Code sits in this bucket with one condition attached: code you can immediately run and check. That's not a small caveat — it's the entire reason code is safe to delegate. The compiler and the test suite are a verification loop most other tasks don't have.</p>
+    <p>Notice what these share. In every one, you supply the ground truth or you can check the output yourself in seconds. The model contributes shape and speed, not facts.</p>
+
+    <h2>Question type → better tool</h2>
+    <table>
+      <thead>
+        <tr><th>Question type</th><th>Better tool</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Price, news, availability, schedule</td><td>Search</td><td>Time-sensitive; the training cutoff means the model can't know</td></tr>
+        <tr><td>Official docs for a library or product</td><td>Search</td><td>You need the current version, not a remembered one</td></tr>
+        <tr><td>Local or business info (hours, address, is it open)</td><td>Search</td><td>Live, specific, changes without notice</td></tr>
+        <tr><td>Anything where being wrong is expensive</td><td>Search</td><td>You need the citation, not just an answer</td></tr>
+        <tr><td>Explain this concept at my level</td><td>Chat model</td><td>Synthesis and re-pitching is what it does</td></tr>
+        <tr><td>Draft it, rewrite it, change the tone</td><td>Chat model</td><td>You supply the intent; no external fact to get wrong</td></tr>
+        <tr><td>Summarise this text I'm pasting in</td><td>Chat model</td><td>You provided the ground truth; it isn't recalling anything</td></tr>
+        <tr><td>Write code I'm about to run</td><td>Chat model</td><td>Execution is a verification loop — you find out immediately</td></tr>
+        <tr><td>Brainstorm, translate, structure messy notes</td><td>Chat model</td><td>Shape matters more than any one answer being exact</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The failure mode that should decide it for you</h2>
+    <p>Hallucination is the core failure mode on the chat side, and the dangerous part isn't that models get things wrong. Everything gets things wrong. It's that a wrong answer arrives with the same fluency and confidence as a right one. There's no tell.</p>
+    <p>A first-hand example. Running a code evaluation on Outlier against a hard novel-composition set, <strong>12 out of 12 generated outputs compiled, and 10 of those 12 were correct by execution.</strong> When I read the two failures, they weren't reasoning failures at all. The logic was sound. They were API-name failures — writing <code>heappoppop</code> where the real function is <code>heappushpop</code>.</p>
+    <p>Sit with what that means. That mistake compiles. It passes a read-through, looks completely normal, and detonates at run time. If I'd graded that output by reading it, I'd have called it correct — the only thing that caught it was running it. "It looks right" is not verification. It's exactly what a fluent generator is optimised to produce.</p>
+
+    <h2>The habit that makes both tools work</h2>
+    <p>Use the model for shape and speed. Verify anything load-bearing against a source. For code, run it. For facts, check the primary source.</p>
+    <p>That's a rhythm, not extra work. Let the model draft or explain the thing — the part that would have cost you an hour. Then check the three claims the piece rests on, which costs two minutes. Names, numbers, dates, versions, function signatures: those are what to check. The prose around them rarely matters. And pasting in source text instead of asking the model to recall it removes the recall failure entirely — more in <a href="https://outlier.host/learn/how-to-write-a-good-ai-prompt/">how to write a good AI prompt</a>.</p>
+
+    <h2>Where local models fit — and where they honestly don't</h2>
+    <p>Worth saying plainly, since I build one: a local model has the same training-cutoff problem as any cloud model, and no live web access at all. Running on your own machine doesn't make it current — if anything it sharpens the boundary, because there's no server-side search quietly filling gaps. For prices, news, or the state of the world today, a local model is the wrong tool, and I'd rather tell you that than have you find out on something that mattered.</p>
+    <p>What local is genuinely good at is the synthesis column, done privately, with no cap and no meter. Summarising a document you'd never paste into someone else's server. Drafting over your own files. Code you're about to run anyway. In all of those the model isn't remembering the world — it's reshaping something you already handed it. Background on how these systems work: <a href="https://outlier.host/learn/what-is-a-large-language-model/">what a large language model is</a>.</p>
+
+    <h2>Questions about AI chat vs Google Search</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can an AI chat model replace Google Search?</h3>
+        <p>Not for the things search is actually good at. Search is authoritative about what exists on the live web right now, and it hands you the citation so you can check it yourself. A chat model answers from what it learned during training and does not know what happened after its cutoff. It replaces search for explaining, drafting, summarising and brainstorming — not for prices, news, schedules, availability, or anything where you need the primary source.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why do AI models make things up?</h3>
+        <p>Because they generate a plausible continuation rather than looking anything up. The output is optimised to read like a correct answer, and a wrong one reads exactly the same as a right one. In my own code evaluation on a hard novel-composition set, 12 of 12 outputs compiled and 10 of 12 were correct when executed. The two failures were not reasoning failures — they were API-name failures, like writing heappoppop instead of heappushpop. That compiles fine and only breaks at run time.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does a local AI model have web access?</h3>
+        <p>By default, no. A local model runs entirely on your own machine, which is the point, but it means the model has the same training-cutoff problem as a cloud model with none of the live web behind it. For anything time-sensitive you still go to search. Local is the right tool for private, uncapped, offline synthesis over text you already have.</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> The 12/12-compiled, 10/12-correct-by-execution result is my own first-hand measurement, run against Outlier on a hard novel-composition code set — outputs were graded by executing them, not by reading them. The <code>heappoppop</code> / <code>heappushpop</code> case is a real failure from that run, quoted as it happened. Everything else on this page is a description of how retrieval and synthesis differ, not a benchmark claim.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano 4B + Lite 9B — local, private, no account. Pro $20/mo or $149/yr adds all 7 model tiers including Plus 397B. Lifetime Pro from $99 (Founding 200) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=ai-vs-google-search">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/how-to-write-a-good-ai-prompt/">How to write a good AI prompt</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

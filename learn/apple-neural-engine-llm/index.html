@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can the Apple Neural Engine run an LLM? I measured it | Outlier</title>
+  <meta name="description" content="Apple's Neural Engine sits idle while your Mac generates text. I used Core ML's own per-op device map to find out why: the planner drops a transformer graph to the CPU past about 8 layers, and the handoff everyone blames costs 0.84 ms.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/learn/apple-neural-engine-llm/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can the Apple Neural Engine run an LLM? I measured it">
+  <meta property="og:description" content="Core ML's own per-op device map shows a transformer graph falling off the Neural Engine at 16 layers. The handoff everyone blames costs 0.84 ms. Residency is the wall.">
+  <meta property="og:url" content="https://outlier.host/learn/apple-neural-engine-llm/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can the Apple Neural Engine run an LLM? I measured it">
+  <meta name="twitter:description" content="The per-op device map says the graph falls off the ANE at 16 layers. The handoff is 0.84 ms and was never the problem.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Can the Apple Neural Engine run an LLM? I measured it","description":"Core ML's own per-op device map shows a transformer-shaped graph falling off the Apple Neural Engine at 16 layers and running entirely on CPU. The GPU-to-ANE handoff, usually blamed, measures 0.84 ms.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/apple-neural-engine-llm/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host/","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Can the Apple Neural Engine run an LLM?","item":"https://outlier.host/learn/apple-neural-engine-llm/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">Learn</a> &nbsp;›&nbsp; Apple Neural Engine and LLMs</div>
+    <h1>Can the Apple Neural Engine run an LLM? I measured it</h1>
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr · measured on an M1 Ultra · 2026-07-23</span>
+      <span class="updated-pill">First-party measurement</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Not in any way that helps you. The Neural Engine can run transformer layers — Core ML's own per-op device map confirms it — but only while the graph stays shallow. At 8 layers everything is still on the ANE. At 16 layers Core ML silently moves <em>every operation</em> to the CPU, and a 32-layer graph runs at roughly 4–7 tokens per second, entirely on CPU. The GPU-to-ANE handoff that usually gets blamed for this measures 0.84 ms, which is nothing. Residency is the wall, not the handoff.</p>
+    </div>
+
+    <p class="lead">Every Mac spec sheet advertises a Neural Engine. Mine has sixteen cores. So when I started building local AI on Apple silicon, the obvious question was why that hardware sits essentially unused while the GPU does all the work generating text — and whether I could put it to work. I spent a session finding out, and the answer surprised me in a specific way: the thing everyone assumes is the problem turned out to be fine, and the real blocker is somewhere nobody points at.</p>
+
+    <h2>What I was actually trying to build</h2>
+    <p>The idea was speculative decoding. You run a small, fast "draft" model to guess several tokens ahead, then have the big model verify the guesses in one pass. When it works you get a real speedup. On a Mac it tends not to work as well as advertised, because the draft and the verify both want the GPU and end up fighting each other for it.</p>
+    <p>Hence the appeal of the Neural Engine. If the draft model could live on the ANE — idle silicon, sitting right there — the GPU would be left alone to verify, and the draft would be close to free. That was the hypothesis. It is a good hypothesis. It is also wrong, and it is worth explaining exactly how.</p>
+
+    <h2>How to tell where an operation actually runs</h2>
+    <p>This is the part I'd want if I were reading someone else's writeup, so I'll put it before the results.</p>
+    <p>Most claims about ANE usage are inferred from power draw, which is a proxy and a weak one. There's something better. Core ML exposes <code>MLComputePlan</code>, and specifically <code>get_compute_device_usage_for_mlprogram_operation</code>, which reports the device assignment for <em>every individual operation</em> in a compiled model. Not an estimate. Apple's own planner telling you where each op landed.</p>
+    <p>That distinction matters enormously here, because the failure mode I found is silent. Nothing errors. Nothing warns. Your model loads, runs, produces correct output, and reports success — while executing entirely on the wrong processor. Without a per-op device map you would simply conclude that the ANE is slow, and you'd be wrong: it isn't running at all.</p>
+
+    <h2>The cliff at 16 layers</h2>
+    <p>I built a representative decode step — attention output projection plus a SwiGLU MLP, hidden size 2560, intermediate 6912, fp16 — and stacked it to increasing depths, checking the device map at each one.</p>
+    <table>
+      <thead><tr><th>Depth</th><th>Where Core ML put the ops</th><th>Median latency</th></tr></thead>
+      <tbody>
+        <tr><td>1 layer</td><td>Neural Engine (all 10 ops)</td><td>3.2 ms</td></tr>
+        <tr><td>2 layers</td><td>Neural Engine (all 20 ops)</td><td>6.1 ms</td></tr>
+        <tr><td>4 layers</td><td>Neural Engine (all 40 ops)</td><td>11.7 ms</td></tr>
+        <tr><td>8 layers</td><td>Neural Engine (all 80 ops)</td><td>22.9 ms</td></tr>
+        <tr><td><strong>16 layers</strong></td><td><strong>CPU — all 160 ops</strong></td><td><strong>90.7 ms</strong></td></tr>
+        <tr><td><strong>32 layers</strong></td><td><strong>CPU — all 321 ops</strong></td><td><strong>139–242 ms</strong></td></tr>
+      </tbody>
+    </table>
+    <p>Up to 8 layers the scaling is clean and linear, about 2.9 ms per layer, every operation on the Neural Engine. Then it falls off a cliff. Not a partial split, not a graceful degradation — at 16 layers the planner gives up and assigns the entire graph to the CPU.</p>
+    <p>A 32-layer model is the shallow end of what counts as a real language model. At that depth we're looking at 139 to 242 milliseconds per token, which is somewhere around 4 to 7 tokens per second, on a processor that was never the point. For comparison, the smallest tier I ship runs at 71.7 tokens per second on the same machine using the GPU.</p>
+
+    <h2>The handoff was never the problem</h2>
+    <p>Here's the part I got wrong going in, and I think most people have it wrong too.</p>
+    <p>The standard explanation for why nobody runs LLMs on the ANE is the cost of moving data — you have to marshal tensors out of your GPU framework, hand them to Core ML, and get them back, once per token. That sounds expensive. I measured it in isolation with a trivial identity model, so the number is pure overhead with no compute in it: <strong>0.84 ms median</strong>, with a 10th percentile of 0.50 ms and a 90th of 1.70 ms.</p>
+    <p>Under a millisecond. And in any real speculative-decoding loop you'd draft a chunk of several tokens per call, so that cost amortises down to a fraction of a millisecond per token. The handoff is a rounding error. It is not why this doesn't work, and if you've been repeating that explanation — I was — it's worth dropping.</p>
+
+    <h2>Why the ANE loses even when it wins</h2>
+    <p>There's a second, more fundamental problem, and it survives even if you solve the residency one.</p>
+    <p>Take the clean linear scaling from the shallow runs and extrapolate it. At 2.9 ms per layer, a 32-layer draft that <em>stayed</em> on the Neural Engine would land around 90 ms per token. The GPU does the same work at roughly 0.3 ms per layer, so about 10 ms per token. Even in the fantasy where Core ML keeps the whole graph resident, the ANE is around nine times slower per token than the GPU it was supposed to relieve.</p>
+    <p>That isn't a defect. It's what the hardware is for. The Neural Engine is built for high throughput on big batched convolution-shaped work — the vision and audio models that run constantly on your phone at very low power. Generating text one token at a time is the opposite workload: tiny, sequential, latency-bound. The ANE is extremely good at a job that language model decoding simply is not.</p>
+
+    <h2>What this means if you just want to run AI on your Mac</h2>
+    <p>Practically: ignore the Neural Engine core count when you're deciding whether a Mac will run local AI well. It's not the number doing the work.</p>
+    <p>The specs that actually matter are memory capacity, which decides what size model fits at all, and memory bandwidth, which largely sets how fast tokens come out. A 16-core ANE next to 8 GB of RAM will run local models worse than a machine with fewer neural cores and 32 GB. If you're sizing a machine, our <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide</a> is the more useful read, and <a href="https://outlier.host/learn/run-ai-without-gpu/">why Apple silicon works without a discrete GPU</a> covers what the unified memory design actually buys you.</p>
+    <p>None of this makes the Neural Engine useless. It's working hard on your Mac right now — Face ID, dictation, photo analysis, live text, background audio. It's just not the part generating your chat replies, and no amount of marketing about neural cores changes what Core ML's planner does with a deep decode graph.</p>
+
+    <h2>What would change my answer</h2>
+    <p>Two things, either of which I'd genuinely like to see:</p>
+    <ul>
+      <li>Core ML starts hosting deep autoregressive decode graphs on the ANE with single-token latency under about 5 ms — meaning both the residency cliff and the per-token gap close.</li>
+      <li>A stateful-KV ANE decode path arrives where a 24-layer-plus graph stays assigned to <code>MLNeuralEngineComputeDevice</code> <em>and</em> beats the GPU per token.</li>
+    </ul>
+    <p>Neither is true today on the hardware and software I tested. If either becomes true, the arithmetic changes and I'll re-run this.</p>
+
+    <div class="receipts"><strong>Receipts and limits:</strong> measured 2026-06-22 on an Apple M1 Ultra, 64 GB, 20 cores (16 performance, 4 efficiency), 16-core ANE, macOS 26.3.1, coremltools 9.0, torch 2.11.0. Latencies are medians of 40–200 runs after warmup. Device assignment comes from Core ML's <code>MLComputePlan</code> per-op map, not from power measurement — I couldn't get <code>powermetrics</code> wattage in this environment, though the op-device map is the stronger signal anyway. <strong>Important caveats:</strong> this used a representative dense-matmul workload, not a fully converted production model with KV cache, RoPE, GQA and a vocabulary head. Those additions are ANE-hostile and would push <em>more</em> to the CPU, so a real model's picture is at least this bad rather than better. The 8-to-16-layer threshold is specific to this graph shape, precision, OS version and coremltools version; a different partitioning strategy might keep more resident, and the numbers may well differ on M3 and M4-family chips — I've only measured M1 Ultra, and re-running on newer silicon would make this stronger.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=apple-neural-engine-llm">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/run-ai-without-gpu/">Running AI without a discrete GPU</a> · <a href="https://outlier.host/seo/learn/what-is-unified-memory/">What unified memory actually is</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM you need</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

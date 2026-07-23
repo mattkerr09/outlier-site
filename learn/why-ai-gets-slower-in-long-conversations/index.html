@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Why AI gets slower the longer you talk to it | Outlier</title>
+  <meta name="description" content="A chat model has no memory between turns, so it re-reads the whole conversation before every answer. That re-reading is called prefill, and it grows every turn. Here's the mechanism, and three real bugs I found that broke the fix.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-22">
+  <link rel="canonical" href="https://outlier.host/learn/why-ai-gets-slower-in-long-conversations/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Why AI gets slower the longer you talk to it">
+  <meta property="og:description" content="A chat model has no memory between turns, so it re-reads the whole conversation before every answer. That re-reading is called prefill, and it grows every turn. Here's the mechanism, and three real bugs I found that broke the fix.">
+  <meta property="og:url" content="https://outlier.host/learn/why-ai-gets-slower-in-long-conversations/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why AI gets slower the longer you talk to it">
+  <meta name="twitter:description" content="It re-reads the entire conversation before every answer. Here's why, and why the standard fix breaks so quietly.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Why AI gets slower the longer you talk to it", "description": "A chat model has no memory between turns, so it re-reads the whole conversation before every answer. That re-reading is called prefill, and it grows every turn. Here's the mechanism, and three real bugs I found that broke the fix.", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/why-ai-gets-slower-in-long-conversations/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Why AI gets slower the longer you talk to it", "item": "https://outlier.host/learn/why-ai-gets-slower-in-long-conversations/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does an AI chat get slower the longer it goes?", "acceptedAnswer": {"@type": "Answer", "text": "Because the model has no memory between turns. To answer your latest message it re-reads the whole conversation from the top, and that step, called prefill, gets longer as the conversation gets longer. A prefix cache can reuse the previous turn's work, but only if the earlier prompt is a byte-identical prefix of the new one."}}, {"@type": "Question", "name": "Does starting a new chat actually make it faster?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, on every vendor. A new conversation means a short prompt, and a short prompt means a short prefill. If the wait grows as a thread gets longer and resets when you start fresh, prompt length is the cause, not your hardware or your connection."}}, {"@type": "Question", "name": "Does this happen with cloud AI too?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Cloud services run the same kind of model and hit the same structural problem: no memory between turns, so the whole conversation is re-read every turn. The difference is visibility. Their cache is on their servers, so you can't see whether it's hitting and you can't fix it when it isn't."}}, {"@type": "Question", "name": "Is Outlier faster than other AI apps because of this?", "acceptedAnswer": {"@type": "Answer", "text": "That's not the claim. The narrow, true version: after the v659 through v662 fixes, latency in Outlier no longer grows with conversation length. Whether that's faster than any particular competitor depends on the model, the machine, and the prompt, and I haven't measured that comparison."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Why AI gets slower the longer you talk to it</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-22</span>
+      <span class="updated-pill">Last updated 2026-07-22</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>A chat model has no memory between turns, so to answer your latest message it re-reads the entire conversation from the beginning. That re-reading step is called prefill.</li>
+        <li>The conversation grows every turn, so the prefill grows every turn, so the wait before the answer starts grows every turn.</li>
+        <li>The standard fix is a prefix cache, which reuses the work from the previous turn. It only works when the old prompt is a byte-identical prefix of the new one, so it breaks easily and silently.</li>
+      </ul>
+    </div>
+
+    <p class="lead">You open a chat in the morning and it's quick. Forty messages later every reply takes a beat too long, then two beats, and you wonder whether the model got worse or your Mac is tired. Neither. It's doing more work per answer than it was this morning, for a reason that's easy to explain and hard to fix.</p>
+
+    <h2>The model re-reads the whole conversation, every single time</h2>
+    <p>Here's the part that surprises people: a chat model doesn't remember your conversation. Nothing persists between turns. When you send message twenty, the software hands it everything — your first message, its first answer, all eighteen turns in between — as one block of text, and it reads that block from the top.</p>
+    <p>That reading pass is called <strong>prefill</strong>, and it's why nothing appears on screen for a moment after you hit enter. The model has to ingest the whole prompt before it can produce the first token.</p>
+    <p>The arithmetic is unforgiving. Turn 2 means re-reading two turns; turn 20 means re-reading twenty. The prefill grows with the conversation, and the pause before the first word gets longer. That's not degradation. That's the design.</p>
+
+    <h2>The fix is a prefix cache, and it's all-or-nothing</h2>
+    <p>Nobody accepts that cost, so every serious runtime has a mitigation: the <strong>prefix cache</strong>, sometimes called KV cache reuse. Turn 20's prompt starts with exactly the same text as turn 19's — same conversation, more stuck on the end. If the runtime kept the work it did for turn 19, it can reuse that and only process the new part. When it works, latency stops depending on conversation length.</p>
+    <p>The catch is the word <em>exactly</em>. Reuse requires the earlier prompt to be a byte-identical prefix of the later one. Not similar. Identical. And the top of a prompt is where software likes to inject things — a timestamp, a memory block, a system instruction rebuilt slightly differently. Any drift up there throws away the entire cache. <a href="https://outlier.host/learn/what-is-prefix-caching/">Prefix caching has its own explainer</a> if you want more depth.</p>
+    <p>Which is why the symptom is confusing from outside. A working cache and a broken one look identical until you time them. You just notice it was snappy this morning and it's crawling.</p>
+
+    <h2>Three bugs, one symptom: what I found in July 2026</h2>
+    <p>I'll use my own app as the worked example, because I have the numbers. Over one debugging session across Outlier v659 to v662 I found <strong>three separate causes of the same symptom</strong>. Each time I fixed one I thought I was done, and another was hiding behind it.</p>
+
+    <table>
+      <thead>
+        <tr><th>Version</th><th>What was actually wrong</th><th>Measured effect of the fix</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>v659</strong></td>
+          <td>The lookup ranked a whole-prompt entry as the "longest match," leaving an empty remainder. The caller called that useless and re-prefilled everything.</td>
+          <td>Wait before the first token: about 18.5s to 1.4–4.7s, once ranking preferred a strictly shorter prefix.</td>
+        </tr>
+        <tr>
+          <td><strong>v660</strong></td>
+          <td>The chat template appended an empty thinking block to the prompt it generated from, then stripped it when rendering that turn into history. Turn N differed from turn N+1 in its last four tokens. 5,919 of 5,923 tokens matched and reuse was still zero.</td>
+          <td>Step 6 of a 6-step agent loop went from 66.4s to 16.0s, and the per-step slope went flat.</td>
+        </tr>
+        <tr>
+          <td><strong>v662</strong></td>
+          <td>A memory feature chose what to recall from the most recent user message. In an agent loop every tool result becomes the most recent message, so the recalled facts — and the top of the prompt — changed every step.</td>
+          <td>Recalling against the first message fixed it. Steps 3–5 held flat at 24.3 / 25.9 / 25.5 seconds while the prompt grew from about 7,000 to 9,200 tokens.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>That last row is the whole article in one line: the prompt got roughly 30% longer and the time barely moved. A flat line instead of a ramp.</p>
+
+    <h2>99.9% matching is worth exactly the same as 0% matching</h2>
+    <p>The v660 bug is the one I'd print on a poster. 5,919 tokens out of 5,923 matched — 99.9% — and reuse was zero. Not reduced — zero.</p>
+    <p>Prefix reuse doesn't degrade gracefully — there's no partial credit for being close. The runtime walks forward from token one, and the instant it finds a mismatch everything after it is unusable, because every later token's state depends on the ones before it. Four bad tokens at the tail of a 6,000-token prompt cost the same as a completely different prompt.</p>
+    <p>That's also why these bugs survive normal debugging. Every check I had was passing — keys matched, hashes matched, the cache had entries. It was perfectly healthy and simply never used.</p>
+
+    <h2>What you can do about it, on any AI you use</h2>
+    <p>You can't patch someone else's cache, but you can shorten the prompt. That works everywhere:</p>
+    <ul>
+      <li><strong>Start a fresh conversation for a new task.</strong> The most effective move by far. A new thread is a short prompt, and a short prompt is a short prefill.</li>
+      <li><strong>Don't edit early messages mid-thread.</strong> Rewriting message three changes the top of the prompt and invalidates every cached token after it. You've paid for the whole conversation again.</li>
+      <li><strong>Don't paste bulk text you don't need.</strong> That 4,000-line log you dropped in at turn two isn't a one-time cost — it's in the prompt for every remaining turn.</li>
+      <li><strong>Notice the shape of the slowdown.</strong> If the wait grows with thread length and resets when you start over, it's prompt length. If it's random, something else is wrong.</li>
+    </ul>
+
+    <h2>Cloud services have the same problem — you just can't see it</h2>
+    <p>None of this is specific to running models on your own machine. The structural fact is the same everywhere, and a hosted service has the same fragility at the top of the prompt.</p>
+    <p>The difference is what you can do about it. Their cache runs on their servers: you can't see whether it's hitting, and you can't fix it when it isn't. I could dump every cache entry and every hit-or-miss decision until the ranking bug fell out. That's a narrow advantage of local software — it doesn't make the model smarter, it just puts the person who can fix the plumbing in the same room as the problem.</p>
+    <p>So my claim is deliberately narrow, because it's the one I measured: after v659 through v662, latency in Outlier no longer grows with conversation length. Closely related: <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets your conversations</a> — same root fact, different consequence.</p>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Why does an AI chat get slower the longer it goes?</h3>
+        <p>Because the model has no memory between turns. To answer your latest message it re-reads the whole conversation from the top, and that step, called prefill, gets longer as the conversation gets longer. A prefix cache can reuse the previous turn's work, but only if the earlier prompt is a byte-identical prefix of the new one.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does starting a new chat actually make it faster?</h3>
+        <p>Yes, on every vendor. A new conversation means a short prompt, and a short prompt means a short prefill. If the wait grows as a thread gets longer and resets when you start fresh, prompt length is the cause, not your hardware or your connection.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does this happen with cloud AI too?</h3>
+        <p>Yes. Cloud services run the same kind of model and hit the same structural problem: no memory between turns, so the whole conversation is re-read every turn. The difference is visibility. Their cache is on their servers, so you can't see whether it's hitting and you can't fix it when it isn't.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is Outlier faster than other AI apps because of this?</h3>
+        <p>That's not the claim. The narrow, true version: after the v659 through v662 fixes, latency in Outlier no longer grows with conversation length. Whether that's faster than any particular competitor depends on the model, the machine, and the prompt, and I haven't measured that comparison.</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> Every timing number in this article is a first-hand measurement I took while debugging Outlier v659 through v662 in July 2026, on my own machine. One machine, one workload — illustrations of the mechanism, not a benchmark you should expect to reproduce exactly. Fuller timing data: <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">the prefix cache latency page</a>.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=why-ai-gets-slower-in-long-conversations">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-prefix-caching/">What is prefix caching?</a> · <a href="https://outlier.host/learn/why-ai-forgets-conversations/">Why AI forgets your conversations</a> · <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">Prefix cache latency benchmarks</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

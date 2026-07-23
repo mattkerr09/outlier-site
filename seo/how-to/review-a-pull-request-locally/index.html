@@ -54,7 +54,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">How-to</span>
 <h1>How to review a pull request without sending code to the cloud</h1>
-<p class="byline">Last updated 2026-06-18 &middot; Outlier v1.11.469</p>
+<p class="byline">Last updated 2026-06-18</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API. The whole sequence below stays on the Mac.</p></div>
 
@@ -76,14 +76,14 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <p><p>For PR review, the Code tier&rsquo;s default 64K context window is wider than Core&rsquo;s 32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p></p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to review a pull request without sending code to the cloud&rdquo;?</h2>
 <p>For PR review, the Code tier&rsquo;s default 64K context window is wider than Core&rsquo;s 32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p>
-<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to review a pull request without sending code to the cloud&rdquo;. Specifically, the product surface in v1.11.469 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
+<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to review a pull request without sending code to the cloud&rdquo;. Specifically, the current product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How does Code-tier context width compare to Core?</h2><p>Code defaults to 64K context against Core&rsquo;s 32K, with both capped at 256K. The two share the same safetensors and produce identical answer quality; the difference is the chat template and decoding configuration. For PR review on diffs over 500 lines, Code&rsquo;s wider default keeps the whole diff plus the relevant surrounding code addressable in a single turn.</p>
 <h2>Where does this guide fit in the rest of the lineup?</h2>
 <p>For a 500-line diff, Code&rsquo;s 64K default context holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.</p>
 <h2>One unique number</h2>
 <p>4 steps, zero network requests after the model is downloaded. Asking along a single axis at a time (correctness, then style, then perf) holds quality better than a single &lsquo;review this&rsquo; ask.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.662/Outlier-1.11.662-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.663/Outlier-1.11.663-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported. macOS 12+.</p>
 
 <div class="related">

@@ -6,7 +6,7 @@
   <title>How to run AI on a Mac with 8GB RAM (2026) | Outlier</title>
   <meta name="description" content="8GB Mac can run real local AI. Outlier Nano hits 32 tok/s on M4 Air. Here's which models fit, which don't, and exactly what to do.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-06-19">
+  <meta name="last-modified" content="2026-07-22">
   <link rel="canonical" href="https://outlier.host/how-to/run-ai-on-8gb-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run AI on a Mac with 8GB RAM">
@@ -76,7 +76,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run AI on a Mac with 8GB of RAM", "description": "8GB Mac can run real local AI. Outlier Nano hits 32 tok/s on M4 Air. Here's which models fit, which don't, and exactly what to do.", "datePublished": "2026-06-19", "dateModified": "2026-06-19", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-ai-on-8gb-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run AI on a Mac with 8GB of RAM", "description": "8GB Mac can run real local AI. Outlier Nano hits 32 tok/s on M4 Air. Here's which models fit, which don't, and exactly what to do.", "datePublished": "2026-06-19", "dateModified": "2026-07-22", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-ai-on-8gb-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run AI on a Mac with 8GB RAM", "item": "https://outlier.host/how-to/run-ai-on-8gb-mac/"}]}
@@ -99,12 +99,12 @@
     <h1>How to run AI on a Mac with 8GB of RAM</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-19</span>
-      <span class="updated-pill">Last updated 2026-06-19</span>
+      <span class="updated-pill">Specs corrected July 2026</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>An 8GB Mac runs Outlier Nano (1.5B) at 32 tok/s and Lite (3B) smoothly. 7B models are tight but workable if you close other apps. Anything above 7B needs 16GB or more.</p>
+      <p>An 8GB Mac comfortably runs Outlier Nano (4B) at 32 tok/s — that's the tier to use. Lite (9B) needs 12GB, so it's out on an 8GB machine. A generic 7B model fits if you close other apps. Anything larger needs 16GB or more.</p>
     </div>
 
     <p class="lead">The M4 MacBook Air ships with 8GB by default — it's the entry config Apple sells to most people, and it was the standard for M1 Airs too. Plenty of buyers wonder whether that's enough for local AI, or whether they made a mistake skipping the 16GB upgrade. Short answer: 8GB works, within clear limits. Here's exactly what those limits are.</p>
@@ -128,16 +128,16 @@
       </thead>
       <tbody>
         <tr>
-          <td>1.5B (Outlier Nano)</td>
-          <td>~1.2GB</td>
-          <td>8GB</td>
-          <td>Runs comfortably with room to spare</td>
+          <td>4B (Outlier Nano)</td>
+          <td>~2.4GB</td>
+          <td>6GB</td>
+          <td>The right tier for an 8GB Mac — runs with room to spare</td>
         </tr>
         <tr>
-          <td>3B (Outlier Lite)</td>
-          <td>~2.0GB</td>
-          <td>8GB</td>
-          <td>Runs fine; leaves headroom for other apps</td>
+          <td>9B (Outlier Lite)</td>
+          <td>~5.0GB</td>
+          <td>12GB</td>
+          <td>Does not fit an 8GB Mac — Outlier lists 12GB as its minimum</td>
         </tr>
         <tr>
           <td>7B</td>
@@ -162,15 +162,15 @@
 
     <p>The cutoff is real: if a model's wired footprint exceeds available free memory, macOS falls back to swapping — writing model weights to the SSD and reading them back on demand. That slows inference to roughly 1–3 tok/s, causes the fan to spin up, and generates noticeable heat. It's not a crash, but it's not usable either. The fix is staying within your memory budget, not fighting it.</p>
 
-    <h2>What Nano and Lite are actually good for</h2>
-    <p>Small doesn't mean useless. Nano (1.5B) and Lite (3B) handle a wide range of everyday tasks well:</p>
+    <h2>What Nano is actually good for</h2>
+    <p>Small doesn't mean useless. Nano (4B) handles a wide range of everyday tasks well:</p>
     <ul>
       <li><strong>Chat and Q&amp;A.</strong> Answering questions, explaining concepts, working through ideas. Nano keeps up faster than you can read at 32 tok/s.</li>
       <li><strong>Writing and editing.</strong> Drafting emails, rewriting paragraphs, tightening copy. These are exactly the tasks where speed matters and where a small model has enough context to do good work.</li>
       <li><strong>Summarization.</strong> Paste in a long document, get the key points. Works well locally with no data leaving your machine.</li>
       <li><strong>Straightforward Q&amp;A over your own files.</strong> Private, offline, and fast.</li>
     </ul>
-    <p>Where Nano and Lite will show their limits: complex multi-step coding problems, deep reasoning chains, or tasks that need the model to hold a lot of context and think carefully. For those, a 27B or larger model makes a noticeable difference — but that's a 16GB or 24GB conversation, not an 8GB one. For daily writing, research, and quick coding help, the small tiers are genuinely capable.</p>
+    <p>Where Nano will show its limits: complex multi-step coding problems, deep reasoning chains, or tasks that need the model to hold a lot of context and think carefully. For those, a 27B or larger model makes a noticeable difference — but that's a 24GB conversation, not an 8GB one. For daily writing, research, and quick coding help, Nano is genuinely capable.</p>
 
     <h2>Pushing it with 7B: what to close, what to expect</h2>
     <p>A 7B model at 4-bit quantization uses around 4.5GB wired. That fits on an 8GB Mac — barely. Whether it runs well depends entirely on what else you have open.</p>
@@ -180,8 +180,8 @@
       <li>Quit Slack, Teams, or any Electron-based app</li>
       <li>Quit mail clients, music apps, and anything running in the background</li>
     </ul>
-    <p>With a clean slate, you should have 5–6GB free, which is enough margin for a 7B model to load without hitting swap. Inference won't be as snappy as Nano — expect something closer to 10–15 tok/s depending on context length — but it will run, and the quality step-up over Lite is real for tasks that need it.</p>
-    <p>The moment macOS starts swapping — you'll notice the fan, the heat, and responses trickling in one token at a time — step back down to Nano or Lite. No model is worth that.</p>
+    <p>With a clean slate, you should have 5–6GB free, which is enough margin for a 7B model to load without hitting swap. Inference won't be as snappy as Nano — expect something closer to 10–15 tok/s depending on context length — but it will run, and the quality step-up over Nano is real for tasks that need it.</p>
+    <p>The moment macOS starts swapping — you'll notice the fan, the heat, and responses trickling in one token at a time — step back down to Nano. No model is worth that.</p>
 
     <h2>When you'll want more RAM</h2>
     <p>8GB is a workable machine for local AI. It's not a fully unconstrained one. Here's when the 16GB upgrade genuinely earns its cost:</p>
@@ -191,19 +191,19 @@
       <li>You do long context work (large codebases, multi-document summarization) where memory pressure is higher.</li>
       <li>You switch between AI and other memory-hungry apps constantly and don't want to manage what's open.</li>
     </ul>
-    <p>If you're primarily using AI for chat, writing, and Q&amp;A — and you're happy with Nano and Lite — 8GB is enough and the $200 upgrade isn't necessary. If you want to run 7B routinely without thinking about it, or if you're curious about larger models, 16GB removes the friction. It's a real trade-off, not a marketing upsell.</p>
+    <p>If you're primarily using AI for chat, writing, and Q&amp;A — and you're happy with Nano — 8GB is enough and the $200 upgrade isn't necessary. If you want to run 7B routinely without thinking about it, or if you want Lite (9B) at all, you need 12GB or more; 16GB removes the friction entirely. It's a real trade-off, not a marketing upsell.</p>
 
     <h2>Step by step: running AI on your 8GB Mac with Outlier</h2>
     <ol>
       <li><strong>Download Outlier</strong> from <a href="https://outlier.host/">outlier.host</a>. It's a signed Mac app — no terminal, no Python, no account required.</li>
-      <li><strong>Open Outlier.</strong> On first launch, it will download the Nano model. The file is small (around 1.2GB) and downloads once.</li>
+      <li><strong>Open Outlier.</strong> On first launch, it will download the Nano model. The file is small (about 2.4GB) and downloads once.</li>
       <li><strong>Start chatting.</strong> Nano loads fast and responds at 32 tok/s on M4 Air — faster than typical reading pace. Try a summary, a draft, a question.</li>
-      <li><strong>Switch to Lite</strong> when you want more depth on a task. The 3B model uses ~2GB wired and is included free alongside Nano.</li>
+      <li><strong>Stay on Nano.</strong> Lite (9B) is also free, but Outlier lists a 12GB minimum for it — on an 8GB Mac it will swap rather than run well. Nano is the tier this machine is for.</li>
       <li><strong>To try 7B,</strong> quit your heavy background apps first (see above), then select a 7B model in Outlier's model picker. Watch Activity Monitor → Memory if you want to verify you're not swapping.</li>
     </ol>
     <p>Everything runs on your chip, stays on your disk, and never touches the internet. The Wi-Fi off, airplane-mode test works out of the box.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Nano speed (32 tok/s) measured on M4 MacBook Air 8GB running Outlier. Lite speed (~18–20 tok/s) measured on the same machine. Wired RAM figures are approximate at 4-bit quantization; actual usage varies by model architecture and context length.</div>
+    <div class="receipts"><strong>Receipts:</strong> Nano speed (32 tok/s) measured on an M4 MacBook Air running Outlier; 71.7 tok/s on an M1 Ultra. Download sizes and minimum-RAM figures are the values Outlier itself ships in its tier list (Nano 4B / 2.37GB / 6GB minimum; Lite 9B / 5.04GB / 12GB minimum). Generic 7B and 13B wired-RAM figures are approximate at 4-bit quantization and vary with architecture and context length. <em>Corrected 2026-07-22: an earlier version of this page listed Nano as 1.5B and Lite as 3B and said Lite ran well on 8GB. Both were wrong.</em></div>
 
     <div class="cta">
       <h3>Download Outlier — free</h3>

@@ -188,7 +188,7 @@ assert count_vowels("aeiou") == 4   # WRONG — the answer is 5</code></pre>
     <p>I'm not going to pretend self-verification erases the gap to a frontier cloud model. It doesn't, and it can't, for a specific reason: a 4-bit 27B has a per-token slip floor on exact enumeration, counting, and arithmetic. That floor is a structural property of the quantized model. Self-verification doesn't lower it.</p>
     <p>What self-verification does is change what happens <em>when</em> the model slips. Without an oracle, a miscount ships. With the arbitration loop and the anti-gaming guard, the miscount produces a red test, the agent computes the true value, and the wrong side gets fixed. The model still miscounts sometimes. It just doesn't get to be wrong <em>and</em> confident <em>and</em> unchecked at the same time. On a local model, that's most of the game — and it's why the agent reports failure honestly instead of claiming a false success.</p>
 
-    <h2>Frequently asked questions</h2>
+    <h2>Questions about how an AI agent checks its own work</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>How does a local AI agent check its own work?</h3>

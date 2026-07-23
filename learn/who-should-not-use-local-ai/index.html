@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Who should not switch to local AI | Outlier</title>
+  <meta name="description" content="I build a local AI app and I think a lot of people should keep paying for cloud AI. The honest list of who local AI is wrong for, written by someone with an obvious incentive to say otherwise.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/learn/who-should-not-use-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Who should not switch to local AI">
+  <meta property="og:description" content="I build a local AI app. Here is the honest list of people who should keep paying for cloud AI instead.">
+  <meta property="og:url" content="https://outlier.host/learn/who-should-not-use-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Who should not switch to local AI">
+  <meta name="twitter:description" content="Written by someone with an obvious incentive to tell you the opposite.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Who should not switch to local AI","description":"An honest list of the people local AI is the wrong choice for, written by the founder of a local AI company.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/who-should-not-use-local-ai/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host/","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Who should not switch to local AI","item":"https://outlier.host/learn/who-should-not-use-local-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">Learn</a> &nbsp;›&nbsp; Who should not switch</div>
+    <h1>Who should not switch to local AI</h1>
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr · founder, Outlier · 2026-07-23</span>
+      <span class="updated-pill">Against my own interest</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Keep paying for cloud AI if you need live web results, image generation, voice mode, or a phone app; if you're on an Intel Mac, Windows, or Linux; if you have 8 GB of RAM and need models bigger than a 4B; if you want the strongest available reasoning on genuinely hard problems; or if you don't want to think about which model to run. Local AI is a real trade, not a free upgrade — and for a decent number of people the trade isn't worth it.</p>
+    </div>
+
+    <p class="lead">I sell a local AI app, so treat everything here accordingly. But I'd rather you read this and decide correctly than download something, find it doesn't do what you assumed, and conclude that local AI is a toy. Most of the disappointment I see comes from a mismatch that was predictable in advance. Here's how to predict it.</p>
+
+    <h2>You need things that are structurally impossible offline</h2>
+    <p>Some capabilities aren't a maturity problem. They cannot work on a machine with no network by definition, and no amount of engineering changes that.</p>
+    <ul>
+      <li><strong>Live information.</strong> Today's news, current prices, whether a flight is delayed, what a company announced this morning. A local model knows what was in its training data and nothing after. If most of your questions are about the present, you need something with web access.</li>
+      <li><strong>Anything that touches an external service.</strong> Reading your inbox, checking a calendar, querying a live database, calling an API on your behalf. Offline means offline.</li>
+    </ul>
+    <p>People sometimes expect that a good enough local model would eventually do these. It won't. That's the wrong axis.</p>
+
+    <h2>You need capabilities we specifically don't have</h2>
+    <p>Separate category: things that are possible locally, just not in our app today. I'd rather name them than let you find out after downloading.</p>
+    <ul>
+      <li><strong>Image generation.</strong> We don't do it. That's a diffusion model, a different architecture entirely. We can <em>read</em> an image you give us; we can't make one. If you want both on the same Mac you'd run a separate tool alongside.</li>
+      <li><strong>Voice mode.</strong> No speech in, no speech out.</li>
+      <li><strong>A phone app.</strong> Mac only. If you want AI in your pocket, this isn't it.</li>
+      <li><strong>Cloud sync across machines.</strong> Your conversations live on the machine that made them, which is the point, and also a limitation.</li>
+    </ul>
+
+    <h2>Your hardware doesn't fit</h2>
+    <p>This one is arithmetic, and it's the most common cause of a bad first experience.</p>
+    <p>We're Apple Silicon only — M1 or later, macOS 12 or newer. Intel Macs are out. Windows and Linux are out. And within Apple Silicon, RAM decides everything:</p>
+    <table>
+      <thead><tr><th>Your RAM</th><th>What actually runs well</th><th>Honest verdict</th></tr></thead>
+      <tbody>
+        <tr><td>8 GB</td><td>Nano (4B) only</td><td>Genuinely useful for chat, drafting, summarising. Don't expect more.</td></tr>
+        <tr><td>16 GB</td><td>Up to Quick (26B)</td><td>A good experience. Core 27B wants 24 GB.</td></tr>
+        <tr><td>24–32 GB</td><td>Core, Code, Vision (27–35B)</td><td>Where local AI starts feeling like a real tool.</td></tr>
+        <tr><td>64 GB+</td><td>Everything, including Plus 397B</td><td>The full range, though Plus runs at about 2 tok/s.</td></tr>
+      </tbody>
+    </table>
+    <p>If you have 8 GB and were hoping to run a 27B model, the answer is no, and no setting fixes it. Buying a new Mac to save $20 a month is also, obviously, terrible arithmetic. Stay on cloud.</p>
+
+    <h2>You're working at the top of the difficulty range</h2>
+    <p>Here's where I have to be careful not to oversell, because our own measurements set the boundary.</p>
+    <p>On everyday tasks, our local 27B is genuinely strong — in an execution-verified evaluation it was effectively 100% correct on common coding problems, and 83% on a deliberately hard novel set. Against Claude Opus on a 54-prompt head-to-head it matched on 98.9% of rubric checks. Those are good numbers and I stand behind them.</p>
+    <p>But on a blind slice of SWE-bench Verified — real bugs in real repositories — the same model measured about 45%. That's a real number, not a leaderboard claim, and it's below what the strongest cloud coding agents achieve. If your work <em>is</em> the hard end — novel research reasoning, long autonomous multi-file agent runs, problems where the last few percent of capability decides the outcome — the frontier cloud models are still ahead, and I'd rather you use them than be quietly disappointed in us.</p>
+
+    <h2>You don't want to think about it</h2>
+    <p>Cloud AI has one genuine, underrated advantage: there's nothing to choose. You open it, it's the model, it works.</p>
+    <p>Local AI asks you to make decisions. Which tier fits your RAM. Whether this question needs the fast small model or the slow big one. Whether a 14 GB download is worth the disk. We work hard to make those defaults sensible, but the decisions exist. Some people find that interesting. Some find it friction they never asked for. If you're the second kind, that's a completely reasonable preference and cloud is the better product for you.</p>
+
+    <h2>Two bad reasons to switch</h2>
+    <p><strong>Because local AI doesn't hallucinate.</strong> It does, at roughly the same rate, for exactly the same reasons. Where it runs has nothing to do with whether it's right. We <a href="https://outlier.host/learn/why-ai-makes-things-up/">caught one in the act</a> and wrote it up.</p>
+    <p><strong>Because it's obviously cheaper.</strong> Sometimes. Our Pro is $20/mo or $149/yr against ChatGPT Plus at $20/mo — real but not dramatic, and the free tier is genuinely free. If you'd have to buy hardware to make it work, the maths inverts completely.</p>
+
+    <h2>So who is it actually for?</h2>
+    <p>Briefly, since this page is about the other direction: people who handle material they'd rather not upload, people who hit usage caps and resent them, people who work somewhere with bad connectivity, people who want the tool to keep working regardless of a vendor's pricing decisions — and people who just like owning their tools. If none of those is you, you're better served elsewhere, and I'd rather say that than take the download.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> RAM and tier figures are the minimums the app itself ships. Quality figures come from our own execution-verified evaluations: effectively 100% correct on common coding tasks, 10/12 on a hard novel-compositional set, 98.9% rubric parity against Claude Opus across 54 prompts, and about 45% (18/40) on a blind SWE-bench Verified slice. All are single-configuration measurements by me, on my own hardware — directional, not leaderboard scores. Competitor pricing is as published at time of writing and changes.</div>
+
+    <div class="cta">
+      <h3>If you're still a fit, it's free to check</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=who-should-not-use-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/why-ai-makes-things-up/">Why AI makes things up</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM you need</a> · <a href="https://outlier.host/vs/local-ai-vs-cloud-ai/">Local AI vs cloud AI</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to speed up local AI on your Mac | Outlier</title>
+  <meta name="description" content="Local AI slowness is two separate problems: time to first token (prefill) and tokens per second (decode). Fix the wait before the answer starts first, then keep the model inside your RAM. Measured numbers from my own Macs.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-11">
+  <link rel="canonical" href="https://outlier.host/how-to/speed-up-local-ai-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to speed up local AI on your Mac">
+  <meta property="og:description" content="Local AI slowness is two separate problems: time to first token (prefill) and tokens per second (decode). Fix the wait before the answer starts first, then keep the model inside your RAM.">
+  <meta property="og:url" content="https://outlier.host/how-to/speed-up-local-ai-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to speed up local AI on your Mac">
+  <meta name="twitter:description" content="Two numbers, two different fixes. Here's the order I'd do them in.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to speed up local AI on your Mac", "description": "Local AI slowness is two separate problems: time to first token (prefill) and tokens per second (decode). Fix the wait before the answer starts first, then keep the model inside your RAM. Measured numbers from my own Macs.", "datePublished": "2026-07-11", "dateModified": "2026-07-11", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/speed-up-local-ai-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to speed up local AI on your Mac", "item": "https://outlier.host/how-to/speed-up-local-ai-mac/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does local AI take so long to start answering?", "acceptedAnswer": {"@type": "Answer", "text": "That gap is prefill. Before the model can write a single word it has to read your entire prompt, and in a chat app the prompt is the whole conversation so far, not just what you typed. The longer that history gets, the longer the wait, unless the runtime can reuse a cached prefix from the previous turn."}}, {"@type": "Question", "name": "Does more RAM make local AI faster?", "acceptedAnswer": {"@type": "Answer", "text": "Not directly. RAM doesn't raise the tokens-per-second ceiling of a model that already fits. What it does is keep you out of the collapse: once a model exceeds free RAM, macOS swaps to SSD and decode drops to roughly 1-3 tokens per second. More RAM means more models stay on the right side of that line."}}, {"@type": "Question", "name": "Should I turn thinking mode off to go faster?", "acceptedAnswer": {"@type": "Answer", "text": "Often yes, and it may not cost you accuracy. On a 30-question GSM8K run against the shipping Nano model, thinking off scored 80% versus 63.3% with thinking on, and finished 32% faster. That's one model on one task, so don't treat it as a universal law, but it's worth trying before assuming more reasoning tokens always mean better answers."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How to speed up local AI on your Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-11</span>
+      <span class="updated-pill">Last updated 2026-07-11</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Local AI slowness is two problems with two different fixes: time to first token (how long before the answer starts) and tokens per second (how fast it streams once it has started).</li>
+        <li>Fix time to first token first — it's what makes an app feel slow. It's dominated by prefill, so keep the top of your prompt stable so the cached prefix gets reused, start a fresh conversation for a new task, and paste less.</li>
+        <li>Then fix tokens per second by picking a model that fits in free RAM and closing memory hogs. A model that spills to SSD swap collapses to roughly 1-3 tokens per second.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Almost every "local AI is too slow" complaint I get is one of two very different problems wearing the same coat. People describe both as slow, but the causes don't overlap and neither do the fixes. Before you buy RAM or download a smaller model, work out which one you actually have.</p>
+
+    <h2>The two numbers that matter, and why they're different</h2>
+    <p><strong>TTFT</strong> — time to first token — is how long you stare at nothing after hitting enter. <strong>tok/s</strong> — decode speed — is how fast words appear once the answer has started. A setup can be terrible at one and fine at the other. A model streaming at a comfortable 20 tokens per second still feels broken if you waited 18 seconds to see the first word.</p>
+    <p>Watch your own app for one turn and note which half hurt. Long pause, then normal text? Next section. Text crawling out once it starts? Skip to the RAM section.</p>
+
+    <h2>Fix time to first token first</h2>
+    <p>TTFT is dominated by <strong>prefill</strong>: the model has to read your whole prompt before it can write anything. And in a chat app, "your prompt" isn't the sentence you just typed — it's the entire conversation, re-fed every turn. That's why turn 20 feels slower than turn 2 even though you typed the same amount. Three levers actually move it:</p>
+    <ul>
+      <li><strong>Keep the stable part of your prompt at the top and unchanged.</strong> Runtimes cache the work already done on a prefix and reuse it. Edit an early message and you invalidate that cache, so the whole thing gets re-read. Put what doesn't change — instructions, the file you're working from — first, and add new material at the bottom.</li>
+      <li><strong>Start a new conversation for a new task.</strong> Continuing a 60-message thread to ask an unrelated question means re-reading 60 messages of irrelevant context every turn.</li>
+      <li><strong>Don't paste 10,000 words you don't need.</strong> Every token in the prompt is prefill work. Paste the function, not the repo.</li>
+    </ul>
+    <p>How much is on the table? On Outlier's own engine, fixing prefix reuse took steady-state TTFT from about 18.5 seconds to the 1.4-4.7 second range. On a 6-step agent loop, step 6 went from 66.4 seconds to 16.0 — and stopped climbing with every step. Latency became flat instead of a function of how long you'd been talking. Mechanics here: <a href="https://outlier.host/learn/what-is-prefix-caching/">what prefix caching is</a>.</p>
+
+    <h2>Then fix tokens per second: make the model fit</h2>
+    <p>Decode speed has one dominant cause on a Mac, and it isn't the chip. <strong>If the model exceeds free RAM, macOS swaps to SSD and decode collapses to roughly 1-3 tokens per second</strong>, with the fans coming up to tell you about it. That's not a slope. It's a cliff.</p>
+    <p>So: pick a model that fits, then keep it fitting. Closing the memory hogs is the cheapest win there is — a browser with many tabs, Docker, a VM, a video editor in the background. Any of those can be the difference between fitting and not. If you're not sure what size you can hold, <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">how much RAM you need for local AI</a> goes through it, and <a href="https://outlier.host/how-to/run-ai-on-8gb-mac/">running AI on an 8 GB Mac</a> covers the tight end.</p>
+    <p>Then pick the size on purpose: a smaller tier for interactive back-and-forth, the large one for the hard question you're willing to wait on. Here's that trade on my own machines:</p>
+
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Machine</th><th>Measured decode</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Nano 4B</strong></td><td>M4 Air</td><td>about 32 tok/s</td></tr>
+        <tr><td><strong>Core 27B</strong></td><td>M1 Ultra</td><td>about 20.7 tok/s</td></tr>
+        <tr><td><strong>Plus 397B</strong></td><td>M1 Ultra (paged expert streaming, ~11 GB peak RSS)</td><td>about 2.1 tok/s</td></tr>
+      </tbody>
+    </table>
+
+    <p>Plus at 2.1 tok/s is slow, and I won't pretend otherwise — it's a 397-billion-parameter model streaming experts from disk at around 11 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
+
+    <h2>Symptom → cause → fix</h2>
+    <table>
+      <thead>
+        <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Long pause, then normal-speed text</td><td>Prefill on a long prompt or conversation</td><td>New conversation for a new task; keep the top of the prompt stable; paste less</td></tr>
+        <tr><td>Pause gets worse every turn</td><td>Cached prefix isn't being reused</td><td>Stop editing earlier messages; append at the bottom, not the middle</td></tr>
+        <tr><td>Text crawls out at a word or two per second, fans loud</td><td>Model exceeds free RAM, macOS is swapping to SSD</td><td>Smaller model tier, or close browser tabs / Docker / VMs / video editors</td></tr>
+        <tr><td>Starts fine, slows down over a long answer</td><td>Thermal throttling on a fanless machine</td><td>Plug in, hard surface, shorter generations</td></tr>
+        <tr><td>Everything is fine but answers take forever to arrive</td><td>Model is thinking before it answers</td><td>Try thinking mode off and compare</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Try turning thinking mode off</h2>
+    <p>This one surprised me enough that I keep repeating it. Thinking mode spends tokens reasoning before it answers, which costs time by definition. What isn't obvious is that it doesn't always buy accuracy. On a 30-question GSM8K run against the shipping Nano model, thinking off scored <strong>80%</strong> against <strong>63.3%</strong> with thinking on, and finished 32% faster.</p>
+    <p>Be honest about what that is: one model, one task, n=30. Thinking isn't useless, and on harder reasoning it earns its keep. But the assumption that more reasoning tokens always mean better answers is worth testing rather than believing. Toggle it, run the same five prompts both ways, keep whichever won.</p>
+
+    <h2>What you can't fix</h2>
+    <p>A fanless MacBook Air will throttle on a long sustained generation. There's no fan to move the heat out, so the chip slows itself down. That's physics, not a bug in your setup, and no setting reverses it. Plugged in and on a hard surface instead of a couch cushion helps at the margin; shorter generations help more, because the machine never gets hot enough to care.</p>
+    <p>Likewise, a big model on a small machine is still a big model on a small machine. Paged streaming makes it run at all, which is useful, but it doesn't make it quick. Quality and responsiveness at once is a hardware conversation, not a settings one.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates — Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~2.1 tok/s (at ~11 GB peak RSS) on an M1 Ultra — were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Why does local AI take so long to start answering?</h3>
+        <p>That gap is prefill. Before the model can write a single word it has to read your entire prompt, and in a chat app the prompt is the whole conversation so far, not just what you typed. The longer that history gets, the longer the wait, unless the runtime can reuse a cached prefix from the previous turn.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does more RAM make local AI faster?</h3>
+        <p>Not directly. RAM doesn't raise the tokens-per-second ceiling of a model that already fits. What it does is keep you out of the collapse: once a model exceeds free RAM, macOS swaps to SSD and decode drops to roughly 1-3 tokens per second. More RAM means more models stay on the right side of that line.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Should I turn thinking mode off to go faster?</h3>
+        <p>Often yes, and it may not cost you accuracy. On a 30-question GSM8K run against the shipping Nano model, thinking off scored 80% versus 63.3% with thinking on, and finished 32% faster. That's one model on one task, so don't treat it as a universal law, but it's worth trying before assuming more reasoning tokens always mean better answers.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=speed-up-local-ai-mac">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM you need for local AI</a> · <a href="https://outlier.host/how-to/run-ai-on-8gb-mac/">Run AI on an 8 GB Mac</a> · <a href="https://outlier.host/learn/what-is-prefix-caching/">What is prefix caching?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

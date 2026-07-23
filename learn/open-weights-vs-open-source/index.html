@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open weights is not open source — what your model's licence actually allows | Outlier</title>
+  <meta name="description" content="Downloadable does not mean unrestricted. Most local AI models ship under Apache 2.0, but some carry custom vendor licences with use restrictions attached. How to check which one you are running, and why it matters commercially.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/learn/open-weights-vs-open-source/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Open weights is not open source — what your model's licence actually allows">
+  <meta property="og:description" content="Downloadable does not mean unrestricted. How to check what licence your local model carries, and why two models on the same machine can have different rules.">
+  <meta property="og:url" content="https://outlier.host/learn/open-weights-vs-open-source/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Open weights is not open source">
+  <meta name="twitter:description" content="Downloadable does not mean unrestricted. Two models on the same Mac can carry very different rules.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Open weights is not open source — what your model's licence actually allows","description":"Downloadable model weights are not automatically unrestricted. Most local models ship under Apache 2.0, but some carry custom vendor licences with use restrictions. How to check which one you are running.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/open-weights-vs-open-source/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host/","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Open weights is not open source","item":"https://outlier.host/learn/open-weights-vs-open-source/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">Learn</a> &nbsp;›&nbsp; Open weights vs open source</div>
+    <h1>Open weights is not open source — what your model's licence actually allows</h1>
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr · founder, Outlier · 2026-07-23</span>
+      <span class="updated-pill">Not legal advice</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>"Open weights" means you can download the model file. It does not mean you can do anything you like with it. Some models ship under a genuine open-source licence like Apache 2.0, with essentially no restrictions on commercial use. Others ship under a custom licence written by the vendor, which can restrict what you may use the model for and require you to pass those restrictions on to anyone you share it with. Both are "downloadable". Only one is open source.</p>
+    </div>
+
+    <p class="lead">This trips up more people than it should, and I include the version of me that shipped a model catalogue without thinking hard enough about it. Two models can sit in the same folder on the same Mac, both downloaded free, both running offline — and carry meaningfully different rules about what you're allowed to do with them. If you're using a local model for client work or inside a product, that difference is worth ten minutes of your attention.</p>
+
+    <h2>Three things people collapse into one word</h2>
+    <p>"Open" is doing far too much work in this space. It's worth separating what actually varies:</p>
+    <ul>
+      <li><strong>Open weights.</strong> The trained parameter files are publicly downloadable. You can run the model yourself. This is the thing that makes local AI possible at all, and it's genuinely significant — but on its own it says nothing about permissions.</li>
+      <li><strong>Open source.</strong> The licence meets the established definition: free use for any purpose, including commercial, with no restrictions on <em>fields of endeavour</em>. Apache 2.0 and MIT qualify. A licence that says "you may not use this for X" does not, however reasonable X is.</li>
+      <li><strong>Open training data.</strong> Almost nobody does this. The overwhelming majority of "open" models publish weights while keeping the training corpus private. If reproducibility matters to you, assume you don't have it.</li>
+    </ul>
+    <p>A model can be the first without being the second, and virtually none are the third. When a vendor says "open model", they nearly always mean the first.</p>
+
+    <h2>Two licence shapes you'll actually meet</h2>
+    <p><strong>Permissive open-source licences</strong> — Apache 2.0 and MIT are the common ones. Use it commercially, modify it, redistribute it, build a product on it. Apache 2.0 also carries an explicit patent grant, which is a genuine advantage for anyone shipping software. The obligations are light: keep the licence and attribution intact.</p>
+    <p><strong>Custom vendor licences</strong> — written by the company that trained the model, and each one is its own document. These typically permit broad commercial use, which is why they feel open in practice, but they commonly add an acceptable-use policy listing prohibited applications, and they usually require that you pass the same terms downstream to anyone you give the model to. Some also reserve rights for the vendor that a permissive licence wouldn't.</p>
+    <p>None of that makes a custom licence unreasonable — restricting weapons development or mass surveillance is a defensible thing for a vendor to do. It does make it <em>not open source</em>, and it does mean you have to read it rather than assume.</p>
+
+    <h2>What this looks like in a real lineup — ours</h2>
+    <p>I'll use our own tiers as the worked example, partly because I can state them with certainty and partly because they make the point better than a hypothetical would. These are the licences of the underlying base models we ship:</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Base model</th><th>Licence</th></tr></thead>
+      <tbody>
+        <tr><td>Nano (4B)</td><td>Qwen3.5-4B</td><td>Apache 2.0</td></tr>
+        <tr><td>Lite (9B)</td><td>Qwen3.5-9B</td><td>Apache 2.0</td></tr>
+        <tr><td><strong>Quick (26B)</strong></td><td>Gemma-4-26B-a4b-it</td><td><strong>Gemma Terms of Use</strong></td></tr>
+        <tr><td>Core (27B)</td><td>Qwen3.6-27B</td><td>Apache 2.0</td></tr>
+        <tr><td>Code (27B)</td><td>Qwen3.6-27B</td><td>Apache 2.0</td></tr>
+        <tr><td>Vision (35B)</td><td>Qwen3.6-35B-A3B</td><td>Apache 2.0</td></tr>
+        <tr><td>Plus (397B)</td><td>Qwen3.5-397B-A17B</td><td>Apache 2.0</td></tr>
+      </tbody>
+    </table>
+    <p>Six of seven are Apache 2.0. One — Quick — is Google's own Gemma Terms of Use, which is a custom licence rather than an open-source one. Same app, same machine, same download flow, different rules. Nothing about the interface tells you that, which is precisely the problem this article exists to fix, and it's why we list the licence and base model for every tier rather than just saying "open".</p>
+
+    <h2>What about the text and code it generates?</h2>
+    <p>This is the question everyone actually has, and I want to be careful here because it's the one where confident internet answers do the most damage.</p>
+    <p>The general position is that a model's licence governs the <em>weights</em> and your use of them, and most vendors do not claim ownership of what you generate. That's the common reading, and it's why people use these models commercially without much anxiety. But two things genuinely complicate it. First, a custom licence with an acceptable-use policy restricts the <em>purposes</em> you may use the model for, and generating output is a use — so a prohibited application doesn't become permitted just because the restriction was about the model rather than the text. Second, whether AI-generated material attracts copyright at all, and who holds it, is unsettled and varies by jurisdiction.</p>
+    <p>So: for ordinary commercial work with an Apache 2.0 model, the position is about as comfortable as it gets. For anything where the answer really matters — you're shipping generated code into a product you'll license onward, or your industry is regulated — read the actual licence for the actual model, and talk to a lawyer. I build inference engines; I'm not qualified to tell you how this resolves for your situation, and anyone on the internet who tells you confidently that they are should be treated with suspicion.</p>
+
+    <h2>How to check what you're running, in about two minutes</h2>
+    <ol>
+      <li><strong>Find the base model's real name.</strong> Not the product name your app gives it. You want the upstream identifier, like <code>Qwen3.6-27B</code> or <code>Gemma-4-26B</code>.</li>
+      <li><strong>Open its model card.</strong> On Hugging Face the licence is listed in the sidebar and the full text is usually in the repository files.</li>
+      <li><strong>Read the licence itself, not the summary.</strong> If it says Apache 2.0 or MIT you're in permissive territory. If it's named after the model family, it's a custom licence — read it properly, including any linked acceptable-use policy.</li>
+      <li><strong>Check per model, not per app.</strong> As our own lineup shows, tiers inside one product can differ.</li>
+      <li><strong>Write down what you concluded.</strong> If you're using this commercially, a one-line note per model of which licence and when you checked will save you reconstructing it later.</li>
+    </ol>
+    <p>If a tool won't tell you which base model it's running, that's worth noticing on its own. You can't evaluate a licence you can't identify.</p>
+
+    <div class="receipts"><strong>Receipts and limits:</strong> the tier table above is read directly from the shipping app's model registry as of version 1.11.663 — base model and licence string per tier. Optional cloud API models available in the app are the provider's own proprietary models and are not covered here. <strong>This is not legal advice</strong>, and I'm deliberately not quoting clause-level terms from third-party licences here, because those documents get revised and a summary written today may be wrong by the time you read it. Open the licence for your specific model and read the current version. Whether AI output is copyrightable, and who owns it, remains unsettled and differs by jurisdiction.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=open-weights-vs-open-source">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/own-your-ai/">What owning your AI means</a> · <a href="https://outlier.host/learn/what-is-a-large-language-model/">What a large language model is</a> · <a href="https://outlier.host/learn/when-ai-models-get-retired/">When AI models get retired</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

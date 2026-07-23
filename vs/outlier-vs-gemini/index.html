@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Gemini: local AI vs Google's cloud AI | Outlier</title>
+  <meta name="description" content="Gemini runs in Google's data centers and plugs into Gmail, Docs and Search. Outlier runs on your Mac's own chip with nothing uploaded. An honest side-by-side on price, privacy, offline use and what each one can't do.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-09">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-gemini/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Gemini: local AI vs Google's cloud AI">
+  <meta property="og:description" content="Gemini runs in Google's data centers and plugs into Gmail, Docs and Search. Outlier runs on your Mac's own chip with nothing uploaded. An honest side-by-side on price, privacy, offline use and what each one can't do.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-gemini/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Gemini: local AI vs Google's cloud AI">
+  <meta name="twitter:description" content="One runs in Google's data center. One runs on your Mac. Here's the honest trade.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Outlier vs Gemini: local AI vs Google's cloud AI", "description": "Gemini runs in Google's data centers and plugs into Gmail, Docs and Search. Outlier runs on your Mac's own chip with nothing uploaded. An honest side-by-side on price, privacy, offline use and what each one can't do.", "datePublished": "2026-07-09", "dateModified": "2026-07-09", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/vs/outlier-vs-gemini/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Gemini", "item": "https://outlier.host/vs/outlier-vs-gemini/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Gemini better than Outlier?", "acceptedAnswer": {"@type": "Answer", "text": "It depends entirely on what you need. Gemini is better if you want your AI to read your Gmail, edit your Docs, search the live web, generate images, or sit on your phone. Outlier is better if you want nothing uploaded, no account, no usage caps, and work that continues with Wi-Fi off. There is no version of this where one tool wins on every row."}}, {"@type": "Question", "name": "Does Google train on my Gemini conversations?", "acceptedAnswer": {"@type": "Answer", "text": "Google's stated policy as of 2026 is that conversations may be used to improve Google products, and that human reviewers may see sampled conversations. There's a control for it, called Keep Activity, under Gemini → Settings &amp; help → Activity; note it's on by default for adult accounts, and Google states conversations are still retained for up to 72 hours even when it's off. Policies change, so check the current terms yourself before relying on any summary, including this one."}}, {"@type": "Question", "name": "Does Outlier work without an internet connection?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The model files live on your Mac and the computation happens on your own chip, so Outlier runs with Wi-Fi off. The flip side is that it has no access to the live internet, so it cannot look up today's news or fetch a page the way Gemini can."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a> &nbsp;›&nbsp; vs gemini</div>
+    <h1>Outlier vs Gemini: local AI vs Google's cloud AI</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · published 2026-07-09</span>
+      <span class="updated-pill">Last updated 2026-07-09</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Gemini runs Google's models in Google's data centers, so every prompt you send is uploaded; Outlier runs models on your Mac's own chip, so nothing leaves the machine.</li>
+        <li>Gemini is stronger on Google Workspace integration, live web access, image generation, very large context windows and a mobile app — Outlier has none of those.</li>
+        <li>Outlier is stronger on privacy, offline use, no account and no usage caps. Both cost $20/month, though Gemini's price also includes 2 TB of Drive storage.</li>
+      </ul>
+    </div>
+
+    <p class="lead">I build Outlier, so read this with that in mind. I've tried to write the comparison I'd want if I were shopping — including the parts where Gemini is the better answer, because there are several and pretending otherwise would waste your time.</p>
+
+    <h2>The actual difference is where the model runs</h2>
+    <p>Everything else follows from this one fact. When you type into Gemini, your words travel to a Google data center, a model there does the work, and the answer comes back. When you type into Outlier, the model file is already sitting on your SSD, and your Mac's own chip does the math. Nothing is sent anywhere.</p>
+    <p>That's not a philosophical distinction. It decides who can read your prompt, whether the thing works on a plane, and whether an account is required to start. Gemini's architecture is what gives it live web access and Workspace integration. Outlier's is what gives it privacy and offline operation. Neither gets both.</p>
+
+    <h2>What Gemini genuinely does better</h2>
+    <p>This is the honest part, and it's a long list.</p>
+    <ul>
+      <li><strong>Workspace integration.</strong> Gemini reaches into Gmail, Docs and Drive. If you ask it to summarize a thread or rewrite a doc you already own, it just does it. Outlier has no Workspace integration at all — you'd be pasting.</li>
+      <li><strong>Live web access.</strong> Gemini is wired into Search. Outlier can't search the live internet, so it has no idea what happened this morning.</li>
+      <li><strong>Very large context windows.</strong> Google has pushed hard here, and it shows on long-document work.</li>
+      <li><strong>Multimodal handling.</strong> Gemini's handling of images and mixed media is strong and well-integrated.</li>
+      <li><strong>Image generation.</strong> Gemini makes images. Outlier does not.</li>
+      <li><strong>A polished mobile app.</strong> Gemini is on your phone. Outlier is Apple Silicon Mac only — no iPhone app, no iPad app.</li>
+      <li><strong>The bundle.</strong> Gemini Advanced is $20/month sold inside Google One AI Premium, which also includes 2 TB of Drive storage. That's a real extra I don't match.</li>
+    </ul>
+    <p>If that list describes your workday, stop reading and go use Gemini. Genuinely. A local model that can't see your inbox isn't going to win an argument against one that can.</p>
+
+    <h2>What Outlier does that Gemini can't</h2>
+    <p>The short version: it doesn't upload anything, and it doesn't need permission to run.</p>
+    <ul>
+      <li><strong>Nothing is uploaded.</strong> Your prompt, your pasted contract, your unreleased code — none of it goes over the wire, because there's no wire in the loop.</li>
+      <li><strong>It works with Wi-Fi off.</strong> Airplane, basement, bad hotel internet, doesn't matter. The model is already on the disk.</li>
+      <li><strong>No account.</strong> You download it and start typing. There's no sign-in, no email, no identity attached to your questions.</li>
+      <li><strong>No usage caps.</strong> There's no per-message quota to hit, because the only resource being consumed is your own machine.</li>
+      <li><strong>Open weights.</strong> Outlier's model weights are open; Gemini's are closed — you can use the model, but you can't hold it.</li>
+    </ul>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr><th>&nbsp;</th><th>Outlier</th><th>Gemini Advanced</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Price</strong></td><td>Free (Nano 4B + Lite 9B). Pro $20/mo or $149/yr for all 7 tiers</td><td>$20/month, inside Google One AI Premium (includes 2 TB Drive)</td></tr>
+        <tr><td><strong>Usage caps</strong></td><td>None — the limit is your own hardware</td><td>Whatever Google's current plan terms say — check them</td></tr>
+        <tr><td><strong>Works offline</strong></td><td>Yes, with Wi-Fi off</td><td>No — every request needs the network</td></tr>
+        <tr><td><strong>Data uploaded</strong></td><td>Nothing leaves the device</td><td>Every prompt goes to Google's servers</td></tr>
+        <tr><td><strong>Account required</strong></td><td>No</td><td>Yes, a Google account</td></tr>
+        <tr><td><strong>Workspace integration</strong></td><td>None</td><td>Gmail, Docs, Drive, Search</td></tr>
+        <tr><td><strong>Image generation</strong></td><td>No</td><td>Yes</td></tr>
+        <tr><td><strong>Mobile app</strong></td><td>No — Apple Silicon Mac only</td><td>Yes, polished</td></tr>
+        <tr><td><strong>Model weights</strong></td><td>Open</td><td>Closed</td></tr>
+      </tbody>
+    </table>
+
+    <h2>What happens to your conversations</h2>
+    <p>Google's stated policy as of 2026 is that conversations may be used to improve Google products, and that human reviewers may see sampled conversations. There's a control for it — Keep Activity, under Gemini → Settings &amp; help → Activity — though it's on by default for adult accounts, and Google states conversations are still retained for up to 72 hours even when it's switched off. I'd verify the current policy yourself before relying on any of that — including this paragraph — because these terms get revised and a summary written in July is a summary of July.</p>
+    <p>With Outlier there's no policy to read on this point, which is the whole idea. The computation happens on your chip. There is no server-side copy of your conversation because there was never a server. If you want the longer walkthrough of how to read these documents for yourself, I wrote one: <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a>.</p>
+    <p>This matters unevenly. If you're asking for dinner ideas, it doesn't matter at all. If you're pasting a client's contract, a patient note, a codebase your employer hasn't shipped yet, or anything under an NDA, it's the entire question.</p>
+
+    <h2>Is the local model actually good enough?</h2>
+    <p>Fair question, and the honest answer is that I have not run a head-to-head against Gemini, so I'm not going to invent a number for it. What I have measured is Outlier's Core 27B against Claude Opus across a 54-prompt head-to-head: Core 27B matched Opus on 98.9% of rubric checks, and hit 100% on the nine hardest prompts in the set — a chess engine, Raft consensus, zero-knowledge proofs. The full data is <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">published here</a>, prompt by prompt, so you can disagree with my rubric.</p>
+    <p>What that tells you is narrow but useful: a model running on your own Mac is no longer obviously the weak option for hard technical work. It doesn't tell you Outlier writes a better email than Gemini, and it can't tell you anything about the tasks Outlier simply doesn't do — searching the web, making an image, reading your Drive.</p>
+
+    <h2>How to choose</h2>
+    <p>The split is cleaner than most comparisons:</p>
+    <p><strong>Pick Gemini</strong> if your working life already lives in Google Workspace. The integration is hard to beat, the mobile app is real, and the 2 TB of Drive storage in the bundle is a genuine extra. If you spend your day in Gmail and Docs, an assistant that can't see either one is solving a different problem than the one you have.</p>
+    <p><strong>Pick Outlier</strong> if your work involves material you'd rather not upload, or if you work somewhere the internet isn't reliable. That's the trade: you're giving up the integration to get the privacy. Those are the same coin.</p>
+    <p>And plenty of people run both. Gemini for the inbox and the web, Outlier for the code and the contracts. Outlier's free tier is Nano 4B and Lite 9B with no account, so testing that idea costs you a download and nothing else.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The 98.9% figure is my own first-hand measurement — a 54-prompt head-to-head between Outlier's Core 27B and Claude Opus, scored against a written rubric, with 100% on the nine hardest prompts (chess engine, Raft consensus, zero-knowledge proofs). Every prompt and result is published at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">the benchmark page</a>. It is a Claude comparison, not a Gemini one; I have not run a Gemini head-to-head and haven't claimed a number for it here. Gemini pricing, bundle contents and the data-use policy described above are Google's stated terms as of 2026 — verify them in your own Google Account settings before relying on them.</div>
+
+    <h2>Questions about Outlier vs Gemini</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is Gemini better than Outlier?</h3>
+        <p>It depends entirely on what you need. Gemini is better if you want your AI to read your Gmail, edit your Docs, search the live web, generate images, or sit on your phone. Outlier is better if you want nothing uploaded, no account, no usage caps, and work that continues with Wi-Fi off. There is no version of this where one tool wins on every row.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does Google train on my Gemini conversations?</h3>
+        <p>Google's stated policy as of 2026 is that conversations may be used to improve Google products, and that human reviewers may see sampled conversations. There's a control for it, called Keep Activity, under Gemini → Settings &amp; help → Activity; note it's on by default for adult accounts, and Google states conversations are still retained for up to 72 hours even when it's off. Policies change, so check the current terms yourself before relying on any summary, including this one.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does Outlier work without an internet connection?</h3>
+        <p>Yes. The model files live on your Mac and the computation happens on your own chip, so Outlier runs with Wi-Fi off. The flip side is that it has no access to the live internet, so it cannot look up today's news or fetch a page the way Gemini can.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-gemini">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-chatgpt/">Outlier vs ChatGPT</a> · <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a> · <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">The 54-prompt benchmark</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

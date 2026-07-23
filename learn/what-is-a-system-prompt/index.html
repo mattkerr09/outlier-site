@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is a system prompt, and why does it matter? | Outlier</title>
+  <meta name="description" content="A system prompt is a block of instructions placed at the top of a conversation, before any user message. It sets persona, rules, output format and constraints for the whole session — and because it sits at the top and rarely changes, it's also the ideal thing for a local AI runtime to cache.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-22">
+  <link rel="canonical" href="https://outlier.host/learn/what-is-a-system-prompt/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is a system prompt, and why does it matter?">
+  <meta property="og:description" content="A system prompt is a block of instructions placed at the top of a conversation, before any user message. It sets persona, rules, output format and constraints for the whole session — and it's also the ideal thing for a local AI runtime to cache.">
+  <meta property="og:url" content="https://outlier.host/learn/what-is-a-system-prompt/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What is a system prompt, and why does it matter?">
+  <meta name="twitter:description" content="It's just more tokens at the top of the context window. That fact explains both what it can do and why prefilling it once and reusing it made our follow-ups roughly 13x faster.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "What is a system prompt, and why does it matter?", "description": "A system prompt is a block of instructions placed at the top of a conversation, before any user message. It sets persona, rules, output format and constraints for the whole session — and because it sits at the top and rarely changes, it's also the ideal thing for a local AI runtime to cache.", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-a-system-prompt/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is a system prompt, and why does it matter?", "item": "https://outlier.host/learn/what-is-a-system-prompt/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is a system prompt different from a normal prompt?", "acceptedAnswer": {"@type": "Answer", "text": "Only in position and lifetime. Structurally it is the same kind of text, in the same context window. It goes at the top, before any user message, and it stays there for the whole session, so it colors every answer instead of just one. There is no separate privileged channel underneath."}}, {"@type": "Question", "name": "Can a system prompt make a model follow rules it otherwise wouldn't?", "acceptedAnswer": {"@type": "Answer", "text": "It can shift behavior a lot, but not by force. The weight a system prompt carries comes from its position at the top of the context and from training that taught the model to treat that block as standing instructions. It's strong guidance, not a hard switch, so treat it as steering rather than a guarantee."}}, {"@type": "Question", "name": "Why does changing my system prompt make the app slower?", "acceptedAnswer": {"@type": "Answer", "text": "Because a runtime can cache the work it already did for the top of the conversation and reuse it. In Outlier, prefilling the system prompt once per model tier and reusing it across requests took follow-up time-to-first-token from about 18 seconds to about 1.3 seconds, roughly 13x, with no change to the model or the prompt text. Edit that block between turns and the cached work no longer matches, so the runtime has to redo it."}}, {"@type": "Question", "name": "What should go in the system prompt versus the user message?", "acceptedAnswer": {"@type": "Answer", "text": "Put durable instructions in the system prompt: tone, output format, domain, and what to never do. Keep per-question detail — the actual task, the pasted code, today's constraint — in the user message. The test is whether the instruction would still be true three questions from now. If yes, it belongs at the top and should stay stable."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>What is a system prompt, and why does it matter?</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-22</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>A system prompt is a block of instructions placed at the top of the conversation, before any user message. It sets persona, rules, output format and constraints for the whole session.</li>
+        <li>Structurally it's just more tokens in the same context window — the model has no separate privileged channel. It gets its weight from position and from training, not from magic.</li>
+        <li>It matters twice: it steers every answer you get, and because it sits at the top and rarely changes, it's the ideal thing for a runtime to cache. Prefilling ours once per model tier and reusing it took follow-up time-to-first-token from about 18 seconds to about 1.3 seconds — and keeping it stable is what preserves that.</li>
+      </ul>
+    </div>
+
+    <p class="lead">A system prompt is the block of instructions that goes at the very top of a conversation, before you've said anything. It tells the model who it's being, what rules apply, what format to answer in, and what not to do — and it applies to the entire session, not just the next reply. Most people meet it as a text box labeled "custom instructions" and never think about it again. It's worth thinking about, because it's doing more work than any single question you'll ever type.</p>
+
+    <h2>What a system prompt actually is</h2>
+    <p>Strip away the interface and a conversation with a language model is one long string of tokens. Your messages are in there. The model's replies are in there. And at the very front sits the system prompt: persona, rules, output format, constraints. Everything after it is read in its light.</p>
+    <p>That's the whole mechanism. No hidden config file, no separate API the model consults. It's text, in the same window, in front of everything else. Slightly deflating to learn, and also the most useful thing to know about it — once you get that it's just tokens at the top, both its power and its limits stop being mysterious.</p>
+
+    <h2>Why the model listens to it at all</h2>
+    <p>If it's just more text, why does the model take it more seriously than a passing remark in message four? Two reasons, and neither is magic.</p>
+    <p>The first is <strong>position</strong>. It's at the top. Everything the model reads afterward is conditioned on what came before, so instructions in front of the conversation shape the whole conversation by construction. The second is <strong>training</strong>. Models are trained on conversations where the leading block is treated as standing instructions, so they've learned to weight it that way.</p>
+    <p>The honest consequence: a system prompt is strong steering, not a hard switch. There's no privileged channel enforcing it. If you write "never use bullet points" at the top and then paste something extremely bullet-shaped, you may still get bullets. Treat it as the strongest lever you have, not a guarantee, and you'll set your expectations correctly.</p>
+
+    <h2>The other reason it matters: speed</h2>
+    <p>Here's the part almost nobody mentions, and it's the thing I spend my days on. Because the system prompt sits at the top and rarely changes, it's the ideal thing for a runtime to cache.</p>
+    <p>Every request, a model has to process the tokens in front of it before it can produce the first word of a reply. If the first several thousand are identical to last time, redoing that work is waste. So don't: prefill the system prompt once, keep the result, reuse it on every request after.</p>
+    <p>In Outlier, doing exactly that — prefilling the system prompt once per model tier and reusing it across requests — took follow-up time-to-first-token from about 18 seconds to about 1.3 seconds. Roughly 13x. Same model, same prompt text, not one word changed. All of the gain came from not repeating work on a block that hadn't changed. The mechanics of that reuse are covered in <a href="https://outlier.host/learn/what-is-prefix-caching/">what prefix caching is</a>.</p>
+
+    <h2>The corollary that bit us</h2>
+    <p>If a stable top-of-conversation is worth 13x, then anything that mutates it between turns throws that away. I learned this the direct way.</p>
+    <p>Outlier has a memory feature that recalls relevant facts and injects them into the conversation. It was running its recall against the most recent user message — which sounds right, and is completely wrong for caching. Every step of an agent loop produced a new "most recent message," so the recalled facts changed, so the injected block changed, so the system block changed. Prefix reuse fell to zero. Every single step re-prefilled the whole conversation from scratch.</p>
+    <p>The fix was one decision: recall against the <em>first</em> user message instead. The block became stable, and the reuse held. Nothing about the model changed. The lesson generalizes past our codebase — if your top-of-conversation block is dynamic, you're paying full price on every turn, and you probably can't see it. It looks like the model being slow. It's the plumbing.</p>
+
+    <h2>System prompt or user message? A simple split</h2>
+    <p>Practical version for anyone actually using one of these apps: durable instructions go up top, per-question detail goes in the message. And once the top block is set, leave it alone.</p>
+
+    <table>
+      <thead>
+        <tr><th>&nbsp;</th><th>System prompt</th><th>User message</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Holds</strong></td><td>Tone, output format, domain, hard "never do this" rules</td><td>The actual task, the pasted code, today's constraint</td></tr>
+        <tr><td><strong>Lifetime</strong></td><td>The whole session</td><td>One turn</td></tr>
+        <tr><td><strong>Should it change?</strong></td><td>Rarely — stability is the point</td><td>Every turn, that's its job</td></tr>
+        <tr><td><strong>Cost of editing it</strong></td><td>Cached work at the top gets invalidated</td><td>None; it was never reusable anyway</td></tr>
+        <tr><td><strong>Good test</strong></td><td>"Would this still be true three questions from now?"</td><td>"Is this specific to what I'm asking right now?"</td></tr>
+      </tbody>
+    </table>
+
+    <p>A rewritten system prompt every session isn't a tuned setup, it's a moving target — for the model and for the cache underneath it. Write it once, write it carefully, then let it sit. For the writing part, <a href="https://outlier.host/learn/how-to-write-a-good-ai-prompt/">how to write a good AI prompt</a> covers the rest.</p>
+
+    <h2>Who owns that layer</h2>
+    <p>Cloud AI apps ship their own hidden system prompts. You don't see them, you can't edit them, and they can change between the Tuesday you built a workflow on one and the Wednesday it stops behaving the same. Your custom instructions get appended to something you were never shown.</p>
+    <p>Running locally, that layer is yours. You write the block, you know what's in it, and it doesn't change unless you change it. I won't claim that alone makes local worth it — the honest trade-offs live elsewhere. But if an app's behavior has ever shifted underneath you with no changelog, owning your own instructions is a real thing to own.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The 18-second-to-1.3-second follow-up time-to-first-token figure is my own first-hand measurement on Outlier, taken before and after prefilling the system prompt once per model tier and reusing it across requests, with no change to the model or the prompt text. The memory-recall bug is from the same codebase: recall was running against the most recent user message, which mutated the injected block every agent step and dropped prefix reuse to zero; recalling against the first user message restored it. No third-party benchmark is being cited here — these are numbers off my own machine.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is a system prompt different from a normal prompt?</h3>
+        <p>Only in position and lifetime. Structurally it is the same kind of text, in the same context window. It goes at the top, before any user message, and it stays there for the whole session, so it colors every answer instead of just one. There is no separate privileged channel underneath.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can a system prompt make a model follow rules it otherwise wouldn't?</h3>
+        <p>It can shift behavior a lot, but not by force. The weight a system prompt carries comes from its position at the top of the context and from training that taught the model to treat that block as standing instructions. It's strong guidance, not a hard switch, so treat it as steering rather than a guarantee.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does changing my system prompt make the app slower?</h3>
+        <p>Because a runtime can cache the work it already did for the top of the conversation and reuse it. In Outlier, prefilling the system prompt once per model tier and reusing it across requests took follow-up time-to-first-token from about 18 seconds to about 1.3 seconds, roughly 13x, with no change to the model or the prompt text. Edit that block between turns and the cached work no longer matches, so the runtime has to redo it.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What should go in the system prompt versus the user message?</h3>
+        <p>Put durable instructions in the system prompt: tone, output format, domain, and what to never do. Keep per-question detail — the actual task, the pasted code, today's constraint — in the user message. The test is whether the instruction would still be true three questions from now. If yes, it belongs at the top and should stay stable.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=what-is-a-system-prompt">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/how-to-write-a-good-ai-prompt/">How to write a good AI prompt</a> · <a href="https://outlier.host/learn/why-ai-forgets-conversations/">Why AI forgets conversations</a> · <a href="https://outlier.host/learn/what-is-prefix-caching/">What is prefix caching?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>

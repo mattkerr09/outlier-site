@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What is AI reasoning? Thinking models explained (2026) | Outlier</title>
+  <meta name="description" content="AI reasoning means a model writes out an intermediate chain of thought before answering. Mechanically it's still next-token prediction — the model just spends tokens working the problem. What it helps, what it costs, and one measurement where it lost.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-08">
+  <link rel="canonical" href="https://outlier.host/learn/what-is-ai-reasoning/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is AI reasoning? Thinking models explained (2026)">
+  <meta property="og:description" content="AI reasoning means a model writes out an intermediate chain of thought before answering. Mechanically it's still next-token prediction — the model just spends tokens working the problem. What it helps, what it costs, and one measurement where it lost.">
+  <meta property="og:url" content="https://outlier.host/learn/what-is-ai-reasoning/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What is AI reasoning? Thinking models explained (2026)">
+  <meta name="twitter:description" content="Thinking models spend tokens working the problem before answering. Here's when that pays and when it doesn't.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "What is AI reasoning? Thinking models explained", "description": "AI reasoning means a model writes out an intermediate chain of thought before answering. Mechanically it's still next-token prediction — the model just spends tokens working the problem. What it helps, what it costs, and one measurement where it lost.", "datePublished": "2026-07-08", "dateModified": "2026-07-08", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-ai-reasoning/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is AI reasoning?", "item": "https://outlier.host/learn/what-is-ai-reasoning/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is a reasoning model always better than a normal one?", "acceptedAnswer": {"@type": "Answer", "text": "No. On my own measurement — Outlier Nano, 30 GSM8K math problems, greedy decoding — thinking mode scored 63.3% against 80% with thinking off, and thinking off was 32% faster. That is one model on one benchmark, so don't read it as a law. Read it as proof that the question has to be measured rather than assumed."}}, {"@type": "Question", "name": "Do thinking tokens cost me anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Thinking tokens are real tokens. In the cloud they take time and money, whether or not the chain of thought is shown to you. On-device they cost wall-clock time and battery. There's no free reasoning; you are buying compute with seconds."}}, {"@type": "Question", "name": "When should I turn thinking on?", "acceptedAnswer": {"@type": "Answer", "text": "Turn it on for problems with several dependent steps: multi-step math, code with interacting constraints, and planning. Leave it off for recall, summarization, formatting, and short factual answers, where the extra tokens buy nothing. Match the mode to the task instead of leaving thinking on by default."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>What is AI reasoning? Thinking models explained</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-08</span>
+      <span class="updated-pill">Last updated 2026-07-08</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>AI reasoning means the model generates an intermediate chain of thought — working — before it commits to a final answer. Models that do this are called reasoning models or thinking models.</li>
+        <li>Mechanically it's still next-token prediction. The model has been trained or prompted to spend tokens working the problem first, which gives it more compute per question.</li>
+        <li>Those thinking tokens are real tokens: they cost time and cloud money, or wall-clock and battery on your own machine. Thinking helps on multi-step problems and wastes tokens on simple ones.</li>
+      </ul>
+    </div>
+
+    <p class="lead">"Reasoning" is the word the industry landed on for a fairly specific behavior: the model writes out its working before it answers. Sometimes you see that working, sometimes it's hidden behind a spinner. Either way it's the same trick, and it's a genuinely useful one — as long as you know what it costs and when it doesn't pay.</p>
+
+    <h2>What a reasoning model actually does</h2>
+    <p>A reasoning model — you'll also see "thinking model," they mean the same thing — produces a chain of thought before the final answer. Ask it a word problem and instead of emitting an answer immediately, it emits a stretch of text where it restates the problem, tries an approach, notices a mistake, backs up, and only then writes the answer you asked for.</p>
+    <p>The examples you've probably met: OpenAI's o-series; DeepSeek-R1, a 671-billion-parameter mixture-of-experts model released with open weights; and the Qwen models, which ship a thinking mode you can switch on and off. That last one matters, because a toggle turns "is thinking better?" from an opinion into something you can measure.</p>
+
+    <h2>Under the hood, it's still next-token prediction</h2>
+    <p>Here's the part the marketing tends to skip. There is no separate reasoning module bolted onto these models. It's the same architecture doing the same thing it always did — predicting the next token, one at a time — described in <a href="https://outlier.host/learn/what-is-a-large-language-model/">the large language model explainer</a>.</p>
+    <p>What changed is training and prompting. The model has been taught to spend tokens working the problem before it commits to an answer. And because every token it generates is another forward pass through the network, a long stretch of working means substantially more computation spent on that one question.</p>
+    <p>That's the whole mechanism: <strong>more tokens equals more compute per question.</strong> It isn't a new kind of cognition. Which is also why it isn't free, and why it isn't automatically better.</p>
+
+    <h2>Thinking tokens are real tokens</h2>
+    <p>Every token in that chain of thought has to be generated the same way any other token is. The consequences are concrete:</p>
+    <ul>
+      <li><strong>In the cloud, you pay for them.</strong> Money and latency, whether or not the provider shows you the chain. A hidden reasoning trace is still a billed one.</li>
+      <li><strong>On your own machine, you pay in seconds and battery.</strong> There's no invoice, but there is a fan, a warm laptop, and a wait before the first useful word appears.</li>
+    </ul>
+    <p>None of that is a reason to avoid thinking modes. It's a reason to spend them where they buy something.</p>
+
+    <h2>I measured it on my own model, and thinking lost</h2>
+    <p>I run a local model on Apple Silicon, so this is easy for me to test rather than argue about. I took Outlier's Nano tier, ran 30 GSM8K grade-school math problems through it with greedy decoding, and flipped the thinking mode on and off. GSM8K is exactly the kind of multi-step arithmetic that chain of thought is supposed to be built for.</p>
+
+    <table>
+      <thead>
+        <tr><th>Outlier Nano, GSM8K, n=30, greedy</th><th>Thinking OFF</th><th>Thinking ON</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Accuracy</strong></td><td>80%</td><td>63.3%</td></tr>
+        <tr><td><strong>Speed</strong></td><td>32% faster</td><td>Baseline</td></tr>
+        <tr><td><strong>Verdict on this pairing</strong></td><td>Better and cheaper</td><td>Worse and slower</td></tr>
+      </tbody>
+    </table>
+
+    <p>Thinking mode was worse by 16.7 percentage points, and thinking OFF was 32% faster. I'll be careful about what that does and doesn't prove. It's one model, one benchmark, one decoding setting. It is not evidence that reasoning modes are a scam, and I'm not going to pretend I know exactly why this particular model degrades when it talks to itself.</p>
+    <p>What it is: a measured counterexample to "thinking is always better." That claim gets repeated as though it were settled, and on my hardware, on a task purpose-built for chain of thought, it was false. If you're choosing a mode for real work, measure your model on your task. Nobody's benchmark is a substitute for that.</p>
+
+    <h2>Where thinking earns its tokens</h2>
+    <p>The pattern I keep seeing is that chain of thought pays when the problem has dependent steps — where getting step four right requires having written down step three. It wastes tokens when the answer was already in the model and just needed to come out.</p>
+
+    <table>
+      <thead>
+        <tr><th>Task</th><th>Thinking mode</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Multi-step math</td><td>Usually helps</td><td>Each step depends on the last; writing them down keeps them straight</td></tr>
+        <tr><td>Code with interacting constraints</td><td>Usually helps</td><td>The model can check one requirement against another before writing</td></tr>
+        <tr><td>Planning</td><td>Usually helps</td><td>Ordering and dependencies are the actual work</td></tr>
+        <tr><td>Recall / factual lookup</td><td>Wastes tokens</td><td>The answer is either in the weights or it isn't; deliberation adds nothing</td></tr>
+        <tr><td>Summarization</td><td>Wastes tokens</td><td>The source text is right there — no derivation needed</td></tr>
+        <tr><td>Formatting and rewriting</td><td>Wastes tokens</td><td>A transformation, not a problem</td></tr>
+        <tr><td>Short factual answers</td><td>Wastes tokens</td><td>You wait longer for the same sentence</td></tr>
+      </tbody>
+    </table>
+
+    <p>"Usually" is doing real work in that table. My Nano measurement was a multi-step math task in the first row, and thinking still lost. The category tells you where to look; it doesn't tell you the answer.</p>
+
+    <h2>The practical rule: match the mode to the task</h2>
+    <p>Leaving thinking on by default is the mistake I see most. It feels safe — more deliberation, surely — but it means you pay latency and battery on every message, including the dozens of trivial ones, and on at least one real pairing it also cost accuracy.</p>
+    <p>So: switch it on when you hand the model something with several dependent steps, and leave it off for everything else. If your tool exposes a toggle, that toggle is worth learning. And if you can run the same 20 or 30 prompts both ways on the work you actually do, do that once. It takes an afternoon and it settles the question for your setup permanently. A related idea — having the model verify its own output instead of just deliberating longer — is covered in <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">how an AI agent checks its own work</a>.</p>
+    <p>Running locally makes this easier, mostly because the feedback is immediate and nothing is metered. You can run a benchmark thirty times over without watching a bill climb. That's the argument in <a href="https://outlier.host/learn/what-is-local-ai/">what local AI is</a>, and testing your own model is a good example of why it matters.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> The thinking ON/OFF numbers are my own measurement, not a citation: Outlier's Nano tier, 30 GSM8K math problems, greedy decoding, thinking mode toggled and everything else held constant. Thinking OFF scored 80%, thinking ON scored 63.3%, and OFF was 32% faster. One model, one benchmark, one decoding setting — reported because it's a counterexample, not because it generalizes. The model descriptions (o-series, DeepSeek-R1 at 671B MoE with open weights, Qwen thinking mode) are public facts about those releases.</div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is a reasoning model always better than a normal one?</h3>
+        <p>No. On my own measurement — Outlier Nano, 30 GSM8K math problems, greedy decoding — thinking mode scored 63.3% against 80% with thinking off, and thinking off was 32% faster. That is one model on one benchmark, so don't read it as a law. Read it as proof that the question has to be measured rather than assumed.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do thinking tokens cost me anything?</h3>
+        <p>Yes. Thinking tokens are real tokens. In the cloud they take time and money, whether or not the chain of thought is shown to you. On-device they cost wall-clock time and battery. There's no free reasoning; you are buying compute with seconds.</p>
+      </div>
+      <div class="faq-item">
+        <h3>When should I turn thinking on?</h3>
+        <p>Turn it on for problems with several dependent steps: multi-step math, code with interacting constraints, and planning. Leave it off for recall, summarization, formatting, and short factual answers, where the extra tokens buy nothing. Match the mode to the task instead of leaving thinking on by default.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite — local, private, no account. Pro $20/mo or $149/yr adds everything (all 7 model tiers incl. Plus 397B). Lifetime Pro from $99 (Founding 200, first 200 seats) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=what-is-ai-reasoning">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
