@@ -111,9 +111,9 @@
     <p class="lead">I'm Matt Kerr. I build Outlier, so treat this as coming from an interested party and check the sources — I've linked them. Msty does a job Outlier deliberately doesn't, and on several axes it's the more flexible tool.</p>
 
     <h2>What Msty is</h2>
-    <p>Msty Studio is a closed-source desktop AI workspace from CloudStack, LLC. It sits above the model layer rather than replacing it: point it at open-weight models on your machine, cloud models on someone else's, or both in one window. The vendor's framing is "local and cloud models, side by side" with "local-first control."</p>
+    <p>Msty Studio is a closed-source desktop AI workspace from CloudStack, LLC. It sits above the model layer rather than replacing it: point it at open-weight models on your machine, cloud models on someone else's, or both in one window. The vendor's framing is "local and cloud models, side by side"; the vendor uses "local-first control" for its separate Claw agent.</p>
 
-    <p>Locally it drives three engines — Ollama, MLX and llama.cpp — from one Local Models area, handling GGUF, MLX and Safetensors. On Apple Silicon the docs say Msty "generally recommends MLX when an MLX format is available," the right call on a Mac. If a model's engine isn't installed, the docs say Msty sets it up first. No Docker, no terminal. On the cloud side it connects to 13 providers, Anthropic and OpenAI through to Groq, OpenRouter, xAI and Bedrock, using keys you supply — so you pay each provider directly, no markup.</p>
+    <p>Locally it drives three engines — Ollama, MLX and llama.cpp — from one Local Models area, handling GGUF, MLX and Safetensors. On Apple Silicon the docs say Msty "generally recommends MLX when an MLX format is available," the right call on a Mac. If a model's engine isn't installed, the docs say Msty sets it up first. No Docker, no terminal. On the cloud side it connects to 13 providers, Anthropic and OpenAI through to Groq, OpenRouter and xAI, using keys you supply — so you pay each provider directly, no markup. Azure OpenAI and Amazon Bedrock are the two that need a paid Aurum seat.</p>
 
     <p>The free tier is substantive rather than a teaser: local and online chat, Agent Mode, Knowledge Stacks for retrieval, an MCP Toolbox, Persona, Prompt, Skill and Media studios, memories and web search all sit at $0. Paid "Aurum" is $149/year or $349 once for a lifetime seat; Enterprise is $300 per user per year, five seats minimum. Aurum adds the web version, Azure and Bedrock, Turnstiles, Live Contexts, Insights and Forge Mode.</p>
 
@@ -122,7 +122,7 @@
 
     <p>The difference in shape is that Outlier ships the models: seven tiers, each a build I picked, tested and published. Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra), Lite 9B, Quick 26B-a4b, Core 27B and Code 27B (15.13 GB, 24 GB, 20.7 tok/s), Vision 35B-a3b, and Plus 397B-a17b, which needs 64 GB and streams experts from SSD. Six are Apache 2.0, Quick carries the Gemma Terms of Use, and the <a href="https://huggingface.co/Outlier-Ai">weights are public</a>. Free means Nano and Lite, no account; Pro is $20/month or $149/year, lifetime from $99. There's no cloud tier and no API-key field.</p>
 
-    <h2>Side by side</h2>
+    <h2>Msty Studio and Outlier, feature for feature</h2>
     <table>
       <thead>
         <tr>
@@ -195,7 +195,7 @@
     <h2>Platforms, licensing and openness</h2>
     <p>Here's where I'm straightforwardly behind. Msty ships macOS builds for Apple Silicon <em>and</em> Intel, plus Windows x64 and Linux x64 as AppImage and .deb. Outlier is Apple Silicon only — no Intel Mac, no Windows, no Linux, no mobile app. If there's a PC or an older Mac in your setup, Msty works there and Outlier doesn't.</p>
 
-    <p>Msty has its own edges. Windows and Linux builds are x64 only, so no Windows-on-ARM or ARM Linux, and Linux carries documented install friction: the AppImage needs libfuse2, may want a <code>--gtk-version=3</code> flag, and the .deb can need sandbox fixes. There's no mobile Msty Studio either — mobile appears only as "Msty Claw Go," coming soon for the separate, still-beta Claw product.</p>
+    <p>Msty has its own edges. Windows and Linux builds are x64 only, so no Windows-on-ARM or ARM Linux, and Linux carries documented install friction: the AppImage needs libfuse2, may want a <code>--gtk-version=3</code> flag, and the .deb can need sandbox fixes. There's no native mobile Msty Studio app — on a phone you reach Studio Web (Aurum) through the Sidecar tunnel rather than a dedicated app; the only native mobile client announced is "Msty Claw Go," coming soon for the separate, still-beta Claw product.</p>
 
     <p>On openness we're in the same boat. Msty's application source isn't published — its GitHub org carries docs, i18n and forks like mlx-omni-server and ollama, not the client — and its terms grant a non-transferable use license with no open-source license named. Outlier's app isn't open source either. The asymmetry is direction: Msty opens tooling around the app, while I publish the weights the app runs. If forking the client matters, neither of us qualifies.</p>
 
@@ -209,9 +209,9 @@
       <li><strong>A lifetime option.</strong> $349 once, price-protected against future increases.</li>
     </ul>
 
-    <p>What I'd check before buying: the free tier is personal use only — the terms say use "for the exercise of your trade or profession for which you are compensated" doesn't qualify, so paid work needs Aurum or Enterprise. Paid licenses cover two devices. Prices rose on 2 December 2025 (Aurum yearly $129 to $149, lifetime $249 to $349). And the zero-telemetry promise covers the vendor, not the models — paste in an OpenAI key and that provider's policy governs those prompts.</p>
+    <p>What I'd check before buying: the free tier is personal use only — the terms say use "for the exercise of your trade or profession for which you are compensated" doesn't qualify, so paid work needs Aurum or Enterprise. Paid licenses cover two devices. Prices rose in early December 2025 — the vendor targeted 2 December (Aurum yearly $129 to $149, lifetime $249 to $349). And the zero-telemetry promise covers the vendor, not the models — paste in an OpenAI key and that provider's policy governs those prompts.</p>
 
-    <h2>Who should pick which</h2>
+    <h2>Hub or appliance: which one you actually want</h2>
     <p><strong>Pick Msty if</strong> you own a Windows or Linux machine or an Intel Mac; you enjoy swapping models; you want local and cloud side by side with your own keys; you need web search, MCP tools or retrieval over your own documents; or you want a lifetime license and a usable free tier.</p>
 
     <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac and want the model decision made for you; you want a guarantee that there's no cloud path in the app at all; or you care about a published quality receipt for the build you're running. On a blind slice of SWE-bench Verified the local 27B measured about 45% (18 of 40) — a number I can publish only because I ship the model.</p>
@@ -219,7 +219,7 @@
     <p><strong>Plenty of people should run both.</strong> Msty is a model workbench; Outlier is a finished appliance on one platform.</p>
 
     <div class="receipts">
-      <strong>Sources:</strong> Msty pricing, tiers and the December 2025 price change from <a href="https://msty.ai/studio/pricing">msty.ai/studio/pricing</a>; builds, engines and providers from <a href="https://docs.msty.ai/studio/getting-started/download">docs.msty.ai</a>; privacy claims from <a href="https://msty.ai/privacy">msty.ai/privacy</a>; licensing and device limits from <a href="https://msty.ai/terms/">msty.ai/terms</a>; open-source status from the vendor's public GitHub org. All read July 2026 — <strong>competitor pricing and policies change, so verify at the source before you buy.</strong> Outlier throughput measured on an M1 Ultra Mac Studio (64 GB); the 98.9% figure comes from the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>.
+      <strong>Sources:</strong> Msty pricing, tiers and the December 2025 price change from <a href="https://msty.ai/studio/pricing">msty.ai/studio/pricing</a>; builds, engines and providers from <a href="https://docs.msty.ai/studio/getting-started/download">docs.msty.ai</a>; remote and mobile access from <a href="https://docs.msty.ai/studio/how-tos/sidecar">the Sidecar docs</a>; privacy claims from <a href="https://msty.ai/privacy">msty.ai/privacy</a>; licensing and device limits from <a href="https://msty.ai/terms/">msty.ai/terms</a>; open-source status from the vendor's public GitHub org. All read July 2026 — <strong>competitor pricing and policies change, so verify at the source before you buy.</strong> Outlier throughput measured on an M1 Ultra Mac Studio (64 GB); the 98.9% figure comes from the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>.
     </div>
 
     <div class="cta">

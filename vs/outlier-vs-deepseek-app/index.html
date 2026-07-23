@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>DeepSeek's chat app is free and fully cloud-based; its privacy policy says personal data is stored in the People's Republic of China and used to train its models unless you email <code>privacy@deepseek.com</code> to opt out. Outlier runs the model on your own Apple Silicon Mac — no account, no caps, works offline, nothing uploaded — but it has no web search, no mobile app, and can't host anything near DeepSeek's 1.6-trillion-parameter V4-Pro. Pick DeepSeek for reach and capability at zero price; pick Outlier when your prompts can't leave the machine.</p>
+      <p>DeepSeek's chat app is free and fully cloud-based; its privacy policy says personal data is stored in the People's Republic of China, and your inputs train its models by default. You can turn that off in the product: Settings › Data controls › "Improve the model for everyone." Outlier runs the model on your own Apple Silicon Mac (no account, no caps, works offline, nothing uploaded), but its web search is Pro-only and much narrower, it has no mobile app, and it can't host anything near DeepSeek's 1.6-trillion-parameter V4-Pro. Pick DeepSeek for reach and capability at zero price; pick Outlier when your prompts can't leave the machine.</p>
     </div>
 
     <p class="lead">Disclosure first: I build Outlier, so I have an obvious stake in one of these two products. Every DeepSeek claim below is tied to DeepSeek's own documentation, or marked when it comes from press reporting.</p>
@@ -113,27 +113,27 @@
     <h2>What DeepSeek actually is</h2>
     <p>DeepSeek is a cloud AI assistant from Hangzhou DeepSeek Artificial Intelligence Co., Ltd. Its site lists exactly three surfaces — Web, App, and API: chat.deepseek.com, the iOS and Android apps, and the developer API.</p>
 
-    <p>The iOS listing, "DeepSeek - AI Assistant," is marked <strong>Free with no in-app purchases</strong>, needs iOS 15.0 or later, and supports iPhone, iPad and iPod touch only. There's no official macOS or Windows app and no official CLI — the <code>deepseek-ai</code> GitHub organization holds 35 repositories of infrastructure and model code and not one chat client. Every DeepSeek desktop app is an unofficial wrapper.</p>
+    <p>The iOS listing, "DeepSeek - AI Assistant," is <strong>listed as Free, with no In-App Purchases block</strong>, needs iOS 15.0 or later, and supports iPhone, iPad and iPod touch only. There's no official macOS or Windows app and no official CLI. The <code>deepseek-ai</code> GitHub organization holds 35 repositories of infrastructure and model code and not one chat client. Every DeepSeek desktop app is an unofficial wrapper.</p>
 
     <p>Underneath is DeepSeek-V4, announced April 24, 2026 as live and open-sourced: <strong>V4-Pro</strong> at 1.6T total / 49B active parameters, <strong>V4-Flash</strong> at 284B / 13B. DeepSeek says 1M context is the default across all official services, with 384K max output. Both weight sets are on Hugging Face, MIT-licensed.</p>
 
     <h2>Where DeepSeek genuinely wins</h2>
     <p>Several of these gaps are structural, and I can't close them.</p>
     <ul>
-      <li><strong>It's free.</strong> Not free-tier-with-a-paywall — the App Store listing shows Free with zero in-app purchases. Outlier's paid tier competes against $0.</li>
-      <li><strong>It runs models no Mac can.</strong> 1.6T total parameters won't fit in 64 GB of unified memory at any quantization I'd ship, and a million tokens of context is the default on every official surface — no Mac holds that much KV cache.</li>
-      <li><strong>The weights are genuinely open.</strong> MIT-licensed and downloadable in FP8-Mixed and FP4+FP8-Mixed, with commercial use, modification and fine-tuning uncapped. Distrust the hosted service and you can self-host the same family — no closed vendor offers that.</li>
+      <li><strong>It's free.</strong> Not free-tier-with-a-paywall: the App Store listing is Free, with no In-App Purchases block on it. Outlier's paid tier competes against $0.</li>
+      <li><strong>It runs models no Mac can.</strong> 1.6T total parameters won't fit in 64 GB of unified memory at any quantization I'd ship, and a million tokens of context is the default on every official surface. No Mac holds that much KV cache.</li>
+      <li><strong>The weights are genuinely open.</strong> MIT-licensed and downloadable in FP8-Mixed and FP4+FP8-Mixed, with commercial use, modification and fine-tuning uncapped. Distrust the hosted service and you can self-host the same family. No closed vendor offers that.</li>
       <li><strong>Independently measured, not self-claimed.</strong> NIST's Center for AI Standards and Innovation put V4-Pro at an IRT-estimated Elo of 800 against GPT-5.4 mini's 749 across nine benchmarks, and more cost efficient on 5 of 7.</li>
-      <li><strong>The API is cheap and drop-in.</strong> V4-Flash costs $0.14 per million input tokens on a cache miss and $0.28 output; V4-Pro, $0.435 and $0.87 — OpenAI-compatible, with an Anthropic-compatible endpoint too.</li>
+      <li><strong>The API is cheap and drop-in.</strong> V4-Flash costs $0.14 per million input tokens on a cache miss and $0.28 output; V4-Pro, $0.435 and $0.87. Both are OpenAI-compatible, with an Anthropic-compatible endpoint too.</li>
       <li><strong>Generous downstream rights.</strong> Outputs are assigned to you, and the Open Platform Terms explicitly permit applying inputs and outputs to "derivative product development, training other models (such as model distillation)." Most vendors forbid precisely that.</li>
       <li><strong>No hardware floor, and it's in your pocket.</strong> Nothing to download or manage, history syncs across devices, same behavior on an 8 GB laptop or a borrowed browser.</li>
     </ul>
-    <p>Outlier has no live web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, no cloud sync. If any of those matter to you, the comparison is over.</p>
+    <p>Outlier has no image generation, no mobile app, no hands-free voice mode, no Windows or Linux build, no cloud sync — and web search exists only on Pro, opt-in per conversation and narrower than DeepSeek's. If any of those matter to you, the comparison is over.</p>
 
     <h2>What Outlier is</h2>
-    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). The model runs on your machine: no account, no usage cap, and it works with Wi-Fi off. Seven tiers ship, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B up to Plus 397B-a17b, which pages MoE experts off the SSD at roughly 11 GB peak RSS. <a href="https://huggingface.co/Outlier-Ai">Weights are published</a>.</p>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). The model runs on your machine: no account, no usage cap, and it works with Wi-Fi off. Seven tiers ship, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B up to Plus 397B-a17b, which pages MoE experts off the SSD at roughly 11 GB peak RSS on a 64 GB Mac, at 2.1 tok/s. That last figure is the honest shape of the ceiling: the flagship tier needs a 64 GB machine and reads back at a walking pace. <a href="https://huggingface.co/Outlier-Ai">Weights are published</a>.</p>
 
-    <p>On quality: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. On a blind slice of SWE-bench Verified the local 27B measured about 45% (18 of 40) — a real number, and not a frontier one.</p>
+    <p>On quality: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. On a blind slice of SWE-bench Verified the local 27B measured about 45% (18 of 40), a real number and not a frontier one.</p>
 
     <h2>Side-by-side</h2>
     <table>
@@ -148,9 +148,23 @@
       </thead>
       <tbody>
         <tr>
+          <td><strong>Model / context</strong></td>
+          <td>V4-Pro 1.6T-a49B, 1M context</td>
+          <td>V4-Pro 1.6T-a49B and V4-Flash 284B-a13B, 1M context</td>
+          <td>Nano 4B / Lite 9B</td>
+          <td>Up to Plus 397B-a17b</td>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Not published</td>
+          <td>Not published</td>
+          <td>71.7 tok/s Nano, 53.4 Lite (M1 Ultra)</td>
+          <td>20.7 tok/s Core 27B, 2.1 Plus 397B</td>
+        </tr>
+        <tr>
           <td><strong>Price</strong></td>
-          <td>Free (App Store: no IAP)</td>
-          <td>$0.14 / $0.28 per M tokens</td>
+          <td>Free (no IAP block listed)</td>
+          <td>Flash $0.14 / $0.28; Pro $0.435 / $0.87 per M tokens</td>
           <td>Free</td>
           <td>$20/mo or $149/yr</td>
         </tr>
@@ -170,7 +184,7 @@
         </tr>
         <tr>
           <td><strong>Data uploaded</strong></td>
-          <td>Yes — all of it</td>
+          <td>Yes, all of it</td>
           <td>Yes</td>
           <td>No</td>
           <td>No</td>
@@ -193,20 +207,20 @@
     </table>
 
     <h2>What each one costs over a year</h2>
-    <p>The consumer chat is the easy column: as far as any primary source shows, <strong>$0</strong> — the App Store listing is Free with no in-app purchases, and DeepSeek publishes no consumer subscription page. Third-party trackers describe web search, DeepThink mode, file upload and history sync as included free — reported, not documented.</p>
+    <p>The consumer chat is the easy column: as far as any primary source shows, <strong>$0</strong>. The App Store listing is Free, with no In-App Purchases block on it, and DeepSeek publishes no consumer subscription page. Third-party trackers describe web search, DeepThink mode, file upload and history sync as included free (reported, not documented).</p>
 
-    <p>The API is metered. A million input plus a million output tokens comes to about $0.42 on V4-Flash and $1.31 on V4-Pro, with cache hits dropping input to $0.0028 and $0.003625 per million. Limits are per-account concurrency — 2500 connections for Flash, 500 for Pro — and the legacy names <code>deepseek-chat</code> and <code>deepseek-reasoner</code> stop working July 24, 2026; the model surface moves on a short clock.</p>
+    <p>The API is metered. A million input plus a million output tokens comes to about $0.42 on V4-Flash and $1.31 on V4-Pro, with cache hits dropping input to $0.0028 and $0.003625 per million. Limits are per-account concurrency: 2500 connections for Flash, 500 for Pro. The legacy names <code>deepseek-chat</code> and <code>deepseek-reasoner</code> stop working July 24, 2026; the model surface moves on a short clock.</p>
 
-    <p>Outlier: Nano and Lite are free forever, no account. Pro is $20/month or $149/year for all seven tiers; lifetime Pro starts at $99. Against a free product, that's a price you pay for locality, not capability per dollar — which DeepSeek wins outright.</p>
+    <p>Outlier: Nano and Lite are free forever, no account. Pro is $20/month or $149/year for all seven tiers; lifetime Pro starts at $99. Against a free product, that's a price you pay for locality, not capability per dollar, which DeepSeek wins outright.</p>
 
     <h2>What happens to your data</h2>
     <p>Everything DeepSeek does is remote. Its privacy policy, updated February 10, 2026, says the company "directly collect[s], process[es] and store[s] your Personal Data in People's Republic of China." What leaves your machine: text and voice input, prompts, uploaded files, photos, feedback and chat history, plus IP address, device identifiers, cookies, OS and approximate location.</p>
 
-    <p>Inputs are used for training by default — the stated purpose includes training and improving DeepSeek's machine learning models, and the policy discloses sharing with corporate-group entities for "foundation model training and optimization." The only opt-out mechanism described is emailing privacy@deepseek.com; no in-app toggle is documented, and the sole in-product control is copying or deleting chat history. The Open Platform Terms contain no clause excluding API inputs from training, and no retention policy at all.</p>
+    <p>Inputs are used for training by default. The stated purpose includes training and improving DeepSeek's machine learning models, and the policy discloses sharing with corporate-group entities for "foundation model training and optimization." The policy also grants "the right to opt-out of using your Personal Data for training our models or optimizing our technologies," without naming how you exercise it. In the product, the control is a toggle: Settings › Data controls › "Improve the model for everyone," on both web and mobile. Turning it off is forward-looking only. Data you shared before you flipped it stays in the training pool unless you email <code>privacy@deepseek.com</code> naming the specific chats you want purged. Worth knowing that the toggle appears in third-party guides rather than in DeepSeek's own privacy policy, so the documented commitment and the shipped control aren't the same artifact. The Open Platform Terms contain no clause excluding API inputs from training, and no retention policy at all.</p>
 
     <p>Credit where it's due: the policy states in capitals that DeepSeek does not run targeted advertising, sell personal data, or profile. Consumer terms are governed by mainland PRC law, disputes heard in Hangzhou.</p>
 
-    <p>A few more items, from press and public-record reporting rather than DeepSeek's documents. Wiz Research found an exposed, unauthenticated database in January 2025 holding over a million entries including chat messages and API keys; South Korea's data-protection commission later found undisclosed transfers of over a million users' data. Government devices in Italy, Taiwan, Australia, Canada, South Korea, the Czech Republic, Texas and the US Navy have been restricted from DeepSeek since early 2025. And TechCrunch reported the model avoids roughly 85% of prompts on China-sensitive topics, with filtering baked into the weights rather than only the app layer — so it follows you even if you self-host.</p>
+    <p>A few more items, from press and public-record reporting rather than DeepSeek's documents. Wiz Research found an exposed, unauthenticated database in January 2025 holding over a million entries including chat messages and API keys; South Korea's data-protection commission later found undisclosed transfers of over a million users' data. Government devices in Italy, Taiwan, Australia, Canada, South Korea, the Czech Republic, Texas and the US Navy have been restricted from DeepSeek since early 2025. On censorship: PromptFoo's January 2025 test of DeepSeek-R1, reported by TechCrunch, found canned pro-government responses to roughly 85% of 1,360 China-sensitive prompts, though the researchers called the restrictions crude and easily jailbroken. I have not seen an equivalent published measurement for V4, and I know of no published test of what a self-hosted copy of the weights does.</p>
 
     <p>Outlier's half is short: the model runs locally, nothing is transmitted, there's no account to attach a history to, and no opt-out because there's no collection.</p>
 
@@ -215,10 +229,10 @@
 
     <p><strong>Pick Outlier if</strong> the content of your prompts is the problem: client files, patient notes, unreleased source, anything under NDA or anything a regulator won't let cross a border. Also pick it if you're somewhere DeepSeek is restricted on work devices, or you need it to work on a plane.</p>
 
-    <p><strong>Run both</strong> and you get the honest best of it — Outlier as the local default for sensitive, offline, high-volume work, DeepSeek for million-token questions that need the live web. Just remember that anything you send there is training data by default.</p>
+    <p><strong>Run both</strong> and you get the honest best of it: Outlier as the local default for sensitive, offline, high-volume work, DeepSeek for million-token questions that need the live web. Just remember that anything you send there is training data until you go turn that toggle off, and that turning it off doesn't reach backwards.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Surfaces from <a href="https://www.deepseek.com/">deepseek.com</a>; iOS details from the <a href="https://apps.apple.com/us/app/deepseek-ai-assistant/id6737597349">App Store</a> (v2.2.2, July 11, 2026); pricing, concurrency and the July 24, 2026 deprecation from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 parameters and MIT licensing from Hugging Face; absent client repos from the <a href="https://github.com/deepseek-ai">deepseek-ai org</a>; data handling from DeepSeek's privacy policy (2026-02-10), Terms of Use (2026-03-27) and Open Platform Terms (2026-04-29); benchmarks from <a href="https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro">NIST CAISI</a>. Incidents, restrictions and censorship figures are press-reported and attributed in the text; no primary source publishes a consumer message cap, so I name none. Outlier specs measured on an M1 Ultra, 2026-07-23. <strong>Competitor pricing and policies change often — check the primary sources first.</strong>
+      <strong>Sources and receipts:</strong> Surfaces from <a href="https://www.deepseek.com/">deepseek.com</a>; iOS details from the <a href="https://apps.apple.com/us/app/deepseek-ai-assistant/id6737597349">App Store</a> (v2.2.2, July 11, 2026); pricing, concurrency and the July 24, 2026 deprecation from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 parameters and MIT licensing from Hugging Face; absent client repos from the <a href="https://github.com/deepseek-ai">deepseek-ai org</a>; data handling from DeepSeek's privacy policy (2026-02-10), Terms of Use (2026-03-27) and Open Platform Terms (2026-04-29); benchmarks from <a href="https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro">NIST CAISI</a>. The Settings › Data controls training toggle is documented in third-party write-ups (Kaspersky among others), not in DeepSeek's own policy. Incidents, restrictions and the censorship figure are press-reported and attributed in the text with their model and date: the 85% figure is PromptFoo's January 2025 test of DeepSeek-R1, not a V4 measurement. No primary source publishes a consumer message cap, so I name none. Outlier specs measured on an M1 Ultra, 2026-07-23. <strong>Competitor pricing and policies change often, so check the primary sources first.</strong>
     </div>
 
     <div class="cta">

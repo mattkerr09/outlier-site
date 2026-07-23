@@ -120,7 +120,7 @@
     <h2>What Outlier is</h2>
     <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). Models run on-device. No account, no usage caps, nothing uploaded, and it works with Wi-Fi off. Seven tiers ship inside the app: Nano 4B (2.37 GB, 6 GB RAM), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 35B-a3b, and Plus 397B-a17b, which streams experts from SSD and peaks around 11 GB of RSS on a 64 GB machine. Nano and Lite are free with no account. Pro is $20/month or $149/year for all seven; lifetime licenses start at $99.</p>
 
-    <p>Outlier is a chat app, not a server, and it isn't open source. No live web search, no image generation, no voice mode, no mobile app, no Windows or Linux build. If any of those are requirements, this comparison ends early.</p>
+    <p>Outlier isn't open source. No image generation, no video, no music, no mobile app, no Windows or Linux build. Web research, voice-to-text, and an OpenAI- and Anthropic-compatible local API server do exist, but all three are Pro features that stay off until you ask for them — research is a per-turn toggle, the API server is a settings switch. The chat window is the product; the server is secondary to it. If any of that is a dealbreaker, this comparison ends early.</p>
 
     <h2>Setup effort: assembled versus bundled</h2>
     <p>KoboldCpp's install is genuinely trivial — download, mark executable, run. The work comes after that. It ships no model. You go find a GGUF file yourself, usually on Hugging Face, and to choose well you need to already understand quantization levels, context length, and how many layers to offload to the GPU. The FAQ gives rough guidance (a 7B model wants at least 8 GB of RAM, 13B at least 16 GB), and Metal acceleration works on Apple Silicon, but the tuning is on you. Then there's Gatekeeper: an unsigned binary means walking through a security override before the first run.</p>
@@ -155,7 +155,7 @@
         <tr>
           <td><strong>Model management</strong></td>
           <td>Bring your own GGUF; any architecture, any quant</td>
-          <td>Seven curated tiers; no third-party model loading</td>
+          <td>Seven curated tiers plus a fixed ~25-model MLX catalog; no arbitrary GGUF loading</td>
         </tr>
         <tr>
           <td><strong>Bundled models</strong></td>
@@ -165,7 +165,7 @@
         <tr>
           <td><strong>Beyond text</strong></td>
           <td>Image gen/edit, video, Whisper STT, TTS, music, vision</td>
-          <td>Vision tier only; no image gen, no voice</td>
+          <td>Vision tier plus voice-to-text (Pro); no image gen, video, TTS, or music</td>
         </tr>
         <tr>
           <td><strong>Platforms</strong></td>
@@ -196,16 +196,16 @@
     </table>
 
     <h2>Where KoboldCpp genuinely wins</h2>
-    <p>This section isn't a courtesy. KoboldCpp beats Outlier outright on several axes that matter.</p>
+    <p>This section isn't a courtesy. KoboldCpp wins outright on several axes that matter.</p>
     <ul>
       <li><strong>Platform reach.</strong> Outlier is Mac-only, Apple Silicon only. That's a straightforward disadvantage. KoboldCpp runs on Windows, Linux, macOS ARM64, and Android through Termux, and it still ships "oldpc" builds for hardware that modern apps have dropped. If your machines aren't all recent Macs, this comparison has one answer.</li>
       <li><strong>It's free, with no tiers at all.</strong> No account, no license key, no upsell. Every feature is available to everyone on day one. Outlier gates five of seven tiers behind $20/month.</li>
       <li><strong>It's open source.</strong> AGPL-3.0, with the llama.cpp and GGML pieces under MIT. Its privacy claims are auditable rather than promised — you can read the code or compile it. Outlier's app is closed source; only the weights are published. If verifiability matters to you, that's a real point against me.</li>
-      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you seven tiers and no way to load anything else.</li>
+      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you seven tiers plus a fixed 25-model MLX catalog — no arbitrary model loading, and nothing outside what I've packaged.</li>
       <li><strong>Feature breadth.</strong> Image generation and editing, video, speech-to-text, multiple TTS engines, music, and vision, all in the same binary. Outlier does text and vision, and that's it.</li>
-      <li><strong>It's a server.</strong> OpenAI- and Ollama-compatible routes drop it into existing pipelines as a backend. Outlier is an app, not an endpoint.</li>
+      <li><strong>It's a server first.</strong> KoboldCpp is designed as a backend: OpenAI- and Ollama-compatible routes drop it into existing pipelines on any of its platforms, for free, with no tier to buy. Outlier ships an OpenAI- and Anthropic-compatible local API server too, but it's Pro-only, off until you enable it in settings, and built to serve the chat app rather than the other way around.</li>
       <li><strong>Release velocity.</strong> Ten releases between February and July 2026, tracking upstream llama.cpp closely, so new architectures land fast.</li>
-      <li><strong>Track record.</strong> Active since March 2023, 11,181 stars and 737 forks as of today, with a community large enough that most setup problems are already documented.</li>
+      <li><strong>Track record.</strong> Active since March 2023, over 11,100 stars and 737 forks as of 2026-07-23, with a community large enough that most setup problems are already documented.</li>
     </ul>
 
     <h2>Where Outlier fits better</h2>
@@ -215,11 +215,11 @@
       <li><strong>Signed and notarized.</strong> No Gatekeeper override, which matters on managed or shared Macs.</li>
       <li><strong>A Mac window, not a browser tab.</strong> No terminal, no localhost port, no launcher dialog.</li>
       <li><strong>A large local tier.</strong> Plus 397B-a17b runs on a 64 GB Mac via paged MoE at about 2.1 tok/s. Assembling a model that size by hand is a project.</li>
-      <li><strong>Published receipts.</strong> Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and hit ~45% on a blind slice of SWE-bench Verified. KoboldCpp's quality is whatever model you loaded — flexible, but unpredictable.</li>
+      <li><strong>Published receipts.</strong> Core 27B scored 98.9% of rubric checks against Claude Opus 4.7 across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and hit ~45% on a blind slice of SWE-bench Verified. KoboldCpp's quality is whatever model you loaded — flexible, but unpredictable.</li>
     </ul>
 
     <h2>Who should pick which</h2>
-    <p><strong>Pick KoboldCpp if</strong> you're on Windows, Linux, or Android; you want to choose your own models; you need image, video, audio, or music generation locally; you want an OpenAI-compatible server behind other tools; you care about open source and auditability; or you'd simply rather not pay. It's also the clear pick for long-form fiction and roleplay, which KoboldAI Lite was built around.</p>
+    <p><strong>Pick KoboldCpp if</strong> you're on Windows, Linux, or Android; you want to choose your own models; you need image, video, audio, or music generation locally; you want a free OpenAI-compatible server behind other tools without paying for a tier; you care about open source and auditability; or you'd simply rather not pay. It's also the clear pick for long-form fiction and roleplay, which KoboldAI Lite was built around.</p>
 
     <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, you want a signed native app that works the moment it opens, and you'd rather not think about GGUF files or command-line flags at all. Also if you want a 397B-class model running locally without assembling that yourself.</p>
 

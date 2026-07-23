@@ -108,7 +108,7 @@
       <p>GGUF is a single self-describing binary file holding tensors plus all metadata needed to load them, run through llama.cpp on Metal, CUDA, HIP, Vulkan or plain CPU. MLX is Apple's MIT-licensed array framework for Apple silicon, where models ship as safetensors plus a config and execute through Metal against unified memory. They aren't competing products — GGUF is a container, MLX is a runtime — and the real trade is portability and catalog breadth against first-party hardware integration and on-device training.</p>
     </div>
 
-    <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device, so I have a stake in how people think about local inference. That's why I'd rather explain the mechanism than sell a conclusion. Most GGUF-vs-MLX arguments go wrong in the first sentence, because the two things being compared aren't the same kind of thing.</p>
+    <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs MLX-format models on-device, so I am on one side of this particular comparison. That's why I'd rather explain the mechanism than sell a conclusion. Most GGUF-vs-MLX arguments go wrong in the first sentence, because the two things being compared aren't the same kind of thing.</p>
 
     <h2>GGUF is a container, not an engine</h2>
 
@@ -126,7 +126,7 @@
 
     <p>The hardware floor is real: Apple silicon, macOS 14.0 or later, native Python 3.10+. Intel Macs are out. CUDA-on-Linux and CPU-only Linux builds now exist, so "MLX is Apple-only" isn't strictly true, but the Mac path is what everything is tuned for.</p>
 
-    <h2>Side by side</h2>
+    <h2>Container vs runtime, side by side</h2>
     <table>
       <thead>
         <tr>
@@ -152,7 +152,7 @@
 
     <h2>Where each one genuinely wins</h2>
 
-    <p><strong>GGUF wins on reach, and it isn't close.</strong> 192,308 models carry the <code>gguf</code> library tag on Hugging Face against 19,656 for <code>mlx</code> — roughly ten to one. When a new open model drops, the community usually has GGUF builds at half a dozen bit-widths within hours, and the same file runs on your M-series laptop, your NVIDIA box, an AMD card, or plain CPU. One artifact, every machine you own. GGUF also gets first-party tooling with no MLX equivalent: an inline metadata viewer on model pages, the <code>gguf-my-repo</code> conversion Space, and a JavaScript parser that reads a remote GGUF's metadata without downloading it.</p>
+    <p><strong>GGUF wins on reach, and it isn't close.</strong> 192,308 models carry the <code>gguf</code> library tag on Hugging Face against 19,656 for <code>mlx</code> — roughly ten to one. When a new open model drops, the community usually has GGUF builds at half a dozen bit-widths within hours, and the same file runs on your M-series laptop, your NVIDIA box, an AMD card, or plain CPU. One artifact, every machine you own. GGUF also gets Hugging Face tooling with no MLX counterpart: an inline metadata viewer on model and files pages, and a JavaScript parser (<code>@huggingface/gguf</code>) that reads a remote GGUF's metadata without downloading it. Conversion Spaces exist for both — <code>ggml-org/gguf-my-repo</code> and <code>mlx-community/mlx-my-repo</code>.</p>
 
     <p><strong>MLX wins on hardware depth and on training.</strong> Unified-memory arrays with no CPU/GPU copy is the design you get when the framework authors work at the company that made the chip. MLX also does what a pure inference format can't: LoRA and full fine-tuning on your own Mac, distributed training over <code>mx.distributed</code>, and a Python API that makes a model something you modify, not just run. Its learned-quantization suite is unusually sophisticated for a local stack — DWQ, AWQ, GPTQ and per-layer dynamic quantization, cascadable, aimed at 2-to-4-bit where small-RAM Macs live. The docs are candid: DWQ takes longer than dynamic quantization but typically produces better results, and distilling to 6- or 8-bit often doesn't work well. MLX Swift is the sane route for native Mac or iOS apps.</p>
 
@@ -162,15 +162,15 @@
 
     <p>The most-cited head-to-head numbers come from Ollama, which moved its Apple silicon path onto MLX in preview on 2026-03-30. Their published figures, tested on M5 hardware: prefill 1,154 tok/s on 0.18 versus 1,810 on 0.19; decode 58 versus 112 tok/s. That looks like a decisive format win. It isn't. Version 0.18 ran a Q4_K_M GGUF and 0.19 ran NVFP4 through MLX — engine, version and quantization scheme all changed at once.</p>
 
-    <p>The preview also carried hard limits: a Mac with more than 32 GB of unified memory, and only one accelerated model at first. Ollama has kept investing — a 2026-06-11 update added NVIDIA's NVFP4 4-bit format, up to 20% faster output through fused Metal kernels, and a snapshot system for agent workloads, with the claim that NVFP4 roughly halves the quality loss of 4-bit quantization relative to unquantized BF16. Still not a clean A/B. I couldn't find any first-party benchmark isolating GGUF against MLX at matched bit-width on identical hardware, so treat every "MLX is X% faster" number as confounded.</p>
+    <p>The preview also carried hard limits: a Mac with more than 32 GB of unified memory, and only one accelerated model at first. Ollama has kept investing — a 2026-06-11 update added NVIDIA's NVFP4 4-bit format, up to 20% faster output through fused Metal kernels, and a snapshot system for agent workloads, with the claim that NVFP4 roughly halves the quality loss of 4-bit quantization relative to unquantized BF16, measured on Gemma 4 12B. Still not a clean A/B. I couldn't find any first-party benchmark isolating GGUF against MLX at matched bit-width on identical hardware, so treat every "MLX is X% faster" number as confounded.</p>
 
-    <h2>Who should pick which</h2>
+    <h2>Which one belongs in your setup</h2>
 
     <p><strong>Pick GGUF</strong> if you run models on more than one kind of machine, if you want whatever came out this week, if you have an Intel Mac or a pre-Sonoma macOS install, or if you want the extreme low-bit end of the curve with imatrix calibration. It's also the safer cross-platform default: llama.cpp has bindings for nearly every language you'd write in.</p>
 
     <p><strong>Pick MLX</strong> if you're on Apple silicon and staying there, if you want to fine-tune rather than only infer, if you're building a native app in Swift, or if you want the learned-quantization methods clawing back quality at 2–4 bit.</p>
 
-    <p><strong>Pick neither, directly, if you just want to use a model.</strong> Neither GGUF nor MLX is a product a normal person can use — no installer, no GUI, no model picker, no update mechanism. Reaching a working chat window means assembling a runtime like Ollama or LM Studio, or writing code. Outlier is one example of the other approach: an Apple-silicon-only Mac app with seven fixed tiers where the format question is decided for you and never surfaced. You pick Nano or Core, not a quant type. That's a genuine trade — the 192,308-model catalog and every knob above, given up in exchange for not touching any of it. If turning those knobs is the fun part, run the frameworks directly. It costs nothing.</p>
+    <p><strong>Pick neither, directly, if you just want to use a model.</strong> Neither GGUF nor MLX is a product a normal person can use — no installer, no GUI, no model picker, no update mechanism. Reaching a working chat window means assembling a runtime like Ollama or LM Studio, or writing code. Outlier is one example of the other approach: an Apple-silicon-only Mac app with seven fixed tiers where the format question is decided for you rather than configured. You pick Nano or Core, not a quant type. That's a genuine trade — the 192,308-model catalog and every knob above, given up in exchange for not touching any of it. If turning those knobs is the fun part, run the frameworks directly. It costs nothing.</p>
 
     <div class="receipts">
       <strong>Sources and receipts:</strong> Spec, versions and type codes from the <a href="https://github.com/ggml-org/ggml/blob/master/docs/gguf.md">ggml GGUF docs</a>; backends and quantization range from the <a href="https://github.com/ggml-org/llama.cpp">llama.cpp README</a> and its <code>imatrix</code> docs. MLX properties and requirements from the <a href="https://github.com/ml-explore/mlx">MLX repo</a> and <a href="https://ml-explore.github.io/mlx/build/html/install.html">install docs</a>; quantization detail from <code>LEARNED_QUANTS.md</code>, the server caveat from <code>SERVER.md</code>, GGUF loading from the <code>mlx.core.load</code> reference. Hugging Face counts retrieved 2026-07-23; they move daily. Throughput and NVFP4 claims are Ollama's own, from their <a href="https://ollama.com/blog/mlx">MLX preview</a> and <a href="https://ollama.com/blog/mlx-performance">performance</a> posts — not reproduced here. Both stacks are MIT-licensed, but runtimes wrapping them change pricing and policy, so verify at source. Outlier tiers: <a href="https://outlier.host/#pricing">outlier.host</a>.

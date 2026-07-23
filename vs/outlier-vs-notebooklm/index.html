@@ -115,16 +115,16 @@
 
     <p>You create a notebook and fill it with sources — PDFs, Word and Google Docs, Slides, Sheets, ePub, Markdown, CSV, audio, images, URLs, and captioned YouTube videos. Drive sources re-sync every few minutes. Then you chat with the notebook, and Google's docs say responses are "grounded exclusively in your notebook sources," with citations pointing back to the spot in a document you supplied. It also produces study guides, briefings, mind maps and Audio Overviews.</p>
 
-    <p>The ceilings are big: 500,000 words or 200 MB per source, no page limit. Since July 2026 each notebook also gets a secure cloud computer that runs code against your sources and returns PDF, Excel, PowerPoint, JSON, charts or images. Google says the product now runs on Gemini 3.5 and Antigravity, reaching Ultra and some Workspace customers first.</p>
+    <p>The ceilings are big: 500,000 words or 200 MB per source, with no page limit on PDFs — though some formats do have their own caps, with Google Slides stopping at 100 slides and Google Sheets at 100,000 tokens. Since July 2026 a notebook can also get a secure cloud computer that runs code against your sources and returns PDF, Excel, PowerPoint, JSON, charts or images; Google says that one is going to Google AI Ultra subscribers and specific Workspace customers first, rolling out to Pro users on the web after that, so it isn't a free-tier feature yet. Google also says the product now runs on Gemini 3.5 and Antigravity, which reached Ultra first and then AI Pro.</p>
 
     <h2>What Outlier is</h2>
     <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12+. No Intel, Windows, Linux or mobile build. Models run entirely on your machine: no account, no usage caps, and it keeps working with Wi-Fi off, because after the download there's no server.</p>
 
-    <p>Seven tiers ship in the app, from Nano (4B, 2.37 GB, runs on 6 GB of RAM) through Core 27B and Code 27B up to Plus, a 397B mixture-of-experts model that streams experts from SSD and peaks near 11 GB of RSS on a 64 GB machine. Six tiers are Apache 2.0; Quick is under the Gemma Terms of Use. The weights are <a href="https://huggingface.co/Outlier-Ai">published</a>, so you can inspect what you're running.</p>
+    <p>Seven tiers ship in the app, from Nano (4B, 2.37 GB, runs on 6 GB of RAM) through Core 27B and Code 27B up to Plus, a 397B mixture-of-experts model that needs a 64 GB Mac and streams experts from SSD, peaking near 11 GB of RSS once it's running. (The low peak is a streaming artifact, not a lower requirement — Plus will not run on a 16 GB machine.) Six tiers are Apache 2.0; Quick is under the Gemma Terms of Use. The weights are <a href="https://huggingface.co/Outlier-Ai">published</a>, so you can inspect what you're running.</p>
 
-    <p>The free tier is Nano plus Lite, no account. Pro is $20/month or $149/year for all seven tiers, with lifetime licenses from $99. The gaps, plainly: no web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, no cloud sync — and no voice mode means no Audio Overviews equivalent.</p>
+    <p>The free tier is Nano plus Lite, no account. Pro is $20/month or $149/year for all seven tiers, with lifetime licenses from $99. The gaps, plainly: no image generation, no mobile app, no Windows or Linux build, no cloud sync. Voice exists, but not the kind Google's product is famous for — Pro transcribes speech to text and reads answers back aloud with a single system voice, and that's the whole of it. Nothing in Outlier generates a scripted multi-speaker discussion, so there is no Audio Overviews equivalent.</p>
 
-    <h2>Side-by-side</h2>
+    <h2>Notebook caps vs no caps</h2>
     <table>
       <thead>
         <tr>
@@ -191,19 +191,19 @@
     <h2>Where Google NotebookLM genuinely wins</h2>
     <p>This isn't a courtesy section. Most of what follows a local Mac app can't do at all.</p>
     <ul>
-      <li><strong>Corpus scale.</strong> 500,000 words or 200 MB per source, no page limit, 300 sources per notebook on the $19.99 Pro tier and 600 on top Ultra. That's a research library, and the indexing behind it is a real advantage of a datacenter.</li>
+      <li><strong>Corpus scale.</strong> 500,000 words or 200 MB per source, no page limit on a PDF (Slides cap at 100 slides and Sheets at 100,000 tokens), 300 sources per notebook on the $19.99 Pro tier and 600 on top Ultra. That's a research library, and the indexing behind it is a real advantage of a datacenter.</li>
       <li><strong>Audio Overviews.</strong> Turning a pile of documents into a listenable two-host discussion made the product famous, and nothing on-device is close on polish.</li>
       <li><strong>Ingest with no setup.</strong> A URL, a YouTube link, a Slides deck, an MP3, a folder of scans — and Drive sources keep themselves current.</li>
-      <li><strong>Sandboxed compute.</strong> Each notebook can write and run code against your sources and hand back an Excel file or a chart, with nothing for you to configure or secure.</li>
-      <li><strong>Reach.</strong> 80+ languages, 195+ countries and territories — hard to reproduce with a small local model.</li>
+      <li><strong>Sandboxed compute (paid tiers).</strong> A notebook can write and run code against your sources and hand back an Excel file or a chart, with nothing for you to configure or secure. It reached Ultra and some Workspace customers first and is rolling out to Pro on the web; free accounts don't have it.</li>
+      <li><strong>Reach.</strong> 80+ languages and 200+ countries and territories — hard to reproduce with a small local model.</li>
       <li><strong>A free tier that's a real product,</strong> not a demo: 100 notebooks, 50 sources each, 50 chats and 3 Audio Overviews a day, at $0.</li>
       <li><strong>Schools and enterprises.</strong> Free in every Google Workspace for Education edition, for users of all ages. Enterprise sells through Google Cloud with a 14-day 5,000-license trial, a 15-license minimum, and EU or US multi-region options for teams that need data kept in one jurisdiction.</li>
       <li><strong>Continuity.</strong> Web, first-party iOS/iPadOS and Android apps, and notebooks that sync into the Gemini app — including the native Gemini app for Mac from April 2026. Outlier runs on one machine, the one you installed it on.</li>
     </ul>
     <p>If the job is "read 200 PDFs and make me a cited podcast about them" — use Gemini Notebook. I would.</p>
 
-    <h2>What it costs over a year</h2>
-    <p>Gemini Notebook can't be bought on its own; paid tiers ride on a Google AI subscription — Plus at $4.99/month, Pro at $19.99/month, Ultra from $99.99/month with a $199.99 option. Google's page lists monthly prices only, with no official annual SKU, so annualising is just twelve times the rate: $59.88, $239.88, $1,198.80. Some press coverage puts Plus nearer $8/month in the US, which conflicts with Google's own page, so check your country. Enterprise is quoted through Google Cloud; the docs state no price.</p>
+    <h2>A notebook subscription vs a one-off license</h2>
+    <p>Gemini Notebook can't be bought on its own; paid tiers ride on a Google AI subscription — Plus at $4.99/month, Pro at $19.99/month, Ultra from $99.99/month with a $199.99 option. Google's page lists monthly prices only, with no official annual SKU, so annualising is just twelve times the rate: $59.88, $239.88, $1,199.88 — and $2,399.88 if you take the $199.99 Ultra option. Some press coverage puts Plus nearer $8/month in the US, which conflicts with Google's own page, so check your country. Enterprise is quoted through Google Cloud; the docs state no price.</p>
 
     <p>Outlier Pro is $20/month or $149/year, or a lifetime license from $99. Two structural differences matter more than the headline number. With Google you're buying a bundle — storage and Gemini app quota come along whether you want them or not. And a tier is an entitlement on an account, not a perpetual license: when it lapses, the capability goes. Downloaded weights stay on the disk.</p>
 
@@ -214,7 +214,7 @@
 
     <p>Outlier's version of this section is short because there isn't much to say: nothing is uploaded, so there's no retention window, no review team, no toggle to find. That's a claim about surface area, not about Google's integrity. Both share one caveat — Google's disclaimer says Gemini Notebook can make mistakes and to consult a qualified professional for medical, legal or financial advice. Same goes for Outlier.</p>
 
-    <h2>Who should pick which</h2>
+    <h2>Which one for which document</h2>
     <p><strong>Pick Gemini Notebook if</strong> your work is source-heavy research over a large document set, you want citations that link back into the sources, you need Audio Overviews or mind maps, you want the same notebook on a phone and a laptop, you're at a school or on Workspace, or you don't own an Apple Silicon Mac.</p>
 
     <p><strong>Pick Outlier if</strong> the documents can't be uploaded — client files, source code, medical or legal drafts, anything under an NDA that names a cloud. Or if you work offline, or you're tired of daily caps. On a 54-prompt head-to-head, Core 27B matched Claude Opus on 98.9% of rubric checks and 100% on the nine hardest; on a blind slice of SWE-bench Verified the local 27B measured about 45%. Strong for everyday work, not frontier.</p>
@@ -222,12 +222,12 @@
     <p><strong>Use both</strong> — that's what I do. Public papers and YouTube research go in a notebook; anything covered by a contract stays on the laptop.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Rename, user counts and cloud code execution from <a href="https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/">blog.google</a> and <a href="https://workspaceupdates.googleblog.com/2026/07/notebooklm-now-gemini-notebook.html">Workspace Updates</a> (16 July 2026). Caps and source ceilings from Google's Gemini Notebook Help Center. Pricing from <a href="https://gemini.google/subscriptions/">gemini.google/subscriptions</a> — monthly only; annual figures above are 12× monthly, not an official SKU. Data and training policy from Google's Gemini Notebook and Gemini Apps privacy documentation. Outlier pricing as of 2026-07-23; benchmark at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data</a>; throughput measured on an M1 Ultra Mac Studio. Competitor pricing, caps and privacy policies change without notice — verify against Google's own pages.
+      <strong>Sources and receipts:</strong> Rename, user counts and cloud code execution from <a href="https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/">blog.google</a> and <a href="https://workspaceupdates.googleblog.com/2026/07/notebooklm-now-gemini-notebook.html">Workspace Updates</a> (16 July 2026). Caps, source ceilings, per-format limits and the 80+ languages figure from Google's <a href="https://support.google.com/gemininotebook/answer/16164461">Gemini Notebook Help Center</a>. Google publishes no single country total, so "200+ countries and territories" is the floor reported by launch and expansion coverage of the rollout — treat it as a floor, not an exact count. Cloud code execution availability, and the Gemini 3.5 and Antigravity rollout order, from blog.google's rename post and its follow-up coverage. Pricing from <a href="https://gemini.google/subscriptions/">gemini.google/subscriptions</a> — monthly only; annual figures above are 12× monthly, not an official SKU. Data and training policy from Google's Gemini Notebook and Gemini Apps privacy documentation. Outlier pricing as of 2026-07-23; benchmark at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data</a>; throughput measured on an M1 Ultra Mac Studio. Competitor pricing, caps and privacy policies change without notice — verify against Google's own pages.
     </div>
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite run on any Apple Silicon Mac, free forever, with nothing uploaded and no usage caps.</p>
+      <p>Nano runs on any Apple Silicon Mac and Lite needs 12&nbsp;GB of RAM; both are free forever, with nothing uploaded and no usage caps.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-notebooklm">Download for Mac</a>
     </div>
 

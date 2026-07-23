@@ -105,10 +105,10 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Zed is an open-source Rust code editor whose AI runs against cloud-hosted Claude, GPT and Gemini by default, so your code leaves the machine unless you configure a local model yourself. Outlier is a standalone Mac app that runs every model on-device — no account, no caps, nothing uploaded — but it isn't an editor and won't edit your repo for you. For agentic work across a big repository, Zed driving a frontier model is stronger; for code that structurally cannot leave the laptop, Outlier delivers that.</p>
+      <p>Zed is an open-source Rust code editor whose AI runs against cloud-hosted Claude, GPT and Gemini by default, so your code leaves the machine unless you configure a local model yourself. Outlier is a standalone Mac app that runs every model on-device — no account, no caps, nothing uploaded unless you switch on an optional cloud path — but it isn't an editor, so its agent works on a project folder behind approval gates instead of streaming edits into your buffer. For agentic work across a big repository, Zed driving a frontier model is stronger; for code that structurally cannot leave the laptop, Outlier delivers that.</p>
     </div>
 
-    <p class="lead">Disclosure up front: I'm Matt Kerr, I built Outlier, and I sell it. Read this like any comparison written by an interested party, and check the sources at the bottom. I've worked to get Zed right, partly because it beats Outlier on several axes I care about.</p>
+    <p class="lead">Disclosure up front: I'm Matt Kerr, I built Outlier, and I sell it. Read this like any comparison written by an interested party, and check the sources at the bottom. I've worked to get Zed right, partly because it is better than Outlier on several axes I care about.</p>
 
     <h2>What Zed's AI actually is</h2>
     <p>Zed is a desktop editor written in Rust by Zed Industries, the team behind Atom and Tree-sitter. It's open source under GPL-3.0-or-later (Apache-2.0 where marked), runs natively on macOS, Linux and Windows, and ships a CLI.</p>
@@ -116,16 +116,16 @@
 
     <h2>Where each one lives</h2>
     <p>Zed's AI lives inside the thing you write code in: it sees your cursor, buffer, diagnostics and repo, and edits stream across files as the agent works.</p>
-    <p>Outlier is a standalone Mac app — Apple Silicon only, M1 or later, macOS 12+. No editor extension, no terminal agent, no inline completion. You bring code to a chat window and carry the answer back, which is more friction in a tight edit loop. What you get instead runs with Wi-Fi off and never asks for a sign-in.</p>
+    <p>Outlier is a standalone Mac app — Apple Silicon only, M1 or later, macOS 12+. No editor extension, no inline completion. Its Code Agent reads a project folder and edits files behind approval gates, but it does that in its own window rather than in your buffer, which is more app-switching in a tight edit loop. What you get instead runs with Wi-Fi off and never asks for a sign-in.</p>
 
     <h2>Which model is doing the work</h2>
-    <p>In Zed the heavy reasoning comes from closed-weight Claude, GPT and Gemini models, with the most capable tiers gated to Pro and Business. The one open-weight piece is <strong>Zeta</strong>, the edit-prediction model — fine-tuned from Qwen2.5-Coder-7B, Apache-2.0, training dataset published on Hugging Face. There are five access paths: Zed-hosted billing, your own keys, existing ChatGPT/Claude/Copilot subscriptions, gateways like OpenRouter and Bedrock, and local servers running Ollama, LM Studio or llama.cpp.</p>
+    <p>In Zed the heavy reasoning comes from closed-weight Claude, GPT and Gemini models, with the most capable tiers gated to Pro and Business. The one open-weight piece is <strong>Zeta 2</strong>, the edit-prediction model — fine-tuned from ByteDance's Seed Coder 8B, Apache-2.0, and open-weight on Hugging Face. It replaced the original Qwen2.5-Coder-7B-based Zeta as Zed's default in March 2026. There are five access paths: Zed-hosted billing, your own keys, existing ChatGPT/Claude/Copilot subscriptions, gateways like OpenRouter and Bedrock, and local servers running Ollama, LM Studio or llama.cpp.</p>
     <p>Outlier ships seven tiers, all on your Mac: Nano 4B (2.37 GB, 6 GB RAM) through Code 27B (15.13 GB, 24 GB RAM) up to Plus 397B-a17b, which streams experts from SSD and wants 64 GB. Six are Apache 2.0; Quick is under the Gemma Terms of Use.</p>
 
     <h2>Does your code leave the machine?</h2>
-    <p>Zed is hybrid but cloud-first by default: using AI features sends prompts and code context to the provider. Zed doesn't retain that data, and its hosted providers operate under zero-data-retention agreements — with one documented carve-out: provider-designated safety models keep data briefly, around 30 days, for safety review rather than training. Your input isn't used for training by default, and edit-prediction collection is opt-in behind three conditions, restricted to open-source-licensed projects, and admin-controlled on Business. A conservative posture, honestly documented.</p>
+    <p>Zed is hybrid but cloud-first by default: using AI features sends prompts and code context to the provider. Zed doesn't retain that data, and its hosted providers operate under zero-data-retention agreements — with one documented carve-out: Anthropic retains data for its designated Covered Models for at least 30 days for trust-and-safety review rather than training. Your input isn't used for training by default, and edit-prediction collection is opt-in behind three conditions, restricted to open-source-licensed projects, and admin-controlled on Business. A conservative posture, honestly documented.</p>
     <p>Even so, default edit prediction needs a sign-in and a cloud round-trip at keystroke granularity. The local path is documented, but it's a configuration you opt into rather than the architecture — local edit prediction drops External Agents and Terminal Threads, and Ollama's context defaults to 4096 tokens unless you raise <code>max_tokens</code>.</p>
-    <p>Outlier has no cloud path to configure: no account, no upload, works with the network off. The cost is real — no live web search, so it can't read a doc page you link, and no cloud sync.</p>
+    <p>Outlier has no cloud path on by default: no account, no upload, works with the network off. Web research and external API keys exist as opt-in paths on Pro, and turning one on sends that specific request off the device by design — but nothing routes outward until you ask it to. The cost is real: with those switched off there's no live retrieval and no cloud sync, so the model works from what's on your disk.</p>
 
     <h2>What it costs</h2>
     <p>Zed's Personal plan is $0 — "$0 forever" on the pricing page — with 2,000 accepted edit predictions a month and unlimited AI use on your own keys. <strong>Pro is $10/month</strong> including $5 of tokens; past that it's API list price plus 10%, billed at month end or per additional $10 incurred, whichever comes first. <strong>Business is $30/seat/month</strong> with no seat minimum, no free trial and no bundled credits. The two-week Pro trial carries $20 of credits and excludes Anthropic's Opus models. No annual discount is published.</p>
@@ -136,7 +136,7 @@
     <p>Here are my coding numbers, and they don't all flatter me. On a blind slice of SWE-bench Verified the local 27B measured <strong>~45% — 18 of 40</strong>. Code 27B scores <strong>0.866 on HumanEval</strong>. Those are my own measurements, not leaderboard submissions, and they sit below the strongest cloud coding agents. Core 27B did match Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a> — but that's answer quality, not multi-step agentic repair.</p>
     <p>On repo-scale context Zed's advantage is straightforward: the agent holds your project plus a frontier context window, with ACP agents and MCP servers pulling in more. Outlier's context is bounded by the RAM in your Mac, and Plus 397B runs at 2.1 tok/s on an M1 Ultra — thorough, not quick. For "read forty files and refactor the call graph," cloud wins.</p>
 
-    <h2>Side by side</h2>
+    <h2>Zed default, Zed local, and Outlier on six axes</h2>
     <table>
       <thead>
         <tr>
@@ -155,7 +155,7 @@
         </tr>
         <tr>
           <td><strong>Model</strong></td>
-          <td>Claude / GPT / Gemini (closed); Zeta 7B for edit prediction</td>
+          <td>Claude / GPT / Gemini (closed); Zeta 2 (8B) for edit prediction</td>
           <td>Ollama, LM Studio, llama.cpp</td>
           <td>Seven on-device tiers, 4B to 397B-a17b</td>
         </tr>
@@ -174,8 +174,8 @@
         <tr>
           <td><strong>Agentic ability</strong></td>
           <td>Agent panel, ACP agents, MCP servers</td>
-          <td>Partial — no External Agents or Terminal Threads</td>
-          <td>Chat-based; no in-repo agent</td>
+          <td>Agent panel works; External Agents and Terminal Threads need their own separate config</td>
+          <td>Code Agent v2 with approval-gated tools; no editor integration</td>
         </tr>
         <tr>
           <td><strong>Repo-scale context</strong></td>
@@ -198,13 +198,14 @@
       <li><strong>Honest docs.</strong> Zed's May 2026 post on local AI says the hardware for frontier models at good speed is "out of reach for consumers," and flags smaller context windows and lower throughput. I run a local-AI company and think that's fair.</li>
     </ul>
 
-    <h2>Who should pick which</h2>
-    <p><strong>Pick Zed if</strong> you want an agent working across a large repository, you're on Linux or Windows, you need the strongest available reasoning on hard bugs, you value auditing the client's source, or you already pay for Claude and OpenAI keys.</p>
-    <p><strong>Pick Outlier if</strong> you work on code that can't go to a third party — client repos under NDA, regulated systems, unreleased product, security work — and want that guaranteed by architecture rather than contract. Also if you work offline, dislike metered billing, or don't want another account.</p>
-    <p><strong>Or run both</strong>, which is what I'd suggest for most developers: Zed as the editor with your own keys or a local model, Outlier for the slice of work that shouldn't go over the wire. They aren't really competing for the same hour.</p>
+    <h2>Editor or standalone: which fits your day</h2>
+    <p>These two aren't really competing for the same hour, so the useful question isn't which is better. It's what your code is allowed to touch.</p>
+    <p>If the answer is "anything," Zed is the better default: an agent working across a large repository, the strongest available reasoning on hard bugs, a client whose source you can audit, and the only one of the two that runs on Linux or Windows. It costs nothing if you already pay for Claude or OpenAI keys.</p>
+    <p>If the answer is "not a third party" — client repos under NDA, regulated systems, unreleased product, security work — Outlier is the one that guarantees it by architecture instead of by contract. The same holds if you work offline a lot, dislike metered billing, or don't want another account.</p>
+    <p>Most developers land on both, and that's what I'd actually suggest: Zed as the editor with your own keys or a local model, Outlier for the slice of work that shouldn't go over the wire.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Zed plans and billing from <a href="https://zed.dev/pricing">zed.dev/pricing</a> plus the September 2025 token-billing post; retention, training, model and local-runtime details from <a href="https://zed.dev/docs/ai/privacy-and-security">zed.dev/docs/ai/</a> (<code>privacy-and-security</code>, <code>ai-improvement</code>, <code>models</code>, <code>llm-providers</code>, <code>use-a-local-model</code>, <code>edit-prediction</code>); license and platform from <a href="https://github.com/zed-industries/zed">zed-industries/zed</a>; Zeta from <a href="https://huggingface.co/zed-industries/zeta">huggingface.co/zed-industries/zeta</a>; age and arbitration from Zed's March 2026 terms post. Checked July 2026 — <strong>competitor pricing and policies change, so verify at the source.</strong> Outlier figures measured on an M1 Ultra Mac Studio (64 GB): SWE-bench Verified blind slice 18/40, HumanEval 0.866 for Code 27B, rubric comparison at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data</a>.
+      <strong>Sources and receipts:</strong> Zed plans and billing from <a href="https://zed.dev/pricing">zed.dev/pricing</a> plus the September 2025 token-billing post; retention, training, model and local-runtime details from <a href="https://zed.dev/docs/ai/privacy-and-security">zed.dev/docs/ai/</a> (<code>privacy-and-security</code>, <code>ai-improvement</code>, <code>models</code>, <code>llm-providers</code>, <code>use-a-local-model</code>, <code>edit-prediction</code>); license and platform from <a href="https://github.com/zed-industries/zed">zed-industries/zed</a>; Zeta 2 from <a href="https://huggingface.co/zed-industries/zeta-2.1">huggingface.co/zed-industries/zeta-2.1</a> and the <a href="https://zed.dev/blog/how-we-developed-zeta2">How We Developed Zeta2</a> post; age and arbitration from Zed's March 2026 terms post. Checked July 2026 — <strong>competitor pricing and policies change, so verify at the source.</strong> Outlier figures measured on an M1 Ultra Mac Studio (64 GB): SWE-bench Verified blind slice 18/40, HumanEval 0.866 for Code 27B, rubric comparison at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data</a>.
     </div>
 
     <div class="cta">

@@ -130,7 +130,7 @@
     <p>For scale: Outlier's largest tier, a 397B-A17B MoE, is a 209 GB download needing 64 GB of RAM, and manages 2.1 tok/s by streaming experts off the SSD. I won't rank open weights against frontier models on benchmarks here — the memory ceiling is the part that doesn't need my word for it.</p>
 
     <h2>Data path, retention and licensing</h2>
-    <p>"Cloud means they train on your prompts" is false at the paid tiers. Anthropic doesn't by default use commercial-product inputs or outputs for training, except what you submit as feedback or a bug report; OpenAI doesn't train on API data unless you opt in. The real distinctions are narrower. It generates abuse-monitoring logs for <em>all</em> API usage, retained up to 30 days by default, and Zero Data Retention needs prior approval and isn't available on every endpoint (<code>/v1/conversations</code> and <code>/v1/assistants</code> aren't eligible). Tiers differ: on Google's Gemini API <strong>Unpaid</strong> tier, Google uses submitted content and responses to improve its products, and human reviewers may read and annotate API input and output. A free prototyping key isn't the paid terms.</p>
+    <p>"Cloud means they train on your prompts" is false at the paid tiers. Anthropic doesn't by default use commercial-product inputs or outputs for training, except what you submit as feedback or a bug report; OpenAI doesn't train on API data unless you opt in. The real distinctions are narrower. OpenAI generates abuse-monitoring logs for <em>all</em> API usage, retained up to 30 days by default, and its Zero Data Retention needs prior approval and isn't available on every endpoint (<code>/v1/conversations</code> and <code>/v1/assistants</code> aren't eligible). Tiers differ: on Google's Gemini API <strong>Unpaid</strong> tier, Google uses submitted content and responses to improve its products, and human reviewers may read and annotate API input and output. A free prototyping key isn't the paid terms.</p>
 
     <p>Local's claim is different in kind: Ollama's FAQ says that run locally it never sees your prompts. But that property belongs to the execution mode, not the brand — Ollama also sells hosted tiers ($20/month Pro, $100/month Max) processed server-side.</p>
 
@@ -169,7 +169,7 @@
     <h3>Running it yourself wins outright when…</h3>
     <ul>
       <li><strong>Marginal cost is the constraint.</strong> Agent loops, corpus reprocessing and heavy best-of-N are metered by electricity, not an invoice and a spend cap.</li>
-      <li><strong>The data genuinely cannot leave.</strong> Air-gapped or regulated work: "the process never sees a network" beats any retention policy.</li>
+      <li><strong>The data genuinely cannot leave.</strong> Air-gapped or regulated work: "the process never sees a network" is a stronger guarantee than any retention policy.</li>
       <li><strong>You want the whole stack.</strong> Any open-weight model, any quantization from 1.5-bit to 8-bit, custom fine-tunes and LoRAs, your own sampling.</li>
       <li><strong>You need to redistribute.</strong> MIT/Apache runtimes plus Apache-2.0 weights means shipping commercially with no vendor relationship.</li>
       <li><strong>Local isn't one desktop.</strong> The same weights serve a team from a Linux box under vLLM, on NVIDIA, AMD or Intel hardware.</li>

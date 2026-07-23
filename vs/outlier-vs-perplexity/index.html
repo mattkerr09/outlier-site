@@ -105,10 +105,10 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Perplexity is a cloud answer engine: it runs live web searches and returns a cited answer, but every query leaves your machine, it needs an account and a connection, and Pro costs $20/month. Outlier runs models entirely on your own Apple Silicon Mac — no account, no usage caps, nothing uploaded, works with Wi-Fi off — and has no web search at all. Asking about this week's news? Perplexity. Asking about documents you can't send to a server? Outlier.</p>
+      <p>Perplexity is a cloud answer engine: it runs live web searches and returns a cited answer, but every query leaves your machine, it needs a connection, and Pro costs $20/month. Outlier runs models entirely on your own Apple Silicon Mac — no account, no usage caps, nothing uploaded, works with Wi-Fi off. Outlier's free tier has no web search at all; Outlier Pro adds opt-in web research and Deep Research, where only the query leaves your Mac. Perplexity's retrieval is still always on, indexed far more broadly, and cited inline. Asking about this week's news? Perplexity. Asking about documents you can't send to a server? Outlier.</p>
     </div>
 
-    <p class="lead">I'm Matt Kerr, and I built Outlier — so treat this as a comparison written by an interested party. I've tried to be accurate rather than flattering, and where Perplexity is clearly better I say so. These two get compared constantly, but they solve different problems. One is a search product with a language model attached. The other is a language model with no search.</p>
+    <p class="lead">I'm Matt Kerr, and I built Outlier — so treat this as a comparison written by an interested party. I've tried to be accurate rather than flattering, and where Perplexity is clearly better I say so. These two get compared constantly, but they solve different problems. One is a search product with a language model attached. The other is a language model running on your own hardware, with search as an optional extra you can switch off.</p>
 
     <h2>What Perplexity is</h2>
     <p>Perplexity calls itself an "answer engine." You ask a question, it runs live web searches, feeds the retrieved pages to large language models, and returns a synthesized answer with inline citations you can click. The models are a mix: Perplexity's own Sonar, built on Llama 3.3 70B and further trained for search, plus third-party frontier models routed through its Agent API — Claude, GPT-5, Gemini and Grok among them.</p>
@@ -118,9 +118,11 @@
     <h2>What Outlier is</h2>
     <p>Outlier is a native Mac app for Apple Silicon (M1 or later, macOS 12+). The model runs on your own chip. No account, no login, no usage cap, nothing uploaded — turn Wi-Fi off and keep working.</p>
 
-    <p>Seven tiers ship in the app, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which streams its experts from SSD and peaks near 11 GB RSS. Nano and Lite are free with no account; Pro is $20/month or $149/year for all seven.</p>
+    <p>Seven tiers ship in the app, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which streams its experts from SSD and peaks near 11 GB RSS on a 64 GB Mac (209 GB on disk, 128 GB recommended) at about 2.1 tok/s on an M1 Ultra. Nano and Lite are free with no account; Pro is $20/month or $149/year for all seven.</p>
 
-    <p>Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. Code 27B scores 0.866 on HumanEval, and on a blind slice of SWE-bench Verified the local 27B measured about 45%. What it cannot do, at all, is search the web.</p>
+    <p>Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. Code 27B scores 0.866 on HumanEval, and on a blind slice of SWE-bench Verified the local 27B measured about 45%.</p>
+
+    <p>Search is where the two products actually meet. The free tiers have no web search: turning it on returns a Pro paywall. <strong>Outlier Pro</strong> ships web research and Deep Research — a toggle you can flip per conversation, and when it's on only the query leaves your Mac, not your prompt history, your files or the model's context. Web search goes to DuckDuckGo, Mojeek and Wikipedia; Deep Research adds Crossref, OpenAlex, StackExchange and Hacker News. It is a much smaller retrieval stack than Perplexity's, it isn't always on, and it doesn't render the inline click-through citations Perplexity built its product around.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -160,11 +162,11 @@
           <td>Yes — every query</td>
           <td>Yes — every query</td>
           <td>No</td>
-          <td>No</td>
+          <td>No, unless you turn on web research — then the query alone</td>
         </tr>
         <tr>
           <td><strong>Account required</strong></td>
-          <td>Yes</td>
+          <td>No for basic search; yes for Pro searches, history and model choice</td>
           <td>Yes</td>
           <td>No</td>
           <td>No</td>
@@ -176,10 +178,10 @@
         </tr>
         <tr>
           <td><strong>Live web search</strong></td>
-          <td>Yes, with citations</td>
-          <td>Yes, with citations</td>
+          <td>Yes, always on, with inline citations</td>
+          <td>Yes, always on, with inline citations</td>
           <td>No</td>
-          <td>No</td>
+          <td>Optional — per-turn toggle, query-only egress, narrower index</td>
         </tr>
       </tbody>
     </table>
@@ -187,20 +189,20 @@
     <h2>Where Perplexity genuinely wins</h2>
     <p>Several of these aren't close, and pretending otherwise would waste your time.</p>
     <ul>
-      <li><strong>Live web grounding with citations.</strong> This is the whole product, not a bolt-on — it answers questions about things that happened after any model's training cutoff. Outlier structurally cannot; there's no retrieval stack behind it.</li>
-      <li><strong>Measured citation accuracy.</strong> Columbia's Tow Center tested eight AI search tools across 1,600 queries. Perplexity had the lowest error rate of the eight at 37% incorrect, ahead of ChatGPT Search, Gemini, Copilot, DeepSeek and Grok, which was worst at 94%.</li>
+      <li><strong>Live web grounding with citations.</strong> This is the whole product, not a bolt-on. Retrieval is always on, runs against a far broader index than the three engines Outlier queries, and every claim renders as a numbered inline citation you can click and check mid-sentence. Outlier Pro's web research is real but comparatively thin: a three-engine lookup rather than a crawled index of its own, no citation UX of that quality, and a local 27B doing the synthesis instead of a frontier model.</li>
+      <li><strong>Measured citation accuracy.</strong> Columbia's Tow Center, March 2025, tested eight AI search tools across 1,600 queries. Free Perplexity had the lowest error rate of the eight at 37% incorrect, ahead of ChatGPT Search, Gemini, Copilot, DeepSeek and Grok-3, which was worst at 94%. Worth knowing before you upgrade: the study ran Perplexity and Perplexity Pro as separate entries, and Perplexity Pro — the $20/month tier this page compares against — scored <em>worse</em> than the free one in the same run.</li>
       <li><strong>Many frontier models on one subscription.</strong> Per-thread model selection across the Claude, GPT, Gemini and Grok families, instead of paying four vendors.</li>
-      <li><strong>Deep Research and Model Council.</strong> Hundreds of sources synthesized in minutes, or three frontier models cross-checking each other. No single local model does either.</li>
+      <li><strong>Deep Research on frontier models, and Model Council.</strong> Outlier Pro has its own Deep Research, but the synthesis is done by a local 27B on your laptop's power budget; Perplexity's runs on frontier models and someone else's GPUs, which is a different quality of write-up on a hard question. Model Council — one question to three frontier models, with agreements and disagreements reconciled — has no local equivalent: Outlier can run a side-by-side compare, but only across its own tiers unless you bring your own API keys and pay those vendors directly.</li>
       <li><strong>It's everywhere.</strong> Phone, tablet, browser, desktop, API. Outlier is one Mac.</li>
       <li><strong>Enterprise posture.</strong> SOC 2 Type II, audit logs, SCIM provisioning, configurable retention and usage analytics on Enterprise Max — things an unmanaged local app doesn't provide.</li>
-      <li><strong>It gives back.</strong> An MIT-licensed MCP server, Apache-2.0 GPU kernels and SDKs, and R1-1776, an open-weights post-trained DeepSeek-R1 on Hugging Face.</li>
+      <li><strong>It gives back.</strong> An MIT-licensed MCP server, Apache-2.0 GPU kernels and SDKs, and R1-1776, the open-weights post-trained DeepSeek-R1 it open-sourced in February 2025.</li>
     </ul>
-    <p>Outlier also has no image generation, no voice mode, no mobile app, no Windows or Linux build, and no cloud sync. If any of those are on your list, this comparison ends here.</p>
+    <p>Outlier also has no image generation, no always-on voice conversation mode (it has push-to-record voice input and read-aloud, not a hands-free spoken back-and-forth), no mobile app, no Windows or Linux build, and no cloud sync. If any of those are on your list, this comparison ends here.</p>
 
     <h2>What it costs over a year</h2>
     <p>Perplexity Pro is $20/month, stated on Perplexity's own Max announcement and matching the App Store in-app purchase listing; Max is listed at $200. Enterprise Pro is $40/user/month ($400/year) and Enterprise Max $325/user/month ($3,250/year). Third-party trackers report discounted annual plans and a $10/month education tier, but I couldn't confirm those — perplexity.ai/pricing returns HTTP 403 to automated fetching — so treat them as unconfirmed.</p>
 
-    <p>Outlier Pro is $20/month or $149/year — $12.42/month. Lifetime Pro starts at $99, and Nano and Lite stay free.</p>
+    <p>Outlier Pro is $20/month or $149/year — $12.42/month. Lifetime Pro starts at $99 while the Founding 200 seats last, then $200. Nano and Lite stay free.</p>
 
     <p>The API is priced separately and is reasonable: Sonar at $1 per million input and output tokens, Sonar Pro at $3/$15, plus request fees of $5–$14 per thousand depending on search context size. The Search API bills $5.00 per 1,000 requests, and third-party models routed through the Agent API carry no Perplexity markup.</p>
 
@@ -215,17 +217,17 @@
 
     <p>Two more things a careful buyer should know: the iOS App Store privacy label discloses precise location, purchase history and device identifiers collected and <em>linked to your identity</em>; and there's real legal overhang, including copyright suits from several publishers and an Amazon suit over Comet's shopping agent that produced a March 2026 injunction blocking the agent from Amazon.</p>
 
-    <p>Outlier's version of this section is short. Nothing is uploaded. No account, no server-side log, no training toggle to find, because there's no server. Six tiers use Apache 2.0 base models; Quick ships under the Gemma Terms of Use, and weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. Sonar's weights are not published, and Perplexity's Terms of Service assign all rights to the company and prohibit reverse engineering.</p>
+    <p>Outlier's version of this section is short. Inference is local, so prompts, files and chat history stay on the machine. No account, no server-side log, no training toggle to find, because there's no server. The one deliberate exception is Pro's web research: switch it on and that turn's search query goes to DuckDuckGo, Mojeek and Wikipedia — the query only, not your prompt history or documents — and the app names every destination in its own settings before it sends anything. Switch it off and nothing leaves. Six tiers use Apache 2.0 base models; Quick ships under the Gemma Terms of Use, and weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. Sonar's weights are not published, and Perplexity's Terms of Service assign all rights to the company and prohibit reverse engineering.</p>
 
     <h2>Who should pick which</h2>
-    <p><strong>Pick Perplexity if</strong> your questions are about the current world — news, prices, releases, anything past a training cutoff. Pick it if you want citations you can click and check, if you need answers on a phone or on Windows, or if a team needs SOC 2 and SCIM.</p>
+    <p><strong>Pick Perplexity if</strong> your questions are mostly about the current world — news, prices, releases, anything past a training cutoff. Outlier Pro can reach the web too, but if research is the job rather than an occasional lookup, Perplexity's broader index, inline citations and frontier-model synthesis are worth the subscription. Pick it if you need answers on a phone or on Windows, or if a team needs SOC 2 and SCIM.</p>
 
     <p><strong>Pick Outlier if</strong> the material can't leave your machine — client files, patient notes, unreleased source code, legal drafts. Pick it if you work on planes or in dead zones, if usage caps have interrupted you mid-task, or if you'd rather pay $149 a year than $240.</p>
 
-    <p><strong>Plenty of people run both</strong>, and that's the honest recommendation for most knowledge workers. Perplexity for anything that needs the live web; Outlier for anything you wouldn't paste into a website. They barely overlap.</p>
+    <p><strong>Plenty of people run both</strong>, and that's the honest recommendation for most knowledge workers. Perplexity for serious research across the live web; Outlier for anything you wouldn't paste into a website, plus the occasional lookup its own search can cover. The overlap is narrower than the feature lists suggest.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Perplexity pricing from its own <a href="https://hub-prod.perplexity.ai/hub/blog/introducing-perplexity-max">Max</a> and <a href="https://hub-prod.perplexity.ai/hub/blog/power-your-organization-s-full-potential">enterprise</a> announcements plus the <a href="https://apps.apple.com/us/app/perplexity-ask-anything/id1668000334">App Store listing</a>; API rates from <a href="https://docs.perplexity.ai/getting-started/pricing">docs.perplexity.ai</a>; data handling from the <a href="https://hub-prod.perplexity.ai/hub/legal/privacy-policy">privacy policy</a>, <a href="https://hub-prod.perplexity.ai/hub/legal/terms-of-service">terms of service</a> and <a href="https://hub-prod.perplexity.ai/hub/blog/introducing-privacy-snapshot">privacy snapshot</a>; citation accuracy from the <a href="https://www.cjr.org/tow_center/we-compared-eight-ai-search-engines-theyre-all-bad-at-citing-news.php">Tow Center study</a>; Comet prompt injection from <a href="https://brave.com/blog/comet-prompt-injection/">Brave</a>. Free-tier quotas and annual/education pricing are flagged unconfirmed above because perplexity.ai/pricing and the Help Center return HTTP 403 to automated fetching. Outlier figures measured on an M1 Ultra Mac Studio (64 GB); pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Competitor pricing, model line-ups and policies change often — check the primary sources before relying on any number here.
+      <strong>Sources and receipts:</strong> Perplexity pricing from its own <a href="https://www.perplexity.ai/hub/blog/introducing-perplexity-max">Max</a> and <a href="https://www.perplexity.ai/hub/blog/power-your-organization-s-full-potential">enterprise</a> announcements plus the <a href="https://apps.apple.com/us/app/perplexity-ask-anything/id1668000334">App Store listing</a>; API rates from <a href="https://docs.perplexity.ai/getting-started/pricing">docs.perplexity.ai</a>; data handling from the <a href="https://www.perplexity.ai/hub/legal/privacy-notice">privacy notice</a>, <a href="https://www.perplexity.ai/hub/legal/terms-of-service">terms of service</a> and <a href="https://www.perplexity.ai/hub/blog/introducing-privacy-snapshot">privacy snapshot</a>; citation accuracy from the <a href="https://www.cjr.org/tow_center/we-compared-eight-ai-search-engines-theyre-all-bad-at-citing-news.php">Tow Center study (March 2025)</a>; Comet prompt injection from <a href="https://brave.com/blog/comet-prompt-injection/">Brave</a>. Free-tier quotas and annual/education pricing are flagged unconfirmed above because perplexity.ai/pricing and the Help Center return HTTP 403 to automated fetching. Outlier figures measured on an M1 Ultra Mac Studio (64 GB); pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Competitor pricing, model line-ups and policies change often — check the primary sources before relying on any number here.
     </div>
 
     <div class="cta">

@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>A PC with a discrete GPU is usually faster; an Apple Silicon Mac usually holds a bigger model. An RTX 5090 pairs 32 GB of VRAM with roughly 1,792 GB/s of bandwidth, so any model that fits generates tokens about 2–3× faster than on the highest-bandwidth Mac. Apple says a Mac Studio can be configured up to 512 GB of unified memory, so it runs models that won't load on a consumer GPU at all — just more slowly.</p>
+      <p>A PC with a discrete GPU is usually faster; an Apple Silicon Mac usually holds a bigger model. An RTX 5090 pairs 32 GB of VRAM with roughly 1,792 GB/s of bandwidth — about 2.2× an M3 Ultra Mac Studio — and generation speed tracks bandwidth closely. A Mac Studio now tops out at 96 GB of unified memory — Apple pulled the 512 GB and 256 GB M3 Ultra options during 2026 — and a MacBook Pro with M5 Max reaches 128 GB. That still runs models a 32 GB consumer GPU won't load at all, just more slowly; it is no longer 512 GB.</p>
     </div>
 
     <p class="lead">Full disclosure: I build <a href="https://outlier.host/">Outlier</a>, a local-AI app that only runs on Apple Silicon, so I have a stake in one side of this. I've tried to make the PC case as strongly as I'd want someone to make mine. On raw speed the discrete GPU wins.</p>
@@ -123,17 +123,17 @@
 
     <p>So compare bandwidth. Apple lists 410 GB/s for the 32-core M4 Max, 546 GB/s for the 40-core and 819 GB/s for M3 Ultra; on laptops, 307 GB/s for M5 Pro and 614 GB/s for M5 Max. NVIDIA's GeForce news pages put the RTX 5090 at about 1,792 GB/s — the spec page omits it. Call that 2.2× an M3 Ultra, 2.9× an M5 Max.</p>
 
-    <p>Prefill is wider still. A third-party community suite puts an H100 at ~7,760 tokens/sec of prompt evaluation on Llama 3 8B against ~1,024 for an M2 Ultra, while generation was 144 vs 76. Long-context RAG and agent loops live on prefill, so that's the gap you feel. Apple claims M5 processes prompts up to 4× faster than M4.</p>
+    <p>Prefill — processing the prompt before the first token — widens the gap further. It is compute-bound where generation is bandwidth-bound, so a discrete GPU's much larger compute budget helps prefill even more than it helps generation; the M5's own 3.33×–4.06× jump in time-to-first-token over M4, against just 1.19×–1.27× for generation, shows how strongly prefill tracks the hardware. Long-context RAG and agent loops live on prefill, so that's the gap you feel. Apple claims M5 processes prompts up to 4× faster than M4.</p>
 
     <h2>Thermals, power, and sustained load</h2>
     <p>NVIDIA rates the RTX 5090 at 575 W and recommends a 1,000 W supply — for the card alone. Apple lists 480 W as maximum continuous draw for an entire Mac Studio. Over hours that's fan noise, room temperature and an electricity bill. Nor is there a real laptop equivalent: a discrete-GPU laptop with useful VRAM is heavy, loud and thermally limited, where a MacBook Pro carries 128 GB on battery.</p>
 
     <h2>Price per usable gigabyte, and the upgrade path</h2>
-    <p>Apple charges steeply per memory tier and solders it: day-one capacity is what you have until you buy a new computer. But getting past 32 GB on the PC isn't cheap either. NVIDIA's workstation documentation describes an RTX PRO 6000 Blackwell at 96 GB of GDDR7 with ECC at full bandwidth — capacity and bandwidth together, which no Mac matches, at a professional price. NVIDIA's own unified-memory box, DGX Spark, has 128 GB but only 273 GB/s, below an entry M4 Max. AMD documents the Ryzen AI Max+ 395 at 128 GB unified, 96 GB reassignable as VRAM.</p>
+    <p>Apple charges steeply per memory tier and solders it: day-one capacity is what you have until you buy a new computer. But getting past 32 GB on the PC isn't cheap either. NVIDIA's workstation documentation describes an RTX PRO 6000 Blackwell at 96 GB of GDDR7 with ECC at full bandwidth — that now equals the Mac Studio's own 96 GB ceiling and carries far more bandwidth with it, which no Mac matches, at a professional price. Against a pro card the Mac has no capacity advantage left; the capacity argument is about consumer GPUs. NVIDIA's own unified-memory box, DGX Spark, has 128 GB but only 273 GB/s, below an entry M4 Max. AMD documents the Ryzen AI Max+ 395 at 128 GB unified, 96 GB reassignable as VRAM.</p>
 
-    <p>Apple announced the M4 Max Mac Studio at $1,999 in March 2025 and the March 2026 MacBook Pro line from $2,199 to $3,899. Third-party reporting describes a 2026 DRAM shortage pushing Apple prices and GPU street prices up, so check live listings. "The PC is cheaper" is worth re-testing, not repeating.</p>
+    <p>Apple announced the M4 Max Mac Studio at $1,999 in March 2025 and the March 2026 M5 Pro and M5 Max MacBook Pros from $2,199 to $3,899, with a 14-inch M5 at $1,699 in the same announcement. Third-party reporting describes a 2026 DRAM shortage pushing Apple prices and GPU street prices up, so check live listings. "The PC is cheaper" is worth re-testing, not repeating.</p>
 
-    <h2>Side by side</h2>
+    <h2>Unified memory vs VRAM, line by line</h2>
     <table>
       <thead>
         <tr>
@@ -150,8 +150,8 @@
         </tr>
         <tr>
           <td><strong>Capacity ceiling</strong></td>
-          <td>512 GB (M3 Ultra); 128 GB laptop</td>
-          <td>32 GB (RTX 5090); 96 GB pro</td>
+          <td>96 GB desktop (M3 Ultra); 128 GB laptop (M5 Max)</td>
+          <td>32 GB (RTX 5090); 96 GB pro (RTX PRO 6000) — matches the Mac desktop ceiling, so the capacity case rests on the consumer card, not the pro one</td>
         </tr>
         <tr>
           <td><strong>Bandwidth</strong></td>
@@ -170,8 +170,8 @@
         </tr>
         <tr>
           <td><strong>Price per usable GB</strong></td>
-          <td>Better above 32 GB</td>
-          <td>Better below 32 GB</td>
+          <td>Unsettled — 2026 DRAM pricing is moving; check live listings</td>
+          <td>Unsettled — 2026 DRAM pricing is moving; check live listings</td>
         </tr>
         <tr>
           <td><strong>Upgrade path</strong></td>
@@ -191,7 +191,7 @@
     <ul>
       <li><strong>Raw generation speed.</strong> 1,792 GB/s against 819 GB/s isn't close. Any model that fits streams out faster on the PC.</li>
       <li><strong>Prefill.</strong> The prompt-processing gap is far bigger than the generation gap, and agentic work is made of prefill.</li>
-      <li><strong>The CUDA software moat.</strong> The biggest practical advantage. vLLM treats CUDA, ROCm and Intel XPU as first-class; Apple Silicon lives in a separate plugin, vLLM-Metal, at v0.2.0 as of April 2026. bitsandbytes gives NVIDIA official support and calls Apple Silicon experimental — its macOS wheel is CPU-only. Unsloth describes Apple/MLX support as in progress. New quantization schemes ship CUDA-first.</li>
+      <li><strong>The CUDA software moat.</strong> The biggest practical advantage. vLLM treats CUDA, ROCm and Intel XPU as first-class; Apple Silicon lives in a separate out-of-tree plugin, <a href="https://github.com/vllm-project/vllm-metal">vLLM-Metal</a>, published on PyPI at 0.1.0 (January 2026), with only 0.3.0 nightly builds on GitHub since. bitsandbytes gives NVIDIA official support and calls Apple Silicon experimental — its macOS wheel is CPU-only. Unsloth describes Apple/MLX support as in progress. New quantization schemes ship CUDA-first.</li>
       <li><strong>Fine-tuning and training.</strong> The LoRA/QLoRA/8-bit-optimizer stack is CUDA kernels. Training on your own data is well-trodden on the PC, newer on the Mac.</li>
       <li><strong>Image, video and diffusion.</strong> ComfyUI runs on Apple silicon but documents that path as needing a PyTorch nightly build. NVIDIA is the reference implementation.</li>
       <li><strong>Upgradeability.</strong> Start mid-range, upgrade later, or add a second card for more VRAM and compute. No Mac does that.</li>
@@ -200,7 +200,7 @@
     </ul>
     <p>The honest counterweight: AMD isn't a clean escape — bitsandbytes treats ROCm as experimental too, and its supported-GPU matrix is narrower and more version-sensitive than CUDA's. Driver and toolkit versions are a recurring tax; Ollama documents a 550+ NVIDIA driver requirement plus separate ROCm and Vulkan paths, where the Mac is one architecture, one driver.</p>
 
-    <h2>Who should pick which</h2>
+    <h2>Which machine for which workload</h2>
     <p><strong>Build the PC if</strong> you want to fine-tune or train, you work with diffusion and video models, your models fit in 32 GB and you want maximum tokens per second, your workload is prefill-heavy, or local dev needs to mirror a Linux/CUDA production target.</p>
 
     <p><strong>Buy the Mac if</strong> you need more model than a consumer GPU holds, you want local AI on a laptop and on battery, you care about noise and power at your desk, or you'd rather install an app than maintain a driver stack.</p>
@@ -208,7 +208,7 @@
     <p>Privacy isn't a differentiator. Both run inference on your own machine, so any privacy claim belongs to the software, not the silicon. And to be plain about my stake: Outlier is Apple Silicon only, M1 or later, macOS 12+ — no Windows, Linux or Intel build. On the PC side, llama.cpp, Ollama and LM Studio have you covered. Pick hardware for the work, then software that runs on it.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Mac Studio bandwidth and the 480 W figure from <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a>; the 512 GB configuration and $1,999 start price from Apple's March 2025 newsroom post; M5 pricing and bandwidth from Apple's March 2026 MacBook Pro announcement. Bandwidth-bound generation and per-model footprints from Apple's <a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Exploring LLMs with MLX on M5</a>. RTX 5090 VRAM and 575 W from NVIDIA's product page; the ~1,792 GB/s figure is on NVIDIA's GeForce news pages, not the spec page. RTX PRO 6000 and Ryzen AI Max+ 395 figures are as vendor docs describe them, not independently confirmed. Cross-vendor throughput numbers are community benchmarks on older builds — indicative only. <strong>Prices and vendor policies change, and 2026 memory pricing is unstable — re-check every figure live.</strong>
+      <strong>Sources and receipts:</strong> Mac Studio bandwidth, the 480 W figure and the current 96 GB memory ceiling from <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a>, checked 2026-07-23; the $1,999 M4 Max start price is from Apple's March 2025 newsroom post, which also announced the 512 GB M3 Ultra option Apple discontinued in March 2026 — that withdrawal is why the 512 GB figure is still widely quoted, and the specs page, not the newsroom post, is the live authority. M5 pricing, the 128 GB M5 Max ceiling and M5 bandwidth from Apple's March 2026 MacBook Pro announcement. Bandwidth-bound generation and per-model footprints from Apple's <a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Exploring LLMs with MLX on M5</a>. RTX 5090 VRAM and 575 W from NVIDIA's product page; the ~1,792 GB/s figure is on NVIDIA's GeForce news pages, not the spec page. RTX PRO 6000 and Ryzen AI Max+ 395 figures are as vendor docs describe them, not independently confirmed. <strong>Prices and vendor policies change, and 2026 memory pricing is unstable — re-check every figure live.</strong>
     </div>
 
     <div class="cta">

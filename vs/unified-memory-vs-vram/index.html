@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon has shipped up to 512GB at 819GB/s, while NVIDIA publishes 1,792GB/s over 96GB for the RTX PRO 6000 — so a 120B model runs on the big Mac and won't load on a 32GB RTX 5090 at all, while on models that fit both, the discrete GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
+      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon tops out today at 96GB in a Mac Studio (819GB/s) and 128GB in an M5 Max MacBook Pro (614GB/s), while NVIDIA publishes 1,792GB/s over 96GB for the RTX PRO 6000. So a 120B model runs on either Mac and won't load on a 32GB RTX 5090 at all, while on models that fit both, the discrete GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
     </div>
 
     <p class="lead">Disclosure first: I build Outlier, a local AI app that only runs on Apple Silicon, so I have an obvious interest in one side of this. I've stuck to published specs and public benchmark tables, and labeled every number I couldn't verify at the source. Where a discrete GPU wins, it wins.</p>
@@ -113,14 +113,16 @@
     <h2>One physical fact everything follows from</h2>
     <p>NVIDIA's own inference-optimization guide is blunt: for token generation, the time spent moving weights, keys, values and activations out of memory dominates the time spent computing. NVIDIA calls it "a memory-bound operation."</p>
 
-    <p>That splits local inference into two problems. <strong>Prompt processing</strong> — reading your question, your files, your codebase — is compute-bound. <strong>Token generation</strong> — the words appearing on screen — tracks memory bandwidth far more closely than TFLOPs. Any comparison quoting one number hides half the story.</p>
+    <p>That splits local inference into two problems. <strong>Prompt processing</strong>, meaning reading your question, your files, your codebase, is compute-bound. <strong>Token generation</strong>, the words appearing on screen, tracks memory bandwidth far more closely than TFLOPs. Any comparison quoting one number hides half the story.</p>
 
-    <p>On Apple silicon the CPU and GPU share one pool — MLX's docs note arrays live in shared memory, usable by any device without transferring data. A discrete GPU has its own isolated, much faster pool, and everything must cross PCIe into it.</p>
+    <p>On Apple silicon the CPU and GPU share one pool: MLX's docs note arrays live in shared memory, usable by any device without transferring data. A discrete GPU has its own isolated, much faster pool, and everything must cross PCIe into it.</p>
 
     <h2>Capacity: what actually fits</h2>
-    <p>Here unified memory sits in a different class. Apple's M3 Ultra configures to 512GB at over 800GB/s (819GB/s per the Mac Studio specs), and Apple claims models over 600 billion parameters run on device. DGX Spark ships 128GB of coherent memory at 273GB/s for inference up to 200B. An RTX 5090 has 32GB; the RTX PRO 6000 has 96GB with ECC.</p>
+    <p>Unified memory used to sit in a class of its own here, and that gap has closed a long way. At the March 2025 M3 Ultra launch Apple offered up to 512GB at 819GB/s, and its claim that models over 600 billion parameters run on device was attached to that configuration. You can't buy it any more. Apple withdrew the 512GB option, then 256GB, then 128GB, and as of July 2026 <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a> tops out at 96GB, still at 819GB/s. The largest pool Apple currently sells is the 128GB M5 Max MacBook Pro at 614GB/s. DGX Spark ships 128GB of coherent memory at 273GB/s for inference up to 200B. An RTX 5090 has 32GB; the RTX PRO 6000 has 96GB with ECC.</p>
 
-    <p>Those are hard ceilings. Spill out of VRAM and the offloaded layers cross PCIe at a fraction of GDDR7 bandwidth — throughput falls off a cliff. Unified memory degrades gently instead. Here's what my app's tiers need:</p>
+    <p>So on nameplate capacity a Mac Studio you can order today ties the PRO 6000 at 96GB, and loses to it on bandwidth by more than 2x. The unified-memory capacity argument now only really lands against consumer cards, where 96GB or 128GB against a 5090's 32GB is still a three- to four-fold difference and decides whether a model loads at all.</p>
+
+    <p>Those are hard ceilings. Spill out of VRAM and the offloaded layers cross PCIe at a fraction of GDDR7 bandwidth, and throughput falls off a cliff. Unified memory degrades gently instead. Here's what my app's tiers need:</p>
 
     <table>
       <thead>
@@ -135,7 +137,7 @@
       </tbody>
     </table>
 
-    <p>Everything through 35B fits a 5090. The 397B tier doesn't, at any quantization worth running; on a 64GB Mac it works only because a paged mixture-of-experts loader streams experts from SSD, holding peak resident memory near 11GB at 2.1 tokens per second on an M1 Ultra. Slow, but it runs. llama.cpp's DGX Spark file shows the same shape on a mainstream model: 59 GiB of gpt-oss-120b at roughly 2,444 tokens/sec prefill, 59 tokens/sec generation. On a 5090 it doesn't load.</p>
+    <p>Everything through 35B fits a 5090. The 397B tier doesn't, at any quantization worth running; on a 64GB Mac it works only because a paged mixture-of-experts loader reads experts off the SSD as the router calls for them. On my M1 Ultra that measures 11GB peak process memory and 3.6GB peak wired memory at 2.1 tokens per second. The 64GB minimum in the table is not the working set: loading materializes sixty layers in one burst that needs macOS's Metal wired-memory limit raised to roughly 56GB, which the kernel won't grant on a smaller machine, and the paging itself wants file-cache headroom on top. Slow, but it runs. llama.cpp's DGX Spark file shows the same shape on a mainstream model: 59 GiB of gpt-oss-120b at roughly 2,444 tokens/sec prefill, 59 tokens/sec generation. On a 5090 it doesn't load.</p>
 
     <p>One caveat: unified memory is <em>shared</em>. The model competes with macOS, your browser and the app, and Metal caps GPU allocation through a documented working-set limit — the widely repeated 75%-of-RAM figure is community-reported, not published by Apple. Usable budget runs well under the sticker number.</p>
 
@@ -144,7 +146,7 @@
 
     <p>The arithmetic is mine, not theirs: a 5090 is about 20x faster than an M4 Max at prompt processing but only about 4x faster at generating tokens. That's the split above — compute-bound prefill, where discrete GPUs are an order of magnitude ahead, and bandwidth-bound decode, where the gap collapses toward the bandwidth ratio.</p>
 
-    <p>Apple is closing the compute half deliberately: M5 puts a Neural Accelerator in every GPU core and claims over 4x M4's peak AI compute, with M5 Pro and M5 Max at 307GB/s and 614GB/s. Right fix — but it's a 20x gap, not a 2x one.</p>
+    <p>Apple is closing the compute half deliberately: M5 puts a Neural Accelerator in every GPU core and claims over 4x M4's peak AI compute, with M5 Pro and M5 Max at 307GB/s and 614GB/s. Right fix, but it's a 20x gap, not a 2x one.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -152,44 +154,45 @@
         <tr><th></th><th>Apple silicon (unified)</th><th>NVIDIA GB10 (unified)</th><th>Discrete GPU (VRAM)</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>Capacity</strong></td><td>Up to 512GB (M3 Ultra)</td><td>128GB LPDDR5x</td><td>32GB (5090) / 96GB (PRO 6000)</td></tr>
-        <tr><td><strong>Bandwidth</strong></td><td>153–819GB/s by chip</td><td>273GB/s</td><td>~1,792GB/s (5090 figure secondary)</td></tr>
-        <tr><td><strong>What fits</strong></td><td>600B-class, per Apple</td><td>200B, per NVIDIA</td><td>What fits the card, then a cliff</td></tr>
+        <tr><td><strong>Capacity</strong></td><td>96GB today (512GB M3 Ultra config withdrawn); 128GB on M5 Max</td><td>128GB LPDDR5x</td><td>32GB (5090) / 96GB (PRO 6000)</td></tr>
+        <tr><td><strong>Bandwidth</strong></td><td>153–819GB/s across the M5 and M3 Ultra lineup</td><td>273GB/s</td><td>~1,792GB/s (5090 figure secondary)</td></tr>
+        <tr><td><strong>What fits</strong></td><td>~120B-class at 4-bit in memory; larger only by SSD paging</td><td>200B, per NVIDIA</td><td>What fits the card, then a cliff</td></tr>
         <tr><td><strong>7B Q4_0 prefill / decode</strong></td><td>714 / 70 t/s (M4 Max)</td><td>n/a</td><td>14,073 / 290 t/s (5090)</td></tr>
-        <tr><td><strong>Power</strong></td><td>480W whole Mac Studio</td><td>140W SoC</td><td>575W card; 600W (PRO 6000)</td></tr>
+        <tr><td><strong>Power</strong></td><td>480W whole Mac Studio</td><td>140W SoC</td><td>575W card / 1,000W system (5090); 600W (PRO 6000)</td></tr>
         <tr><td><strong>Price per GB of pool</strong></td><td>not verified</td><td>~$37</td><td>~$62 / ~$89 (secondary)</td></tr>
         <tr><td><strong>Upgrade path</strong></td><td>Soldered at purchase</td><td>Fixed; two units link</td><td>Swap, add cards, rent in cloud</td></tr>
       </tbody>
     </table>
 
     <h2>Thermals, power, and sustained load</h2>
-    <p>An RTX 5090 draws 575W for the card alone, with an 850W supply recommended; the PRO 6000 is rated 600W. An entire M3 Ultra Mac Studio — CPU, GPU, memory, storage, fans — is rated 480W maximum continuous. DGX Spark's GB10 is 140W. That shows up as noise, heat, and where the machine can live — and for a laptop there's no dedicated-VRAM option in this class at all.</p>
+    <p>An RTX 5090 draws 575W for the card alone, and NVIDIA specifies a 1,000W system power supply, measured on a Ryzen 9 9950X build. The PRO 6000 is rated 600W. An entire M3 Ultra Mac Studio, CPU and GPU and memory and storage and fans, is rated 480W maximum continuous. DGX Spark's GB10 is 140W. That shows up as noise, heat, and where the machine can live. For a laptop there's no dedicated-VRAM option in this class at all.</p>
 
     <h2>Price per usable gigabyte</h2>
     <p>Where official prices exist: DGX Spark's Founders Edition went from $3,999 to $4,699 in February 2026, which NVIDIA attributed directly to industry-wide memory supply constraints — about $37 per gigabyte of pool. The 5090's $1,999 launch MSRP is secondary-sourced, roughly $62/GB. Secondary reporting puts the 96GB PRO 6000 at $8,565 at launch, about $89/GB, and higher on NVIDIA's marketplace by mid-2026.</p>
 
-    <p>I won't quote a Mac Studio figure — Apple's store pages don't render prices for verification, and I'd be guessing. Tom's Hardware reports Apple withdrew the 512GB option and raised the 96GB-to-256GB upgrade to $2,000 during the shortage. Date every price you read, mine included — TrendForce forecasts server DRAM contract prices up another 13–18% quarter over quarter in Q3 2026.</p>
+    <p>I won't quote a Mac Studio figure: Apple's store pages don't render prices for verification, and I'd be guessing. What moved instead was the configuration list. Tom's Hardware reported Apple withdrawing the 512GB option in March 2026 and raising the 96GB-to-256GB upgrade to $2,000 during the shortage; MacRumors reported the 256GB option going in May 2026, and the 128GB option went after it. That is why the spec page now stops at 96GB, and why any Mac Studio price-per-gigabyte you find written before mid-2026 is describing a machine Apple no longer builds. Date every price you read, mine included. TrendForce forecasts server DRAM contract prices up another 13–18% quarter over quarter in Q3 2026.</p>
 
     <h2>Where dedicated VRAM genuinely wins</h2>
     <p>If your work looks like this list, buy the GPU.</p>
     <ul>
-      <li><strong>Time to first token.</strong> About 20x on identical llama.cpp runs. For agentic coding or long-context RAG — anything re-reading a big codebase each turn — that's the difference between instant and painful.</li>
+      <li><strong>Capacity at the top end, now.</strong> This used to be the Mac's strongest card and it isn't any more. A PRO 6000 matches the biggest Mac Studio you can order at 96GB and moves it at 1,792GB/s against 819GB/s. Unified memory only wins on capacity against consumer cards.</li>
+      <li><strong>Time to first token.</strong> About 20x on identical llama.cpp runs. For agentic coding or long-context RAG, anything re-reading a big codebase each turn, that's the difference between instant and painful.</li>
       <li><strong>Batching and concurrency.</strong> The compute headroom idle during single-stream decode is what serves many requests at once. A Mac serving one user leaves little on the table; a Mac serving eight falls apart.</li>
       <li><strong>Ecosystem depth.</strong> vLLM lists CUDA, ROCm and Intel XPU as GPU platforms; Apple silicon GPU support lives in a separate vllm-metal repo. TensorRT-LLM and new kernels land on CUDA first and Metal later, if ever.</li>
       <li><strong>Training and fine-tuning.</strong> NVIDIA markets the PRO 6000 for local fine-tuning and DGX Spark up to 70B. The Mac story is overwhelmingly an inference story.</li>
       <li><strong>ECC and repairability.</strong> The PRO 6000's 96GB is ECC-protected; Apple's isn't. You can add a card, swap one, or rent the same GPU in a cloud. Apple silicon memory is soldered — what you buy is what you have forever.</li>
     </ul>
-    <p>And NVIDIA has conceded the capacity argument by shipping its own unified-memory box — the question is drifting from Mac versus GPU toward CUDA versus Metal on similar memory architectures.</p>
+    <p>The architectures are converging from both directions. NVIDIA now ships its own unified-memory box at 128GB, and Apple has walked its ceiling back from 512GB to 96GB, so the interesting question is drifting away from Mac versus GPU and toward CUDA versus Metal on memory systems that look increasingly alike.</p>
 
     <h2>Who should pick which</h2>
     <p><strong>Pick unified memory if</strong> you want to run large models at all on one machine, you value quiet and low power, you work on a laptop, or your workload is single-user chat, writing and coding.</p>
 
     <p><strong>Pick dedicated VRAM if</strong> your models fit in 32–96GB, time-to-first-token is what you feel most, you're serving multiple users, or you plan to fine-tune.</p>
 
-    <p>Both paths run fully on-device, so cloud privacy questions don't apply to either; the weights' own licenses are the only policy layer. If you land on Apple silicon, prefill is your weak axis — prompt caching and prefix reuse buy more than any spec bump. That's the bet Outlier makes: Apple Silicon only, macOS 12+, no Windows or Linux build, no live web search.</p>
+    <p>Both paths run fully on-device, so cloud privacy questions don't apply to either; the weights' own licenses are the only policy layer. If you land on Apple silicon, prefill is your weak axis — prompt caching and prefix reuse buy more than any spec bump. That's the bet Outlier makes: Apple Silicon only, macOS 12+, no Windows or Linux build.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Bandwidth-bound decode, <a href="https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/">NVIDIA's inference guide</a>. Shared memory, the <a href="https://github.com/ml-explore/mlx">MLX README</a>. Apple specs, the <a href="https://www.apple.com/newsroom/2025/03/apple-reveals-m3-ultra-taking-apple-silicon-to-a-new-extreme/">M3 Ultra</a>, <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5</a> and <a href="https://www.apple.com/newsroom/2026/03/apple-debuts-m5-pro-and-m5-max-to-supercharge-the-most-demanding-pro-workflows/">M5 Pro/Max</a> posts plus <a href="https://www.apple.com/mac-studio/specs/">Mac Studio specs</a>. NVIDIA specs, the <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">RTX 5090</a>, <a href="https://www.nvidia.com/en-us/products/workstations/professional-desktop-gpus/rtx-pro-6000/">RTX PRO 6000</a> and <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">DGX Spark</a> pages; price change from <a href="https://forums.developer.nvidia.com/t/2-23-2026-price-change-announcement/361713">NVIDIA's forum</a>. Throughput, llama.cpp's benchmark threads for <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">Apple silicon</a> and <a href="https://github.com/ggml-org/llama.cpp/discussions/15013">CUDA</a> plus its <a href="https://raw.githubusercontent.com/ggml-org/llama.cpp/master/benches/dgx-spark/dgx-spark.md">DGX Spark file</a> — community-submitted across different commits and machines on a small, dated workload, so directional, not controlled. DRAM forecast, <a href="https://www.trendforce.com/presscenter/news/20260709-13140.html">TrendForce</a>. <strong>Secondary, unconfirmed at the vendor:</strong> the 5090's 1,792GB/s and $1,999 MSRP, PRO 6000 street pricing, the Mac Studio configuration changes, the 75% Metal working-set figure. Outlier tiers measured on an M1 Ultra; pricing moves fast, so date any figure you quote.
+      <strong>Sources and receipts:</strong> Bandwidth-bound decode, <a href="https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/">NVIDIA's inference guide</a>. Shared memory, the <a href="https://github.com/ml-explore/mlx">MLX README</a>. Apple specs, the <a href="https://www.apple.com/newsroom/2025/03/apple-reveals-m3-ultra-taking-apple-silicon-to-a-new-extreme/">M3 Ultra</a>, <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5</a> and <a href="https://www.apple.com/newsroom/2026/03/apple-debuts-m5-pro-and-m5-max-to-supercharge-the-most-demanding-pro-workflows/">M5 Pro/Max</a> posts plus <a href="https://www.apple.com/mac-studio/specs/">Mac Studio specs</a>, which is the live authority on the ceiling: checked 2026-07-23 it lists 96GB as the maximum unified memory at 819GB/s and 480W maximum continuous power, so the 512GB and 600B figures belong to the March 2025 launch configuration and not to anything on sale. The 128GB M5 Max ceiling and the 307/614GB/s bandwidths are from Apple's March 2026 M5 Pro/Max post. NVIDIA specs, the <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">RTX 5090</a> page (575W total graphics power and 1,000W required system power, NVIDIA's figure measured on a Ryzen 9 9950X build), <a href="https://www.nvidia.com/en-us/products/workstations/professional-desktop-gpus/rtx-pro-6000/">RTX PRO 6000</a> and <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">DGX Spark</a> pages; price change from <a href="https://forums.developer.nvidia.com/t/2-23-2026-price-change-announcement/361713">NVIDIA's forum</a>. Throughput, llama.cpp's benchmark threads for <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">Apple silicon</a> and <a href="https://github.com/ggml-org/llama.cpp/discussions/15013">CUDA</a> plus its <a href="https://raw.githubusercontent.com/ggml-org/llama.cpp/master/benches/dgx-spark/dgx-spark.md">DGX Spark file</a> — community-submitted across different commits and machines on a small, dated workload, so directional, not controlled. DRAM forecast, <a href="https://www.trendforce.com/presscenter/news/20260709-13140.html">TrendForce</a>. <strong>Outlier's own measurements, M1 Ultra 64GB:</strong> Plus 397B on the V9 paged engine at 11GB peak process memory, 3.6GB peak wired memory and 2.1 tok/s; the 64GB floor comes from the engine's requirement that macOS's <code>iogpu.wired_limit_mb</code> be raised to roughly 56GB for the load burst. Tier download sizes and minimum RAM are the shipping catalog's own values. These are my numbers on one machine, not third-party benchmarks. <strong>Secondary, unconfirmed at the vendor:</strong> the 5090's 1,792GB/s and $1,999 MSRP, PRO 6000 street pricing, the dates and prices attached to Apple's memory-option withdrawals (Tom's Hardware for March 2026, MacRumors for May 2026 — the 96GB ceiling itself is confirmed on Apple's spec page, only the timeline is third-party), the 75% Metal working-set figure. Pricing moves fast, so date any figure you quote.
     </div>
 
     <div class="cta">

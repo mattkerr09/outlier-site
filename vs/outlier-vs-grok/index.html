@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-grok/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs Grok: local Mac AI vs xAI's cloud assistant">
-  <meta property="og:description" content="Grok is cloud-only, account required, and trains on consumer chats by default. Outlier runs on your Mac with no account and nothing uploaded. Honest trade-offs.">
+  <meta property="og:description" content="xAI's models are cloud-only and train on consumer chats by default. Outlier runs on your Mac with no account and nothing uploaded. Honest trade-offs, including where Grok wins.">
   <meta property="og:url" content="https://outlier.host/vs/outlier-vs-grok/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -105,38 +105,38 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Grok is xAI's cloud assistant: $0/month free tier, SuperGrok at $30/month, account required, and consumer conversations used to train xAI's models by default unless you find the opt-out. Outlier is a Mac app where the model runs on your own hardware — no account, no usage caps, works with Wi-Fi off, nothing uploaded. Grok has live web and X search, image and video generation, voice and mobile apps; Outlier has none of those, and there's no native Grok app for macOS.</p>
+      <p>Grok is xAI's cloud assistant: $0/month free tier, SuperGrok at $30/month, account required to keep history or subscribe, and consumer conversations used to train xAI's models by default unless you find the opt-out. Outlier is a Mac app where the model runs on your own hardware — no account, no usage caps, works with Wi-Fi off, nothing uploaded. Grok has always-on web and X search, image and video generation, spoken voice mode and mobile apps; Outlier answers from the local model unless you turn on its opt-in web research tool, generates no images or video, and has no mobile app — and there's no native Grok app for macOS.</p>
     </div>
 
     <p class="lead">I build Outlier, so read this knowing I'm an interested party. I've written the version I'd want if I were choosing — including a long section on where Grok is genuinely better, because it is. Every figure below comes from xAI's own pages, checked 2026-07-23.</p>
 
     <h2>What Grok actually is</h2>
-    <p>Grok is xAI's conversational assistant and model family. You reach it through grok.com, the iOS and Android apps, inside X, through a REST API, or through Grok Build, an open-source terminal coding agent. All of those send your prompt to xAI's servers; inference is entirely cloud-side, with no local option anywhere in the product line. The flagship is Grok 4.5 with a 500,000-token context window, and Grok 4.3 and the 4.20 variants go to a million. None of them have published weights.</p>
+    <p>Grok is xAI's conversational assistant and model family. You reach it through grok.com, the iOS and Android apps, inside X, through a REST API, or through Grok Build, an open-source terminal coding agent. Every xAI-hosted surface is cloud-side, and while xAI has open-sourced older weights — Grok-1 in 2024 and Grok-2.5 in 2025 — its current flagship models have no published weights. Grok Build is the one exception to the cloud-only shape — it can be pointed at Ollama or any local OpenAI-compatible server — but xAI's own models are never local. The flagship is Grok 4.5 with a 500,000-token context window, and Grok 4.3 and the 4.20 variants go to a million.</p>
 
     <p>On platforms, xAI's own site says Grok is "Available on Web, iOS and Android," and the download footer lists those three plus Grok on X. There's no native macOS app, and the official iOS listing (Grok AI by X Corp., free, iOS 17+, rated 4.88 across ~1.31 million ratings) shows no Mac devices. On a Mac you're in a browser tab, or a terminal.</p>
 
-    <p>The terminal option is real, and it's good. Grok Build is an Apache-2.0 Rust coding agent installed with a one-line <code>curl … | bash</code>, with binaries for macOS, Linux and Windows and support for MCP servers, parallel subagents, plan mode, skills, hooks, git worktrees, headless CI and sandboxed execution. But it authenticates through your browser and calls xAI's hosted models. The agent runs on your machine; the thinking doesn't.</p>
+    <p>The terminal option is real, and it's good. Grok Build is an Apache-2.0 Rust coding agent installed with a one-line <code>curl … | bash</code>, with binaries for macOS, Linux and Windows and support for MCP servers, parallel subagents, plan mode, skills, hooks, git worktrees, headless CI and sandboxed execution. By default it authenticates through your browser and calls xAI's hosted models — the agent runs on your machine, the thinking doesn't. Its custom-models doc does document pointing it at Ollama (<code>http://localhost:11434/v1</code>) or any local OpenAI-compatible server (<code>http://localhost:8080/v1</code>), so the agent itself isn't welded to the cloud. But the moment you do that you're running somebody else's local model, not Grok.</p>
 
     <h2>Where Grok genuinely wins</h2>
     <p>These aren't hedged concessions. They're structural gaps no amount of work on my end closes.</p>
     <ul>
-      <li><strong>Live information.</strong> Grok searches the open web and X posts at query time, so it can answer about something that happened an hour ago. A local model is frozen at its training cutoff. That's architecture, not polish.</li>
+      <li><strong>Live information.</strong> Grok searches the open web and X posts at query time, so it can answer about something that happened an hour ago. A local model is frozen at its training cutoff, and Outlier Pro's web research is a tool you switch on for a request — not a standing connection to X. That's architecture, not polish.</li>
       <li><strong>Context windows nobody runs at home.</strong> 500k tokens on Grok 4.5, a million on Grok 4.3 and the 4.20 line. The KV cache alone would dwarf any consumer Mac's RAM.</li>
       <li><strong>Frontier-scale quality.</strong> Grok 4.5 was trained on datacenter compute. A 2–30 GB model on a laptop won't match it on the hardest reasoning or broadest recall.</li>
       <li><strong>Multimodal in one thread.</strong> Vision, image generation and editing, short text-to-video, low-latency voice, PDF analysis. Building that locally means five models and a pile of glue.</li>
-      <li><strong>A free tier that isn't a trial.</strong> $0/month includes real-time web and X search, voice mode and connectors, with SOC 2 Type I and II listed even there.</li>
+      <li><strong>A free tier that isn't a trial.</strong> $0/month includes real-time web and X search, voice mode and connectors, with SOC 2 Type I and II listed even there, and xAI's comparison matrix even ticks Grok 4.5 on Free. What's held back: image and video generation (Grok Imagine, now paid-only across all tiers) and the no-training guarantee.</li>
       <li><strong>Real openness, in the parts they opened.</strong> The Grok Build agent, the Python SDK and the protobufs are Apache-2.0, and Grok's own system prompts are AGPL-3.0 — rare, and it deserves credit. Grok-1 shipped under Apache 2.0 in March 2024.</li>
       <li><strong>Mobile, sync and memory.</strong> iPhone, Android, cross-device history, persistent memory, personas.</li>
-      <li><strong>Cheap long-context API.</strong> grok-4.3 is $1.25/$2.50 per million input/output tokens with a 1M window; grok-4.5 is $2.00/$6.00 under 200k context and $4.00/$12.00 above it.</li>
+      <li><strong>Cheap long-context API.</strong> grok-4.3 is $1.25/$2.50 per million under 200k context and $2.50/$5.00 above it, with a 1M window; grok-4.5 is $2.00/$6.00 under 200k context and $4.00/$12.00 above it.</li>
     </ul>
 
-    <h2>What it costs over a year</h2>
-    <p>xAI's pricing page publishes exactly two consumer prices: Free at $0/month and SuperGrok at $30/month, which is where Grok 4.5, higher rate limits and image and video generation live. The matrix also names SuperGrok Lite, SuperGrok Heavy, Business and Enterprise — with no price for any of them and no annual billing option at all.</p>
+    <h2>A year of SuperGrok, a year of Outlier</h2>
+    <p>xAI's pricing page publishes exactly two consumer prices: Free at $0/month and SuperGrok at $30/month, which adds higher rate limits and image and video generation (Grok Imagine) on top of the free tier; xAI's own matrix marks Grok 4.5 available on Free as well, though the Free plan card doesn't list it. The matrix also names SuperGrok Lite, SuperGrok Heavy, Business and Enterprise — with no price for any of them and no annual billing option at all.</p>
 
     <p>So the only annual figure you can compute from xAI's own material is $360/year, at twelve monthly payments. Third-party trackers list Heavy at $300/month and an annual plan at $300/year; I couldn't confirm either on an xAI-owned page, so treat both as unverified. Outlier Pro is $20/month or $149/year, with lifetime Pro from $99.</p>
 
-    <h2>What happens to your data</h2>
-    <p>xAI's privacy policy defines your Input as prompts plus files, images, audio, voice and video — all transmitted to and processed on xAI's servers. Consumer inputs and outputs are used to train xAI's models by default. An opt-out exists (Settings → Data Controls → "Improve the model" on mobile, Settings → Data → "Improve the Model" on grok.com), but it's opt-out rather than opt-in, it only covers conversations after you flip it, and it has holes: feedback you volunteer may still be used for training, and unauthenticated users in some regions outside the EU and UK can't opt out at all.</p>
+    <h2>Where your Grok conversations end up</h2>
+    <p>xAI's privacy policy defines your Input as prompts plus files, images, audio, voice and video — all transmitted to and processed on xAI's servers. Consumer inputs and outputs are used to train xAI's models by default. An opt-out exists (Settings → Data Controls → "Improve the model" on mobile, Settings → Data → "Improve the Model" on grok.com), but it's opt-out rather than opt-in, it only covers conversations after you flip it, and it has holes: feedback you volunteer may still be used for training, and unauthenticated users in some regions outside the EU and UK can't opt out at all. That last hole is worth sitting with, because you <em>can</em> use Grok without registering: xAI's consumer FAQ says an unregistered session isn't retained for your later use, and in the same breath that logged-out users don't get the training opt-out. Anonymous Grok is the private-feeling option that has the least control attached.</p>
 
     <p>The controls that do exist are concrete. Private Chat keeps content out of training, hides it from history, and deletes it within 30 days barring legal holds; business, enterprise and API traffic is excluded from training outright; and xAI says it doesn't sell user data. What gives me pause is the other side: authorized xAI staff may review conversations for model performance, security and legal compliance; the no-training guarantee is a business-tier feature, so consumers get a toggle rather than a contract; and xAI asks users not to put personal information into prompts at all. That last one is honest of them, and a real limit on what you can use it for.</p>
 
@@ -147,9 +147,9 @@
 
     <p>For quality, the number I'd point at: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. On a blind slice of SWE-bench Verified it measured about 45%. All on-device.</p>
 
-    <p>What Outlier doesn't have, plainly: live web search, image generation, voice mode, a mobile app, Windows or Linux builds, or cloud sync. I build it solo in Grand Rapids, and publish the weights at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>.</p>
+    <p>What Outlier doesn't have, plainly: no always-on live web search like Grok's — Pro has an opt-in web research tool you switch on per request, not a live index of X — no image or video generation, no mobile app, no Windows or Linux builds, no cloud sync. Pro does include voice input (speech to text), but not Grok's low-latency spoken conversation. I build it solo in Grand Rapids, and publish the weights at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>.</p>
 
-    <h2>Side-by-side</h2>
+    <h2>Grok vs Outlier, line by line</h2>
     <table>
       <thead>
         <tr>
@@ -198,7 +198,7 @@
         </tr>
         <tr>
           <td><strong>Account required</strong></td>
-          <td>Yes</td>
+          <td>No for anonymous use; yes to save history</td>
           <td>Yes</td>
           <td>No</td>
           <td>No</td>
@@ -210,13 +210,20 @@
         </tr>
         <tr>
           <td><strong>Web search</strong></td>
-          <td>Yes — web and X</td>
+          <td>Yes — web and X, always on</td>
           <td>Yes — higher limits</td>
+          <td>No</td>
+          <td>Opt-in web research tool; no X index</td>
+        </tr>
+        <tr>
+          <td><strong>Image generation</strong></td>
+          <td>No — paid-only</td>
+          <td>Yes</td>
           <td>No</td>
           <td>No</td>
         </tr>
         <tr>
-          <td><strong>Image / video generation</strong></td>
+          <td><strong>Video generation</strong></td>
           <td>No</td>
           <td>Yes</td>
           <td>No</td>
@@ -225,15 +232,15 @@
       </tbody>
     </table>
 
-    <h2>Who should pick which</h2>
+    <h2>Grok or Outlier, by what you actually do</h2>
     <p><strong>Pick Grok if</strong> you need answers about things happening right now, you want image or video generation and voice in the same thread, you work from a phone as much as a laptop, or your documents need a 500k-to-1M-token window.</p>
 
-    <p><strong>Pick Outlier if</strong> the content itself is the problem: client files, source code, medical or legal drafts — anything you'd hesitate to paste into a service whose own policy asks you not to include personal information. Or if you want no account, no caps, a session that keeps working on a plane, and $149/year instead of $360.</p>
+    <p><strong>Pick Outlier if</strong> the content itself is the problem: client files, source code, medical or legal drafts — anything you'd hesitate to paste into a service whose own policy asks you not to include personal information. Or if you want no account, no caps, a session that keeps working on a plane, and $149/year against $360 at xAI's published monthly rate (trackers claim a $300/year annual plan I couldn't confirm).</p>
 
     <p><strong>Plenty of people should run both.</strong> Grok for the live, visual, mobile work; Outlier for the confidential, offline, high-volume work. They aren't competing for the same hour of your day.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> prices and tiers from <a href="https://x.ai/pricing">x.ai/pricing</a>; models and API rates from <a href="https://docs.x.ai/developers/models">docs.x.ai</a>; platforms from <a href="https://x.ai/grok">x.ai/grok</a>; data handling from <a href="https://x.ai/legal/privacy-policy">x.ai/legal/privacy-policy</a> and <a href="https://x.ai/legal/faq">x.ai/legal/faq</a>; <a href="https://github.com/xai-org/grok-build">github.com/xai-org/grok-build</a>; iOS details via the App Store lookup API; the inquiry from the <a href="https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-opens-investigation-x-xiuc">DPC press release</a>. All checked 2026-07-23. The $300/month Heavy and $300/year annual figures on third-party trackers are <strong>unconfirmed</strong>. Outlier pricing at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB). Competitor pricing and policies change often — check xAI's pages first.
+      <strong>Sources and receipts:</strong> prices and tiers from <a href="https://x.ai/pricing">x.ai/pricing</a>; models and API rates from <a href="https://docs.x.ai/developers/models">docs.x.ai</a>; platforms from <a href="https://x.ai/grok">x.ai/grok</a>; data handling from <a href="https://x.ai/legal/privacy-policy">x.ai/legal/privacy-policy</a> and <a href="https://x.ai/legal/faq">x.ai/legal/faq</a>; the agent and its local-model support from <a href="https://github.com/xai-org/grok-build">github.com/xai-org/grok-build</a> (user-guide doc 11, "Custom Models", documents Ollama and OpenAI-compatible localhost endpoints); iOS details via the App Store lookup API; the inquiry from the <a href="https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-opens-investigation-x-xiuc">DPC press release</a>. All checked 2026-07-23. The $300/month Heavy and $300/year annual figures on third-party trackers are <strong>unconfirmed</strong>. Outlier pricing at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB). Competitor pricing and policies change often — check xAI's pages first.
     </div>
 
     <div class="cta">

@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Qwen Chat (now branded Qwen Studio) is Alibaba's free cloud assistant — no subscription, no account required, on web, macOS, Windows, iOS and Android — but every prompt, file, image and video is uploaded, and its Terms say user content trains Alibaba's models by default. Outlier runs Qwen's <em>published</em> open weights on your own Apple Silicon Mac: no account, no caps, nothing uploaded, works with Wi-Fi off, $149/year for all seven tiers. Same lineage, opposite delivery — Qwen Chat serves bigger models nobody can self-host, Outlier serves Apache-2.0 ones that never leave the device.</p>
+      <p>Qwen Chat (now branded Qwen Studio) is Alibaba's free cloud assistant — no subscription, no account required, on web, macOS, Windows, Android and iOS (iOS not listed in the US or German App Store as of 23 July 2026) — but every prompt, file, image and video is uploaded, and its Terms say user content trains Alibaba's models by default. Outlier runs Qwen's <em>published</em> open weights on your own Apple Silicon Mac: no account, no caps, nothing uploaded unless you switch on web search, works with Wi-Fi off, $149/year for all seven tiers. Same lineage, opposite delivery — Qwen Chat serves bigger models nobody can self-host, Outlier serves Apache-2.0 ones that never leave the device.</p>
     </div>
 
     <p class="lead">I'm Matt Kerr, and I built Outlier — so treat this as a comparison by an interested party. Every claim about Alibaba's product is tied to a source you can check. This one's odd to write, because Outlier runs Qwen weights: six of its seven tiers are Qwen models. One family, two very different deliveries.</p>
@@ -113,14 +113,14 @@
     <h2>What Qwen Chat actually is</h2>
     <p>Qwen Chat is Alibaba's consumer AI assistant, at chat.qwen.ai. It's now branded <strong>Qwen Studio</strong> — qwen.ai still serves the old /qwenchat route, but the page title, buttons and iOS listing all read "Qwen Studio." It's operated by Alibaba Cloud (Singapore) Private Limited; the Privacy Policy and Terms are both dated 19 May 2026.</p>
 
-    <p>The app's public model endpoint lists exactly four models: <code>Qwen3.8-Max-Preview</code>, <code>Qwen3.7-Max</code>, <code>Qwen3.7-Plus</code> and <code>Qwen3.6-Plus</code>. Qwen3.7-Plus is the multimodal one — vision, documents, video, audio, thinking and search in one model. Max is text-only.</p>
+    <p>The app's public model endpoint lists exactly four models: <code>Qwen3.8-Max-Preview</code>, <code>Qwen3.7-Max</code>, <code>Qwen3.7-Plus</code> and <code>Qwen3.6-Plus</code>. Both Plus models (Qwen3.7-Plus and Qwen3.6-Plus) are fully multimodal — vision, documents, video, audio, thinking and search. Qwen3.7-Max is text-only; Qwen3.8-Max-Preview adds vision and video but not audio.</p>
 
     <p>There's no consumer subscription. The config reports subscriptions and payment/quota disabled and anonymous use enabled, so you can open the web app and start typing without an account; sign-in is Google, GitHub or Apple OAuth. Native clients cover macOS, Windows, iOS and Android — the Mac DMG is about 146 MB.</p>
 
     <h2>The part that makes this comparison strange: same family, different weights</h2>
     <p>Outlier's tiers are built on Qwen3.5-4B, Qwen3.5-9B, Qwen3.6-27B, Qwen3.6-35B-A3B and Qwen3.5-397B-A17B, all Apache-2.0. (The exception is Quick, a Gemma model under Gemma's terms.) Those are Alibaba's published open weights, downloaded once and run on your machine.</p>
 
-    <p>Here's the honest wrinkle: <strong>you can't self-host what Qwen Chat is serving.</strong> Qwen3.7-Plus, Qwen3.7-Max and Qwen3.8-Max-Preview have no published weights anywhere. The Qwen org's newest open releases are Qwen3.6-27B and Qwen3.6-35B-A3B, both from 24 April 2026 — and both are already in Outlier as the Core, Code and Vision tiers. The open line and the hosted line have split. Alibaba still ships genuinely open models, which I'm grateful for, but the chat product runs a tier above anything I can put on a laptop.</p>
+    <p>Here's the honest wrinkle: <strong>you can't self-host what Qwen Chat is serving.</strong> Qwen3.7-Plus, Qwen3.7-Max and Qwen3.8-Max-Preview have no published weights anywhere. Qwen3.6-35B-A3B landed 15 April 2026 and Qwen3.6-27B on 21 April 2026 — both Apache-2.0, both already in Outlier as the Core, Code and Vision tiers. Alibaba has kept shipping open weights since (an agent model in June, ASR models later that month), but nothing on the Max or Plus line. The open line and the hosted line have split. Alibaba still ships genuinely open models, which I'm grateful for, but the chat product runs a tier above anything I can put on a laptop.</p>
 
     <p>The flip side is the escape hatch: if you later decide you don't want your work on someone else's servers, you can move to Qwen weights you control without changing families. That's rare among cloud assistants, and it's most of why Outlier exists.</p>
 
@@ -129,15 +129,15 @@
     <ul>
       <li><strong>Free, no account, nothing on disk.</strong> Outlier's free tiers cost nothing either, but you download a 2.37 GB model first.</li>
       <li><strong>It runs models no Mac can run.</strong> The Max tier is datacenter-scale and unpublished. Outlier's largest tier, Plus 397B, is a 209 GB download needing a 64 GB Mac, at 2.1 tokens/second on an M1 Ultra.</li>
-      <li><strong>Live web search and a deep-research mode.</strong> Outlier has no web access at all — it answers from training data. That's a hard limit, not a soft one.</li>
-      <li><strong>Image generation, image editing, text-to-video, TTS and voice.</strong> Outlier does none of these. Text in, text out.</li>
+      <li><strong>A far stronger research stack.</strong> Search is a native capability on all four models Qwen Chat serves, and deep research is a first-party mode alongside it. Outlier does have opt-in web search with citations (DuckDuckGo, Mojeek, Wikipedia) and its own Deep Research mode — but both are Pro-only, both borrow third-party engines, and a local model reads the pages, so a wide sweep is slower and shallower than the same sweep run on a datacenter model. On the free tiers there's no web access at all.</li>
+      <li><strong>Image generation, image editing and text-to-video.</strong> Outlier reads images (the Vision tier) and transcribes your speech on Pro, and any reply can be read back in the system voice — but it generates no images and no video.</li>
       <li><strong>Multimodal input local hardware can't touch.</strong> Video up to 2 GB and one hour, audio up to three hours, 20 MB documents. No Mac reasons over an hour of video on battery.</li>
       <li><strong>It's on your phone.</strong> iOS and Android clients plus Windows and web, and it's fine on an 8 GB Mac. Outlier is Apple Silicon Mac only — no iPhone, no Windows.</li>
-      <li><strong>A real productivity surface.</strong> MCP tools, artifacts, web-dev mode, slides, projects (10 × 5 files), memory, 16 UI languages, and Qwen's strength in Chinese-language work.</li>
+      <li><strong>A real productivity surface.</strong> MCP tools, artifacts, web-dev mode, slides, projects (10 × 5 files), memory, 15 UI languages across 17 locales, and Qwen's strength in Chinese-language work.</li>
       <li><strong>Good output terms.</strong> You keep rights in your prompts, and Qwen assigns you its interest in the outputs.</li>
     </ul>
 
-    <h2>Side by side</h2>
+    <h2>Cloud Qwen vs local Qwen, line by line</h2>
     <table>
       <thead>
         <tr>
@@ -170,7 +170,7 @@
           <td><strong>Data uploaded</strong></td>
           <td>Yes — prompts, files, images, audio, video</td>
           <td>No</td>
-          <td>No</td>
+          <td>No, unless you turn on web search</td>
         </tr>
         <tr>
           <td><strong>Account required</strong></td>
@@ -200,14 +200,14 @@
     </table>
     <p>*On 23 July 2026 an App Store lookup returned nothing for the US or German storefronts, while Singapore, UK and Japan returned the app. US iPhone users are on web or desktop.</p>
 
-    <h2>What it costs over a year</h2>
+    <h2>Free to use, paid to build on</h2>
     <p>For anyone using the chat app: <strong>$0</strong>. There's no consumer tier to buy. That's hard to compete with, and I won't pretend otherwise.</p>
 
     <p>The money is on the developer side. On Alibaba Cloud Model Studio, international list price for qwen3.7-max is $2.50 per million input tokens and $7.50 per million output (currently shown with a limited-time 50% discount); qwen3.7-plus is $0.40 in / $1.60 out at the 0–256K tier. Free API access is a one-million-token trial per model, valid 90 days. Token Plan (Team Edition) credits run $30 to $200 a month — $360 to $2,400 a year.</p>
 
     <p>Outlier Pro is $20/month or $149/year for all seven tiers; lifetime licences start at $99. Nano and Lite don't expire and don't ask for an email.</p>
 
-    <h2>What happens to your data</h2>
+    <h2>The two clauses that decide this for NDA work</h2>
     <p>Everything runs cloud-side, so everything is uploaded. The Privacy Policy says Qwen collects "your prompts and other content you upload, such as text, files, images, audio and videos," plus device ID, IP address and interaction data. For voice and video it notes this "involves the processing of data that may be considered biometric identifiers."</p>
 
     <p>Two clauses deserve a slow read. First, the Terms say you authorise use and storage of non-personal user content to develop and improve Alibaba's machine-learning models. Training on your content is the default; the training-data summary says users can opt out "by submitting their requests to us" — a request to a company, not a switch in the app. Second, the Terms require a perpetual, irrevocable, sub-licensable, worldwide licence over user content and deem all of it "non-confidential and non-proprietary." That rules the product out for NDA-bound or client-confidential material.</p>
@@ -216,15 +216,15 @@
 
     <p>Outlier's version of this section is short because there isn't much to say. Inference happens on your Mac: no account, no conversation telemetry, no opt-out to find.</p>
 
-    <h2>Who should pick which</h2>
-    <p><strong>Pick Qwen Chat if</strong> you want large-model answers for free, you need current information from the web, you want image, video, audio or voice features, you're on a phone or a Windows machine, or what you're pasting in isn't sensitive. For general knowledge work and drafting, free plus multimodal plus web search is a strong package.</p>
+    <h2>Which Qwen should you run?</h2>
+    <p><strong>Pick Qwen Chat if</strong> you want large-model answers for free, you want agentic deep research rather than a single search pass, you want to generate images or video, you're on a phone or a Windows machine, or what you're pasting in isn't sensitive. For general knowledge work and drafting, free plus multimodal plus search is a strong package.</p>
 
     <p><strong>Pick Outlier if</strong> the content is the problem — client files, source code, medical notes, legal drafts, anything under NDA. The "non-confidential and non-proprietary" clause and the default training use make Qwen Chat a poor fit there, and model quality doesn't fix it. Same if you need it to work on a plane, or if you want to still be running this exact model in five years.</p>
 
-    <p><strong>Use both</strong> — that's what I do. Qwen Chat for public research and anything needing the web or a video file; Outlier for work I'd be uncomfortable pasting anywhere. On a 54-prompt head-to-head, Core 27B matched Claude Opus on 98.9% of rubric checks and 100% of the nine hardest, and on a blind slice of SWE-bench Verified it measured about 45%. Enough for most everyday work, and still not a frontier cloud model.</p>
+    <p><strong>Use both</strong> — that's what I do. Qwen Chat for wide public research, generated images and anything involving a video file; Outlier for work I'd be uncomfortable pasting anywhere. On a 54-prompt head-to-head, Core 27B matched Claude Opus on 98.9% of rubric checks and 100% of the nine hardest, and on a blind slice of SWE-bench Verified it measured about 45%. Enough for most everyday work, and still not a frontier cloud model.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Qwen's model list, feature flags, upload ceilings and subscription settings were read from its own public config endpoints at chat.qwen.ai and qwen.ai on 23 July 2026. Policy quotes from <a href="https://qwen.ai/privacypolicy">qwen.ai/privacypolicy</a>, <a href="https://qwen.ai/termsservice">qwen.ai/termsservice</a> and <a href="https://qwen.ai/training-data-summary">qwen.ai/training-data-summary</a>. Pricing from Alibaba Cloud Model Studio docs (updated 15 July 2026); open weights checked against the Qwen org on Hugging Face. Outlier pricing at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB); benchmark detail at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>. Competitor pricing, policies and feature flags change without notice — check the linked pages before relying on any of this.
+      <strong>Sources and receipts:</strong> Qwen's model list, feature flags, upload ceilings and subscription settings were read from its own public config endpoints at chat.qwen.ai and qwen.ai on 23 July 2026. Policy quotes from <a href="https://qwen.ai/privacypolicy">qwen.ai/privacypolicy</a>, <a href="https://qwen.ai/termsservice">qwen.ai/termsservice</a> and <a href="https://qwen.ai/training-data-summary">qwen.ai/training-data-summary</a>. Pricing from Alibaba Cloud Model Studio docs (updated 15 July 2026), with Token Plan (Team Edition) tiers at <a href="https://www.alibabacloud.com/help/en/model-studio/token-plan-overview">alibabacloud.com/help/en/model-studio/token-plan-overview</a>; open weights checked against the Qwen org on Hugging Face. Outlier pricing at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB); benchmark detail at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>. Competitor pricing, policies and feature flags change without notice — check the linked pages before relying on any of this.
     </div>
 
     <div class="cta">

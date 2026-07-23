@@ -105,22 +105,22 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>For local AI, the M1 and M4 differ in two things: memory ceiling (16GB vs 32GB, and 64GB on M4 Pro, 128GB on M4 Max) and memory bandwidth (roughly 68GB/s vs 120GB/s). Capacity decides which models you can run at all; bandwidth decides how fast they generate. The 11-to-38 TOPS Neural Engine gap is irrelevant here, because llama.cpp, MLX and Ollama all run on the GPU.</p>
+      <p>For local AI, the M1 and M4 differ in two things that matter: memory ceiling (16GB on base M1 versus 32GB on M4, 64GB on M4 Pro, 128GB on M4 Max) and memory bandwidth (roughly 68GB/s versus 120GB/s). Capacity decides which models run at all; bandwidth decides how fast they generate, and the measured M1-to-M4 speedup on LLaMA 7B is 1.70x against a bandwidth ratio of 1.76x. The 11-to-38 TOPS Neural Engine gap is the wrong number to shop on: local models run on the GPU, not the Neural Engine.</p>
     </div>
 
-    <p class="lead">I'm Matt Kerr, and I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs language models on your own hardware — so I'm an interested party, worth saying up front. This isn't a pitch. It's the hardware note I wish I'd had before spending two years profiling inference on these chips, and the honest version includes where a PC with a discrete GPU wins.</p>
+    <p class="lead">I'm Matt Kerr, and I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs language models on your own hardware — so I'm an interested party, worth saying up front. This is the hardware note I wish I'd had, and it includes where a PC with a discrete GPU wins.</p>
 
     <h2>Unified memory is why a Mac is in this conversation</h2>
-    <p>On a typical PC a model has to fit the graphics card's VRAM: 12GB card, 12GB budget, and the system RAM sitting next to it doesn't help. Apple silicon shares one pool between CPU and GPU, which is why MLX, Apple's MIT-licensed array framework, is built on the line "Arrays in MLX live in shared memory." No copy across a PCIe bus, no VRAM cliff.</p>
-    <p><strong>M1 has this too.</strong> Unified memory shipped in November 2020 and hasn't changed shape since, so a 16GB M1 holds a model that would otherwise need a 16GB card. The advantage is architectural, not generational.</p>
+    <p>On a PC, a model has to fit the graphics card's VRAM: 12GB card, 12GB budget, and the system RAM next to it doesn't help. Apple silicon shares one pool between CPU and GPU, which is why MLX — Apple's MIT-licensed array framework — is built on the premise that its arrays live in shared memory.</p>
+    <p><strong>The M1 has this too.</strong> Unified memory shipped in November 2020, so a 16GB M1 holds a model that would otherwise need a 16GB card. The advantage is architectural, not generational.</p>
 
     <h2>Capacity and bandwidth are two different limits</h2>
-    <p><strong>Capacity</strong> is a wall — the weights fit in RAM or the machine swaps to SSD and the experience collapses. <strong>Bandwidth</strong> is a slope: generating each token means reading the weights out of memory, so tokens per second scales close to linearly with read speed.</p>
-    <p>The numbers line up almost too neatly. Apple never published a bandwidth figure for the base M1, but called M1 Max's 400GB/s "nearly 6x that of M1," and later said M5's 153GB/s is "more than 2x over M1" — both imply about 68GB/s. M4 is a documented 120GB/s, a 1.76x ratio. In llama.cpp's community table (LLaMA 7B, Q4_0), M1 generates 14.15 tok/s and base M4 generates 24.11 — 1.70x. Decode is a bandwidth story, and it behaves predictably.</p>
-    <p>Prefill is the other half, and it's compute-bound, so GPU core count shows up: 117.96 tok/s on M1, 221.29 on M4, 439.78 on M4 Pro, 885.68 on M4 Max. Paste in a long document and prefill is the wait before the first word appears.</p>
+    <p><strong>Capacity is a wall:</strong> the weights fit in RAM or the machine falls back to disk and the experience collapses. <strong>Bandwidth is a slope:</strong> each token means reading the weights out of memory, so tokens per second scales with read speed.</p>
+    <p>Apple never published a bandwidth figure for the base M1, but it called M1 Max's 400GB/s nearly six times M1's, and later put M5's 153GB/s at more than double M1's — both imply about 68GB/s. M4 is a documented 120GB/s, a 1.76x ratio. In llama.cpp's community table (LLaMA 7B, Q4_0), M1 generates 14.15 tok/s and base M4 manages 24.11 — 1.70x. Decode is a bandwidth story.</p>
+    <p>Prefill is compute-bound, so GPU cores show up there instead — 117.96 tok/s on M1 against 885.68 on M4 Max — and that's the wait before the first word appears.</p>
 
     <h2>What each configuration actually fits</h2>
-    <p>Same question, concrete. I'm using Outlier's tiers here because those RAM minimums are measured rather than guessed.</p>
+    <p>The "what fits" row uses Outlier's tiers because those RAM minimums are measured rather than guessed.</p>
 
     <table>
       <thead>
@@ -170,7 +170,7 @@
         </tr>
         <tr>
           <td><strong>Top Outlier tier that fits</strong></td>
-          <td>Lite 9B (Quick 26B-a4b at the 16GB ceiling)</td>
+          <td>Lite 9B (Quick 26B-a4b only on a 16GB M1, other apps closed)</td>
           <td>Core/Code 27B, Vision 35B-a3b</td>
           <td>Plus 397B-a17b</td>
           <td>Plus, with headroom</td>
@@ -178,50 +178,46 @@
         <tr>
           <td><strong>Sold new by Apple</strong></td>
           <td>No — used/refurb</td>
-          <td>Yes, from $599</td>
-          <td>Yes, from $1,399</td>
-          <td>Yes</td>
+          <td>Yes, from $799 (Mac mini)</td>
+          <td>Yes, from $1,599 (Mac mini)</td>
+          <td>Yes, from $2,499 (Mac Studio)</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Two caveats. 16GB is the M1 <em>maximum</em> — Apple's spec sheet for the M1 MacBook Air reads "8GB unified memory, Configurable to 16GB," and plenty shipped with 8GB. LM Studio still tells 8GB owners to "stick to smaller models and modest context sizes." Chip ceilings aren't machine ceilings either: Apple's spec page tops the M4 Mac mini at 24GB, not 32GB.</p>
-    <p>The pool is also shared. macOS, your browser and the app itself draw from the same RAM the weights need, so usable budget sits below the nameplate. Metal exposes a "recommended max working set size" for exactly this; I couldn't retrieve Apple's documented fraction, so I won't quote one.</p>
+    <p>Two caveats. 16GB is the M1 <em>maximum</em>, not its typical configuration — Apple's spec sheet for the M1 MacBook Air reads "8GB unified memory, Configurable to 16GB," which is why LM Studio tells 8GB owners to stick to smaller models. Chip ceilings aren't machine ceilings either, and in mid-2026 the gap is wide: Apple's own spec pages top the M4 Mac mini at 24GB, the M4 Pro Mac mini at 48GB, and the M4 Max Mac Studio at 64GB, while the MacBook Pro line has moved to M5 entirely. So the 64GB and 128GB in that row are what the silicon supports, not what you can order — 64GB is reachable today only on a Mac Studio, and 128GB only on a used or refurbished M4 Max MacBook Pro. And the throughput figures are community-submitted, one model at one quantization.</p>
+    <p>The pool is shared, too: macOS and your browser draw from the same RAM the weights need, so usable budget sits below the nameplate. Metal exposes a "recommended max working set size" for this, but I couldn't retrieve Apple's documented fraction, so I won't quote one.</p>
 
     <h2>The Neural Engine numbers are the wrong number</h2>
-    <p>Most M1-vs-M4 pieces lead with 11 TOPS versus 38. For local LLMs that's inert. MLX lead maintainer Awni Hannun wrote in the project's repo that "at the moment we don't have plans to support ANE in MLX given it is a closed source API," reconfirmed it in 2025, and the request is closed as wontfix. llama.cpp runs on Metal, and Ollama's blog says its Apple silicon build now sits on MLX. Your tokens come off the GPU on both chips.</p>
-    <p>There's a second problem: M4's 38 TOPS is widely reported as an INT8 measurement against M1's FP16 figure. I found no Apple page stating either precision, so treat cross-generation TOPS as not directly comparable.</p>
+    <p>Most M1-vs-M4 comparisons lead with 11 TOPS against 38. For local language models that figure is inert. MLX's lead maintainer wrote in the project's own repo that there are no plans to support the ANE "given it is a closed source API," and the request is closed as wontfix. Your tokens come off the GPU on both chips.</p>
+    <p>M4's 38 TOPS is also widely reported as an INT8 measurement against M1's FP16 figure. I found no Apple page stating either precision, so treat cross-generation TOPS as not directly comparable.</p>
 
-    <h2>Sustained load, and what I won't estimate</h2>
-    <p>Local inference is sustained, not bursty — a long generation pins the GPU for its whole duration. On thermals, the honest answer is that I have no vendor-published sustained-inference data comparing a fanless Air to an actively cooled mini, and I'm not inventing a table. Architecturally, though, both chips do this at laptop power, quietly, on battery, which no discrete-GPU laptop matches. If you'll run hours of generation a day, pick the actively cooled chassis whatever chip is inside it.</p>
+    <h2>Thermals, price per gigabyte, and the upgrade path that isn't</h2>
+    <p>Local inference is a sustained load, not a burst — a long generation pins the GPU for its whole duration. I have no vendor-published data comparing a fanless Air against an actively cooled mini under that load, so I won't put numbers on it. If you'll generate for hours a day, pick the actively cooled chassis. Both chips do this at laptop power, quietly, on battery — a combination few discrete-GPU laptops sustain at comparable power draw.</p>
+    <p>Unified memory is part of the chip package and chosen when you order — Apple's spec language is "configurable to." There's no aftermarket upgrade, so build-to-order is the most consequential decision here. Buy memory first.</p>
+    <p>Apple's store prices as I write this: Mac mini with M4 and 16GB at $799, with M4 Pro and 24GB at $1,599 — about $50 per nameplate gigabyte at the entry point. M1 machines aren't sold new any more (the Air line is M5 only), so an M1 is a used or refurbished buy at prices I can't source. Which raises the currency problem: M5 shipped in October 2025 at 153GB/s, with Apple claiming over 4x M4's peak GPU compute (and over 6x M1's peak GPU compute for AI).</p>
 
-    <h2>Price per usable gigabyte, and the upgrade path that doesn't exist</h2>
-    <p>Unified memory is soldered. Neither chip has an upgrade path, which makes the configure-to-order choice the most consequential decision you'll make for local AI. Buy memory, not clock speed.</p>
-    <p>The prices Apple publishes: Mac mini with M4 and 16GB at $599, Mac mini with M4 Pro at $1,399. That's roughly $37 per gigabyte of unified memory at the entry point, and it's the cheapest new Mac that runs mid-size models decently. M1 machines aren't sold new at all — the MacBook Air line is M5 only now — so an M1 is a used or refurbished buy, and I have no sourced figure for street prices, so check rather than trust an article.</p>
-    <p>One currency note: M4 isn't Apple's current silicon. M5 shipped in October 2025 with a Neural Accelerator in every GPU core and 153GB/s bandwidth, and Apple claims "over 4x the peak GPU compute performance for AI compared to M4." M5 Pro and M5 Max followed in March 2026.</p>
+    <h2>Where a discrete GPU wins, and where Apple silicon does</h2>
+    <p>On raw throughput, a PC with a good discrete GPU is usually faster than a Mac at a similar price, and I'd rather say so than pretend otherwise. Dedicated graphics memory runs at bandwidths no base Apple chip approaches, and CUDA's tooling is deeper than Metal's. If your model fits comfortably in VRAM, buy the card.</p>
+    <p>Apple's counter isn't speed, it's capacity per dollar and watts per token. A card makes you shrink the model to fit it; unified memory lets you scale the model to the machine — Apple markets M4 Max's 128GB as enough for models of nearly 200 billion parameters. Matching that in cards costs far more and draws far more power.</p>
+    <p>The M1 gets written off too fast, too. Apple Intelligence still requires only "M1 and later," and LM Studio's minimum is Apple silicon on macOS 14. Apple's Foundation Models framework hands third-party apps a roughly 3B on-device model, free and offline, on any Apple Intelligence-capable Mac, though the weights aren't published. And 14 tok/s on a 7B model is faster than most people read.</p>
+    <p>What M4 buys is the ceiling, not the speedometer: 16GB to 32GB moves you out of "7-9B only" and into 27B-class territory — a category change, not a percentage. In Outlier's tiers that's Lite 9B versus Core 27B, which scored 98.9% of rubric checks against Claude Opus 4.7 across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>.</p>
 
-    <h2>Where a discrete GPU still wins</h2>
-    <p>On raw throughput, a PC with a good discrete GPU is usually faster than a Mac at the same price, and I'd rather say that than pretend otherwise. Dedicated graphics memory runs at bandwidths no base Apple chip approaches, and the CUDA ecosystem for training, fine-tuning and kernel work is deeper than the Metal side. If your model fits comfortably in VRAM, buy the card.</p>
-    <p>Apple's case is capacity per dollar and power draw. A discrete card makes you shrink the model to fit; unified memory lets you scale the model to the machine — Apple markets the M4 Max's 128GB as enough to "easily interact with large language models that have nearly 200 billion parameters," and the M3 Ultra Mac Studio configures to 512GB. Matching that capacity in cards costs far more and pulls far more power.</p>
-
-    <h2>Where Apple silicon genuinely wins — M1 included</h2>
-    <p>The M1 isn't a legacy device, and people write it off too fast. Apple Intelligence still requires only "M1 and later." LM Studio's stated minimum is Apple silicon plus macOS 14. Apple's Foundation Models framework — a ~3B on-device model, offline, with "AI inference that is free of cost" — runs on any Apple Intelligence-capable Mac. And 14 tok/s on a 7B model is faster than most people read.</p>
-    <p>What M4 buys is the ceiling, not the speedometer. Going from 16GB to 32GB (or 64, or 128) moves you out of "7-8B only" and into 13B-32B territory — a category change, not a percentage. In Outlier's tiers that's Lite 9B versus Core 27B, the tier that matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>. Model size decides whether a local app feels useful far more than tokens per second does.</p>
-
-    <h2>Who should pick which</h2>
-    <p><strong>Already own a 16GB M1:</strong> keep it. Run 4B-9B models with sane contexts and you have a working local setup today — on Outlier that's the free Nano and Lite tiers, no account.</p>
-    <p><strong>Own an 8GB M1:</strong> capacity is your wall and tuning won't move it. Nano (2.37GB download, 6GB minimum) works; a 27B model never will.</p>
-    <p><strong>Buying new on a budget:</strong> the $599 M4 Mac mini is a fair entry point, but spend the configure-to-order money on memory first — and compare current M5 machines before you commit.</p>
-    <p><strong>Serious about big models:</strong> you want M4 Pro or Max with 64GB or more, so $1,399 and up. Outlier's Plus tier (397B-a17b, 209GB download) needs 64GB and streams experts from SSD to hold peak RSS near 11GB; it runs at 2.1 tok/s on my M1 Ultra — useful for hard problems, nobody's idea of chat.</p>
-    <p><strong>Throughput above all, on one model that fits a card:</strong> buy the PC. I'd rather you got the right machine than the one I write software for.</p>
+    <h2>Pick the chip by the model you want to run</h2>
+    <p><strong>You have an 8GB M1:</strong> capacity is your wall and tuning won't move it. A 4B model works well — Outlier's Nano is a 2.37GB download, 6GB minimum — and a 27B never will.</p>
+    <p><strong>You have a 16GB M1:</strong> keep it. 4B to 9B models with sensible context lengths are a working local setup today. Upgrade when you want 27B-class quality.</p>
+    <p><strong>Buying new on a budget:</strong> the $799 M4 Mac mini is a fair entry point, but put the build-to-order money into memory — and compare current M5 machines first.</p>
+    <p><strong>Long documents or codebases:</strong> pay for GPU cores. Prefill is where M4 Pro and Max earn their price.</p>
+    <p><strong>The largest models:</strong> 64GB minimum — and no M4 Pro machine Apple currently sells gets there, since the M4 Pro Mac mini stops at 48GB. Today that means a Mac Studio, where M4 Max starts at $2,499 with 36GB and Apple lists 64GB as a build-to-order option on the 40-core-GPU M4 Max, or a used 128GB M4 Max MacBook Pro. Outlier's Plus tier (397B-a17b, 209GB) pages experts off the SSD to hold peak RSS near 11GB — 2.1 tok/s on my M1 Ultra, useful for hard problems and nobody's idea of chat.</p>
+    <p><strong>Throughput above all, on a model that fits a card:</strong> buy the PC. I'd rather you got the right machine than the one I write software for.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Specs, ceilings and bandwidth from Apple Newsroom (<a href="https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/">M1</a>, <a href="https://www.apple.com/newsroom/2024/05/apple-introduces-m4-chip/">M4</a>, <a href="https://www.apple.com/newsroom/2024/10/apple-introduces-m4-pro-and-m4-max/">M4 Pro/Max</a>, <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5</a>) and <a href="https://support.apple.com/en-us/111883">Apple's M1 MacBook Air tech specs</a>; the ~68GB/s M1 figure is implied by Apple's comparisons, not published. Throughput is community-submitted data in <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp's Apple silicon benchmark thread</a> — one model at one quantization, not vendor-certified. ANE position from <a href="https://github.com/ml-explore/mlx/issues/18">MLX issue #18</a>; 8GB guidance from <a href="https://lmstudio.ai/docs/app/system-requirements">LM Studio</a>. Outlier tier sizes and tok/s measured in-app on an M1 Ultra (64GB), July 2026. Hardware prices and configuration options change — verify at apple.com before buying.
+      <strong>Sources and receipts:</strong> Chip ceilings and bandwidth for M4, M4 Pro and M4 Max all come from one page — Apple Newsroom's <a href="https://www.apple.com/newsroom/2024/10/apple-introduces-m4-pro-and-m4-max/">M4 Pro and M4 Max release</a>, which states 32GB and 120GB/s for M4, "up to 64GB … and 273GB/s" for M4 Pro, and "up to 128GB … and up to 546GB/s" for M4 Max. Shipping machine configurations are read off Apple's tech specs: <a href="https://www.apple.com/mac-mini/specs/">Mac mini</a> (16GB configurable to 24GB; M4 Pro configurable to 48GB; 120GB/s), <a href="https://www.apple.com/mac-studio/specs/">Mac Studio</a> (M4 Max 36GB configurable to 64GB), and <a href="https://www.apple.com/macbook-pro/specs/">MacBook Pro</a>, which now lists M5 parts only. The ~68GB/s M1 figure is implied by two Apple comparisons rather than published: the <a href="https://www.apple.com/newsroom/2021/10/introducing-m1-pro-and-m1-max-the-most-powerful-chips-apple-has-ever-built/">M1 Pro and M1 Max release</a> calls M1 Max's 400GB/s "nearly 6x the memory bandwidth of M1," and the <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5 release</a> puts 153GB/s at "more than 2x over M1" — that release is also the source for the 4x/6x GPU-compute claim. Neural Engine TOPS from the <a href="https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/">M1 launch release</a> (11 trillion ops/s) and the <a href="https://www.apple.com/newsroom/2024/05/apple-introduces-m4-chip/">M4 introduction</a> (38 trillion ops/s); neither states a memory ceiling or a bandwidth figure, so neither is cited for one. M1 configuration language from <a href="https://support.apple.com/en-us/111883">Apple's M1 MacBook Air tech specs</a>. Prices read from apple.com/shop on 2026-07-23. Throughput from <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp's Apple silicon benchmark thread</a> (community-submitted). Neural Engine position from the <a href="https://github.com/ml-explore/mlx/issues/18">MLX issue tracker</a>; 8GB guidance from <a href="https://lmstudio.ai/docs/app/system-requirements">LM Studio</a>. Outlier tier sizes and tok/s measured on an M1 Ultra (64GB), July 2026. Hardware prices, configurations and vendor policies change — verify at apple.com before buying.
     </div>
 
     <div class="cta">
       <h3>Try local AI on the Mac you already have</h3>
-      <p>Outlier runs models fully on-device on any Apple Silicon Mac, M1 or later, macOS 12+. Nano and Lite are free — no account, no caps, works with Wi-Fi off. No web search, image generation or mobile app; it's a local text model, and that's the idea.</p>
+      <p>Outlier runs models on-device on any Apple Silicon Mac, M1 or later, macOS 12+. Nano and Lite are free — no account, no caps, works with Wi-Fi off.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=m1-vs-m4-for-local-ai">Download for Mac</a>
     </div>
 

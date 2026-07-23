@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-microsoft-copilot/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs Microsoft Copilot: local Mac AI vs Microsoft's cloud">
-  <meta property="og:description" content="Copilot is cloud-hosted and grounded in your Microsoft 365 data. Outlier runs on your Mac with no account and nothing uploaded. Prices, caps, data policy, and honest trade-offs.">
+  <meta property="og:description" content="Copilot is cloud-hosted and grounded in your Microsoft 365 data. Outlier runs on your Mac with no account and no prompt uploaded. Prices, caps, data policy, and honest trade-offs.">
   <meta property="og:url" content="https://outlier.host/vs/outlier-vs-microsoft-copilot/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Microsoft Copilot runs entirely in Microsoft's cloud. The consumer app is free, but Microsoft states it can't reach your documents or email and doesn't run inside Word, Excel or Outlook; the version that reads your work — Microsoft 365 Copilot — is $30 per user per month billed yearly, <em>on top of</em> a qualifying Microsoft 365 licence. Outlier runs on your Mac: no account, no caps, nothing uploaded, works with Wi-Fi off. Copilot wins on web access, mobile and enterprise governance; Outlier wins when the data can't leave the machine.</p>
+      <p>Microsoft Copilot runs entirely in Microsoft's cloud. The consumer app is free, but Microsoft states it can't reach your documents or email and doesn't run inside Word, Excel or Outlook; the version that reads your work — Microsoft 365 Copilot — is $30 per user per month billed yearly, <em>on top of</em> a qualifying Microsoft 365 licence. Outlier runs on your Mac: no account, no caps, works with Wi-Fi off, and nothing is uploaded to run the model — the one thing that ever leaves is a search query, and only while you have 🌐 search switched on. Copilot wins on work-data grounding, mobile and enterprise governance; Outlier wins when the data can't leave the machine.</p>
     </div>
 
     <p class="lead">Fair warning: I built Outlier, so I'm an interested party. I've tried to write the Copilot half the way I'd want a competitor to write about me — every number below comes from Microsoft's own pages, linked at the bottom, and anything I couldn't confirm I left out rather than guessed.</p>
@@ -117,8 +117,9 @@
     <p>Worth knowing if you're budgeting: Copilot Pro, the standalone $20/month consumer plan, is gone. Microsoft says it "is no longer available for purchase" and support for existing subscribers ends 1 August 2026; Microsoft 365 Premium is the replacement.</p>
 
     <h2>What Outlier is</h2>
-    <p>Outlier is a native Mac app for Apple Silicon (M1 or later, macOS 12+). You download it, it downloads a model, and everything after that runs on your machine — no account, no caps, nothing uploaded, works with Wi-Fi off.</p>
-    <p>Seven tiers, from Nano (4B, 2.37 GB, needs 6 GB RAM) through Core 27B to a 397B-a17b Plus tier that streams experts from SSD. Nano and Lite are free forever, no account. Pro is $20/month or $149/year for all seven, lifetime from $99. Core 27B matched Claude Opus on 98.9% of rubric checks across 54 prompts, and measured about 45% on a blind slice of SWE-bench Verified.</p>
+    <p>Outlier is a native Mac app for Apple Silicon (M1 or later, macOS 12+). You download it, it downloads a model, and everything after that runs on your machine — no account, no caps, no prompt uploaded, works with Wi-Fi off.</p>
+    <p>Seven tiers, from Nano (4B, 2.37 GB, needs 6 GB RAM) through Core 27B to a 397B-a17b Plus tier that streams experts from SSD. On an M1 Ultra Nano runs about 71.7 tok/s and Core 27B about 20.7. Nano and Lite are free forever, no account. Pro is $20/month or $149/year for all seven, lifetime from $99. Core 27B matched Claude Opus on 98.9% of rubric checks across 54 prompts, and measured about 45% on a blind slice of SWE-bench Verified.</p>
+    <p>Three things that matter for the comparison below, because the page is about privacy and I'd rather state them than let you find them later. Outlier does have web search: a 🌐 toggle in the composer that queries DuckDuckGo, Mojeek and Wikipedia, plus a Deep Research mode that adds Crossref, OpenAlex, StackExchange and Hacker News and answers with inline citations. When it's on, the query leaves your Mac — not your chat history, your files or the model's context — and the app's Privacy Ledger lists every destination it can reach. Second, Vision 35B accepts image input, so screenshots, diagrams and OCR work. Third, there's dictation into the composer and a read-aloud button on replies. Web research, Deep Research, vision and dictation are all Pro features; the free tiers are Nano and Lite text chat.</p>
 
     <h2>What Copilot actually costs per year</h2>
     <p>Consumer pricing as of July 2026: <strong>Microsoft 365 Personal</strong> is $9.99/month or $99.99/year for one person. <strong>Family</strong> is $12.99/month or $129.99/year for up to six. <strong>Premium</strong> is $19.99/month or $199.99/year for up to six, and includes Office with Copilot built in, up to 6 TB of storage, and agents like Researcher in Word and Analyst in Excel. Eligible existing subscribers are offered a promotional $99.99 first year.</p>
@@ -131,9 +132,9 @@
     <ul>
       <li><strong>It reads your actual work.</strong> Graph grounding across Exchange mail, Teams chats and meetings, SharePoint, OneDrive and your calendar is something a local Mac app can't replicate. Outlier can't see any of it.</li>
       <li><strong>Frontier models, no hardware bill.</strong> GPT-5.6-class models and Claude run in Microsoft's datacentres, so an old laptop gets the same answers as a Mac Studio. Outlier's quality is bounded by your RAM — Plus needs 64 GB.</li>
-      <li><strong>Web-grounded answers.</strong> Copilot Chat searches the live web. Outlier has no web search at all.</li>
+      <li><strong>Web grounding at Bing scale, and grounded in your tenant too.</strong> Copilot Chat answers off Microsoft's own search index — always on, no toggle, and in Microsoft 365 Copilot the same answer can braid a live web result together with a document from your SharePoint. Outlier does have web search — a 🌐 toggle over DuckDuckGo, Mojeek and Wikipedia, plus a Deep Research mode with citations — but it's public search APIs rather than a first-party index, it's a Pro feature rather than something the free tiers get, and nothing it retrieves knows anything about your organisation.</li>
       <li><strong>Everywhere you are.</strong> Windows, Mac, iOS, Android and browser, conversations following you between them. Outlier is Apple Silicon Mac only — no Windows, no Linux, no mobile app, no sync.</li>
-      <li><strong>Voice and images.</strong> Copilot supports voice conversations, and Microsoft's hosted model list includes Black Forest Labs' FLUX image model. Outlier is text in, text out.</li>
+      <li><strong>Spoken conversation, and images out.</strong> Copilot holds a real back-and-forth voice conversation, and Microsoft's hosted model list includes Black Forest Labs' FLUX image model. Outlier takes text <em>and</em> images in — Vision 35B, on the Pro tier — and it has dictation plus a read-aloud button, but that's a microphone and a speaker bolted to a text app, not a conversation. It generates no images at all.</li>
       <li><strong>Enterprise governance.</strong> Purview eDiscovery, retention and DLP over Copilot interactions, Conditional Access, MFA, per-group control over which AI providers users reach, plus GDPR, ISO 27001, HIPAA and ISO 42001 coverage and EU Data Boundary status. I'm one person in Grand Rapids; I can't offer that.</li>
       <li><strong>Legal indemnity.</strong> The Copilot Copyright Commitment means Microsoft defends a commercial customer sued over Copilot output and pays resulting judgments, provided the guardrails were used. Outlier gives you no such backstop.</li>
     </ul>
@@ -141,11 +142,11 @@
 
     <h2>What happens to your data</h2>
     <p>Commercially, Microsoft's written position is strong: "Prompts, responses, and data accessed through Microsoft Graph aren't used to train foundation LLMs," stored interaction data is encrypted and also excluded from training, and Copilot has opted out of Azure OpenAI abuse monitoring, which includes human review of content. That's a better contractual floor than most cloud vendors put in writing.</p>
-    <p>The consumer side is weaker, and it's opt-<em>out</em>. Microsoft's privacy statement says it may use your data "to develop, train, and fine-tune our AI models, including large language models," and that "in some markets, this data can help train our AI models in Microsoft Copilot unless you opt out." The switches sit under Settings → Privacy. Opting out covers past, present and future conversations and propagates within 30 days — but it doesn't exclude them from use for "advertising, digital safety, security, and compliance purposes." History is kept 18 months by default. Some users are excluded automatically: work account holders, signed-out users, under-18s, and users in several countries including Brazil, South Korea and Vietnam.</p>
+    <p>The consumer side is weaker, and it's opt-<em>out</em>. Microsoft's privacy statement says it may use your data "to develop, train, and fine-tune our AI models, including large language models," and that "in some markets, this data can help train our AI models in Microsoft Copilot unless you opt out." The switches sit under Settings → Privacy. Opting out covers past, present and future conversations and propagates within 30 days — but it doesn't exclude them from use for "advertising, digital safety, security, and compliance purposes." History is kept 18 months by default. Some users are excluded automatically: work-account holders, signed-out users, and under-18s.</p>
     <p>Your queries may also not stay in your country. Microsoft says LLM calls route to nearby datacentres "but also can call into other regions where capacity is available during high utilization periods," and customers outside the EU "may have their queries processed in the US, EU, or other regions." Anthropic's models in Copilot are excluded from the EU Data Boundary, so EU/EFTA and UK tenants have them off by default.</p>
-    <p>Outlier's half of this is short because there's nothing to configure: the model runs on your Mac, so there's no prompt to route, no region, no retention period, no toggle to find. That's the whole pitch — and also why Outlier can't do the things listed above.</p>
+    <p>Outlier's half is shorter, and it should be held to the same standard. The model runs on your Mac, so for inference there is no prompt to route, no region and no retention period — there's nothing on the wire to have a policy about. There is exactly one egress path a user can open: the 🌐 search toggle. Turn it on and the <em>query</em> (not your chat history) goes to DuckDuckGo, Mojeek and Wikipedia, and in Deep Research also to Crossref, OpenAlex, StackExchange and Hacker News. The app doesn't hide that — the badge in the header changes while search is on, and clicking it opens a Privacy Ledger that lists every destination the app can reach, what it sends and when. Switch the toggle off and the network path closes. So: one toggle, one narrow payload, disclosed in the product — not "nothing ever leaves", which would be the same kind of overclaim I'm criticising above.</p>
 
-    <h2>Side by side</h2>
+    <h2>Copilot's three SKUs against Outlier's two</h2>
     <table>
       <thead>
         <tr>
@@ -165,6 +166,14 @@
           <td>$30/user/mo yearly, plus a base M365 licence</td>
           <td>Free</td>
           <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Models</strong></td>
+          <td>Microsoft-hosted; you don't choose</td>
+          <td>Microsoft-hosted; you don't choose</td>
+          <td>Microsoft-hosted; GPT-5.6 family, Claude opt-in</td>
+          <td>Nano 4B and Lite 9B only</td>
+          <td>All seven tiers, incl. Core 27B, Vision 35B and Plus 397B</td>
         </tr>
         <tr>
           <td><strong>Usage caps</strong></td>
@@ -187,8 +196,8 @@
           <td>Yes — prompts to Microsoft</td>
           <td>Yes</td>
           <td>Yes — prompt plus Graph grounding data</td>
-          <td>No</td>
-          <td>No</td>
+          <td>No — inference is local, and web search is Pro-only</td>
+          <td>No for model inference; the query only, if you turn 🌐 search on</td>
         </tr>
         <tr>
           <td><strong>Account required</strong></td>
@@ -217,25 +226,25 @@
           <td>Yes in some markets, unless you opt out</td>
           <td>Consumer policy applies</td>
           <td>No — excluded in writing</td>
-          <td colspan="2">No — nothing is sent</td>
+          <td colspan="2">No — nothing is used for training</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>Who should pick which</h2>
-    <p><strong>Pick Microsoft Copilot if</strong> your organisation runs on Microsoft 365 and you want answers grounded in your real mail, files and meetings; if you need compliance certifications, eDiscovery and admin control; if you need Windows, Android or a phone in your pocket; if you want the live web, voice or image generation; or if your hardware couldn't load a 27B model.</p>
-    <p><strong>Pick Outlier if</strong> the material genuinely can't leave the machine — client files, source code under NDA, medical or legal drafts — and a contractual promise isn't the same as data never moving. Or if you work offline, or you're tired of metering, or $149/year against $360/seat/year plus a base licence changes the maths. It's Mac-only and text-only with no web search and no mobile app, and I'd rather you know that before you download than after.</p>
+    <h2>Microsoft shop or not: how to decide</h2>
+    <p><strong>Pick Microsoft Copilot if</strong> your organisation runs on Microsoft 365 and you want answers grounded in your real mail, files and meetings; if you need compliance certifications, eDiscovery and admin control; if you need Windows, Android or a phone in your pocket; if you want voice conversations or generated images; or if your hardware couldn't load a 27B model.</p>
+    <p><strong>Pick Outlier if</strong> the material genuinely can't leave the machine — client files, source code under NDA, medical or legal drafts — and a contractual promise isn't the same as data never moving. Or if you work offline, or you're tired of metering, or $149/year against $360/seat/year plus a base licence changes the maths. It's Apple Silicon Mac only, there's no mobile app and no sync, and it writes text back even though it can read images, and I'd rather you know that before you download than after.</p>
     <p><strong>One deployment note before you buy seats.</strong> Copilot surfaces whatever a user technically has permission to see, which in most tenants is more than they were meant to find. Microsoft's stopgap, Restricted SharePoint Search, is capped at 100 sites, is explicitly "not a security boundary," and is being retired — new enablement is blocked from 31 July 2026. Fix permissions first. Microsoft also notes responses "aren't guaranteed to be 100% factual."</p>
 
-    <p><strong>Plenty of people run both</strong>, which is the sane answer for most Microsoft shops: Copilot for anything needing tenant data or the live web, Outlier for the confidential work and the plane rides.</p>
+    <p><strong>Plenty of people run both</strong>, which is the sane answer for most Microsoft shops: Copilot for anything needing tenant data or Microsoft's own web index, Outlier for the confidential work and the plane rides.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Copilot pricing from <a href="https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products">microsoft.com consumer plan comparison</a>, <a href="https://www.microsoft.com/en-us/microsoft-365-copilot/enterprise">Microsoft 365 Copilot enterprise</a> and <a href="https://www.microsoft.com/en-us/microsoft-365-copilot/business">Copilot Business</a>, checked July 2026. Data handling, region routing, training policy and the Copyright Commitment from <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy">learn.microsoft.com Copilot privacy</a>, the <a href="https://www.microsoft.com/en-us/privacy/privacystatement">Microsoft Privacy Statement</a> and <a href="https://support.microsoft.com/en-us/microsoft-copilot/microsoft-copilot-privacy-controls">Copilot privacy controls</a>. Licensing prerequisites from <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-licensing">Copilot licensing</a>; offline/network requirements from <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements">Copilot requirements</a>; oversharing caveats from <a href="https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search">Restricted SharePoint Search</a>. I could not confirm current free-tier rate limits from any live primary source, so I haven't quoted a number. Outlier pricing and specs as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; Core 27B parity from the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>, throughput measured on M1 Ultra. Microsoft changes prices, SKUs and policies often — Copilot Pro was retired outright — so re-check anything load-bearing before you commit budget.
+      <strong>Sources and receipts:</strong> Copilot pricing from <a href="https://www.microsoft.com/en-us/microsoft-365/buy/compare-all-microsoft-365-products">microsoft.com consumer plan comparison</a>, <a href="https://www.microsoft.com/en-us/microsoft-365-copilot/enterprise">Microsoft 365 Copilot enterprise</a> and <a href="https://www.microsoft.com/en-us/microsoft-365-copilot/business">Copilot Business</a>, checked July 2026. Data handling, region routing, training policy and the Copyright Commitment from <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-privacy">learn.microsoft.com Copilot privacy</a>, the <a href="https://www.microsoft.com/en-us/privacy/privacystatement">Microsoft Privacy Statement</a> and <a href="https://support.microsoft.com/en-us/microsoft-copilot/microsoft-copilot-privacy-controls">Copilot privacy controls</a>. Licensing prerequisites from <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-licensing">Copilot licensing</a>; offline/network requirements from <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements">Copilot requirements</a>; oversharing caveats from <a href="https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search">Restricted SharePoint Search</a>. I could not confirm current free-tier rate limits from any live primary source, so I haven't quoted a number. Outlier pricing and specs as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; Core 27B parity from the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>; Nano 71.7 tok/s and Core 27B 20.7 tok/s measured on my own M1 Ultra. Outlier's search providers, Deep Research sources and image input are taken from the shipping desktop build's own Privacy Ledger and feature strings, not from marketing copy. Microsoft changes prices, SKUs and policies often — Copilot Pro was retired outright — so re-check anything load-bearing before you commit budget.
     </div>
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite run on any Apple Silicon Mac, free forever, with nothing uploaded and no login. Download, pick a model, start typing.</p>
+      <p>Nano runs on any Apple Silicon Mac and Lite needs 12&nbsp;GB of RAM; both are free forever, with no prompt uploaded and no login. Download, pick a model, start typing.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-microsoft-copilot">Download for Mac</a>
     </div>
 

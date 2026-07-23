@@ -97,7 +97,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
-    <h1>Self-hosting an LLM on a server vs running it on-device</h1>
+    <h1>Self-hosted LLM vs on-device AI: the real trade-offs</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-07-23</span>
@@ -105,22 +105,22 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Self-hosting an LLM means running open-weight model files yourself on a GPU server you rent or own — usually vLLM or llama.cpp behind an OpenAI-compatible HTTP API — instead of the model running inside an app on the end user's own machine. Self-hosting wins where size, concurrency and memory bandwidth matter: tensor parallelism spans GPUs, so one deployment can serve 671B-class models to many people at once. On-device wins where the marginal cost per user is zero, the network is unreliable or absent, and nobody wants to run infrastructure — but you're capped by whatever memory the machine shipped with.</p>
+      <p>Self-hosting an LLM means running open-weight model files yourself on a GPU server you rent or own — usually vLLM or llama.cpp behind an OpenAI-compatible HTTP API — instead of the model running inside an app on the user's own machine. Self-hosting wins on size, concurrency and memory bandwidth: tensor parallelism spans GPUs, so one deployment serves 671B-class models to many people at once. On-device wins on zero marginal cost, offline operation and having no infrastructure — but it's capped by the memory the machine shipped with.</p>
     </div>
 
-    <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device, so I have a side in this. That's exactly why I want to be precise about where the server approach genuinely beats mine. Both routes run the same open weights. What changes is where the tensors live, who pays for the silicon they live on, and what breaks when something goes wrong.</p>
+    <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device, so I have a side in this — which is why I want to be precise about where the server approach wins over mine. Both routes run the same open weights. What changes is where the tensors live and who pays for the silicon.</p>
 
     <h2>What self-hosting actually involves</h2>
-    <p>The mechanism is unglamorous. You pull open-weight files — safetensors or GGUF — from somewhere like Hugging Face, load them into an inference server on a machine with a GPU, and that process exposes an HTTP endpoint speaking the OpenAI chat-completions schema. Every client you already own then points at your URL.</p>
+    <p>The mechanism is unglamorous. You pull open-weight files from Hugging Face, load them into an inference server on a GPU machine, and that process exposes an HTTP endpoint speaking the OpenAI chat-completions schema. Every client you own points at your URL.</p>
 
-    <p>Three servers cover most of the field. <strong>vLLM</strong> (Apache-2.0) calls itself "a fast and easy-to-use library for LLM inference and serving" and supports NVIDIA, AMD and Intel GPUs plus x86/ARM/PowerPC CPUs, with plugins for Google TPUs, Intel Gaudi and Huawei Ascend. <strong>llama.cpp</strong> (MIT) ships <code>llama-server</code>, "a lightweight, OpenAI API compatible, HTTP server for serving LLMs," spanning Metal, CUDA, HIP, Vulkan, SYCL and WebGPU, with 1.5-bit through 8-bit quantization and CPU+GPU hybrid inference to partially accelerate models larger than total VRAM. <strong>Ollama</strong> (MIT) wraps that for macOS, Windows, Linux and Docker behind a REST API on <code>localhost:11434</code>.</p>
+    <p>Three servers cover most of the field. <strong>vLLM</strong> (Apache-2.0) calls itself "a fast and easy-to-use library for LLM inference and serving" and supports NVIDIA, AMD and Intel GPUs plus x86/ARM/PowerPC CPUs. <strong>llama.cpp</strong> (MIT) ships <code>llama-server</code>, "a lightweight, OpenAI API compatible, HTTP server," with 1.5-bit to 8-bit quantization and CPU+GPU hybrid inference for models larger than total VRAM. <strong>Ollama</strong> (MIT) wraps it behind a REST API on <code>localhost:11434</code>.</p>
 
-    <p>The lever that makes servers different in kind, not degree, is <code>--tensor-parallel-size</code> — vLLM's "number of tensor parallel groups." Splitting one model's weights across many GPUs is how a deployment holds something no single accelerator can. An AWS g6e.48xlarge, a common target, is eight L40S cards at 48 GB each: 384 GB of VRAM in one box.</p>
+    <p>The lever that makes servers different in kind is <code>--tensor-parallel-size</code>, vLLM's "number of tensor parallel groups": splitting one model's weights across many GPUs is how a deployment holds what no single accelerator can.</p>
 
     <h2>What on-device actually involves</h2>
-    <p>On-device, the weights load into the same process the user is clicking around in, and inference runs on whatever accelerator the machine already has. On Apple Silicon that's Metal, usually via MLX (MIT), built around unified memory: "Arrays in MLX live in shared memory. Operations on MLX arrays can be performed on any of the supported device types without transferring data." No PCIe staging — but also no way to add memory the machine wasn't sold with.</p>
+    <p>On-device, the weights load into the same process the user is clicking around in, and inference runs on whatever accelerator the machine has. On Apple Silicon that's Metal, usually via MLX (MIT), built around unified memory: "Arrays in MLX live in shared memory. Operations on MLX arrays can be performed on any of the supported device types without transferring data."</p>
 
-    <p>Outlier is one instance of this shape, and I'll use it as an example rather than a recommendation. Apple Silicon only, M1 or later, macOS 12+. Its Core tier is Qwen3.6-27B at 15.13 GB, needs 24 GB of RAM, and runs about 20.7 tok/s on an M1 Ultra. Its largest tier is a 397B-a17b MoE: a 209 GB download that needs a 64 GB Mac and pages experts off the SSD to hold peak RSS near 11 GB, at 2.1 tok/s. That number is the honest shape of the ceiling — on-device can reach big models, but it reaches them by fighting for every gigabyte. Worth noting the Core weights are Apache-2.0 Qwen3.6-27B, the same checkpoint you'd serve from vLLM. On-device doesn't imply a weaker model family.</p>
+    <p>Outlier is one instance of that shape — an example here, not the conclusion. Its Core tier is Qwen3.6-27B at 15.13 GB, wants 24 GB of RAM and runs about 20.7 tok/s on an M1 Ultra. Its largest is a 397B-a17b MoE, a 209 GB download that pages experts off the SSD to keep peak RSS near 11 GB on a 64 GB Mac — at 2.1 tok/s, which is the honest shape of the ceiling. Those Core weights are the same Apache-2.0 checkpoint you'd serve from vLLM, though: on-device doesn't mean a weaker model family.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -132,61 +132,61 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Model size ceiling</strong></td><td>Effectively unbounded via tensor parallelism — 671B-class is servable</td><td>Capped by installed memory; SSD paging extends it at a speed cost</td></tr>
-        <tr><td><strong>Concurrency</strong></td><td>Many simultaneous users per GPU via continuous batching</td><td>One person at a time</td></tr>
-        <tr><td><strong>Memory bandwidth</strong></td><td>H100 SXM 3.35 TB/s; H100 NVL 3.9 TB/s at 94 GB</td><td>Consumer unified memory, well below datacenter parts</td></tr>
-        <tr><td><strong>Recurring cost</strong></td><td>Hourly, forever — $0.69/hr (RTX 4090) to $4.29/hr (H100 SXM) and up</td><td>Hardware you already own; no per-hour line</td></tr>
-        <tr><td><strong>Network</strong></td><td>Required for every token</td><td>None after the model download</td></tr>
-        <tr><td><strong>Auth &amp; security</strong></td><td>Operator-supplied: TLS, keys, rate limits, monitoring</td><td>No listening endpoint to misconfigure</td></tr>
-        <tr><td><strong>Ops burden</strong></td><td>Cluster, storage, secrets, upgrades, on-call</td><td>An app install</td></tr>
-        <tr><td><strong>Apple Silicon</strong></td><td>Second-class on the server stack</td><td>The native target</td></tr>
+        <tr><td><strong>Model size</strong></td><td>Unbounded via tensor parallelism</td><td>Installed memory; paging costs speed</td></tr>
+        <tr><td><strong>Concurrency</strong></td><td>Many users per GPU</td><td>One person at a time</td></tr>
+        <tr><td><strong>Bandwidth</strong></td><td>H100 SXM 3.35 TB/s</td><td>Consumer unified memory</td></tr>
+        <tr><td><strong>Recurring cost</strong></td><td>$0.69–$4.29/hr per GPU</td><td>No per-hour line</td></tr>
+        <tr><td><strong>Network</strong></td><td>Required per token</td><td>None after download</td></tr>
+        <tr><td><strong>Security</strong></td><td>You add TLS, keys, limits</td><td>No listening endpoint</td></tr>
+        <tr><td><strong>Ops burden</strong></td><td>Cluster, secrets, on-call</td><td>An app install</td></tr>
+        <tr><td><strong>Apple Silicon</strong></td><td>Second-class</td><td>Native target</td></tr>
       </tbody>
     </table>
 
     <h2>Where self-hosting genuinely wins</h2>
-    <p>These aren't concessions. They're the reasons serious deployments are server-side.</p>
+    <p>These aren't concessions — they're why serious deployments are server-side.</p>
     <ul>
-      <li><strong>Model size.</strong> DeepSeek-V3 is 671B total parameters with 37B activated per token; gpt-oss-120b needs an 80 GB GPU. Those are server-class artifacts, and the on-device workarounds trade throughput to get near them.</li>
-      <li><strong>Concurrency, the real differentiator.</strong> vLLM's PagedAttention partitions the KV cache into blocks and cuts memory waste from 60–80% to under 4%, which is what makes large batches viable. The launch post claimed "up to 24x higher throughput compared to HF and up to 3.5x higher throughput than TGI" — that's June 2023 against 2023 baselines, so treat it as directional, not current. The architectural point holds: one GPU serving forty people is something only a server does.</li>
-      <li><strong>Bandwidth.</strong> An H100 SXM moves 3.35 TB/s. Long-context prefill and big-batch decode are bandwidth problems, and this is where datacenter hardware most clearly beats a desktop.</li>
-      <li><strong>One endpoint, many clients.</strong> Because vLLM and <code>llama-server</code> both speak the OpenAI API, a single deployment backs laptops, phones, CI jobs and internal tools with one upgrade path. A per-machine app can't serve a CI runner at all.</li>
-      <li><strong>It offloads the work.</strong> No battery drain, no thermal throttling, no multi-gigabyte resident set competing with the user's real apps, and jobs survive a closed lid.</li>
-      <li><strong>Operability.</strong> Container and Kubernetes deploys, versioned config, central logs and metrics, per-key auth via <code>--api-key</code>. You can answer "what did we ask the model last Tuesday" org-wide — genuinely impossible across a fleet of desktop installs.</li>
-      <li><strong>Data control can be just as strong.</strong> On hardware you own or inside your own VPC, prompts never reach a model vendor and retention is your policy. That's why regulated buyers pick it.</li>
+      <li><strong>Model size.</strong> DeepSeek-V3 is 671B total parameters with 37B activated per token; gpt-oss-120b needs an 80 GB GPU. Those are server-class artifacts, and on-device workarounds trade throughput to get near them.</li>
+      <li><strong>Concurrency, the real differentiator.</strong> vLLM's PagedAttention partitions the KV cache into blocks and cuts memory waste from 60–80% to under 4%, which is what makes large batches viable. The launch post claimed "up to 24x higher throughput compared to HF" — June 2023 against 2023 baselines, so treat it as directional. The architecture point stands: one GPU serving a whole team is something only a server does.</li>
+      <li><strong>Bandwidth.</strong> An H100 SXM moves 3.35 TB/s. Long-context prefill and big-batch decode are bandwidth problems — where datacenter hardware has the clearest advantage over a desktop.</li>
+      <li><strong>One endpoint, many clients.</strong> vLLM and <code>llama-server</code> both speak the OpenAI API, so a single deployment backs laptops, phones, CI jobs and internal tools with one upgrade path. A per-machine app can't serve a CI runner.</li>
+      <li><strong>It offloads the work.</strong> No battery drain, no thermal throttling, no multi-gigabyte resident set fighting the user's apps; jobs survive a closed lid.</li>
+      <li><strong>Operability.</strong> Kubernetes deploys, versioned config, central logs and metrics, per-key auth via <code>--api-key</code>. You can answer "what did we ask the model last Tuesday" org-wide — impossible across desktop installs.</li>
+      <li><strong>Data control can be just as strong.</strong> On hardware you own, prompts never reach a model vendor and retention is your policy — why regulated buyers pick it.</li>
     </ul>
 
     <h2>Where on-device genuinely wins</h2>
     <ul>
-      <li><strong>Zero marginal cost per user.</strong> Nothing to meter, nothing to scale. The thousandth user costs the operator nothing.</li>
-      <li><strong>It works with the network off.</strong> A self-hosted endpoint can't, by construction. Any outage — provider, transit, or your own cluster — takes the assistant down; on a plane it was never up.</li>
-      <li><strong>No round trip per token,</strong> so no network latency floor, and no third party with physical custody of the RAM the model runs in. Unless the server is in your building, prompts enter someone else's datacenter. AWS's data-privacy FAQ says "we do not access or use your content for any purpose without your agreement," but that page doesn't explicitly address AI/ML training use — you'd confirm that in the service terms, and the answer differs per provider.</li>
-      <li><strong>Apple Silicon is the native target.</strong> vLLM's install matrix covers CUDA, ROCm, XPU and CPU; Apple Silicon appears only "via vLLM-Metal," a separate project outside the main repo, plus CPU-only support. In practice, self-hosting means NVIDIA — a different hardware and driver world from a Mac.</li>
-      <li><strong>Nothing to secure.</strong> Ollama binds 127.0.0.1 and its FAQ's answer for network exposure is Nginx, ngrok or Cloudflare Tunnel; auth is what the operator adds. vLLM's <code>--api-key</code> is a header check, a floor rather than a security model. A misconfigured bind is an unauthenticated inference endpoint on the open internet. An app with no socket has no such failure mode.</li>
+      <li><strong>Zero marginal cost per user.</strong> Nothing to meter or scale — the thousandth user costs nothing.</li>
+      <li><strong>It works with the network off.</strong> A self-hosted endpoint can't, by construction. Any outage — provider, transit or your own cluster — takes the assistant down.</li>
+      <li><strong>No round trip per token,</strong> and no third party holding physical custody of the RAM the model runs in. AWS's data-privacy FAQ says "we do not access or use your content for any purpose without your agreement," but doesn't explicitly address AI/ML training use — confirm that in the service terms, which differ per provider.</li>
+      <li><strong>Apple Silicon is the native target.</strong> vLLM's install matrix covers CUDA, ROCm, XPU and CPU; Apple Silicon appears only "via vLLM-Metal," a separate project outside the main repo, plus CPU-only support. In practice, self-hosting means NVIDIA.</li>
+      <li><strong>Nothing to secure.</strong> Ollama binds 127.0.0.1, and its FAQ's answer for network access is Nginx, ngrok or Cloudflare Tunnel — auth is what the operator adds. vLLM's <code>--api-key</code> is a header check, a floor rather than a security model. A misconfigured bind puts an unauthenticated endpoint on the internet; an app with no socket can't.</li>
     </ul>
 
     <h2>The cost and ops math people skip</h2>
-    <p>RunPod Secure Cloud lists H100 PCIe at $2.89/hr and RTX 4090 at $0.69/hr, storage billed separately. Run either around the clock — 730 hours a month — and that's roughly $2,110/month for the H100 and roughly $504/month for the 4090. Lambda lists one H100 SXM at $4.29/GPU/hr (about $3,100/month) with no egress fees. Hugging Face Inference Endpoints, if you'd rather not touch metal, run $0.80/hr on an L4 up to $9.25/hr on a B200.</p>
+    <p>RunPod Secure Cloud lists H100 PCIe at $2.89/hr and RTX 4090 at $0.69/hr, storage billed separately. Run either around the clock — 730 hours a month — and that's roughly $2,110 and $504 respectively. Lambda's H100 SXM is $4.29/GPU/hr, about $3,100/month, with no egress fees. Hugging Face Inference Endpoints run $0.80/hr on an L4 to $4.50/hr on an H100.</p>
 
-    <p>Serverless softens this without erasing it. RunPod bills per second "from when a worker starts until it fully stops," and Flex workers scale to zero — with a configurable idle timeout, default five seconds, that's still billed, plus a cold start on the next request. You're trading money for time-to-first-token.</p>
+    <p>Serverless softens that: RunPod bills per second "from when a worker starts until it fully stops," and Flex workers scale to zero — though the idle timeout, five seconds by default, is still billed, and the next request pays a cold start.</p>
 
-    <p>Then there's the work itself. vLLM's own Kubernetes guide wants a running GPU cluster, a PersistentVolumeClaim for model storage, a Secret holding a Hugging Face token, and a shared-memory <code>emptyDir</code> for tensor-parallel inference — before you add TLS, authz, rate limiting, monitoring or an on-call rotation. Buying instead of renting moves the problem to facilities: NVIDIA rates the H100 SXM at up to 700W configurable, per GPU, before host, networking and cooling.</p>
+    <p>Then the work itself. vLLM's Kubernetes guide walks you through a GPU cluster, a shared-memory <code>emptyDir</code> that tensor-parallel inference requires, plus optional model-cache storage (a PersistentVolumeClaim or <code>hostPath</code>) and, for gated models, a Secret holding a Hugging Face token — before TLS, authz, rate limiting or on-call. Owning metal moves the problem to facilities: NVIDIA rates the H100 SXM at up to 700W configurable, per GPU, before cooling.</p>
 
-    <p>One more check before building on any of it: open weights aren't uniformly open source. Llama 3.3's license requires a separate license from Meta above 700 million monthly active users and mandates "Built with Llama" attribution. DeepSeek-V3's code is MIT while the weights carry a separate Model License. Open WebUI, the common self-hosted front end, is BSD-3-Clause plus a clause prohibiting altering or removing its branding unless you're under 50 end users per 30 days or hold written permission. Qwen3.6-27B and gpt-oss-20b, by contrast, are plain Apache-2.0.</p>
+    <p>Check licenses too — open weights aren't uniformly open source. Llama 3.3 needs a separate license from Meta above 700 million monthly active users and mandates "Built with Llama" attribution. DeepSeek-V3's code is MIT while its weights carry a separate Model License. Open WebUI forbids removing its branding above 50 end users per 30 days. Qwen3.6-27B and gpt-oss-20b are plain Apache-2.0.</p>
 
     <h2>Who should pick which</h2>
-    <p><strong>Self-host if</strong> you're serving more than one person, you need a model bigger than any single machine holds, you want one endpoint behind your CI and internal tools, you need central audit logs and key rotation, or compliance says inference has to run on hardware your organization owns. Self-host too for throughput work — batch classification, evals, pipeline jobs — where continuous batching pays for the GPU many times over.</p>
+    <p><strong>Self-host if</strong> you're serving more than one person, you need a model bigger than any single machine holds, you want one endpoint behind your CI and internal tools, you need central audit logs, or compliance says inference must run on hardware you own. Self-host for throughput work too — batch classification, evals, pipeline jobs — where continuous batching pays for the GPU many times over.</p>
 
-    <p><strong>Go on-device if</strong> you're one person doing one thing at a time, the recurring bill is the problem, the machine has to work without a connection, or the data is the kind you'd rather never transit anyone's network. Outlier is one implementation: no account, no caps, nothing uploaded, free at the Nano and Lite tiers. It has no web search, no image generation, no mobile app, no voice mode, no Windows or Linux build and no cloud sync, because those are what the architecture costs. LM Studio, Jan and a locally built llama.cpp are the same category with different trade-offs.</p>
+    <p><strong>Go on-device if</strong> you're one person doing one thing at a time, the recurring bill is the problem, the machine has to work without a connection, or the data is the kind you'd rather never transit a network. Outlier is one implementation: no account, no caps, nothing uploaded, free at the Nano and Lite tiers, and with no web search, image generation, mobile app or Windows build — that's what the architecture costs.</p>
 
-    <p><strong>Run both</strong> if that's your actual week — a small on-device model for everything routine and confidential, a server for the jobs needing 671B parameters or forty concurrent requests. They're not competing philosophies. They're two places to put the same weights.</p>
+    <p><strong>Run both</strong> — something on-device for routine and confidential work, a server for jobs needing 671B parameters or dozens of concurrent requests. They're two places to put the same weights.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> vLLM capabilities, install matrix, <code>serve</code> flags and Kubernetes requirements from <a href="https://github.com/vllm-project/vllm">github.com/vllm-project/vllm</a> and <a href="https://docs.vllm.ai/en/latest/">docs.vllm.ai</a>; the throughput and PagedAttention numbers come from the <a href="https://vllm.ai/blog/2023-06-20-vllm">June 20, 2023 launch post</a> and are dated accordingly. llama.cpp and Ollama details from their repos and <a href="https://docs.ollama.com/faq">docs.ollama.com/faq</a>. MLX unified-memory quote from <a href="https://github.com/ml-explore/mlx">github.com/ml-explore/mlx</a>. Pricing from <a href="https://www.runpod.io/pricing">runpod.io/pricing</a>, <a href="https://lambda.ai/service/gpu-cloud#pricing">lambda.ai</a> and <a href="https://huggingface.co/pricing">huggingface.co/pricing</a>; the monthly figures are my own arithmetic on those hourly rates at 730 h/month. H100 power and bandwidth from <a href="https://www.nvidia.com/en-us/data-center/h100/">nvidia.com</a>. License terms read from the Llama 3.3, DeepSeek-V3, Qwen3.6-27B, gpt-oss-20b and Open WebUI license files. Outlier tier sizes, RAM floors and tok/s measured on an M1 Ultra Mac Studio. <strong>GPU pricing and vendor policies change often</strong> — everything here was current as of 2026-07-23, so re-check the source pages before budgeting against them.
+      <strong>Sources and receipts:</strong> capabilities, install matrix, <code>serve</code> flags and Kubernetes requirements from <a href="https://github.com/vllm-project/vllm">vllm-project/vllm</a> and <a href="https://docs.vllm.ai/en/latest/">its docs</a>; throughput and PagedAttention from the <a href="https://vllm.ai/blog/2023-06-20-vllm">June 20, 2023 launch post</a>, dated accordingly; llama.cpp and Ollama from their repos and <a href="https://docs.ollama.com/faq">the FAQ</a>; <a href="https://github.com/ml-explore/mlx">ml-explore/mlx</a>; pricing from <a href="https://www.runpod.io/pricing">RunPod</a>, <a href="https://lambda.ai/service/gpu-cloud#pricing">Lambda</a> and <a href="https://huggingface.co/pricing">Hugging Face</a>, monthly totals my arithmetic at 730 h/month; H100 specs from <a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA</a>; the Llama 3.3, DeepSeek-V3 and Open WebUI license files; Outlier figures measured on an M1 Ultra. <strong>GPU pricing and vendor policies change often</strong> — re-check the sources before budgeting.
     </div>
 
     <div class="cta">
       <h3>Want the on-device side to try?</h3>
-      <p>Outlier runs open weights entirely on Apple Silicon — no account, no caps, works with Wi-Fi off. Nano and Lite are free. It won't replace a GPU cluster, and it isn't trying to.</p>
+      <p>Outlier runs open weights on Apple Silicon — no account, no caps, works with Wi-Fi off. Nano and Lite are free; it won't replace a GPU cluster.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=self-hosted-vs-on-device-ai">Download for Mac</a>
     </div>
 

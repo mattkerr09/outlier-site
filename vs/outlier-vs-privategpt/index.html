@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>PrivateGPT is free, Apache-2.0 software you self-host: an API layer adding RAG, document ingestion, tools, MCP and text-to-SQL on top of a separate inference server. It does not run models — you point it at Ollama, LM Studio, llama.cpp or vLLM. Outlier is a native macOS app that bundles the engine and seven model tiers and runs them on-device with nothing to assemble. Both keep your data on your own hardware, so privacy isn't the deciding factor: pick PrivateGPT if you're a developer building private AI features on Mac, Linux or Windows, and Outlier if you want a finished chat app on an Apple Silicon Mac.</p>
+      <p>PrivateGPT is free, Apache-2.0 software you self-host: an API layer adding RAG, document ingestion, tools, MCP and text-to-SQL on top of a separate inference server. It does not run models — you point it at Ollama, LM Studio, llama.cpp or vLLM. Outlier is a native macOS app that bundles the engine, manages seven model tiers, and runs them on-device with nothing to assemble. Both keep your data on your own hardware, so privacy isn't the deciding factor: pick PrivateGPT if you're a developer building private AI features on Mac, Linux or Windows, and Outlier if you want a finished chat app on an Apple Silicon Mac.</p>
     </div>
 
     <p class="lead">I'm Matt Kerr — I build Outlier, so I have an obvious stake here. I'm writing this anyway because the two get lumped together in search results while solving genuinely different problems. Both are private. Both are local. That's where the similarity ends: PrivateGPT is a developer platform with 57,000 GitHub stars behind it; Outlier is a consumer Mac app.</p>
@@ -124,7 +124,7 @@
 
     <p>Nano and Lite are free with no account. Pro is $20/month or $149/year for all seven tiers, with lifetime licenses from $99. The base models are Qwen and Gemma derivatives — six tiers Apache 2.0, Quick under the Gemma Terms of Use — and the weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. The app itself is not open source. That's a real difference from PrivateGPT and I'll come back to it.</p>
 
-    <h2>Side by side</h2>
+    <h2>What each one hands you out of the box</h2>
     <table>
       <thead>
         <tr>
@@ -162,7 +162,7 @@
         <tr>
           <td><strong>Bundled vs assembled</strong></td>
           <td>Assembled: no weights ship with it</td>
-          <td>Bundled: app + engine + weights</td>
+          <td>Bundled: app + engine ship together; weights download on demand from inside the app</td>
         </tr>
         <tr>
           <td><strong>Platforms</strong></td>
@@ -181,7 +181,7 @@
         </tr>
         <tr>
           <td><strong>Team / server deployment</strong></td>
-          <td>Yes — Docker, Linux, on-prem, air-gapped</td>
+          <td>Yes — Docker, Linux, on-prem; upstream has one shared credential and no per-user isolation</td>
           <td>No — single-user desktop app</td>
         </tr>
       </tbody>
@@ -193,27 +193,27 @@
       <li><strong>It's open source, and that's a stronger privacy guarantee than mine.</strong> Apache 2.0 means every claim about where your data goes is verifiable in the source. Outlier's privacy claims you take on trust from me. However local a closed app is, it can't match auditability.</li>
       <li><strong>Cross-platform.</strong> macOS, Linux and Windows all get first-class install paths, plus Docker. Outlier is Apple Silicon only — no Intel, no Windows, no Linux, no mobile. If your team isn't all on modern Macs, Outlier is out of the running and PrivateGPT isn't.</li>
       <li><strong>Backend-agnostic.</strong> It works with any OpenAI-compatible server and therefore any model those servers can host. No lock-in to one runtime, quantization format or model family. An app that ships its own engine can't offer that.</li>
-      <li><strong>Production primitives.</strong> Document ingestion, retrieval with citations, agentic RAG, embeddings, custom tools, MCP connectors, text-to-SQL, tabular analysis, code execution in your workspace. Plus official Python and TypeScript SDKs and documented integrations with Claude Code, Claude Desktop, Claude for Microsoft 365 and OpenCode.</li>
-      <li><strong>It deploys for a team.</strong> One server, many users, on-prem or air-gapped. A single-user desktop app can't do that.</li>
+      <li><strong>Production primitives.</strong> Document ingestion, retrieval with citations, agentic RAG, embeddings, custom tools, MCP connectors, text-to-SQL, tabular analysis, code execution in your workspace. Client access is covered too: the 1.0 docs' "Client libraries" page tells you to install the Anthropic SDK (<code>pip install anthropic</code> or <code>npm install @anthropic-ai/sdk</code>) or LangChain and point it at your own PrivateGPT URL, because PrivateGPT's own endpoint speaks the Claude API even though it talks OpenAI-compatible on the way out to your inference server — so any Claude-compatible client works unmodified. The docs name Claude Code and Cursor as AI clients you can point at PrivateGPT's MCP server. Ignore the first-party <code>pgpt-python</code> and <code>privategpt-sdk-node</code> packages you'll find in search results: both are stuck at 0.1.2 from 2024, target the pre-1.0 API that v1.0.0's release notes call not forward-compatible, and are no longer referenced by the docs.</li>
+      <li><strong>It deploys for a team.</strong> One server, many clients, on-prem — a single-user desktop app can't do that at all. Read the fine print, though: upstream authenticates everyone with one shared server secret and has no per-user isolation, the docs warn that the Workbench has no access control and should stay local, and they list auth providers (OAuth, LDAP, SSO), multi-tenancy and per-user vector stores as things community forks add rather than things the project ships. Real multi-user deployment is fork work or Zylon's commercial product.</li>
       <li><strong>Free at any scale</strong> — no seats, no tokens, no metering — with a funded company (Zylon) maintaining it.</li>
     </ul>
 
     <h2>Where Outlier fits better</h2>
-    <p>Outlier's advantage is narrow and specific: it's a finished product for one platform. One thing to install instead of two, no Python version to pin, no embedding model to choose, and a published RAM figure for every tier so you know before downloading whether it'll run on your 16 GB Mac. PrivateGPT publishes no hardware guidance — reasonably, since performance comes from whatever server you point it at, but "will this run well on my laptop?" then has no documented answer.</p>
+    <p>Outlier's advantage is narrow and specific: it's a finished product for one platform. One thing to install instead of two, no Python version to pin, no embedding model to choose, and a published RAM figure for every tier so you know before downloading whether it'll run on your 16 GB Mac. PrivateGPT publishes only example-model sizes — roughly 24 GB for its reference LLM under Ollama, about 18 GB as a Q4 GGUF, 670 MB for embeddings — not per-machine RAM floors. That's reasonable, since performance comes from whatever server you point it at, but "will this run well on my laptop?" still has no documented answer.</p>
 
     <p>On quality, the only numbers I can show are for my own models. Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest prompts; on a blind slice of SWE-bench Verified the local 27B measured about 45% (18/40). None of that says anything about PrivateGPT, which inherits whatever quality your chosen model has — that's the point of it.</p>
 
-    <p>Two more honest notes. "Private" in PrivateGPT describes a configuration, not an enforced property: <code>OPENAI_API_BASE</code> accepts a remote endpoint as happily as localhost, so a misconfigured deployment can quietly ship prompts to a third party. And its built-in web tools break locality by design — web search routes queries to Brave's API and needs a Brave key. Outlier has no web search at all, which is a limitation, not a virtue; it also has no image generation, voice mode or cloud sync.</p>
+    <p>Two more honest notes. "Private" in PrivateGPT describes a configuration, not an enforced property: <code>OPENAI_API_BASE</code> accepts a remote endpoint as happily as localhost, so a misconfigured deployment can quietly ship prompts to a third party. And its built-in web tools break locality by design — web search routes queries to Brave's API and needs a Brave key. Outlier's web research is Pro-only and opt-in, and its free tier has none; it also has no image generation, voice mode or cloud sync.</p>
 
-    <h2>Who should pick which</h2>
-    <p><strong>Pick PrivateGPT if</strong> you're building on top of private inference rather than just chatting with it, you need RAG over your own documents with citations, you're on Linux or Windows, you want to audit the code, or you need one server serving many people.</p>
+    <h2>Developer backend or desktop app?</h2>
+    <p><strong>Pick PrivateGPT if</strong> you're building on top of private inference rather than just chatting with it, you need RAG over your own documents with citations, you're on Linux or Windows, you want to audit the code, or you need one server behind an internal app — accepting that per-user accounts and isolation are something you or a fork add on top.</p>
 
     <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, you want to be talking to a capable local model within a couple of minutes, and you'd rather not maintain an inference server as a second moving part. It's a product, not a framework.</p>
 
     <p><strong>Running both is reasonable.</strong> They don't compete for the same slot — one is your desktop chat window, the other is the backend your app talks to.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> PrivateGPT star/fork counts, license and creation date from the <a href="https://api.github.com/repos/zylon-ai/private-gpt">GitHub API</a> on 2026-07-23; release dates from the <a href="https://github.com/zylon-ai/private-gpt/releases">releases page</a>; architecture, install paths, Python version, Workbench caveats and web-tool behavior from <a href="https://docs.privategpt.dev/">docs.privategpt.dev</a>; commercial tier from <a href="https://www.zylon.ai/">zylon.ai</a>. I could not find a telemetry or privacy-policy statement in PrivateGPT's published docs, and zylon.ai/privacy-policy returned 404 — that's an absence of a written statement, not evidence of phone-home behavior, and the source is open so you can check it yourself. Outlier tier sizes, RAM floors and throughput measured on an M1 Ultra Mac Studio (64 GB); pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Open-source projects move fast and commercial pricing changes — verify anything load-bearing at the source before you commit.
+      <strong>Sources and receipts:</strong> PrivateGPT star/fork counts, license and creation date from the <a href="https://api.github.com/repos/zylon-ai/private-gpt">GitHub API</a> on 2026-07-23; release dates from the <a href="https://github.com/zylon-ai/private-gpt/releases">releases page</a>; architecture, install paths, Python version, Workbench caveats, auth model and web-tool behavior from <a href="https://docs.privategpt.dev/">docs.privategpt.dev</a>; client libraries from that site's <a href="https://docs.privategpt.dev/api-reference/sdks">Client libraries</a> page and example-model sizes from <a href="https://docs.privategpt.dev/providers/overview">Providers overview</a>; the abandoned first-party SDK versions from PyPI (<code>pgpt-python</code> 0.1.2, uploaded 2024-04-23) and npm (<code>privategpt-sdk-node</code> 0.1.2), with both source repos last pushed in August 2024; commercial tier from <a href="https://www.zylon.ai/">zylon.ai</a>. Anything marketed as air-gapped is Zylon's commercial product — the OSS docs don't claim it. I could not find a telemetry or privacy-policy statement in PrivateGPT's published docs, and zylon.ai/privacy-policy returned 404 — that's an absence of a written statement, not evidence of phone-home behavior, and the source is open so you can check it yourself. Outlier tier sizes, RAM floors and throughput measured on an M1 Ultra Mac Studio (64 GB); pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Open-source projects move fast and commercial pricing changes — verify anything load-bearing at the source before you commit.
     </div>
 
     <div class="cta">

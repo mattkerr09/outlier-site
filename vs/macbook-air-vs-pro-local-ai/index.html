@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled | Outlier</title>
-  <meta name="description" content="Memory ceiling, bandwidth, and cooling — the three numbers that decide whether a MacBook Air or a MacBook Pro runs local AI models better, with every figure sourced.">
+  <meta name="description" content="A neutral hardware comparison for running local AI models: unified memory ceilings, memory bandwidth, thermals under sustained load, price per usable gigabyte, and why there's no upgrade path.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/macbook-air-vs-pro-local-ai/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled">
-  <meta property="og:description" content="32GB at 153GB/s and no fans, or 128GB at up to 614GB/s with High Power Mode. What each configuration actually fits, and what fanless really costs.">
+  <meta property="og:description" content="Memory ceiling, memory bandwidth, and cooling — the three axes that decide which Mac laptop runs which local model, with the numbers from Apple's own spec pages.">
   <meta property="og:url" content="https://outlier.host/vs/macbook-air-vs-pro-local-ai/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -18,7 +18,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled">
-  <meta name="twitter:description" content="Memory ceiling decides what runs. Bandwidth decides how fast. Cooling decides how long. A sourced buying guide.">
+  <meta name="twitter:description" content="32GB vs 128GB, 153GB/s vs 614GB/s, no fans vs High Power Mode — what actually changes when you run models on your own laptop.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -76,7 +76,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled","description":"Memory ceiling, bandwidth, and cooling — the three numbers that decide whether a MacBook Air or a MacBook Pro runs local AI models better, with every figure sourced.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled","description":"A neutral hardware comparison for running local AI models: unified memory ceilings, memory bandwidth, thermals under sustained load, price per usable gigabyte, and why there's no upgrade path.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"MacBook Air vs MacBook Pro for local AI","item":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}]}
@@ -105,96 +105,145 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Both laptops run the identical macOS local-AI stack and differ for inference in three measurable ways. The MacBook Air (M5) tops out at 32GB of unified memory at 153GB/s and is fanless; the MacBook Pro reaches 128GB at up to 614GB/s on the M5 Max, and it alone has High Power Mode. Memory ceiling decides which models run at all, bandwidth decides how fast they generate, cooling decides how long you hold the peak.</p>
+      <p>For local AI, the MacBook Air and MacBook Pro differ in three measurable ways: memory ceiling (32GB on the Air, up to 128GB on an M5 Max), memory bandwidth (153GB/s vs up to 614GB/s), and cooling (the Air is fanless; the Pro has fans and a High Power Mode). Memory ceiling decides which models run at all, bandwidth decides how fast they type, cooling only matters for long continuous sessions. Buy for the memory number first — it's the one you can never change after checkout.</p>
     </div>
 
-    <p class="lead">I build Outlier, a Mac app that runs language models on-device, so I have an obvious interest in people owning Macs that run models well — weigh the rest accordingly. Apple doesn't pay me and I don't sell hardware. This is what I tell people who ask which laptop to buy.</p>
+    <p class="lead">Disclosure: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs language models entirely on-device, so I'm an interested party in people buying Macs that run models well. I'll try to be useful anyway — this page is about the hardware, and the honest answer for most people is the cheaper machine.</p>
 
-    <h2>Three numbers, and only three</h2>
-    <p>The software isn't the variable. macOS, Metal, and MLX — Apple's MIT-licensed array framework, built so "arrays live in shared memory" and operations run on CPU or GPU without transferring data — are identical on both, and one binary covers a 16GB fanless Air and a 128GB M5 Max. The M5's AI gain comes from a 10-core GPU with a Neural Accelerator in each core, and that architecture is in the Air too. So the question is only: how much memory, how fast, is there a fan?</p>
+    <h2>Memory capacity is the decision. Bandwidth is the experience.</h2>
+
+    <p>Everything a local model needs — the weights, the KV cache that grows with your conversation, plus whatever macOS and your other apps hold — has to fit in unified memory at once. That's a wall, not a slowdown. If a model doesn't fit, it doesn't run.</p>
+
+    <p>The MacBook Air (M5) ships with 16GB and configures to 24GB or 32GB. End of the line. An M5 Pro ships with 24GB and configures up to 64GB, but only on the 20-core-GPU binning, not the base 16-core part. An M5 Max ships with 36GB and goes to 48GB, 64GB, or 128GB, and 128GB only on the M5 Max with the 40-core GPU. So the step to the 128GB class isn't a $200 checkbox. It's the step from a $1,299 Air to a $4,099-and-up M5 Max.</p>
+
+    <p>The sticker number isn't your model budget, either. Metal exposes <code>recommendedMaxWorkingSetSize</code> — how much memory a GPU "can allocate without affecting its runtime performance" — and Apple advises staying under it. It sits below installed RAM, so budget a few gigabytes of overhead.</p>
+
+    <p>Bandwidth is the other half: 153GB/s on M5, 307GB/s on M5 Pro, 460 or 614GB/s on M5 Max by GPU core count — roughly a 4x spread. llama.cpp's maintainers put the mechanism plainly: <strong>token generation is bandwidth-limited, prompt processing is compute-bound</strong>. Words on screen track bandwidth; time-to-first-token on a long document tracks compute.</p>
+
+    <h2>What actually fits, at real model sizes</h2>
+
+    <p>Gigabytes are hard to reason about abstractly, so here are the tiers I ship in Outlier, which publish RAM floors. Comparable apps have a similar ladder.</p>
+
+    <ul>
+      <li><strong>16GB Air ($1,299):</strong> Nano 4B (2.37GB download, 6GB floor) and Lite 9B (5.04GB, 12GB floor) run comfortably. Quick, a 26B mixture-of-experts model at 15.61GB, has a 16GB floor — it fits, with little room for anything else.</li>
+      <li><strong>24GB Air, or a base M5 Pro:</strong> where 27B-class dense models get practical. Core 27B and Code 27B are 15.13GB downloads with a 24GB floor; Vision 35B-a3b is 19.0GB.</li>
+      <li><strong>32GB Air (the ceiling):</strong> same models, with headroom for long contexts and a full desktop behind them.</li>
+      <li><strong>64GB+, MacBook Pro only:</strong> Outlier's Plus tier is a 397B mixture-of-experts model: a 209GB download, 64GB floor, cleared by streaming experts from SSD at roughly 11GB peak resident memory. No Air will ever run it.</li>
+    </ul>
+
+    <p>Apple says the M5 Max can "run LLMs with hundreds of billions of parameters entirely on device." True, and more than most people need. Storage matters too: 209GB is no rounding error on a laptop SSD. Base Air storage doubled to 512GB, and Apple credits the new SSD with "2x faster read/write performance," which it says is "significantly accelerating file access and speeding up workflows." That's a file-access claim, not a model-load claim, and Apple publishes no figure for how long a local model takes to load on any Mac.</p>
+
+    <h2>Thermals: what fanless actually costs</h2>
+
+    <p>Apple says both new Airs "feature a thin, light, and completely silent fanless design." The Pro has active cooling, and on M5 Pro and M5 Max a High Power Mode that "allows the fans to run at higher speeds" and "may allow the system to deliver higher performance in very intensive workloads." Apple's model list for it includes the 14- and 16-inch MacBook Pro with M5 Pro or M5 Max, and no Air and no base-M5 14-inch Pro, so "buy a Pro" only buys that lever on an M5 Pro or Max.</p>
+
+    <p>I have to be careful here. I found no rigorous primary measurement of throttling under GPU-heavy inference on a fanless Air. The figures that circulate ("20 tokens/sec falling to 8," "15-25% after half an hour") appear only on affiliate blogs with no methodology. I'm not citing them.</p>
+
+    <p>The closest credible data point is CPU-only and a generation old: <a href="https://www.notebookcheck.net/Apple-MacBook-Air-15-M4-review-The-fanless-M4-SoC-is-years-ahead-of-the-competition.976933.0.html">Notebookcheck's M4 MacBook Air 15 review</a> found that in a Cinebench 2024 multi loop, "after 30 minutes, its performance of 776 points was only 11% lower," down from an unthrottled 874, with package power peaking at 20.5W and settling near 9W after 20 minutes. Third-party, and not an inference test, but the shape is instructive. The Air throttles, gradually, and lands well above zero.</p>
+
+    <p>Practically: a chat turn that takes twenty seconds never approaches the thermal limit. Batch-summarizing two hundred documents does. If your use is bursty, cooling barely matters. If it's continuous, that's the whole reason the Pro exists.</p>
+
+    <h2>Side by side</h2>
 
     <table>
       <thead>
         <tr>
-          <th></th>
+          <th>Axis</th>
           <th>MacBook Air (M5)</th>
           <th>MacBook Pro (M5 Pro)</th>
           <th>MacBook Pro (M5 Max)</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Memory: standard / max</strong></td><td>16GB / 32GB</td><td>24GB / 64GB</td><td>36GB / 128GB (128GB needs the 40-core GPU)</td></tr>
-        <tr><td><strong>Memory bandwidth</strong></td><td>153GB/s</td><td>307GB/s</td><td>460GB/s (32-core) or 614GB/s (40-core)</td></tr>
-        <tr><td><strong>Cooling</strong></td><td>Fanless, silent</td><td>Active (fans)</td><td>Active (fans)</td></tr>
-        <tr><td><strong>High Power Mode</strong></td><td>No</td><td>Yes</td><td>Yes</td></tr>
-        <tr><td><strong>Starting price</strong></td><td>$1,099 (13") / $1,299 (15")</td><td>$2,199 (14") / $2,699 (16")</td><td>$3,599 (14") / $3,899 (16")</td></tr>
-        <tr><td><strong>Price per GB, as shipped</strong></td><td>~$69/GB (13")</td><td>~$92/GB (14")</td><td>~$100/GB (14")</td></tr>
-        <tr><td><strong>Memory upgrade later</strong></td><td>None — soldered</td><td>None — soldered</td><td>None — soldered</td></tr>
-        <tr><td><strong>Battery (Apple video test)</strong></td><td>Up to 18 hr</td><td>Up to 22 hr (14") / 24 hr (16")</td><td>Up to 20 hr (14")</td></tr>
+        <tr>
+          <td><strong>Starting price</strong></td>
+          <td>$1,299 (13") / $1,499 (15")</td>
+          <td>$2,499 (14") / $2,999 (16")</td>
+          <td>$4,099 (14") / $4,399 (16")</td>
+        </tr>
+        <tr>
+          <td><strong>Memory: standard → max</strong></td>
+          <td>16GB → 32GB</td>
+          <td>24GB → 64GB (20-core GPU only)</td>
+          <td>36GB → 128GB (40-core GPU only)</td>
+        </tr>
+        <tr>
+          <td><strong>Memory bandwidth</strong></td>
+          <td>153GB/s</td>
+          <td>307GB/s</td>
+          <td>460GB/s or 614GB/s</td>
+        </tr>
+        <tr>
+          <td><strong>Cooling</strong></td>
+          <td>Fanless, silent</td>
+          <td>Active (fans)</td>
+          <td>Active (fans)</td>
+        </tr>
+        <tr>
+          <td><strong>High Power Mode</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Price per GB, base config</strong></td>
+          <td>~$81/GB</td>
+          <td>~$104/GB</td>
+          <td>~$114/GB</td>
+        </tr>
+        <tr>
+          <td><strong>Largest Outlier tier that fits</strong></td>
+          <td>Vision 35B-a3b (at 24GB+)</td>
+          <td>Plus 397B (at 64GB)</td>
+          <td>Plus 397B, with headroom</td>
+        </tr>
+        <tr>
+          <td><strong>Weight</strong></td>
+          <td>2.7 lb (13") / 3.3 lb (15")</td>
+          <td>3.5 lb (14") / 4.7 lb (16")</td>
+          <td>3.6 lb (14") / 4.7 lb (16")</td>
+        </tr>
+        <tr>
+          <td><strong>Upgrade path after purchase</strong></td>
+          <td colspan="3">None. Unified memory is soldered across the range.</td>
+        </tr>
       </tbody>
     </table>
 
-    <p>One wrinkle the table flattens: there's also a base-M5 14-inch MacBook Pro from $1,599, and High Power Mode is supported only on M5 Pro and Max. The cheapest Pro has fans but not that lever.</p>
+    <p>The per-gigabyte row divides starting price by standard memory, which flatters the Air. I couldn't confirm Apple's 24GB and 32GB upgrade prices from a primary source, since the store renders them client-side. It also uses the base 14-inch M5 Pro, the 15-core CPU / 16-core GPU part, which can't be configured to 64GB at all; reaching 64GB means starting from the 18/20 model instead.</p>
 
-    <h2>Capacity decides what runs at all</h2>
-    <p>A model has to fit before anything else matters. That memory is unified — the GPU addresses system RAM directly, no VRAM copy — and soldered. What you configure at checkout is what you own for the life of the machine.</p>
+    <h2>Where each one genuinely wins — and where neither does</h2>
 
-    <p>The number on the box isn't your working budget, either. macOS takes a slice, Metal publishes <code>recommendedMaxWorkingSetSize</code> — "an approximation of how much memory... this GPU device can allocate without affecting its runtime performance" — which sits below total RAM, and the KV cache grows with the conversation.</p>
+    <p><strong>The Air wins on capacity per dollar, and on silence.</strong> A $1,299 fanless laptop holding a 15GB model in memory the GPU addresses directly, with no VRAM copy, is not a compromise machine. MLX, Apple's MIT-licensed array framework, is built around exactly that: arrays live in shared memory and run on CPU or GPU without transfers. And silence is a real feature. A long generation on a PC laptop announces itself through the fans; on an Air it doesn't announce itself at all.</p>
 
-    <p>Against Outlier's published tier minimums:</p>
-    <ul>
-      <li><strong>16GB Air (base):</strong> Nano 4B (2.37 GB, 6GB minimum) and Lite 9B (5.04 GB, 12GB) are comfortable; Quick 26B-a4b (15.61 GB, 16GB minimum) sits right at the line. LM Studio agrees — 16GB recommended, 8GB Macs held to "smaller models and modest context sizes."</li>
-      <li><strong>24GB or 32GB Air:</strong> adds Core and Code 27B (15.13 GB, 24GB minimum) and Vision 35B-a3b (19.0 GB). The Air's sweet spot, and what I'd tell most people to buy.</li>
-      <li><strong>Pro at 64GB:</strong> clears the floor for Plus 397B-a17b — a 209 GB download that pages experts off the SSD at ~11 GB peak RSS. No Air reaches it.</li>
-      <li><strong>Pro at 128GB:</strong> headroom for long context, and what Apple means by "Run LLMs with hundreds of billions of parameters entirely on device."</li>
-    </ul>
+    <p><strong>The Pro wins on ceiling, prompt processing, and sustained load.</strong> 128GB at 614GB/s has no equivalent in any other laptop class, and Apple claims the M5 Pro and Max deliver "up to 4x faster LLM prompt processing than M4 Pro and M4 Max" — the compute-bound half, the half you feel when you paste in a long file.</p>
 
-    <p>Note the cliff: M5 Pro stops at 64GB and 128GB needs the 40-core M5 Max, so reaching the very large models is a $3,599-and-up jump, not simply "buy a Pro."</p>
+    <p><strong>A desktop with a discrete GPU usually wins on raw throughput, and I won't pretend otherwise.</strong> If a model fits inside a dedicated GPU's VRAM, that card will typically generate tokens faster than any Mac laptop, because it has far more bandwidth to work with. Apple's advantage is narrower: capacity per dollar, and power draw. If your workload fits comfortably in 16 or 24GB of VRAM and you have a desk and an outlet, a PC with a discrete card is a defensible choice.</p>
 
-    <h2>Bandwidth decides how fast it comes out</h2>
-    <p>153GB/s on any Air against up to 614GB/s on the top Pro is roughly a 4x spread. The llama.cpp maintainers spell out why that matters: prompt processing is compute-bound, token generation is bandwidth-limited. Generation is what you watch arrive word by word, so it tracks bandwidth. Prefill is the pause before the first word, and that's where compute and sustained clocks pay off.</p>
-
-    <p>Apple's claims fit that split without producing an absolute number: the M5 Air is "up to 4x faster performance for AI tasks" than the M4 Air, and the M5 Pro/Max delivers "up to 4x faster LLM prompt processing than M4 Pro and M4 Max." Relative multipliers against unstated workloads, both. Apple publishes no tokens per second, anywhere.</p>
-
-    <p>My own numbers are narrower but measured: Outlier's Nano 4B runs 71.7 tok/s on an M1 Ultra desktop and 32 tok/s on an M4 MacBook Air, and Core 27B does 20.7 tok/s on the M1 Ultra. Thirty-two tokens a second on a fanless laptop is faster than you read.</p>
-
-    <h2>Fanless vs actively cooled: what silence costs</h2>
-    <p>Apple describes the Air plainly: "Both models feature a thin, light, and completely silent fanless design." The Pro has fans plus High Power Mode, which "allows the fans to run at higher speeds" so the machine "may... deliver higher performance in very intensive workloads." The Air has no equivalent control.</p>
-
-    <p>Now the uncomfortable part: nobody has published a rigorous throttling curve for GPU-heavy inference on a fanless Air. The tokens-per-second decay curves that circulate all trace back to affiliate posts with no stated methodology, so I won't repeat them.</p>
-
-    <p>The best measurement I found is CPU-only and a generation back: Notebookcheck's Cinebench 2024 loop on the M4 MacBook Air 15. "After 30 minutes, its performance of 776 points was only 11% lower," with package power peaking at 20.5 watts and settling near 9 after twenty. The Air steps down rather than falling over. The Pro's design is the mirror image — Apple's own phrase is a system moving "50 percent more air than the previous generation."</p>
-
-    <p>My read, having shipped an app people run for hours: at chat length cooling barely matters, because you finish before the machine warms up. Point an agent at the GPU for an hour and the Pro holds its clocks while the Air walks its power budget down. Silence is a real feature, though — not a consolation prize.</p>
-
-    <h2>Where each one genuinely wins</h2>
-    <p><strong>The Air wins on capacity per dollar and on power.</strong> Roughly $69 per gigabyte at the 13-inch entry price is the cheapest way to get a GPU that can address 16–32GB of weights, in a silent 2.7-pound machine. M5 also doubled base storage to 512GB, which matters when models run 15GB each.</p>
-
-    <p><strong>The Pro wins on ceiling and on sustained work.</strong> 128GB at 614GB/s isn't matched by another laptop class, High Power Mode is a real user-accessible lever, and the bandwidth advantage shows up on every token.</p>
-
-    <p><strong>And a discrete GPU still wins on raw throughput.</strong> A desktop with a high-end card will out-generate any of these laptops on a model that fits inside its dedicated VRAM, and it isn't close. Apple's argument is different: capacity per dollar and power draw. A fanless $1,099 laptop pulling well under 20 watts while holding a 15GB model in memory the GPU reads directly is a trade no discrete card offers. Past the VRAM limit, the question stops being how fast and becomes whether it runs.</p>
+    <p><strong>Nobody wins on published numbers.</strong> Every Apple AI claim is a relative multiplier — "up to 4x faster performance for AI tasks than MacBook Air with M4," "up to 9.5x faster than MacBook Air with M1" — against unstated workloads, and Apple gives no absolute tokens-per-second figure for any Mac. The battery ratings (18 hours on the Air, up to 24 on the 16-inch M5 Pro) are video-streaming tests. And the llama.cpp community table is crowd-sourced rather than vendor-measured, useful as direction and nothing more.</p>
 
     <h2>Who should pick which</h2>
-    <p><strong>Buy the MacBook Air</strong> if local AI is a daily tool rather than your whole job — 24GB or 32GB, 13- or 15-inch. It runs everything up to the 27B-class tiers, silently. Don't buy the 16GB base if you care about this: memory is soldered, and it's the one decision you can't walk back.</p>
 
-    <p><strong>Buy the M5 Pro</strong> if you want 64GB, keep long conversations open, or run agents for hours. You get High Power Mode, 307GB/s, and the headroom to stay there.</p>
+    <p><strong>Buy the Air, and put the savings into memory.</strong> If local AI is a tool in your day rather than your whole day — drafting, code assistance, summarizing, private notes — a 24GB or 32GB Air runs 27B-class models and never makes a sound. Outlier's Nano tier ran ~32 tok/s in a single-prompt observation on a 16GB M4 Air (2026-05-04, indicative), quicker than most people read. Skip the 16GB base config if local AI is a real reason to buy.</p>
 
-    <p><strong>Buy the M5 Max</strong> only if you need models above the 64GB line, and know 128GB requires the 40-core GPU part.</p>
+    <p><strong>Buy an M5 Pro at 64GB</strong> if you want the very large mixture-of-experts models on a laptop, or if you routinely run inference for tens of minutes at a stretch and want High Power Mode as a lever. Check the chip line before you check the memory box: Apple only offers 64GB on the M5 Pro with the 20-core GPU, so the base 14-inch M5 Pro is a dead end for this configuration.</p>
 
-    <p>Ignore two things while deciding: battery ratings (Apple's 18–24 hour figures are video-streaming tests, not inference) and any tokens/second number quoted without a model, quantization, and context length.</p>
+    <p><strong>Buy an M5 Max at 128GB</strong> only if you can name the reason: models above the 64GB class, fine-tuning, several models resident at once. Otherwise it's an expensive way to buy headroom you won't reach.</p>
+
+    <p>One caveat that isn't hardware at all: whether inference is local is a property of the app, not the Mac. Apple's own Apple Intelligence is hybrid, routing some requests to Private Cloud Compute, where Apple states "PCC deletes the user's data after fulfilling the request."</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Memory ceilings and bandwidth from Apple's tech specs (<a href="https://support.apple.com/en-us/126320">126320</a>, <a href="https://support.apple.com/en-us/126318">126318</a>); pricing, fanless design, and AI multipliers from Apple Newsroom, March 2026 and October 2025; High Power Mode from Apple's <a href="https://support.apple.com/en-us/101613">Power Modes</a> article; <code>recommendedMaxWorkingSetSize</code> from Apple's Metal docs. Prompt-processing vs generation from <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp discussion #4167</a>. Sustained-load figures from Notebookcheck's M4 MacBook Air 15 review — third-party, CPU-only, previous chip generation. Outlier tier sizes and tok/s measured on an M1 Ultra (64GB) and an M4 Air. I couldn't confirm the 24GB/32GB Air upgrade prices from a primary source, so I haven't quoted one. Apple's prices and configurations change — check current specs first.
+      <strong>Sources and receipts:</strong> All six starting prices re-pulled 2026-07-23 from the live US Apple Store configurator at <a href="https://www.apple.com/shop/buy-mac/macbook-air">apple.com/shop/buy-mac/macbook-air</a> and <a href="https://www.apple.com/shop/buy-mac/macbook-pro">/macbook-pro</a>, not from the March 2026 launch announcements, which listed the Air $200 lower. The price-per-GB row is those prices divided by each base config's standard memory. Memory ceilings, GPU-binning restrictions, bandwidth, and weights from the tech specs at <a href="https://support.apple.com/en-us/126320">support.apple.com/126320</a> (Air 13-inch) and <a href="https://support.apple.com/en-us/126318">126318</a> (Pro 14-inch, M5 Pro or M5 Max). Storage, fanless design, and battery ratings from <a href="https://www.apple.com/newsroom/2026/03/apple-introduces-the-new-macbook-air-with-m5/">Apple's MacBook Air with M5 announcement</a>; memory-bandwidth and LLM claims from <a href="https://www.apple.com/newsroom/2026/03/apple-debuts-m5-pro-and-m5-max-to-supercharge-the-most-demanding-pro-workflows/">the M5 Pro and M5 Max announcement</a>. High Power Mode wording and its model list from <a href="https://support.apple.com/en-us/101613">About Power Modes on your Mac</a> (published June 5, 2026), which lists the 14- and 16-inch MacBook Pro with M5 Pro or M5 Max and no other current notebook. Compute-bound vs bandwidth-bound framing from the <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp Apple Silicon benchmark discussion</a>, crowd-sourced rather than vendor-measured. Sustained-load figures from <a href="https://www.notebookcheck.net/Apple-MacBook-Air-15-M4-review-The-fanless-M4-SoC-is-years-ahead-of-the-competition.976933.0.html">Notebookcheck's M4 MacBook Air 15 review</a>, a third-party CPU benchmark rather than an inference test. Outlier tier sizes and RAM floors measured on shipping builds; the ~32 tok/s figure is a single-prompt operator observation on a 16GB M4 Air (2026-05-04), indicative and not sigma-qualified. Apple's prices, configurations, and spec pages change — check them before you buy.
     </div>
 
     <div class="cta">
-      <h3>Run models on the Mac you already have</h3>
-      <p>Outlier is a native Apple Silicon app — no account, no caps, nothing uploaded. Nano and Lite are free forever and run fine on a 16GB Air.</p>
+      <h3>Try local AI on the Mac you already have</h3>
+      <p>Outlier runs models fully on-device on any Apple Silicon Mac — no account, no usage caps, works with Wi-Fi off. Nano and Lite are free, and Nano runs in 6GB.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=macbook-air-vs-pro-local-ai">Download for Mac</a>
     </div>
 
     <div class="related">
-      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
     </div>
   </div>
 </article>

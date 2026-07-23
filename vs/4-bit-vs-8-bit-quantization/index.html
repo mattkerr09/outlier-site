@@ -126,7 +126,7 @@
 
     <h2>What you pay for it in quality</h2>
 
-    <p>The canonical numbers are llama.cpp's own quality table (LLaMA-7B), given as perplexity deltas against fp16: Q4_K_S +0.1149, <strong>Q4_K_M +0.0535</strong>, Q5_K_M +0.0142, Q6_K +0.0044, <strong>Q8_0 +0.0004</strong>. Q4_K_M, Q5_K_S and Q5_K_M are labeled "recommended." Q8_0 is marked <em>not</em> recommended — not because it's bad, but because it's overkill: Q6_K is already within 0.005 perplexity of fp16 at 1.5 GB less.</p>
+    <p>The canonical numbers are llama.cpp's 2023 k-quants quality table (LLaMA-7B), given as perplexity deltas against fp16: Q4_K_S +0.1149, <strong>Q4_K_M +0.0535</strong>, Q5_K_M +0.0142, Q6_K +0.0044, <strong>Q8_0 +0.0004</strong>. That table's quantize tool labeled Q4_K_M, Q5_K_S and Q5_K_M "recommended," and marked Q8_0 <em>not</em> recommended — not because it's bad, but because it's overkill: Q6_K is already within 0.005 perplexity of fp16 at 1.5 GB less. Current llama.cpp has dropped those labels and now quotes its deltas against Llama-3-8B (Q4_K_M +0.1754, Q6_K +0.0217, Q8_0 +0.0026), where the ordering is identical.</p>
 
     <p>Task scores agree. A 2026 benchmark across 13 llama.cpp quant formats on Llama-3.1-8B-Instruct puts Q4_K_S at an average of 69.17 against Q8_0's 69.41, GSM8K 77.33 vs 77.48 — inside noise, at a 70.83% size reduction instead of 46.87%. Caveat honestly: single-author preprint, not peer reviewed.</p>
 
@@ -147,14 +147,14 @@
           <td><strong>Bits per weight</strong></td>
           <td>16.0005</td>
           <td>8.5008</td>
-          <td>—</td>
+          <td>6.5633</td>
           <td>4.8944</td>
         </tr>
         <tr>
           <td><strong>File size (Llama-3.1-8B)</strong></td>
           <td>14.96 GiB</td>
           <td>7.95 GiB</td>
-          <td>—</td>
+          <td>6.14 GiB</td>
           <td>4.58 GiB</td>
         </tr>
         <tr>
@@ -168,7 +168,7 @@
           <td><strong>Prompt processing, 512 tok</strong></td>
           <td>923.49 t/s</td>
           <td>865.09 t/s</td>
-          <td>—</td>
+          <td>812.01 t/s</td>
           <td>821.81 t/s</td>
         </tr>
         <tr>
@@ -179,7 +179,7 @@
           <td>+0.0535</td>
         </tr>
         <tr>
-          <td><strong>llama.cpp's own label</strong></td>
+          <td><strong>k-quants label (2023)</strong></td>
           <td>—</td>
           <td>not recommended</td>
           <td>—</td>
@@ -188,11 +188,11 @@
       </tbody>
     </table>
 
-    <p>Caveat: sizes and throughput come from the Llama-3.1-8B run, the perplexity deltas from an older LLaMA-7B table. Q6_K's 8B size isn't published; on 7B it's 5.15 GB against F16's 13.0 GB.</p>
+    <p>Caveat: sizes and throughput come from the Llama-3.1-8B run, the perplexity deltas from an older LLaMA-7B table.</p>
 
     <h2>Where 4-bit genuinely wins</h2>
 
-    <p>No hedging: the evidence is one-sided, and it's the vendors' own data. Q4_K_M costs about +0.05 perplexity, takes a 13 GB 7B model to under 4 GB, and llama.cpp marks it recommended while calling 8-bit overkill. Ollama ships it as the silent default: <code>llama3.1:latest</code> and <code>llama3.1:8b</code> resolve to the same 4.9 GB artifact as <code>llama3.1:8b-instruct-q4_K_M</code>, identical digest. On Mac, <code>mlx_lm.convert -q</code> gives you 4-bit.</p>
+    <p>No hedging: the evidence is one-sided, and it's the vendors' own data. Q4_K_M costs about +0.05 perplexity, takes a 13 GB 7B model to under 4 GB, and llama.cpp's k-quants table marked it recommended while flagging 8-bit as overkill. Ollama ships it as the silent default: <code>llama3.1:latest</code> and <code>llama3.1:8b</code> resolve to the same 4.9 GB artifact as <code>llama3.1:8b-instruct-q4_K_M</code>, identical digest. On Mac, <code>mlx_lm.convert -q</code> gives you 4-bit.</p>
 
     <p>The bigger win is that 4-bit changes which models you can run at all. On a 16 GB Mac it's the difference between a 20B-class model and nothing: gpt-oss-20b was post-trained with MXFP4 quantization of its MoE weights and is documented to run within 16 GB. That family has no higher-precision original, so the choice isn't even offered.</p>
 
@@ -200,17 +200,17 @@
 
     <h2>Where the reassuring numbers don't reach</h2>
 
-    <p>Perplexity and multiple-choice benchmarks are the metrics <em>least</em> sensitive to the failures users notice. A 0.24-point average-score gap is compatible with a model that emits a plausible but nonexistent API name in generated code, and nobody has published a good measurement of 4-bit's effect on exact-symbol recall.</p>
+    <p>Perplexity and multiple-choice benchmarks are the metrics <em>least</em> sensitive to the failures users notice. A 0.24-point average-score gap is compatible with a model that emits a plausible but nonexistent API name in generated code, and none of the quantization evaluations cited here measure exact-symbol recall — the benchmarks are multiple-choice, GSM8K and perplexity.</p>
 
     <p>Damage isn't constant across models, either — it grows with how heavily a model was pretrained. "Scaling Laws for Precision" (Kumar et al., 2024, fit on 465+ pretraining runs) finds post-training quantization degradation rises with training data, to the point where extra pretraining turns actively harmful for the quantized model. An empirical LLaMA3 study across 10 PTQ and LoRA-FT methods at 1–8 bits agreed, for a 15T-token model. Friendly numbers from 2023-era 7B models don't transfer automatically.</p>
 
-    <p>4-bit also sits close to a cliff: llama.cpp calls Q3_K_S "very high quality loss" (+0.5505) and Q2_K "not recommended" (+0.8698), so a vendor quietly shipping Q3 to save RAM is selling a materially different product. The published comparisons are short-context, and KV-cache quantization is a separate axis whose long-context behavior is community-reported rather than studied — treat it as unverified. Cross-app comparison is nearly hopeless too: Q4_K_M, NF4, AWQ-int4, MLX affine 4-bit and MXFP4 are all called "4-bit," and none are equivalent.</p>
+    <p>4-bit also sits close to a cliff: llama.cpp's k-quants table rated Q3_K_S "very high quality loss" (+0.5505) and Q2_K "not recommended" (+0.8698), so a vendor quietly shipping Q3 to save RAM is selling a materially different product. The published comparisons are short-context, and KV-cache quantization is a separate axis whose long-context behavior is community-reported rather than studied — treat it as unverified. Cross-app comparison is nearly hopeless too: Q4_K_M, NF4, AWQ-int4, MLX affine 4-bit and MXFP4 are all called "4-bit," and none are equivalent.</p>
 
     <h2>One shipped example: what Outlier does</h2>
 
-    <p>Outlier is one instance of the 4-bit default, not the point of this article. It's a Mac app, Apple Silicon only, on-device, no account. You can back the bit width out of the downloads: Nano is 4B in 2.37 GB, Core 27B in 15.13 GB — both near 4.5 bits per weight. Each tier ships as one artifact, so picking a tier <em>is</em> the quantization choice; that's less control than llama.cpp or Ollama give you.</p>
+    <p>Outlier is one instance of the 4-bit default, not the point of this article. It's a Mac app, Apple Silicon only, on-device, no account. You can back the bit width out of the downloads: Nano is 4B in 2.37 GB, Core 27B in 15.13 GB. Core works out to about 4.5 bits per weight, Nano closer to 4.7 — small models keep proportionally more of the embedding table at higher precision. Each tier ships as one artifact, so picking a tier <em>is</em> the quantization choice; that's less control than llama.cpp or Ollama give you.</p>
 
-    <p>What it buys, measured: Core 27B matched Claude Opus on 98.9% of rubric checks in a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and scored about 45% on a blind slice of SWE-bench Verified. Outlier has no web search, image generation, mobile app or Windows build.</p>
+    <p>What it buys, measured: Core 27B matched Claude Opus on 98.9% of rubric checks in a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and scored about 45% on a blind slice of SWE-bench Verified. Outlier has no image generation, mobile app or Windows build (web research is a Pro-only, opt-in feature).</p>
 
     <h2>Who should pick which</h2>
 
@@ -218,14 +218,14 @@
 
     <p><strong>Pick 5-bit or 6-bit</strong> if you have headroom. Q6_K measures +0.0044 perplexity, indistinguishable from fp16 on that metric, and still generates faster than 8-bit.</p>
 
-    <p><strong>Pick 8-bit</strong> when you need quantization removed as a variable: evals, debugging whether a failure is the model or the quant, or work where exact recall beats speed. Cheap insurance if the RAM is idle.</p>
+    <p><strong>Pick 8-bit</strong> when you need quantization removed as a variable: evals, debugging whether a failure is the model or the quant, or work where exact recall matters more than speed. Cheap insurance if the RAM is idle.</p>
 
     <p><strong>Pick fp16</strong> for prefill-dominated work, or as the reference when you're producing quantizations yourself.</p>
 
     <p>The binary is a bit fake anyway. mlx-lm supports dynamic quantization that estimates per-layer sensitivity, and it's common to keep embeddings and the output projection higher. The honest answer is often "4-bit, with 6-bit in three places."</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Bits per weight, sizes and throughput: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md">llama.cpp quantize README</a>. Perplexity deltas: <a href="https://github.com/ggml-org/llama.cpp/discussions/2094">discussion 2094</a> and the <a href="https://github.com/ggml-org/llama.cpp/pull/1684">k-quants PR</a> (LLaMA-7B). Task scores: <a href="https://arxiv.org/abs/2601.14277">arXiv 2601.14277</a>, single-author preprint, not peer reviewed. Methods: <a href="https://arxiv.org/abs/2208.07339">LLM.int8()</a>, <a href="https://arxiv.org/abs/2305.14314">QLoRA</a>, <a href="https://arxiv.org/abs/2210.17323">GPTQ</a>, <a href="https://arxiv.org/abs/2306.00978">AWQ</a>. Degradation scaling: <a href="https://arxiv.org/abs/2411.04330">Kumar et al.</a> and <a href="https://arxiv.org/abs/2404.14047">Huang et al.</a> Apple silicon: <a href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.quantize.html">MLX docs</a>, <a href="https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/LEARNED_QUANTS.md">mlx-lm learned quants</a>. Defaults: <a href="https://ollama.com/library/llama3.1/tags">ollama.com</a> and the <a href="https://huggingface.co/openai/gpt-oss-20b">gpt-oss-20b card</a>. KV-cache behavior at long context is community-reported, not a controlled study. Formats, defaults and third-party pricing or policies change — re-check before relying on a number. Outlier figures measured on M1 Ultra, 2026-07-23.
+      <strong>Sources and receipts:</strong> Bits per weight, sizes and throughput: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md">llama.cpp quantize README</a>. Perplexity deltas: <a href="https://github.com/ggml-org/llama.cpp/discussions/2094">discussion 2094</a> and the <a href="https://github.com/ggml-org/llama.cpp/pull/1684">k-quants PR</a> (LLaMA-7B, 2023). Task scores: <a href="https://arxiv.org/abs/2601.14277">arXiv 2601.14277</a>, single-author preprint, not peer reviewed. Methods: <a href="https://arxiv.org/abs/2208.07339">LLM.int8()</a>, <a href="https://arxiv.org/abs/2305.14314">QLoRA</a>, <a href="https://arxiv.org/abs/2210.17323">GPTQ</a>, <a href="https://arxiv.org/abs/2306.00978">AWQ</a>. Degradation scaling: <a href="https://arxiv.org/abs/2411.04330">Kumar et al.</a> and <a href="https://arxiv.org/abs/2404.14047">Huang et al.</a> Apple silicon: <a href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.quantize.html">MLX docs</a>, <a href="https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/LEARNED_QUANTS.md">mlx-lm learned quants</a>. Defaults: <a href="https://ollama.com/library/llama3.1/tags">ollama.com</a> and the <a href="https://huggingface.co/openai/gpt-oss-20b">gpt-oss-20b card</a>. KV-cache behavior at long context is community-reported, not a controlled study. Formats, defaults and third-party pricing or policies change — re-check before relying on a number. Outlier figures measured on M1 Ultra: 54-prompt rubric benchmark 2026-05, SWE-bench Verified blind slice (18/40) 2026-06-25.
     </div>
 
     <div class="cta">

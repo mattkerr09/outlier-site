@@ -105,7 +105,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Gemma and Llama aren't apps — they're families of downloadable model weights, and you need a runtime like Ollama, llama.cpp, LM Studio or MLX before you can chat with either. Google's Gemma 4 (2 April 2026) is Apache 2.0, ungated, and ships in five sizes topping out at 31B, so it fits ordinary Macs. Meta's Llama 4, still the newest open Llama, starts at 108.6B total parameters under a source-available license with a 700-million-monthly-user ceiling, a mandatory "Built with Llama" credit, and a clause withholding the grant from EU-domiciled developers.</p>
+      <p>Gemma and Llama aren't apps — they're families of downloadable model weights, and you need a runtime like Ollama, llama.cpp, LM Studio or MLX before you can chat with either. Google's Gemma 4 launched 2 April 2026 in four sizes, with a 12B build added 23 May 2026 to make five; it's Apache 2.0, ungated, and tops out at 31B, so it fits ordinary Macs. Meta's Llama 4, still the newest open Llama, starts at 108.6B total parameters under a source-available license with a 700-million-monthly-user ceiling, a mandatory "Built with Llama" credit, and a clause withholding the grant from EU-domiciled developers.</p>
     </div>
 
     <p class="lead">Nobody signs up for Gemma or Llama. You download a checkpoint, point a runtime at it, and live with whatever license came attached — and the license is the part that turns up later in a lawyer's email. That's the axis most comparisons skip, so it's the one I've spent the most words on.</p>
@@ -118,9 +118,9 @@
 
     <h2>Sizes: what you can actually get</h2>
 
-    <p>Gemma 4 ships five sizes: <strong>E2B</strong> and <strong>E4B</strong> for edge and mobile, <strong>12B</strong>, <strong>26B-A4B</strong> (mixture-of-experts), and <strong>31B</strong> dense. One family covers a phone, a MacBook Air and a Mac Studio. The 12B instruction-tuned build is 11.95B parameters with a context window up to 256K tokens; it takes text, image, audio and video in and produces text only. Training data cuts off January 2025, so anything newer has to arrive through retrieval.</p>
+    <p>Gemma 4 ships five sizes: <strong>E2B</strong> and <strong>E4B</strong> for edge and mobile, <strong>12B</strong>, <strong>26B-A4B</strong> (mixture-of-experts), and <strong>31B</strong> dense. Four of those launched together on 2 April 2026; the 12B unified multimodal build followed on 23 May 2026. One family covers a phone, a MacBook Air and a Mac Studio. The 12B instruction-tuned build is 11.95B parameters with a context window up to 256K tokens; it takes text, image, audio and video in and produces text only. Training data cuts off January 2025, so anything newer has to arrive through retrieval.</p>
 
-    <p>Llama 4's ladder starts far higher. Its smallest member, Scout Instruct, is a 108.6B-total-parameter mixture-of-experts model with 17B active across 16 experts. Maverick is bigger. There's no small Llama 4 and nothing newer either: Scout and Maverick landed on Hugging Face 1–3 April 2025, and no Llama 5 exists. Meta's April 2026 flagship, Muse Spark, ships as a private API preview with no weight download, and <code>llama.com</code> now redirects to Meta's developer site.</p>
+    <p>Llama 4's ladder starts far higher. Its smallest member, Scout Instruct, is a 108.6B-total-parameter mixture-of-experts model with 17B active across 16 experts. Maverick is bigger. There's no small Llama 4 and nothing newer either: Scout and Maverick landed on Hugging Face 5 April 2025, and no Llama 5 exists. Meta's April 2026 flagship, Muse Spark, is closed — there is no weight download. It opened to developers on 9 July 2026 as a paid, pay-as-you-go Meta Model API in public preview, not as a checkpoint you can run. And <code>llama.com</code> now redirects to Meta's developer site.</p>
 
     <h2>Licensing: the difference that decides things</h2>
 
@@ -132,7 +132,7 @@
 
     <p>The sharpest condition is territorial. Meta's Acceptable Use Policy withholds the Section 1(a) grant from anyone domiciled in, or any company with a principal place of business in, the European Union with respect to multimodal models — and every Llama 4 model is natively multimodal. End users of a product built on one are exempt; the developer isn't. The weights are also gated on Hugging Face behind terms acceptance and a request queue.</p>
 
-    <h2>Side by side</h2>
+    <h3>The two families side by side</h3>
 
     <table>
       <thead>
@@ -145,8 +145,8 @@
       <tbody>
         <tr>
           <td><strong>Latest open release</strong></td>
-          <td>2 April 2026</td>
-          <td>1–3 April 2025, no successor</td>
+          <td>2 April 2026 (12B added 23 May 2026)</td>
+          <td>5 April 2025, no successor</td>
         </tr>
         <tr>
           <td><strong>Sizes</strong></td>
@@ -176,12 +176,12 @@
         <tr>
           <td><strong>Languages</strong></td>
           <td>140+ pre-trained, per Google</td>
-          <td>Multilingual; deepest fine-tune ecosystem</td>
+          <td>No figure in the sources cited here</td>
         </tr>
         <tr>
           <td><strong>Practical on a Mac</strong></td>
           <td>Yes — day-one MLX 4-bit, official QAT int4</td>
-          <td>Not at Llama 4 sizes; Llama 3.x instead</td>
+          <td>Only on 64 GB+ Macs; Llama 3.x in practice</td>
         </tr>
       </tbody>
     </table>
@@ -198,7 +198,7 @@
 
     <p>The arithmetic is simple: 4-bit weights are half a byte per parameter, so a 12B model's weights land near 6 GB before context and overhead, and a 31B near 15–16 GB. Gemma 4 was Apple-silicon-ready immediately — MLX 4-bit conversions of E2B, E4B, 26B-A4B and 31B hit <code>mlx-community</code> on 2 April 2026, release day. Google also publishes quantization-aware-trained int4 GGUF builds (the 12B and 31B <code>qat-q4_0-gguf</code> repos, May–June 2026), and QAT holds quality better than naive post-hoc quantization.</p>
 
-    <p>One number from my own build: Outlier's Quick tier is Gemma-4-26B-a4b-it, a 15.61 GB download with a 16 GB RAM floor. Llama 4 is a different story — 108.6B parameters is north of 50 GB at 4 bits before overhead. As of mid-2026 the popular <code>mlx-community</code> Llama conversions are all Llama 3.x (3.1 8B, 3.2 1B and 3B, 3.3 70B), with Llama 4 absent. Running Llama on a Mac means running last generation's Llama.</p>
+    <p>One number from my own build: Outlier's Quick tier is Gemma-4-26B-a4b-it, a 15.61 GB download with a 16 GB RAM floor. Llama 4 is a different story — 108.6B parameters is north of 50 GB at 4 bits before overhead. <code>mlx-community</code> does carry Llama 4 conversions — Scout and Maverick, 4-bit and up, posted April 2025 — but Scout at 4 bits is still around 54 GB of weights, past what anything short of a 64 GB Mac will hold, and Maverick is further out of reach again. The Llama checkpoints most Mac users actually run are 3.x (3.1 8B, 3.2 1B and 3B, 3.3 70B). On ordinary hardware, running Llama means running last generation's Llama.</p>
 
     <p>One trap worth naming: run either family locally and no prompt touches a network, but that follows from local execution, not from a vendor promise. On Google's Gemini API, Gemma 4 is free-tier-only with the paid tier marked "Not available," and the free tier marked "Used to improve our products: Yes." Google's terms say human reviewers may read and annotate API input and output, and warn against submitting sensitive or personal information. Same weights, opposite privacy posture.</p>
 
@@ -208,18 +208,18 @@
 
     <p><strong>Llama wins on ecosystem depth, and it isn't close.</strong> For tooling, published fine-tuning recipes and comparability to prior research, Llama 3.x has more support than anything else you can download, and its 1B, 3B and 8B models are among the best-understood on Apple silicon.</p>
 
-    <p><strong>And raw weights beat any packaged app, mine included.</strong> A downloaded checkpoint can't be deprecated, rate-limited, price-hiked or silently swapped, so results stay reproducible permanently. Both families grant full fine-tuning rights, so you can specialize on your own data without a vendor seeing it. Self-hosting costs nothing ongoing but hardware and power, against Outlier Pro at $20/month or $149/year — and the weights run on Windows and Linux, while Outlier is Apple Silicon Mac only, macOS 12+, with no web search, image generation or mobile app.</p>
+    <p><strong>And raw weights have an advantage no packaged app can match, mine included.</strong> A downloaded checkpoint can't be deprecated, rate-limited, price-hiked or silently swapped, so results stay reproducible permanently. Both families grant full fine-tuning rights, so you can specialize on your own data without a vendor seeing it. Self-hosting costs nothing ongoing but hardware and power, against Outlier Pro at $20/month or $149/year — and the weights run on Windows and Linux, while Outlier is Apple Silicon Mac only, macOS 12+, with no web search, image generation or mobile app.</p>
 
-    <h2>Who should pick which</h2>
+    <h2>Gemma 4, Llama 3.x, or neither</h2>
 
     <p><strong>Pick Gemma 4</strong> if you're shipping something commercial and want the license question closed, if you're EU-domiciled, if the model has to fit ordinary hardware, or if you need multilingual coverage and multimodal input at laptop scale.</p>
 
     <p><strong>Pick Llama 3.x</strong> if you want the deepest fine-tuning ecosystem, you're reproducing published research, or you already run its 8B and 70B checkpoints and it works. Go in knowing you adopt the license conditions along with the model, and that the open line has been quiet since April 2025.</p>
 
-    <p><strong>Pick a finished app</strong> if you'd rather use a local model this afternoon than assemble one. That's Ollama and LM Studio, both free, and it's Outlier — seven tiers, no account, no caps, nothing uploaded. Choose it for the packaging, not because you think the weights are weak. They aren't. They're just unfinished.</p>
+    <p><strong>Pick a finished app</strong> if you'd rather use a local model this afternoon than assemble one. That's Ollama or LM Studio if you want to keep driving the weights yourself, and it's Outlier if you want them packaged — seven tiers, nothing uploaded, no caps, and no account needed for the free ones. Choose it for the packaging, not because you think the weights are weak. They aren't. They're just unfinished.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Gemma 4 sizes and modalities from <a href="https://deepmind.google/models/gemma/gemma-4/">deepmind.google</a> and the <a href="https://huggingface.co/google/gemma-4-12B-it">12B-it model card</a>; the Apache 2.0 move from the <a href="https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html">Google Open Source Blog</a>; older terms and output rights at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>; runtimes from the <a href="https://ai.google.dev/gemma/docs">Gemma docs</a>; hosted-tier handling from <a href="https://ai.google.dev/pricing">Gemini API pricing</a> and <a href="https://ai.google.dev/gemini-api/terms">terms</a>. Llama 4 conditions from the <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama4/LICENSE">Community License</a> and <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama4/USE_POLICY.md">Acceptable Use Policy</a>; open-source status per the <a href="https://opensource.org/blog/metas-llama-license-is-still-not-open-source">OSI</a>; sizes from <a href="https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct">Scout's model card</a>; distribution from <a href="https://ai.meta.com/blog/introducing-muse-spark-msl/">Meta on Muse Spark</a>. MLX availability reflects <code>mlx-community</code> as of mid-2026; Outlier tier size and RAM floor measured on the shipping app. <strong>Licenses and hosted-API policies change without notice — read the primary document before relying on any of this commercially.</strong>
+      <strong>Sources and receipts:</strong> Gemma 4 sizes and modalities from <a href="https://deepmind.google/models/gemma/gemma-4/">deepmind.google</a> and the <a href="https://huggingface.co/google/gemma-4-12B-it">12B-it model card</a>; the Apache 2.0 move from the <a href="https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html">Google Open Source Blog</a>; older terms and output rights at <a href="https://ai.google.dev/gemma/terms">ai.google.dev/gemma/terms</a>; runtimes from the <a href="https://ai.google.dev/gemma/docs">Gemma docs</a>; hosted-tier handling from <a href="https://ai.google.dev/pricing">Gemini API pricing</a> and <a href="https://ai.google.dev/gemini-api/terms">terms</a>. Llama 4 conditions from the <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama4/LICENSE">Community License</a> and <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama4/USE_POLICY.md">Acceptable Use Policy</a>; open-source status per the <a href="https://opensource.org/blog/metas-llama-license-is-still-not-open-source">OSI</a>; sizes from <a href="https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct">Scout's model card</a>; Muse Spark distribution from Meta's own posts — the <a href="https://ai.meta.com/blog/introducing-muse-spark-msl/">April announcement</a> and the <a href="https://ai.meta.com/blog/introducing-muse-spark-meta-model-api/">9 July 2026 public-preview API post</a>. MLX availability reflects <code>mlx-community</code> as of mid-2026; Outlier tier size and RAM floor measured on the shipping app. <strong>Licenses and hosted-API policies change without notice — read the primary document before relying on any of this commercially.</strong>
     </div>
 
     <div class="cta">

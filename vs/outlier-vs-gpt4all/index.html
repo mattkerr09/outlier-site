@@ -118,23 +118,23 @@
     <p>Credit where it's due: the "Enable Datalake" sharing toggle defaults to Off, so does off-device embedding, and the docs warn plainly that using a remote provider means "your prompts leave your computer to the API provider."</p>
 
     <h2>Where the project stands as of July 2026</h2>
-    <p>GPT4All's newest release is v3.10.0, published 2025-02-25. The GitHub API reports the repo was last pushed 2025-05-27, and that commit was a CI config change — the last substantive commits are from February 2025. PyPI still shows bindings 2.8.2, and 772 issues are open with no visible triage.</p>
+    <p>GPT4All's newest release is v3.10.0, published 2025-02-25. The GitHub API reports the repo was last pushed 2025-05-27, and that commit was a CI config change — the last substantive commits are from February 2025. PyPI still shows bindings 2.8.2, and 730 issues and 42 pull requests are open with no visible triage.</p>
 
-    <p>There's no deprecation notice and the repo isn't archived, but there's no statement either way. An issue titled "Is GPT4all dead?" has been open since August 2025 with no maintainer reply — every comment is from someone outside the organization. Nomic's homepage now describes the company as "Domain-Specific AI for Architecture, Engineering &amp; Construction," and GPT4All appears in neither the navigation nor the pricing page. The download page works; the product just isn't part of the company's story.</p>
+    <p>There's no deprecation notice and the repo isn't archived, but there's no statement either way. An issue titled "Is GPT4all dead?" has been open since August 2025 with no maintainer reply — every comment is from someone outside the organization. Nomic's homepage now describes the company as "the domain-specific AI platform for architecture, engineering, and construction firms," and GPT4All appears in neither the navigation nor the pricing page. The download page works; the product just isn't part of the company's story.</p>
 
     <p>Community comments in the "Development stopped?" thread claim the frozen backend can't load newer architectures — in January 2026 they describe Qwen3 as unsupported and put the ceiling near Mistral Small 3.2. No maintainer has confirmed that and I haven't tested it, so treat it as user reporting.</p>
 
     <h2>Interface, and who each one is built for</h2>
     <p>Both are GUI apps, so this gap is narrower than with terminal-first tools. GPT4All's window is a chat interface with a model picker, approachable for someone who's never opened a terminal. It also exposes the knobs — GPU layers, thread counts, context length — which reads as flexibility to a tinkerer and as homework to everyone else.</p>
 
-    <p>Outlier is a native macOS app with no model-runtime settings at all. Pick a tier, it loads, you type. There's no CLI, no Python SDK, no local API server — if you want to script against a local model, GPT4All gives you that today and Outlier doesn't. Neither has a mobile version.</p>
+    <p>Outlier is a native macOS app with no model-runtime settings at all. Pick a tier, it loads, you type. Outlier ships an OpenAI-compatible local API server on Pro, but no Python SDK and no user-facing CLI in the packaged Mac app; GPT4All gives you both. Neither has a mobile version.</p>
 
     <h2>Setup effort, model management, and what's in the box</h2>
     <p>GPT4All hands you a catalog with file sizes so you can match a model to your RAM, and lets power users drop in any GGUF from HuggingFace. Real flexibility — and a decision you have to get right: too aggressive a quantization and quality drops in ways that are hard to attribute, too large and it swaps.</p>
 
-    <p>Outlier ships seven fixed tiers, sizing done for you: Nano 4B (2.37 GB, 6 GB RAM) through Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, and Vision 35B-a3b, up to Plus 397B-a17b (209 GB, 64 GB RAM), which streams experts from SSD and peaks near 11 GB RSS. Base models are tuned Qwen3.5, Gemma-4, and Qwen3.6 variants, published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. Fewer choices, no sliders.</p>
+    <p>Outlier ships seven fixed tiers, sizing done for you: Nano 4B (2.37 GB, 6 GB RAM) through Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, and Vision 35B-a3b, up to Plus 397B-a17b (209 GB, 64 GB RAM), which streams experts from SSD and peaks near 11 GB RSS. Base models are tuned Qwen3.5, Gemma-4, and Qwen3.6 variants; six of the seven tiers are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a> — Plus 397B is not. Fewer choices, no sliders.</p>
 
-    <p>In the box, it flips: GPT4All bundles LocalDocs with on-device embedding and a Sources view. Outlier has no document-collection feature, no web search, no image generation, no voice mode.</p>
+    <p>In the box, both ship retrieval — the difference is what it costs. GPT4All bundles LocalDocs with on-device embedding and a Sources view, free on every platform it supports. Outlier's equivalents — projects, web research with citations, MCP — sit behind Pro. Outlier's voice support is input only, record and transcribe, not a conversational voice mode, and it doesn't generate images.</p>
 
     <h2>Platform support and licensing — where Outlier loses</h2>
     <p>I'll be blunt. GPT4All runs on Windows (down to an Intel Core i3 2nd Gen), Windows ARM, macOS Monterey 12.6+, and Ubuntu/Linux x86-64, plus a community Flathub build. Outlier is Apple Silicon only — M1 or later, macOS 12+. No Intel Macs, no Windows, no Linux. If your team isn't all on modern Macs, Outlier isn't an option and GPT4All is.</p>
@@ -151,14 +151,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Interface</strong></td><td>GUI + Python SDK + local API server; no CLI</td><td>Native Mac GUI; no CLI, SDK, or server</td></tr>
+        <tr><td><strong>Interface</strong></td><td>GUI + Python SDK + local API server; no CLI</td><td>Native Mac GUI + local API server (Pro); no CLI or SDK</td></tr>
         <tr><td><strong>Built for</strong></td><td>Tinkerers and developers, usable by non-experts</td><td>End users who want it to just work</td></tr>
         <tr><td><strong>Setup effort</strong></td><td>Choose a model, optionally tune threads/GPU layers</td><td>Choose a tier; no runtime settings</td></tr>
         <tr><td><strong>Model management</strong></td><td>Curated catalog plus any HuggingFace GGUF</td><td>Seven fixed tiers, pre-sized and tuned</td></tr>
-        <tr><td><strong>Bundled vs assembled</strong></td><td>LocalDocs, embeddings, API server in the box</td><td>Chat only; no RAG, search, or images</td></tr>
-        <tr><td><strong>Model sizes</strong></td><td>Catalog targets roughly 3–13B</td><td>4B up to 397B-a17b (64 GB Mac)</td></tr>
+        <tr><td><strong>Bundled vs assembled</strong></td><td>LocalDocs, embeddings, API server in the box</td><td>Projects, web research, MCP, API server; no image generation</td></tr>
+        <tr><td><strong>Model sizes</strong></td><td>Catalog runs roughly 1–14B</td><td>4B up to 397B-a17b (64 GB Mac)</td></tr>
         <tr><td><strong>Platforms</strong></td><td>Windows x64, Windows ARM, macOS 12.6+, Linux x86-64</td><td>Apple Silicon Macs only, macOS 12+</td></tr>
-        <tr><td><strong>Licensing</strong></td><td>MIT, open source, commercial use allowed</td><td>Closed-source app; weights published, Apache 2.0 base models</td></tr>
+        <tr><td><strong>Licensing</strong></td><td>MIT, open source, commercial use allowed</td><td>Closed-source app; six of seven tiers' weights published, Apache 2.0 except Quick (Gemma Terms of Use)</td></tr>
         <tr><td><strong>Price</strong></td><td>Free, no paid tier</td><td>Free (Nano + Lite); Pro $20/mo or $149/yr</td></tr>
         <tr><td><strong>Runs offline</strong></td><td>Yes, by default</td><td>Yes, by default</td></tr>
         <tr><td><strong>Last release</strong></td><td>v3.10.0, 2025-02-25</td><td>Shipping through July 2026</td></tr>
@@ -170,27 +170,27 @@
       <li><strong>Free and MIT-licensed.</strong> Not free-as-in-trial — permissively licensed, commercial use included, no seat cost, no account. Very few local AI apps clear that bar, and Outlier doesn't.</li>
       <li><strong>Cross-platform coverage Outlier can't match.</strong> One project covers Windows x64, Windows ARM, macOS, and Linux. For mixed fleets that's decisive.</li>
       <li><strong>Runs on modest hardware.</strong> No GPU required, minimum spec as low as a 2nd-gen Core i3, with Metal on Apple Silicon and Vulkan for NVIDIA and AMD cards.</li>
-      <li><strong>LocalDocs is a real feature, in the box.</strong> Point it at a folder, chat with your files, see the retrieved snippets. Outlier has nothing comparable.</li>
-      <li><strong>Scriptable.</strong> An OpenAI-compatible local server plus a Python SDK, with documented LangChain, Weaviate, and OpenLIT integrations.</li>
+      <li><strong>LocalDocs is free, cross-platform, and in the box.</strong> Point it at a folder, chat with your files, see which snippets came back. Outlier's nearest equivalents — projects and web research with citations — are Pro-gated and Mac-only, so if you want folder-grounded chat without paying, GPT4All is the one that does it.</li>
+      <li><strong>A Python SDK, not just a server.</strong> Both apps expose an OpenAI-compatible local endpoint, but <code>pip install gpt4all</code> gives you a first-party library and documented LangChain, Weaviate, and OpenLIT integrations. Outlier has the endpoint and nothing built on top of it.</li>
       <li><strong>Verifiable privacy defaults.</strong> Server off and localhost-only, Datalake sharing off, off-device embedding off.</li>
       <li><strong>Optional hybrid use.</strong> The same window can talk to Groq, OpenAI, or Mistral — added in v3.10.0 — so one app covers local and cloud.</li>
       <li><strong>Community depth.</strong> 77,000+ GitHub stars since March 2023 means tutorials and forum answers for almost anything you'll hit.</li>
     </ul>
 
-    <h2>Who should pick which</h2>
-    <p><strong>Pick GPT4All if</strong> you're on Windows or Linux, you need open source rather than merely free, you want document chat built in, you're scripting against a local model, your hardware is older or GPU-less, or you'd rather have the knobs than have them hidden. Not wanting to pay anything is a fine reason on its own.</p>
+    <h2>Mac-only and paid, versus free and everywhere</h2>
+    <p><strong>Pick GPT4All if</strong> you're on Windows or Linux, you need open source rather than merely free, you want document chat built in and free, you're scripting from Python against a local model, your hardware is older or GPU-less, or you'd rather have the knobs than have them hidden. Not wanting to pay anything is a fine reason on its own.</p>
 
-    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, you want models past the 13B range — Core 27B, or Plus 397B on a 64 GB machine — and you'd rather not think about quantization or which GGUF to download. On measured quality: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and scored about 45% (18/40) on a blind slice of SWE-bench Verified.</p>
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, you want models past the 14B ceiling of GPT4All's catalog — Core 27B, or Plus 397B on a 64 GB machine — and you'd rather not think about quantization or which GGUF to download. On measured quality: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and scored about 45% (18/40) on a blind slice of SWE-bench Verified.</p>
 
     <p><strong>The honest tiebreaker</strong> is maintenance. A frozen app still works — the binary doesn't stop running. But it won't load next year's models, and nobody's answering the issue tracker.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> GPT4All license, stars, open issues, and last-push date from the <a href="https://api.github.com/repos/nomic-ai/gpt4all">GitHub API</a> and the <a href="https://github.com/nomic-ai/gpt4all/releases">releases page</a> (read 2026-07-23). Platform requirements, components, server behavior, settings defaults, and LocalDocs from <a href="https://docs.gpt4all.io/">docs.gpt4all.io</a>. Pricing and positioning from <a href="https://www.nomic.ai/pricing">nomic.ai/pricing</a> and <a href="https://www.nomic.ai/">nomic.ai</a>; bindings version from PyPI. Model-ceiling claims are unverified community comments on issue #3558, labeled as such above. Outlier tier sizes and RAM floors measured on an M1 Ultra Mac Studio; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">benchmark method here</a>. Competitor pricing and project status change — check the primary sources.
+      <strong>Sources and receipts:</strong> GPT4All license, stars, last-push date, and the open issue and pull-request split (730 issues + 42 PRs; the repo's <code>open_issues_count</code> of 772 counts both) from the <a href="https://api.github.com/repos/nomic-ai/gpt4all">GitHub API</a> and the <a href="https://github.com/nomic-ai/gpt4all/releases">releases page</a> (read 2026-07-23). Catalog size range from the 32 entries in <code>models3.json</code> on the repo's main branch. Platform requirements, components, server behavior, settings defaults, and LocalDocs from <a href="https://docs.gpt4all.io/">docs.gpt4all.io</a>. Pricing and positioning from <a href="https://www.nomic.ai/pricing">nomic.ai/pricing</a> and <a href="https://www.nomic.ai/">nomic.ai</a>; bindings version from PyPI. Model-ceiling claims are unverified community comments on issue #3558, labeled as such above. Outlier tier sizes and RAM floors measured on an M1 Ultra Mac Studio; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">benchmark method here</a>. Which Outlier tiers have public weights was checked against the <a href="https://huggingface.co/Outlier-Ai">Outlier-Ai org listing</a> on 2026-07-23; per-tier feature availability comes from the shipping app's entitlement map, and licensing from the <a href="https://outlier.host/terms.html">terms page</a>. Competitor pricing and project status change — check the primary sources.
     </div>
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite run on any Apple Silicon Mac — no login, no caps, nothing uploaded. On Windows or Linux? GPT4All is the better start.</p>
+      <p>Nano and Lite run on Apple Silicon (Nano from 6&nbsp;GB RAM, Lite from 12&nbsp;GB) — no login, no caps, nothing uploaded. On Windows or Linux? GPT4All is the better start.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-gpt4all">Download for Mac</a>
     </div>
 
