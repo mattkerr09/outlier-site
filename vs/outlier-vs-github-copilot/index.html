@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs GitHub Copilot: local coding AI vs cloud coding AI | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac coding AI) vs GitHub Copilot (cloud, in-editor). Where the code runs, what it costs, agentic ability, and where Copilot still wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-github-copilot/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs GitHub Copilot: local coding AI vs cloud coding AI">
+  <meta property="og:description" content="Copilot runs frontier models on remote infrastructure inside six IDEs. Outlier runs a 27B coding model on your own Mac. Honest receipts on both.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-github-copilot/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs GitHub Copilot: local coding AI vs cloud coding AI">
+  <meta name="twitter:description" content="Where the code runs, which model does the work, what it costs, and where GitHub Copilot still wins.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs GitHub Copilot: local coding AI vs cloud coding AI","description":"Honest comparison of Outlier (local Mac coding AI) vs GitHub Copilot (cloud, in-editor). Where the code runs, what it costs, agentic ability, and where Copilot still wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-github-copilot/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs GitHub Copilot","item":"https://outlier.host/vs/outlier-vs-github-copilot/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs GitHub Copilot: local coding AI vs cloud coding AI</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>GitHub Copilot lives in six IDEs, a terminal CLI, a desktop app and GitHub.com, and every suggestion is computed on remote infrastructure run by GitHub, OpenAI, Anthropic, Google or AWS — your source code leaves the machine. Outlier is a standalone Mac app whose 27B coding model runs entirely on your own Apple Silicon: no account, no caps, works with Wi-Fi off. Copilot has the higher ceiling and deeper repository integration; Outlier uploads nothing.</p>
+    </div>
+
+    <p class="lead">I built Outlier, so treat this as a comparison written by an interested party. Every claim about Copilot comes from GitHub’s own docs, cited at the bottom, and I’ve been blunt about where Copilot is the better tool. Copilot is a cloud service that reaches into your editor; Outlier is a local app that reaches into nothing.</p>
+
+    <h2>Where each one lives</h2>
+    <p>Copilot’s surface area is the part no local Mac app matches. GitHub’s feature matrix lists six editors — VS Code, Visual Studio, JetBrains, Eclipse, Xcode, NeoVim — with uneven coverage: VS Code and Visual Studio get completions, chat, agent mode and next edit suggestions, while NeoVim gets code completion only, no chat and no agent mode. Beyond editors there’s a terminal CLI, a native desktop app for macOS, Linux and Windows, plus GitHub.com, GitHub Mobile and Windows Terminal — one subscription.</p>
+
+    <p>Outlier is one app: native macOS, Apple Silicon, macOS 12 or later. No Windows, no Linux, no mobile, no editor extension. You don’t get ghost text as you type, and you move code between the app and your editor yourself — a real ergonomic cost. What you get back is one process, no network.</p>
+
+    <h2>Which model is doing the work</h2>
+    <p>Copilot routes to other companies’ models: OpenAI’s GPT-5 family, Anthropic’s Claude Haiku 4.5 through Opus 4.8, Google’s Gemini 3.x, GitHub’s Raptor mini, Microsoft’s MAI-Code-1-Flash, Moonshot’s Kimi K2.7 Code — a lot of frontier capability behind one login. You can’t download those weights, pin a version, or archive one, and the free tier offers no model choice at all: auto selection only.</p>
+
+    <p>Outlier ships seven tiers you download once, from Nano 4B up to Plus 397B-a17b, including <strong>Code 27B</strong> (15.13 GB, 24 GB RAM). Six are Apache 2.0, Quick is under the Gemma Terms of Use, and the weights are published openly — what you’ve downloaded can’t be deprecated out from under you.</p>
+
+    <h2>Does your code leave the machine?</h2>
+    <p>With Copilot, yes, and GitHub documents where: OpenAI models on OpenAI’s and GitHub’s Azure infrastructure, Anthropic models on AWS, Anthropic and Google Cloud, Google’s on Google Cloud. GitHub holds zero-data-retention agreements with OpenAI and Anthropic, and says Google commits not to train on GitHub data — better than a default API relationship.</p>
+
+    <p>The training policy needs a careful read. Since April 24, 2026, on Free, Pro, Pro+ and Max, GitHub may use your inputs, outputs, code snippets and surrounding context — code around the cursor, file names, repository structure — to train its models, on by default. The opt-out is real but manual. Business and Enterprise data is excluded by contract, so the strongest protection goes to buyers with procurement, not the individual on a $100 Max plan.</p>
+
+    <p>VS Code does support local models through Ollama or LM Studio for chat, which its docs say need no account, no plan and no internet. But those same docs state you can’t use a local model for inline suggestions, and semantic search still needs the cloud. With Outlier the question doesn’t arise.</p>
+
+    <h2>Cost, and how predictable it is</h2>
+    <p>Copilot Free is $0 for up to 2,000 completions and 50 chat requests a month. Pro is $10/user/month with $15 in credits, Pro+ $39 with $70, Max $100 with $200. One credit is $0.01, billing is per model, and published input prices run $0.20 to $10.00 per million tokens. Paid plans include unlimited completions, which don’t consume credits.</p>
+
+    <p>Copilot Pro at $10 is cheaper than Outlier Pro at $20, and I won’t spin that. What changed is predictability: on June 1, 2026 GitHub replaced request-based billing with usage-based billing, so spend now tracks which model you pick. Annual billing is winding down too — GitHub’s docs say an account is automatically downgraded to Copilot Free when its annual plan ends. Business and Enterprise are quoted through sales, not listed publicly.</p>
+
+    <p>Outlier’s free tier is Nano and Lite, no account, no caps. Pro is $20/month or $149/year for all seven tiers, lifetime from $99. That number doesn’t move with usage — heavy days cost electricity, not credits.</p>
+
+    <h2>Agentic ability and repo-scale context</h2>
+    <p>This is Copilot’s strongest ground. Agent mode runs in the major editors, cloud agents run on GitHub’s infrastructure and open pull requests, and the desktop app runs several isolated sessions at once, each with its own git worktree and branch, so parallel agents don’t collide. Cloud sandboxes, in public preview, keep long runs off your battery.</p>
+
+    <p>Now my numbers, unflattering part first. Code 27B scores <strong>0.866 on HumanEval</strong>. On a blind slice of SWE-bench Verified, the local 27B resolved <strong>18 of 40 issues, about 45%</strong> — measured in my own harness, not a leaderboard submission, and below what the strongest cloud coding agents report. Core 27B separately matched Claude Opus on <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">98.9% of rubric checks across 54 prompts</a>. Strong on well-specified work, behind on long autonomous repo work, and there’s no GitHub integration at all.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr><th></th><th>GitHub Copilot</th><th>Outlier</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Where it lives</strong></td>
+          <td>6 IDEs, CLI, desktop app, GitHub.com, Mobile</td>
+          <td>Standalone macOS app, no editor extension</td>
+        </tr>
+        <tr>
+          <td><strong>Model</strong></td>
+          <td>Hosted OpenAI, Anthropic, Google, Microsoft, Moonshot</td>
+          <td>7 downloadable tiers incl. Code 27B, open weights</td>
+        </tr>
+        <tr>
+          <td><strong>Code leaves machine</strong></td>
+          <td>Yes — Azure, AWS, Google Cloud, OpenAI</td>
+          <td>No — on-device, works offline</td>
+        </tr>
+        <tr>
+          <td><strong>Trained on by default</strong></td>
+          <td>Free/Pro/Pro+/Max yes since 2026-04-24 (opt-out); Business no</td>
+          <td>No data to train on</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>$0 / $10 / $39 / $100 monthly, usage-metered credits</td>
+          <td>Free / $20 monthly / $149 yearly / $99 lifetime</td>
+        </tr>
+        <tr>
+          <td><strong>Caps</strong></td>
+          <td>Free: 2,000 completions. Paid: metered chat and agents</td>
+          <td>None; no account</td>
+        </tr>
+        <tr>
+          <td><strong>Agentic ability</strong></td>
+          <td>Agent mode, cloud agents that open PRs, sandboxes</td>
+          <td>Local only; ~45% on a blind SWE-bench slice</td>
+        </tr>
+        <tr>
+          <td><strong>Repo-scale context</strong></td>
+          <td>Native issues, PRs, code review</td>
+          <td>Files you give it; no code-hosting integration</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where GitHub Copilot genuinely wins</h2>
+    <ul>
+      <li><strong>Raw capability ceiling.</strong> The largest models Copilot serves are far beyond anything that fits in 64 GB of unified memory. On hard reasoning that’s a durable advantage.</li>
+      <li><strong>It’s in your editor.</strong> Inline completions while you type are a different workflow from switching to an app. If that’s how you work, nothing local replaces it today.</li>
+      <li><strong>Multi-vendor access on one bill.</strong> Five vendors’ models, no separate accounts or API keys.</li>
+      <li><strong>The GitHub side.</strong> Pull requests, issues, automated review, agents that open PRs for you. A local app has no equivalent — I’m not going to build a code host.</li>
+      <li><strong>Cloud runs don’t cost you hardware.</strong> A long agent session in a GitHub-hosted sandbox doesn’t heat your laptop or eat your RAM. On a MacBook Air, that matters.</li>
+      <li><strong>Governance, and a free tier that isn’t a demo.</strong> Content exclusion, org policy, audit logs, a Data Protection Agreement, a duplication filter for public-code matches of 65 lexemes or more, and 2,000 completions a month at $0.</li>
+      <li><strong>Auditable in part.</strong> Copilot for Xcode is published under MIT.</li>
+    </ul>
+    <p>GitHub documents the limits too: Copilot Chat may produce code that looks valid but isn’t, and quality drops on obscure languages. The headline 55%-faster and 75%-more-satisfied figures are GitHub’s own marketing, not independent research.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick GitHub Copilot if</strong> you want completions in your editor, you live inside GitHub, you need a frontier model on hard problems, you’re on Windows or Linux, or you want agents opening pull requests while you do something else. Business and Enterprise also get the training exclusion in writing.</p>
+
+    <p><strong>Pick Outlier if</strong> your code can’t leave the machine — client work under NDA, regulated codebases, security research. Also if you want a flat bill instead of metered credits, or you work offline.</p>
+
+    <p><strong>Use both</strong>, which is what I do and what Copilot’s bring-your-own-key support allows: local for the sensitive and routine, cloud for what you’re stuck on.</p>
+
+    <div class="receipts">
+      <strong>Sources:</strong> plans and credits from <a href="https://github.com/features/copilot/plans">github.com/features/copilot/plans</a> and GitHub Docs; the 2026-06-01 billing change from “What changed with Copilot billing”; surfaces from the Copilot feature matrix; hosting, retention terms and the 2026-04-24 training policy from the model-hosting and Copilot-policy docs; local-model limits from <a href="https://code.visualstudio.com/docs/copilot/customization/language-models">code.visualstudio.com</a>. <strong>Competitor pricing and data policies change often — verify at GitHub before deciding.</strong> Outlier figures measured on M1 Ultra; HumanEval 0.866 and the 18/40 SWE-bench Verified slice ran in my own harness, not a leaderboard. Pricing as of 2026-07-23.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever, no login, no caps. Pro adds Code 27B and five more tiers.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-github-copilot">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

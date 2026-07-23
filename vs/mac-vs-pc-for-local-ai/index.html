@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac vs PC for local AI: unified memory vs a discrete GPU | Outlier</title>
+  <meta name="description" content="An engineering comparison of Apple Silicon and a Windows/Linux PC with a discrete GPU for running AI models locally: capacity vs bandwidth, what actually fits, thermals, price per usable gigabyte, and upgrade paths.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/mac-vs-pc-for-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Mac vs PC for local AI: unified memory vs a discrete GPU">
+  <meta property="og:description" content="Capacity vs bandwidth, what actually fits, thermals, price per usable gigabyte, and upgrade paths — an honest hardware comparison for running AI models on your own machine.">
+  <meta property="og:url" content="https://outlier.host/vs/mac-vs-pc-for-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mac vs PC for local AI: unified memory vs a discrete GPU">
+  <meta name="twitter:description" content="A discrete GPU is usually faster. Apple Silicon holds more model per dollar and per watt. Here's the engineering behind that trade.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Mac vs PC for local AI: unified memory vs a discrete GPU","description":"An engineering comparison of Apple Silicon and a Windows/Linux PC with a discrete GPU for running AI models locally: capacity vs bandwidth, what actually fits, thermals, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-vs-pc-for-local-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Mac vs PC for local AI","item":"https://outlier.host/vs/mac-vs-pc-for-local-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Mac vs PC for local AI: unified memory vs a discrete GPU</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>A PC with a discrete GPU is usually faster; an Apple Silicon Mac usually holds a bigger model. An RTX 5090 pairs 32 GB of VRAM with roughly 1,792 GB/s of bandwidth, so any model that fits generates tokens about 2–3× faster than on the highest-bandwidth Mac. Apple says a Mac Studio can be configured up to 512 GB of unified memory, so it runs models that won't load on a consumer GPU at all — just more slowly.</p>
+    </div>
+
+    <p class="lead">Full disclosure: I build <a href="https://outlier.host/">Outlier</a>, a local-AI app that only runs on Apple Silicon, so I have a stake in one side of this. I've tried to make the PC case as strongly as I'd want someone to make mine. On raw speed the discrete GPU wins.</p>
+
+    <h2>One architectural difference drives everything else</h2>
+    <p>A discrete GPU has its own memory: a fixed pool of VRAM on a very wide bus. Apple Silicon has one pool shared by CPU and GPU — MLX, Apple's framework, notes that its arrays live in shared memory and run on either device without a copy. On the PC the model has to fit in VRAM or performance falls off a cliff; spill into system RAM over PCIe and generation collapses. On the Mac, "VRAM" is whatever you bought, minus what macOS is using. No wall at 32 GB — and no 1,792 GB/s bus.</p>
+
+    <h2>What actually fits</h2>
+    <p>Weights are the floor, not the total — you also need the KV cache, which grows with context, plus the runtime and the OS. Apple's ML research team measured footprints on a 24 GB MacBook Pro — Qwen 8B is 17.46 GB at BF16 and 5.61 GB at 4-bit, Qwen 14B 4-bit is 9.16 GB, GPT-OSS 20B at MXFP4 is 12.08 GB, and a Qwen 30B MoE 4-bit is 17.31 GB.</p>
+
+    <p>Our own tiers line up. Nano (4B) is 2.37 GB and wants 6 GB of RAM; Lite (9B) 5.04 GB at 12 GB; Quick (26B-a4b) 15.61 GB at 16 GB; Core and Code (both 27B) 15.13 GB at 24 GB; Vision (35B-a3b) 19.0 GB at 24 GB; Plus (397B-a17b) is 209 GB on a 64 GB machine, paging MoE experts off the SSD at ~11 GB resident. Against a 32 GB card, a 4-bit model up to about 30B is comfortable and quick; a 70B isn't. That's the capacity argument.</p>
+
+    <h2>Speed: bandwidth is the ceiling, and the PC has more of it</h2>
+    <p>Token generation is bound by memory bandwidth, not compute — Apple's research group says so, and its measurements show it. M4 to M5 lifted bandwidth from 120 GB/s to 153 GB/s and produced time-to-first-token speedups of 3.33×–4.06×, but generation speedups of only 1.19×–1.27×.</p>
+
+    <p>So compare bandwidth. Apple lists 410 GB/s for the 32-core M4 Max, 546 GB/s for the 40-core and 819 GB/s for M3 Ultra; on laptops, 307 GB/s for M5 Pro and 614 GB/s for M5 Max. NVIDIA's GeForce news pages put the RTX 5090 at about 1,792 GB/s — the spec page omits it. Call that 2.2× an M3 Ultra, 2.9× an M5 Max.</p>
+
+    <p>Prefill is wider still. A third-party community suite puts an H100 at ~7,760 tokens/sec of prompt evaluation on Llama 3 8B against ~1,024 for an M2 Ultra, while generation was 144 vs 76. Long-context RAG and agent loops live on prefill, so that's the gap you feel. Apple claims M5 processes prompts up to 4× faster than M4.</p>
+
+    <h2>Thermals, power, and sustained load</h2>
+    <p>NVIDIA rates the RTX 5090 at 575 W and recommends a 1,000 W supply — for the card alone. Apple lists 480 W as maximum continuous draw for an entire Mac Studio. Over hours that's fan noise, room temperature and an electricity bill. Nor is there a real laptop equivalent: a discrete-GPU laptop with useful VRAM is heavy, loud and thermally limited, where a MacBook Pro carries 128 GB on battery.</p>
+
+    <h2>Price per usable gigabyte, and the upgrade path</h2>
+    <p>Apple charges steeply per memory tier and solders it: day-one capacity is what you have until you buy a new computer. But getting past 32 GB on the PC isn't cheap either. NVIDIA's workstation documentation describes an RTX PRO 6000 Blackwell at 96 GB of GDDR7 with ECC at full bandwidth — capacity and bandwidth together, which no Mac matches, at a professional price. NVIDIA's own unified-memory box, DGX Spark, has 128 GB but only 273 GB/s, below an entry M4 Max. AMD documents the Ryzen AI Max+ 395 at 128 GB unified, 96 GB reassignable as VRAM.</p>
+
+    <p>Apple announced the M4 Max Mac Studio at $1,999 in March 2025 and the March 2026 MacBook Pro line from $2,199 to $3,899. Third-party reporting describes a 2026 DRAM shortage pushing Apple prices and GPU street prices up, so check live listings. "The PC is cheaper" is worth re-testing, not repeating.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Apple Silicon Mac</th>
+          <th>PC + discrete GPU</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Memory model</strong></td>
+          <td>One unified CPU/GPU pool</td>
+          <td>Separate fixed VRAM</td>
+        </tr>
+        <tr>
+          <td><strong>Capacity ceiling</strong></td>
+          <td>512 GB (M3 Ultra); 128 GB laptop</td>
+          <td>32 GB (RTX 5090); 96 GB pro</td>
+        </tr>
+        <tr>
+          <td><strong>Bandwidth</strong></td>
+          <td>307–819 GB/s</td>
+          <td>~1,792 GB/s (RTX 5090)</td>
+        </tr>
+        <tr>
+          <td><strong>What fits</strong></td>
+          <td>4-bit 27B on 24 GB; 397B MoE on 64 GB</td>
+          <td>4-bit up to ~30B on 32 GB</td>
+        </tr>
+        <tr>
+          <td><strong>Sustained load</strong></td>
+          <td>480 W whole machine</td>
+          <td>575 W card, 1,000 W PSU</td>
+        </tr>
+        <tr>
+          <td><strong>Price per usable GB</strong></td>
+          <td>Better above 32 GB</td>
+          <td>Better below 32 GB</td>
+        </tr>
+        <tr>
+          <td><strong>Upgrade path</strong></td>
+          <td>None — soldered</td>
+          <td>Swap GPU, add RAM or a card</td>
+        </tr>
+        <tr>
+          <td><strong>Laptop option</strong></td>
+          <td>Yes, on battery</td>
+          <td>Heavy, loud, throttled</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where the PC with a discrete GPU genuinely wins</h2>
+    <p>These advantages are real, and several are decisive.</p>
+    <ul>
+      <li><strong>Raw generation speed.</strong> 1,792 GB/s against 819 GB/s isn't close. Any model that fits streams out faster on the PC.</li>
+      <li><strong>Prefill.</strong> The prompt-processing gap is far bigger than the generation gap, and agentic work is made of prefill.</li>
+      <li><strong>The CUDA software moat.</strong> The biggest practical advantage. vLLM treats CUDA, ROCm and Intel XPU as first-class; Apple Silicon lives in a separate plugin, vLLM-Metal, at v0.2.0 as of April 2026. bitsandbytes gives NVIDIA official support and calls Apple Silicon experimental — its macOS wheel is CPU-only. Unsloth describes Apple/MLX support as in progress. New quantization schemes ship CUDA-first.</li>
+      <li><strong>Fine-tuning and training.</strong> The LoRA/QLoRA/8-bit-optimizer stack is CUDA kernels. Training on your own data is well-trodden on the PC, newer on the Mac.</li>
+      <li><strong>Image, video and diffusion.</strong> ComfyUI runs on Apple silicon but documents that path as needing a PyTorch nightly build. NVIDIA is the reference implementation.</li>
+      <li><strong>Upgradeability.</strong> Start mid-range, upgrade later, or add a second card for more VRAM and compute. No Mac does that.</li>
+      <li><strong>Production parity.</strong> Linux gives you containerized stacks that mirror what runs on a server.</li>
+      <li><strong>A used market at every tier.</strong> The Mac path has a hard entry price.</li>
+    </ul>
+    <p>The honest counterweight: AMD isn't a clean escape — bitsandbytes treats ROCm as experimental too, and its supported-GPU matrix is narrower and more version-sensitive than CUDA's. Driver and toolkit versions are a recurring tax; Ollama documents a 550+ NVIDIA driver requirement plus separate ROCm and Vulkan paths, where the Mac is one architecture, one driver.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Build the PC if</strong> you want to fine-tune or train, you work with diffusion and video models, your models fit in 32 GB and you want maximum tokens per second, your workload is prefill-heavy, or local dev needs to mirror a Linux/CUDA production target.</p>
+
+    <p><strong>Buy the Mac if</strong> you need more model than a consumer GPU holds, you want local AI on a laptop and on battery, you care about noise and power at your desk, or you'd rather install an app than maintain a driver stack.</p>
+
+    <p>Privacy isn't a differentiator. Both run inference on your own machine, so any privacy claim belongs to the software, not the silicon. And to be plain about my stake: Outlier is Apple Silicon only, M1 or later, macOS 12+ — no Windows, Linux or Intel build. On the PC side, llama.cpp, Ollama and LM Studio have you covered. Pick hardware for the work, then software that runs on it.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Mac Studio bandwidth and the 480 W figure from <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a>; the 512 GB configuration and $1,999 start price from Apple's March 2025 newsroom post; M5 pricing and bandwidth from Apple's March 2026 MacBook Pro announcement. Bandwidth-bound generation and per-model footprints from Apple's <a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Exploring LLMs with MLX on M5</a>. RTX 5090 VRAM and 575 W from NVIDIA's product page; the ~1,792 GB/s figure is on NVIDIA's GeForce news pages, not the spec page. RTX PRO 6000 and Ryzen AI Max+ 395 figures are as vendor docs describe them, not independently confirmed. Cross-vendor throughput numbers are community benchmarks on older builds — indicative only. <strong>Prices and vendor policies change, and 2026 memory pricing is unstable — re-check every figure live.</strong>
+    </div>
+
+    <div class="cta">
+      <h3>On Apple Silicon? Try it free</h3>
+      <p>Outlier runs models entirely on your Mac — no account, no caps, nothing uploaded. Nano and Lite are free.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mac-vs-pc-for-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

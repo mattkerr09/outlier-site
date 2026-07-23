@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs KoboldCpp: native Mac app vs single-file local server | Outlier</title>
+  <meta name="description" content="Both run AI locally, so privacy isn't the difference. KoboldCpp is a free AGPL single-file server for any GGUF model on any OS; Outlier is a paid native Mac app with bundled models.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-koboldcpp/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs KoboldCpp: native Mac app vs single-file local server">
+  <meta property="og:description" content="Both are fully offline, so privacy isn't the axis. The real differences: interface, setup effort, model management, platform reach, and licensing.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-koboldcpp/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs KoboldCpp: native Mac app vs single-file local server">
+  <meta name="twitter:description" content="Two local AI tools, two very different jobs. An honest comparison from Outlier's founder.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs KoboldCpp: native Mac app vs single-file local server","description":"Both run AI locally, so privacy isn't the difference. KoboldCpp is a free AGPL single-file server for any GGUF model on any OS; Outlier is a paid native Mac app with bundled models. An honest comparison from Outlier's founder.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-koboldcpp/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs KoboldCpp","item":"https://outlier.host/vs/outlier-vs-koboldcpp/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs KoboldCpp: native Mac app vs single-file local server</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>KoboldCpp and Outlier both run models entirely on your own hardware, so privacy is not what separates them. KoboldCpp is a free, AGPL-3.0 single-file server you launch from a terminal and use through a browser UI — it runs any GGUF model you supply, on Windows, Linux, macOS ARM64, or Android. Outlier is a paid native Mac app with curated models built in, and it only runs on Apple Silicon.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr. I build Outlier, so treat this as a comparison written by an interested party — read the KoboldCpp repo and judge for yourself. I've tried to be accurate about both, including the places where KoboldCpp is simply the better tool. Every claim about KoboldCpp below comes from its own README, wiki FAQ, and GitHub release data, checked on 2026-07-23.</p>
+
+    <h2>What KoboldCpp actually is</h2>
+    <p>KoboldCpp is a local inference server maintained by LostRuins, first published in March 2023 and still pushed almost daily. It builds on llama.cpp and wraps it in a distribution model the project sums up as "One File. Zero Install." You download one executable, run it, and it starts a server that hosts KoboldAI Lite — a browser interface aimed heavily at writing, storytelling, and roleplay — plus an OpenAI-compatible <code>/v1</code> API. As of v1.117.1 it also serves Ollama-compatible embeddings and streaming endpoints with tool calling, which means existing tooling can point at it without code changes.</p>
+
+    <p>It is not text-only. The same binary handles image generation and editing (Stable Diffusion, SDXL, Flux), video generation, Whisper speech-to-text, several text-to-speech engines, music generation, and multimodal vision — a wider surface than almost any consumer local AI app on the Mac, mine included.</p>
+
+    <p>On macOS, the release ships exactly one artifact: <code>koboldcpp-mac-arm64</code>. You <code>chmod +x</code> it and run it from Terminal, and it serves a UI at <code>localhost:5001</code>. There's a launcher dialog, but it's a Python customtkinter window, not a Cocoa app. There is no <code>.app</code> bundle, no menu bar presence, and the binary is unsigned — the README notes that on newer macOS you may need to whitelist it in security settings.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). Models run on-device. No account, no usage caps, nothing uploaded, and it works with Wi-Fi off. Seven tiers ship inside the app: Nano 4B (2.37 GB, 6 GB RAM), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 35B-a3b, and Plus 397B-a17b, which streams experts from SSD and peaks around 11 GB of RSS on a 64 GB machine. Nano and Lite are free with no account. Pro is $20/month or $149/year for all seven; lifetime licenses start at $99.</p>
+
+    <p>Outlier is a chat app, not a server, and it isn't open source. No live web search, no image generation, no voice mode, no mobile app, no Windows or Linux build. If any of those are requirements, this comparison ends early.</p>
+
+    <h2>Setup effort: assembled versus bundled</h2>
+    <p>KoboldCpp's install is genuinely trivial — download, mark executable, run. The work comes after that. It ships no model. You go find a GGUF file yourself, usually on Hugging Face, and to choose well you need to already understand quantization levels, context length, and how many layers to offload to the GPU. The FAQ gives rough guidance (a 7B model wants at least 8 GB of RAM, 13B at least 16 GB), and Metal acceleration works on Apple Silicon, but the tuning is on you. Then there's Gatekeeper: an unsigned binary means walking through a security override before the first run.</p>
+
+    <p>Outlier's tradeoff is the mirror image. The app is signed and notarized, you double-click it, pick a tier, and it downloads the weights and picks the settings. You don't choose a quantization because you never see one — a real loss of control, traded deliberately for someone's mother being able to use it.</p>
+
+    <h2>Side-by-side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>KoboldCpp</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Interface</strong></td>
+          <td>Terminal launch → browser UI (KoboldAI Lite) + HTTP API</td>
+          <td>Native Mac chat window</td>
+        </tr>
+        <tr>
+          <td><strong>Who it's for</strong></td>
+          <td>Tinkerers, writers/roleplayers, developers wiring a local backend</td>
+          <td>End users who want a Mac app that opens and works</td>
+        </tr>
+        <tr>
+          <td><strong>Setup effort</strong></td>
+          <td>Download one file, chmod, clear Gatekeeper, source your own model</td>
+          <td>Install, pick a tier, wait for download</td>
+        </tr>
+        <tr>
+          <td><strong>Model management</strong></td>
+          <td>Bring your own GGUF; any architecture, any quant</td>
+          <td>Seven curated tiers; no third-party model loading</td>
+        </tr>
+        <tr>
+          <td><strong>Bundled models</strong></td>
+          <td>None — not included with the download</td>
+          <td>All seven, in-app</td>
+        </tr>
+        <tr>
+          <td><strong>Beyond text</strong></td>
+          <td>Image gen/edit, video, Whisper STT, TTS, music, vision</td>
+          <td>Vision tier only; no image gen, no voice</td>
+        </tr>
+        <tr>
+          <td><strong>Platforms</strong></td>
+          <td>Windows, Linux, macOS ARM64, Android (Termux), Docker, Colab, RunPod</td>
+          <td>macOS on Apple Silicon only</td>
+        </tr>
+        <tr>
+          <td><strong>Signed / notarized on Mac</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>License</strong></td>
+          <td>AGPL-3.0 (llama.cpp / GGML components MIT)</td>
+          <td>Proprietary app; open weights on Hugging Face</td>
+        </tr>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>Free, no tiers, no account</td>
+          <td>Free tier (Nano + Lite); Pro $20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Runs offline</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where KoboldCpp genuinely wins</h2>
+    <p>This section isn't a courtesy. KoboldCpp beats Outlier outright on several axes that matter.</p>
+    <ul>
+      <li><strong>Platform reach.</strong> Outlier is Mac-only, Apple Silicon only. That's a straightforward disadvantage. KoboldCpp runs on Windows, Linux, macOS ARM64, and Android through Termux, and it still ships "oldpc" builds for hardware that modern apps have dropped. If your machines aren't all recent Macs, this comparison has one answer.</li>
+      <li><strong>It's free, with no tiers at all.</strong> No account, no license key, no upsell. Every feature is available to everyone on day one. Outlier gates five of seven tiers behind $20/month.</li>
+      <li><strong>It's open source.</strong> AGPL-3.0, with the llama.cpp and GGML pieces under MIT. Its privacy claims are auditable rather than promised — you can read the code or compile it. Outlier's app is closed source; only the weights are published. If verifiability matters to you, that's a real point against me.</li>
+      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you seven tiers and no way to load anything else.</li>
+      <li><strong>Feature breadth.</strong> Image generation and editing, video, speech-to-text, multiple TTS engines, music, and vision, all in the same binary. Outlier does text and vision, and that's it.</li>
+      <li><strong>It's a server.</strong> OpenAI- and Ollama-compatible routes drop it into existing pipelines as a backend. Outlier is an app, not an endpoint.</li>
+      <li><strong>Release velocity.</strong> Ten releases between February and July 2026, tracking upstream llama.cpp closely, so new architectures land fast.</li>
+      <li><strong>Track record.</strong> Active since March 2023, 11,181 stars and 737 forks as of today, with a community large enough that most setup problems are already documented.</li>
+    </ul>
+
+    <h2>Where Outlier fits better</h2>
+    <p>Outlier's argument is narrow and it's about the last mile, not the engine.</p>
+    <ul>
+      <li><strong>Nothing to assemble.</strong> Models are in the app. No Hugging Face detour, no quant decision, no GPU-layer flag.</li>
+      <li><strong>Signed and notarized.</strong> No Gatekeeper override, which matters on managed or shared Macs.</li>
+      <li><strong>A Mac window, not a browser tab.</strong> No terminal, no localhost port, no launcher dialog.</li>
+      <li><strong>A large local tier.</strong> Plus 397B-a17b runs on a 64 GB Mac via paged MoE at about 2.1 tok/s. Assembling a model that size by hand is a project.</li>
+      <li><strong>Published receipts.</strong> Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and hit ~45% on a blind slice of SWE-bench Verified. KoboldCpp's quality is whatever model you loaded — flexible, but unpredictable.</li>
+    </ul>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick KoboldCpp if</strong> you're on Windows, Linux, or Android; you want to choose your own models; you need image, video, audio, or music generation locally; you want an OpenAI-compatible server behind other tools; you care about open source and auditability; or you'd simply rather not pay. It's also the clear pick for long-form fiction and roleplay, which KoboldAI Lite was built around.</p>
+
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, you want a signed native app that works the moment it opens, and you'd rather not think about GGUF files or command-line flags at all. Also if you want a 397B-class model running locally without assembling that yourself.</p>
+
+    <p><strong>Both is reasonable.</strong> KoboldCpp can serve an API in the background while a Mac app handles daily chat.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> KoboldCpp details from its <a href="https://github.com/LostRuins/koboldcpp">GitHub repository</a>, its <a href="https://github.com/LostRuins/koboldcpp/wiki/The-KoboldCpp-FAQ-and-Knowledgebase">wiki FAQ</a>, the <a href="https://github.com/LostRuins/koboldcpp/blob/concedo/LICENSE.md">AGPL-3.0 LICENSE.md</a>, and GitHub release metadata for v1.117.1 (published 2026-07-09), all checked 2026-07-23; star, fork, and release-cadence figures are from the GitHub API on that date. Note that KoboldCpp publishes no formal privacy policy — its privacy statements live in the community wiki FAQ, and the optional AI Horde and remote-tunnel features are off by default and send data off-machine when enabled, which the FAQ says plainly. Outlier tier sizes, RAM floors, and throughput measured on an M1 Ultra Mac Studio; pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Open-source projects and pricing both change fast — verify at the source before deciding.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on-device for free, forever. Apple Silicon Macs, macOS 12 or later.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-koboldcpp">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

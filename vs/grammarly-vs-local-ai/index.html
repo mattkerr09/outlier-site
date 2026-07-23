@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grammarly vs local AI: what you give up, what you gain | Outlier</title>
+  <meta name="description" content="Grammarly runs in the cloud and trains on individual accounts' text by default. A local Mac model keeps drafts on the machine but loses the system-wide overlay. Honest trade-offs, written by Outlier's founder.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/grammarly-vs-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Grammarly vs local AI: what you give up, what you gain">
+  <meta property="og:description" content="Grammarly is cloud-only and trains on individual accounts by default. A local model keeps drafts on-device but can't correct you inside Mail or Word. The honest trade-offs, both directions.">
+  <meta property="og:url" content="https://outlier.host/vs/grammarly-vs-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Grammarly vs local AI: what you give up, what you gain">
+  <meta name="twitter:description" content="Cloud proofreading everywhere you type, versus an on-device model that never uploads a word. Where each one genuinely wins.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Grammarly vs local AI: what you give up, what you gain","description":"Grammarly is cloud-only and trains on individual accounts' text by default. A local Mac model keeps drafts on-device but loses the system-wide overlay. Honest trade-offs in both directions, written by Outlier's founder.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/grammarly-vs-local-ai/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Grammarly vs local AI","item":"https://outlier.host/vs/grammarly-vs-local-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Grammarly vs local AI: what you give up, what you gain</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Grammarly checks your writing in the cloud — text goes to servers in the United States, and on Free and individual Pro accounts it trains Grammarly's models unless you switch that off. A local app like Outlier runs the model on your Mac: nothing uploaded, no account, no prompt cap, but it works only in its own window, not inside Apple Mail, Word or a browser tab. Keep Grammarly for proofreading everywhere you type; edit locally when drafts must stay on the machine.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I build Outlier, so I'm an interested party. I've tried to write this the way I'd want a competitor to write about me. Grammarly is a specialist with two decades of research behind it, and at catching errors while you type it does things a general local model doesn't do at all.</p>
+
+    <h2>What Grammarly actually is</h2>
+    <p>Grammarly checks grammar, spelling, clarity and tone and rewrites text, as an overlay that follows you around the machine: Mac (macOS 10.15+) and Windows apps, browser extensions, iPhone and Android keyboards, a web editor, Google Docs and Office integrations. It claims coverage of more than a million apps and programs, and that reach <em>is</em> the product — it corrects you in Apple Mail, in Pages, in a Jira ticket, without you thinking about it.</p>
+
+    <p>Pricing, precisely. <strong>Free</strong> is $0: spelling and grammar correction, tone detection, 100 AI prompts a month. <strong>Pro</strong> is $30 per member per month, $60 quarterly, or $144 per year — that last figure is where the $12/month in the marketing comes from, an annual average rather than a month-to-month price. Pro adds 2,000 prompts a month, full-sentence rewrites, tone adjustment, plagiarism and AI-text detection, one style guide and one brand tone. <strong>Enterprise</strong> is quote-based: unlimited prompts, SAML SSO, SCIM, BYOK encryption, DLP. A region-specific <strong>Grammarly Plus</strong> plan runs in some countries at a lower price.</p>
+
+    <p>None of it runs on your computer. Grammarly's own documentation is blunt — "your computer must be connected to the internet" — and there's no offline mode. Checked text goes to AWS servers in the United States: TLS 1.2 in transit, AES-256 at rest. Editor documents stay there until you delete them or close the account.</p>
+
+    <p>On individual accounts, content is used for model training by default. The control is Product Improvement and Training — at <code>account.grammarly.com/security/privacy</code> for Free and Premium, under admin data settings for Pro — and switching it off deletes the data stored for that feature. Enterprise, sales-purchased and Education accounts start opted out; everyone else opted in. Grammarly says it uses aggregated, de-identified samples rather than raw documents, doesn't sell content, and bars its model providers from training on user text. Stronger than most — still promises about words that already left your laptop.</p>
+
+    <h2>What the local version looks like</h2>
+    <p>Outlier is a Mac app for Apple Silicon (M1 or later, macOS 12+) that runs the model on the machine. No account, no meter, and it works with Wi-Fi off. Seven tiers, from Nano (4B, 2.37 GB, 6 GB RAM) through Core and Code 27B (15.13 GB, 24 GB RAM) to Plus 397B-a17b, which streams experts off the SSD and wants 64 GB. Nano and Lite are free; Pro is $20/month or $149/year, lifetime from $99.</p>
+
+    <p>What it isn't is a system-wide overlay: it doesn't sit inside Apple Mail or watch browser text fields. That's the main thing you give up, along with no mobile app, no Windows or Linux build, no web search and no cloud sync.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Grammarly Free</th>
+          <th>Grammarly Pro</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>$0</td>
+          <td>$30/mo, or $144/yr</td>
+          <td>$0</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Text processed</strong></td>
+          <td>Cloud (AWS, US)</td>
+          <td>Cloud (AWS, US)</td>
+          <td>Your Mac</td>
+          <td>Your Mac</td>
+        </tr>
+        <tr>
+          <td><strong>Offline</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Trains on your text by default</strong></td>
+          <td>Yes</td>
+          <td>Yes (single-user)</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account needed</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>AI prompt cap</strong></td>
+          <td>100/mo</td>
+          <td>2,000/mo</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works in other apps</strong></td>
+          <td>System-wide</td>
+          <td>System-wide</td>
+          <td>Own window</td>
+          <td>Own window</td>
+        </tr>
+        <tr>
+          <td><strong>Languages</strong></td>
+          <td>23 + 5 English variants</td>
+          <td>23 + 5 English variants</td>
+          <td>English-strongest</td>
+          <td>English-strongest</td>
+        </tr>
+        <tr>
+          <td><strong>Platforms</strong></td>
+          <td>Mac, Win, iOS, Android, web</td>
+          <td>Mac, Win, iOS, Android, web</td>
+          <td>Apple Silicon Mac</td>
+          <td>Apple Silicon Mac</td>
+        </tr>
+        <tr>
+          <td><strong>Certifications</strong></td>
+          <td colspan="2">SOC 2 Type 2, ISO 27001, ISO 27701, ISO/IEC 42001</td>
+          <td colspan="2">None — nothing leaves the device</td>
+        </tr>
+        <tr>
+          <td><strong>Open weights</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Six of seven tiers</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Grammarly is clearly better</h2>
+    <ul>
+      <li><strong>Reach.</strong> One install puts correction everywhere you type, desktop and phone. Matching that from a Mac app means solving system-wide text injection, which is hard on macOS. I haven't.</li>
+      <li><strong>Specialist correction quality.</strong> Not a chatbot pointed at prose — the output of a long grammatical-error-correction research program (GECToR is on their GitHub, Apache 2.0). For commas, agreement and house style, a specialist is the right instrument.</li>
+      <li><strong>The free tier is real.</strong> Core correction and tone detection at $0, not a crippled demo. Plenty of people never need to pay.</li>
+      <li><strong>Languages.</strong> 23 beyond English, plus American, British, Canadian, Australian and Indian variants. On-device that's one very large model or many small ones; I can't match it today.</li>
+      <li><strong>Compliance depth.</strong> SOC 2 Type 2, ISO 27001, ISO 27701 and ISO/IEC 42001:2023 (the AI-management standard, certified 2025), plus stated HIPAA, CCPA and GDPR compliance, SSO and SCIM. A one-person company in Michigan cannot carry that paperwork; if procurement has a checklist, this decides it.</li>
+      <li><strong>No hardware requirement.</strong> Runs on any Mac back to macOS 10.15, including 8 GB Intel machines, with no download and no battery cost. Outlier needs Apple Silicon and 6 GB of RAM minimum.</li>
+      <li><strong>A higher ceiling, plus team tooling.</strong> Anthropic, OpenAI and Azure appear on the published subprocessor list, so hard rewrites aren't bounded by laptop memory; shared style guides and analytics matter at fifty seats.</li>
+    </ul>
+
+    <h2>Where running it locally is better</h2>
+    <ul>
+      <li><strong>Nothing leaves.</strong> No opt-out to hunt for, because there's no upload. For unpublished manuscripts, client files, legal or medical drafts, or non-US residency rules, that's structural rather than a setting.</li>
+      <li><strong>It works offline.</strong> On a plane, on bad hotel wifi, in a basement.</li>
+      <li><strong>No meter.</strong> 100 prompts a month free, 2,000 on Pro, unlimited only on Enterprise. Locally, nothing ticks down.</li>
+      <li><strong>No account.</strong> The free tiers work straight after download — no email, no usage history attached to an identity.</li>
+      <li><strong>Price, honestly told.</strong> Month to month it's $30 against $20. Annually it's $144 against $149 — Grammarly is five dollars cheaper and I won't pretend otherwise. Lifetime licenses from $99 change that past year one.</li>
+      <li><strong>Model transparency.</strong> You know which model answered, you can pin a version, and the weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. Grammarly names its AI subprocessors collectively, not which one serves which feature.</li>
+      <li><strong>Surface stability.</strong> Grammarly for Word on Mac was discontinued and Grammarly for Microsoft Office is being retired; the parent company rebranded to Superhuman in late 2025 and the privacy policy moved off grammarly.com. None of that makes the checker worse — it does mean the surfaces move.</li>
+    </ul>
+
+    <h2>The quality question, answered honestly</h2>
+    <p>I don't have a head-to-head grammatical-error-correction benchmark against Grammarly, and I won't invent one. What I have is a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt run against Claude Opus</a>, where the local Core 27B matched on 98.9% of rubric checks and 100% on the nine hardest prompts, plus a blind slice of SWE-bench Verified at about 45%. Those are assistant and coding numbers; they say nothing about comma splices.</p>
+
+    <p>My read from daily use: a 27B general model is good at the <em>structural</em> half of editing — this paragraph buries its point, this sentence carries two ideas, this draft runs forty percent long. It's weaker at the <em>mechanical</em> half, where you want every instance flagged, not most of them noticed. Grammarly is built for the mechanical half and it shows.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Grammarly if</strong> you want correction everywhere you type without thinking about it; you write in more than one language or a non-American English variant; procurement needs certifications; you're on an Intel Mac, a PC, an 8 GB laptop or a phone; or your team needs shared style guides.</p>
+
+    <p><strong>Run it locally if</strong> your drafts are confidential — client work, legal filings, medical notes, unpublished writing; you edit offline; you'd rather your text not train anyone's model; or you don't want an account.</p>
+
+    <p><strong>Use both</strong>, which is what I'd tell most people. Grammarly Free does the mechanical pass everywhere you type; a local model handles what shouldn't leave the machine, plus the structural rewriting.</p>
+
+    <div class="receipts">
+      <strong>Sources:</strong> plan features and limits from <a href="https://www.grammarly.com/plans">grammarly.com/plans</a>; pricing, the offline statement, hosting, retention and the training default from Grammarly's support articles and security page; AI subprocessors from <a href="https://superhuman.com/legal/subprocessors">superhuman.com/legal/subprocessors</a>; ISO/IEC 42001 from the April 2025 announcement. Checked 2026-07-23 — <strong>competitor pricing, limits and privacy defaults change; verify against Grammarly's pages.</strong> Outlier tiers measured on an M1 Ultra Mac Studio; benchmark at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/</a>.
+    </div>
+
+    <div class="cta">
+      <h3>Try the local half for free</h3>
+      <p>Nano and Lite run on your Mac with no account and nothing uploaded. Paste in a draft and see how the structural editing holds up.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=grammarly-vs-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a></p>
+    </div>
+  </div>
+
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

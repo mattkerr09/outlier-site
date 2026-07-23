@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple unified memory vs an NVIDIA RTX GPU for local LLMs | Outlier</title>
+  <meta name="description" content="A neutral hardware comparison: Apple silicon unified memory vs an NVIDIA RTX discrete GPU for running LLMs locally. Capacity, bandwidth, what fits, power, and price per usable gigabyte.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Apple unified memory vs an NVIDIA RTX GPU for local LLMs">
+  <meta property="og:description" content="Capacity vs bandwidth, what model sizes actually fit, thermals, price per usable gigabyte, and upgrade paths — an engineering comparison, not a product pitch.">
+  <meta property="og:url" content="https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apple unified memory vs an NVIDIA RTX GPU for local LLMs">
+  <meta name="twitter:description" content="Apple wins on what fits. NVIDIA wins on how fast it runs once it fits. The honest engineering breakdown.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Apple unified memory vs an NVIDIA RTX GPU for local LLMs","description":"A neutral hardware comparison: Apple silicon unified memory vs an NVIDIA RTX discrete GPU for running LLMs locally. Capacity, bandwidth, what fits, power, and price per usable gigabyte.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Apple unified memory vs an NVIDIA RTX GPU","item":"https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Apple unified memory vs an NVIDIA RTX GPU for local LLMs</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Apple silicon holds model weights in one unified pool — 36GB to 128GB on an M4 Max Mac Studio, 96GB and up on an M3 Ultra — while a GeForce RTX 5090 holds 32GB of GDDR7. An RTX card is considerably quicker on any model that fits in that VRAM, especially at prompt processing. Buy Apple for capacity per dollar and power draw; buy NVIDIA for throughput and CUDA support.</p>
+    </div>
+
+    <p class="lead">Disclosure up front: I build Outlier, a Mac-only local AI app, so my day job sits on the Apple side of this. What follows is what I'd have wanted to read before spending my own money, including where a discrete GPU is simply the better machine.</p>
+
+    <h2>Two ways to hold a model</h2>
+    <p>Apple silicon puts one pool of LPDDR5X on the SoC, addressed directly by CPU, GPU and Neural Engine. Apple's framing of the M3 Ultra: "The unified memory architecture of M3 Ultra integrates the most high-bandwidth, low-latency memory ever available in a personal computer." A Mac Studio starts at 36GB with M4 Max and goes to 128GB; M3 Ultra starts at 96GB, and all of it can hold weights.</p>
+
+    <p>An RTX card inverts that — a smaller pool of quicker memory bolted to far more compute. The 5090 has 32GB of GDDR7 on a 512-bit interface, 1,792 GB/sec of bandwidth and 21,760 CUDA cores at $1,999; below it, 16GB on the 5080 ($999) and 5070 Ti ($749), 12GB on the 5070 ($549). The structure matters more than the specs: a discrete GPU needs a host-to-device copy, so weights cross PCIe into VRAM and whatever doesn't fit stays behind. In Apple's MLX there's no transfer step at all — arrays live in shared memory.</p>
+
+    <h2>Capacity versus bandwidth</h2>
+    <p>Inference has two phases with different bottlenecks, and conflating them is where hardware advice goes wrong. llama.cpp's benchmark thread puts it plainly: prompt processing at large batch size "is compute bound... speed depends on how many FLOPS you can utilize," while generating one token at a time is bandwidth-bound. Bandwidth sets tokens per second; compute sets how long you wait first.</p>
+
+    <p>Apple's top configuration reaches over 800 GB/s (819 GB/s for M3 Ultra); M4 Max is 410 or 546 GB/s. Community-submitted llama.cpp scoreboard results, all Llama 2 7B Q4_0, put a 5090 at roughly 14,000 tok/s prefill and 290 tok/s generation against about 1,240 / 94 on an M2 Ultra and 714 / 70 on an M4 Max — near 11x and 3x. Crowd-sourced, one small model: directional, not vendor-certified.</p>
+
+    <h2>What actually fits</h2>
+    <p>Here's the wall. A 70B model at 4-bit is roughly 40GB of weights before any KV cache, so it doesn't fit in 32GB. llama.cpp will offload the overflow to system RAM over PCIe and throughput collapses. Apple claims an M3 Ultra Mac Studio runs models of over 600 billion parameters entirely in memory.</p>
+
+    <p>Concrete sizes: Outlier's tiers are the ones I have exact figures for. Nano 4B is a 2.37GB download needing 6GB of RAM; Lite 9B 5.04GB / 12GB; Quick 26B-a4b 15.61GB / 16GB; Core and Code 27B 15.13GB / 24GB; Vision 35B-a3b 19.0GB / 24GB. All fit a 32GB 5090 and would run quicker there than on my M1 Ultra, where Core measures 20.7 tok/s. The tier above flips it: Plus is 397B-a17b, a 209GB download that runs on a 64GB Mac by streaming experts off the SSD — 2.1 tok/s. Paging weights from slower storage always costs an order of magnitude.</p>
+
+    <p>One caveat cuts against Apple: macOS won't hand a process the whole pool for GPU work. Metal exposes a recommended maximum working set, commonly cited as roughly 75% of RAM and adjustable via <code>iogpu.wired_limit_mb</code>. That figure comes from an Apple Developer Forums thread, not documentation — budget below the sticker number.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Apple silicon (Mac Studio)</th>
+          <th>NVIDIA GeForce RTX 50</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Memory capacity</strong></td>
+          <td>36–128GB (M4 Max); 96GB+ (M3 Ultra)</td>
+          <td>12 / 16 / 32GB (5070 / 5080 / 5090)</td>
+        </tr>
+        <tr>
+          <td><strong>Memory bandwidth</strong></td>
+          <td>410 or 546 GB/s (M4 Max); 819 GB/s (M3 Ultra)</td>
+          <td>672 / 960 / 1,792 GB/s</td>
+        </tr>
+        <tr>
+          <td><strong>What fits at 4-bit</strong></td>
+          <td>Over 600B params per Apple</td>
+          <td>Fine to ~30B; not 70B</td>
+        </tr>
+        <tr>
+          <td><strong>Throughput (7B Q4_0)</strong></td>
+          <td>~714–1,240 prefill / ~70–94 gen</td>
+          <td>~14,000 prefill / ~290 gen (5090)</td>
+        </tr>
+        <tr>
+          <td><strong>Power envelope</strong></td>
+          <td>480W max, whole machine</td>
+          <td>575W listed, card only</td>
+        </tr>
+        <tr>
+          <td><strong>Entry price</strong></td>
+          <td>From $1,999 (whole computer)</td>
+          <td>$549–$1,999 (card only)</td>
+        </tr>
+        <tr>
+          <td><strong>Upgrade path</strong></td>
+          <td>None — soldered at purchase</td>
+          <td>Swap or add cards; resale market</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where the NVIDIA card genuinely wins</h2>
+    <p>Prompt processing isn't close, and it's the argument I'd lead with from the other side. Anything that re-reads a long context every turn — agent loops, RAG, codebase Q&amp;A, tool calls — pays that prefill cost repeatedly. An 11x gap is the difference between instant and a visible wait, and it grows with context.</p>
+
+    <p>Software is the second honest win. CUDA is the reference platform: vLLM, TensorRT-LLM and flash-attention target it first, and new architectures and quantization formats have a working CUDA path on day one. vLLM's own docs still route macOS builds to CPU unless you add a Metal plugin. Fine-tuning is the same story — LoRA, QLoRA and full fine-tunes work out of the box with mainstream PyTorch; the Mac path goes through MLX with fewer recipes.</p>
+
+    <p>NVIDIA isn't conceding capacity, either. DGX Spark pairs a 20-core Arm CPU with a Blackwell GPU over 128GB of coherent LPDDR5x at 273 GB/s, with a 140W SoC TDP; NVIDIA's marketplace has listed it at $4,699, which I'm reporting rather than confirming. In May 2026 NVIDIA announced RTX Spark — Grace CPU plus Blackwell RTX GPU over NVLink-C2C, "up to 128GB of unified memory," 1 petaflop of AI performance, and a claim of 120B-parameter models at 1M tokens of context — shipping this fall through ASUS, Dell, HP, Lenovo and others. Unified memory won't be an Apple-only idea by autumn.</p>
+
+    <h2>Power, thermals, and price per usable gigabyte</h2>
+    <p>I have no instrumented sustained-load numbers for either platform, so I'll stick to published envelopes. Apple rates the entire Mac Studio at 480W maximum continuous power. NVIDIA's listed total graphics power for the 5090 is 575W for the card alone — a figure off NVIDIA's product listing, not a spec table I pulled directly. That means a large PSU, real airflow and fan noise on long runs. Desk-side or laptop-first, it's a category difference.</p>
+
+    <p>On price, $1,999 buys either a complete Mac Studio with 36GB or one 5090 with 32GB that still needs a computer around it: roughly $55 per gigabyte of unified memory versus $62 per gigabyte of VRAM plus a host. If the ~75% cap holds, Apple's effective number is nearer $74 per usable gigabyte. The math swings to Apple only above 32GB, where consumer GeForce has nothing to sell you — NVIDIA's answer is the RTX PRO 6000 Blackwell at 96GB and up to 600W: workstation money for one card.</p>
+
+    <p>Upgrade paths are the underestimated asymmetry. A card is a slot decision you can revisit, resell or double — though GeForce has no NVLink, so a second card is PCIe-bound with no automatic VRAM pooling. Apple's memory is soldered at purchase, so buying too little is permanent. Tom's Hardware reported in March 2026 that Apple pulled the 512GB M3 Ultra option and raised the 256GB upgrade to $2,000. The same shortage reportedly pushed NVIDIA's SUPER refresh toward 2027.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick an RTX card if</strong> your models fit in 32GB and speed is the point; if you fine-tune; if you need day-one support for new formats; if you're prototyping for cloud deployment; or if you own a PC and want the cheapest credible entry — a $549 card, not a whole machine.</p>
+
+    <p><strong>Pick Apple silicon if</strong> you want models that don't fit in 32GB at all; if the machine is a laptop or sits where 575W of card is a non-starter; if you build or use native macOS software, since CUDA is licensed only for systems with NVIDIA GPUs; or if you'd rather own one quiet computer than a build.</p>
+
+    <p><strong>Both share the part I care about most.</strong> With llama.cpp, MLX or Ollama, inference runs entirely on your machine — no prompts leave the box, and there's no training policy to compare because there's no vendor endpoint. That's a property of running locally, not of either company's silicon.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Apple bandwidth, memory ranges, 480W power, the 600B-parameter claim and the $1,999 start from <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a> and Apple Newsroom (March 2025); GeForce specs and prices from NVIDIA's RTX 50 announcement. Throughput is community-submitted llama.cpp scoreboard data on Llama 2 7B Q4_0, not a vendor benchmark. <strong>Not confirmed from primary sources:</strong> the 5090's 575W TGP, RTX PRO 6000 specs, DGX Spark's $4,699 price, the ~75% macOS working-set cap (Apple Developer Forums) and the 512GB removal plus delayed SUPER refresh (Tom's Hardware). RTX Spark bandwidth and price are undisclosed. Outlier figures measured on a 64GB M1 Ultra. Competitor pricing and policies change fast; re-check before buying.
+    </div>
+
+    <div class="cta">
+      <h3>Running local models on a Mac?</h3>
+      <p>Seven model tiers, on-device, no account, nothing uploaded. The free tier needs 6GB of RAM.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mac-vs-nvidia-gpu-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

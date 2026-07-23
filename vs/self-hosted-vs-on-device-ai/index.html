@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Self-hosted LLM vs on-device: the real trade-offs | Outlier</title>
+  <meta name="description" content="Running vLLM or llama.cpp on your own GPU server versus running the same open weights on the user's own machine. Mechanism, cost, concurrency, and when each is correct.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/self-hosted-vs-on-device-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Self-hosted LLM vs on-device: the real trade-offs">
+  <meta property="og:description" content="vLLM/llama.cpp on a rented GPU versus the same open weights running in an app on your own machine. Model size ceiling, concurrency, cost, and offline behavior.">
+  <meta property="og:url" content="https://outlier.host/vs/self-hosted-vs-on-device-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Self-hosted LLM vs on-device: the real trade-offs">
+  <meta name="twitter:description" content="Server-side vLLM versus on-device inference — model size, concurrency, cost per month, and what breaks in each.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Self-hosted LLM vs on-device: the real trade-offs","description":"Running vLLM or llama.cpp on your own GPU server versus running the same open weights on the user's own machine. Mechanism, cost, concurrency, and when each is correct.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/self-hosted-vs-on-device-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Self-hosted LLM vs on-device","item":"https://outlier.host/vs/self-hosted-vs-on-device-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Self-hosting an LLM vs running it on-device</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Self-hosting an LLM means running open-weight model files yourself on a GPU server you rent or own — usually vLLM or llama.cpp behind an OpenAI-compatible HTTP API. On-device means the same class of open weights runs inside an app on the user's own machine, with no server in the path. Self-hosting wins on model size and concurrency; on-device wins on recurring cost, offline operation, and the fact that no prompt crosses a network.</p>
+    </div>
+
+    <p class="lead">Both approaches run the same open weights on hardware you control. The difference is <em>whose</em> hardware, and that choice cascades: model size ceiling, concurrency, monthly cost, ops load. Disclosure up front — I build <a href="https://outlier.host/">Outlier</a>, a Mac app that takes the on-device route, so I'm an interested party here.</p>
+
+    <h2>What self-hosting actually means</h2>
+    <p>You put open weights on a disk attached to a GPU and start an inference server that loads them into VRAM and speaks HTTP. Usually one of three. <strong>vLLM</strong> (Apache-2.0) targets NVIDIA, AMD and Intel GPUs plus x86/ARM/PowerPC CPUs. <strong>llama.cpp</strong> (MIT) ships <code>llama-server</code>, "a lightweight, OpenAI API compatible, HTTP server for serving LLMs," covering Metal, CUDA, Vulkan and SYCL with 1.5-bit through 8-bit quantization. <strong>Ollama</strong> (MIT) wraps the same idea in a REST API on <code>http://localhost:11434</code>.</p>
+
+    <p>What makes vLLM the default for serious serving is PagedAttention: it partitions the KV cache into blocks the way an OS pages memory, which the project says cuts cache waste from 60–80% to under 4% and lets you batch far more sequences onto one card. Their launch post claimed up to 24× the throughput of naive Hugging Face serving — June 2023, against 2023 baselines, so read it as a historical marker, not a current head-to-head.</p>
+
+    <h2>What on-device actually means</h2>
+    <p>Same weights, different destination: downloaded to the user's machine, loaded into that machine's memory, inference in-process. On Apple Silicon the usual substrate is <strong>MLX</strong> (MIT), built around unified memory — "arrays in MLX live in shared memory. Operations on MLX arrays can be performed on any of the supported device types without transferring data." That erases the host-to-VRAM copy, and the model's budget becomes your whole RAM rather than a separate 24 GB or 80 GB pool.</p>
+
+    <p>The ceiling is whatever the machine shipped with, and you can't add more later. Outlier is one example: tiers from Nano (4B, 2.37 GB download, 6 GB RAM, 71.7 tok/s on an M1 Ultra) up to Plus (397B-a17b, a 209 GB download needing 64 GB of RAM, running 2.1 tok/s by paging MoE experts off the SSD at ~11 GB peak RSS). That top tier is the on-device answer to "the model doesn't fit," and the price is speed. Every on-device stack hits the same wall.</p>
+
+    <p>The two stacks also don't share hardware. vLLM's install matrix targets NVIDIA CUDA, AMD ROCm, Intel XPU and CPU; Apple Silicon appears only "via vLLM-Metal," a separate project outside the main repo, plus CPU-only support. Self-hosting means NVIDIA and CUDA; on-device on a Mac means Metal and MLX. llama.cpp is the one runtime spanning both.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Axis</th>
+          <th>Self-hosted server</th>
+          <th>On-device</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Model size ceiling</strong></td><td>Unbounded — tensor parallelism spans GPUs; 671B-class is servable</td><td>Capped by installed memory</td></tr>
+        <tr><td><strong>Concurrency</strong></td><td>Many users per GPU via continuous batching</td><td>One user, by construction</td></tr>
+        <tr><td><strong>Memory bandwidth</strong></td><td>H100 SXM 3.35 TB/s; NVL 3.9 TB/s at 94 GB</td><td>Consumer unified memory, well below that</td></tr>
+        <tr><td><strong>Recurring cost</strong></td><td>$0.69–$4.29/GPU/hr rented; owned means up to 700 W per H100 SXM</td><td>None beyond hardware you own</td></tr>
+        <tr><td><strong>Network</strong></td><td>Required — every token crosses a link</td><td>None; works with Wi-Fi off</td></tr>
+        <tr><td><strong>Auth</strong></td><td>Operator-supplied (<code>--api-key</code>, proxy, tunnel)</td><td>No listening endpoint</td></tr>
+        <tr><td><strong>Ops burden</strong></td><td>Cluster, storage, secrets, TLS, monitoring, on-call</td><td>Install the app</td></tr>
+        <tr><td><strong>Auditability</strong></td><td>Central logs and metrics across a fleet</td><td>Per-machine only</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where self-hosting genuinely wins</h2>
+    <p>These are real, and I'm not going to soften them.</p>
+    <ul>
+      <li><strong>Model size has no ceiling.</strong> <code>--tensor-parallel-size</code> splits one model across GPUs, so a rack serves DeepSeek-V3 — 671B total parameters, 37B activated per token — or gpt-oss-120b, which needs an 80 GB GPU. No laptop holds those.</li>
+      <li><strong>Concurrency is the real differentiator.</strong> Continuous batching plus PagedAttention means one GPU serves a team; an on-device app serves exactly one person. With 40 engineers, the math isn't close.</li>
+      <li><strong>Bandwidth.</strong> 3.35 TB/s on an H100 SXM is what makes long-context prefill and large-batch decode quick — the dimension where datacenter silicon most clearly beats a desktop.</li>
+      <li><strong>One endpoint, many clients.</strong> vLLM and <code>llama-server</code> both speak the OpenAI API, so a single deployment backs laptops, phones, CI jobs and internal tools with one upgrade path.</li>
+      <li><strong>Operability.</strong> Versioned config, container deploys, central logs, per-key auth. You can answer "what did we ask the model last Tuesday" across an org — impossible across desktop installs.</li>
+      <li><strong>It offloads the work.</strong> No battery drain, no thermal throttling, no multi-gigabyte footprint fighting the user's real apps, and jobs survive a closed laptop.</li>
+      <li><strong>Data control can equal on-device</strong> when the hardware is literally yours. On your own metal or VPC, prompts never reach a model vendor and retention is your policy.</li>
+    </ul>
+
+    <h2>Where on-device genuinely wins</h2>
+    <p><strong>The bill never arrives.</strong> RunPod's H100 PCIe is $2.89/hr — roughly $2,110/month at 730 hours if you leave it up — and even a 4090 pod is about $504/month. Lambda's single H100 SXM is $4.29/GPU/hr; Hugging Face Inference Endpoints run $0.80/hr for an L4 to $4.50/hr for an H100. Fair prices for real hardware; they just don't stop. You pay for idle too: pods bill from worker start to full stop, and even scale-to-zero Flex workers keep a billed idle timeout and reintroduce cold starts, trading money for first-token latency.</p>
+
+    <p><strong>Nothing crosses a network.</strong> Unless the server is in your building, every request enters a datacenter with physical custody of the box and the RAM the model runs in. AWS's data-privacy FAQ says "we do not access or use your content for any purpose without your agreement," but that page doesn't explicitly address AI/ML training use — you'd confirm that in the service terms, and the answer differs per provider. On-device sidesteps the question rather than answering it.</p>
+
+    <p><strong>Security is structural, not configured.</strong> Ollama binds 127.0.0.1:11434, and its FAQ's answer for network access is Nginx, ngrok or Cloudflare Tunnel — auth is what the operator adds. vLLM's <code>--api-key</code> is a header check, a floor rather than a security model. A misconfigured bind is an unauthenticated inference endpoint on the internet; an app with no listening socket has no such failure mode.</p>
+
+    <p><strong>And there's no infrastructure.</strong> vLLM's Kubernetes guide wants a GPU-capable cluster, a PVC for model storage, a Secret holding a Hugging Face token, and a shared-memory volume for tensor parallelism — before TLS, rate limiting or on-call.</p>
+
+    <h2>One thing neither side escapes: licenses</h2>
+    <p>Open weights aren't automatically open source. Llama 3.3 requires a separate license from Meta above 700 million monthly active users and mandates "Built with Llama" attribution. DeepSeek-V3's code is MIT, but the weights sit under a separate Model License. Qwen3.6-27B is plain Apache-2.0, as is gpt-oss-20b. Even Open WebUI adds a branding clause you only escape under 50 end users per 30 days.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Self-host if</strong> you need a model no consumer machine can hold, you're serving more than one person, you need central audit logs and key rotation, or you run long-context and batch work where 3+ TB/s of bandwidth is the point. Also self-host when compliance requires inference on hardware your organization owns — something on-device can't satisfy at fleet scale.</p>
+
+    <p><strong>Go on-device if</strong> the workload is one person at a time, the recurring bill is the problem, the machine has to work without a connection, or the data is the kind you'd rather not transit anyone's network. Outlier is one implementation of that shape — Apple Silicon only, M1 or later, macOS 12+, no account, no caps, nothing uploaded, free at the Nano and Lite tiers. It has no web search, no image generation, no mobile app, no voice mode and no Windows or Linux build, because those are the costs of the architecture. LM Studio, Jan, and a locally compiled llama.cpp are the same category with different trade-offs.</p>
+
+    <p>Plenty of teams run both: a shared server for the big model and the batch jobs, an on-device app for the sensitive and offline work. The right answer changes per task.</p>
+
+    <div class="receipts">
+      <strong>Sources:</strong> install matrix, <code>serve</code> flags and Kubernetes requirements from <a href="https://github.com/vllm-project/vllm">vLLM's repo</a> and <a href="https://docs.vllm.ai/en/latest/">docs</a>; the 24× and PagedAttention figures come from the <a href="https://vllm.ai/blog/2023-06-20-vllm">June 20, 2023 launch post</a>, not a current benchmark. Binding and data statement from <a href="https://docs.ollama.com/faq">Ollama's FAQ</a>; llama.cpp and MLX from their READMEs. Pricing from <a href="https://www.runpod.io/pricing">RunPod</a>, <a href="https://lambda.ai/service/gpu-cloud#pricing">Lambda</a> and <a href="https://huggingface.co/pricing">Hugging Face</a> — monthly figures are my arithmetic at 730 hours. H100 specs from <a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA</a>; licenses from each Hugging Face repo. <strong>Pricing and vendor policies change often</strong> — check the links before budgeting. Outlier figures measured on an M1 Ultra.
+    </div>
+
+    <div class="cta">
+      <h3>Want to see the on-device side firsthand?</h3>
+      <p>Outlier runs open weights entirely on your Mac — no account, no caps, works with Wi-Fi off. Nano and Lite are free.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=self-hosted-vs-on-device-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

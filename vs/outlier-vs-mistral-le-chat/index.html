@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Mistral Le Chat (now Vibe): local Mac AI vs a European cloud assistant | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Mistral Le Chat, renamed Vibe in 2026. Price, usage caps, offline use, training opt-out, and where each one genuinely wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-mistral-le-chat/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Mistral Le Chat (now Vibe): local Mac AI vs a European cloud assistant">
+  <meta property="og:description" content="Mistral's assistant is $14.99/mo, cloud-only, and trains on consumer input by default unless you opt out. Outlier runs on your Mac with no account. An honest side-by-side.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-mistral-le-chat/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Mistral Le Chat (now Vibe): local Mac AI vs a European cloud assistant">
+  <meta name="twitter:description" content="Price, caps, offline use, and what happens to your data — an honest comparison from Outlier's founder.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Mistral Le Chat (now Vibe): local Mac AI vs a European cloud assistant","description":"Honest comparison of Outlier (local Mac AI) vs Mistral Le Chat, renamed Vibe in 2026. Price, usage caps, offline use, training opt-out, and where each one genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-mistral-le-chat/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Mistral Le Chat","item":"https://outlier.host/vs/outlier-vs-mistral-le-chat/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Mistral Le Chat (now Vibe): local Mac AI vs a European cloud assistant</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Mistral Le Chat — renamed Vibe during 2026 — is a cloud assistant from the French company Mistral AI. Pro is $14.99/month, an account is required, every prompt runs on Mistral's servers, and on consumer tiers your input trains their models unless you find the opt-out. Outlier is a Mac app where the model runs on your own hardware: no account, no caps, works with Wi-Fi off, nothing uploaded — but no web search, image generation, mobile app, or voice mode, all of which Mistral has.</p>
+    </div>
+
+    <p class="lead">Full disclosure: I built Outlier and I sell it, which is an obvious bias. So I've written this from Mistral's own pricing page, docs, and privacy policy, and linked it all at the bottom so you can check me. Mistral's assistant does several things Outlier simply cannot.</p>
+
+    <h2>What Mistral Le Chat is</h2>
+    <p>Le Chat is Mistral AI's consumer and business assistant. During 2026 it was rebranded to <strong>Mistral Vibe</strong> — the docs state "Le Chat is now Vibe," with conversations, settings, and plans carried over. Mistral's surfaces disagree on the date (the help-center article says June 5, 2026; announcements cluster in late May), so trust the month, not the day. The entry point is still chat.mistral.ai.</p>
+
+    <p>Vibe runs in three modes — Chat, Work for multi-step professional tasks, and Code for development — operating "across web, mobile, your code editor, and your terminal." That means a web app, iOS and Android apps, a terminal CLI, and VS Code and JetBrains plugins. There's no desktop app on any platform, including macOS; the pricing page's Interfaces list covers web, CLI, IDE, and mobile only. Desktop "Le Chat" wrappers on GitHub are community projects, not Mistral software.</p>
+
+    <p>Work mode runs on Mistral Medium 3.5, a 128B dense model with a 256k context window; coding runs on the Devstral 2 family. Both are cloud-served — but the weights are published, which is unusual.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native Mac app for Apple Silicon (M1 or later, macOS 12+). It downloads a model once, then runs it on your machine — no account, no caps, and it works with the Wi-Fi off. Seven tiers, from Nano (4B, 2.37 GB, runs in 6 GB of RAM) up to Plus 397B-a17b, which streams experts from SSD and needs a 64 GB machine.</p>
+
+    <p>Nano and Lite are free, no account. Pro is $20/month or $149/year for all seven tiers, lifetime from $99. What Outlier does <em>not</em> have, plainly: web search, image generation, a mobile app, voice mode, Windows or Linux builds, cloud sync.</p>
+
+    <h2>Side-by-side comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Mistral Free</th>
+          <th>Mistral Pro</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>$0</td>
+          <td>$14.99/mo (ex. tax)</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>"Limited" messages; 2 Code Web sessions/day</td>
+          <td>"Up to 6x free"; fair-use limits</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No (CLI with local models only)</td>
+          <td>No (CLI with local models only)</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes — all prompts and files</td>
+          <td>Yes — all prompts and files</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Trains on your input</strong></td>
+          <td>Yes, opt-out</td>
+          <td>Yes, opt-out</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td>Web, iOS, Android, CLI, VS&nbsp;Code/JetBrains</td>
+          <td>Same</td>
+          <td>macOS (Apple Silicon)</td>
+          <td>macOS (Apple Silicon)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Mistral genuinely wins</h2>
+    <p>Several of these are things Outlier structurally can't do.</p>
+    <ul>
+      <li><strong>Web search.</strong> Vibe searches the live web; Outlier answers from what's in the weights. If your work depends on this week's news, that alone decides it.</li>
+      <li><strong>Image generation, voice, and mobile.</strong> Image generation is included even on the free tier. Voice mode handles recording, transcription, and summaries. There are real iOS and Android apps. Outlier is text, on a Mac.</li>
+      <li><strong>Price.</strong> $14.99/month undercuts the $20/month that ChatGPT Plus, Claude Pro, and Outlier Pro all charge. Verified students pay $5.99/month for up to 12 months.</li>
+      <li><strong>The weights are actually open.</strong> Mistral Large 3 (675B) and Devstral Small 2 (24B) are Apache-2.0 on Hugging Face; Medium 3.5 (128B) is under a modified MIT license. If Mistral vanished, the weights would still exist.</li>
+      <li><strong>The CLI is real open source and isn't cloud-locked.</strong> github.com/mistralai/mistral-vibe is Apache-2.0, ~4,700 stars, actively pushed as of July 2026. An account is optional, and the docs say it "works fully offline with local models, or against any compatible API key you provide."</li>
+      <li><strong>Ecosystem depth.</strong> 100+ connectors, custom remote MCP servers, Workflows, scheduled tasks, hooks, a code-interpreter sandbox, 15 GB storage on Pro.</li>
+      <li><strong>Agents that work with the lid closed.</strong> "Teleport" hands a coding session from your terminal to a remote agent and back. When your Mac sleeps, Outlier stops.</li>
+      <li><strong>EU-native posture.</strong> EU providers prioritized, Standard Contractual Clauses for transfers, a published DPA, self-serve deletion, a training opt-out, and on-premises or private-cloud deployment for enterprise.</li>
+      <li><strong>Coding scores.</strong> Devstral 2 reports 72.2% on SWE-bench Verified. On a blind slice of that benchmark Outlier's local 27B measured about 45% (18/40). The cloud model is ahead.</li>
+    </ul>
+
+    <h2>What it costs over a year</h2>
+    <p>Mistral doesn't publish an annual plan, so the honest arithmetic is twelve monthly payments: <strong>$14.99 × 12 = $179.88 a year, before tax</strong>. The App Store listing shows a second in-app purchase at $149.99 alongside the $14.99 one, consistent with annual billing — but it doesn't label the period, so treat that as an inference, not a price. Outlier Pro is $20/month or $149/year (about $12.42/month yearly), lifetime from $99. Mistral Team is $24.99/user/month with a <strong>$50/month minimum</strong>, so a solo user on Team pays for two seats.</p>
+
+    <p>The bigger caveat: you can't tell what you're buying. Free is "limited messages and web searches." Paid is "Up to 6x free" messages and "Up to 5x free" web searches, every tier marked "subject to fair usage limits." No absolute numbers are published. Vibe Code Web is the one place with hard figures: 2 sessions per day free, 100 paid, 24-hour maximum session, 3-hour inactivity timeout. Outlier has no caps — no server to meter, so the ceiling is your Mac.</p>
+
+    <h2>What happens to your data</h2>
+    <p>This is where the two differ most. Read the policy, not the marketing.</p>
+
+    <p><strong>Training is opt-out, not opt-in.</strong> The policy covers "Your Input and Output, subject to your opt-out," and says Mistral doesn't train on your data "when you use Le Chat Enterprise or the paid version of our APIs." A paying Pro subscriber isn't in that exclusion. An account-level control to object exists — you have to find it and flip it.</p>
+
+    <p><strong>Retention has no default expiry.</strong> Mistral keeps input and output "until you delete your account or until you delete the conversation." There's no consumer equivalent of the API's zero-data-retention mode.</p>
+
+    <p><strong>"European AI" doesn't mean data never leaves Europe.</strong> The policy prioritizes EU providers but reserves the right, "in exceptional cases," to use non-EU ones under Article 46 safeguards — a well-documented position, but not a guarantee. A Memory feature also stores past interactions, and the policy warns that sensitive input such as health details "may be stored as a Memory."</p>
+
+    <p>Outlier's answer is structural, not contractual: no server, so no retention policy, no training toggle, no transfer mechanism. That's not virtue on my part — it's what happens when inference runs on your own silicon. And one wrinkle on Mistral's side: only the CLI is open source, so the web and mobile clients most people touch have to be taken on trust.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Mistral Vibe if</strong> you need live web results, image generation, voice, or a phone app; you want one $14.99 subscription covering chat and coding; you're a student eligible for $5.99; you want agents that run while your laptop is shut; or you're an EU organization that wants a GDPR-native vendor with an on-premises path.</p>
+
+    <p><strong>Pick Outlier if</strong> you handle material you can't upload — client files, patient notes, unreleased code, legal drafts — and want that guaranteed by architecture, not a setting; you work offline; or you'd rather pay a fixed $149/year with nothing metered. In a 54-prompt head-to-head, Core 27B matched Claude Opus on 98.9% of rubric checks and 100% on the nine hardest prompts, so for everyday writing and reasoning the local gap is smaller than parameter counts suggest.</p>
+
+    <p><strong>Run both</strong> if you can. Vibe for the live web or a phone; Outlier for sensitive, offline, or high-volume work. That's how I use it.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Prices, tiers, interfaces, features from <a href="https://mistral.ai/pricing">mistral.ai/pricing</a> (July 2026); rebrand and modes from <a href="https://docs.mistral.ai/vibe/overview">the Vibe docs</a>; offline CLI behavior from <a href="https://docs.mistral.ai/vibe/code/cli/install-setup">the CLI install guide</a>; session caps from <a href="https://docs.mistral.ai/vibe/code/vibe-code-web/limits-and-lifecycle">Vibe Code Web limits</a>; training, retention, transfer, and Memory language quoted from the <a href="https://legal.mistral.ai/terms/privacy-policy">privacy policy</a>. Model licenses verified on Hugging Face, CLI license on <a href="https://github.com/mistralai/mistral-vibe">GitHub</a>. The $149.99 App Store tier is an inference about annual billing, not a stated price. Outlier specs measured on an M1 Ultra; the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a> is published in full. Competitor pricing and policies change often — check the linked pages first.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever, run entirely on your Mac, and work offline.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-mistral-le-chat">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

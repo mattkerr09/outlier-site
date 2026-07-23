@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Cline: on-device Mac app vs open-source VS Code agent | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (on-device Mac AI) and Cline (open-source VS Code coding agent). Where each lives, which model drives it, whether code leaves your machine, cost, and agentic ability.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-cline/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Cline: on-device Mac app vs open-source VS Code agent">
+  <meta property="og:description" content="Cline is an Apache-2.0 coding agent that ships no model. Outlier is a Mac app that runs its own models on-device. An honest look at both, by Outlier's founder.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-cline/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Cline: on-device Mac app vs open-source VS Code agent">
+  <meta name="twitter:description" content="Editor agent vs on-device app: where each lives, which model drives it, whether code leaves the machine, and what it costs.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Cline: on-device Mac app vs open-source VS Code agent","description":"Honest comparison of Outlier (on-device Mac AI) and Cline (open-source VS Code coding agent). Where each lives, which model drives it, whether code leaves your machine, cost, agentic ability, and repo-scale context.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-cline/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Cline","item":"https://outlier.host/vs/outlier-vs-cline/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Cline: on-device Mac app vs open-source VS Code agent</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Cline is an open-source (Apache 2.0) coding agent that lives inside VS Code and your terminal and ships no model of its own — you point it at Anthropic, OpenAI, Google, or a local server and pay that provider per token. Outlier is a standalone Apple Silicon Mac app running its own models on-device, with no account and no per-token bill, but it won't touch your files. Want an agent working inside your repo? Cline. Want a capable model whose prompts never leave your Mac? Outlier.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr, and I build Outlier — so read this as a comparison written by an interested party. Every claim about Cline is checkable against its own docs, linked at the end. Both tools appeal to developers who don't want their code in someone else's product, but they solve that in different places: one is a harness, the other a model runtime.</p>
+
+    <h2>What Cline is — and what it isn't</h2>
+    <p>Cline calls itself "an AI coding agent that lives in your editor and your terminal." It's Apache 2.0, with roughly 65,000 GitHub stars and about 4.74 million VS Code Marketplace installs. The detail that matters most is missing from that sentence: Cline trains and ships no model. It's an agent loop, a tool layer and an approval UI; the intelligence comes from whatever you attach — Anthropic, OpenAI, Google, OpenRouter, Bedrock, Vertex, Groq, or a local Ollama or LM Studio server.</p>
+    <p>So the comparison tilts both ways: point Cline at a frontier cloud model and it out-reasons Outlier; point it at a small local one and it won't. Outlier ships the model, so what you get is what I measured.</p>
+
+    <h2>Where each one lives</h2>
+    <p>Cline is a passenger. Documented install targets include VS Code, Cursor, Windsurf, VSCodium, Antigravity and JetBrains, with Zed and Neovim via ACP mode. There's also a real CLI (<code>npm i -g cline</code>, Node 20+) that runs interactively or headless — headless triggers automatically with <code>--json</code> or piped stdin, which makes it usable in CI. But there's no standalone macOS app and no mobile app: if you don't already live in a supported editor or terminal, Cline isn't usable at all.</p>
+    <p>Outlier is the opposite shape — a native Mac app for Apple Silicon (M1 or later, macOS 12+). No Intel, no Windows, no Linux, no mobile. You open it and type; it doesn't sit in VS Code and doesn't touch your files.</p>
+
+    <h2>Does your code leave the machine?</h2>
+    <p>Cline's enterprise docs say "Your code never leaves your environment" and "Repositories are never indexed or cached." That's true about <em>Cline's</em> servers. It is not a claim that your code stays on your laptop — unless you run a local model, file contents get packed into prompts and sent to a third-party API. That's how the agent works.</p>
+    <p>The privacy notice draws the line: with your own API key, on prompts and outputs, "we do not collect it." With Cline-provided keys it does collect them "in order to facilitate your requests to third-party AI model providers on your behalf." And Cline can't offer a training opt-out because it doesn't hold the model — the ToS and privacy notice both defer to providers, who "may use User Content for training unless you have explicitly opted out where such an option is offered by that AI model provider."</p>
+    <p>The local path is real — Ollama and LM Studio are documented providers — with documented friction: enable "Use Compact Prompt," watch for Ollama's default context silently truncating the system prompt, budget 32-64GB of RAM. Outlier only has that path: no account, nothing uploaded, works with Wi-Fi off.</p>
+
+    <h2>What it costs</h2>
+    <p>The software is free for individual developers; the pricing page says "You only pay for AI inference credits when you use AI models." Bring your own key, buy Cline credits and pick from "100+ models supported by Cline," or take ClinePass — $4.99 the first month, then $9.99/month promotionally, plus possible processing fees. ClinePass covers roughly ten open-weight coding models at 2-5x standard API rate limits, metered on a 5-hour rolling window plus weekly and monthly caps. Enterprise is "Custom" — contact sales, no published price.</p>
+    <p>Metered inference is what to plan for, since agentic coding grows its own context as it reads. Issue #7558 on Cline's repo, "Something very wrong with token usage and cost control," reports two prompts and three responses costing $6.80 after context reached roughly 441k tokens — a user report, not a vendor admission, and closed, but similar threads recur.</p>
+    <p>Outlier's free tier is Nano (4B) and Lite (9B), no account, no caps; Pro is $20/month or $149/year for all seven tiers, lifetime from $99. Inference is your own electricity, so a long session costs what a short one does.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr><th></th><th>Cline</th><th>Outlier</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Where it lives</strong></td><td>Editor extension (VS Code, Cursor, JetBrains…) plus CLI and local Kanban. No standalone or mobile app.</td><td>Standalone Mac app, Apple Silicon only (M1+, macOS 12+). No editor integration.</td></tr>
+        <tr><td><strong>Which model</strong></td><td>None of its own — attach any cloud API, a self-hosted endpoint, or local Ollama / LM Studio.</td><td>Seven bundled tiers, Nano 4B to Plus 397B-a17b. Six Apache 2.0, one Gemma Terms.</td></tr>
+        <tr><td><strong>Code leaves the machine?</strong></td><td>Not via Cline's servers with your own key — but yes, to the model API you chose, unless it's local.</td><td>No. On-device; works offline.</td></tr>
+        <tr><td><strong>Cost</strong></td><td>Free for individuals; you pay inference. ClinePass $4.99 then $9.99/mo. Enterprise custom.</td><td>Free tier (Nano + Lite). Pro $20/mo or $149/yr, lifetime from $99. No per-token cost.</td></tr>
+        <tr><td><strong>Agentic ability</strong></td><td>Plan/Act modes, per-action approval, terminal execution, browser use, MCP tools, <code>.clinerules</code>, headless <code>--auto-approve</code>.</td><td>Chat-shaped. Won't edit files, run tests, or drive a terminal.</td></tr>
+        <tr><td><strong>Repo-scale context</strong></td><td>Reads your working tree directly; multi-root workspaces; parallel Kanban worktrees (research preview).</td><td>You bring context to it. No repo indexing.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The coding numbers, stated honestly</h2>
+    <p>Outlier's Core and Code tiers are both 27B. On a blind slice of SWE-bench Verified the local 27B measured about <strong>45% (18 of 40)</strong>, and it scores <strong>0.866</strong> on HumanEval. Those are my measurements on my hardware, not leaderboard submissions: 45% sits below the strongest cloud coding agents. Drive Cline with a frontier cloud model and expect it to resolve issues a 27B on your laptop won't. Core 27B did match Claude Opus on 98.9% of rubric checks in a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a> — but that's answer quality, not agentic issue-resolution.</p>
+
+    <h2>Where Cline genuinely wins</h2>
+    <ul>
+      <li><strong>It's actually open source.</strong> Apache 2.0, whole client, auth and data handling included — readable, auditable, forkable. Outlier isn't: the weights are at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>, the app is not.</li>
+      <li><strong>It does the work.</strong> Editing files, running commands, reading terminal output, using a browser, calling MCP tools — with Plan/Act modes and per-action approval. A chat app that can't touch your repo isn't in the same sport.</li>
+      <li><strong>It's model-agnostic.</strong> When a better model ships you change a dropdown — never locked to one lab, including mine.</li>
+      <li><strong>Repo context comes free.</strong> It already sits in your working tree, with multi-root workspaces and <code>.clinerules</code> for standing instructions.</li>
+      <li><strong>It reaches past the IDE.</strong> Headless CLI for CI, an <code>@cline/sdk</code> Agent Core to build on, Kanban for parallel agents.</li>
+      <li><strong>Governance without a hosted data plane.</strong> SSO/OIDC/SCIM, RBAC, OpenTelemetry, VPC deployment — inference stays on the customer's accounts. Telemetry is narrow, excludes code and conversations, and admins can't force it on.</li>
+    </ul>
+    <p>If your job is shipping code in an editor, Cline is built for that and Outlier isn't.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Cline if</strong> you want an agent that edits files and runs commands, you want to swap models as the frontier moves, you need CI automation, or your security team needs a client it can read line by line. If code also has to stay local, point it at Ollama or LM Studio.</p>
+    <p><strong>Pick Outlier if</strong> you want a capable model on your Mac with no account, no caps and no per-token bill; you work on a plane or behind an air gap; or you're not a developer at all. Outlier has no live web search, no image generation, no voice mode, no mobile app, no Windows or Linux build, no cloud sync.</p>
+    <p><strong>Pick both</strong> if you're like most developers I talk to: Cline in the editor for agentic work, Outlier for thinking, drafting, and anything you'd rather not paste into an API.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Cline claims verified against <a href="https://cline.bot/pricing">cline.bot/pricing</a>, <a href="https://cline.bot/cline-pass">cline.bot/cline-pass</a>, <a href="https://cline.bot/privacy">cline.bot/privacy</a>, <a href="https://cline.bot/tos">cline.bot/tos</a> (both effective September 2025), <a href="https://docs.cline.bot/home">docs.cline.bot</a>, <a href="https://github.com/cline/cline">github.com/cline/cline</a>, and the VS Code Marketplace listing (4,743,250 installs, v4.0.10). The $6.80 figure is user-reported in issue #7558, not a vendor statement. Outlier tier specs, the SWE-bench Verified slice (18/40) and HumanEval 0.866 were measured by me on an M1 Ultra Mac Studio. Competitor pricing and policies change often — check Cline's pages before deciding. Written by Outlier's founder; I have a commercial interest in one of these products.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on-device free, forever. Nothing uploaded, no sign-up.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-cline">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

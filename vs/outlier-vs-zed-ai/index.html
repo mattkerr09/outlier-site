@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Zed AI: on-device Mac assistant vs an AI code editor | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (on-device Mac AI) and Zed's editor AI (open-source editor, cloud-first models). Where the code goes, what it costs, agentic ability, and where Zed genuinely wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-zed-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Zed AI: on-device Mac assistant vs an AI code editor">
+  <meta property="og:description" content="Zed is an open-source editor with cloud-first AI. Outlier runs models on your Mac. An honest look at where the code goes, cost, agentic ability, and repo-scale context.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-zed-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Zed AI: on-device Mac assistant vs an AI code editor">
+  <meta name="twitter:description" content="Open-source editor with cloud-first AI vs a Mac app that runs models on-device. Honest trade-offs, measured coding numbers.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Zed AI: on-device Mac assistant vs an AI code editor","description":"Honest comparison of Outlier (on-device Mac AI) and Zed's editor AI (open-source editor, cloud-first models). Where the code goes, what it costs, agentic ability, and where Zed genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-zed-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Zed AI","item":"https://outlier.host/vs/outlier-vs-zed-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Zed AI: on-device Mac assistant vs an AI code editor</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Zed is an open-source Rust code editor whose AI runs against cloud-hosted Claude, GPT and Gemini by default — your code leaves the machine unless you configure a local model. Outlier is a standalone macOS app running its models entirely on-device: no account, no caps, nothing uploaded, but it isn't an editor and won't drive your repo. Pick Zed for an agent inside the file you're editing; pick Outlier if your source can't be transmitted at all.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr and I build Outlier, so I've got an obvious stake here — read accordingly and check the sources at the bottom. These two overlap on one thing, helping you write code, and differ on nearly everything else: where they live, which model does the work, whether your source leaves the disk, and what a heavy month costs. Including where Zed is the better tool.</p>
+
+    <h2>Where each one lives</h2>
+    <p>Zed is a Rust desktop editor from Zed Industries, running natively on macOS, Linux and Windows — built by the people behind Atom and Tree-sitter, and genuinely open source under GPL-3.0-or-later (Apache-2.0 where marked), not a closed shell over a fork. There's a CLI for opening projects and setting Zed as your Git editor. As of mid-2026 Zed's own download and docs pages describe a desktop app only; I found no mobile app or web version. AI shows up in three places: an agent panel for multi-file edits, inline edit prediction as you type, and external agents over ACP (Claude Agent, Codex, OpenCode) plus MCP servers.</p>
+
+    <p>Outlier is a native macOS app for Apple Silicon, M1 or later, macOS 12+. No Intel, Windows, Linux or mobile build. It's a standalone assistant window, not an editor — you ask, it answers, you move the code yourself.</p>
+
+    <h2>Which model does the work</h2>
+    <p>Zed is deliberately vendor-agnostic, with five access paths: models Zed hosts and bills you for, your own API keys, subscriptions you already pay for, gateways like OpenRouter, and local servers via Ollama, LM Studio or llama.cpp. But the models doing the hard reasoning by default are closed-weight — Claude, GPT, Gemini — with the strongest tiers gated to Pro and Business. One exception deserves credit: Zeta, Zed's edit-prediction model, is fine-tuned from Qwen2.5-Coder-7B, released Apache-2.0, with its training dataset published openly. Open weights <em>and</em> open data in a commercial product is rare.</p>
+
+    <p>Outlier runs seven tiers locally, from Nano 4B up to Plus 397B-a17b, on Qwen and Gemma bases — six Apache 2.0, Quick under the Gemma Terms of Use. Weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>.</p>
+
+    <h2>Does your code leave the machine?</h2>
+    <p>Zed is cloud-first by default: use an AI feature and your prompt plus code context goes to a provider. Its posture there is strong — zero-retention agreements with Anthropic, Google and OpenAI, no data sales, no training on your inputs by default. Edit-prediction training collection is opt-in and needs three separate conditions met at once: you enable it, the project is detected as open source by its license files, and the files aren't excluded by config. On Business it defaults off, under admin control.</p>
+
+    <p>Two caveats, both from Zed's docs. Zero retention carves out provider-designated safety models, which keep data for a limited window (30 days for safety review, not training). And default edit prediction needs a sign-in and cloud round-trip, so cursor context is transmitted continuously as you type unless you switch providers.</p>
+
+    <p>Outlier's answer is architectural, not contractual: models run on your Mac, no account, works with Wi-Fi off. Zed's privacy rests on three companies honoring agreements; Outlier's rests on there being no network path.</p>
+
+    <h2>What it costs</h2>
+    <p>Zed's free Personal plan is $0 forever: 2,000 accepted edit predictions a month, unlimited AI on your own API keys. Pro is $10/month including $5 of tokens; overage bills at API list price +10%, charged at month end or per additional $10 incurred, whichever comes first. Business is $30 per seat per month — no minimum seats, no free trial, no bundled LLM credits at all. The Pro trial runs two weeks with $20 of credits, Opus excluded, and no annual discount is published.</p>
+
+    <p>Credit where it's due: on September 24, 2025 Zed moved to token billing and <em>cut</em> Pro from $20 to $10. Companies rarely halve a price, and list +10% is far more legible than opaque prompt quotas.</p>
+
+    <p>Outlier's free tier is Nano and Lite, no account. Pro is $20/month or $149/year for all seven tiers, lifetime from $99. No token meter — the marginal cost of a request is electricity.</p>
+
+    <h2>Agentic ability and repo-scale context</h2>
+    <p>Zed wins this axis and I won't dress it up. Its agent panel edits files across your project, streams edits into view as they land, and hands off to ACP agents or MCP servers. Outlier does none of that — you paste in, you copy out. If you want something that opens files and loops until the tests pass, Zed is built for it and Outlier isn't.</p>
+
+    <p>Context is more nuanced. Zed's local path has a real footgun: Ollama defaults to 4,096 tokens unless you set <code>max_tokens</code> per model, quietly truncating large files. Local edit prediction also doesn't support External Agents or Terminal Threads, so local mode isn't at parity with hosted. On my side, context is bounded by the RAM left after weights — Code 27B is a 15.13 GB download needing 24 GB.</p>
+
+    <p>My coding numbers, measured rather than claimed: on a blind slice of SWE-bench Verified the local 27B resolved <strong>~45% (18/40)</strong>, and it scores <strong>0.866</strong> on HumanEval. Those are my own runs, not leaderboard entries, and 45% sits below the strongest cloud agents.</p>
+
+    <h2>Side-by-side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Zed AI</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Where it lives</strong></td>
+          <td>Open-source desktop editor (macOS, Linux, Windows) + CLI</td>
+          <td>Standalone macOS app, Apple Silicon</td>
+        </tr>
+        <tr>
+          <td><strong>Which model</strong></td>
+          <td>Hosted Claude / GPT / Gemini; Zeta 7B (Apache-2.0) for prediction; local via Ollama or llama.cpp</td>
+          <td>Seven local tiers, Nano 4B to Plus 397B-a17b</td>
+        </tr>
+        <tr>
+          <td><strong>Code leaves machine</strong></td>
+          <td>Yes by default; no with deliberate local config</td>
+          <td>No — runs with Wi-Fi off</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>$0 Personal; $10/mo Pro incl. $5 tokens, overage list +10%; $30/seat Business</td>
+          <td>Free Nano + Lite; Pro $20/mo or $149/yr; lifetime from $99</td>
+        </tr>
+        <tr>
+          <td><strong>Agentic ability</strong></td>
+          <td>Agent panel, multi-file edits, ACP agents, MCP servers</td>
+          <td>None — assistant only, no repo automation</td>
+        </tr>
+        <tr>
+          <td><strong>Repo-scale context</strong></td>
+          <td>Large on hosted models; Ollama defaults to 4,096 tokens</td>
+          <td>Bounded by free RAM after weights (Code 27B: 24 GB)</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes for hosted AI; 18+ since March 2, 2026</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Zed's AI genuinely wins</h2>
+    <ul>
+      <li><strong>It's an editor with an agent in it.</strong> Multi-file agentic edits streaming into the buffer you're staring at is a workflow Outlier can't offer. This is the big one.</li>
+      <li><strong>Frontier models on demand.</strong> On hard reasoning and long-context synthesis, a hosted Claude or Gemini beats anything fitting in 24 GB of unified memory. My 45% is evidence for that, not against it.</li>
+      <li><strong>Fully auditable.</strong> GPL-3.0-or-later means you can read what the AI integration actually does. Outlier publishes weights; the app isn't open source.</li>
+      <li><strong>Cross-platform.</strong> macOS, Linux and Windows plus a CLI. Outlier is Apple Silicon only, ruling it out for mixed teams.</li>
+      <li><strong>Cheaper entry.</strong> Pro at $10/month is half Outlier Pro, and the free tier is fully functional on your own keys.</li>
+      <li><strong>They're honest about local models.</strong> Zed's blog calls frontier hardware "out of reach for consumers" and says local models take more discipline. I respect publishing that instead of burying it.</li>
+    </ul>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Zed</strong> if you want AI inside your editor doing agentic multi-file work, if you're on Linux or Windows or a mixed team, if you already pay for a Claude or Copilot subscription to reuse, or if reading your tooling's source matters. When a task needs a frontier model, Zed has one and Outlier doesn't.</p>
+
+    <p><strong>Pick Outlier</strong> if the code you work on genuinely can't be transmitted — NDA client repos, regulated codebases, unreleased work — and you'd rather that be enforced by architecture than a vendor agreement. Also if you work offline, or want a Mac assistant that handles writing and reasoning alongside code.</p>
+
+    <p><strong>Or run both.</strong> Zed for repo-scale agentic work on code you're fine sending out, Outlier for the code you're not — and Zed will point its agent panel at a local model too.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Zed plans, limits and trial terms from <a href="https://zed.dev/pricing">zed.dev/pricing</a>; the September 24, 2025 token-billing change from <a href="https://zed.dev/blog/pricing-change-llm-usage-is-now-token-based">Zed's blog</a>; retention carve-outs, opt-in training collection and the Ollama 4,096-token default from <a href="https://zed.dev/docs/ai/privacy-and-security">Zed's AI docs</a>; Zeta from <a href="https://huggingface.co/zed-industries/zeta">Hugging Face</a>; license and platforms from <a href="https://github.com/zed-industries/zed">GitHub</a>; the 18+ rule from the March 2, 2026 <a href="https://zed.dev/blog/terms-update">terms update</a>. Checked 2026-07-23; competitor pricing and policies change, so verify against Zed's pages. Outlier tier sizes and RAM floors measured on an M1 Ultra; SWE-bench Verified (18/40) and HumanEval 0.866 are my own blind runs, not leaderboard submissions.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever — no login, no usage caps. Ask it something with Wi-Fi off.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-zed-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Otter.ai alternative: doing meeting notes locally on a Mac | Outlier</title>
+  <meta name="description" content="An honest comparison of Otter.ai's cloud meeting transcription against doing the same work locally with Outlier — what you give up, what you gain, and where Otter is simply better.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/otter-ai-alternative-local/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Otter.ai alternative: doing meeting notes locally on a Mac">
+  <meta property="og:description" content="Otter.ai transcribes meetings in the cloud. Outlier runs on your Mac and doesn't transcribe audio at all. Here's the honest trade — written by Outlier's founder.">
+  <meta property="og:url" content="https://outlier.host/vs/otter-ai-alternative-local/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Otter.ai alternative: doing meeting notes locally on a Mac">
+  <meta name="twitter:description" content="Cloud meeting transcription vs a local Mac model. What you give up, what you gain, and where Otter genuinely wins.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Otter.ai alternative: doing meeting notes locally on a Mac","description":"An honest comparison of Otter.ai's cloud meeting transcription against doing the same work locally with Outlier — what you give up, what you gain, and where Otter is simply better.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/otter-ai-alternative-local/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Otter.ai alternative: meeting notes locally","item":"https://outlier.host/vs/otter-ai-alternative-local/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Otter.ai alternative: doing meeting notes locally on a Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Otter.ai records or ingests meeting audio, transcribes it with speaker labels on Otter's servers, and generates summaries and action items. Outlier is a local Mac app that doesn't record audio and doesn't do speech-to-text, so it isn't a drop-in replacement. What it replaces is the second half: once a transcript exists as text, Outlier summarizes it, pulls action items and answers questions about it on your machine — no account, no caps, nothing uploaded.</p>
+    </div>
+
+    <p class="lead">I build Outlier, so read this as an interested party's comparison — though I point at primary sources for every number. Otter is a purpose-built meeting product, and for a lot of people it's the correct answer. This page is about a narrower question: which parts of AI meeting notes actually need a cloud service, and which parts don't.</p>
+
+    <h2>What Otter.ai is</h2>
+    <p>Otter is a US-based, closed-source subscription service. It transcribes meeting audio with speaker labels on Otter's servers, then generates summaries, action items and searchable AI chat across your whole transcript library. The bot joins Zoom, Google Meet and Microsoft Teams from your calendar — including meetings you don't attend — and the Mac/Windows desktop app, announced in October 2025, can record bot-free, capturing the meeting locally instead of sending a bot into the call.</p>
+
+    <p>As of July 2026 there are four plans: Basic at $0, Pro at $16.99/user/month monthly or $8.33 annually, Business at $30 or $19.99 annually, and custom Enterprise. The caps matter more than the prices. Basic gives 300 recording minutes per user per month, 30 minutes per conversation and three lifetime file imports; Pro raises that to 1,200 minutes a month, 90 minutes per meeting and 10 imports. Unlimited minutes and four-hour meetings start at Business. API and webhooks are Enterprise-only, SSO/SCIM is listed as needing a 100-user minimum, HIPAA is an Enterprise add-on, and an Otter MCP server is included from the free plan up. Live transcription covers six languages, on web, macOS, Windows, iOS, Android and a Chrome extension.</p>
+
+    <h2>Where the data goes</h2>
+    <p>All computation and storage is cloud-side. Otter's security page describes data stored in AWS S3 with AES-256 server-side encryption, and no on-device or offline mode is documented anywhere on Otter's own pages. What leaves the machine includes audio, uploaded media, transcripts and automatic OtterPilot screenshots, plus account and device identifiers, IP address and inferred location.</p>
+
+    <p>Two Otter pages sound contradictory on training until you notice the scoping. The privacy policy, effective 16 June 2026, says Otter trains "our proprietary AI technology on de-identified audio recordings and on transcriptions," and that data labeling providers receive shared data to build training sets. The security page's prominent no-training promise is scoped to third-party AI vendors — the subprocessor list names Anthropic and OpenAI — and imported files are excluded as well. Otter says it de-identifies first, and that human review of audio requires explicit customer consent. On the primary pages I could read, I found no described self-serve opt-out from Otter training on your de-identified recordings; the opt-outs the policy describes cover sale/sharing and targeted advertising. Help-center articles that reportedly describe a training toggle returned 403 to me, so I won't assert it either way.</p>
+
+    <p>Every subprocessor Otter lists is US-based and storage is on AWS; no EU data-residency option appears on Otter's own pages, and third-party analyses say there isn't one even on Enterprise. Consent risk also sits with whoever deployed the recorder — third-party reporting describes a consolidated federal class action in California alleging wiretap and CIPA violations for recording without all-party consent, unresolved as of mid-2026. I couldn't fetch the docket, so treat that as reported rather than verified. Either way, in two-party-consent states getting everyone's agreement is your job, not the vendor's.</p>
+
+    <h2>What Outlier is, and what it can't do</h2>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). Models run fully on-device across seven tiers, Nano 4B up to Plus 397B-a17b. No account, no caps, works with Wi-Fi off, nothing uploaded. Nano and Lite are free; Pro is $20/month or $149/year, with lifetime licenses from $99.</p>
+
+    <p>Now the part a comparison page usually buries. <strong>Outlier doesn't record meetings, doesn't join calls, and doesn't do speech-to-text.</strong> No bot, no calendar integration, no mobile app, no Windows build, no cloud sync, no shared workspace. If you want notes to appear on their own after a meeting, Otter does that and Outlier doesn't.</p>
+
+    <p>The local version is two steps. You get a transcript some other way — an on-device speech-to-text tool, or a transcript your conferencing platform already produced — then hand that text to Outlier for the summary, the decisions and the follow-up questions. That's a manual seam Otter doesn't have. It's also the step where the model does the actual thinking, and the step that doesn't require a server.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Otter.ai</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Where processing happens</strong></td><td>Otter's servers (AWS S3)</td><td>Your Mac, always</td></tr>
+        <tr><td><strong>Records / joins meetings</strong></td><td>Yes — Zoom, Meet, Teams; bot-free on desktop</td><td>No</td></tr>
+        <tr><td><strong>Speech-to-text</strong></td><td>Yes, live, speaker labels, six languages</td><td>No — bring your own transcript</td></tr>
+        <tr><td><strong>Summaries, action items</strong></td><td>Yes, automatic</td><td>Yes, from pasted text</td></tr>
+        <tr><td><strong>Search across past meetings</strong></td><td>Yes — AI Chat over the corpus</td><td>No index; one document at a time</td></tr>
+        <tr><td><strong>Cost</strong></td><td>$0 / $8.33–16.99 / $19.99–30 per user/mo</td><td>Free tier; $20/mo or $149/yr; lifetime from $99</td></tr>
+        <tr><td><strong>Usage caps</strong></td><td>300 min/mo free, 1,200 Pro; unlimited from Business</td><td>None</td></tr>
+        <tr><td><strong>Works offline</strong></td><td>No</td><td>Yes</td></tr>
+        <tr><td><strong>Account required</strong></td><td>Yes</td><td>No</td></tr>
+        <tr><td><strong>Vendor trains on your data</strong></td><td>Policy describes training on de-identified audio</td><td>Nothing is uploaded</td></tr>
+        <tr><td><strong>Teams and admin</strong></td><td>Workspaces, permissions, SSO/SCIM, retention</td><td>No</td></tr>
+        <tr><td><strong>Platforms</strong></td><td>Web, macOS, Windows, iOS, Android, Chrome</td><td>Apple Silicon Macs only</td></tr>
+        <tr><td><strong>Auditability</strong></td><td>Closed source; ToS bars reverse engineering</td><td>Weights published on Hugging Face</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where Otter genuinely wins</h2>
+    <p>These aren't reluctant concessions. They're the reasons the product has the customers it has.</p>
+    <ul>
+      <li><strong>Zero local compute.</strong> A four-hour multi-speaker meeting transcribes without touching your CPU, GPU, RAM or battery, and works the same on a base MacBook Air or a phone. A local model's quality is bounded by the machine it runs on; Otter's isn't.</li>
+      <li><strong>Capture is solved end to end.</strong> The bot joins from your calendar and records meetings you aren't even in. Any local approach depends on you being there and hitting record.</li>
+      <li><strong>Live transcription with speaker labels</strong> while the meeting is still running — what makes late-joiner catch-up and in-meeting search possible at all.</li>
+      <li><strong>Built for more than one person, on every device:</strong> web, macOS, Windows, iOS, Android and a browser extension over one shared library, with permissions, comments, admin controls, retention policies and SSO/SCIM. That's a whole category a single-user Mac app doesn't serve.</li>
+      <li><strong>Corpus-wide search and downstream plumbing.</strong> AI Chat queries every meeting you've had, not one file at a time, and results flow into Salesforce, HubSpot, Slack, Jira, Notion and Google Workspace, an Enterprise REST API, and a hosted MCP server available even on the free plan.</li>
+      <li><strong>Compliance paperwork that unblocks purchases:</strong> SOC 2 Type 2, a published subprocessor list, admin-set retention, HIPAA as an Enterprise add-on.</li>
+      <li><strong>Purpose-built speech models.</strong> Otter runs its own ASR and speaker-ID models trained on enormous volumes of meeting audio across six languages and a wide accent range. A general-purpose chat model is no substitute for that, and I won't pretend otherwise.</li>
+    </ul>
+
+    <h2>What you gain by doing the second half locally</h2>
+    <p>The trade is narrow but real. The recording is the sensitive artifact — a board discussion, a privileged call with counsel, a diligence session under NDA. Transcribe and summarize locally and that artifact never becomes someone else's stored object, never enters a de-identified training corpus, and never waits on a retention policy. There's no toggle to find because there's no upload.</p>
+
+    <p>You also stop metering. Otter's cheaper tiers cap you at 300 or 1,200 minutes a month with 30- or 90-minute per-meeting limits; Outlier has no caps and works on a plane. The summarizing holds up, too: on a 54-prompt head-to-head, Core 27B matched Claude Opus on <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">98.9% of rubric checks</a>, and turning a transcript into decisions and owners is well inside what that model does.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Otter if</strong> you need meetings captured automatically, you need live transcription during the call, you're on Windows or a phone, you're buying for a team that shares a transcript library, or you need an API, SSO or a signed DPA. If any of those is a requirement, this isn't close.</p>
+
+    <p><strong>Pick a local setup if</strong> the recordings themselves are the confidential thing, you're one person rather than a team, you're on an Apple Silicon Mac, or you'd rather not pay per seat forever. You're accepting a manual step in exchange for the audio never leaving your machine.</p>
+
+    <p><strong>Plenty of people should use both</strong> — Otter for routine standups, local for the handful of conversations that shouldn't be uploaded at all.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> pricing and caps from <a href="https://otter.ai/pricing">otter.ai/pricing</a>; storage, encryption and human-review consent from <a href="https://otter.ai/privacy-security">otter.ai/privacy-security</a>; training language from <a href="https://otter.ai/privacy-policy">otter.ai/privacy-policy</a>; vendor list from <a href="https://otter.ai/subprocessors">otter.ai/subprocessors</a>; licensing from <a href="https://otter.ai/terms-of-service">otter.ai/terms-of-service</a>; platforms and integrations from <a href="https://otter.ai/">otter.ai</a>. All read July 2026, with promotional discounts showing on the pricing page, so displayed prices may sit below list. The EU-residency point and the litigation are <strong>third-party reporting only</strong> — the help center (403) and the docket weren't fetchable. Vendor pricing and policies change; check the primary pages before relying on any of this. Outlier specs and pricing from the shipping app; benchmark method at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>.
+    </div>
+
+    <div class="cta">
+      <h3>Try the local half free</h3>
+      <p>Nano and Lite run on any Apple Silicon Mac with no account and no caps. Paste in a transcript and see what the summary looks like.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=otter-ai-alternative-local">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

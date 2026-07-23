@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Google NotebookLM (Gemini Notebook): local AI vs a cloud research assistant | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Google NotebookLM, renamed Gemini Notebook in July 2026. Price, caps, offline use, what happens to your uploads, and who should pick which.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-notebooklm/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Google NotebookLM (Gemini Notebook)">
+  <meta property="og:description" content="A cloud source-grounded research assistant vs a Mac app that runs models on your own hardware. Price, caps, offline, uploads, and honest trade-offs.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-notebooklm/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Google NotebookLM (Gemini Notebook)">
+  <meta name="twitter:description" content="Cloud research notebooks vs on-device AI on a Mac — price, caps, offline, uploads, and where each one genuinely has the edge.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Google NotebookLM (Gemini Notebook): local AI vs a cloud research assistant","description":"Honest comparison of Outlier (local Mac AI) vs Google NotebookLM, renamed Gemini Notebook in July 2026. Price, caps, offline use, what happens to your uploads, and who should pick which.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-notebooklm/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Google NotebookLM","item":"https://outlier.host/vs/outlier-vs-notebooklm/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Google NotebookLM (Gemini Notebook): local AI vs a cloud research assistant</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Google NotebookLM — renamed Gemini Notebook on 16 July 2026 — is a cloud research assistant: you upload documents, links and audio to Google, and a Gemini model answers using only those sources, with inline citations. Outlier is a Mac app that runs models on your own hardware — no account, no usage caps, nothing uploaded, works with Wi-Fi off. Pick Gemini Notebook for a large, cited research library with Audio Overviews; pick Outlier when the documents can't leave your machine.</p>
+    </div>
+
+    <p class="lead">Full disclosure: I'm Matt Kerr, and I build Outlier — read this the way you'd read any comparison written by one side. Every number is sourced, and the section where Google wins is the longest on the page, because on several axes it isn't close.</p>
+
+    <h2>What Gemini Notebook (formerly NotebookLM) is</h2>
+    <p>Google renamed NotebookLM to <strong>Gemini Notebook</strong> in a rollout that began 16 July 2026, across Workspace and personal Google accounts alike. No admin action was needed, old links redirect, notebooks carried over. Google says more than 30 million people and over 600,000 organizations use it.</p>
+
+    <p>You create a notebook and fill it with sources — PDFs, Word and Google Docs, Slides, Sheets, ePub, Markdown, CSV, audio, images, URLs, and captioned YouTube videos. Drive sources re-sync every few minutes. Then you chat with the notebook, and Google's docs say responses are "grounded exclusively in your notebook sources," with citations pointing back to the spot in a document you supplied. It also produces study guides, briefings, mind maps and Audio Overviews.</p>
+
+    <p>The ceilings are big: 500,000 words or 200 MB per source, no page limit. Since July 2026 each notebook also gets a secure cloud computer that runs code against your sources and returns PDF, Excel, PowerPoint, JSON, charts or images. Google says the product now runs on Gemini 3.5 and Antigravity, reaching Ultra and some Workspace customers first.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12+. No Intel, Windows, Linux or mobile build. Models run entirely on your machine: no account, no usage caps, and it keeps working with Wi-Fi off, because after the download there's no server.</p>
+
+    <p>Seven tiers ship in the app, from Nano (4B, 2.37 GB, runs on 6 GB of RAM) through Core 27B and Code 27B up to Plus, a 397B mixture-of-experts model that streams experts from SSD and peaks near 11 GB of RSS on a 64 GB machine. Six tiers are Apache 2.0; Quick is under the Gemma Terms of Use. The weights are <a href="https://huggingface.co/Outlier-Ai">published</a>, so you can inspect what you're running.</p>
+
+    <p>The free tier is Nano plus Lite, no account. Pro is $20/month or $149/year for all seven tiers, with lifetime licenses from $99. The gaps, plainly: no web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, no cloud sync — and no voice mode means no Audio Overviews equivalent.</p>
+
+    <h2>Side-by-side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Gemini Notebook Free</th>
+          <th>Gemini Notebook Paid</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>$0/mo</td>
+          <td>$4.99 / $19.99 / $99.99+ per month, via a Google AI plan</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>100 notebooks, 50 sources each, 50 chats/day, 3 Audio Overviews/day</td>
+          <td>Pro: 500 notebooks, 300 sources, 500 chats/day, 20 Audio Overviews/day</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes (age-verified Google account)</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>License key only</td>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td>Web, iOS/iPadOS, Android</td>
+          <td>Web, iOS/iPadOS, Android</td>
+          <td>macOS 12+, Apple Silicon</td>
+          <td>macOS 12+, Apple Silicon</td>
+        </tr>
+        <tr>
+          <td><strong>Model weights</strong></td>
+          <td>Closed</td>
+          <td>Closed</td>
+          <td>Published</td>
+          <td>Published</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Google NotebookLM genuinely wins</h2>
+    <p>This isn't a courtesy section. Most of what follows a local Mac app can't do at all.</p>
+    <ul>
+      <li><strong>Corpus scale.</strong> 500,000 words or 200 MB per source, no page limit, 300 sources per notebook on the $19.99 Pro tier and 600 on top Ultra. That's a research library, and the indexing behind it is a real advantage of a datacenter.</li>
+      <li><strong>Audio Overviews.</strong> Turning a pile of documents into a listenable two-host discussion made the product famous, and nothing on-device is close on polish.</li>
+      <li><strong>Ingest with no setup.</strong> A URL, a YouTube link, a Slides deck, an MP3, a folder of scans — and Drive sources keep themselves current.</li>
+      <li><strong>Sandboxed compute.</strong> Each notebook can write and run code against your sources and hand back an Excel file or a chart, with nothing for you to configure or secure.</li>
+      <li><strong>Reach.</strong> 80+ languages, 195+ countries and territories — hard to reproduce with a small local model.</li>
+      <li><strong>A free tier that's a real product,</strong> not a demo: 100 notebooks, 50 sources each, 50 chats and 3 Audio Overviews a day, at $0.</li>
+      <li><strong>Schools and enterprises.</strong> Free in every Google Workspace for Education edition, for users of all ages. Enterprise sells through Google Cloud with a 14-day 5,000-license trial, a 15-license minimum, and EU or US multi-region options for teams that need data kept in one jurisdiction.</li>
+      <li><strong>Continuity.</strong> Web, first-party iOS/iPadOS and Android apps, and notebooks that sync into the Gemini app — including the native Gemini app for Mac from April 2026. Outlier runs on one machine, the one you installed it on.</li>
+    </ul>
+    <p>If the job is "read 200 PDFs and make me a cited podcast about them" — use Gemini Notebook. I would.</p>
+
+    <h2>What it costs over a year</h2>
+    <p>Gemini Notebook can't be bought on its own; paid tiers ride on a Google AI subscription — Plus at $4.99/month, Pro at $19.99/month, Ultra from $99.99/month with a $199.99 option. Google's page lists monthly prices only, with no official annual SKU, so annualising is just twelve times the rate: $59.88, $239.88, $1,198.80. Some press coverage puts Plus nearer $8/month in the US, which conflicts with Google's own page, so check your country. Enterprise is quoted through Google Cloud; the docs state no price.</p>
+
+    <p>Outlier Pro is $20/month or $149/year, or a lifetime license from $99. Two structural differences matter more than the headline number. With Google you're buying a bundle — storage and Gemini app quota come along whether you want them or not. And a tier is an entitlement on an account, not a perpetual license: when it lapses, the capability goes. Downloaded weights stay on the disk.</p>
+
+    <h2>What happens to your documents</h2>
+    <p>Google's consumer policy is better than most cloud AI's, and I'll say so plainly: content in Gemini Notebook isn't used to directly train Google's foundational models unless you choose to submit feedback. Training is opt-in via the thumbs-up/down button, not opt-out. Click it and that content goes to trained review teams, disconnected from your Google Account, retained up to three years. Workspace and Education accounts get no human review at all, and no training.</p>
+
+    <p>Two caveats before uploading anything sensitive. Notebooks sync into the Gemini app, and chats held there fall under Gemini Apps Keep Activity — where a subset are human-reviewed and, with Keep Activity on, used to train Google's models. Google also warns that turning Keep Activity off does not delete data in Gemini Notebook, so the two deletion controls don't line up. Data residency is an Enterprise feature; consumer accounts get no jurisdiction control.</p>
+
+    <p>Outlier's version of this section is short because there isn't much to say: nothing is uploaded, so there's no retention window, no review team, no toggle to find. That's a claim about surface area, not about Google's integrity. Both share one caveat — Google's disclaimer says Gemini Notebook can make mistakes and to consult a qualified professional for medical, legal or financial advice. Same goes for Outlier.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Gemini Notebook if</strong> your work is source-heavy research over a large document set, you want citations that link back into the sources, you need Audio Overviews or mind maps, you want the same notebook on a phone and a laptop, you're at a school or on Workspace, or you don't own an Apple Silicon Mac.</p>
+
+    <p><strong>Pick Outlier if</strong> the documents can't be uploaded — client files, source code, medical or legal drafts, anything under an NDA that names a cloud. Or if you work offline, or you're tired of daily caps. On a 54-prompt head-to-head, Core 27B matched Claude Opus on 98.9% of rubric checks and 100% on the nine hardest; on a blind slice of SWE-bench Verified the local 27B measured about 45%. Strong for everyday work, not frontier.</p>
+
+    <p><strong>Use both</strong> — that's what I do. Public papers and YouTube research go in a notebook; anything covered by a contract stays on the laptop.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Rename, user counts and cloud code execution from <a href="https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/">blog.google</a> and <a href="https://workspaceupdates.googleblog.com/2026/07/notebooklm-now-gemini-notebook.html">Workspace Updates</a> (16 July 2026). Caps and source ceilings from Google's Gemini Notebook Help Center. Pricing from <a href="https://gemini.google/subscriptions/">gemini.google/subscriptions</a> — monthly only; annual figures above are 12× monthly, not an official SKU. Data and training policy from Google's Gemini Notebook and Gemini Apps privacy documentation. Outlier pricing as of 2026-07-23; benchmark at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data</a>; throughput measured on an M1 Ultra Mac Studio. Competitor pricing, caps and privacy policies change without notice — verify against Google's own pages.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on any Apple Silicon Mac, free forever, with nothing uploaded and no usage caps.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-notebooklm">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

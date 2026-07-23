@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemma vs Llama: sizes, licensing, and what runs on a Mac | Outlier</title>
+  <meta name="description" content="Google Gemma vs Meta Llama, compared on sizes, licensing (Apache 2.0 vs the Llama Community License), task strengths, language coverage, and what actually fits on a Mac.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/gemma-vs-llama/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Gemma vs Llama: sizes, licensing, and what runs on a Mac">
+  <meta property="og:description" content="Gemma 4 is Apache 2.0 and ungated; Llama 4 is source-available with a 700M-user ceiling and an EU carve-out. An honest open-model-family comparison.">
+  <meta property="og:url" content="https://outlier.host/vs/gemma-vs-llama/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gemma vs Llama: sizes, licensing, and what runs on a Mac">
+  <meta name="twitter:description" content="Apache 2.0 vs the Llama Community License, size ladders, task strengths, and real Mac RAM numbers.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Gemma vs Llama: sizes, licensing, and what runs on a Mac","description":"Google Gemma vs Meta Llama, compared on sizes, licensing (Apache 2.0 vs the Llama Community License), task strengths, language coverage, and what actually fits on a Mac.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/gemma-vs-llama/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Gemma vs Llama","item":"https://outlier.host/vs/gemma-vs-llama/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Gemma vs Llama: sizes, licensing, and what runs on a Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Gemma and Llama aren't apps — they're downloadable model weights, and you need a runtime like Ollama, llama.cpp, LM Studio or MLX before you can chat with either. Google's Gemma 4 (2 April 2026) is Apache 2.0, ungated, and ships in five sizes up to 31B, so it fits on real Macs. Meta's Llama 4 — still the newest open Llama, from April 2025 — starts at 108.6B total parameters under a source-available license with a 700-million-monthly-user ceiling, a mandatory "Built with Llama" credit, and a clause withholding the grant from EU developers.</p>
+    </div>
+
+    <p class="lead">Nobody signs up for Gemma or Llama. You download a checkpoint, point a runtime at it, and live with whatever license came attached — and that license is what turns up later in a lawyer's email.</p>
+
+    <p><strong>Disclosure, up front.</strong> I build Outlier, a local AI app for Mac. It ships Qwen-family and Gemma-family weights — six tiers on Apache 2.0 Qwen checkpoints, one (Quick) on Gemma-4-26B-a4b — and none on Llama. So I'm an interested party here. Every claim below points at a primary document.</p>
+
+    <h2>These are weights, not products</h2>
+    <p>Neither Google nor Meta ships a Mac app, an installer, or a chat window for these files. No history, no document handling, no updates, no support. You get a folder of tensors and a config; you, or a third-party app, supply the runtime, the memory budget, the quantization and the prompt template. Google's own docs point at llama.cpp, Ollama, LM Studio and MLX. It's a component, not an application.</p>
+
+    <h2>Sizes: what you can actually get</h2>
+    <p>Gemma 4 ships five: <strong>E2B</strong> and <strong>E4B</strong> for edge and mobile, <strong>12B</strong>, <strong>26B-A4B</strong> (mixture-of-experts), and <strong>31B</strong> dense. One family covers a phone, a MacBook Air and a Mac Studio. The 12B-it build is 11.95B parameters with up to a 256K context; it takes text, image, audio and video in, and produces text only. Training data cuts off January 2025, so anything newer must come from retrieval.</p>
+
+    <p>Llama 4's ladder is shorter and starts far higher. Its smallest, <strong>Scout Instruct</strong>, is 108.6B total parameters (17B active, 16 experts). Maverick is larger. There is no small Llama 4 — and nothing newer. It was published 1–3 April 2025 and no Llama 5 exists. Meta's April 2026 flagship, Muse Spark, ships as a private API preview with no weight download, and <code>llama.com</code> now redirects to <code>developer.meta.com/ai/</code>.</p>
+
+    <h2>Licensing: the difference that actually decides things</h2>
+    <p><strong>Gemma 4 is Apache 2.0.</strong> Google moved the family off its custom terms in April 2026, and every official Gemma 4 repository in Google's Hugging Face org is tagged <code>license:apache-2.0</code> and ungated: no access request, no queue. No user ceiling, no mandatory branding, no naming rule, no geographic carve-out, and you may redistribute the weights inside a commercial app. Google also claims no rights in your outputs.</p>
+
+    <p>The catch is that <strong>the family is split.</strong> Gemma 3 and earlier, plus variants like PaliGemma and FunctionGemma, stay under the custom Gemma Terms of Use (dated 1 April 2026), with a Prohibited Use Policy, redistribution notices, and an obligation to pass restrictions downstream. Ship two generations in one product and you track two regimes. Outlier's Quick tier is that case; our license list says Gemma Terms, not Apache.</p>
+
+    <p><strong>Llama 4 is source-available, not open source</strong> — the Open Source Initiative has stated publicly that Meta's license fails the Open Source definition, so "open source Llama" is inaccurate. The Community License, effective 5 April 2025, requires a separate license from Meta above 700 million monthly active users, that you prominently display "Built with Llama," and that any derived model's name begin with "Llama."</p>
+
+    <p>The sharper problem is territorial. Meta's Acceptable Use Policy withholds the Section 1(a) grant from anyone domiciled in, or any company with a principal place of business in, the EU with respect to multimodal models — and every Llama 4 model is natively multimodal. End users of a product built on them are exempt; the builder isn't. The weights are also gated on Hugging Face behind terms acceptance.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Gemma 4 (Google)</th>
+          <th>Llama 4 (Meta)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Latest open release</strong></td>
+          <td>2 April 2026</td>
+          <td>1–3 April 2025, no successor</td>
+        </tr>
+        <tr>
+          <td><strong>Sizes</strong></td>
+          <td>E2B, E4B, 12B, 26B-A4B (MoE), 31B</td>
+          <td>Scout 108.6B total (17B active), Maverick</td>
+        </tr>
+        <tr>
+          <td><strong>License</strong></td>
+          <td>Apache 2.0 (Gemma 3 and earlier: Gemma Terms)</td>
+          <td>Llama 4 Community License (source-available)</td>
+        </tr>
+        <tr>
+          <td><strong>Commercial conditions</strong></td>
+          <td>None beyond Apache 2.0</td>
+          <td>700M MAU ceiling, "Built with Llama" credit, "Llama" name prefix</td>
+        </tr>
+        <tr>
+          <td><strong>EU developers</strong></td>
+          <td>No restriction</td>
+          <td>Section 1(a) grant withheld for multimodal models</td>
+        </tr>
+        <tr>
+          <td><strong>Practical on a Mac</strong></td>
+          <td>Yes — day-one MLX 4-bit, official QAT int4 GGUF</td>
+          <td>Not at Llama 4 sizes; use Llama 3.x</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Strengths by task, and language coverage</h2>
+    <p>Gemma 4's edge is capability per gigabyte. A ~12B model with a 256K context that ingests images, audio and video is a lot of surface area for something that fits on a laptop, and Google describes the family as pre-trained across 140+ languages — well past what most locally-runnable models handle.</p>
+
+    <p>Llama's edge is the ecosystem. Years of fine-tunes, LoRAs, quantization recipes, kernels and eval harnesses target Llama first, and it's the de facto research baseline, so its failure modes are documented publicly better than almost any other family. If you need results comparable to published work, Llama 3.x is the well-lit path.</p>
+
+    <p>Neither ships a safety layer — filtering and abuse tooling come as separate models (ShieldGemma, Llama Guard) — and both disclaim warranties entirely, the Gemma terms providing the model "AS IS."</p>
+
+    <h2>What runs on a Mac, at what RAM</h2>
+    <p>Gemma 4 was Apple-silicon-ready on day one: MLX 4-bit conversions of E2B, E4B, 26B-A4B and 31B landed in <code>mlx-community</code> on 2 April 2026, the release date. Google also publishes quantization-aware-trained int4 GGUF builds (the 12B and 31B <code>qat-q4_0-gguf</code> repos, May–June 2026), and QAT weights hold up better than naive post-hoc quantization.</p>
+
+    <p>A number from my own build: Outlier's Quick tier is Gemma-4-26B-a4b-it, a 15.61 GB download that runs in 16 GB of RAM. Llama 4 is a different story — 108.6B parameters is over 50 GB at 4 bits, before overhead. As of mid-2026 the popular <code>mlx-community</code> Llama conversions are all Llama 3.x (3.1 8B, 3.2 1B/3B, 3.3 70B), no Llama 4 among them. Running Llama on a Mac means running last generation's Llama.</p>
+
+    <p>One note, because it gets muddled: run either family locally and no prompt leaves the machine — but that's a property of local execution, not a vendor promise. Google's hosted Gemini API is different. Gemma 4 is free-tier-only there, the free tier is marked "Used to improve our products: Yes," human reviewers may read and annotate API input and output, and Google warns against submitting sensitive data.</p>
+
+    <h2>Where each family genuinely wins</h2>
+    <p><strong>Gemma 4 wins on licensing, cleanly.</strong> Apache 2.0 from a frontier lab, ungated, no user ceiling, no branding obligation, no naming rule, no geography clause. That's not a marginal edge over Llama's terms — it's a different category of freedom.</p>
+
+    <p><strong>Llama wins on ecosystem maturity, and it isn't close.</strong> For tooling depth, published fine-tuning recipes and comparability to prior research, Llama 3.x has more than anything else you can download, and its small models are among the best-understood on Apple silicon.</p>
+
+    <p><strong>And raw weights beat any packaged app — mine included — on several axes.</strong> A downloaded checkpoint can't be deprecated, rate-limited, price-hiked or silently swapped, so results stay reproducible forever. You can fine-tune on your own data without a vendor seeing it, choose your own runtime and quantization, and pay nothing ongoing but electricity. Outlier just packages that for people who'd rather not.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Gemma 4</strong> if you're shipping something commercial, if you're EU-domiciled, if the model has to fit ordinary hardware, or if you want multilingual and multimodal input at laptop scale. Apache 2.0 removes the questions that otherwise need a lawyer.</p>
+
+    <p><strong>Pick Llama 3.x</strong> if you want the deepest tooling and fine-tuning ecosystem, or a baseline comparable to published research — with the caveat that its last open release was April 2025 and no open successor is announced.</p>
+
+    <p><strong>Pick a finished app</strong> if you want to use a local model today rather than assemble one — that's Outlier (seven tiers, Apple Silicon, no account, nothing uploaded), and it's also Ollama and LM Studio, free. Outlier has no web search, image generation, mobile app, or Windows and Linux build.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Gemma 4 sizes and modalities from <a href="https://deepmind.google/models/gemma/gemma-4/">deepmind.google</a> and the <a href="https://huggingface.co/google/gemma-4-12B-it">12B-it model card</a>; Apache 2.0 from the <a href="https://opensource.googleblog.com/2026/03/gemma-4-expanding-the-gemmaverse-with-apache-20.html">Google Open Source Blog</a>; older <a href="https://ai.google.dev/gemma/terms">Gemma terms</a>; hosted-tier handling from <a href="https://ai.google.dev/pricing">Gemini API pricing</a> and <a href="https://ai.google.dev/gemini-api/terms">terms</a>. Llama 4 from the <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama4/LICENSE">Community License</a>, <a href="https://github.com/meta-llama/llama-models/blob/main/models/llama4/USE_POLICY.md">Acceptable Use Policy</a>, <a href="https://opensource.org/blog/metas-llama-license-is-still-not-open-source">OSI</a>, <a href="https://huggingface.co/meta-llama/Llama-4-Scout-17B-16E-Instruct">Scout's model card</a> and <a href="https://ai.meta.com/blog/introducing-muse-spark-msl/">Meta on Muse Spark</a>. MLX claims reflect <code>mlx-community</code> as of mid-2026; Outlier tier sizes measured on the shipping app. <strong>Licenses and hosted-API policies change without notice — verify the primary documents.</strong>
+    </div>
+
+    <div class="cta">
+      <h3>Want Gemma without the assembly</h3>
+      <p>Outlier runs Gemma- and Qwen-family weights on your Mac. No account, no caps, nothing uploaded.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=gemma-vs-llama">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All Outlier comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

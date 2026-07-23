@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Qwen Chat: the same model family, two delivery models | Outlier</title>
+  <meta name="description" content="Outlier runs open Qwen weights on your Mac; Qwen Chat runs Alibaba's unpublished Qwen3.7/3.8 models in the cloud. Honest comparison of price, data handling, offline use and capability.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-qwen-chat/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Qwen Chat: the same model family, two delivery models">
+  <meta property="og:description" content="Outlier runs open Qwen weights locally on a Mac. Qwen Chat runs Alibaba's proprietary Qwen3.7/3.8 in the cloud, free. Where each one genuinely wins.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-qwen-chat/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Qwen Chat: the same model family, two delivery models">
+  <meta name="twitter:description" content="Same Qwen lineage, opposite delivery: open weights on your Mac vs Alibaba's cloud. Price, privacy, offline, and honest trade-offs.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Qwen Chat: the same model family, two delivery models","description":"Outlier runs open Qwen weights on your Mac; Qwen Chat runs Alibaba's unpublished Qwen3.7/3.8 models in the cloud. Honest comparison of price, data handling, offline use and capability.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-qwen-chat/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Qwen Chat","item":"https://outlier.host/vs/outlier-vs-qwen-chat/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Qwen Chat: the same model family, two delivery models</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Qwen Chat (now branded Qwen Studio) is Alibaba's free cloud assistant — no subscription, no account required, on web, macOS, Windows, iOS and Android — but every prompt, file, image and video is uploaded, and its Terms say user content trains Alibaba's models by default. Outlier runs Qwen's <em>published</em> open weights on your own Apple Silicon Mac: no account, no caps, nothing uploaded, works with Wi-Fi off, $149/year for all seven tiers. Same lineage, opposite delivery — Qwen Chat serves bigger models nobody can self-host, Outlier serves Apache-2.0 ones that never leave the device.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr, and I built Outlier — so treat this as a comparison by an interested party. Every claim about Alibaba's product is tied to a source you can check. This one's odd to write, because Outlier runs Qwen weights: six of its seven tiers are Qwen models. One family, two very different deliveries.</p>
+
+    <h2>What Qwen Chat actually is</h2>
+    <p>Qwen Chat is Alibaba's consumer AI assistant, at chat.qwen.ai. It's now branded <strong>Qwen Studio</strong> — qwen.ai still serves the old /qwenchat route, but the page title, buttons and iOS listing all read "Qwen Studio." It's operated by Alibaba Cloud (Singapore) Private Limited; the Privacy Policy and Terms are both dated 19 May 2026.</p>
+
+    <p>The app's public model endpoint lists exactly four models: <code>Qwen3.8-Max-Preview</code>, <code>Qwen3.7-Max</code>, <code>Qwen3.7-Plus</code> and <code>Qwen3.6-Plus</code>. Qwen3.7-Plus is the multimodal one — vision, documents, video, audio, thinking and search in one model. Max is text-only.</p>
+
+    <p>There's no consumer subscription. The config reports subscriptions and payment/quota disabled and anonymous use enabled, so you can open the web app and start typing without an account; sign-in is Google, GitHub or Apple OAuth. Native clients cover macOS, Windows, iOS and Android — the Mac DMG is about 146 MB.</p>
+
+    <h2>The part that makes this comparison strange: same family, different weights</h2>
+    <p>Outlier's tiers are built on Qwen3.5-4B, Qwen3.5-9B, Qwen3.6-27B, Qwen3.6-35B-A3B and Qwen3.5-397B-A17B, all Apache-2.0. (The exception is Quick, a Gemma model under Gemma's terms.) Those are Alibaba's published open weights, downloaded once and run on your machine.</p>
+
+    <p>Here's the honest wrinkle: <strong>you can't self-host what Qwen Chat is serving.</strong> Qwen3.7-Plus, Qwen3.7-Max and Qwen3.8-Max-Preview have no published weights anywhere. The Qwen org's newest open releases are Qwen3.6-27B and Qwen3.6-35B-A3B, both from 24 April 2026 — and both are already in Outlier as the Core, Code and Vision tiers. The open line and the hosted line have split. Alibaba still ships genuinely open models, which I'm grateful for, but the chat product runs a tier above anything I can put on a laptop.</p>
+
+    <p>The flip side is the escape hatch: if you later decide you don't want your work on someone else's servers, you can move to Qwen weights you control without changing families. That's rare among cloud assistants, and it's most of why Outlier exists.</p>
+
+    <h2>Where Qwen Chat genuinely wins</h2>
+    <p>These aren't close calls. If any of them describes your work, use Qwen Chat.</p>
+    <ul>
+      <li><strong>Free, no account, nothing on disk.</strong> Outlier's free tiers cost nothing either, but you download a 2.37 GB model first.</li>
+      <li><strong>It runs models no Mac can run.</strong> The Max tier is datacenter-scale and unpublished. Outlier's largest tier, Plus 397B, is a 209 GB download needing a 64 GB Mac, at 2.1 tokens/second on an M1 Ultra.</li>
+      <li><strong>Live web search and a deep-research mode.</strong> Outlier has no web access at all — it answers from training data. That's a hard limit, not a soft one.</li>
+      <li><strong>Image generation, image editing, text-to-video, TTS and voice.</strong> Outlier does none of these. Text in, text out.</li>
+      <li><strong>Multimodal input local hardware can't touch.</strong> Video up to 2 GB and one hour, audio up to three hours, 20 MB documents. No Mac reasons over an hour of video on battery.</li>
+      <li><strong>It's on your phone.</strong> iOS and Android clients plus Windows and web, and it's fine on an 8 GB Mac. Outlier is Apple Silicon Mac only — no iPhone, no Windows.</li>
+      <li><strong>A real productivity surface.</strong> MCP tools, artifacts, web-dev mode, slides, projects (10 × 5 files), memory, 16 UI languages, and Qwen's strength in Chinese-language work.</li>
+      <li><strong>Good output terms.</strong> You keep rights in your prompts, and Qwen assigns you its interest in the outputs.</li>
+    </ul>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Qwen Chat</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>Free (no consumer plan sold)</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>Undocumented</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes — prompts, files, images, audio, video</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>No (anonymous web use allowed)</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Platforms</strong></td>
+          <td>Web, macOS, Windows, iOS*, Android</td>
+          <td>macOS (Apple Silicon, 12+)</td>
+          <td>macOS (Apple Silicon, 12+)</td>
+        </tr>
+        <tr>
+          <td><strong>Models</strong></td>
+          <td>Qwen3.6-Plus → Qwen3.8-Max-Preview; no published weights</td>
+          <td>Nano 4B + Lite 9B</td>
+          <td>All 7 tiers incl. Core 27B, Plus 397B</td>
+        </tr>
+        <tr>
+          <td><strong>Trained on your content</strong></td>
+          <td>Yes by default; opt out by request</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>*On 23 July 2026 an App Store lookup returned nothing for the US or German storefronts, while Singapore, UK and Japan returned the app. US iPhone users are on web or desktop.</p>
+
+    <h2>What it costs over a year</h2>
+    <p>For anyone using the chat app: <strong>$0</strong>. There's no consumer tier to buy. That's hard to compete with, and I won't pretend otherwise.</p>
+
+    <p>The money is on the developer side. On Alibaba Cloud Model Studio, international list price for qwen3.7-max is $2.50 per million input tokens and $7.50 per million output (currently shown with a limited-time 50% discount); qwen3.7-plus is $0.40 in / $1.60 out at the 0–256K tier. Free API access is a one-million-token trial per model, valid 90 days. Token Plan (Team Edition) credits run $30 to $200 a month — $360 to $2,400 a year.</p>
+
+    <p>Outlier Pro is $20/month or $149/year for all seven tiers; lifetime licences start at $99. Nano and Lite don't expire and don't ask for an email.</p>
+
+    <h2>What happens to your data</h2>
+    <p>Everything runs cloud-side, so everything is uploaded. The Privacy Policy says Qwen collects "your prompts and other content you upload, such as text, files, images, audio and videos," plus device ID, IP address and interaction data. For voice and video it notes this "involves the processing of data that may be considered biometric identifiers."</p>
+
+    <p>Two clauses deserve a slow read. First, the Terms say you authorise use and storage of non-personal user content to develop and improve Alibaba's machine-learning models. Training on your content is the default; the training-data summary says users can opt out "by submitting their requests to us" — a request to a company, not a switch in the app. Second, the Terms require a perpetual, irrevocable, sub-licensable, worldwide licence over user content and deem all of it "non-confidential and non-proprietary." That rules the product out for NDA-bound or client-confidential material.</p>
+
+    <p>Jurisdiction matters too. The Privacy Policy says data may be transferred out of and processed outside the jurisdiction you're in, and that certain group entities in Singapore and Mainland China get limited remote access to it. It describes encryption in transit and at rest and a security programme following "a standard industry framework," but names no certification. Terms are 18+.</p>
+
+    <p>Outlier's version of this section is short because there isn't much to say. Inference happens on your Mac: no account, no conversation telemetry, no opt-out to find.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Qwen Chat if</strong> you want large-model answers for free, you need current information from the web, you want image, video, audio or voice features, you're on a phone or a Windows machine, or what you're pasting in isn't sensitive. For general knowledge work and drafting, free plus multimodal plus web search is a strong package.</p>
+
+    <p><strong>Pick Outlier if</strong> the content is the problem — client files, source code, medical notes, legal drafts, anything under NDA. The "non-confidential and non-proprietary" clause and the default training use make Qwen Chat a poor fit there, and model quality doesn't fix it. Same if you need it to work on a plane, or if you want to still be running this exact model in five years.</p>
+
+    <p><strong>Use both</strong> — that's what I do. Qwen Chat for public research and anything needing the web or a video file; Outlier for work I'd be uncomfortable pasting anywhere. On a 54-prompt head-to-head, Core 27B matched Claude Opus on 98.9% of rubric checks and 100% of the nine hardest, and on a blind slice of SWE-bench Verified it measured about 45%. Enough for most everyday work, and still not a frontier cloud model.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Qwen's model list, feature flags, upload ceilings and subscription settings were read from its own public config endpoints at chat.qwen.ai and qwen.ai on 23 July 2026. Policy quotes from <a href="https://qwen.ai/privacypolicy">qwen.ai/privacypolicy</a>, <a href="https://qwen.ai/termsservice">qwen.ai/termsservice</a> and <a href="https://qwen.ai/training-data-summary">qwen.ai/training-data-summary</a>. Pricing from Alibaba Cloud Model Studio docs (updated 15 July 2026); open weights checked against the Qwen org on Hugging Face. Outlier pricing at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB); benchmark detail at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>. Competitor pricing, policies and feature flags change without notice — check the linked pages before relying on any of this.
+    </div>
+
+    <div class="cta">
+      <h3>Run Qwen weights on your own Mac</h3>
+      <p>Nano and Lite are free forever — no account, no upload. Pro adds all seven tiers.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-qwen-chat">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies explained</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

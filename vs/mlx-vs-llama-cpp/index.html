@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple MLX vs llama.cpp: picking a local inference runtime on Mac | Outlier</title>
+  <meta name="description" content="A technical comparison of Apple MLX and llama.cpp as local LLM inference runtimes on Apple silicon — unified memory, GGUF vs MLX formats, serving layers, and when each one is the right call.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/mlx-vs-llama-cpp/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Apple MLX vs llama.cpp: picking a local inference runtime on Mac">
+  <meta property="og:description" content="MLX is Apple's array framework for Apple silicon; llama.cpp is a dependency-free C/C++ engine that runs everywhere. Mechanism, trade-offs, and when each is correct.">
+  <meta property="og:url" content="https://outlier.host/vs/mlx-vs-llama-cpp/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Apple MLX vs llama.cpp: picking a local inference runtime on Mac">
+  <meta name="twitter:description" content="Unified memory, GGUF vs MLX, llama-server vs mlx-lm — the real trade-offs between the two runtimes on Apple silicon.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Apple MLX vs llama.cpp: picking a local inference runtime on Mac","description":"A technical comparison of Apple MLX and llama.cpp as local LLM inference runtimes on Apple silicon — unified memory, GGUF vs MLX formats, serving layers, and when each one is the right call.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mlx-vs-llama-cpp/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Apple MLX vs llama.cpp","item":"https://outlier.host/vs/mlx-vs-llama-cpp/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Apple MLX vs llama.cpp: picking a local inference runtime on Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>MLX is Apple's own array framework for Apple silicon and tends to generate tokens faster for small and mid-size models on a Mac; llama.cpp is a dependency-free C/C++ engine that runs on nearly every platform and ships a far more complete server. Both are MIT-licensed, both are free, both run entirely on your own hardware, and neither one ships model weights. Pick MLX if you only target Apple silicon and want throughput plus training; pick llama.cpp if you need model coverage, portability, or a serving layer that is already production-shaped.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a local AI app for Mac, and it runs on MLX — so I'm not neutral. What follows is the comparison I ran before making that call, including the places where llama.cpp is the better engineering decision and my own app would have been easier to ship.</p>
+
+    <h2>What each one actually is</h2>
+    <p>MLX is an array framework for machine learning on Apple silicon, published by Apple's machine learning research group under an MIT license — a NumPy-shaped library with lazy evaluation, composable function transforms, autodiff, and Python, C++, C and Swift APIs. <code>mlx-lm</code> is the language-model layer on top: <code>generate</code>/<code>chat</code>/<code>convert</code> CLIs, a Python streaming API, LoRA and full fine-tuning including on quantized models, and distributed inference via <code>mx.distributed</code>.</p>
+
+    <p>llama.cpp is LLM inference in C/C++, also MIT, aiming at minimal setup across a wide range of hardware with no dependencies at all. Apple silicon is a first-class target — the project optimizes for ARM NEON, Accelerate and Metal — but so are CUDA, HIP, Vulkan, SYCL, MUSA, OpenCL, WebGPU, and x86 CPUs with AVX/AVX2/AVX512. On macOS, Metal is on by default; you turn it off with <code>-DGGML_METAL=OFF</code> at build time or <code>--n-gpu-layers 0</code> at runtime.</p>
+
+    <p>Neither costs anything — no account, no pricing page, no license fee — so either can ship inside a commercial Mac app. Both are fully local; the only network traffic in the default path is downloading weights.</p>
+
+    <h2>The mechanism: unified memory and where the time goes</h2>
+    <p>MLX's central design decision is that arrays live in unified memory shared by CPU and GPU. There's no host-to-device copy step, and device placement is per operation rather than a whole-model decision. On a Mac, where CPU and GPU already share one pool, that matches the hardware instead of emulating a discrete GPU that isn't there.</p>
+
+    <p>The second thing to understand is that inference has two phases with different bottlenecks, and Apple's own research states it plainly: the first token is compute-bound, while subsequent tokens are bounded by memory bandwidth. That explains most of the benchmark spread you'll see online. Prefill scales with matrix math; decode scales with how fast weights stream out of RAM.</p>
+
+    <p>Apple measured this in November 2025 on an M5 MacBook Pro against a comparable M4, using MLX on both: time-to-first-token improved 3.33x to 4.06x (Qwen 14B 4-bit hit 4.06x), while token generation improved only 1.19x to 1.27x — tracking the bandwidth jump from 120 GB/s to 153 GB/s. That's a hardware comparison, not a runtime comparison, and it gets misquoted as one. What it does show is that new Apple GPU features reach MLX first, because Apple writes MLX.</p>
+
+    <h2>Model formats: GGUF and MLX are not interchangeable</h2>
+    <p>llama.cpp uses GGUF, with integer quantization from 1.5-bit to 8-bit and its own conversion tooling. MLX uses its own format via <code>mlx_lm.convert</code>, defaulting to 4-bit, with nvfp4 added in v0.32.0. A GGUF won't load in MLX, and an MLX repo won't load in llama.cpp.</p>
+
+    <p>That decides your model catalog. llama.cpp's README lists 50-plus text model families plus multimodal; mlx-lm points at thousands of Hub models with pre-quantized conversions in the <code>mlx-community</code> org. In practice a brand-new architecture gets a GGUF before it gets a working MLX conversion, and llama.cpp's release pace means support often lands within days.</p>
+
+    <h2>Serving and embedding: this is the real gap</h2>
+    <p>mlx-lm ships an OpenAI-shaped HTTP server with <code>/v1/chat/completions</code> and <code>/v1/models</code>, and its own docs carry a warning worth quoting: it is <q>not recommended for production as it only implements basic security checks</q>. It's a development convenience, not a serving layer.</p>
+
+    <p>llama-server is a different class of thing. Per its README: OpenAI-compatible chat, responses and embeddings routes, Anthropic Messages-compatible completions, reranking, parallel decoding with multi-user slots, continuous batching, multimodal, schema-constrained JSON, tool calling for effectively any model, speculative decoding, LoRA adapters, prompt caching with KV reuse, API-key auth, and a web UI. If you need a server this quarter, that list is the whole argument.</p>
+
+    <p>Embedding splits the same way. llama.cpp compiles to small self-contained binaries and exposes <code>libllama</code>, with 30-plus language bindings. MLX's Python path needs native arm64 Python 3.10+ — Rosetta breaks it — so you're bundling a Python runtime inside a notarized <code>.app</code> unless you move to <code>mlx-swift</code>. mlx-swift is first-party and covers macOS, iOS and visionOS, but its docs note that command-line SwiftPM can't build the Metal shaders, so the final build goes through Xcode, which complicates headless CI. llama.cpp's own Swift packaging has long-standing friction too; teams routinely fall back to prebuilt XCFrameworks.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Axis</th>
+          <th>Apple MLX (+ mlx-lm)</th>
+          <th>llama.cpp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>License / cost</strong></td><td>MIT, free</td><td>MIT, free</td></tr>
+        <tr><td><strong>Hardware</strong></td><td>Apple silicon, macOS 14+; CUDA backend on Linux; no Intel Mac</td><td>Metal, CUDA, HIP, Vulkan, SYCL, OpenCL, WebGPU, x86/ARM CPU</td></tr>
+        <tr><td><strong>Model format</strong></td><td>MLX-converted, 4-bit default, nvfp4 in v0.32.0</td><td>GGUF, 1.5-bit through 8-bit</td></tr>
+        <tr><td><strong>Model coverage</strong></td><td>Thousands of Hub models, conversion required, new archs lag</td><td>50+ families plus multimodal, usually first to a new model</td></tr>
+        <tr><td><strong>Serving</strong></td><td>Basic OpenAI-shaped server, explicitly not for production</td><td>llama-server: auth, batching, slots, tools, KV cache, web UI</td></tr>
+        <tr><td><strong>Native embedding</strong></td><td>mlx-swift for macOS/iOS/visionOS; Xcode required for shaders</td><td>libllama, no dependencies, 30+ bindings; Swift path is bumpier</td></tr>
+        <tr><td><strong>Training</strong></td><td>LoRA and full fine-tuning, autodiff, distributed</td><td>Inference-first</td></tr>
+        <tr><td><strong>Maturity</strong></td><td>v0.32.0, pre-1.0, API stability not promised</td><td>build b10092 (2026-07-23), 5,000+ releases, no LTS branch</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where each one genuinely wins</h2>
+    <p><strong>MLX wins on Apple silicon throughput, and on being more than an inference engine.</strong> A reproducible third-party suite (apple-silicon-llm-bench) reports MLX-Swift ahead of llama.cpp on decode for small and mid-size models on an M4 Max: Qwen 2.5 0.5B at 531 vs 297 tok/s, Qwen 3.5 2B at 292 vs 150, Gemma 4 E2B at 185 vs 119. Ollama's own March 2026 numbers after moving its Apple path to MLX show prefill 1,810 vs 1,154 tok/s and decode 112 vs 58 on Qwen3.5-35B-A3B in NVFP4 — with the stated caveats that it was a preview, needed more than 32 GB of unified memory, and supported few models. MLX also trains. llama.cpp doesn't try to.</p>
+
+    <p><strong>llama.cpp wins on reach, completeness, and shipping friction.</strong> MLX can't produce a Windows build, can't drive a discrete GPU, and can't run on an Intel Mac at all. llama.cpp covers all of that from one codebase. Its server is close to finished software rather than a demo, GGUF is the de-facto distribution format for open weights, and zero dependencies makes signing and notarizing a Mac app far less painful than shipping a Python stack. And 5,000-plus releases mean bugs on new architectures get fixed in days — though that pace also means API churn and no LTS branch, so pinning a build is your problem.</p>
+
+    <p>These aren't mutually exclusive. LM Studio's docs describe shipping llama.cpp variants across platforms alongside an Apple-silicon-only MLX engine, and Ollama went MLX-first on Apple silicon then, per its June 2026 post, brought GGUF back through llama.cpp for breadth.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick llama.cpp</strong> if you ship on more than one platform, need a server with auth and batching now, want the widest model catalog, need to support Intel Macs, or want the smallest possible binary in a signed app.</p>
+
+    <p><strong>Pick MLX</strong> if you are Apple-silicon-only by design, want the measured decode throughput on small and mid-size models, need fine-tuning in the same framework as inference, or are building a native Swift app for Mac and iPhone from one code path.</p>
+
+    <p><strong>Pick both</strong> if you're building a product where different models want different engines and you can afford to maintain two paths.</p>
+
+    <p>For Outlier the constraints decided it. Outlier is Apple Silicon only, M1 or later, macOS 12+ — no Intel, no Windows, no Linux, no mobile app — so llama.cpp's portability, its strongest card, buys me nothing. What MLX gave me was room to build the parts that aren't in either runtime: the Plus tier is a 397B-a17b MoE that streams experts from SSD at roughly 11 GB peak RSS, which needed paging control a general-purpose engine wasn't going to hand me. The trade is real — I wrote my own serving layer, prompt caching and model manager, all of which llama-server would have given me free.</p>
+
+    <p>One last thing, and it's the most useful advice here: the author of apple-silicon-llm-bench cautions about session-to-session variance and recommends benchmarking the exact artifact you ship, since quantization method and build flags move the numbers as much as runtime choice does. Every figure above, mine included, is a hypothesis.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> MLX and mlx-lm capabilities, license and platform requirements from the <a href="https://github.com/ml-explore/mlx">ml-explore/mlx</a> and <a href="https://github.com/ml-explore/mlx-lm">mlx-lm</a> repos and the <a href="https://ml-explore.github.io/mlx/build/html/install.html">MLX install docs</a>; server caveat from mlx-lm's SERVER.md; Swift build caveat from <a href="https://github.com/ml-explore/mlx-swift">mlx-swift</a>. llama.cpp features, backends and server capabilities from <a href="https://github.com/ggml-org/llama.cpp">ggml-org/llama.cpp</a>, its build docs and tools/server README. M5 vs M4 figures from <a href="https://machinelearning.apple.com/research/exploring-llms-mlx-m5">Apple Machine Learning Research</a>, published 2025-11-19. Ollama throughput figures from <a href="https://ollama.com/blog/mlx">ollama.com/blog/mlx</a> (tested 2026-03-29, preview build) and its June 2026 GGUF post; LM Studio engine lineup from its published docs; independent decode numbers from <a href="https://github.com/john-rocky/apple-silicon-llm-bench">apple-silicon-llm-bench</a>. Release state checked 2026-07-23. Outlier tier specs measured on an M1 Ultra Mac Studio; the 27B parity result is at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>. Both projects move fast — versions, benchmarks and feature lists change, and neither publishes a privacy or telemetry policy, so any claim an app makes on top of them is that app's own claim to defend.
+    </div>
+
+    <div class="cta">
+      <h3>See what MLX looks like as a finished Mac app</h3>
+      <p>Outlier runs models fully on-device on Apple Silicon. No account, no usage caps, works with Wi-Fi off. Nano and Lite are free forever.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mlx-vs-llama-cpp">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

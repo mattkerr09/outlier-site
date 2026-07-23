@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Meta AI: local Mac AI vs Meta's cloud assistant | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI, no account) vs Meta AI (free cloud assistant on Muse Spark). Price, caps, offline, data handling, and where each genuinely wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-meta-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Meta AI: local Mac AI vs Meta's cloud assistant">
+  <meta property="og:description" content="Meta AI is free, cloud-only, and everywhere. Outlier runs on your Mac with nothing uploaded. An honest look at the trade-offs, written by Outlier's founder.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-meta-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Meta AI: local Mac AI vs Meta's cloud assistant">
+  <meta name="twitter:description" content="Free cloud assistant vs on-device Mac AI — price, caps, offline, and what happens to your data.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Meta AI: local Mac AI vs Meta's cloud assistant","description":"Honest comparison of Outlier (local Mac AI, no account) vs Meta AI (free cloud assistant on Muse Spark). Price, caps, offline, data handling, and where each genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-meta-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Meta AI","item":"https://outlier.host/vs/outlier-vs-meta-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Meta AI: local Mac AI vs Meta's cloud assistant</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Meta AI is a free cloud assistant on Meta's servers, already inside WhatsApp, Instagram, Facebook and Ray-Ban Meta glasses. Outlier is a Mac app that runs models on your own hardware — no account, no caps, nothing uploaded. Meta AI has live web answers, image generation and voice that Outlier doesn't. Meta's terms say it reviews your AI conversations, uses them to improve its AI, and since December 16, 2025 uses them for ad personalization.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I built Outlier and I sell it, so I'm not neutral. That's why I write these the way I'd want one written about my own product — the other side's advantages stated plainly, with sources you can check. These two are near-opposite designs: a free cloud assistant with enormous reach, and a Mac app with no servers.</p>
+
+    <h2>What Meta AI is</h2>
+    <p>Meta AI is Meta's consumer assistant. You reach it in a standalone iOS or Android app, on the web at meta.ai, and inside Facebook, Instagram, WhatsApp and Messenger — plus on Ray-Ban Meta and Oakley Meta glasses, since the app absorbed the old Meta View companion.</p>
+
+    <p>It runs on Muse Spark, announced April 8, 2026 as "the first in a new series of large language models built by Meta Superintelligence Labs." Muse Spark 1.1, from July 9, 2026, is Meta's "multimodal reasoning model built for agentic tasks," with a one-million-token context window it actively manages. That's what "Thinking" mode gives you.</p>
+
+    <p>Two structural facts matter. The weights are closed — at launch Muse Spark went out only "in private preview via API to select partners," and Meta said it hopes to open-source future versions, a hope rather than a commitment. And there's no desktop client: the App Store listing is iPhone and iPad only, iOS 17.2+, rated 13+. On a Mac, Meta AI is a browser tab.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12+. No Intel, no Windows, no Linux, no phone app. Models run on your machine, so there's no account, no usage cap, nothing uploaded. Turn Wi-Fi off and it keeps working.</p>
+
+    <p>There are seven tiers. Nano (4B, 2.37 GB, 6 GB RAM) and Lite (9B, 5.04 GB, 12 GB RAM) are free. Pro — $20/month or $149/year — adds Quick 26B-a4b, Core 27B, Code 27B, Vision 35B-a3b, and Plus, a 397B-a17b model that streams experts from SSD at roughly 11 GB peak RAM. On an M1 Ultra, Nano measures 71.7 tok/s and Core 20.7. Six tiers are Apache 2.0, with weights on <a href="https://huggingface.co/Outlier-Ai">Hugging Face</a>.</p>
+
+    <p>On quality: Core 27B matched Claude Opus on 98.9% of rubric checks across a 54-prompt head-to-head, and 100% on the nine hardest. On a blind slice of SWE-bench Verified it measured about 45%. Real numbers — and also not frontier numbers.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Meta AI</th>
+          <th>Meta One (paid)</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>Free</td>
+          <td>Unpublished; limited testing</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>Yes — a monthly AI allowance</td>
+          <td>Expanded allowance</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes — every prompt</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes (13+)</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td>iPhone/iPad (iOS 17.2+), Android, web, Meta apps, glasses</td>
+          <td>Mobile</td>
+          <td>macOS 12+, Apple Silicon</td>
+          <td>macOS 12+, Apple Silicon</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Meta AI genuinely wins</h2>
+    <p>This isn't a formality. Meta AI does several things Outlier can't do at all.</p>
+    <ul>
+      <li><strong>It's free, and the good model is the free one.</strong> Muse Spark powers meta.ai and the app with no subscription. Outlier's free tier stops at 9B.</li>
+      <li><strong>Frontier scale.</strong> A million-token context window the model actively manages, plus agentic tool and computer use. No consumer Mac hosts a model in that class at that context length.</li>
+      <li><strong>Zero setup.</strong> No download, no model files, no RAM budget. It's already in the apps people open.</li>
+      <li><strong>Glasses.</strong> Meta AI is the assistant on Ray-Ban Meta and Oakley Meta hardware, with first-person visual understanding. A desktop app can't do hands-free.</li>
+      <li><strong>Multimodal breadth.</strong> Image generation and editing, video, and voice conversation from one assistant. Outlier generates no images and has no voice mode.</li>
+      <li><strong>Live information.</strong> When the model can't answer, Meta routes the query to search partners. Outlier has no web search, so it answers from training data and has a cutoff.</li>
+      <li><strong>Continuity and personalization.</strong> Conversations follow you across phone, web and glasses, and Meta tailors answers using your profile and location.</li>
+      <li><strong>Distribution.</strong> Roughly a billion people's usage funding continuous model work, versus one person in Michigan.</li>
+    </ul>
+    <p>If your work needs current information, images, voice, a phone, or glasses, Meta AI is the better tool and I'd rather say so than pretend.</p>
+
+    <h2>What it costs over a year</h2>
+    <p>For most people, Meta AI costs nothing. The App Store lists it as free with in-app purchases, and Meta frames the paid tier as extra capacity on top of existing access, not a gate.</p>
+
+    <p>That paid tier is <strong>Meta One</strong>, which adds features across Instagram, Facebook, Messenger, Meta AI and WhatsApp. For Premium, Meta lists an "expanded monthly AI usage allowance," the ability to "generate more images and videos," and "more advanced reasoning." Meta publishes no price and says Meta One "is currently in limited testing and isn't available in all locations." Press coverage in May 2026 reported $7.99 and $19.99 a month for the two tiers with no annual plan — reported, not confirmed on a Meta page. And free doesn't mean unmetered: an allowance exists.</p>
+
+    <p>Outlier's math is simpler: $0 for Nano and Lite forever, $149/year for Pro, or $99 and up once for lifetime. On price alone Meta AI wins outright for the average person. Outlier's argument isn't that it's cheaper than free — it's that you own what you paid for, and it doesn't meter you.</p>
+
+    <h2>What happens to your data</h2>
+    <p>Here's where the two diverge most, and Meta is unusually direct about it. Its AI Terms state: "Meta will review your interactions with AIs, including the content of your conversations with or messages to AIs, and this review may be automated or manual (human)." The help center adds that "Meta uses your interactions with AIs to improve AI at Meta," and that responses draw on your location and profile details like age, gender and interests.</p>
+
+    <p>Queries can also leave Meta: it "may share certain information with select partners, like search engines," including your messages and your region when the AI can't answer. Since December 16, 2025, Meta AI interactions feed ad and content personalization across Meta's apps. Meta excludes conversations touching religion, sexual orientation, political views, health, ethnic origin and union membership from ad targeting, and points to Ads Preferences — but that's a control, not an off switch, and the change is rolling out in "most regions."</p>
+
+    <p>The mitigation Meta's own terms offer is telling: "Do not share information that you don't want the AIs to use and retain, such as information about sensitive topics." Deletion exists but is scoped — the app offers "Delete all chats and media," yet nothing says deletion pulls your data out of models already trained on it. Apple's privacy label lists Location, Contacts, User Content, Search History, Browsing History, Financial Info and Sensitive Info as linked to you, used partly for third-party advertising. Credit where due: Meta has shipped parental controls that switch off chats with AI characters.</p>
+
+    <p>Outlier's version of this section is short: no server, no account, no telemetry on your prompts, nothing to opt out of. The flip side is just as real — no cloud sync, no backup, no cross-device history. If your Mac dies, the chats die with it.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Meta AI if</strong> you want a capable assistant for free, you need answers about things that happened this week, you want images and voice, you're on a phone or Windows, or you own Meta glasses. It has reach no Mac app can match.</p>
+
+    <p><strong>Pick Outlier if</strong> the content of your prompts is the problem — client files, source code, medical or legal drafts, anything you wouldn't want reviewed by a human or folded into ad targeting. Also if you need to work with the network off, or want weights you can download and inspect.</p>
+
+    <p><strong>Use both,</strong> honestly. Most people I talk to do. They aren't competing for the same minute of your day.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Muse Spark launch and closed-weights status from Meta's April 8, 2026 announcement; 1.1 capabilities from ai.meta.com (July 9, 2026). Quotes from Meta's AI Terms and help pages; ad personalization from Meta's October 2025 post; platform and privacy-label details from the App Store listing. Meta One's monthly prices are press-reported, not published by Meta, and labeled as such above. Outlier pricing and throughput measured on an M1 Ultra (64 GB) on 2026-07-23; the 54-prompt result is at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>. Cloud pricing, models and privacy policies change often — check Meta's pages before relying on any figure here.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on your Mac with nothing uploaded and no sign-up.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-meta-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

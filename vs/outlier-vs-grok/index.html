@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Grok: local Mac AI vs xAI's cloud assistant | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Grok (xAI cloud). Price, usage caps, offline use, training on your data, and where Grok genuinely wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-grok/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Grok: local Mac AI vs xAI's cloud assistant">
+  <meta property="og:description" content="Grok is cloud-only, account required, and trains on consumer chats by default. Outlier runs on your Mac with no account and nothing uploaded. Honest trade-offs.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-grok/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Grok: local Mac AI vs xAI's cloud assistant">
+  <meta name="twitter:description" content="Cloud Grok vs on-device Outlier — price, caps, offline, data handling, and where each one actually fits.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Grok: local Mac AI vs xAI's cloud assistant","description":"Honest comparison of Outlier (local Mac AI) vs Grok (xAI cloud). Price, usage caps, offline use, training on your data, and where Grok genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-grok/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Grok","item":"https://outlier.host/vs/outlier-vs-grok/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Grok: local Mac AI vs xAI's cloud assistant</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Grok is xAI's cloud assistant: $0/month free tier, SuperGrok at $30/month, account required, and consumer conversations used to train xAI's models by default unless you find the opt-out. Outlier is a Mac app where the model runs on your own hardware — no account, no usage caps, works with Wi-Fi off, nothing uploaded. Grok has live web and X search, image and video generation, voice and mobile apps; Outlier has none of those, and there's no native Grok app for macOS.</p>
+    </div>
+
+    <p class="lead">I build Outlier, so read this knowing I'm an interested party. I've written the version I'd want if I were choosing — including a long section on where Grok is genuinely better, because it is. Every figure below comes from xAI's own pages, checked 2026-07-23.</p>
+
+    <h2>What Grok actually is</h2>
+    <p>Grok is xAI's conversational assistant and model family. You reach it through grok.com, the iOS and Android apps, inside X, through a REST API, or through Grok Build, an open-source terminal coding agent. All of those send your prompt to xAI's servers; inference is entirely cloud-side, with no local option anywhere in the product line. The flagship is Grok 4.5 with a 500,000-token context window, and Grok 4.3 and the 4.20 variants go to a million. None of them have published weights.</p>
+
+    <p>On platforms, xAI's own site says Grok is "Available on Web, iOS and Android," and the download footer lists those three plus Grok on X. There's no native macOS app, and the official iOS listing (Grok AI by X Corp., free, iOS 17+, rated 4.88 across ~1.31 million ratings) shows no Mac devices. On a Mac you're in a browser tab, or a terminal.</p>
+
+    <p>The terminal option is real, and it's good. Grok Build is an Apache-2.0 Rust coding agent installed with a one-line <code>curl … | bash</code>, with binaries for macOS, Linux and Windows and support for MCP servers, parallel subagents, plan mode, skills, hooks, git worktrees, headless CI and sandboxed execution. But it authenticates through your browser and calls xAI's hosted models. The agent runs on your machine; the thinking doesn't.</p>
+
+    <h2>Where Grok genuinely wins</h2>
+    <p>These aren't hedged concessions. They're structural gaps no amount of work on my end closes.</p>
+    <ul>
+      <li><strong>Live information.</strong> Grok searches the open web and X posts at query time, so it can answer about something that happened an hour ago. A local model is frozen at its training cutoff. That's architecture, not polish.</li>
+      <li><strong>Context windows nobody runs at home.</strong> 500k tokens on Grok 4.5, a million on Grok 4.3 and the 4.20 line. The KV cache alone would dwarf any consumer Mac's RAM.</li>
+      <li><strong>Frontier-scale quality.</strong> Grok 4.5 was trained on datacenter compute. A 2–30 GB model on a laptop won't match it on the hardest reasoning or broadest recall.</li>
+      <li><strong>Multimodal in one thread.</strong> Vision, image generation and editing, short text-to-video, low-latency voice, PDF analysis. Building that locally means five models and a pile of glue.</li>
+      <li><strong>A free tier that isn't a trial.</strong> $0/month includes real-time web and X search, voice mode and connectors, with SOC 2 Type I and II listed even there.</li>
+      <li><strong>Real openness, in the parts they opened.</strong> The Grok Build agent, the Python SDK and the protobufs are Apache-2.0, and Grok's own system prompts are AGPL-3.0 — rare, and it deserves credit. Grok-1 shipped under Apache 2.0 in March 2024.</li>
+      <li><strong>Mobile, sync and memory.</strong> iPhone, Android, cross-device history, persistent memory, personas.</li>
+      <li><strong>Cheap long-context API.</strong> grok-4.3 is $1.25/$2.50 per million input/output tokens with a 1M window; grok-4.5 is $2.00/$6.00 under 200k context and $4.00/$12.00 above it.</li>
+    </ul>
+
+    <h2>What it costs over a year</h2>
+    <p>xAI's pricing page publishes exactly two consumer prices: Free at $0/month and SuperGrok at $30/month, which is where Grok 4.5, higher rate limits and image and video generation live. The matrix also names SuperGrok Lite, SuperGrok Heavy, Business and Enterprise — with no price for any of them and no annual billing option at all.</p>
+
+    <p>So the only annual figure you can compute from xAI's own material is $360/year, at twelve monthly payments. Third-party trackers list Heavy at $300/month and an annual plan at $300/year; I couldn't confirm either on an xAI-owned page, so treat both as unverified. Outlier Pro is $20/month or $149/year, with lifetime Pro from $99.</p>
+
+    <h2>What happens to your data</h2>
+    <p>xAI's privacy policy defines your Input as prompts plus files, images, audio, voice and video — all transmitted to and processed on xAI's servers. Consumer inputs and outputs are used to train xAI's models by default. An opt-out exists (Settings → Data Controls → "Improve the model" on mobile, Settings → Data → "Improve the Model" on grok.com), but it's opt-out rather than opt-in, it only covers conversations after you flip it, and it has holes: feedback you volunteer may still be used for training, and unauthenticated users in some regions outside the EU and UK can't opt out at all.</p>
+
+    <p>The controls that do exist are concrete. Private Chat keeps content out of training, hides it from history, and deletes it within 30 days barring legal holds; business, enterprise and API traffic is excluded from training outright; and xAI says it doesn't sell user data. What gives me pause is the other side: authorized xAI staff may review conversations for model performance, security and legal compliance; the no-training guarantee is a business-tier feature, so consumers get a toggle rather than a contract; and xAI asks users not to put personal information into prompts at all. That last one is honest of them, and a real limit on what you can use it for.</p>
+
+    <p>One more thing belongs on the record. On 17 February 2026 the Irish Data Protection Commission opened a statutory inquiry into X Internet Unlimited Company over the apparent creation and publication of non-consensual intimate or sexualised images of EU/EEA data subjects, including children, via generative AI functionality associated with Grok on X. It targets Grok-on-X rather than the standalone xAI app — but it's live.</p>
+
+    <h2>What Outlier is, and what it can't do</h2>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). Models run on your machine — no account, no caps, and it works with Wi-Fi off once a model has downloaded. Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra) and Lite 9B are free forever; Pro at $20/month or $149/year adds five more tiers up to Plus 397B-a17b.</p>
+
+    <p>For quality, the number I'd point at: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. On a blind slice of SWE-bench Verified it measured about 45%. All on-device.</p>
+
+    <p>What Outlier doesn't have, plainly: live web search, image generation, voice mode, a mobile app, Windows or Linux builds, or cloud sync. I build it solo in Grand Rapids, and publish the weights at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>.</p>
+
+    <h2>Side-by-side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Grok Free</th>
+          <th>SuperGrok</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>$0/mo</td>
+          <td>$30/mo (no annual price published)</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>Yes — rate-limited</td>
+          <td>Yes — higher rate limits</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes — prompts, files, images, audio, video</td>
+          <td>Yes — same</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Trains on your chats</strong></td>
+          <td>By default; opt-out toggle</td>
+          <td>By default; opt-out toggle</td>
+          <td>No — nothing leaves the Mac</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td colspan="2">Web, iOS, Android, X; CLI for macOS/Linux/Windows. No native Mac app.</td>
+          <td colspan="2">macOS 12+, Apple Silicon only. No Windows, Linux or mobile.</td>
+        </tr>
+        <tr>
+          <td><strong>Web search</strong></td>
+          <td>Yes — web and X</td>
+          <td>Yes — higher limits</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Image / video generation</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Grok if</strong> you need answers about things happening right now, you want image or video generation and voice in the same thread, you work from a phone as much as a laptop, or your documents need a 500k-to-1M-token window.</p>
+
+    <p><strong>Pick Outlier if</strong> the content itself is the problem: client files, source code, medical or legal drafts — anything you'd hesitate to paste into a service whose own policy asks you not to include personal information. Or if you want no account, no caps, a session that keeps working on a plane, and $149/year instead of $360.</p>
+
+    <p><strong>Plenty of people should run both.</strong> Grok for the live, visual, mobile work; Outlier for the confidential, offline, high-volume work. They aren't competing for the same hour of your day.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> prices and tiers from <a href="https://x.ai/pricing">x.ai/pricing</a>; models and API rates from <a href="https://docs.x.ai/developers/models">docs.x.ai</a>; platforms from <a href="https://x.ai/grok">x.ai/grok</a>; data handling from <a href="https://x.ai/legal/privacy-policy">x.ai/legal/privacy-policy</a> and <a href="https://x.ai/legal/faq">x.ai/legal/faq</a>; <a href="https://github.com/xai-org/grok-build">github.com/xai-org/grok-build</a>; iOS details via the App Store lookup API; the inquiry from the <a href="https://www.dataprotection.ie/en/news-media/press-releases/data-protection-commission-opens-investigation-x-xiuc">DPC press release</a>. All checked 2026-07-23. The $300/month Heavy and $300/year annual figures on third-party trackers are <strong>unconfirmed</strong>. Outlier pricing at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB). Competitor pricing and policies change often — check xAI's pages first.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on your Mac for free, forever. No login, no caps, nothing uploaded. Apple Silicon, macOS 12+.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-grok">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

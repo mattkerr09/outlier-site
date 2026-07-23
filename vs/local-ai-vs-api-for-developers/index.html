@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local AI vs a hosted LLM API: a developer's comparison | Outlier</title>
+  <meta name="description" content="Self-hosting open weights with Ollama, llama.cpp, vLLM or MLX versus calling Anthropic, OpenAI or Google. Real pricing, rate limits, data retention, licensing and hardware ceilings.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/local-ai-vs-api-for-developers/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Local AI vs a hosted LLM API: a developer's comparison">
+  <meta property="og:description" content="Self-hosting open weights versus renting frontier capability per token. Pricing, rate limits, retention policy, licensing and the hardware ceiling — with sources.">
+  <meta property="og:url" content="https://outlier.host/vs/local-ai-vs-api-for-developers/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Local AI vs a hosted LLM API: a developer's comparison">
+  <meta name="twitter:description" content="Ollama, llama.cpp, vLLM and MLX versus Anthropic, OpenAI and Google — the mechanism, the money, and the real trade-offs.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Local AI vs a hosted LLM API: a developer's comparison","description":"Self-hosting open weights with Ollama, llama.cpp, vLLM or MLX versus calling Anthropic, OpenAI or Google. Real pricing, rate limits, data retention, licensing and hardware ceilings.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/local-ai-vs-api-for-developers/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Local AI vs a hosted LLM API","item":"https://outlier.host/vs/local-ai-vs-api-for-developers/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Local AI vs a hosted LLM API: a developer's comparison</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Call a hosted API when you need frontier-scale capability, elastic concurrency, or a product that ships everywhere — no consumer machine holds a model that big, and both Anthropic and OpenAI default to <em>not</em> training on API data. Run a local model when the per-token bill, the round trip, or the fact that prompts leave the machine is your binding constraint; after hardware, local inference costs electricity. llama.cpp, Ollama and LM Studio all expose OpenAI-compatible endpoints, so most teams route by task rather than choosing once.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device, so I'm an interested party. I've kept this to numbers you can check, and said where the hosted API is the better answer.</p>
+
+    <h2>What each one actually does</h2>
+    <p>A local runtime is a process on your machine that loads a quantized weights file into memory, runs the forward pass on whatever accelerator you have, and keeps the KV cache in your own RAM. <strong>llama.cpp</strong> (MIT) is the substrate most of the ecosystem sits on — Metal on Apple Silicon, plus CUDA, HIP, SYCL, Vulkan and CPU paths, at quantizations from 1.5-bit to 8-bit. <strong>Ollama</strong> (also MIT) wraps it in a CLI and a local REST API; <strong>LM Studio</strong> is a desktop app running GGUF and MLX models behind OpenAI-compatible REST, with offline document RAG. <strong>MLX</strong> is Apple's MIT array framework built on unified memory, and <strong>vLLM</strong> (Apache-2.0) is the server-shaped one: PagedAttention and continuous batching for throughput.</p>
+
+    <p>A hosted API is an HTTPS request: you send tokens, a vendor runs a model you can't inspect on hardware you don't own, and you're billed per million tokens each way.</p>
+
+    <h2>The money, and the ceilings attached to it</h2>
+    <p>Claude API list pricing, per million tokens: <strong>Opus 4.8 $5 in / $25 out</strong>, Sonnet 5 $2/$10 introductory through August 31 2026, then $3/$15. OpenAI's list runs from gpt-5.6-sol at $5 input / $0.50 cached input / $30 output down to gpt-5.4-nano at $0.20/$0.02/$1.25.</p>
+
+    <p>Headline rates aren't what you pay. Anthropic prices a 5-minute cache write at 1.25x base input and a 1-hour write at 2x, but a cache <em>read</em> at 0.1x — a 5-minute cache pays for itself after one hit. Batch takes 50% off both directions (Opus 4.8 becomes $2.50/$12.50) and stacks with caching. The other way: hosted web search bills $10 per 1,000 searches on top of tokens, and Anthropic's newer tokenizer (Opus 4.7+, Sonnet 5, Fable 5) emits roughly <strong>30% more tokens for the same text</strong> — identical content costs more at an unchanged rate.</p>
+
+    <p>The ceilings are per-organization. Anthropic's Start tier for Opus 4.x is 1,000 RPM / 2M input tokens per minute / 400K output tokens per minute; Scale reaches 10,000 RPM / 10M ITPM / 2M OTPM, and cache reads don't count toward ITPM on most models. Spend caps are $500 (Start), $1,000 (Build) and $200,000 (Scale): over a rate limit you get a 429 with retry-after, over the cap usage pauses until next month. Local inference has none of that arithmetic — though your hardware is paid for whether you use it or not, and an idle API costs $0.</p>
+
+    <h2>Where the hardware ceiling actually bites</h2>
+    <p>OpenAI's open-weight release states the limit cleanly: <strong>gpt-oss-120b</strong> (117B params, 5.1B active) fits on a single 80GB GPU, while only the much smaller <strong>gpt-oss-20b</strong> (21B, 3.6B active) is documented to run within 16GB — both via MXFP4 quantization of the MoE weights. No quantization setting fits a frontier-scale model in a laptop.</p>
+
+    <p>Sizing below it is your problem too. Ollama publishes no minimum RAM figure — only that required RAM scales with <code>OLLAMA_NUM_PARALLEL</code> × <code>OLLAMA_CONTEXT_LENGTH</code>, and that a model which doesn't fit gets split across CPU and GPU (its example: 48%/52%).</p>
+
+    <p>For scale: Outlier's largest Apple Silicon tier, Plus 397B-a17b, is a 209 GB download needing 64 GB of RAM, running at 2.1 tok/s by streaming MoE experts off the SSD to hold about 11 GB peak RSS. I'm not claiming how open weights score against frontier models on benchmarks; I have no primary source for that head-to-head, and the memory ceiling is the defensible point.</p>
+
+    <h2>Data path, retention and licensing</h2>
+    <p>"Cloud means they train on your prompts" is false at the paid tiers. Anthropic doesn't by default use commercial-product inputs or outputs for training, except what you submit as feedback or a bug report; OpenAI doesn't train on API data unless you opt in. The distinctions are narrower. OpenAI generates abuse-monitoring logs for <em>all</em> API usage, retained up to 30 days by default; Zero Data Retention needs prior approval and isn't available on every endpoint (<code>/v1/conversations</code> and <code>/v1/assistants</code> aren't eligible). Tiers differ too: on Google's Gemini API <strong>Unpaid</strong> tier, Google uses submitted content and responses to improve its products, and human reviewers may read and annotate API input and output. A free prototyping key isn't the paid terms.</p>
+
+    <p>Local's claim is different in kind: Ollama's FAQ says that run locally it never sees your prompts or data. But that property belongs to the execution mode, not the brand — Ollama also sells hosted tiers ($20/month Pro, $100/month Max) processed server-side.</p>
+
+    <p>Licensing needs the same care. Runtimes are clean — llama.cpp, Ollama and MLX are MIT, vLLM Apache-2.0 — but weights are messier. gpt-oss and Qwen3-32B are Apache-2.0; Meta's Llama 4 Community License isn't, requiring a separate license request if your products exceeded 700 million monthly active users on the release date, a "Built with Llama" notice, and derivative names beginning with "Llama". LM Studio's docs publish no open-source license for the app itself, though it's free at home and at work — free-but-proprietary until you check.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Axis</th>
+          <th>Local runtime</th>
+          <th>Hosted API</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Cost model</strong></td><td>Hardware up front, ~$0 per token after</td><td>Per MTok forever; batch 50% off, cache reads 0.1x</td></tr>
+        <tr><td><strong>Capability ceiling</strong></td><td>Bounded by RAM/VRAM</td><td>Frontier scale, no local memory constraint</td></tr>
+        <tr><td><strong>Concurrency</strong></td><td>One box; vLLM batching for a team</td><td>10,000 RPM / 10M ITPM at Scale</td></tr>
+        <tr><td><strong>Data path</strong></td><td>Never leaves the machine</td><td>Leaves it; no training by default, abuse logs ≤30 days</td></tr>
+        <tr><td><strong>Offline</strong></td><td>Yes</td><td>No — latency floor, vendor availability</td></tr>
+        <tr><td><strong>Ops burden</strong></td><td>Quantization, context sizing, updates, packaging</td><td>Vendor's</td></tr>
+        <tr><td><strong>Server-side extras</strong></td><td>Build them yourself</td><td>Caching, batch, web search, code sandboxes</td></tr>
+        <tr><td><strong>Model lifecycle</strong></td><td>Frozen until you change it</td><td>Vendor deprecates; retired IDs return 404</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where each genuinely wins</h2>
+    <h3>The hosted API wins outright when…</h3>
+    <ul>
+      <li><strong>You need the capability ceiling.</strong> Million-token-context frontier models don't fit in consumer RAM — a memory limit, not a tuning gap.</li>
+      <li><strong>You're shipping cross-platform.</strong> No weights, no thermal budget; the same call works from a laptop, a CI runner or a phone.</li>
+      <li><strong>Load is spiky.</strong> Scale tier reaches 10,000 requests/minute, Batch halves bulk work, idle costs nothing.</li>
+      <li><strong>You'd otherwise rebuild infrastructure.</strong> Caching, batch, hosted search, code sandboxes and native tool use get reimplemented locally.</li>
+      <li><strong>You want upgrades for free.</strong> A new model is a one-string change, not a release plus a re-download.</li>
+    </ul>
+    <h3>Running it yourself wins outright when…</h3>
+    <ul>
+      <li><strong>Marginal cost is the constraint.</strong> Agent loops, corpus reprocessing and heavy best-of-N are metered by electricity, not an invoice and a spend cap.</li>
+      <li><strong>The data genuinely cannot leave.</strong> Air-gapped or regulated work: "the process never sees a network" beats any retention policy.</li>
+      <li><strong>You want the whole stack.</strong> Any open-weight model, any quantization from 1.5-bit to 8-bit, custom fine-tunes and LoRAs, your own sampling.</li>
+      <li><strong>You need to redistribute.</strong> MIT/Apache runtimes plus Apache-2.0 weights means shipping commercially with no vendor relationship.</li>
+      <li><strong>Local isn't one desktop.</strong> The same weights serve a team from a Linux box under vLLM, on NVIDIA, AMD or Intel hardware.</li>
+    </ul>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick the hosted API</strong> if you're building cross-platform, your load is bursty, or you need the largest models and longest context. Budget for retries, deprecation dates and that ~30% tokenizer inflation.</p>
+    <p><strong>Self-host</strong> if you have a fixed, heavy, repetitive workload; a hard data-residency requirement; or something to redistribute with no vendor in the loop. Read the weights license, not just the runtime license.</p>
+    <p><strong>Use a packaged on-device app</strong> — Outlier is one example, LM Studio another — if you want local inference without owning the packaging, signing and update problem. Outlier is Apple Silicon only, with no web search, no image generation, no mobile app and no Windows build; those are exactly the gaps a hosted API fills.</p>
+    <p><strong>Or both:</strong> these runtimes speak the OpenAI wire format, so routing cheap steps locally and escalating hard ones is a config change, not a rewrite.</p>
+
+    <div class="receipts">
+      <strong>Sources:</strong> Anthropic <a href="https://platform.claude.com/docs/en/about-claude/pricing">pricing</a>, <a href="https://platform.claude.com/docs/en/api/rate-limits">rate limits</a>, <a href="https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training">training policy</a>; OpenAI <a href="https://developers.openai.com/api/docs/pricing">pricing</a> and <a href="https://developers.openai.com/api/docs/guides/your-data">data controls</a>; <a href="https://ai.google.dev/gemini-api/terms">Gemini API terms</a>; the <a href="https://github.com/ollama/ollama">Ollama</a>, <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, <a href="https://github.com/vllm-project/vllm">vLLM</a>, <a href="https://github.com/ml-explore/mlx">MLX</a> and <a href="https://github.com/openai/gpt-oss">gpt-oss</a> repos; <a href="https://docs.ollama.com/faq">docs.ollama.com/faq</a>, <a href="https://ollama.com/pricing">ollama.com/pricing</a>, <a href="https://lmstudio.ai/docs">lmstudio.ai/docs</a>; the meta-llama/llama-models LICENSE. Outlier figures measured on an M1 Ultra (64 GB), plus my own <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a> — weigh it accordingly. Third-party prices and policies were current on 2026-07-23 and change often.
+    </div>
+
+    <div class="cta">
+      <h3>Local inference without the ops?</h3>
+      <p>Outlier runs open-weight models on-device on Apple Silicon — no account, no caps, nothing uploaded. Free tier: Nano 4B and Lite 9B.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=local-ai-vs-api-for-developers">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

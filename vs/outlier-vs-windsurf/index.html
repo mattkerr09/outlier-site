@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Windsurf (Codeium): local coding AI vs a cloud agent IDE | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Windsurf — now rebranded Devin Desktop. Where the model runs, whether your code leaves the machine, cost, agents, and repo-scale context.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-windsurf/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Windsurf (Codeium): local coding AI vs a cloud agent IDE">
+  <meta property="og:description" content="Windsurf is now Devin Desktop. Its agents run locally, its models don't. Here's the honest comparison against Outlier's on-device Code 27B — including where the cloud still wins.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-windsurf/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Windsurf (Codeium): local coding AI vs a cloud agent IDE">
+  <meta name="twitter:description" content="Local weights on your Mac vs a cross-platform IDE driving vendor-hosted frontier models. Honest receipts, including where Outlier is behind.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Windsurf (Codeium): local coding AI vs a cloud agent IDE","description":"Honest comparison of Outlier (local Mac AI) vs Windsurf — now rebranded Devin Desktop. Where the model runs, whether your code leaves the machine, cost, agentic ability, and repo-scale context.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-windsurf/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Windsurf (Codeium)","item":"https://outlier.host/vs/outlier-vs-windsurf/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Windsurf (Codeium): local coding AI vs a cloud agent IDE</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Windsurf no longer ships under that name: Cognition acquired it and rebranded it Devin Desktop on June 2, 2026, and windsurf.com now redirects to devin.ai. Its agent harness runs on your machine, but every model is vendor-hosted: your code goes to the cloud for inference and indexing, and training on it is the default unless you pay to opt out. Outlier runs the model itself on your Mac — no account, no quota, nothing uploaded — but its Code 27B measured about 45% on a blind SWE-bench Verified slice, behind the strongest cloud coding agents.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr and I build Outlier, so read this as a comparison written by an interested party. Every claim about the other product is sourced to its own docs, and my numbers are here even where they're unflattering.</p>
+
+    <h2>Read this first: "Windsurf" is now Devin Desktop</h2>
+    <p>Windsurf is a retired name. Codeium became Windsurf, Cognition acquired it, and on June 2, 2026 it became <strong>Devin Desktop</strong>; windsurf.com now 308-redirects to devin.ai/desktop.</p>
+
+    <p>Plans, pricing and extensions carried over. The agent didn't: <strong>Cascade</strong>, the agent that defined Windsurf, reached end of life on July 1, 2026, replaced by Devin Local — a Rust rewrite Cognition calls up to 30% more token efficient. Three product identities in two years is a real risk if you're standardizing a team.</p>
+
+    <h2>Where each one lives</h2>
+    <p>Outlier is a native macOS app for Apple Silicon, M1 or later, macOS 12+. That's the whole surface area: no Windows or Linux build, no mobile app, no web version, no extension.</p>
+
+    <p>Devin Desktop is the opposite shape — a full IDE with the agent inside it, built for macOS, Windows and Linux, plus a command-line agent and a JetBrains plugin. If you want something that edits your working tree and iterates until the tests pass, that's what it was made for. Outlier isn't an editor.</p>
+
+    <h2>Which model is doing the work</h2>
+    <p>Outlier ships seven tiers that download once and run on your GPU, from Nano 4B to Plus 397B-a17b, which pages MoE experts off the SSD. Six are Apache 2.0, the weights are on Hugging Face, and on an M1 Ultra Nano runs about 71.7 tok/s and Core 27B about 20.7.</p>
+
+    <p>Devin Desktop routes to a catalog Cognition puts at 150+ models on Pro and 276+ on Enterprise — OpenAI, Anthropic, Google, DeepSeek, Moonshot, Zhipu, Minimax, xAI — plus its own SWE-1.5/1.6/1.7, described as frontier-size at hundreds of billions of parameters and served on Cerebras at up to 950 tok/s.</p>
+
+    <p>All of it is vendor-hosted. "Devin Local" is a local agent <em>harness</em> with access to your files and tools, not local weights. The ACP docs list Claude Agent, Codex CLI and Gemini CLI as pluggable agents, and never mention Ollama, LM Studio or any local runtime. No network, no agent.</p>
+
+    <h2>Does your code leave the machine?</h2>
+    <p>Outlier: no. No account, no round trip, no prompt telemetry. Turn Wi-Fi off and it keeps working, and there's no training opt-out to hunt for because there's nothing to opt out of.</p>
+
+    <p>Devin Desktop: yes, twice over. Every prompt and every file the agent reads goes to a hosted model, and remote indexing clones your repository into Cognition's cloud to build embeddings on a single-tenant instance — code and snippets are deleted afterward only if "Store Snippets" is unchecked.</p>
+
+    <p>Then training. Cognition's Platform Terms of Service, effective June 30, 2026, say it may use Customer Data for model training. Paid subscribers can opt out on the Data Controls page, which also enables Zero Data Retention; the free tier has no documented opt-out. One caveat: Cognition's enterprise security page says it does not train on customer data by default, contradicting those consumer terms — that page appears to cover enterprise deployments only.</p>
+
+    <h2>What you pay</h2>
+    <p>Devin Desktop: <strong>Free</strong> at $0 with a light agent quota and unlimited Tab completions; <strong>Pro</strong> at $20/mo, adding frontier models from OpenAI, Anthropic and Google plus cloud agents; <strong>Max</strong> at $200/mo for higher quotas; Teams at $80/mo base plus $40 per seat. Yearly terms aren't published, so I can't give an honest annual figure.</p>
+
+    <p>You also can't compute what $20 buys in advance: quota numbers aren't published, only that your daily quota exceeds a seventh of your weekly one, and overflow is billed at API list prices. Credits became quotas in March 2026, with existing subscribers grandfathered indefinitely.</p>
+
+    <p>Outlier: the free tier is Nano and Lite, no account, no cap. Pro is $20/month or $149/year for all seven tiers; Lifetime Pro starts at $99. No quotas — the compute is yours.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Outlier</th>
+          <th>Windsurf / Devin Desktop</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Where it lives</strong></td>
+          <td>Mac app (Apple Silicon, macOS 12+)</td>
+          <td>IDE, CLI, JetBrains (Mac/Win/Linux)</td>
+        </tr>
+        <tr>
+          <td><strong>Model</strong></td>
+          <td>7 local tiers, 4B–397B</td>
+          <td>150+ hosted models incl. SWE-1.5</td>
+        </tr>
+        <tr>
+          <td><strong>Code leaves machine</strong></td>
+          <td>No</td>
+          <td>Yes, inference and indexing</td>
+        </tr>
+        <tr>
+          <td><strong>Trained on your data</strong></td>
+          <td>No</td>
+          <td>Yes by default; opt-out paid only</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>Yes</td>
+          <td>No documented offline mode</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Free; $20/mo, $149/yr, $99 lifetime; no caps</td>
+          <td>Free; $20/mo; $200/mo Max; unpublished quotas</td>
+        </tr>
+        <tr>
+          <td><strong>Agentic ability</strong></td>
+          <td>Local loop; ~45% blind SWE-bench slice</td>
+          <td>Local + cloud agents, subagents, MCP</td>
+        </tr>
+        <tr>
+          <td><strong>Repo-scale context</strong></td>
+          <td>Local RAM only; retrieval on device</td>
+          <td>Cloud-indexed embeddings, whole repo</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Agentic ability and repo context: my honest receipts</h2>
+    <p>This is where Outlier is behind, and I'd rather say so up front. On a blind slice of SWE-bench Verified the local 27B measured about <strong>45% — 18 of 40</strong>: my own harness, not a leaderboard submission, published because it's real, not because it flatters me. Code 27B scores <strong>0.866 on HumanEval</strong>. Against a hosted agent with hundreds of billions of parameters, that's a gap: on a long refactor with cross-module coupling, the cloud agent lands changes a 27B on your laptop won't.</p>
+
+    <p>Repo-scale context is the second gap: Devin Desktop indexes your whole repository in the cloud, while Outlier's context is bounded by local RAM. On a two-million-line monorepo that isn't subtle. Throughput is the third — 950 tok/s on Cerebras against 20.7 on an M1 Ultra.</p>
+
+    <p>Where local holds up: reading unfamiliar code, writing a function, explaining a stack trace, refactoring one file. Core 27B matched Claude Opus on 98.9% of rubric checks in a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a> — but that's general capability, not agentic coding.</p>
+
+    <h2>Where Windsurf (Devin Desktop) genuinely wins</h2>
+    <ul>
+      <li><strong>Breadth, scale and speed no local app can approach.</strong> 150+ models across eight vendors, switchable per request. A hundreds-of-billions-parameter model can't sit resident on a 16 GB laptop at all, and 950 tok/s on Cerebras is orders of magnitude past consumer Apple silicon.</li>
+      <li><strong>Cloud agents leave your machine alone.</strong> Long refactors run in remote VMs — no RAM, GPU or battery cost, and they survive a closed lid.</li>
+      <li><strong>Cross-platform.</strong> macOS, Windows, Linux, JetBrains, CLI. Outlier is Mac-only, which serves part of a mixed team at best.</li>
+      <li><strong>Deep agent tooling, with an escape hatch.</strong> MCP servers, skills, hooks, workflows, AGENTS.md rules, worktrees and subagents — plus ACP, which drives Claude Agent, Codex CLI or Gemini CLI from the same editor. Cognition built the door out of their own product.</li>
+      <li><strong>Compliance posture.</strong> SOC 2 Type II, a FedRAMP documentation track, SSO, SCIM, RBAC, customer-managed keys, dedicated deployment, and Zero Data Retention as one toggle on any paid plan. Outlier has none of it, having no server to certify.</li>
+    </ul>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Devin Desktop if</strong> you want an agent driving multi-file changes across a large repo; you need capability or throughput your hardware can't produce; your team is on Windows or Linux; procurement wants SSO and a SOC 2 report; or you want agents running while your laptop stays free.</p>
+
+    <p><strong>Pick Outlier if</strong> your code sits under an NDA or a rule that makes cloud indexing a non-starter; you want a structural guarantee rather than a toggle you pay to enable; you work offline; or you want a flat $149/year instead of usage-based overflow billing.</p>
+
+    <p><strong>Use both,</strong> what I'd tell most developers: keep the sensitive and offline work local, and send the gnarly refactor to a cloud agent with a far bigger model behind it.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Every Devin Desktop claim comes from Cognition's own primary sources, checked 2026-07-23: windsurf.com's redirect, the product and rebrand pages, devin.ai/pricing, the docs for quota, Devin Local, ACP, remote indexing and models, and the Platform ToS. Where two of their pages disagree on training defaults I said so instead of picking one, and I left out the reported acquisition price and the commonly cited annual discount: no primary source confirms either. <strong>Competitor pricing and data policies change often — verify before you buy.</strong> Outlier's numbers are mine: ~45% (18/40) on a blind SWE-bench Verified slice, 0.866 HumanEval, tok/s on an M1 Ultra. Outlier has no web search, image generation, voice mode, mobile app, Windows/Linux build, or cloud sync.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever, no login or cap. Turn off Wi-Fi and see what a local model does with your code.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-windsurf">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

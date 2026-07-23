@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4-bit vs 8-bit quantization for local LLMs: which should you run? | Outlier</title>
+  <meta name="description" content="4-bit vs 8-bit quantization explained with primary numbers: bits per weight, tokens/sec, perplexity deltas, and the cases where each bit width is actually the right call.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/4-bit-vs-8-bit-quantization/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="4-bit vs 8-bit quantization for local LLMs: which should you run?">
+  <meta property="og:description" content="Bits per weight, tokens/sec, perplexity deltas — the real mechanism and the real trade-offs between 4-bit and 8-bit local models, with primary sources.">
+  <meta property="og:url" content="https://outlier.host/vs/4-bit-vs-8-bit-quantization/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="4-bit vs 8-bit quantization for local LLMs: which should you run?">
+  <meta name="twitter:description" content="4-bit is smaller AND faster than 8-bit at generation. Here's the mechanism, the measured numbers, and when 8-bit is still the right call.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"4-bit vs 8-bit quantization for local LLMs: which should you run?","description":"4-bit vs 8-bit quantization explained with primary numbers: bits per weight, tokens/sec, perplexity deltas, and the cases where each bit width is actually the right call.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/4-bit-vs-8-bit-quantization/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"4-bit vs 8-bit quantization","item":"https://outlier.host/vs/4-bit-vs-8-bit-quantization/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>4-bit vs 8-bit quantization for local LLMs: which should you run?</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>4-bit is the right default for almost all local LLM work, and it's faster as well as smaller: on llama.cpp's Llama-3.1-8B numbers, Q4_K_M generates 71.93 tokens/sec from a 4.58 GiB file while Q8_0 manages 50.93 tokens/sec from 7.95 GiB. 8-bit earns its extra memory when you need quantization eliminated as a variable — evals, debugging, work that hinges on exact recall. The real decision usually isn't 4 vs 8 on one model, though; it's a bigger model at 4-bit against a smaller one at 8-bit, and the bigger model wins.</p>
+    </div>
+
+    <p class="lead">Quantization isn't a product and it isn't anyone's competitor. It's the compression step that makes a model fit on hardware you already own, and every on-device Mac LLM app uses it already. The real question is which bit width an app ships, and whether it tells you. Disclosure: I'm Matt Kerr, I build <a href="https://outlier.host/">Outlier</a>, a Mac app that ships 4-bit-class models — so check the sources.</p>
+
+    <h2>What "4-bit" means, and why it isn't 4 bits</h2>
+
+    <p>Weights are normally 16-bit floats. Quantization rounds them onto a coarse grid: split each tensor into small blocks, find a scale (and for some formats a minimum) covering each block's range, then store every weight as a small integer index into that grid. The scales stay at higher precision — which is where the naming goes fuzzy.</p>
+
+    <p>llama.cpp publishes the real figures for Llama-3.1-8B: <code>Q4_K_M</code> is <strong>4.8944 bits per weight</strong> (4.58 GiB), <code>Q8_0</code> is <strong>8.5008 bpw</strong> (7.95 GiB), F16 is 16.0005 bpw (14.96 GiB). "Half a byte per parameter" understates the footprint by roughly 20%, so size a model against your RAM using the published file size, not the arithmetic.</p>
+
+    <p>Not all 4-bit is the same 4-bit, either. K-quants spend more bits on the most sensitive tensors, GPTQ minimizes per-layer output error, AWQ protects salient channels using activation statistics, and QLoRA's NF4 is called information-theoretically optimal for normally distributed weights. MLX supports 2, 3, 4 (the default), 5, 6 and 8 bits.</p>
+
+    <h2>4-bit is faster than 8-bit, not just smaller</h2>
+
+    <p>This is the part people get backwards. Generation is memory-bandwidth-bound — every token streams the whole weight set through the compute units, so fewer bits means fewer bytes moved. llama.cpp's Llama-3.1-8B run, generation at 128 tokens: <strong>Q4_K_M 71.93 t/s, Q6_K 58.67 t/s, Q8_0 50.93 t/s, F16 29.17 t/s.</strong> Same hardware, same weights — a 1.4x edge over 8-bit, 2.5x over fp16.</p>
+
+    <p>Prefill runs the other way, because prompt processing is compute-bound: F16 923.49 t/s at 512 tokens, Q8_0 865.09, Q4_K_M 821.81. Dequantizing costs you when the ALUs are already saturated. So 4-bit buys generation speed, not prompt-ingest speed — for long-prompt, short-answer work, the advantage shrinks or inverts.</p>
+
+    <h2>What you pay for it in quality</h2>
+
+    <p>The canonical numbers are llama.cpp's own quality table (LLaMA-7B), as perplexity deltas against fp16: Q4_K_S +0.1149, <strong>Q4_K_M +0.0535</strong>, Q5_K_M +0.0142, Q6_K +0.0044, <strong>Q8_0 +0.0004</strong>. Q4_K_M, Q5_K_S and Q5_K_M are labeled "recommended." Q8_0 is marked <em>not</em> recommended — not because it's bad, but because it's overkill: Q6_K is already within 0.005 perplexity of fp16 at 1.5 GB less.</p>
+
+    <p>Task scores agree. A 2026 benchmark across 13 llama.cpp quant formats on Llama-3.1-8B-Instruct puts Q4_K_S at an average of 69.17 against Q8_0's 69.41, GSM8K 77.33 vs 77.48 — inside noise, at a 70.83% size reduction instead of 46.87%. Caveat honestly: single-author preprint, not peer reviewed.</p>
+
+    <p>8-bit's case is well evidenced too. LLM.int8() reports Int8 inference without performance degradation up to 175B parameters, routing emergent outlier dimensions through a 16-bit matmul while over 99.9% of the compute stays in 8-bit. And mlx-lm's docs concede that distilling 16-bit down to 8-bit or 6-bit "often doesn't work well" — the loss starts so low there's nothing to recover.</p>
+
+    <h2>The numbers side by side</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>F16</th>
+          <th>Q8_0</th>
+          <th>Q6_K</th>
+          <th>Q4_K_M</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bits per weight</strong></td>
+          <td>16.0005</td>
+          <td>8.5008</td>
+          <td>—</td>
+          <td>4.8944</td>
+        </tr>
+        <tr>
+          <td><strong>File size (Llama-3.1-8B)</strong></td>
+          <td>14.96 GiB</td>
+          <td>7.95 GiB</td>
+          <td>—</td>
+          <td>4.58 GiB</td>
+        </tr>
+        <tr>
+          <td><strong>Generation, 128 tok</strong></td>
+          <td>29.17 t/s</td>
+          <td>50.93 t/s</td>
+          <td>58.67 t/s</td>
+          <td>71.93 t/s</td>
+        </tr>
+        <tr>
+          <td><strong>Prompt processing, 512 tok</strong></td>
+          <td>923.49 t/s</td>
+          <td>865.09 t/s</td>
+          <td>—</td>
+          <td>821.81 t/s</td>
+        </tr>
+        <tr>
+          <td><strong>Perplexity delta (7B table)</strong></td>
+          <td>baseline</td>
+          <td>+0.0004</td>
+          <td>+0.0044</td>
+          <td>+0.0535</td>
+        </tr>
+        <tr>
+          <td><strong>llama.cpp's own label</strong></td>
+          <td>—</td>
+          <td>not recommended</td>
+          <td>—</td>
+          <td>recommended</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Caveat: sizes and throughput come from the Llama-3.1-8B run, the perplexity deltas from an older LLaMA-7B table in <code>quantize --help</code>. Q6_K's size isn't in the 8B run; on 7B it's 5.15 GB to F16's 13.0 GB.</p>
+
+    <h2>Where 4-bit genuinely wins</h2>
+
+    <p>No hedging here — the evidence is one-sided and it's the vendors' own data. Q4_K_M costs about +0.05 perplexity, cuts a 13 GB model to under 4 GB, and llama.cpp marks it recommended while calling 8-bit overkill. Ollama ships it as the silent default: <code>llama3.1:latest</code> and <code>llama3.1:8b</code> resolve to the same 4.9 GB artifact as <code>llama3.1:8b-instruct-q4_K_M</code>, identical digest. On Mac, <code>mlx_lm.convert -q</code> gives you 4-bit.</p>
+
+    <p>The bigger win is that 4-bit changes which models you can run at all. On a 16 GB Mac it's the difference between a 20B-class model and nothing: gpt-oss-20b was post-trained with MXFP4 quantization of its MoE weights and is documented to run within 16 GB. That family has no higher-precision original, so the choice isn't even offered. A larger model at 4-bit almost always beats a smaller one at 8-bit.</p>
+
+    <p>Modern 4-bit also isn't the naive 4-bit that earned the technique its reputation in 2023: k-quants, GPTQ, AWQ and MLX's distillation against an unquantized teacher all attack the gap differently. And it's MIT-licensed software on your own machine — no service, no telemetry, no data policy, because there's nothing for one to cover.</p>
+
+    <h2>Where the reassuring numbers don't reach</h2>
+
+    <p>Perplexity and multiple-choice benchmarks are the metrics <em>least</em> sensitive to the failures users notice. A 0.24-point score gap is compatible with a model that emits a plausible but nonexistent API name in generated code, and nobody has published a good measurement of 4-bit's effect on exact-symbol recall.</p>
+
+    <p>Damage isn't constant across models, either — it grows with how heavily a model was pretrained. "Scaling Laws for Precision" (Kumar et al., 2024, fit on 465+ pretraining runs) finds post-training quantization degradation rises with training data, to the point where extra pretraining turns actively harmful for the quantized model. An empirical LLaMA3 study across 10 PTQ and LoRA-FT methods at 1–8 bits agreed, for a 15T-token model. Numbers from 2023-era 7B models don't transfer automatically.</p>
+
+    <p>And 4-bit sits close to a cliff: llama.cpp calls Q3_K_S "very high quality loss" (+0.5505) and Q2_K "not recommended" (+0.8698), so a vendor quietly shipping Q3 to save RAM is selling a different product. The published comparisons are also short-context, and KV-cache quantization is a separate axis whose long-context behavior is community-reported rather than studied — unverified, treat it that way. Cross-app comparison is hopeless too: Q4_K_M, NF4, AWQ-int4, MLX affine 4-bit and MXFP4 are all called "4-bit," and none are equivalent.</p>
+
+    <h2>One shipped example: what Outlier does</h2>
+
+    <p>Outlier is an instance of the 4-bit default, not the point of this article. It's a Mac app, Apple Silicon only, running on-device with no account and no caps. You can back the bit width out of the downloads: Nano is 4B in 2.37 GB, Core 27B in 15.13 GB — both around 4.5 bits per weight. Each tier ships as one artifact, so picking a tier <em>is</em> the quantization choice. There's no bit-width dropdown, a real trade-off against llama.cpp or Ollama.</p>
+
+    <p>What that buys, measured: Core 27B matched Claude Opus on 98.9% of rubric checks in a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and on a blind slice of SWE-bench Verified the local 27B measured about 45%. Outlier has no web search, image generation, mobile app or Windows/Linux build — none of which is a quantization question.</p>
+
+    <h2>Who should pick which</h2>
+
+    <p><strong>Pick 4-bit</strong> for normal work — chat, drafting, coding help, summarization — or whenever it's what makes a larger model fit your RAM. It's the default for good reason, and faster at generation.</p>
+
+    <p><strong>Pick 5-bit or 6-bit</strong> if you have headroom. Q6_K measures +0.0044 perplexity, indistinguishable from fp16 on that metric, and still generates faster than 8-bit.</p>
+
+    <p><strong>Pick 8-bit</strong> when you need quantization removed as a variable: evals, debugging whether a failure is the model or the quant, or work where exact recall beats speed. Cheap insurance if the RAM is idle.</p>
+
+    <p><strong>Pick fp16</strong> for prefill-dominated workloads, or as the reference when you're producing quantizations yourself. If you're mostly generating tokens, don't.</p>
+
+    <p>The binary is a bit fake anyway. mlx-lm supports dynamic quantization that estimates per-layer sensitivity, and it's common to keep embeddings and the output projection higher. The honest answer is often "4-bit, with 6-bit in three places."</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Bits per weight, sizes and throughput: <a href="https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md">llama.cpp quantize README</a>. Perplexity deltas: <a href="https://github.com/ggml-org/llama.cpp/discussions/2094">discussion 2094</a> and the <a href="https://github.com/ggml-org/llama.cpp/pull/1684">k-quants PR</a> (LLaMA-7B). Task scores: <a href="https://arxiv.org/abs/2601.14277">arXiv 2601.14277</a>, single-author preprint, not peer reviewed. Methods: <a href="https://arxiv.org/abs/2208.07339">LLM.int8()</a>, <a href="https://arxiv.org/abs/2305.14314">QLoRA</a>, <a href="https://arxiv.org/abs/2210.17323">GPTQ</a>, <a href="https://arxiv.org/abs/2306.00978">AWQ</a>. Degradation scaling: <a href="https://arxiv.org/abs/2411.04330">Kumar et al.</a>, <a href="https://arxiv.org/abs/2404.14047">Huang et al.</a> Apple silicon: <a href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.quantize.html">MLX docs</a>, <a href="https://github.com/ml-explore/mlx-lm/blob/main/mlx_lm/LEARNED_QUANTS.md">mlx-lm learned quants</a>. Defaults: <a href="https://ollama.com/library/llama3.1/tags">ollama.com</a>, <a href="https://huggingface.co/openai/gpt-oss-20b">gpt-oss-20b card</a>. KV-cache behavior at long context is community-reported, not a controlled study. Formats and defaults change — re-check the links before relying on a number. Outlier figures: M1 Ultra, 2026-07-23.
+    </div>
+
+    <div class="cta">
+      <h3>Want a 4-bit local model without building one?</h3>
+      <p>Outlier ships quantized models for Apple Silicon, runs on-device, and needs no account. Free tiers: Nano 4B and Lite 9B.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=4-bit-vs-8-bit-quantization">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

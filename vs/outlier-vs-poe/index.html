@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Poe: local Mac AI vs Quora's model aggregator | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Poe by Quora (cloud aggregator, compute points). Price, caps, offline use, data handling, and where each one genuinely wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-poe/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Poe: local Mac AI vs Quora's model aggregator">
+  <meta property="og:description" content="Poe sells one pool of compute points across many cloud models. Outlier runs models on your Mac with no account and nothing uploaded. An honest comparison.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-poe/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Poe: local Mac AI vs Quora's model aggregator">
+  <meta name="twitter:description" content="Cloud aggregator vs on-device Mac AI — price, caps, offline, data handling, and honest trade-offs.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Poe: local Mac AI vs Quora's model aggregator","description":"Honest comparison of Outlier (local Mac AI) vs Poe by Quora (cloud aggregator, compute points). Price, caps, offline use, data handling, and where each one genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-poe/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Poe","item":"https://outlier.host/vs/outlier-vs-poe/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Poe: local Mac AI vs Quora's model aggregator</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Poe is Quora's cloud aggregator: one account and one pool of compute points buys models from OpenAI, Anthropic, Google and xAI, plus image, video and audio generators, on web, Mac, Windows, iPhone and Android. Outlier runs models on your own Mac — no account, no caps, nothing uploaded, works with Wi-Fi off. Poe's annual plans run $49.99 to $2,499.99; Outlier Pro is $149/year, and its two smallest models are free.</p>
+    </div>
+
+    <p class="lead">Full disclosure: I'm Matt Kerr, I build Outlier, so I have an obvious stake here. I've sourced every claim about Poe to Poe's own pages, and I've been specific about what my app can't do. If you need video generation or an iPhone, get Poe — Outlier has no answer for either.</p>
+
+    <h2>What Poe is</h2>
+    <p>Poe is run by Quora, Inc. Its about page pitches access to the best AI from many companies in one interface across your devices — a storefront, not a lab. Quora doesn't train what it sells. The catalog named on Poe's pricing and API pages includes GPT-5.5, Claude-Opus-4.7, Gemini-3.1-Pro, Grok-4, DeepSeek-R1, and image and video models like Nano-Banana-Pro, Veo-3.1 and Sora-2.</p>
+
+    <p>The billing unit is a <strong>compute point</strong>. Each message spends points at a rate set by the model you picked, out of a daily or monthly allowance. Points are fungible across modalities, so one balance covers a chat reply, an image, or a few seconds of video. Poe says it's free for most usage, with plans from $4.99/month.</p>
+
+    <p>There's a real developer platform on top: a documented bot protocol, server bots, monetization, group chats, and an OpenAI-compatible REST API at <code>api.poe.com/v1</code> (plus an Anthropic-compatible endpoint) that Poe documents as working with Cursor, Cline, Continue and the <code>llm</code> CLI, capped at 500 requests per minute.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12 or newer. No Windows, Linux, or iPhone build. What it does have is the whole model running on your machine: no account, no usage cap, no prompt leaving the device. Turn off Wi-Fi and it keeps working.</p>
+
+    <p>Seven tiers ship in the app, from Nano (4B, a 2.37 GB download, 6 GB RAM minimum, 71.7 tok/s on my M1 Ultra and 32 tok/s on an M4 MacBook Air) through Core and Code at 27B, up to Plus at 397B-a17b, which streams experts from SSD and peaks near 11 GB of RSS on a 64 GB Mac. Six base models are Apache 2.0; Quick is under Gemma's terms. Nano and Lite are free; Pro is $20/month or $149/year for all seven.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Poe free</th>
+          <th>Poe paid</th>
+          <th>Outlier free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>Free</td>
+          <td>$49.99–$2,499.99/yr (from $4.99/mo)</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>Yes — daily compute points</td>
+          <td>Yes — 10k points/day at entry; 660k–8.25M/month above</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes — chats, photos, documents</td>
+          <td>Yes — chats, photos, documents</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes (13+)</td>
+          <td>Yes (13+)</td>
+          <td>No</td>
+          <td>License key only</td>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td colspan="2">Web, macOS, Windows, iOS 17+, iPadOS 17+, visionOS 1+, Android</td>
+          <td colspan="2">macOS 12+, Apple Silicon only</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>What it costs over a year</h2>
+    <p>Poe's annual ladder, off its subscription page: $49.99/yr ($4.17/mo) for 10,000 points per day; $199.99/yr for 660,000 points per month; $499.99/yr for 1.65 million; $999.99/yr for 3.3 million; $2,499.99/yr for 8.25 million. The page advertises a 17% saving against monthly billing, and Apple's App Store listing corroborates the middle rung at $19.99 monthly, $199.99 yearly.</p>
+
+    <p>Watch the unit change. The cheapest tier is metered <strong>per day</strong>; every tier above it, <strong>per month</strong>. A daily bucket refills nightly but punishes one heavy afternoon; a monthly bucket can be gone by the 8th.</p>
+
+    <p>From Poe's terms of sale: points work only on Poe, have no cash value, and are non-transferable and non-refundable. They don't roll over unless stated otherwise, purchased points expire a year after purchase, and subscriptions auto-renew. Normal for a credits product, but harder to forecast than a flat fee. Outlier Pro is $149/year, or $99–$200 once for a lifetime license, and token volume doesn't move the bill.</p>
+
+    <h2>What happens to your data</h2>
+    <p>Poe is remote by construction. Its privacy policy says third-party model providers and developers may receive details about your interactions with bots on Poe, including the contents of your chats and photos or documents you upload. It also tells users not to share sensitive personal information with bots — card numbers, social security numbers, that category.</p>
+
+    <p>Credit where due: Poe's privacy center says official bots built on OpenAI, Anthropic, Google and Meta models do not train on your chats, and only third-party developer bots may. A shield icon — full or half shaded — shows the exposure per bot before you send. More transparency than most aggregators bother with.</p>
+
+    <p>The catch: that control is per bot, not per account, and no global training opt-out is documented. Memory can be switched off and its summaries deleted, though Poe notes summaries can outlive the chats they came from. The terms also take a worldwide, non-exclusive, royalty-free, transferable and perpetual license to your content — you keep ownership. Privacy policy dated April 30, 2026; terms March 19, 2026.</p>
+
+    <p>Outlier's half is short: inference happens in your Mac's memory. No server logs it, no toggle to find.</p>
+
+    <h2>Where Poe genuinely wins</h2>
+    <p>Not concessions — facts about what a laptop can't do.</p>
+    <ul>
+      <li><strong>Breadth across labs.</strong> One subscription reaches competing frontier models side by side. If your job is working out which lab handles a prompt best, Poe beats any single-model app, mine included.</li>
+      <li><strong>Modalities a Mac can't run.</strong> Images, audio, and especially video — Veo- and Sora-class output isn't generated on-device today. Outlier does no images, no voice, no video.</li>
+      <li><strong>Live information.</strong> Poe's hosted models reach the network. Outlier has no web search; it works from the weights.</li>
+      <li><strong>Every device, synced.</strong> Web, macOS, Windows, iOS, iPadOS, visionOS and Android. Outlier is one Mac.</li>
+      <li><strong>The cheapest real plan is cheap.</strong> $49.99/year undercuts a single-vendor $20/month plan, and it isn't a crippled trial.</li>
+      <li><strong>Your subscription is also an API key.</strong> Subscribers drive the OpenAI-compatible endpoint with existing points at no extra cost, so one plan can fund Cursor, Cline, Continue, Roo and the <code>llm</code> CLI — and since the endpoints are standard-shaped, migrating out is mostly a base-URL change.</li>
+      <li><strong>A real builder ecosystem.</strong> A documented bot protocol, an Apache-2.0 SDK (<code>fastapi_poe</code>), monetization and multi-bot chats make Poe a platform, not just a chat window — and it costs your machine no RAM, no disk, no fans.</li>
+    </ul>
+
+    <h2>Where Outlier has the edge</h2>
+    <p>Four things, all structural rather than a matter of degree. Nothing you type is uploaded, so there's no policy to trust and no shield icon to check. It works offline — on a plane, in a basement, on hotel Wi-Fi that's pretending to work. No caps, so a long refactor costs nothing but time. And the price doesn't move with usage.</p>
+
+    <p>The honest quality receipt: Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. On a blind slice of SWE-bench Verified it measured about 45%. Strong for a model on your desk — not the same as the top of Poe's catalog. On a genuinely hard problem, a frontier cloud model still wins.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Poe if</strong> you want to compare labs without an account at each, you need image, audio or video generation, you need current information off the live web, you work across a phone and a PC too, or you want one subscription that also funds your coding-tool API calls.</p>
+
+    <p><strong>Pick Outlier if</strong> what you paste in is confidential — client files, source code, medical or legal drafts — and "providers may receive the contents of your chats" is a non-starter; if you work where the network isn't; or if metered points make you edit yourself before you type.</p>
+
+    <p><strong>Run both</strong> if that's your situation, and plenty do. Poe's $49.99/year tier keeps frontier breadth and image generation on hand cheaply; Outlier takes the confidential, offline and high-volume work. They aren't competing for one job.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Pricing and models from <a href="https://poe.com/subscription_plans">poe.com/subscription_plans</a> and <a href="https://poe.com/about">poe.com/about</a>; points and refunds from the <a href="https://poe.com/pages/terms-of-sale">terms of sale</a>; data handling from <a href="https://poe.com/privacy">poe.com/privacy</a> and the <a href="https://poe.com/pages/privacy-center">privacy center</a>; content license and age minimum from <a href="https://poe.com/tos">poe.com/tos</a>; platforms from <a href="https://poe.com/download">poe.com/download</a> and Apple's App Store listing; API from <a href="https://creator.poe.com/api-reference/overview">creator.poe.com</a>. Checked July 2026. One gap: Poe's help center — canonical for free-tier allowances and per-model point costs — returns HTTP 403 to automated fetching, so reported free-allowance cuts in March 2026 are unconfirmed at the source and left out above. <strong>Competitor pricing and policies change without notice — verify at the source before you buy.</strong> Outlier pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>; throughput measured on M1 Ultra (64 GB).
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on your Mac for free, forever, with no sign-in and no upload. Download, open, and start typing.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-poe">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

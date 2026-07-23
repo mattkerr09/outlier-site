@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qwen vs Llama: open model families compared in 2026 | Outlier</title>
+  <meta name="description" content="Qwen vs Llama in 2026: sizes, licensing (Apache 2.0 vs the Llama Community License), strengths by task, and what actually runs on a Mac at 16GB, 32GB and 64GB.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/qwen-vs-llama/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Qwen vs Llama: open model families compared in 2026">
+  <meta property="og:description" content="Apache 2.0 vs the Llama Community License, size ladders, release cadence, and what each family needs to run on a Mac. Written by an interested party, disclosed.">
+  <meta property="og:url" content="https://outlier.host/vs/qwen-vs-llama/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Qwen vs Llama: open model families compared in 2026">
+  <meta name="twitter:description" content="Licensing, sizes, cadence and Mac RAM — an honest look at the two biggest open-weight model families.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Qwen vs Llama: open model families compared in 2026","description":"Qwen vs Llama in 2026: sizes, licensing (Apache 2.0 vs the Llama Community License), strengths by task, language coverage, and what actually runs on a Mac at 16GB, 32GB and 64GB.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/qwen-vs-llama/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Qwen vs Llama","item":"https://outlier.host/vs/qwen-vs-llama/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Qwen vs Llama: open model families compared in 2026</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Qwen and Llama are downloadable model weights, not apps. Every Qwen open-weight model is Apache 2.0 and ungated, the line runs 0.8B to 397B, and three generations shipped since February 2026. Llama ships under Meta's own license — a 700-million-user commercial cap, an acceptable-use policy, a "Built with Llama" attribution rule and a manual-approval download form — and Meta has published no new open-weight base model since April 2025.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I'm not neutral. I build <a href="https://outlier.host/">Outlier</a>, a Mac app shipping Qwen-family and Gemma-family weights on-device and no Llama weights at all. That was mostly a licensing decision, and I'll show you the clauses. Llama has advantages I'd be lying to skip, so those are here too.</p>
+
+    <h2>Neither of these is a product</h2>
+    <p>Qwen comes from Alibaba, Llama from Meta, and both are just files. You run them through somebody else's runtime — llama.cpp, MLX, Ollama, vLLM — or rent them from a hosted API. Neither ships a Mac installer, a model manager or support. And one thing people get backwards: run either locally and nothing leaves your machine. Data exposure is a question about the hosted services, not the weights.</p>
+
+    <h2>Licensing decides whether you can ship</h2>
+    <p>For a hobby script, licensing is noise. Ship software with weights inside it and it's the whole decision. <strong>Qwen is Apache 2.0.</strong> The Qwen3.6 repo says it plainly: "All our open-weight models are licensed under Apache 2.0." No user cap, no field-of-use restrictions, no naming rules, no attribution, no form. Qwen3.6-27B on Hugging Face is <code>gated: false</code> — fetchable programmatically, on a user's behalf.</p>
+    <p><strong>Llama 4 isn't.</strong> Four clauses in the Llama 4 Community License matter. A scale cap: above 700 million monthly active users, you "must request a license from Meta, which Meta may grant to you in its sole discretion." An Acceptable Use Policy incorporated by reference, barring military, nuclear, espionage and weapons work, critical-infrastructure operation and unlicensed professional practice. Attribution: "prominently display 'Built with Llama'", and derived model names must begin with "Llama."</p>
+    <p>The Open Source Initiative has said publicly that Meta's license doesn't meet the Open Source Definition, citing the commercial restriction and the field-of-use policy. That post was about Llama 2 in 2023; both clause types survive in Llama 4. Then there's the gate: Llama weights on Hugging Face are <code>gated: "manual"</code> — name, date of birth, country, affiliation, job title, plus a review wait. For an app fetching models on a user's behalf, that's a wall.</p>
+    <p>Outlier's Quick tier is Gemma-based, and <strong>Gemma is neither</strong> — it's under Google's Gemma Terms of Use, which permit commercial use but attach a use policy Google can update. Six of my seven tiers are Apache 2.0 Qwen; Gemma is the exception.</p>
+
+    <h2>Sizes, and what actually runs on a Mac</h2>
+    <p>Qwen's ladder is unusually complete: Qwen3.5 spans 0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B and 397B-A17B, and Qwen3.6 added a 35B-A3B MoE plus a dense 27B in April 2026. There's a real Qwen for an 8GB, 16GB, 32GB and 64GB Mac. Llama 4 has no small member — Scout is 17B active over 109B total, Maverick 17B over 400B, and Behemoth, previewed as still training, never shipped. A 4-bit Scout is well past 16GB, so on a Mac you fall back to Llama 3.x: 3.2 1B and 3B are excellent, 3.3 70B wants 64GB.</p>
+    <p>Measured off my own build, not a spec sheet: Qwen3.5-4B is 2.37GB needing 6GB RAM (71.7 tok/s on an M1 Ultra, 32 on an M4 Air); Qwen3.5-9B, 5.04GB and 12GB; Qwen3.6-27B, 15.13GB and 24GB at 20.7 tok/s; Qwen3.6-35B-A3B, 19.0GB and 24GB; Qwen3.5-397B-A17B, 209GB and 2.1 tok/s on a 64GB machine, streaming experts from SSD.</p>
+
+    <h2>Strengths by task, language coverage, and the Apple Silicon gap</h2>
+    <p>Qwen3.6-27B's own <code>config.json</code> reports 262,144-token context, a hybrid stack alternating linear and full attention every fourth layer, and native multimodality. Long context plus vision at a size that runs 4-bit on a 32GB Mac is rare. Llama 4 Scout advertises a 10M-token window, the largest published for any open-weight model, and both Llama 4 models are natively multimodal — but you need serious hardware to see it.</p>
+    <p>On Apple Silicon the gap is stark. mlx-community's 8-bit Qwen3.6-35B-A3B pulls roughly 85,800 downloads a month and the 4-bit 61,400; Llama-4-Scout 4-bit sees about 1,200. On base checkpoints: Qwen3.6-35B-A3B ~6.14M per 30 days and Qwen3.6-27B ~5.34M, against Scout's 462K and Maverick's 64K. Llama's counterexample is real, though — Llama-3.2-1B-Instruct pulls ~10.4M a month, more than any single Qwen3.6 checkpoint, and Meta ships its own SpinQuant-INT4 and QLoRA-INT4 on-device builds.</p>
+    <p>On language coverage I'd rather leave a gap than guess: I found no primary source I trust for a current Qwen3.6-versus-Llama-4 multilingual head-to-head, so I'm not publishing one. What is documented: Alibaba runs separate international and Chinese-mainland deployments, and the official Qwen Studio app appears in the Singapore, Hong Kong and UK App Stores but not in a US App Store search, where the only "qwen" result is an unaffiliated third-party app — a real supply-chain trap.</p>
+
+    <h2>Side-by-side</h2>
+    <table>
+      <thead>
+        <tr><th>Axis</th><th>Qwen (Alibaba)</th><th>Llama (Meta)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Newest weights</strong></td><td>Qwen3.6, April 2026</td><td>Llama 4, April 2025</td></tr>
+        <tr><td><strong>Sizes</strong></td><td>0.8B to 397B-A17B</td><td>Llama 4: 109B, 400B; Llama 3.x: 1B to 70B</td></tr>
+        <tr><td><strong>License</strong></td><td>Apache 2.0</td><td>Llama 4 Community License</td></tr>
+        <tr><td><strong>Commercial cap</strong></td><td>None</td><td>Above 700M monthly users</td></tr>
+        <tr><td><strong>Field-of-use limits</strong></td><td>None</td><td>Acceptable Use Policy</td></tr>
+        <tr><td><strong>Attribution</strong></td><td>None</td><td>"Built with Llama" plus naming rule</td></tr>
+        <tr><td><strong>Download gate</strong></td><td>Ungated</td><td>Manual review, six fields</td></tr>
+        <tr><td><strong>Context / vision</strong></td><td>262K, multimodal at 27B</td><td>10M on Scout, multimodal</td></tr>
+        <tr><td><strong>16GB Mac</strong></td><td>Yes, through the 9B tier</td><td>3.2 1B/3B yes; Llama 4 no</td></tr>
+        <tr><td><strong>64GB Mac</strong></td><td>Yes, through 397B-A17B</td><td>3.3 70B yes; Scout awkward</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where each family genuinely wins, and where each falls down</h2>
+    <p><strong>Qwen wins on license, ladder and cadence.</strong> Apache 2.0 across the whole open line is the cleanest legal posture a major lab offers. Alibaba publishes its own FP8 and GPTQ-Int4 checkpoints, so a production build doesn't hang on community re-quants, and MLX and GGUF builds land within days. Qwen Code, the official terminal agent, is Apache 2.0 and points at a local Ollama or vLLM endpoint.</p>
+    <p><strong>Llama wins on maturity and the small end.</strong> llama.cpp is named after it. Every inference stack, quantization format, fine-tuning library and Core ML path targets Llama first, so integration risk is near zero. Llama 3.3 70B has the widest hosted-provider availability of any open model. And enterprise procurement has cleared its license thousands of times.</p>
+    <p><strong>Llama's problem is stagnation.</strong> The newest artifact of any kind in Meta's Hugging Face org is dated 2025-04-28 — roughly fifteen months of nothing while Qwen shipped three generations. <code>llama.com</code> no longer exists; it redirects to developer.meta.com, a JavaScript shell where the license isn't server-rendered, so GitHub is now the reliable source. Press reports say Meta moved its frontier work to closed weights — unconfirmed from any Meta-owned page.</p>
+    <p><strong>Qwen's problems differ.</strong> The flagship isn't open: Qwen-Max is API-only with no weights in Qwen's Hugging Face org, so the strongest Qwen isn't the one you can run. Cadence cuts both ways — Qwen3.5 shipped in February 2026 and was superseded in April, and Qwen3.6's config still carries a <code>qwen3_5</code> architecture string, so pin an exact checkpoint. The developer free tier ended 2026-04-15, leaving a 1M-token trial valid 90 days. And I couldn't read Qwen's consumer privacy policy — it renders only via JavaScript — so whether Qwen Studio chats train models is unknown.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Qwen if</strong> you're shipping commercial software with weights bundled or auto-downloaded, you need a size that fits a consumer Mac, or you want a cheap hosted escalation path — Qwen-Flash starts at $0.05 per million input tokens.</p>
+    <p><strong>Pick Llama if</strong> you need a sub-gigabyte always-resident model, your stack depends on tooling that only supports Llama architectures, procurement has already cleared the license, or you want a hosted fallback across many providers.</p>
+    <p><strong>Pick neither, and use an app,</strong> if you want local AI on your Mac without choosing a runtime, a quantization and a prompt format. That's what I built Outlier for: Apple Silicon only, no account, no caps, nothing uploaded. It has no web search, no image generation, no voice mode and no Windows build — if you need those, raw weights and your own runtime serve you better.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Qwen licensing from <a href="https://github.com/QwenLM/Qwen3.6">github.com/QwenLM/Qwen3.6</a>; sizes, gating and downloads from the Hugging Face API; architecture from Qwen3.6-27B's own <code>config.json</code>. Llama 4 sizes from <a href="https://ai.meta.com/blog/llama-4-multimodal-intelligence/">Meta's announcement</a>; license clauses quoted verbatim from the <a href="https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama4/LICENSE">LICENSE</a> and <a href="https://raw.githubusercontent.com/meta-llama/llama-models/main/models/llama4/USE_POLICY.md">USE_POLICY</a> files. OSI position from <a href="https://opensource.org/blog/metas-llama-2-license-is-not-open-source">opensource.org</a>. Pricing from Alibaba Cloud Model Studio, updated 2026-07-15. Download counts are 30-day figures read in July 2026 and move constantly. Outlier RAM and throughput measured on my own hardware. <strong>Licenses, prices and policies change</strong> — verify at the source. I ship Qwen and Gemma weights, so I'm an interested party.
+    </div>
+
+    <div class="cta">
+      <h3>Or skip the runtime entirely</h3>
+      <p>Outlier runs Qwen and Gemma weights on your Mac. No account, nothing uploaded, free tier included.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=qwen-vs-llama">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

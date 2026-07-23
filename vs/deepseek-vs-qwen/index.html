@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek vs Qwen: open model families compared (2026) | Outlier</title>
+  <meta name="description" content="DeepSeek vs Qwen open weights compared: sizes, licensing (MIT vs Apache 2.0), strengths by task, language coverage, and what actually runs on a Mac at what RAM.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/deepseek-vs-qwen/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="DeepSeek vs Qwen: open model families compared (2026)">
+  <meta property="og:description" content="Sizes, licensing, task strengths, and what runs on a Mac. Written by the founder of an app that ships Qwen weights — disclosed up front.">
+  <meta property="og:url" content="https://outlier.host/vs/deepseek-vs-qwen/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DeepSeek vs Qwen: open model families compared (2026)">
+  <meta name="twitter:description" content="MIT vs Apache 2.0, 0.8B to 1.6T parameters, and which of these actually fits on a Mac.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"DeepSeek vs Qwen: open model families compared (2026)","description":"DeepSeek vs Qwen open weights compared: sizes available, licensing (MIT vs Apache 2.0 vs Llama Community License vs Gemma Terms of Use), strengths by task, language coverage, and what runs on a Mac at what RAM.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/deepseek-vs-qwen/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"DeepSeek vs Qwen","item":"https://outlier.host/vs/deepseek-vs-qwen/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>DeepSeek vs Qwen: open model families compared</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>DeepSeek and Qwen both publish real open weights under permissive licenses — DeepSeek's V4 models are MIT, every Qwen open-weight model is Apache 2.0 — so both are safe to run, fine-tune and redistribute commercially with no gated request form. The practical difference is size: DeepSeek's open line starts at 284B parameters and tops out at 1.6T, while Qwen ships eight open sizes from 0.8B to 397B. If the question is what runs on your own Mac, the answer is Qwen, not DeepSeek.</p>
+    </div>
+
+    <p class="lead">Most open-model comparisons stop at benchmark charts. The questions that decide things are duller: what license are the weights under, which sizes exist, and will any of them fit on the machine in front of you? DeepSeek and Qwen answer those three very differently, though both are Chinese-developed families that publish downloadable checkpoints while also selling hosted access to models they never release.</p>
+
+    <p><strong>Disclosure, because it matters:</strong> I build Outlier, a Mac app that runs models on-device, and six of its seven tiers are Qwen weights — the seventh is Gemma. I'm not a neutral party on this axis. Read the Qwen-favorable parts accordingly; I've tried to let the sourced numbers do the work.</p>
+
+    <h2>The size ladders aren't comparable</h2>
+    <p>DeepSeek's open V4 line is two checkpoints, both on Hugging Face under the MIT License. <strong>DeepSeek-V4-Flash</strong> is 284B total parameters with 13B activated per token, mixed FP4/FP8 precision with the MoE experts in FP4, and 1M token context. <strong>DeepSeek-V4-Pro</strong> is 1.6T total with 49B activated, also 1M context. Real weights, no legal strings — and also datacenter artifacts.</p>
+
+    <p>Qwen's open line is a ladder, shipped in four waves: Qwen3.5-397B-A17B (Feb 16, 2026), the mid sizes 122B-A10B, 35B-A3B and 27B (Feb 24), the small sizes 9B, 4B, 2B and 0.8B (Mar 2), then Qwen3.6-35B-A3B (Apr 16) and Qwen3.6-27B (Apr 22). That last one is dense, 64 layers on a hybrid Gated DeltaNet plus Gated Attention design, with 262,144 tokens of native context extensible to roughly 1,010,000 via YaRN. Alibaba's repo pitches it as "Flagship-Level Coding in a 27B Dense Model."</p>
+
+    <p>The catch: Qwen's strongest models aren't in the open line. <code>qwen3.7-max</code>, <code>qwen3.7-plus</code> and <code>qwen3.8-max-preview</code> are API-only, so the open family visibly trails the proprietary flagship.</p>
+
+    <h2>Licensing decides what you can build</h2>
+    <p>This is under-covered, and it determines whether a product like mine can legally exist. DeepSeek's V4 repos state the weights are under the MIT License. Qwen states all its open-weight models are Apache 2.0. Both are OSI-approved, both permit commercial use, redistribution and fine-tuning without asking anyone, and Apache 2.0 adds an explicit patent grant that MIT leaves implicit.</p>
+
+    <p>Compare the common alternatives. Meta's Llama Community License and Google's Gemma Terms of Use aren't open source licenses in the OSI sense — they're custom vendor licenses attaching conditions Apache 2.0 and MIT don't, including acceptable-use policies that travel downstream to whoever you redistribute to. I ship one Gemma-based tier, so I live with it: the terms get passed along, and I track a policy a third party can revise. Read the actual text yourself — I'm describing the shape of the obligations, not quoting them. For a downstream product, MIT and Apache 2.0 are the difference between "publish it" and "get a lawyer first."</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>DeepSeek</th>
+          <th>Qwen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Open-weight license</strong></td>
+          <td>MIT</td>
+          <td>Apache 2.0</td>
+        </tr>
+        <tr>
+          <td><strong>Open sizes</strong></td>
+          <td>284B-A13B, 1.6T-A49B</td>
+          <td>0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B, 397B-A17B</td>
+        </tr>
+        <tr>
+          <td><strong>Open context</strong></td>
+          <td>1M tokens (both)</td>
+          <td>262K native on 3.6-27B, ~1.01M with YaRN</td>
+        </tr>
+        <tr>
+          <td><strong>API price /1M</strong></td>
+          <td>v4-flash $0.14 in / $0.28 out; v4-pro $0.435 / $0.87</td>
+          <td>qwen3.7-plus $0.4 / $1.6; qwen3.7-max $2.5 / $7.5 (promo)</td>
+        </tr>
+        <tr>
+          <td><strong>Trains on your inputs</strong></td>
+          <td>Yes, with an in-product opt-out toggle</td>
+          <td>Yes (de-identified); no documented toggle</td>
+        </tr>
+        <tr>
+          <td><strong>Hosted data location</strong></td>
+          <td>People's Republic of China</td>
+          <td>Singapore and Mainland China</td>
+        </tr>
+        <tr>
+          <td><strong>Native Mac client</strong></td>
+          <td>Not confirmed (iPhone/iPad app only)</td>
+          <td>Yes — macOS, Windows, Web, iOS, Android</td>
+        </tr>
+        <tr>
+          <td><strong>Fits a 16–32 GB Mac</strong></td>
+          <td>No</td>
+          <td>Yes, 0.8B through 27B</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>What runs on a Mac, and at what RAM</h2>
+    <p>Here I can give measured numbers, because these are the checkpoints Outlier ships. Quantized, on Apple Silicon: Qwen3.5-4B is a 2.37 GB download needing 6 GB of RAM, at 71.7 tok/s on an M1 Ultra and about 32 tok/s on an M4 MacBook Air. Qwen3.5-9B is 5.04 GB and 12 GB RAM at 53.4 tok/s. Qwen3.6-27B is 15.13 GB and wants 24 GB, measured at 20.7 tok/s. Qwen3.6-35B-A3B is 19.0 GB and 24 GB RAM. Qwen3.5-397B-A17B is a 209 GB download needing 64 GB, streaming experts from SSD with paged MoE at roughly 11 GB peak RSS and 2.1 tok/s.</p>
+
+    <p>Neither DeepSeek V4 checkpoint has a Mac story. 284B in mixed FP4/FP8 is already past what 64 GB holds. Sparse MoE helps, but the weights still have to live somewhere. On a Mac, DeepSeek means the browser and their API.</p>
+
+    <h2>Strengths by task, and language coverage</h2>
+    <p>DeepSeek's clearest strength is hosted cost. v4-flash at $0.14 per million input tokens is far below Western providers, and a cache hit drops that to $0.0028 — roughly fifty times cheaper than a miss. The counterweight is churn: DeepSeek's docs announce that the widely-integrated <code>deepseek-chat</code> and <code>deepseek-reasoner</code> names are deprecated as of 2026/07/24 15:59 UTC, and reserve the right to adjust prices.</p>
+
+    <p>Qwen's strength is breadth. Beyond text: Qwen3-VL for vision, Qwen3-Omni for text/audio/image/video in and text/audio out, plus ASR, TTS, embedding and image generation models — all open. Qwen Code, its Apache 2.0 terminal agent, points at OpenAI, Anthropic, Gemini, Qwen or a local Ollama/vLLM endpoint, and states it doesn't train on your prompts or code. On coding, the 27B I ship measures 0.866 on HumanEval and about 45% (18/40) on a blind slice of SWE-bench Verified.</p>
+
+    <p>On language coverage I'll be honest rather than useful: I have no sourced, apples-to-apples multilingual evaluation of these two families, so I won't invent one. Both are developed in China with Chinese and English as first-class targets, and Qwen extends into speech via open ASR and TTS. If multilingual quality decides it, test both on your own languages.</p>
+
+    <h2>Where each family genuinely wins</h2>
+    <p><strong>DeepSeek wins on license simplicity at the frontier.</strong> Releasing a 1.6T-parameter model under MIT is genuinely unusual. Nobody else at that scale hands over weights with a license that short.</p>
+    <p><strong>DeepSeek wins on hosted price and on the training opt-out.</strong> It documents a real control — an in-product "Improve the model for everyone" toggle plus an email opt-out — and its terms assign output rights to you. Qwen documents no equivalent toggle; it trains on de-identified User Content and Feedback on a legitimate-interests basis, offering only generic rights to object or withdraw consent via a DPO email.</p>
+    <p><strong>Qwen wins on the size ladder and on shipped software.</strong> Eight open sizes is a real choice, not one take-it-or-leave-it checkpoint, and Qwen Studio ships native clients on Web, iOS, Android, macOS and Windows. As of mid-2026 DeepSeek's App Store listing covers iPhone and iPad only and its downloads URL returns a 404; I couldn't confirm a macOS client either way from a primary source.</p>
+    <p><strong>Both win for the wider ecosystem.</strong> DeepSeek's DeepGEMM, DeepEP, FlashMLA, 3FS and DeepSeek-OCR are MIT, as is Qwen's FlashQLA.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick DeepSeek</strong> if you run server-side inference at volume and price per token dominates, if you want frontier-scale open weights and have the hardware, or if a documented training opt-out is something your compliance team checks for.</p>
+    <p><strong>Pick Qwen</strong> if you need a model that fits consumer hardware, if Apache 2.0's patent grant matters to your legal review, if you want open multimodal or speech models rather than text alone, or if you want a desktop client today.</p>
+    <p><strong>Pick neither hosted service</strong> if the data can't leave your jurisdiction. DeepSeek stores personal data in the PRC; Qwen stores and processes it in Singapore and Mainland China. Running the weights yourself is the only version where that question doesn't arise — which is why Outlier exists, and why it's Qwen weights inside it. Outlier also has no web search, no image generation, no mobile app and no Windows or Linux build.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> DeepSeek API pricing and the 2026/07/24 deprecation from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 parameter counts and MIT license from the Hugging Face model cards; data location and opt-out wording from DeepSeek's privacy policy and terms of use. Qwen release timeline and the Apache 2.0 statement from <a href="https://github.com/QwenLM/Qwen3.5">github.com/QwenLM/Qwen3.5</a>; Qwen3.6-27B architecture from its model card; hosted pricing from Alibaba Cloud Model Studio (Singapore); privacy terms from qwen.ai (updated 2026-05-19). Checked July 2026 — vendors change prices, deprecate model names and revise privacy terms without notice, and Alibaba's headline rates are "limited-time" with no published end date. Outlier tier sizes, RAM floors and throughput measured on M1 Ultra (64 GB) and an M4 MacBook Air; more at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data/outlier-vs-claude-54-prompt-benchmark/</a>.
+    </div>
+
+    <div class="cta">
+      <h3>Run Qwen weights on your own Mac</h3>
+      <p>Outlier is a native macOS app for Apple Silicon. Nano and Lite are free: no account, no caps, works with Wi-Fi off.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=deepseek-vs-qwen">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies explained</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All Outlier comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

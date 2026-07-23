@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Msty: two local AI apps, two different jobs | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (Mac-only, bundled models) vs Msty Studio (cross-platform workspace, bring your own models and API keys). Both run locally, so privacy isn't the deciding factor.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-msty/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Msty: two local AI apps, two different jobs">
+  <meta property="og:description" content="Msty Studio runs whatever model you point it at, on Mac, Windows and Linux. Outlier ships its own models and only runs on Apple Silicon. An honest look at both.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-msty/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Msty: two local AI apps, two different jobs">
+  <meta name="twitter:description" content="Both run models on your own machine. The real differences are platform, model management, and what's bundled vs assembled.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Msty: two local AI apps, two different jobs","description":"Honest comparison of Outlier (Mac-only, bundled models) vs Msty Studio (cross-platform workspace, bring your own models and API keys). Both run locally, so privacy isn't the deciding factor.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-msty/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Msty","item":"https://outlier.host/vs/outlier-vs-msty/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Msty: two local AI apps, two different jobs</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Msty Studio and Outlier are both local-first desktop AI apps, so neither ships your chats to a vendor — privacy isn't what separates them. Msty is a cross-platform workspace that runs whatever open-weight model you point it at via Ollama, MLX or llama.cpp, and can also broker calls to 13 cloud providers with your own API keys. Outlier is Apple-Silicon-only, ships its own seven model tiers, and has no cloud path at all.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr. I build Outlier, so treat this as coming from an interested party and check the sources — I've linked them. Msty does a job Outlier deliberately doesn't, and on several axes it's the more flexible tool.</p>
+
+    <h2>What Msty is</h2>
+    <p>Msty Studio is a closed-source desktop AI workspace from CloudStack, LLC. It sits above the model layer rather than replacing it: point it at open-weight models on your machine, cloud models on someone else's, or both in one window. The vendor's framing is "local and cloud models, side by side" with "local-first control."</p>
+
+    <p>Locally it drives three engines — Ollama, MLX and llama.cpp — from one Local Models area, handling GGUF, MLX and Safetensors. On Apple Silicon the docs say Msty "generally recommends MLX when an MLX format is available," the right call on a Mac. If a model's engine isn't installed, the docs say Msty sets it up first. No Docker, no terminal. On the cloud side it connects to 13 providers, Anthropic and OpenAI through to Groq, OpenRouter, xAI and Bedrock, using keys you supply — so you pay each provider directly, no markup.</p>
+
+    <p>The free tier is substantive rather than a teaser: local and online chat, Agent Mode, Knowledge Stacks for retrieval, an MCP Toolbox, Persona, Prompt, Skill and Media studios, memories and web search all sit at $0. Paid "Aurum" is $149/year or $349 once for a lifetime seat; Enterprise is $300 per user per year, five seats minimum. Aurum adds the web version, Azure and Bedrock, Turnstiles, Live Contexts, Insights and Forge Mode.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native macOS app for Apple Silicon, M1 or later, on macOS 12 and up. Models run fully on-device with no account, no usage caps and no network dependency once downloaded — turn Wi-Fi off and keep working.</p>
+
+    <p>The difference in shape is that Outlier ships the models: seven tiers, each a build I picked, tested and published. Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra), Lite 9B, Quick 26B-a4b, Core 27B and Code 27B (15.13 GB, 24 GB, 20.7 tok/s), Vision 35B-a3b, and Plus 397B-a17b, which needs 64 GB and streams experts from SSD. Six are Apache 2.0, Quick carries the Gemma Terms of Use, and the <a href="https://huggingface.co/Outlier-Ai">weights are public</a>. Free means Nano and Lite, no account; Pro is $20/month or $149/year, lifetime from $99. There's no cloud tier and no API-key field.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Msty Studio</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Interface</strong></td>
+          <td>Desktop GUI; browser version (Aurum) via a Sidecar proxy</td>
+          <td>Native Mac GUI only</td>
+        </tr>
+        <tr>
+          <td><strong>Who it's for</strong></td>
+          <td>Tinkerers who want model choice and cloud keys in one place</td>
+          <td>End users who want a Mac app that already works</td>
+        </tr>
+        <tr>
+          <td><strong>Setup effort</strong></td>
+          <td>Install, pick a model; Msty installs the engine for you</td>
+          <td>Install, pick a tier, download starts</td>
+        </tr>
+        <tr>
+          <td><strong>Model management</strong></td>
+          <td>You choose: 3 engines, GGUF/MLX/Safetensors, 13 cloud providers</td>
+          <td>Seven curated tiers, no picker beyond them</td>
+        </tr>
+        <tr>
+          <td><strong>Bundled vs assembled</strong></td>
+          <td>Assembled — you bring models and keys</td>
+          <td>Bundled — weights ship with it</td>
+        </tr>
+        <tr>
+          <td><strong>Platforms</strong></td>
+          <td>macOS (Apple Silicon + Intel), Windows x64, Linux x64</td>
+          <td>Apple Silicon Macs only</td>
+        </tr>
+        <tr>
+          <td><strong>Cloud models</strong></td>
+          <td>Yes, bring your own key</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Source code</strong></td>
+          <td>Closed; docs and some forks public</td>
+          <td>Closed; weights public</td>
+        </tr>
+        <tr>
+          <td><strong>Free tier</strong></td>
+          <td>$0, personal use only</td>
+          <td>$0, Nano + Lite, no account</td>
+        </tr>
+        <tr>
+          <td><strong>Paid</strong></td>
+          <td>$149/yr, $349 lifetime, 2 devices</td>
+          <td>$20/mo or $149/yr, lifetime from $99</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Bundled versus assembled — the real fork in the road</h2>
+    <p>This is the difference that decides it for most people. Msty is a hub: put a 4B model, a 70B model and Claude in the same window, switch between them, and it bootstraps whichever engine each one needs. Auto-installing Ollama removes the biggest reason people bounce off local AI.</p>
+
+    <p>But a hub can't promise a result, because the result depends on what you plug in. Msty ships no model of its own, so any quality comparison against Msty really measures whichever model the user picked. Outlier takes the opposite trade: fewer choices, but I own the outcome. Core 27B matched Claude Opus on 98.9% of rubric checks across a 54-prompt head-to-head — a number attached to a build I ship, not a configuration you assembled.</p>
+
+    <p>Neither approach wins in general. If you like choosing models, my curation is a cage. If you'd rather not learn what a quantisation format is, it's the other way round.</p>
+
+    <h2>Platforms, licensing and openness</h2>
+    <p>Here's where I'm straightforwardly behind. Msty ships macOS builds for Apple Silicon <em>and</em> Intel, plus Windows x64 and Linux x64 as AppImage and .deb. Outlier is Apple Silicon only — no Intel Mac, no Windows, no Linux, no mobile app. If there's a PC or an older Mac in your setup, Msty works there and Outlier doesn't.</p>
+
+    <p>Msty has its own edges. Windows and Linux builds are x64 only, so no Windows-on-ARM or ARM Linux, and Linux carries documented install friction: the AppImage needs libfuse2, may want a <code>--gtk-version=3</code> flag, and the .deb can need sandbox fixes. There's no mobile Msty Studio either — mobile appears only as "Msty Claw Go," coming soon for the separate, still-beta Claw product.</p>
+
+    <p>On openness we're in the same boat. Msty's application source isn't published — its GitHub org carries docs, i18n and forks like mlx-omni-server and ollama, not the client — and its terms grant a non-transferable use license with no open-source license named. Outlier's app isn't open source either. The asymmetry is direction: Msty opens tooling around the app, while I publish the weights the app runs. If forking the client matters, neither of us qualifies.</p>
+
+    <h2>Where Msty genuinely wins</h2>
+    <ul>
+      <li><strong>It runs on your whole fleet.</strong> Mac, Windows and Linux from one vendor. Outlier runs on one platform.</li>
+      <li><strong>Model freedom.</strong> If a model dropped this morning, you can probably run it in Msty today. In Outlier you wait for me to ship a tier.</li>
+      <li><strong>Cloud and local in one window.</strong> Thirteen providers with your own keys, so you can escalate a hard prompt to a frontier model without leaving the app. Outlier has no escape hatch.</li>
+      <li><strong>Features Outlier lacks entirely.</strong> Web search, MCP tools, Knowledge Stacks, media generation, personas and crews. Outlier has none of those.</li>
+      <li><strong>A blunt privacy policy.</strong> Msty states all app data stays on your device and that the vendor collects no analytics or telemetry at all, though it says nothing either way about AI training.</li>
+      <li><strong>A lifetime option.</strong> $349 once, price-protected against future increases.</li>
+    </ul>
+
+    <p>What I'd check before buying: the free tier is personal use only — the terms say use "for the exercise of your trade or profession for which you are compensated" doesn't qualify, so paid work needs Aurum or Enterprise. Paid licenses cover two devices. Prices rose on 2 December 2025 (Aurum yearly $129 to $149, lifetime $249 to $349). And the zero-telemetry promise covers the vendor, not the models — paste in an OpenAI key and that provider's policy governs those prompts.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Msty if</strong> you own a Windows or Linux machine or an Intel Mac; you enjoy swapping models; you want local and cloud side by side with your own keys; you need web search, MCP tools or retrieval over your own documents; or you want a lifetime license and a usable free tier.</p>
+
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac and want the model decision made for you; you want a guarantee that there's no cloud path in the app at all; or you care about a published quality receipt for the build you're running. On a blind slice of SWE-bench Verified the local 27B measured about 45% (18 of 40) — a number I can publish only because I ship the model.</p>
+
+    <p><strong>Plenty of people should run both.</strong> Msty is a model workbench; Outlier is a finished appliance on one platform.</p>
+
+    <div class="receipts">
+      <strong>Sources:</strong> Msty pricing, tiers and the December 2025 price change from <a href="https://msty.ai/studio/pricing">msty.ai/studio/pricing</a>; builds, engines and providers from <a href="https://docs.msty.ai/studio/getting-started/download">docs.msty.ai</a>; privacy claims from <a href="https://msty.ai/privacy">msty.ai/privacy</a>; licensing and device limits from <a href="https://msty.ai/terms/">msty.ai/terms</a>; open-source status from the vendor's public GitHub org. All read July 2026 — <strong>competitor pricing and policies change, so verify at the source before you buy.</strong> Outlier throughput measured on an M1 Ultra Mac Studio (64 GB); the 98.9% figure comes from the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever on any Apple Silicon Mac. Download, pick a tier, and start. Nothing leaves your machine.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-msty">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

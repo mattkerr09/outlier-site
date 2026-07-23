@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Aider: on-device Mac app vs terminal AI pair programmer | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI app) and Aider (free open-source terminal coding agent). Where each runs, which model powers it, whether your code leaves the machine, and real coding numbers.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-aider/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Aider: on-device Mac app vs terminal AI pair programmer">
+  <meta property="og:description" content="Aider is a free Apache-2.0 terminal agent that edits and commits your git repo using any LLM. Outlier is a paid Mac app running its own models on-device. Honest comparison with real numbers.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-aider/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Aider: on-device Mac app vs terminal AI pair programmer">
+  <meta name="twitter:description" content="Free open-source repo agent vs paid on-device Mac app. Cost, privacy, agentic ability, repo-scale context — and where Aider genuinely wins.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Aider: on-device Mac app vs terminal AI pair programmer","description":"Honest comparison of Outlier (local Mac AI app) and Aider (free open-source terminal coding agent). Where each runs, which model powers it, whether your code leaves the machine, cost, agentic ability, and repo-scale context.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-aider/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Aider","item":"https://outlier.host/vs/outlier-vs-aider/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Aider: on-device Mac app vs terminal AI pair programmer</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Aider is a free, Apache-2.0 command-line tool that connects your git repository to an LLM you choose — cloud API or local model — and lets it read, edit, and auto-commit files in your working tree. Outlier is a paid native Mac app that ships its own models and runs them entirely on your device, with no account, no API key, and no per-token bill. Pick Aider if you want an agent living inside your repo and you're willing to bring your own model; pick Outlier if you want a fixed on-device model in an app that needs no setup.</p>
+    </div>
+
+    <p class="lead">I build Outlier, so read this as a comparison written by an interested party. I've tried to be accurate about Aider anyway — it's genuinely good software, and pretending otherwise would make this page useless. The two barely overlap: one is a repo-native agent with no model, the other a model-native app with no repo integration.</p>
+
+    <h2>What Aider actually is</h2>
+    <p>Aider is a terminal pair programmer from Aider AI LLC, open source under Apache 2.0. You install it as a Python package (<code>aider-chat</code> on PyPI), run it inside a git repo, add a few files to the chat, and say what you want. It edits real files on disk and commits each change with a generated message, so review and rollback happen with ordinary <code>git diff</code>, <code>git blame</code>, and <code>git revert</code> instead of a proprietary review panel.</p>
+
+    <p>It ships no model of its own — that's the whole design. Aider connects to OpenAI, Anthropic, Gemini, GROQ, DeepSeek, Azure, Cohere, OpenRouter, and "almost any" OpenAI-compatible API, and the docs explicitly cover fully local models via Ollama or a local OpenAI-compatible server. Orchestration, repo mapping, file editing, linting, testing, and git commits all run on your machine; only inference goes wherever your chosen model lives.</p>
+
+    <p>It installs on macOS, Linux, and Windows through a helper installer, one-liner scripts, uv, pipx, pip, Docker, Codespaces, or Replit. The interfaces are the CLI, an "experimental browser UI" (<code>aider --browser</code>), and watch-mode, where a comment in your editor becomes the request. There's no native Mac app and no mobile app.</p>
+
+    <h2>What Outlier actually is</h2>
+    <p>Outlier is a Mac app for Apple Silicon (M1 or later, macOS 12+). It downloads weights once and runs them on your machine — no account, no usage caps, works with Wi-Fi off. Seven tiers: Nano 4B (2.37 GB), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 35B-a3b, and Plus 397B-a17b (209 GB, streamed from SSD by a paged MoE loader at roughly 11 GB peak RSS). Nano and Lite are free; Pro is $20/month or $149/year and enables all seven.</p>
+
+    <p>It's a chat app, not a repo agent. It doesn't touch your working tree, run your test suite, or commit anything. It also has no live web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, and no cloud sync. Those aren't roadmap coyness — they're absent.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Aider</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Where it lives</strong></td>
+          <td>Terminal CLI; experimental browser UI; editor watch-mode. macOS, Linux, Windows</td>
+          <td>Standalone native Mac app. Apple Silicon only, macOS 12+</td>
+        </tr>
+        <tr>
+          <td><strong>Which model powers it</strong></td>
+          <td>Whichever you configure — OpenAI, Anthropic, Gemini, DeepSeek, OpenRouter, Azure, or a local Ollama / OpenAI-compatible endpoint</td>
+          <td>Its own seven tiers, from Nano 4B to Plus 397B-a17b. No model choice beyond the tier picker</td>
+        </tr>
+        <tr>
+          <td><strong>Does code leave the machine</strong></td>
+          <td>Depends entirely on your endpoint. Cloud model: repo map, added files, and chat go to that provider. Local model: nothing needs to leave</td>
+          <td>No. Inference is on-device; nothing is uploaded</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Software is free, no account, no seat license. You pay your model provider per token</td>
+          <td>Free for Nano + Lite. Pro $20/mo or $149/yr. Lifetime from $99. No metering</td>
+        </tr>
+        <tr>
+          <td><strong>Agentic ability</strong></td>
+          <td>Edits files in place, runs lint and tests in a loop, auto-commits, <code>/undo</code></td>
+          <td>Chat only — you copy code in and out. No git integration</td>
+        </tr>
+        <tr>
+          <td><strong>Repo-scale context</strong></td>
+          <td>Tree-sitter repo map of files and key symbols, graph-ranked and fitted to a token budget (default <code>--map-tokens 1k</code>), plus files you add</td>
+          <td>Whatever you paste or attach in a conversation</td>
+        </tr>
+        <tr>
+          <td><strong>Telemetry</strong></td>
+          <td>Opt-in analytics; never collects code, chat, or keys. Absent a flag, enabled for a random subset who are then prompted. Permanent opt-out: <code>aider --analytics-disable</code></td>
+          <td>None to opt out of — the model runs locally</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Does your code leave the machine?</h2>
+    <p>Aider's answer is "that's your call." Outlier's is fixed.</p>
+
+    <p>With Aider pointed at a cloud model, three things go over the wire: the generated repo map, the full contents of any file you add to the chat, and the chat messages. Aider's privacy policy (Aider AI LLC, last updated April 12, 2025) covers device, usage, and analytics info; it says nothing about training on your inputs, and it wouldn't, because Aider doesn't operate a model. Whether your code trains someone's next release is governed by the provider you configured. Aider's own services are US-hosted and intended for US visitors.</p>
+
+    <p>Point Aider at Ollama or a local OpenAI-compatible server and nothing needs to leave at all. That path is real, documented, and has documented sharp edges. Ollama defaults to a 2k context window, which the docs call "very small for working with aider," and silently discards anything beyond it — the docs themselves call that especially dangerous, since users don't realize most of their data is being thrown away. Aider's edit formats also want a capable model; the docs warn it "may not work well with less capable models." The cheapest, most private path is the most fragile one.</p>
+
+    <p>Outlier has no configuration axis here. The model is on your Mac and the app works with the network off. There's no endpoint to choose — a limitation and a guarantee at once.</p>
+
+    <h2>What the coding numbers actually say</h2>
+    <p>Our real measurements, not a leaderboard boast: on a blind slice of SWE-bench Verified, the local 27B measured <strong>about 45% (18 of 40)</strong>, and Code 27B scores <strong>0.866 on HumanEval</strong>. Those are internal runs on our own harness, and they sit below what the strongest cloud coding agents do. Core 27B also matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>.</p>
+
+    <p>For the ceiling: Aider publishes its own polyglot benchmark — 225 Exercism exercises across C++, Go, Java, JavaScript, Python, and Rust — with gpt-5 (high) topping the board at 88.0%. Different benchmark, different tasks, so don't read 45% against 88% as a head-to-head. Read the direction instead: a frontier cloud model driving Aider will out-code a 27B on your Mac, and it isn't close on the hardest multi-file work. If your bar is the strongest possible result and cost isn't the constraint, that combination wins.</p>
+
+    <p>Aider's board publishes dollar cost per run too, which is the counterweight: $29.08 for that 225-exercise benchmark on gpt-5 (high), $146.32 on o3-pro (high). Free software, metered usage.</p>
+
+    <h2>Where Aider genuinely wins</h2>
+    <p>Several places, and none of them are close.</p>
+    <ul>
+      <li><strong>It's an agent; Outlier isn't.</strong> Aider edits real files, loops on lint and tests, and commits. Outlier gives you text in a window. On "fix this failing test across four files," Aider does the work and Outlier watches.</li>
+      <li><strong>Model freedom.</strong> One tool drives GPT, Claude, Gemini, DeepSeek, OpenRouter, or your own local server, with identical muscle memory either way. Outlier gives you our seven tiers and that's the menu.</li>
+      <li><strong>Free and open source.</strong> Apache 2.0, with the agent loop and prompts readable in the repo — forkable, auditable, and you can see exactly what gets sent. Outlier Pro costs money and isn't open source.</li>
+      <li><strong>Git-native review.</strong> Every change is a commit with a message. Diff, blame, revert — no proprietary UI to learn.</li>
+      <li><strong>The repo map is a real idea.</strong> A tree-sitter map of files and key symbols, graph-ranked and budgeted, gives a model architectural awareness of a big codebase without ingesting it. Outlier has no equivalent.</li>
+      <li><strong>It runs everywhere.</strong> Linux, Windows, Docker, Codespaces, over SSH. Outlier runs on Apple Silicon Macs and nowhere else.</li>
+      <li><strong>Real scale.</strong> 47.6k GitHub stars, roughly 6.8M PyPI installs, ~15B tokens/week, a top-20 spot on OpenRouter, and 88% of the last release's new code written by Aider itself.</li>
+    </ul>
+
+    <p>One caveat, as due diligence rather than a knock: the cadence has slowed. The last tagged release is v0.86.0 (2025-08-09), the newest PyPI upload 0.86.2 (2026-02-12), the most recent commit to main 2026-05-22, against 1,756 open issues. Commits continue and the repo isn't archived, but the polyglot leaderboard's newest dated entry is 2025-10-03, the README still recommends a mid-2025 model set, and there's no documented Model Context Protocol support.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Aider if</strong> you live in a terminal, already pay for API access, want the agent touching your files and commits directly, work on Linux or Windows or over SSH, or want to audit and fork the tool you're trusting with your source. If you want the strongest coding output available today, Aider plus a frontier model is the better answer than any 27B running locally, mine included.</p>
+
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, want a structural guarantee that code never leaves the machine rather than one that depends on configuring an endpoint correctly, don't want a metered bill, or want an app instead of a version-pinned Python install. It also fits work that isn't repo-shaped: explaining an unfamiliar file, drafting an algorithm, reviewing a snippet you can't upload anywhere.</p>
+
+    <p><strong>Or both.</strong> They stack. Our weights are on <a href="https://huggingface.co/Outlier-Ai">Hugging Face</a>, so you can serve them behind your own OpenAI-compatible endpoint and drive them with Aider — exactly the local path Aider documents. Keep sensitive repos local, route the hardest refactors to a cloud model, and use the Mac app for the thinking-out-loud half.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Aider details from <a href="https://aider.chat/docs/">aider.chat/docs</a> — install, LLM support, repo map, Ollama notes, browser UI, analytics, and privacy policy (Aider AI LLC, last updated 2025-04-12) — plus the <a href="https://aider.chat/docs/leaderboards/">polyglot leaderboard</a>, the <a href="https://github.com/Aider-AI/aider">GitHub repo</a> and API metadata, and PyPI package metadata for <code>aider-chat</code>, all checked 2026-07-23. Outlier tier sizes, throughput, and the ~11 GB Plus peak RSS measured on an M1 Ultra Mac Studio; SWE-bench Verified slice (18/40) and HumanEval 0.866 are our own internal runs, not third-party leaderboard results. Outlier pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Third-party pricing, policies, model recommendations, and benchmark boards change without notice — verify anything load-bearing at the source before you rely on it.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on your Mac for free, forever, with nothing uploaded. Pro adds Code 27B and the rest of the seven tiers.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-aider">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

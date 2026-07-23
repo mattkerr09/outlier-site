@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs text-generation-webui (oobabooga): two local AI apps compared | Outlier</title>
+  <meta name="description" content="Both run models on your own hardware, so privacy isn't the difference. An honest comparison of setup, interface, model management, platforms and licensing — written by Outlier's founder.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-text-generation-webui/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs text-generation-webui (oobabooga): two local AI apps compared">
+  <meta property="og:description" content="Both are private and offline. The real differences are setup effort, what's bundled, platform support and licensing — TextGen is AGPL and cross-platform; Outlier is Mac-only and closed.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-text-generation-webui/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs text-generation-webui (oobabooga): two local AI apps compared">
+  <meta name="twitter:description" content="Two ways to run AI locally: assemble it yourself with TextGen, or install a curated Mac app. Honest tradeoffs from Outlier's founder.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs text-generation-webui (oobabooga): two local AI apps compared","description":"Both run models on your own hardware, so privacy isn't the difference. An honest comparison of setup, interface, model management, platform support and licensing, written by Outlier's founder.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-text-generation-webui/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs text-generation-webui","item":"https://outlier.host/vs/outlier-vs-text-generation-webui/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs text-generation-webui (oobabooga): two local AI apps compared</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Both run models entirely on your own hardware, so privacy is not the difference between them. text-generation-webui — renamed TextGen in its 4.x releases — is free, AGPL-3.0 open source, runs on Windows, Linux and macOS, and loads any model across five swappable inference backends, but you bring your own weights and flags. Outlier is a closed-source, Mac-only app that ships seven ready-to-run tiers and picks the settings for you.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr. I build Outlier, so I have an obvious stake here — read this with that in mind. Every claim about TextGen is verifiable in its repo, release notes or requirements files. And on several axes, TextGen is the more capable software.</p>
+
+    <h2>Privacy is not the axis — both of these are local</h2>
+    <p>Most "vs" articles about local AI lean on privacy. That doesn't apply here. TextGen's README describes it as "100% offline and private, with zero telemetry, external resources, or remote update requests," and there's no vendor account behind it, so there's nothing to opt out of. Outlier is the same: on-device, no account, works with Wi-Fi off. Both have opt-in network features that break that posture — TextGen's web search queries DuckDuckGo and <code>--public-api</code> routes traffic through a Cloudflare tunnel. Neither is on by default, but the second is a foot-gun for anyone assuming the app is offline in every configuration.</p>
+
+    <h2>What TextGen actually is now</h2>
+    <p>First, the name. The project has been renamed: the canonical repo is <code>github.com/oobabooga/textgen</code> and the old URL redirects there. Most people still say "oobabooga," but the release assets say <code>textgen</code>.</p>
+    <p>It's AGPL-3.0 and entirely free — no account, no subscription, no metering. It started in December 2022 and it's one of the largest projects in this space: 47,482 stars, ~5,980 forks, 836 open issues at the time of writing. v4.7 through v4.9 all shipped inside about three weeks in May 2026; v4.9 added MTP speculative decoding, web-search snippet extraction, and a live tokens-per-second readout. Five inference backends — llama.cpp, ik_llama.cpp, Transformers, ExLlamaV3 and TensorRT-LLM — swap without restarting, and the PC side gets separate portable builds for CUDA 12.4, CUDA 13.1, ROCm 7.2, Vulkan and CPU-only.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12 or newer. No Intel Macs, no Windows, no Linux, no mobile app. Models run fully on-device, no account, no usage caps.</p>
+    <p>Seven tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which streams experts from SSD at about 11 GB peak RSS. Nano and Lite are free; Pro is $20/month or $149/year for all seven. Weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>; the app itself is not open source.</p>
+
+    <h2>Interface, setup, and what's in the box</h2>
+    <p>This is the real dividing line. TextGen is a Gradio web UI wrapped, since v4.7.3, in a bundled Electron shell, so it opens in its own window rather than a browser tab. It's also a server: run it with <code>--api</code> and you get an OpenAI- <em>and</em> Anthropic-compatible endpoint on port 5000, with streaming and tool calling. There's no interactive chat CLI — the command line is for configuration (<code>--cpu</code>, <code>--split-mode</code>, <code>--spec-type</code>), not conversation. The portable builds don't need installing, but on macOS the release notes tell you to run <code>xattr -cr</code> on the folder first, because the builds aren't notarized.</p>
+    <p>The bigger difference: <strong>TextGen ships with no model.</strong> You pick the weights, the quantization and the context settings, usually by pulling a GGUF into <code>user_data/models</code>. That's the source of both its flexibility and its learning curve. Outlier inverts it: choose a tier, it downloads, it runs, and it won't offer you something your machine can't hold.</p>
+
+    <h2>Platforms and licensing — where Outlier is the narrower product</h2>
+    <p>I'll be blunt, because this is the clearest disadvantage on my side. TextGen runs on Windows, Linux and macOS, Apple Silicon and Intel, with the same workflow everywhere. Outlier runs on Apple Silicon Macs and nowhere else. PC with a good GPU, Linux workstation, Intel MacBook? Outlier isn't an option and TextGen is.</p>
+    <p>Licensing cuts the same way. TextGen is AGPL-3.0 — read it, fork it, audit it, keep running your exact version forever regardless of what the maintainer does next. Outlier's app is closed source, and that's a legitimate reason to prefer TextGen.</p>
+    <p>One caveat on TextGen's Mac story: the Apple Silicon requirements file ships one inference wheel, llama.cpp — ExLlamaV3 and TensorRT-LLM are absent, so Mac users get a subset of the headline backend flexibility. And as of mid-2026 the documentation doesn't say whether Metal acceleration is compiled into the prebuilt macOS wheels; unlike the Windows and Linux assets, the Mac ones carry no acceleration label. I won't assert either way without testing.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>text-generation-webui (TextGen)</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Interface</strong></td><td>Gradio UI in an Electron window + API server; CLI is config, not chat</td><td>Native Mac window; no server, no CLI</td></tr>
+        <tr><td><strong>Who it's for</strong></td><td>Developers, tinkerers, self-hosters</td><td>End users who want it to just work</td></tr>
+        <tr><td><strong>Setup</strong></td><td>Unzip, <code>xattr -cr</code> on macOS, then pick a model yourself</td><td>Install, pick a tier, done</td></tr>
+        <tr><td><strong>Models</strong></td><td>Bring your own, from all of Hugging Face</td><td>Seven curated tiers, 4B to 397B</td></tr>
+        <tr><td><strong>Bundled vs assembled</strong></td><td>App bundled, model assembled by you</td><td>Both bundled</td></tr>
+        <tr><td><strong>Backends</strong></td><td>Five, swappable live (llama.cpp only on Mac)</td><td>One, not user-selectable</td></tr>
+        <tr><td><strong>Platforms</strong></td><td>Windows, Linux, macOS (arm64 + x86_64)</td><td>Apple Silicon Macs only</td></tr>
+        <tr><td><strong>Mobile</strong></td><td>No app; LAN browser via <code>--listen</code></td><td>None</td></tr>
+        <tr><td><strong>API</strong></td><td>OpenAI- and Anthropic-compatible</td><td>None</td></tr>
+        <tr><td><strong>Licence</strong></td><td>AGPL-3.0, source available</td><td>Closed app; weights public</td></tr>
+        <tr><td><strong>Price</strong></td><td>$0</td><td>Free tier, or $20/mo, $149/yr</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where text-generation-webui genuinely wins</h2>
+    <ul>
+      <li><strong>It's free and it's yours.</strong> AGPL source plus free binaries, no account, no metering, no vendor who can change the terms.</li>
+      <li><strong>It runs on everything.</strong> Windows, Linux and macOS, same workflow. Outlier covers one platform.</li>
+      <li><strong>Any model, day one.</strong> The whole Hugging Face ecosystem — niche fine-tunes, uncensored models, brand-new releases the week they drop. Outlier gives you our seven tiers and nothing else.</li>
+      <li><strong>It's a server.</strong> An OpenAI- and Anthropic-compatible API makes it a drop-in local substitute in scripts you already have. Outlier has none.</li>
+      <li><strong>LoRA fine-tuning built in</strong>, including CPU-mode training. One sharp edge: per the compatibility doc, LoRA works on the Transformers loader, not on llama.cpp, which is what most local users run.</li>
+      <li><strong>Wider modality coverage.</strong> Vision, PDF and .docx attachments, image generation via diffusers, TTS and voice extensions, MCP support. Outlier has vision but no image generation, no voice, no web search.</li>
+      <li><strong>It serves the household.</strong> One capable machine plus <code>--listen</code> puts every phone and laptop on the LAN into the same model.</li>
+      <li><strong>Community depth.</strong> 47k stars, an extension ecosystem, a wiki and an active subreddit — somebody has already documented your problem.</li>
+    </ul>
+    <p>One counterweight, not a gotcha: v4.9 restricted CORS to localhost "to prevent drive-by API access" and closed a path-traversal vector, so earlier versions were exposed to a web page quietly calling your local API. Active hardening is a good sign — but you run the server.</p>
+
+    <h2>Where Outlier fits better</h2>
+    <p>Outlier's argument is narrow: one signed, notarized Mac app where the model, settings and interface arrive together, with published numbers for what you get. Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest; the Code tier scores 0.866 on HumanEval. TextGen can't publish numbers like that — it's model-agnostic by design, so its quality is whatever you loaded, which is the whole point of it.</p>
+    <p>The other thing you get is the absence of decisions: no quantization, no flags, no Terminal. If that sounds like an insult to your intelligence, you're not the customer and TextGen is the better tool.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick text-generation-webui if</strong> you're on Windows, Linux or an Intel Mac; you want specific community models; you want an OpenAI- or Anthropic-compatible API for your own scripts; you want LoRA fine-tuning, image generation or voice; you want to serve other devices over your LAN; or open source is a requirement rather than a preference.</p>
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac and you want something ready in one download, with no model shopping and no Terminal.</p>
+    <p><strong>Running both is reasonable.</strong> One's a workbench, the other's an appliance.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> TextGen claims come from primary sources — the repo and README at <a href="https://github.com/oobabooga/textgen">github.com/oobabooga/textgen</a>, the GitHub API repo record, the <a href="https://github.com/oobabooga/textgen/releases/tag/v4.9">v4.9</a> and <a href="https://github.com/oobabooga/textgen/releases/tag/v4.7.3">v4.7.3</a> release notes, <code>requirements_apple_silicon.txt</code> and <code>docs/What Works.md</code>. Repo statistics were read 2026-07-23 and change constantly. Metal acceleration on macOS is deliberately not asserted — primary sources don't document it. Outlier throughput was measured on an M1 Ultra Mac Studio; methodology at the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>. Competitor features, licensing and pricing change — verify anything decision-critical at the source.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever on any Apple Silicon Mac. Download, pick a tier, start typing.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-text-generation-webui">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Sourcegraph Cody: on-device Mac AI vs enterprise cloud coding assistant | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) and Sourcegraph Cody (Enterprise-only cloud coding assistant). Where each lives, which models run, whether code leaves your machine, cost, and repo-scale context.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-sourcegraph-cody/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Sourcegraph Cody: on-device Mac AI vs enterprise cloud coding assistant">
+  <meta property="og:description" content="Cody is now Enterprise-only and entirely cloud-run. Outlier runs on your Mac with no account. An honest look at where each one wins.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-sourcegraph-cody/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Sourcegraph Cody: on-device Mac AI vs enterprise cloud coding assistant">
+  <meta name="twitter:description" content="Enterprise-only cloud IDE assistant vs a local Mac app. Models, privacy, cost, agentic ability, and repo-scale context.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Sourcegraph Cody: on-device Mac AI vs enterprise cloud coding assistant","description":"Honest comparison of Outlier (local Mac AI) and Sourcegraph Cody (Enterprise-only cloud coding assistant). Where each lives, which models run, whether code leaves your machine, cost, and repo-scale context.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-sourcegraph-cody/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Sourcegraph Cody","item":"https://outlier.host/vs/outlier-vs-sourcegraph-cody/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Sourcegraph Cody: on-device Mac AI vs enterprise cloud coding assistant</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Sourcegraph Cody is a cloud coding assistant inside VS Code, JetBrains and Visual Studio, sold only as part of Sourcegraph Enterprise — Cody Free and Cody Pro were discontinued on July 23, 2025. Every request sends code snippets to a third-party frontier model like Claude or GPT-5; Enterprise has no local inference. Outlier is a standalone Mac app that runs its models on your own Apple Silicon with no account and nothing uploaded, but it only sees code on your laptop — Cody sees every repository your company has indexed.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I'm Matt Kerr, and I build Outlier, so every claim here about Cody comes from Sourcegraph's own docs, linked at the bottom. They barely overlap in shape: one is an enterprise platform bolted to a company-wide code index, the other a Mac app you run offline. The useful question isn't which is better, it's which problem you have.</p>
+
+    <h2>What Sourcegraph Cody is in mid-2026</h2>
+    <p>Sourcegraph's docs describe Cody as an AI coding assistant that uses recent LLMs plus your development context to help you write and fix code. It's marked "Supported on Sourcegraph Enterprise," and that phrase is doing a lot of work.</p>
+    <p>On June 25, 2025 Sourcegraph announced that Cody Free and Cody Pro would shut down on July 23, 2025, that new signups had already stopped, and that Enterprise Starter would no longer include Cody. Departing users were pointed at Amp. Enterprise customers, the post said, were unaffected, and Sourcegraph remained "fully committed" to that offering.</p>
+    <p>Since then the signals have been mixed. Cody isn't on Sourcegraph's pricing page or homepage, has no dedicated entry in the 2026 changelog, and goes unmentioned in the December 2, 2025 announcement that Sourcegraph and Amp were splitting into independent companies. The clients still ship, though: VS Code extension v1.155.0 landed 2026-06-17 with 868,377 installs, and the JetBrains plugin has 483,514 downloads.</p>
+
+    <h2>Where each one lives</h2>
+    <p>Cody is an extension first. Documented clients are VS Code, JetBrains IDEs, Visual Studio (marked Experimental), the web app, and a CLI you install with <code>npm install -g @sourcegraph/cody</code> on Node 20+ — itself "in the Experimental stage for Enterprise accounts." No standalone macOS app or mobile client appears in that list.</p>
+    <p>Outlier is the opposite shape: a native macOS app for Apple Silicon (M1 or later, macOS 12+). No Intel build, no Windows, no Linux, no iPhone app, no editor extension. You keep a chat window beside your editor and move code yourself. If you want an assistant that edits files in place inside IntelliJ, Cody does that and Outlier can't.</p>
+
+    <h2>Which model is doing the work</h2>
+    <p>Cody routes to frontier cloud models: Claude Opus 4.8 down to 4.5, Sonnet 5/4.6/4.5 and Haiku 4.5; Gemini 2.5 Pro, 3.1 Pro and 3.5 Flash; GPT-5.4 through GPT-5, GPT-4o, GPT-4.1 and o3. Default chat is Claude Sonnet 4.5. Autocomplete runs on DeepSeek V2 Lite Base and an Autoedits fine-tune of DeepSeek Coder V2 served through Fireworks.ai — open weights, but consumed as a hosted API, not run by you.</p>
+    <p>Outlier ships seven tiers you download once and run locally: Nano 4B (2.37 GB), Lite 9B (5.04 GB), Quick 26B-a4b (15.61 GB), Core 27B and Code 27B (15.13 GB each), Vision 35B-a3b (19.0 GB), and Plus 397B-a17b (209 GB, streaming experts from SSD at roughly 11 GB peak RSS). Six are Apache 2.0, Quick is under the Gemma Terms of Use, and the weights sit at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. Cody's client is no longer open: github.com/sourcegraph/cody returns a 404, and the Apache-2.0 <code>cody-public-snapshot</code> repo is archived, last pushed 2025-08-01.</p>
+
+    <h2>Does your code leave the machine?</h2>
+    <p>With Cody, always. The FAQ is explicit that inference is remote: Cody sends code snippets, up to 28 KB per request, to a third-party cloud LLM service, and a self-hosted Sourcegraph instance still needs internet access for those calls, which route by default through cody-gateway.sourcegraph.com.</p>
+    <p>The written guarantees are strong, and I'd rather quote them than paraphrase. Sourcegraph's Cody notice states that Sourcegraph and its partner LLMs don't use code from Cody Enterprise or Cody Pro teams to train models, and that partner LLMs won't retain input or output, embeddings included, beyond the time needed to generate the output. Fine-tuning is opt-in, and enterprises can bypass the Gateway with their own infrastructure.</p>
+    <p>Outlier's version is structural rather than contractual. Models run on your Mac, with no account and no usage cap, and it works with Wi-Fi switched off — no policy to read and no toggle to find, because there's no server. One caveat on Cody's side: its documented Ollama path, the only local-inference story, says support is Experimental and "available for Cody Free and Pro plans" — the two plans discontinued a year ago. Enterprise has no documented local option.</p>
+
+    <h2>What it costs, and side by side</h2>
+    <p>On cost: Cody appears nowhere on Sourcegraph's pricing page — the only published figure is an Enterprise plan starting at $16K — and there's no self-serve purchase. Outlier is free for Nano and Lite, $20/month or $149/year for all seven tiers, lifetime from $99.</p>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Sourcegraph Cody</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Where it lives</strong></td>
+          <td>VS Code, JetBrains, Visual Studio (Experimental), web, CLI (Experimental)</td>
+          <td>Standalone macOS app, Apple Silicon only</td>
+        </tr>
+        <tr>
+          <td><strong>Model</strong></td>
+          <td>Cloud: Claude Opus 4.8, GPT-5.4, Gemini 3.5 Flash; default Sonnet 4.5</td>
+          <td>On-device: 7 tiers, Nano 4B → Plus 397B-a17b</td>
+        </tr>
+        <tr>
+          <td><strong>Code leaves the machine</strong></td>
+          <td>Yes — snippets up to 28 KB per request; internet required even when self-hosted</td>
+          <td>No — nothing uploaded, runs offline</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Enterprise contract only; no per-seat price published</td>
+          <td>Free (Nano + Lite); Pro $20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes — Sourcegraph Enterprise account with Cody enabled</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Agentic ability</strong></td>
+          <td>Inline and quick edit, auto-edit from cursor movement, MCP support</td>
+          <td>Chat-based; you apply edits yourself</td>
+        </tr>
+        <tr>
+          <td><strong>Repo-scale context</strong></td>
+          <td>Org-wide Sourcegraph index, code graph, permission-aware retrieval</td>
+          <td>Only what's on your Mac</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The honest coding receipts</h2>
+    <p>Here's my number, measured rather than lifted from a leaderboard. On a blind slice of SWE-bench Verified, Outlier's local 27B resolved about 45% — 18 of 40 problems. Code 27B scores 0.866 on HumanEval. Core 27B also matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest prompts.</p>
+    <p>Forty-five percent is a real result for a 15 GB model on a laptop, and it's also below what the strongest cloud coding agents post. Cody's default is Claude Sonnet 4.5 and its list runs to Opus 4.8; on a genuinely hard multi-file bug, those models beat a local 27B more often than not. I'd rather say that than pretend a quantized model closes a gap that big.</p>
+
+    <h2>Where Sourcegraph Cody genuinely wins</h2>
+    <p>Cody's moat is real, and a local Mac app can't cross it.</p>
+    <ul>
+      <li><strong>Organization-scale context.</strong> Cody retrieves from the Sourcegraph index across every remote repository your company has, using keyword search, the Search API, the code graph and @-mentions of files, symbols and repos. For a 5,000-repo org, that's context Outlier can't see — the code isn't on the laptop.</li>
+      <li><strong>Permission-aware retrieval.</strong> The FAQ states retrieval ensures only code the user has read permission for is retrieved. That's a hard problem an on-device tool never has to solve, and a hard requirement in regulated environments.</li>
+      <li><strong>No hardware ceiling.</strong> Opus 4.8 and GPT-5.4 don't care what Mac you have — no RAM budget, no quantization tradeoff, and the model list refreshes without re-downloading tens of gigabytes.</li>
+      <li><strong>Governance.</strong> RBAC roles, admin-chosen models, Context Filters that exclude sensitive paths, and an org-wide Prompt Library. A single-user app has no answer to that.</li>
+      <li><strong>One assistant across a mixed toolchain</strong> — VS Code, eleven JetBrains IDEs, Visual Studio and the web, under one policy — and it has shipped since 2023.</li>
+    </ul>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Cody if</strong> your company already runs Sourcegraph, your code lives in hundreds of repositories nobody clones locally, you need permission-scoped retrieval and admin governance, and you want frontier-model quality on hard multi-file work. Without an indexed Sourcegraph deployment, the differentiator collapses.</p>
+    <p><strong>Pick Outlier if</strong> you're an individual or small team on Macs, you want code staying on the machine by architecture rather than by contract, you work offline, or you simply can't buy Cody. Outlier has no web search, no image generation, no mobile app, no voice mode, no Windows or Linux build, and no cloud sync. If you need any of those, it's the wrong tool.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> plan changes from the <a href="https://sourcegraph.com/blog/changes-to-cody-free-pro-and-enterprise-starter-plans">June 25, 2025 announcement</a>; clients, models, Gateway and FAQ details from <a href="https://sourcegraph.com/docs/cody">sourcegraph.com/docs/cody</a>; data terms from <a href="https://sourcegraph.com/terms/cody-notice">sourcegraph.com/terms/cody-notice</a>; repo status from <a href="https://github.com/sourcegraph/cody-public-snapshot">cody-public-snapshot</a>; install counts from the marketplace listings. Sourcegraph publishes no per-seat Cody price, so I haven't used the ~$59/user/month figure circulating on third-party review sites. Outlier numbers measured on an M1 Ultra (64 GB): SWE-bench Verified blind slice 18/40, HumanEval 0.866, rubric parity in the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>. Pricing and policies change — check before deciding.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever on any Apple Silicon Mac.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-sourcegraph-cody">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

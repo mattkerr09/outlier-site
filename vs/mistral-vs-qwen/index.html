@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mistral vs Qwen: open model families compared (2026) | Outlier</title>
+  <meta name="description" content="Mistral vs Qwen open-weight model families: sizes, Apache 2.0 licensing, Mac and MLX support, RAM requirements, and hosted API pricing — written by an interested party who ships Qwen weights.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/mistral-vs-qwen/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Mistral vs Qwen: open model families compared (2026)">
+  <meta property="og:description" content="Sizes, licensing, Mac RAM fit and API pricing across the Mistral and Qwen open-weight families — with a plain disclosure that Outlier ships Qwen-family weights.">
+  <meta property="og:url" content="https://outlier.host/vs/mistral-vs-qwen/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mistral vs Qwen: open model families compared (2026)">
+  <meta name="twitter:description" content="Apache 2.0 both ways — but the size ladder, the Mac story and the licensing fine print differ. An honest, disclosed comparison.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Mistral vs Qwen: open model families compared (2026)","description":"Mistral vs Qwen open-weight model families: sizes, Apache 2.0 licensing, Mac and MLX support, RAM requirements, and hosted API pricing — written by an interested party who ships Qwen weights.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mistral-vs-qwen/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Mistral vs Qwen","item":"https://outlier.host/vs/mistral-vs-qwen/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Mistral vs Qwen: two open model families, compared honestly</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Both ship genuine Apache 2.0 open weights, so on the license that decides whether you can ship a commercial product, it's a tie. Qwen covers a wider size ladder — 0.8B through 397B-A17B — and documents Apple Silicon support (mlx-lm and mlx-vlm) in its own README; Mistral's laptop-sized open models stop at Ministral 3 14B, with Mac builds from the community. Mistral wins on jurisdiction and pricing clarity: EU-based, API traffic never used for training, flat list prices instead of Alibaba's region-tiered ones.</p>
+    </div>
+
+    <p class="lead">Disclosure first, because this comparison isn't neutral: I build Outlier, a Mac app that ships Qwen-family and Gemma-family weights on-device. Six of its seven tiers are Qwen builds, so I have money riding on one side. What I can offer instead is the checklist I actually use — sizes, license, RAM fit, distribution — and a mark wherever my interest might be doing the talking.</p>
+
+    <h2>What each family actually ships</h2>
+    <p>Qwen's position is blunt: the official repo states that all of its open-weight models are licensed under Apache 2.0. The release list backs it up: Qwen3.5 at 0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B and a 397B-A17B flagship (Feb–Mar 2026), then Qwen3.6 at 35B-A3B and 27B in April. One prompt format from phone-class up to a model that needs 64 GB of unified memory.</p>
+
+    <p>Mistral's catalogue is shaped differently. Mistral 3, announced 2 December 2025, brought Mistral Large 3 (675B total, 41B active, sparse MoE) and Ministral 3 in 3B, 8B and 14B — all Apache 2.0, in base, instruct and reasoning variants. Mistral Small 4 (v26.03) followed: Apache 2.0, 119B total with 6.5B active across 128 experts, 256k context. Mistral's docs then split the catalogue into open weights and premier, closed models — OCR 4, OCR 3, Codestral and Moderation 2 sit on the closed side.</p>
+
+    <p>Worth saying loudly: <strong>the current flagship is closed on both sides.</strong> Alibaba serves qwen3.7-max only through Model Studio, <code>github.com/QwenLM/Qwen3.7</code> returns a 404, and the official README lists open weights only through Qwen3.6. "Open family" doesn't mean "the best model is open."</p>
+
+    <h2>Licensing: the part that decides whether you can ship</h2>
+    <p>This axis gets skipped constantly and it's the one that costs money. Apache 2.0 — confirmed on the model cards for Qwen3.6-27B, Mistral Small 4 and Ministral 3 8B — means you can embed the weights in a commercial app, quantize them, fine-tune them and redistribute the result. No per-seat fee, no vendor approval step, no clause that flips on when you get popular.</p>
+
+    <p>Compare the two other licenses you'll meet here. Meta's Llama models ship under the Llama Community License, Google's Gemma models under the Gemma Terms of Use — bespoke agreements with attached use policies, not standard OSI licenses, and terms that can shift between releases in a way Apache 2.0 can't. I'm not on the sidelines: Outlier's Quick tier is Gemma-family under Gemma Terms of Use, and the other six are Apache 2.0. I know which conversation is shorter.</p>
+
+    <p>Caveat on both families: open weights are redistribution rights over a binary, not reproducibility. Neither vendor publishes its corpus or recipe.</p>
+
+    <h2>What runs on a Mac, and at what RAM</h2>
+    <p>Qwen's lead here is documentation more than architecture. Its README states that both mlx-lm (text) and mlx-vlm (vision + text) support Qwen3.6, alongside GGUF/llama.cpp, Ollama, LM Studio and vLLM. Ready-made 4-bit MLX conversions land immediately — <code>mlx-community/Qwen3.6-27B-4bit</code> is about 16.1 GB and runs from a one-line <code>mlx_lm.server</code>. Mistral's cards lead with vLLM and datacenter GPUs; the Ministral 3 8B card frames FP8 as running on a single H200. Mac support for Mistral exists, but on the community's schedule.</p>
+
+    <p>The naming trips people up. <strong>Mistral Small 4 is not small</strong> — 119B total won't fit a 16 GB Mac at any useful quantization, even with 6.5B active. But <code>mlx-community/Ministral-3-8B-Instruct-2512-4bit</code> is 5.6 GB, Apache 2.0, multimodal (8.4B LM plus a 0.4B vision encoder), 256k context — comfortable on 16 GB. From my own builds: Outlier's Nano (4B) is 2.37 GB and needs 6 GB RAM, Core (27B) is 15.13 GB and needs 24 GB, Plus (397B-A17B) is 209 GB and needs 64 GB.</p>
+
+    <p>Distribution differs too. Ollama's library carries current Qwen — 3.5 from 0.8B to 122B, plus 3.6 — but has no Ministral 3 or Mistral Small 4 entries; its newest Mistral listings are mistral-medium-3.5 and mistral-large-3. Local Mistral users fall back to community GGUFs.</p>
+
+    <h2>Strengths by task, agents, and languages</h2>
+    <p>I'm not publishing a cross-family leaderboard — I didn't find primary benchmark tables I'd stand behind. What's verifiable is structure. Qwen3.6-27B natively supports a 262,144-token context, extensible toward roughly 1,010,000 with RoPE scaling, useful for whole-repo work on a model you can run locally. Ministral 3 8B puts vision in a 5.6 GB package, which Qwen matches only at larger sizes.</p>
+
+    <p>Both vendors open-source their agent harness, and the difference matters if you're local-first. Qwen Code is Apache-2.0, ships VS Code, JetBrains and Zed plugins, and speaks OpenAI, Anthropic, Gemini and Qwen APIs plus "any third-party provider or local model (Ollama / vLLM)." Mistral's <code>mistral-vibe</code> is also Apache-2.0, but its README requires a Mistral API key and documents no local endpoint — that agent experience is cloud-only.</p>
+
+    <p>On languages, both market multilingual capability and I couldn't verify per-language numbers from the model cards, so test on your own text. What <em>is</em> verifiable is jurisdiction, often the real question behind "which languages": Mistral is EU-based, and Alibaba's Model Studio runs in Singapore, US-Virginia, Beijing, Hong Kong, Tokyo and Frankfurt, with non-interchangeable keys and region-specific pricing.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Mistral</th>
+          <th>Qwen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Open sizes</strong></td>
+          <td>Ministral 3 3B/8B/14B; Small 4 119B-A6.5B; Large 3 675B-A41B</td>
+          <td>0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B, 397B-A17B</td>
+        </tr>
+        <tr>
+          <td><strong>License</strong></td>
+          <td>Apache 2.0 on the open list; OCR and Codestral closed</td>
+          <td>Apache 2.0 on all open weights; qwen3.7-max API-only</td>
+        </tr>
+        <tr>
+          <td><strong>Fits 16 GB Mac</strong></td>
+          <td>Ministral 3 8B 4-bit = 5.6 GB</td>
+          <td>0.8B–9B; 27B 4-bit = 16.1 GB</td>
+        </tr>
+        <tr>
+          <td><strong>Apple Silicon</strong></td>
+          <td>Community GGUF / MLX</td>
+          <td>mlx-lm + mlx-vlm, vendor-documented</td>
+        </tr>
+        <tr>
+          <td><strong>Context</strong></td>
+          <td>256k (Small 4, Ministral 3 8B)</td>
+          <td>262k on 3.6-27B, ~1M with RoPE</td>
+        </tr>
+        <tr>
+          <td><strong>Ollama library</strong></td>
+          <td>Tops out at medium-3.5 / large-3</td>
+          <td>Qwen 3.5 and 3.6 present</td>
+        </tr>
+        <tr>
+          <td><strong>Agent CLI</strong></td>
+          <td>mistral-vibe (API key required)</td>
+          <td>Qwen Code (Ollama / vLLM supported)</td>
+        </tr>
+        <tr>
+          <td><strong>Cheapest hosted</strong></td>
+          <td>Ministral 3 3B $0.10 / $0.10 per 1M</td>
+          <td>qwen3.5-flash $0.10 / $0.40 per 1M</td>
+        </tr>
+        <tr>
+          <td><strong>Jurisdiction</strong></td>
+          <td>EU (France)</td>
+          <td>6 regions incl. Frankfurt, Virginia</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where each family genuinely wins</h2>
+    <p><strong>Mistral wins the small multimodal slot.</strong> Ministral 3 8B — Apache 2.0, vision encoder included, 256k context, 5.6 GB at 4-bit — is the cleanest "vision model that fits a MacBook Air" in either family. If that's your requirement, it isn't close.</p>
+
+    <p><strong>Mistral wins on pricing you can quote.</strong> Flat list prices per million tokens: Medium 3.5 $1.50/$7.50, Large 3 $0.50/$1.50, Small 4 $0.15/$0.60, Ministral 3 8B $0.15/$0.15, plus 50% off batch and 90% off cached input. Alibaba uses volume-tiered input pricing, and prices, availability and keys differ per region — a number that's right in Singapore may be wrong in Frankfurt.</p>
+
+    <p><strong>Mistral wins on stated data terms.</strong> API traffic isn't used for training, and Vibe Pro, Team and Enterprise conversations aren't by default. Alibaba's "never use your data for model training" line is verifiable too, but scoped to Model Studio, the paid API. Mistral's weak spot is its own free tier: Vibe Free conversations can be used to improve the models, with opt-out.</p>
+
+    <p><strong>Qwen wins on the size ladder and the Mac path.</strong> One family from 0.8B to 397B, MLX documented at release, immediate community 4-bit builds, first-party Ollama presence. For an app spanning a 16 GB Air and a 64 GB Studio, that's one integration instead of several — and it's exactly why I ship Qwen weights, so weigh it accordingly. Tooling neutrality goes the same way: Qwen Code points at a local endpoint and mistral-vibe won't.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Mistral if</strong> you need a small multimodal model on constrained hardware, you want EU jurisdiction, you need quotable per-token prices for a cloud fallback, or you're already on vLLM where Mistral's docs lead.</p>
+
+    <p><strong>Pick Qwen if</strong> you're building on Apple Silicon, you need one family that scales across very different machines, or you want an agent CLI that talks to a local endpoint without a vendor key.</p>
+
+    <p><strong>Pick both</strong> if you're integrating seriously — both are Apache 2.0, so route each task to whichever wins your evals. One warning for anyone bundling weights into an app: Qwen went 3.5 to 3.6 to a closed 3.7 in roughly six months, and Mistral went Large 3 to Small 4 to Medium 3.5. Every release is a re-quantize cycle you inherit.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Qwen sizes, licensing and MLX support from the <a href="https://github.com/QwenLM/Qwen3.6">Qwen3.6 repo</a> plus the <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B</a> and <a href="https://huggingface.co/mlx-community/Qwen3.6-27B-4bit">mlx-community 4-bit</a> cards. Mistral from <a href="https://mistral.ai/news/mistral-3/">mistral.ai/news/mistral-3</a>, <a href="https://docs.mistral.ai/models/overview">docs.mistral.ai</a>, and the <a href="https://huggingface.co/mistralai/Mistral-Small-4-119B-2603">Small 4</a> and <a href="https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512">Ministral 3 8B</a> cards. Pricing from <a href="https://mistral.ai/pricing/api">mistral.ai/pricing/api</a> and <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing">Alibaba Model Studio</a> (updated 2026-07-15). Data policies from <a href="https://docs.mistral.ai/admin/monitor-comply/privacy-data-controls">Mistral privacy &amp; data controls</a>; distribution from <a href="https://ollama.com/search?q=qwen">ollama.com</a>. Outlier tier sizes and throughput measured on an M1 Ultra. <strong>One gap:</strong> I could not verify Qwen's consumer chat pricing or data policy — qwen.ai and chat.qwen.ai render client-side and returned no text — so nothing here is a claim about Qwen Chat. Competitor pricing and terms change without notice.
+    </div>
+
+    <div class="cta">
+      <h3>Want Qwen weights running locally without the setup?</h3>
+      <p>Outlier runs Qwen- and Gemma-family models fully on-device on Apple Silicon. No account, no caps, nothing uploaded. No web search, no image generation, no mobile app.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=mistral-vs-qwen">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

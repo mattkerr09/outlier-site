@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Enchanted: bundled Mac app vs open-source Ollama client | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (bundled local Mac AI app) and Enchanted (free Apache-2.0 Ollama client for macOS, iOS and visionOS). Setup, model management, platforms, licensing.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-enchanted/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Enchanted: bundled Mac app vs open-source Ollama client">
+  <meta property="og:description" content="Both run locally, so privacy isn't the difference. The real split: one app that ships models, versus a free open-source front end for an Ollama server you run yourself.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-enchanted/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Enchanted: bundled Mac app vs open-source Ollama client">
+  <meta name="twitter:description" content="Two local-AI tools compared: what's bundled vs what you assemble, setup effort, platform support, and licensing.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Enchanted: bundled Mac app vs open-source Ollama client","description":"Honest comparison of Outlier (bundled local Mac AI app) and Enchanted (free Apache-2.0 Ollama client for macOS, iOS and visionOS). Setup, model management, platforms, licensing.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-enchanted/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Enchanted","item":"https://outlier.host/vs/outlier-vs-enchanted/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Enchanted: bundled Mac app vs open-source Ollama client</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Enchanted is a free, Apache-2.0 chat app for macOS, iOS, iPadOS and visionOS that acts as a front end for an Ollama server you install and run yourself — it ships no models and does no inference. Outlier is a paid, closed-source Mac app that bundles the runtime and the models together, so there's no server to install. Both run entirely on your own hardware, so privacy is not the deciding factor; the deciding factors are how much assembly you want to do, and whether you need the app on an iPhone or Vision Pro.</p>
+    </div>
+
+    <p class="lead">Disclosure up front: I'm Matt Kerr, I build Outlier, and I'm the interested party here. I've tried to write this so that someone who ends up choosing Enchanted still finds it useful. Enchanted is genuinely good software, it's free, and it does several things Outlier can't do at all.</p>
+
+    <h2>Privacy isn't the difference here</h2>
+    <p>Most comparisons on this site pit a local app against a cloud service, and privacy carries the whole argument. Not this one. Point Enchanted at an Ollama server on your own Mac and your prompts never leave the machine — same as Outlier. Its App Store privacy label says the developer collects no data, its dependency list contains no analytics SDKs, and the macOS build is sandboxed with four entitlements (network client, microphone, read-only access to files you pick). That's structural, not promissory, because there's no vendor backend to send anything to.</p>
+    <p>One caveat that cuts both ways: Enchanted talks to whatever endpoint you type in. If that endpoint is a hosted Ollama somewhere else, your prompts go there. And the README's own recipe for reaching a home server from your phone is an ngrok tunnel — <code>ngrok http 11434</code> — which puts your model behind a publicly reachable third-party URL. That's a real hole in an otherwise airtight story, and it's the project's own documented method.</p>
+
+    <h2>Client versus bundle: the actual split</h2>
+    <p>Enchanted performs no inference. The README is blunt about it: you need to run your own Ollama server, version 0.1.14 or later. The app is 7.2 MB because there's nothing in it but the interface. You install Ollama separately, pull models with Ollama's command line, keep both updated, and troubleshoot the server when something goes wrong. Enchanted is the pretty ChatGPT-shaped window on top.</p>
+    <p>Outlier ships the other way. The runtime and the model catalogue are the product: you download the app, pick a tier, and it fetches the weights itself. No server process, no terminal, no version pinning. Nano (4B, 2.37 GB, 6 GB RAM) and Lite (9B, 5.04 GB, 12 GB RAM) are free with no account. Pro adds Quick, Core, Code, Vision and Plus — Core 27B runs about 20.7 tok/s on an M1 Ultra, and Plus 397B streams its experts from SSD to fit in roughly 11 GB of peak RSS on a 64 GB machine.</p>
+    <p>Which is better depends entirely on whether "install and manage Ollama" reads to you as a five-minute chore or a wall. If you already run Ollama, Enchanted costs you nothing and adds a good interface to something you have. If you don't, Enchanted's setup is Ollama's setup plus an app.</p>
+
+    <h2>Who each one is for</h2>
+    <p>Enchanted's own positioning answers this. The App Store listing was renamed <strong>"Enchanted Developers Only"</strong> in version 1.9.0, with the entire release note reading "App name changed to reflect that it's for developers only." It sits in the Developer Tools category and its description talks about LLM researchers chatting with self-hosted models. That's an unusually honest piece of self-labelling, and it tells you who should walk in.</p>
+    <p>Outlier is built for the person who wants a chat app and has no interest in the machinery underneath. No account, no caps, no server, works with Wi-Fi off. Different audiences, and I don't think either framing is wrong.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Enchanted</th>
+          <th>Outlier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Interface</strong></td><td>Native GUI client only; no CLI, no web UI</td><td>Native GUI app; no CLI, no web UI</td></tr>
+        <tr><td><strong>Who it's for</strong></td><td>Developers, tinkerers, LLM researchers (per its own App Store listing)</td><td>End users who want a chat app with nothing to assemble</td></tr>
+        <tr><td><strong>Setup effort</strong></td><td>Install and run Ollama separately, then point the app at it</td><td>Download app, pick a tier, it fetches the weights</td></tr>
+        <tr><td><strong>Model management</strong></td><td>Whatever your Ollama has pulled; you manage it via Ollama</td><td>Seven fixed tiers managed in-app</td></tr>
+        <tr><td><strong>Inference engine</strong></td><td>None bundled — external Ollama server</td><td>Bundled, on-device (Apple Silicon)</td></tr>
+        <tr><td><strong>Download size</strong></td><td>7.2 MB (no weights)</td><td>App + 2.37 GB to 209 GB per tier</td></tr>
+        <tr><td><strong>Platforms</strong></td><td>macOS 14+, iOS/iPadOS 17+, visionOS 1.1+</td><td>macOS 12+, Apple Silicon only — no iPhone, iPad, Vision Pro, Windows or Linux</td></tr>
+        <tr><td><strong>API compatibility</strong></td><td>Ollama API only (OpenAI-compatible support requested in 4 open issues)</td><td>Local models only</td></tr>
+        <tr><td><strong>Licence</strong></td><td>Apache-2.0, full Swift source on GitHub</td><td>Closed source; weights published on Hugging Face</td></tr>
+        <tr><td><strong>Price</strong></td><td>Free, no in-app purchases</td><td>Free tier (Nano + Lite); Pro $20/mo or $149/yr</td></tr>
+        <tr><td><strong>Maintenance status</strong></td><td>Last functional commits 2025-03-18; App Store build unchanged since 2025-08-19</td><td>Actively shipping</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Where Enchanted genuinely wins</h2>
+    <p>Several of these aren't close.</p>
+    <ul>
+      <li><strong>It's free and it's open.</strong> Apache-2.0, roughly 6,000 GitHub stars, the entire Swift source public. You can read exactly what it sends where, fork it, or build it yourself. Outlier's app is closed source — you have to take my word for the privacy claims, or watch the network traffic. Only our weights are public.</li>
+      <li><strong>Four Apple platforms, one download.</strong> macOS, iPhone, iPad and Vision Pro. Outlier is Mac-only and Apple Silicon only, with no mobile app of any kind. If you want the same conversations on your phone, Outlier simply cannot do it, and that's a real disadvantage.</li>
+      <li><strong>Splitting the UI from the runtime is a genuinely better architecture for some setups.</strong> Run a big model on a desktop with lots of RAM and drive it from a thin client. An app that does inference on-device is hard-capped by the RAM of the machine it's installed on — Outlier's Plus tier needs 64 GB, full stop.</li>
+      <li><strong>Model-agnostic.</strong> Anything in the Ollama library works, including models released long after the app stopped being updated. You can switch models mid-conversation or resubmit an edited message to a different model, which is a fast A/B workflow. Outlier gives you seven tiers I picked.</li>
+      <li><strong>Nice Mac-native touches.</strong> A Ctrl+Cmd+K Spotlight-style panel to prompt from anywhere, prompt templates ("Completions") that act on selected text in other apps, read-aloud with system voices, voice prompts, image attachments, proper markdown and code rendering.</li>
+      <li><strong>7.2 MB.</strong> Install and uninstall cost is basically nothing.</li>
+    </ul>
+
+    <h2>Where Outlier has an edge</h2>
+    <p>It's self-contained: one download, no Ollama, no terminal, no endpoint URL to configure, and the models come with it. It's actively maintained — Enchanted's last functional code commits date to March 2025, the App Store build hasn't moved since August 2025, 113 issues sit open, and and the README's first line now points to Jaz as "the new iteration of this project" — a different product entirely. Enchanted still works; it just isn't going anywhere.</p>
+    <p>On output quality I can only speak to Outlier's side, since Enchanted's quality is whatever model you pulled. Our Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and our local 27B measured about 45% on a blind slice of SWE-bench Verified. Also worth saying plainly: Outlier has no web search, no image generation, no voice mode, no cloud sync.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Enchanted if</strong> you already run Ollama, you want your models on an iPhone or a Vision Pro, you want to point one app at a server on another machine, you need open source you can audit or fork, or you want to swap freely among many models. It costs nothing to try.</p>
+    <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, you don't want to install or maintain a server, you want the models handled for you, and you'd rather pay for something under active development than run a free tool whose author has moved on.</p>
+    <p><strong>Skip both if</strong> you're on Windows or Linux. Neither app runs there.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Enchanted facts verified 2026-07-23 from primary sources — the GitHub repo API and commit history (<a href="https://github.com/gluonfield/enchanted">github.com/gluonfield/enchanted</a>: Apache-2.0, 5,977 stars, 113 open issues, last functional commits 2025-03-18), its README, PRIVACY.md, entitlements file and Xcode project, and Apple's iTunes lookup API plus the <a href="https://apps.apple.com/us/app/enchanted-developers-only/id6474268307">App Store listing</a> (free, no in-app purchases, 7.2 MB, version 1.9.0 dated 2025-08-19, Developer Tools category). Outlier tier sizes, RAM floors and throughput measured on an M1 Ultra Mac Studio; the 54-prompt Claude Opus comparison is published at <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">outlier.host/data</a>; Outlier pricing as of 2026-07-23. Competitor pricing, licences, platform support and maintenance status change — check the sources above before you decide.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite are free forever on any Apple Silicon Mac. No server to install, no login, nothing uploaded.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-enchanted">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

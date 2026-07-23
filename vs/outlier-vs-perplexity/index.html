@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier vs Perplexity: local Mac AI vs a cloud answer engine | Outlier</title>
+  <meta name="description" content="Honest comparison of Outlier (local Mac AI) vs Perplexity (cloud answer engine). Price, caps, offline use, data handling, and where each one genuinely wins.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/outlier-vs-perplexity/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier vs Perplexity: local Mac AI vs a cloud answer engine">
+  <meta property="og:description" content="Perplexity searches the live web and cites it. Outlier runs on your Mac with nothing uploaded. An honest look at both, written by Outlier's founder.">
+  <meta property="og:url" content="https://outlier.host/vs/outlier-vs-perplexity/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier vs Perplexity: local Mac AI vs a cloud answer engine">
+  <meta name="twitter:description" content="Live web citations vs on-device privacy — price, caps, offline, and data handling compared honestly.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Perplexity: local Mac AI vs a cloud answer engine","description":"Honest comparison of Outlier (local Mac AI) vs Perplexity (cloud answer engine). Price, caps, offline use, data handling, and where each one genuinely wins.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-perplexity/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Perplexity","item":"https://outlier.host/vs/outlier-vs-perplexity/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Outlier vs Perplexity: local Mac AI vs a cloud answer engine</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Perplexity is a cloud answer engine: it runs live web searches and returns a cited answer, but every query leaves your machine, it needs an account and a connection, and Pro costs $20/month. Outlier runs models entirely on your own Apple Silicon Mac — no account, no usage caps, nothing uploaded, works with Wi-Fi off — and has no web search at all. Asking about this week's news? Perplexity. Asking about documents you can't send to a server? Outlier.</p>
+    </div>
+
+    <p class="lead">I'm Matt Kerr, and I built Outlier — so treat this as a comparison written by an interested party. I've tried to be accurate rather than flattering, and where Perplexity is clearly better I say so. These two get compared constantly, but they solve different problems. One is a search product with a language model attached. The other is a language model with no search.</p>
+
+    <h2>What Perplexity is</h2>
+    <p>Perplexity calls itself an "answer engine." You ask a question, it runs live web searches, feeds the retrieved pages to large language models, and returns a synthesized answer with inline citations you can click. The models are a mix: Perplexity's own Sonar, built on Llama 3.3 70B and further trained for search, plus third-party frontier models routed through its Agent API — Claude, GPT-5, Gemini and Grok among them.</p>
+
+    <p>It runs nearly everywhere: web, iOS 18+, iPadOS, Android, a native macOS app called Personal Computer, the Comet browser on macOS and Windows, and a developer API. There's no official CLI, but an MCP server (<code>npx -y @perplexity-ai/mcp-server</code>) drops search and research tools into editors like Claude Code and Cursor. Deep Research runs dozens of searches across hundreds of sources and returns a cited report in two to four minutes; Model Council, a Max feature, sends one question to three frontier models and reconciles where they agree and disagree.</p>
+
+    <h2>What Outlier is</h2>
+    <p>Outlier is a native Mac app for Apple Silicon (M1 or later, macOS 12+). The model runs on your own chip. No account, no login, no usage cap, nothing uploaded — turn Wi-Fi off and keep working.</p>
+
+    <p>Seven tiers ship in the app, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which streams its experts from SSD and peaks near 11 GB RSS. Nano and Lite are free with no account; Pro is $20/month or $149/year for all seven.</p>
+
+    <p>Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest. Code 27B scores 0.866 on HumanEval, and on a blind slice of SWE-bench Verified the local 27B measured about 45%. What it cannot do, at all, is search the web.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Perplexity Free</th>
+          <th>Perplexity Pro</th>
+          <th>Outlier Free</th>
+          <th>Outlier Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td>Free</td>
+          <td>$20/mo</td>
+          <td>Free</td>
+          <td>$20/mo or $149/yr</td>
+        </tr>
+        <tr>
+          <td><strong>Usage caps</strong></td>
+          <td>Yes — "a limited number of answers per day" for Deep Research; exact quotas undocumented</td>
+          <td>Yes — "a high volume" of Deep Research queries</td>
+          <td>None</td>
+          <td>None</td>
+        </tr>
+        <tr>
+          <td><strong>Works offline</strong></td>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Data uploaded</strong></td>
+          <td>Yes — every query</td>
+          <td>Yes — every query</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Account required</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Platform</strong></td>
+          <td colspan="2">Web, iOS, iPadOS, Android, macOS app, Comet browser (macOS + Windows), API</td>
+          <td colspan="2">macOS 12+ on Apple Silicon only</td>
+        </tr>
+        <tr>
+          <td><strong>Live web search</strong></td>
+          <td>Yes, with citations</td>
+          <td>Yes, with citations</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Where Perplexity genuinely wins</h2>
+    <p>Several of these aren't close, and pretending otherwise would waste your time.</p>
+    <ul>
+      <li><strong>Live web grounding with citations.</strong> This is the whole product, not a bolt-on — it answers questions about things that happened after any model's training cutoff. Outlier structurally cannot; there's no retrieval stack behind it.</li>
+      <li><strong>Measured citation accuracy.</strong> Columbia's Tow Center tested eight AI search tools across 1,600 queries. Perplexity had the lowest error rate of the eight at 37% incorrect, ahead of ChatGPT Search, Gemini, Copilot, DeepSeek and Grok, which was worst at 94%.</li>
+      <li><strong>Many frontier models on one subscription.</strong> Per-thread model selection across the Claude, GPT, Gemini and Grok families, instead of paying four vendors.</li>
+      <li><strong>Deep Research and Model Council.</strong> Hundreds of sources synthesized in minutes, or three frontier models cross-checking each other. No single local model does either.</li>
+      <li><strong>It's everywhere.</strong> Phone, tablet, browser, desktop, API. Outlier is one Mac.</li>
+      <li><strong>Enterprise posture.</strong> SOC 2 Type II, audit logs, SCIM provisioning, configurable retention and usage analytics on Enterprise Max — things an unmanaged local app doesn't provide.</li>
+      <li><strong>It gives back.</strong> An MIT-licensed MCP server, Apache-2.0 GPU kernels and SDKs, and R1-1776, an open-weights post-trained DeepSeek-R1 on Hugging Face.</li>
+    </ul>
+    <p>Outlier also has no image generation, no voice mode, no mobile app, no Windows or Linux build, and no cloud sync. If any of those are on your list, this comparison ends here.</p>
+
+    <h2>What it costs over a year</h2>
+    <p>Perplexity Pro is $20/month, stated on Perplexity's own Max announcement and matching the App Store in-app purchase listing; Max is listed at $200. Enterprise Pro is $40/user/month ($400/year) and Enterprise Max $325/user/month ($3,250/year). Third-party trackers report discounted annual plans and a $10/month education tier, but I couldn't confirm those — perplexity.ai/pricing returns HTTP 403 to automated fetching — so treat them as unconfirmed.</p>
+
+    <p>Outlier Pro is $20/month or $149/year — $12.42/month. Lifetime Pro starts at $99, and Nano and Lite stay free.</p>
+
+    <p>The API is priced separately and is reasonable: Sonar at $1 per million input and output tokens, Sonar Pro at $3/$15, plus request fees of $5–$14 per thousand depending on search context size. The Search API bills $5.00 per 1,000 requests, and third-party models routed through the Agent API carry no Perplexity markup.</p>
+
+    <p>Free-tier quotas aren't documented on any page I could reach. Perplexity says free users get "access to a limited number of answers per day" for Deep Research; the numbers people quote come from third-party trackers that disagree with each other.</p>
+
+    <h2>What happens to your data</h2>
+    <p>With Perplexity, every query goes to Perplexity's servers — not a criticism, just how a search product has to work. Even the Mac Personal Computer app, which reaches local files and 400+ connectors, orchestrates all of it "in a secure development sandbox on Perplexity servers," by Perplexity's own description. Local file content can travel to the cloud, and I haven't found a published boundary of what stays on device.</p>
+
+    <p>The privacy policy permits using collected data to "Improve or create services and products, including our AI models." The only training carve-out written into it is email content. The policy also states plainly that Perplexity does not sell personal data or send queries to advertisers. Guides widely describe a data-retention toggle that's on by default and must be switched off in Settings; I couldn't verify that from a primary source, since the Help Center is behind a 403.</p>
+
+    <p>Comet's design is better than it gets credit for — history, cookies, passwords and card details stay on device, and only the current tab plus relevant history is sent when you invoke the Assistant. Against that, Brave's security team documented indirect prompt injection in Comet: page content reached the model without separating user instructions from untrusted webpage text, letting hidden instructions exfiltrate data from logged-in sessions. Brave reported it 25 July 2025 and, after the 20 August 2025 disclosure, said Perplexity "still hasn't fully mitigated the kind of attack described here."</p>
+
+    <p>Two more things a careful buyer should know: the iOS App Store privacy label discloses precise location, purchase history and device identifiers collected and <em>linked to your identity</em>; and there's real legal overhang, including copyright suits from several publishers and an Amazon suit over Comet's shopping agent that produced a March 2026 injunction blocking the agent from Amazon.</p>
+
+    <p>Outlier's version of this section is short. Nothing is uploaded. No account, no server-side log, no training toggle to find, because there's no server. Six tiers use Apache 2.0 base models; Quick ships under the Gemma Terms of Use, and weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. Sonar's weights are not published, and Perplexity's Terms of Service assign all rights to the company and prohibit reverse engineering.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick Perplexity if</strong> your questions are about the current world — news, prices, releases, anything past a training cutoff. Pick it if you want citations you can click and check, if you need answers on a phone or on Windows, or if a team needs SOC 2 and SCIM.</p>
+
+    <p><strong>Pick Outlier if</strong> the material can't leave your machine — client files, patient notes, unreleased source code, legal drafts. Pick it if you work on planes or in dead zones, if usage caps have interrupted you mid-task, or if you'd rather pay $149 a year than $240.</p>
+
+    <p><strong>Plenty of people run both</strong>, and that's the honest recommendation for most knowledge workers. Perplexity for anything that needs the live web; Outlier for anything you wouldn't paste into a website. They barely overlap.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Perplexity pricing from its own <a href="https://hub-prod.perplexity.ai/hub/blog/introducing-perplexity-max">Max</a> and <a href="https://hub-prod.perplexity.ai/hub/blog/power-your-organization-s-full-potential">enterprise</a> announcements plus the <a href="https://apps.apple.com/us/app/perplexity-ask-anything/id1668000334">App Store listing</a>; API rates from <a href="https://docs.perplexity.ai/getting-started/pricing">docs.perplexity.ai</a>; data handling from the <a href="https://hub-prod.perplexity.ai/hub/legal/privacy-policy">privacy policy</a>, <a href="https://hub-prod.perplexity.ai/hub/legal/terms-of-service">terms of service</a> and <a href="https://hub-prod.perplexity.ai/hub/blog/introducing-privacy-snapshot">privacy snapshot</a>; citation accuracy from the <a href="https://www.cjr.org/tow_center/we-compared-eight-ai-search-engines-theyre-all-bad-at-citing-news.php">Tow Center study</a>; Comet prompt injection from <a href="https://brave.com/blog/comet-prompt-injection/">Brave</a>. Free-tier quotas and annual/education pricing are flagged unconfirmed above because perplexity.ai/pricing and the Help Center return HTTP 403 to automated fetching. Outlier figures measured on an M1 Ultra Mac Studio (64 GB); pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Competitor pricing, model line-ups and policies change often — check the primary sources before relying on any number here.
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free — no account needed</h3>
+      <p>Nano and Lite run on your own Mac, free forever, with nothing uploaded and no sign-up. Download and ask something in under two minutes.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-perplexity">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

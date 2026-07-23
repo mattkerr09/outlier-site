@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified memory vs dedicated VRAM for LLM inference | Outlier</title>
+  <meta name="description" content="Unified memory decides which models fit; dedicated VRAM decides how fast they run. Capacity, bandwidth, thermals, price per usable gigabyte, and upgrade paths compared.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/unified-memory-vs-vram/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Unified memory vs dedicated VRAM for LLM inference">
+  <meta property="og:description" content="A hardware comparison: unified memory decides what fits, dedicated VRAM decides how fast it runs. Capacity, bandwidth, power, price per usable gigabyte.">
+  <meta property="og:url" content="https://outlier.host/vs/unified-memory-vs-vram/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Unified memory vs dedicated VRAM for LLM inference">
+  <meta name="twitter:description" content="Capacity vs bandwidth, what actually fits, thermals, price per usable gigabyte, and upgrade paths — with published benchmark numbers.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"Unified memory vs dedicated VRAM for LLM inference","description":"Unified memory decides which models fit; dedicated VRAM decides how fast they run. Capacity, bandwidth, thermals, price per usable gigabyte, and upgrade paths compared.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/unified-memory-vs-vram/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Unified memory vs dedicated VRAM","item":"https://outlier.host/vs/unified-memory-vs-vram/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Unified memory vs dedicated VRAM for LLM inference</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon reaches 512GB at up to 819GB/s, an RTX 5090 gives 32GB at roughly 1,792GB/s — so a 120B model runs on the big Mac and won't load on the GPU at all, while on models that fit both the GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
+    </div>
+
+    <p class="lead">Disclosure first: I build Outlier, a local AI app that only runs on Apple Silicon, so I have an obvious interest in one side of this. I've stuck to published specs and public benchmark tables, and labeled every number I couldn't verify at the source. Where a discrete GPU wins, it wins.</p>
+
+    <h2>One physical fact everything follows from</h2>
+    <p>NVIDIA's own inference-optimization guide is blunt: for token generation, the time spent moving weights, keys, values and activations out of memory dominates the time spent computing. NVIDIA calls it "a memory-bound operation."</p>
+
+    <p>That splits local inference into two problems. <strong>Prompt processing</strong> — reading your question, your files, your codebase — is compute-bound. <strong>Token generation</strong> — the words appearing on screen — tracks memory bandwidth far more closely than TFLOPs. Any comparison quoting one number hides half the story.</p>
+
+    <p>The architecture follows. On Apple silicon the CPU and GPU share one pool — MLX's docs note that arrays live in shared memory, usable by any device without transferring data. A discrete GPU has its own isolated, much faster pool, and everything must cross PCIe into it.</p>
+
+    <h2>Capacity: what actually fits</h2>
+    <p>Here unified memory sits in a different class. Apple's M3 Ultra configures to 512GB at over 800GB/s (819GB/s per the Mac Studio specs), and Apple claims models over 600 billion parameters run on device. DGX Spark ships 128GB of coherent memory at 273GB/s for inference up to 200B. An RTX 5090 has 32GB; the RTX PRO 6000 has 96GB with ECC.</p>
+
+    <p>Those are hard ceilings. Spill out of VRAM and the offloaded layers cross PCIe at a fraction of GDDR7 bandwidth — throughput falls off a cliff. Unified memory degrades gently instead. Here's what my app's tiers need:</p>
+
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Download</th><th>Min RAM</th><th>Fits 32GB VRAM?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Nano 4B</td><td>2.37 GB</td><td>6 GB</td><td>Yes</td></tr>
+        <tr><td>Lite 9B</td><td>5.04 GB</td><td>12 GB</td><td>Yes</td></tr>
+        <tr><td>Core 27B / Code 27B</td><td>15.13 GB</td><td>24 GB</td><td>Yes</td></tr>
+        <tr><td>Vision 35B-a3b</td><td>19.0 GB</td><td>24 GB</td><td>Yes</td></tr>
+        <tr><td>Plus 397B-a17b</td><td>209 GB</td><td>64 GB</td><td>No</td></tr>
+      </tbody>
+    </table>
+
+    <p>Everything through 35B fits a 5090. The 397B tier doesn't, at any quantization worth running; on a 64GB Mac it works only because a paged mixture-of-experts loader streams experts from SSD, holding peak resident memory near 11GB at 2.1 tokens per second on an M1 Ultra. Slow, but it runs. llama.cpp's DGX Spark file shows the same shape on a mainstream model: 59 GiB of gpt-oss-120b at roughly 2,444 tokens/sec prefill, 59 tokens/sec generation. On a 5090 it doesn't load.</p>
+
+    <p>One caveat: unified memory is <em>shared</em>. The model competes with macOS, your browser and the app, and Metal caps GPU allocation through a documented working-set limit — the widely repeated 75%-of-RAM figure is community-reported, not published by Apple. Usable budget runs well under the sticker number.</p>
+
+    <h2>Bandwidth: speed once it fits</h2>
+    <p>llama.cpp keeps two community benchmark threads in its repo, same model (LLaMA 7B Q4_0). Apple silicon: M4 Max 714 tokens/sec prefill and 70 tokens/sec generation; M2 Ultra 1,238 and 94. CUDA: RTX 5090 14,073 and 290; RTX PRO 6000 14,855 and 274.</p>
+
+    <p>The arithmetic is mine, not theirs: a 5090 is about 20x faster than an M4 Max at prompt processing but only about 4x faster at generating tokens. That's the split above — compute-bound prefill, where discrete GPUs are an order of magnitude ahead, and bandwidth-bound decode, where the gap collapses toward the bandwidth ratio.</p>
+
+    <p>Apple is closing the compute half deliberately: M5 puts a Neural Accelerator in every GPU core and claims over 4x M4's peak AI compute, with M5 Pro and M5 Max at 307GB/s and 614GB/s. Right fix — but it's a 20x gap, not a 2x one.</p>
+
+    <h2>Side by side</h2>
+    <table>
+      <thead>
+        <tr><th></th><th>Apple silicon (unified)</th><th>NVIDIA GB10 (unified)</th><th>Discrete GPU (VRAM)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Capacity</strong></td><td>Up to 512GB (M3 Ultra)</td><td>128GB LPDDR5x</td><td>32GB (5090) / 96GB (PRO 6000)</td></tr>
+        <tr><td><strong>Bandwidth</strong></td><td>153–819GB/s by chip</td><td>273GB/s</td><td>~1,792GB/s (5090 figure secondary)</td></tr>
+        <tr><td><strong>What fits</strong></td><td>600B-class, per Apple</td><td>200B, per NVIDIA</td><td>What fits the card, then a cliff</td></tr>
+        <tr><td><strong>7B Q4_0 prefill / decode</strong></td><td>714 / 70 t/s (M4 Max)</td><td>n/a</td><td>14,073 / 290 t/s (5090)</td></tr>
+        <tr><td><strong>Power</strong></td><td>480W whole Mac Studio</td><td>140W SoC</td><td>575W card; 600W (PRO 6000)</td></tr>
+        <tr><td><strong>Price per GB of pool</strong></td><td>not verified</td><td>~$37</td><td>~$62 / ~$89 (secondary)</td></tr>
+        <tr><td><strong>Upgrade path</strong></td><td>Soldered at purchase</td><td>Fixed; two units link</td><td>Swap, add cards, rent in cloud</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Thermals, power, and sustained load</h2>
+    <p>An RTX 5090 draws 575W for the card alone, with an 850W supply recommended; the PRO 6000 is rated 600W. An entire M3 Ultra Mac Studio — CPU, GPU, memory, storage, fans — is rated 480W maximum continuous. DGX Spark's GB10 is 140W. That shows up as noise, heat, and where the machine can live — and for a laptop there's no dedicated-VRAM option in this class at all.</p>
+
+    <h2>Price per usable gigabyte</h2>
+    <p>Where official prices exist: DGX Spark's Founders Edition went from $3,999 to $4,699 in February 2026, which NVIDIA attributed directly to industry-wide memory supply constraints — about $37 per gigabyte of pool. The 5090's $1,999 launch MSRP is secondary-sourced, roughly $62/GB. Secondary reporting puts the 96GB PRO 6000 at $8,565 at launch, about $89/GB, and higher on NVIDIA's marketplace by mid-2026.</p>
+
+    <p>I won't quote a Mac Studio figure — Apple's store pages don't render prices for verification, and I'd be guessing. Tom's Hardware reports Apple withdrew the 512GB option and raised the 96GB-to-256GB upgrade to $2,000 during the shortage. Date every price you read, mine included — TrendForce forecasts server DRAM contract prices up another 13–18% quarter over quarter in Q3 2026.</p>
+
+    <h2>Where dedicated VRAM genuinely wins</h2>
+    <p>If your work looks like this list, buy the GPU.</p>
+    <ul>
+      <li><strong>Time to first token.</strong> About 20x on identical llama.cpp runs. For agentic coding or long-context RAG — anything re-reading a big codebase each turn — that's the difference between instant and painful, and it's exactly where unified memory is weakest.</li>
+      <li><strong>Batching and concurrency.</strong> The compute headroom idle during single-stream decode is what serves many requests at once. A Mac serving one user leaves little on the table; a Mac serving eight falls apart.</li>
+      <li><strong>Ecosystem depth.</strong> vLLM lists CUDA, ROCm and Intel XPU as GPU platforms; Apple silicon GPU support lives in a separate vllm-metal repo. TensorRT-LLM and new kernels land on CUDA first and Metal later, if ever.</li>
+      <li><strong>Training and fine-tuning.</strong> NVIDIA markets the PRO 6000 for local fine-tuning and DGX Spark up to 70B. The Mac story is overwhelmingly an inference story.</li>
+      <li><strong>ECC and repairability.</strong> The PRO 6000's 96GB is ECC-protected; Apple's isn't. You can add a card, swap one, or rent the same GPU in a cloud. Apple silicon memory is soldered — what you buy is what you have forever.</li>
+    </ul>
+    <p>And NVIDIA has conceded the capacity argument by shipping its own unified-memory box — the question is drifting from Mac versus GPU toward CUDA versus Metal on similar memory architectures.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Pick unified memory if</strong> you want to run large models at all on one machine, you value quiet and low power, you work on a laptop, or your workload is single-user chat, writing and coding.</p>
+
+    <p><strong>Pick dedicated VRAM if</strong> your models fit in 32–96GB, time-to-first-token is what you feel most, you're serving multiple users, or you plan to fine-tune.</p>
+
+    <p>Both paths are fully on-device, so the privacy questions that apply to cloud services don't apply to either; the weights' licenses are the only policy layer, identical on both. If you land on Apple silicon, prefill is your weak axis — prompt caching and prefix reuse buy more than any spec bump. That's the bet Outlier makes: Apple Silicon only, macOS 12+, no Windows or Linux build, no live web search.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Bandwidth-bound decode, <a href="https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/">NVIDIA's inference guide</a>. Shared memory, the <a href="https://github.com/ml-explore/mlx">MLX README</a>. Apple specs, the <a href="https://www.apple.com/newsroom/2025/03/apple-reveals-m3-ultra-taking-apple-silicon-to-a-new-extreme/">M3 Ultra</a>, <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5</a> and <a href="https://www.apple.com/newsroom/2026/03/apple-debuts-m5-pro-and-m5-max-to-supercharge-the-most-demanding-pro-workflows/">M5 Pro/Max</a> posts plus <a href="https://www.apple.com/mac-studio/specs/">Mac Studio specs</a>. NVIDIA specs, the <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">RTX 5090</a>, <a href="https://www.nvidia.com/en-us/products/workstations/professional-desktop-gpus/rtx-pro-6000/">RTX PRO 6000</a> and <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">DGX Spark</a> pages; price change from <a href="https://forums.developer.nvidia.com/t/2-23-2026-price-change-announcement/361713">NVIDIA's forum</a>. Throughput, llama.cpp's benchmark threads for <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">Apple silicon</a> and <a href="https://github.com/ggml-org/llama.cpp/discussions/15013">CUDA</a> plus its <a href="https://raw.githubusercontent.com/ggml-org/llama.cpp/master/benches/dgx-spark/dgx-spark.md">DGX Spark file</a> — community-submitted across different commits and machines on a small, dated workload, so directional, not controlled. DRAM forecast, <a href="https://www.trendforce.com/presscenter/news/20260709-13140.html">TrendForce</a>. <strong>Secondary, unconfirmed at the vendor:</strong> the 5090's 1,792GB/s and $1,999 MSRP, PRO 6000 street pricing, the Mac Studio configuration changes, the 75% Metal working-set figure. Outlier tiers measured on an M1 Ultra; pricing moves fast, so date any figure you quote.
+    </div>
+
+    <div class="cta">
+      <h3>Running models on unified memory?</h3>
+      <p>Outlier runs models fully on-device — no account, no caps, nothing uploaded. Nano and Lite are free forever.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=unified-memory-vs-vram">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>

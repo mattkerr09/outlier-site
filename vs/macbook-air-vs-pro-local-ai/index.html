@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled | Outlier</title>
+  <meta name="description" content="Memory ceiling, bandwidth, and cooling — the three numbers that decide whether a MacBook Air or a MacBook Pro runs local AI models better, with every figure sourced.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/vs/macbook-air-vs-pro-local-ai/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled">
+  <meta property="og:description" content="32GB at 153GB/s and no fans, or 128GB at up to 614GB/s with High Power Mode. What each configuration actually fits, and what fanless really costs.">
+  <meta property="og:url" content="https://outlier.host/vs/macbook-air-vs-pro-local-ai/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled">
+  <meta name="twitter:description" content="Memory ceiling decides what runs. Bandwidth decides how fast. Cooling decides how long. A sourced buying guide.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled","description":"Memory ceiling, bandwidth, and cooling — the three numbers that decide whether a MacBook Air or a MacBook Pro runs local AI models better, with every figure sourced.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"MacBook Air vs MacBook Pro for local AI","item":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-07-23</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Both laptops run the identical macOS local-AI stack and differ for inference in three measurable ways. The MacBook Air (M5) tops out at 32GB of unified memory at 153GB/s and is fanless; the MacBook Pro reaches 128GB at up to 614GB/s on the M5 Max, and it alone has High Power Mode. Memory ceiling decides which models run at all, bandwidth decides how fast they generate, cooling decides how long you hold the peak.</p>
+    </div>
+
+    <p class="lead">I build Outlier, a Mac app that runs language models on-device, so I have an obvious interest in people owning Macs that run models well — weigh the rest accordingly. Apple doesn't pay me and I don't sell hardware. This is what I tell people who ask which laptop to buy.</p>
+
+    <h2>Three numbers, and only three</h2>
+    <p>The software isn't the variable. macOS, Metal, and MLX — Apple's MIT-licensed array framework, built so "arrays live in shared memory" and operations run on CPU or GPU without transferring data — are identical on both, and one binary covers a 16GB fanless Air and a 128GB M5 Max. The M5's AI gain comes from a 10-core GPU with a Neural Accelerator in each core, and that architecture is in the Air too. So the question is only: how much memory, how fast, is there a fan?</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>MacBook Air (M5)</th>
+          <th>MacBook Pro (M5 Pro)</th>
+          <th>MacBook Pro (M5 Max)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Memory: standard / max</strong></td><td>16GB / 32GB</td><td>24GB / 64GB</td><td>36GB / 128GB (128GB needs the 40-core GPU)</td></tr>
+        <tr><td><strong>Memory bandwidth</strong></td><td>153GB/s</td><td>307GB/s</td><td>460GB/s (32-core) or 614GB/s (40-core)</td></tr>
+        <tr><td><strong>Cooling</strong></td><td>Fanless, silent</td><td>Active (fans)</td><td>Active (fans)</td></tr>
+        <tr><td><strong>High Power Mode</strong></td><td>No</td><td>Yes</td><td>Yes</td></tr>
+        <tr><td><strong>Starting price</strong></td><td>$1,099 (13") / $1,299 (15")</td><td>$2,199 (14") / $2,699 (16")</td><td>$3,599 (14") / $3,899 (16")</td></tr>
+        <tr><td><strong>Price per GB, as shipped</strong></td><td>~$69/GB (13")</td><td>~$92/GB (14")</td><td>~$100/GB (14")</td></tr>
+        <tr><td><strong>Memory upgrade later</strong></td><td>None — soldered</td><td>None — soldered</td><td>None — soldered</td></tr>
+        <tr><td><strong>Battery (Apple video test)</strong></td><td>Up to 18 hr</td><td>Up to 22 hr (14") / 24 hr (16")</td><td>Up to 20 hr (14")</td></tr>
+      </tbody>
+    </table>
+
+    <p>One wrinkle the table flattens: there's also a base-M5 14-inch MacBook Pro from $1,599, and High Power Mode is supported only on M5 Pro and Max. The cheapest Pro has fans but not that lever.</p>
+
+    <h2>Capacity decides what runs at all</h2>
+    <p>A model has to fit before anything else matters. That memory is unified — the GPU addresses system RAM directly, no VRAM copy — and soldered. What you configure at checkout is what you own for the life of the machine.</p>
+
+    <p>The number on the box isn't your working budget, either. macOS takes a slice, Metal publishes <code>recommendedMaxWorkingSetSize</code> — "an approximation of how much memory... this GPU device can allocate without affecting its runtime performance" — which sits below total RAM, and the KV cache grows with the conversation.</p>
+
+    <p>Against Outlier's published tier minimums:</p>
+    <ul>
+      <li><strong>16GB Air (base):</strong> Nano 4B (2.37 GB, 6GB minimum) and Lite 9B (5.04 GB, 12GB) are comfortable; Quick 26B-a4b (15.61 GB, 16GB minimum) sits right at the line. LM Studio agrees — 16GB recommended, 8GB Macs held to "smaller models and modest context sizes."</li>
+      <li><strong>24GB or 32GB Air:</strong> adds Core and Code 27B (15.13 GB, 24GB minimum) and Vision 35B-a3b (19.0 GB). The Air's sweet spot, and what I'd tell most people to buy.</li>
+      <li><strong>Pro at 64GB:</strong> clears the floor for Plus 397B-a17b — a 209 GB download that pages experts off the SSD at ~11 GB peak RSS. No Air reaches it.</li>
+      <li><strong>Pro at 128GB:</strong> headroom for long context, and what Apple means by "Run LLMs with hundreds of billions of parameters entirely on device."</li>
+    </ul>
+
+    <p>Note the cliff: M5 Pro stops at 64GB and 128GB needs the 40-core M5 Max, so reaching the very large models is a $3,599-and-up jump, not simply "buy a Pro."</p>
+
+    <h2>Bandwidth decides how fast it comes out</h2>
+    <p>153GB/s on any Air against up to 614GB/s on the top Pro is roughly a 4x spread. The llama.cpp maintainers spell out why that matters: prompt processing is compute-bound, token generation is bandwidth-limited. Generation is what you watch arrive word by word, so it tracks bandwidth. Prefill is the pause before the first word, and that's where compute and sustained clocks pay off.</p>
+
+    <p>Apple's claims fit that split without producing an absolute number: the M5 Air is "up to 4x faster performance for AI tasks" than the M4 Air, and the M5 Pro/Max delivers "up to 4x faster LLM prompt processing than M4 Pro and M4 Max." Relative multipliers against unstated workloads, both. Apple publishes no tokens per second, anywhere.</p>
+
+    <p>My own numbers are narrower but measured: Outlier's Nano 4B runs 71.7 tok/s on an M1 Ultra desktop and 32 tok/s on an M4 MacBook Air, and Core 27B does 20.7 tok/s on the M1 Ultra. Thirty-two tokens a second on a fanless laptop is faster than you read.</p>
+
+    <h2>Fanless vs actively cooled: what silence costs</h2>
+    <p>Apple describes the Air plainly: "Both models feature a thin, light, and completely silent fanless design." The Pro has fans plus High Power Mode, which "allows the fans to run at higher speeds" so the machine "may... deliver higher performance in very intensive workloads." The Air has no equivalent control.</p>
+
+    <p>Now the uncomfortable part: nobody has published a rigorous throttling curve for GPU-heavy inference on a fanless Air. The figures that circulate — "20 down to 8 tokens per second" — come from affiliate posts with no methodology, so I won't repeat them.</p>
+
+    <p>The best measurement I found is CPU-only and a generation back: Notebookcheck's Cinebench 2024 loop on the M4 MacBook Air 15. "After 30 minutes, its performance of 776 points was only 11% lower," with package power peaking at 20.5 watts and settling near 9 after twenty. The Air steps down rather than falling over. The Pro's design is the mirror image — Apple's own phrase is a system moving "50 percent more air than the previous generation."</p>
+
+    <p>My read, having shipped an app people run for hours: at chat length cooling barely matters, because you finish before the machine warms up. Point an agent at the GPU for an hour and the Pro holds its clocks while the Air walks its power budget down. Silence is a real feature, though — not a consolation prize.</p>
+
+    <h2>Where each one genuinely wins</h2>
+    <p><strong>The Air wins on capacity per dollar and on power.</strong> Roughly $69 per gigabyte at the 13-inch entry price is the cheapest way to get a GPU that can address 16–32GB of weights, in a silent 2.7-pound machine. M5 also doubled base storage to 512GB, which matters when models run 15GB each.</p>
+
+    <p><strong>The Pro wins on ceiling and on sustained work.</strong> 128GB at 614GB/s isn't matched by another laptop class, High Power Mode is a real user-accessible lever, and the bandwidth advantage shows up on every token.</p>
+
+    <p><strong>And a discrete GPU still wins on raw throughput.</strong> A desktop with a high-end card will out-generate any of these laptops on a model that fits inside its dedicated VRAM, and it isn't close. Apple's argument is different: capacity per dollar and power draw. A fanless $1,099 laptop pulling well under 20 watts while holding a 15GB model in memory the GPU reads directly is a trade no discrete card offers. Past the VRAM limit, the question stops being how fast and becomes whether it runs.</p>
+
+    <h2>Who should pick which</h2>
+    <p><strong>Buy the MacBook Air</strong> if local AI is a daily tool rather than your whole job — 24GB or 32GB, 13- or 15-inch. It runs everything up to the 27B-class tiers, silently. Don't buy the 16GB base if you care about this: memory is soldered, and it's the one decision you can't walk back.</p>
+
+    <p><strong>Buy the M5 Pro</strong> if you want 64GB, keep long conversations open, or run agents for hours. You get High Power Mode, 307GB/s, and the headroom to stay there.</p>
+
+    <p><strong>Buy the M5 Max</strong> only if you need models above the 64GB line, and know 128GB requires the 40-core GPU part.</p>
+
+    <p>Ignore two things while deciding: battery ratings (Apple's 18–24 hour figures are video-streaming tests, not inference) and any tokens/second number quoted without a model, quantization, and context length.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> Memory ceilings and bandwidth from Apple's tech specs (<a href="https://support.apple.com/en-us/126320">126320</a>, <a href="https://support.apple.com/en-us/126318">126318</a>); pricing, fanless design, and AI multipliers from Apple Newsroom, March 2026 and October 2025; High Power Mode from Apple's <a href="https://support.apple.com/en-us/101613">Power Modes</a> article; <code>recommendedMaxWorkingSetSize</code> from Apple's Metal docs. Prompt-processing vs generation from <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp discussion #4167</a>. Sustained-load figures from Notebookcheck's M4 MacBook Air 15 review — third-party, CPU-only, previous chip generation. Outlier tier sizes and tok/s measured on an M1 Ultra (64GB) and an M4 Air. I couldn't confirm the 24GB/32GB Air upgrade prices from a primary source, so I haven't quoted one. Apple's prices and configurations change — check current specs first.
+    </div>
+
+    <div class="cta">
+      <h3>Run models on the Mac you already have</h3>
+      <p>Outlier is a native Apple Silicon app — no account, no caps, nothing uploaded. Nano and Lite are free forever and run fine on a 16GB Air.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=macbook-air-vs-pro-local-ai">Download for Mac</a>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+</footer>
+</body>
+</html>
