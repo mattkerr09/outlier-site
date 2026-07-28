@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to fine-tune an AI model locally on your Mac (no data uploaded) | Outlier</title>
+  <meta name="description" content="Fine-tuning teaches a model your own examples. Cloud fine-tuning uploads your data to do it. Here's how to train a LoRA adapter on your own JSONL entirely on your Mac, with nothing leaving the machine.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-07-23">
+  <link rel="canonical" href="https://outlier.host/learn/fine-tune-ai-locally/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to fine-tune an AI model locally on your Mac">
+  <meta property="og:description" content="Train a LoRA adapter on your own examples, on-device. What fine-tuning is, when it helps, and how the local version keeps your data off anyone's servers.">
+  <meta property="og:url" content="https://outlier.host/learn/fine-tune-ai-locally/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fine-tune an AI model locally on your Mac">
+  <meta name="twitter:description" content="LoRA fine-tuning on your own data, on-device, nothing uploaded.">
+<style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"How to fine-tune an AI model locally on your Mac (no data uploaded)","description":"What fine-tuning is, when it beats prompting, and how to train a LoRA adapter on your own JSONL data entirely on-device with Outlier.","datePublished":"2026-07-23","dateModified":"2026-07-23","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/fine-tune-ai-locally/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host/","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Fine-tune AI locally","item":"https://outlier.host/learn/fine-tune-ai-locally/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/learn/">Learn</a> &nbsp;&rsaquo;&nbsp; Fine-tune AI locally</div>
+    <h1>How to fine-tune an AI model locally on your Mac</h1>
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr &middot; founder, Outlier &middot; 2026-07-23</span>
+      <span class="updated-pill">On-device, nothing uploaded</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Fine-tuning adjusts a model with your own examples so it answers the way you want without being told every time. The catch with cloud fine-tuning is that you hand your training data to someone else's servers to do it. Local fine-tuning trains a small add-on called a LoRA adapter on your Mac from a file of your own examples &mdash; the data never leaves the machine. It's built into Outlier Pro: point it at a JSONL file, set a few numbers, run the job, and switch the adapter on.</p>
+    </div>
+
+    <p class="lead">Most people never need to fine-tune anything &mdash; a good prompt gets you most of the way. But there's a real gap between "the model can do this if I explain it every time" and "the model just does this," and fine-tuning is how you close it. What changed recently is that you can now do it without uploading a single row of your data anywhere.</p>
+
+    <h2>What fine-tuning actually is</h2>
+    <p>A base model is trained on the general internet. Fine-tuning continues that training a little further on examples you supply, nudging the model toward your format, your terminology, your house style. You're not teaching it new facts so much as new <em>habits</em>.</p>
+    <p>Modern fine-tuning almost never rewrites the whole model &mdash; that's expensive and risks breaking what already works. Instead it trains a <strong>LoRA adapter</strong>: a small set of extra weights that ride on top of the frozen base model. The adapter is a few megabytes, you can keep several around, and you switch them on and off. Turn it off and you're back to the stock model exactly.</p>
+
+    <h2>Fine-tuning vs just writing a better prompt</h2>
+    <p>Reach for a prompt first. Fine-tuning earns its keep only in specific cases:</p>
+    <table>
+      <thead><tr><th>Use a prompt when</th><th>Fine-tune when</th></tr></thead>
+      <tbody>
+        <tr><td>You need it once or occasionally</td><td>You do the same task hundreds of times</td></tr>
+        <tr><td>The instruction fits in a paragraph</td><td>The "instruction" is really 50 examples of a style</td></tr>
+        <tr><td>You want to change behaviour quickly</td><td>You want a fixed format the model won't drift from</td></tr>
+        <tr><td>Examples change constantly</td><td>You have a stable body of past work to learn from</td></tr>
+      </tbody>
+    </table>
+    <p>A useful rule: if you find yourself pasting the same three example outputs into every conversation to get the format right, that's a fine-tune waiting to happen. Bake the examples in once instead of paying for them in every prompt.</p>
+
+    <h2>Why doing it locally matters</h2>
+    <p>The training data is the whole point of fine-tuning, and it's usually your most sensitive material &mdash; past client deliverables, internal documentation, support transcripts, your own writing. Cloud fine-tuning requires you to upload exactly that. For a lot of people and most regulated work, that upload is a non-starter.</p>
+    <p>Local fine-tuning removes the question. The examples sit in a file on your disk, the training runs on your Mac's own GPU cores, and the resulting adapter is a local file. Nothing is transmitted, so there's no data-processing agreement to sign and no server to trust. If you can't send the data out, this is the only version of fine-tuning available to you.</p>
+
+    <h2>What your training data looks like</h2>
+    <p>Fine-tuning data is a JSONL file &mdash; one example per line, each a prompt paired with the completion you wish the model had produced. You're showing it the target, not describing it:</p>
+    <p><code>{"prompt": "Summarize this ticket for the weekly report: ...", "completion": "..."}</code></p>
+    <p>The examples are the entire lesson, so quality beats quantity. A few dozen clean, consistent pairs that all demonstrate the same behaviour will teach more than thousands of noisy ones. If your examples disagree with each other about format, the model learns to be inconsistent.</p>
+
+    <h2>Doing it in Outlier, step by step</h2>
+    <ol>
+      <li><strong>Point it at your data.</strong> Choose a <code>.jsonl</code> file, or drop one under <code>~/.outlier/datasets/</code> and give the path.</li>
+      <li><strong>Set the knobs.</strong> Three matter: rank (how much capacity the adapter gets &mdash; 8 is a sensible default), epochs (how many passes over your data &mdash; 3 is a fine start), and batch size. The defaults are reasonable; raise epochs if the model isn't picking up the pattern, lower them if it starts parroting your examples too literally.</li>
+      <li><strong>Run the job.</strong> Training happens on-device with a progress bar. Time depends on data size and the tier you're training.</li>
+      <li><strong>Switch the adapter on.</strong> When the job completes it joins your adapter list; click "Use this adapter" and your chats now run with it. Toggle it off any time to return to the stock model.</li>
+    </ol>
+
+    <h2>Honest limits</h2>
+    <p>Fine-tuning is not a memory system &mdash; if you need the model to know a specific document, retrieval (feeding it the document at question time) is usually the better tool. It also won't make a small model as smart as a big one; it shapes behaviour, it doesn't raise the ceiling on reasoning. And a badly built dataset produces a confidently wrong model, so the honest failure mode is "garbage in, garbage out, but fluent." Start small, test the adapter against held-back examples, and keep the base model one toggle away.</p>
+    <p>Fine-tuning is part of Outlier Pro. It's the same on-device principle as the rest of the app: your data is the input, and the input stays on your Mac.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> the workflow described here is the fine-tune feature in the shipping app &mdash; LoRA adapters trained from a JSONL dataset, with rank, epochs and batch-size controls, a completed-adapter list, and an activate/deactivate toggle that overlays the adapter on the local model. It runs on your Mac using Apple's MLX; no training data is uploaded. Training time and quality depend on your dataset and hardware, so treat the defaults as a starting point, not a guarantee.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite &mdash; local, private, no account. Pro $20/mo or $149/yr adds everything, including on-device fine-tuning and all 7 model tiers (incl. Plus 397B). Lifetime Pro from $99 (Founding 200) or $200 (Founders 500). Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=fine-tune-ai-locally">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/ai-tools-that-train-on-your-data/">Who trains on your data</a> &middot; <a href="https://outlier.host/learn/what-is-a-large-language-model/">What a large language model is</a> &middot; <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your data private</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier &middot; local AI for Mac &middot; <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> &middot; <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
