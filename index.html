@@ -814,7 +814,7 @@
           <tr>
             <td><div class="tname">Outlier Core</div><div class="tbase">Qwen3.6-27B · text-only</div></td>
             <td><strong>89.5%</strong><div class="meta">179/200</div></td>
-            <td><strong>45.0%</strong><div class="meta">18/40 · blind · official Docker</div></td>
+            <td><strong>46.0%</strong><div class="meta">23/50 · blind · official Docker · v1.11.757</div></td>
             <td class="meta">20.7 tok/s</td>
             <td class="meta">15.13 GB</td>
           </tr>
@@ -843,7 +843,7 @@
       </table>
     </div>
     <p class="provenance reveal"><strong>MMLU</strong> — 2026-08-09, n=200, deterministic stratified sample across 57 subjects, greedy (temperature 0, fixed seed), thinking off, run through the shipping v1.11.757 app path on an M1 Ultra. At n=200 the 95% interval is roughly ±7 points near 50% and ±4 points near 90%, so Lite and Quick are a statistical tie. An independent earlier run at n=50 gave Nano 52, Quick 82 and Core 90 — within one point of these, by a different method. Core and Code returned an identical 179/200, which is the expected result: Code is Core's weights with a code-specialized configuration.</p>
-    <p class="provenance reveal"><strong>SWE-bench</strong> — Core: SWE-bench Verified, blind (the agent gets the issue and the repository only, with no test patch, candidate-file hint or pass/fail feedback), graded by the official <code>swebench.harness</code> Docker evaluation, 18 of 40 resolved, 2026-06-25. Quick: 0 of 30 on our internal firm30 agentic set. Agentic scores depend heavily on the agent harness, not only the model — one scheduling fix moved a tier from 11/30 to 15/30 — so these are being re-run against the current build and will be updated here. <strong>Decode</strong> — M1 Ultra, V9 paged engine; speed on your Mac will differ.</p>
+    <p class="provenance reveal"><strong>SWE-bench</strong> — Core: SWE-bench Verified, blind (the agent gets the issue and the repository at base commit only — no test patch, no candidate-file hint, no pass/fail feedback), graded by the official <code>swebench.harness</code> Docker evaluation. Re-run against the shipping v1.11.757 build on 2026-08-09: <strong>23 of 50 resolved</strong> on a fixed random sample (seed 42). Seven of the fifty produced no patch at all and are counted as unresolved. The 95% interval at this sample size is about ±14 points. The previous run, 18 of 40 on an older build (2026-06-25), gave 45.0% — statistically the same result, which is worth stating plainly: the agent harness changed a great deal in between and the blind score did not move. Quick: 0 of 30 on our internal firm30 agentic set. <strong>Decode</strong> — M1 Ultra, V9 paged engine; speed on your Mac will differ.</p>
   </div>
 </section>
 

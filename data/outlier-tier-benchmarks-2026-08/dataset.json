@@ -8,7 +8,6 @@
   "dateModified": "2026-08-09",
   "hardware": "Apple M1 Ultra, 64 GB unified memory, macOS",
   "app_version": "1.11.757",
-
   "mmlu": {
     "method": "Deterministic stratified sample across all 57 MMLU subjects (round-robin by subject, no RNG, reproducible). Zero-shot: question + A-D choices, answer with the letter only. Scored by letter extraction; the scorer self-validates against 6 known cases before every run. Requests go through the shipping app's /chat path so the measurement exercises the same code users run.",
     "n": 200,
@@ -16,37 +15,100 @@
     "date": "2026-08-09",
     "confidence_note": "95% interval at n=200 is roughly +/-7 points near 50% and +/-4 points near 90%. Lite and Quick are a statistical tie.",
     "results": {
-      "nano": {"accuracy_pct": 53.0, "correct": 106, "n": 200},
-      "lite": {"accuracy_pct": 77.5, "correct": 155, "n": 200},
-      "quick": {"accuracy_pct": 81.5, "correct": 163, "n": 200},
-      "core": {"accuracy_pct": 89.5, "correct": 179, "n": 200},
-      "code": {"accuracy_pct": 89.5, "correct": 179, "n": 200,
-               "note": "Identical to Core by construction: Code is Core's weights with a code-specialized configuration. Run as a consistency check, not as an independent measurement."},
-      "plus": {"measured": false, "reason": "397B tier requires 209 GB of weights; the test machine had ~166 GB free."},
-      "vision": {"measured": false, "reason": "Multimodal tier; text-only MMLU is not the appropriate measure."}
+      "nano": {
+        "accuracy_pct": 53.0,
+        "correct": 106,
+        "n": 200
+      },
+      "lite": {
+        "accuracy_pct": 77.5,
+        "correct": 155,
+        "n": 200
+      },
+      "quick": {
+        "accuracy_pct": 81.5,
+        "correct": 163,
+        "n": 200
+      },
+      "core": {
+        "accuracy_pct": 89.5,
+        "correct": 179,
+        "n": 200
+      },
+      "code": {
+        "accuracy_pct": 89.5,
+        "correct": 179,
+        "n": 200,
+        "note": "Identical to Core by construction: Code is Core's weights with a code-specialized configuration. Run as a consistency check, not as an independent measurement."
+      },
+      "plus": {
+        "measured": false,
+        "reason": "397B tier requires 209 GB of weights; the test machine had ~166 GB free."
+      },
+      "vision": {
+        "measured": false,
+        "reason": "Multimodal tier; text-only MMLU is not the appropriate measure."
+      }
     },
     "cross_check": "An earlier independent run at n=50, using a different harness, gave nano 52, quick 82 and core 90 - within one point of these results on every tier."
   },
-
   "swebench": {
-    "method": "SWE-bench Verified, blind: the agent receives the issue text and the repository at base commit only - no test patch, no candidate-file hint, no FAIL_TO_PASS feedback. Patches graded by the official swebench.harness Docker evaluation.",
-    "caveat": "Agentic scores depend on the agent harness as much as the model. One scheduling fix moved a tier from 11/30 to 15/30 without any change to the weights. The Core figure below was measured on an older build and is being re-run against the current one.",
+    "method": "SWE-bench Verified, blind: the agent receives the issue text and the repository at base commit only - no test patch, no candidate-file hint, no FAIL_TO_PASS feedback. Patches graded by the official swebench.harness Docker evaluation. Fixed random sample, seed 42. Instances that produce no patch are counted as unresolved.",
+    "caveat": "Agentic scores depend on the agent harness as much as the model - one scheduling fix moved a tier from 11/30 to 15/30 with no change to the weights. Core has now been measured on both an old and the current build; the blind score did not move.",
     "results": {
-      "core": {"resolved": 18, "n": 40, "resolved_pct": 45.0, "protocol": "blind, official Docker", "date": "2026-06-25"},
-      "quick": {"resolved": 0, "n": 30, "resolved_pct": 0.0, "protocol": "internal firm30 agentic set", "date": "2026-07"},
-      "code": {"measured": false, "reason": "Shares Core's base weights; not separately measured on the blind set."},
-      "nano": {"measured": false},
-      "lite": {"measured": false},
-      "plus": {"measured": false},
-      "vision": {"measured": false}
+      "core": {
+        "resolved": 23,
+        "n": 50,
+        "resolved_pct": 46.0,
+        "protocol": "blind, official Docker",
+        "date": "2026-08-09",
+        "app_version": "1.11.757",
+        "empty_patches": 7,
+        "confidence_note": "95% interval ~ +/-14 points at n=50",
+        "previous": {
+          "resolved": 18,
+          "n": 40,
+          "resolved_pct": 45.0,
+          "date": "2026-06-25",
+          "note": "older build; retained because the comparison is the point - the harness changed a great deal and the score did not."
+        }
+      },
+      "quick": {
+        "resolved": 0,
+        "n": 30,
+        "resolved_pct": 0.0,
+        "protocol": "internal firm30 agentic set",
+        "date": "2026-07"
+      },
+      "code": {
+        "measured": false,
+        "reason": "Shares Core's base weights; not separately measured on the blind set."
+      },
+      "nano": {
+        "measured": false
+      },
+      "lite": {
+        "measured": false
+      },
+      "plus": {
+        "measured": false
+      },
+      "vision": {
+        "measured": false
+      }
     }
   },
-
   "decode_tokens_per_sec": {
     "method": "M1 Ultra, V9 paged engine. Speed varies by Mac.",
     "source": "https://outlier.host/data/local-ai-benchmarks-mac-2026/",
-    "results": {"nano": 71.7, "lite": 53.4, "core": 20.7, "code": 20.7, "plus": 2.1, "vision": 16.31}
+    "results": {
+      "nano": 71.7,
+      "lite": 53.4,
+      "core": 20.7,
+      "code": 20.7,
+      "plus": 2.1,
+      "vision": 16.31
+    }
   },
-
   "note": "Published because a benchmark table without its conditions is not a benchmark. Every figure states its sample size, decoding settings and date; every gap says why it is a gap."
 }
