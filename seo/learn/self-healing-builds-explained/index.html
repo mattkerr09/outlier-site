@@ -83,12 +83,12 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <p>Two guards keep the green check meaningful. A repair may never weaken tests: attempts to loosen or delete an assertion to make a suite pass are rejected outright. And across a multi-turn session, Outlier tracks the passing-test count: a turn that stays green while materially fewer tests pass &mdash; because a test file was rewritten and coverage quietly shrank &mdash; is downgraded and labeled with exactly how many previously-passing tests disappeared.</p>
 
 <h2>What the numbers look like</h2>
-<p>Measured on the shipping build (v1.11.763, M1 Ultra, all processing on-device): a 13-module restaurant-management app with cross-module dependency chains builds fully green &mdash; 13 files, all compiling, 13 tests passing &mdash; in 494 seconds. A 13-turn autonomous session grew the same app from 13 to 25 files and 13 to 49 passing tests with zero crashes, and every turn&rsquo;s verdict matched reality: honest greens, an honest &ldquo;unverified&rdquo; where a turn couldn&rsquo;t be confirmed, and honest failures on the two turns the model genuinely broke.</p>
+<p>Measured on the shipping build (v1.11.764, M1 Ultra, all processing on-device): a 13-module restaurant-management app with cross-module dependency chains builds fully green &mdash; 13 files, all compiling, 13 tests passing &mdash; in 494 seconds. A 13-turn autonomous session grew the same app from 13 to 25 files and 13 to 49 passing tests with zero crashes, and every turn&rsquo;s verdict matched reality: honest greens, an honest &ldquo;unverified&rdquo; where a turn couldn&rsquo;t be confirmed, and honest failures on the two turns the model genuinely broke.</p>
 
 <h2>Why this matters more than a benchmark score</h2>
 <p>An assistant that reports success it cannot prove poisons everything downstream &mdash; your trust, your git history, and any system that learns from its own results. Outlier&rsquo;s build verdicts are engineered adversarially: each repair and each verdict rule ships only after a review process that actively tries to construct false greens and false reds. The result is an on-device agent whose &ldquo;succeeded&rdquo; means something you can act on without re-checking by hand.</p>
 
-<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.763/Outlier-1.11.763-arm64.dmg" data-plausible="dl-selfhealing">Download Outlier for macOS</a>
+<a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.764/Outlier-1.11.764-arm64.dmg" data-plausible="dl-selfhealing">Download Outlier for macOS</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported.</p>
 
 <div class="related">
