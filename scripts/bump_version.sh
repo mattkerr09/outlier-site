@@ -15,7 +15,7 @@
 #   * lines carrying a provenance marker are never touched
 #   * afterwards it re-checks that provenance still matches dataset.json
 #
-# Usage:  scripts/bump_version.sh 1.11.757 1.11.779
+# Usage:  scripts/bump_version.sh 1.11.757 1.11.780
 set -euo pipefail
 
 OLD="${1:?usage: bump_version.sh OLD NEW}"
