@@ -67,18 +67,18 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <li><strong>Clear Xcode derived data.</strong> <code>~/Library/Developer/Xcode/DerivedData</code> can be tens of GB.</li>
 <li><strong>Use the Outlier model picker to delete tiers.</strong> Each tier has a Delete button next to its size in Settings &gt; Models.</li>
 </ol>
-<h2>What is the specific thing to know about this guide?</h2>
+<h2>Where the disk space actually goes</h2>
 <p>The Plus tier alone is 209 GB on disk. A typical Mac with 512 GB total storage will feel pressure once the OS, Xcode, Photos, and Plus weights are all present.</p>
-<h2>What can go wrong with this guide?</h2>
+<h2>What goes wrong if you delete the wrong thing</h2>
 <ul><li>Hugging Face cache may hold prior tier snapshots after an update.</li><li>The model picker&rsquo;s Delete button removes weights but leaves their config metadata; safe to ignore.</li></ul>
-<h2>How does this guide differ from the cloud equivalent?</h2>
+<h2>Why cloud tools don't have this problem</h2>
 <p>Cloud models do not consume your disk. They consume your wallet per token instead. The trade-off is direct.</p>
 <p><p>The Plus tier alone is 209 GB on disk. A typical Mac with 512 GB total storage will feel pressure once the OS, Xcode, Photos, and Plus weights are all present.</p></p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to free up disk space for large local models&rdquo;?</h2>
 <p>The Plus tier alone is 209 GB on disk. A typical Mac with 512 GB total storage will feel pressure once the OS, Xcode, Photos, and Plus weights are all present.</p>
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to free up disk space for large local models&rdquo;. Specifically, the current product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How big is each Outlier tier on disk?</h2><p>Nano 2.37 GB, Lite 5.04 GB, Quick 15.61 GB, Core 15.13 GB, Code 15.13 GB (shares Core weights), Vision 19.0 GB, Plus 209 GB. Plus alone is more than half a typical 512 GB SSD&rsquo;s usable capacity once the OS is accounted for; the v1.9 streaming engine improvements only reduce the working RAM requirement, not the disk requirement.</p>
-<h2>Where does this guide fit in the rest of the lineup?</h2>
+<h2>Tier sizes, and what is safe to remove</h2>
 <p>A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Code shares Core (no extra disk), Vision adds 19 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.</p>
 <h2>One unique number</h2>
 <p>4 steps, zero network requests after the model is downloaded. Hugging Face cache duplicates can hide tens of GB; <code>du -sh ~/.cache/huggingface/hub/</code> usually reveals the surprise.</p>

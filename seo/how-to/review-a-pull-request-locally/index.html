@@ -67,18 +67,18 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <li><strong>Ask for a single axis at a time.</strong> Bug surface, then style, then perf.</li>
 <li><strong>Save the rendered review to your PR description.</strong> No part of the diff has left the Mac.</li>
 </ol>
-<h2>What is the specific thing to know about this guide?</h2>
+<h2>The one thing to get right when reviewing a PR locally</h2>
 <p>For PR review, the Code tier&rsquo;s default 64K context window is wider than Core&rsquo;s 32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p>
-<h2>What can go wrong with this guide?</h2>
+<h2>Where a local PR review goes wrong</h2>
 <ul><li>Diffs over 1000 lines may exceed Code&rsquo;s default 64K context if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li></ul>
-<h2>How does this guide differ from the cloud equivalent?</h2>
+<h2>How this differs from pasting a diff into a cloud chat</h2>
 <p>Cloud PR review tools transmit the diff. Outlier&rsquo;s Code mode keeps it on the Mac, which matters when the diff has untested mitigations or unreleased features.</p>
 <p><p>For PR review, the Code tier&rsquo;s default 64K context window is wider than Core&rsquo;s 32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p></p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to review a pull request without sending code to the cloud&rdquo;?</h2>
 <p>For PR review, the Code tier&rsquo;s default 64K context window is wider than Core&rsquo;s 32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p>
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to review a pull request without sending code to the cloud&rdquo;. Specifically, the current product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How does Code-tier context width compare to Core?</h2><p>Code defaults to 64K context against Core&rsquo;s 32K, with both capped at 256K. The two share the same safetensors and produce identical answer quality; the difference is the chat template and decoding configuration. For PR review on diffs over 500 lines, Code&rsquo;s wider default keeps the whole diff plus the relevant surrounding code addressable in a single turn.</p>
-<h2>Where does this guide fit in the rest of the lineup?</h2>
+<h2>Which tier suits review work</h2>
 <p>For a 500-line diff, Code&rsquo;s 64K default context holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.</p>
 <h2>One unique number</h2>
 <p>4 steps, zero network requests after the model is downloaded. Asking along a single axis at a time (correctness, then style, then perf) holds quality better than a single &lsquo;review this&rsquo; ask.</p>

@@ -60,17 +60,17 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 
 <h2>What does Outlier Nano run like on Mac mini M4?</h2>
 <p>The pairing under examination is <strong>Outlier Nano</strong> (2.37 GB MLX 4-bit, Qwen3.5-4B base, 32K default context, 6 GB unified memory minimum) on a <strong>Mac mini M4</strong> (Apple M4, 10 CPU cores, 10 GPU cores, 16|24|32 GB unified memory, 120 GB/s, 2024). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact Mac mini M4 scales as the ratio 120&nbsp;/&nbsp;800 = <strong>0.15&times;</strong> the published M1 Ultra number.</p>
-<h2>How much memory does the model take during generation?</h2>
+<h2>How much memory does Nano need on an M4 Mac mini?</h2>
 <p>Outlier&rsquo;s Outlier Nano has a measured peak generation footprint of about 3 GB. The Mac mini M4 base configuration ships with 16|24|32 GB unified, and the rule of thumb is to leave roughly 4 GB for the OS and one open browser tab. On Mac mini M4 the Outlier Nano bandwidth-scaled estimate is <strong>~10.8 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 71.7 tok/s on M1 Ultra &times; (120&nbsp;/&nbsp;800) bus ratio for the Apple M4. Treat as a first-order projection &mdash; the Outlier Nano number on this 2024 machine has not been formally measured.</p>
 <h2>What is the install path on Mac mini M4 for Outlier Nano?</h2>
 <p>The 2024 Mac mini M4 ships with 16|24|32 GB of unified memory, so headroom for the 6 GB Outlier Nano requirement is 10 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M4 machine is that the 2.37 GB pull from <code>Outlier-Ai/Outlier-Nano-4B-MLX-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/nano/</code> and download time is bandwidth-limited by the network, not by the 10-core Apple M4 CPU.</p>
 <h2>What context window can I use on a 16 GB Mac?</h2>
 <p>The Outlier Nano tier defaults to 32K context and caps at 256K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 16|24|32 GB Mac mini M4, the default context is the safe starting point.</p>
-<h2>What works well on this pairing, and what is still rough?</h2>
+<h2>What Nano handles well on an M4 Mac mini, and what it doesn't</h2>
 <ul><li>The Mac mini M4 (Apple M4, 120 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Nano on this exact machine is approximately 120 divided by 2.37 GB tokens per second.</li><li>The 16 GB base SKU of the Mac mini M4 swaps aggressively under the Outlier Nano tier; close Chrome and other RAM-heavy applications before generation.</li><li>The Apple M4 (120 GB/s, 10 GPU cores) is current Apple Store silicon as of 2025; new-purchase tok-per-second-per-dollar is best in the lineup at the Outlier Nano tier.</li><li>Cold boot of Outlier on a 10-core Apple M4 is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
 <h2>What is the unique number for Outlier Nano on Mac mini M4?</h2>
 <p>2.37 GB on disk against 16|24|32 GB unified memory means the weights alone consume about <strong>15%</strong> of the base SKU&rsquo;s RAM on the Mac mini M4.</p>
-<h2>Should I pick a different tier?</h2>
+<h2>Is Nano the right tier for an M4 Mac mini?</h2>
 <p>For heavier work, the Lite tier is the next step up; check that the 16|24|32 GB SKU you have can fit its weights before installing. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for Mac mini M4 is 0.15&times; M1 Ultra reference.</p>
 
 <a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.781/Outlier-1.11.781-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>

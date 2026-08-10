@@ -60,17 +60,17 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 
 <h2>What does Outlier Vision run like on MacBook Pro M3 Max?</h2>
 <p>The pairing under examination is <strong>Outlier Vision</strong> (19 GB MLX 4-bit, Qwen3.6-35B-A3B base, 32K default context, 24 GB unified memory minimum) on a <strong>MacBook Pro M3 Max</strong> (Apple M3 Max, 14-16 CPU cores, 30-40 GPU cores, 36|48|64|96|128 GB unified memory, 300-400 GB/s, 2023). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact MacBook Pro M3 Max scales as the ratio 300-400&nbsp;/&nbsp;800 = <strong>0.38&times;</strong> the published M1 Ultra number.</p>
-<h2>How much memory does the model take during generation?</h2>
+<h2>How much memory does Vision need on an M3 Max MacBook Pro?</h2>
 <p>Outlier&rsquo;s Outlier Vision has a measured peak generation footprint of about 20 GB. The MacBook Pro M3 Max base configuration ships with 36|48|64|96|128 GB unified, and the rule of thumb is to leave roughly 4 GB for the OS and one open browser tab. On MacBook Pro M3 Max the Outlier Vision bandwidth-scaled estimate is <strong>—</strong>; derivation: — tok/s on M1 Ultra &times; (300-400&nbsp;/&nbsp;800) bus ratio for the Apple M3 Max. Treat as a first-order projection &mdash; the Outlier Vision number on this 2023 machine has not been formally measured.</p>
 <h2>What is the install path on MacBook Pro M3 Max for Outlier Vision?</h2>
 <p>The 2023 MacBook Pro M3 Max ships with 36|48|64|96|128 GB of unified memory, so headroom for the 24 GB Outlier Vision requirement is 12 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M3 Max machine is that the 19 GB pull from <code>Outlier-Ai/Outlier-Vision-35B-A3B-MLX-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/vision/</code> and download time is bandwidth-limited by the network, not by the 14-16-core Apple M3 Max CPU.</p>
 <h2>What context window can I use on a 36 GB Mac?</h2>
 <p>The Outlier Vision tier defaults to 32K context and caps at 32K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 36|48|64|96|128 GB MacBook Pro M3 Max, the default context is the safe starting point.</p>
-<h2>What works well on this pairing, and what is still rough?</h2>
+<h2>What Vision handles well on an M3 Max MacBook Pro, and what it doesn't</h2>
 <ul><li>The MacBook Pro M3 Max (Apple M3 Max, 300-400 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Vision on this exact machine is approximately 300-400 divided by 19 GB tokens per second.</li><li>Cold boot of Outlier on a 14-16-core Apple M3 Max is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
 <h2>What is the unique number for Outlier Vision on MacBook Pro M3 Max?</h2>
 <p>19 GB on disk against 36|48|64|96|128 GB unified memory means the weights alone consume about <strong>53%</strong> of the base SKU&rsquo;s RAM on the MacBook Pro M3 Max.</p>
-<h2>Should I pick a different tier?</h2>
+<h2>Is Vision the right tier for an M3 Max MacBook Pro?</h2>
 <p>For lighter-weight work on this Apple M3 Max, the Compact tier is the next step down and runs visibly faster. For heavier work, the Plus tier is the next step up; check that the 36|48|64|96|128 GB SKU you have can fit its weights before installing. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for MacBook Pro M3 Max is 0.38&times; M1 Ultra reference.</p>
 
 <a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.781/Outlier-1.11.781-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>

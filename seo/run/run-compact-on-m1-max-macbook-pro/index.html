@@ -60,17 +60,17 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 
 <h2>What does Outlier Core run like on MacBook Pro M1 Max?</h2>
 <p>The pairing under examination is <strong>Outlier Core</strong> (15.13 GB MLX 4-bit, Qwen3.6-27B base, 32K default context, 24 GB unified memory minimum) on a <strong>MacBook Pro M1 Max</strong> (Apple M1 Max, 10 CPU cores, 24-32 GPU cores, 32|64 GB unified memory, 400 GB/s, 2021). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact MacBook Pro M1 Max scales as the ratio 400&nbsp;/&nbsp;800 = <strong>0.50&times;</strong> the published M1 Ultra number.</p>
-<h2>How much memory does the model take during generation?</h2>
+<h2>How much memory does Core need on an M1 Max MacBook Pro?</h2>
 <p>Outlier&rsquo;s Outlier Core has a measured peak generation footprint of about 16 GB. The MacBook Pro M1 Max base configuration ships with 32|64 GB unified, and the rule of thumb is to leave roughly 4 GB for the OS and one open browser tab. On MacBook Pro M1 Max the Outlier Core bandwidth-scaled estimate is <strong>~10.3 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 20.7 tok/s on M1 Ultra &times; (400&nbsp;/&nbsp;800) bus ratio for the Apple M1 Max. Treat as a first-order projection &mdash; the Outlier Core number on this 2021 machine has not been formally measured.</p>
 <h2>What is the install path on MacBook Pro M1 Max for Outlier Core?</h2>
 <p>The 2021 MacBook Pro M1 Max ships with 32|64 GB of unified memory, so headroom for the 24 GB Outlier Core requirement is 8 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M1 Max machine is that the 15.13 GB pull from <code>Outlier-Ai/Outlier-Core-27B-MLX-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/compact/</code> and download time is bandwidth-limited by the network, not by the 10-core Apple M1 Max CPU.</p>
 <h2>What context window can I use on a 32 GB Mac?</h2>
 <p>The Outlier Core tier defaults to 32K context and caps at 256K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 32|64 GB MacBook Pro M1 Max, the default context is the safe starting point.</p>
-<h2>What works well on this pairing, and what is still rough?</h2>
+<h2>What Core handles well on an M1 Max MacBook Pro, and what it doesn't</h2>
 <ul><li>The MacBook Pro M1 Max (Apple M1 Max, 400 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Core on this exact machine is approximately 400 divided by 15.13 GB tokens per second.</li><li>The Apple M1 Max memory bus runs slower than M2 and later silicon in the same class; the Outlier Core tier numbers are correspondingly lower than the M4 equivalent.</li><li>Cold boot of Outlier on a 10-core Apple M1 Max is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
 <h2>What is the unique number for Outlier Core on MacBook Pro M1 Max?</h2>
 <p>15.13 GB on disk against 32|64 GB unified memory means the weights alone consume about <strong>47%</strong> of the base SKU&rsquo;s RAM on the MacBook Pro M1 Max.</p>
-<h2>Should I pick a different tier?</h2>
+<h2>Is Core the right tier for an M1 Max MacBook Pro?</h2>
 <p>For lighter-weight work on this Apple M1 Max, the Lite tier is the next step down and runs visibly faster. For heavier work, the Code or Vision tier is the next step up; check that the 32|64 GB SKU you have can fit its weights before installing. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for MacBook Pro M1 Max is 0.50&times; M1 Ultra reference.</p>
 
 <a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.781/Outlier-1.11.781-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
