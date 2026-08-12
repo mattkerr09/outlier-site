@@ -299,7 +299,13 @@
     .models .plan.pro{color:var(--v0);}
     .models .meta{font-size:.86rem;color:var(--text-mid);}
     .models tr.flag td{background:linear-gradient(90deg,rgba(168,85,247,.08),transparent);}
-    .provenance{font-family:var(--mono);font-size:.78rem;color:var(--text-dim);text-align:center;margin:1.4rem auto 0;line-height:1.7;max-width:78ch;}
+    /* The methodology notes. This is the one thing on the page that free
+       competitors do not have - a published, reproducible benchmark with its
+       conditions stated - and it was set at 12.48px in #6f688c, which is
+       3.89:1 against this background and FAILS WCAG AA for text this size.
+       Centred, too, which is wrong for prose this long. Now 15.2px in
+       --text-mid (8.37:1) and left-aligned. Measured, not eyeballed. */
+    .provenance{font-family:var(--mono);font-size:.95rem;color:var(--text-mid);text-align:left;margin:1.4rem auto 0;line-height:1.7;max-width:78ch;}
 
     /* ---------- hardware fit ---------- */
     .hw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:960px;margin:0 auto;}
