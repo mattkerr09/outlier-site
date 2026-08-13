@@ -56,6 +56,21 @@
     <ul>
       <li>No inference telemetry. We do not log your prompts, model outputs, or which questions you ask.</li>
       <li>No analytics SDK in the desktop app. (The marketing site at outlier.host uses Plausible for anonymous pageview counts only — no cookies, no IP storage, no cross-site tracking.)</li>
+      <!-- Added 2026-08-13. This page listed Plausible as the only thing the marketing site
+           touched, which read as a complete list and was not one: outlier.host loads its four
+           typefaces from Google Fonts and Fontshare, and loading a font is an HTTP request that
+           hands those companies your IP address. Nothing here is sent by the app and no prompt
+           or file is involved — but "nothing leaves your machine" is this product's entire
+           argument, and a page that enumerates what it does NOT do has to be complete or the
+           enumeration is the misleading part. kerrandcompanyholdings.com already discloses its
+           Google Fonts request in exactly these terms; this brings outlier.host in line. -->
+      <li>No third-party assets on this site except type. outlier.host loads its typefaces from
+      <a href="https://fonts.google.com/">Google Fonts</a> (<code>fonts.googleapis.com</code>,
+      <code>fonts.gstatic.com</code>) and <a href="https://www.fontshare.com/">Fontshare</a>
+      (<code>api.fontshare.com</code>). Requesting a font file exposes your IP address to those
+      servers, the same as any file you request from any site. They set no cookies here, they
+      receive nothing about what you do on the page, and the desktop app requests neither: the
+      shipping bundle contains no reference to any of those three hosts.</li>
       <li>No account required to use Free Nano + Lite or BYOK cloud.</li>
       <li>No automatic crash reporting. Crash logs are saved locally to <code>~/.outlier/crashes/</code>. You decide whether to email them via the Bug Report flow.</li>
       <li>No reading your filesystem outside what you explicitly mount as a Project, attach as a file, or grant via macOS file/screen permissions.</li>
