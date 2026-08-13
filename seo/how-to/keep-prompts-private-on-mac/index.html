@@ -73,9 +73,9 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <ul><li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: Plausible analytics on the website and the Tauri auto-updater both make external calls; turn the auto-updater off if you want strict no-network.</li></ul>
 <h2>How this differs from a cloud provider's privacy setting</h2>
 <p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;packets do not leave the device&rsquo;, which is verifiable with a network monitor.</p>
-<p><p>The chat path calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p></p>
+
 <h2>What does this guide <em>not</em> claim about &ldquo;how to keep prompts private on a mac&rdquo;?</h2>
-<p>The chat path calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
+
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to keep prompts private on a mac&rdquo;. Specifically, the current product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How can I prove no prompt is leaving the device?</h2><p>Run Outlier with the network monitor of your choice (Little Snitch, LuLu, <code>pktap</code>). Once the model is downloaded, send a chat message with web search disabled. The expected packet count to any non-loopback destination is zero. The loopback traffic on <code>127.0.0.1:8766</code> is the front end speaking to the local FastAPI sidecar; that is the entire chat path.</p>
 <h2>Which tiers keep everything local</h2>

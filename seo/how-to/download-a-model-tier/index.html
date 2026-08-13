@@ -73,9 +73,9 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <ul><li>Hugging Face download interrupted partway leaves a half-checkpoint; the picker UI detects this on next launch and offers to resume.</li><li>Slow networks make the Plus tier&rsquo;s 209 GB pull effectively a multi-hour task.</li></ul>
 <h2>Why this isn't like calling a cloud model</h2>
 <p>Cloud-side model selection happens in a dropdown bound to a billing tier. Outlier&rsquo;s model picker happens once, against on-disk weights you fetched yourself.</p>
-<p><p>Each tier&rsquo;s safetensors are pulled from a public Hugging Face repository under the <code>Outlier-Ai</code> namespace. The Plus tier is the exception: it pulls from <code>mlx-community/Qwen3.5-397B-A17B-4bit</code> at 209 GB.</p></p>
+
 <h2>What does this guide <em>not</em> claim about &ldquo;how to download an outlier model tier&rdquo;?</h2>
-<p>Each tier&rsquo;s safetensors are pulled from a public Hugging Face repository under the <code>Outlier-Ai</code> namespace. The Plus tier is the exception: it pulls from <code>mlx-community/Qwen3.5-397B-A17B-4bit</code> at 209 GB.</p>
+
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to download an outlier model tier&rdquo;. Specifically, the current product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How does the model picker decide which tier is enabled?</h2><p>The backend reads the Mac&rsquo;s reported unified memory at startup and toggles each tier&rsquo;s <code>enabled</code> flag based on a 15% slack against the tier&rsquo;s <code>min_ram_gb</code>. The check lives in <code>desktop_app/backend/server.py</code> around line 1216 and is the reason Nano stays available on a 6 GB Mac while Core appears greyed out on the same hardware.</p>
 <h2>Which tier to download first</h2>

@@ -73,9 +73,9 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <ul><li>If Accessibility permission is denied, the companion has no app context to read.</li><li>Screen Recording permission is per-app and prompts on first capture only; deny once and it stays denied until reset in System Settings.</li></ul>
 <h2>How this compares to a browser-tab assistant</h2>
 <p>Cloud-side context-aware assistants typically read whatever the user pastes. The Outlier companion reads the active app via the macOS Accessibility tree, locally.</p>
-<p><p>The companion window reads the active app context via the macOS Accessibility tree. Pixel-level vision uses the Screen Recording permission and is only wired into the Vision tier.</p></p>
+
 <h2>What does this guide <em>not</em> claim about &ldquo;how to set up the outlier companion window&rdquo;?</h2>
-<p>The companion window reads the active app context via the macOS Accessibility tree. Pixel-level vision uses the Screen Recording permission and is only wired into the Vision tier.</p>
+
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to set up the outlier companion window&rdquo;. Specifically, the current product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>What does the companion read about the active app?</h2><p>The companion calls <code>osascript</code> against System Events to walk the Accessibility tree of the frontmost app: window title, focused element, and the labels of nearby UI elements. That is enough context for &lsquo;summarize what I am looking at&rsquo;. Pixel-level vision (passing a screenshot to the model) requires the Vision tier and the Screen Recording permission, both of which the app declares in <code>Info.plist</code>.</p>
 <h2>Which tiers suit the companion window</h2>
