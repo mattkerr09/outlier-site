@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We thought our own RAM requirement was too high. We measured it. | Outlier</title>
+  <meta name="description" content="Outlier Vision lists a 24 GB minimum. We suspected that was conservative, measured peak memory at 22.22 GB, and left the number alone. Here is why.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-08-12">
+  <link rel="canonical" href="https://outlier.host/learn/i-was-wrong-about-our-own-ram-requirement/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="We thought our own RAM requirement was too high. We measured it.">
+  <meta property="og:description" content="Outlier Vision lists a 24 GB minimum. We suspected that was conservative, measured peak memory at 22.22 GB, and left the number alone. Here is why.">
+  <meta property="og:url" content="https://outlier.host/learn/i-was-wrong-about-our-own-ram-requirement/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="We thought our own RAM requirement was too high. We measured it.">
+  <meta name="twitter:description" content="Peak 22.22 GB against a 24 GB floor. The floor stays.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+    <div class="wrap">
+      <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&#8250;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+      <h1>We thought our own RAM requirement was too high. We measured it.</h1>
+      <div class="byline-row">
+        <span class="byline">Outlier &middot; solo-built in Grand Rapids &middot; published 2026-08-12</span>
+      </div>
+
+      <div class="quick-answer">
+        <span class="qa-label">Quick answer</span>
+        <ul>
+          <li>Outlier Vision is a 19 GB download and lists a <strong>24 GB</strong> minimum memory requirement.</li>
+          <li>That looked conservative, and a lower number would let more Macs run it. So we measured instead of arguing.</li>
+          <li>Peak resident memory during real image work: <strong>22.22 GB</strong>.</li>
+          <li>1.78 GB of headroom on a machine that is also running a browser and your editor is not headroom. The 24 GB stayed.</li>
+        </ul>
+      </div>
+
+      <p>Published minimum requirements are usually marketing rounded up, so it is reasonable to assume ours were too. Lowering the Vision floor from 24 GB to 20 GB would have made the tier available on a much larger set of machines, which is a real commercial reason to want the number to be wrong.</p>
+
+      <h2>What we did</h2>
+
+      <p>Ran Vision on actual image tasks and watched peak resident memory rather than reasoning from the file size. The download is 19 GB. Peak was 22.22 GB. Weights are not the whole cost: the image encoder, the decoded image itself, the key-value cache and the runtime all sit on top, and the peak is what determines whether a machine survives, not the average.</p>
+
+      <h2>Why 22.22 does not mean 24 was wrong</h2>
+
+      <p>A requirement is not a measurement of the best case. It is a promise about the worst case on a machine doing other things. On a 24 GB Mac, 22.22 GB leaves 1.78 GB for the operating system, the browser you asked the question about, and whatever else is open. That is not comfortable. It is the edge of swapping, and swapping on a model this size turns a fast answer into a stalled one.</p>
+
+      <p>Rounding the floor down would have moved the failure from "this tier is not available on your Mac", which is disappointing but clear, to "this tier is available and sometimes grinds to a halt", which is worse. We left it at 24 GB.</p>
+
+      <h2>The general point</h2>
+
+      <p>We started with a suspicion that flattered us and would have grown our addressable machines. Measuring it cost an afternoon and the answer was no. That is the ordinary outcome of checking, and it is the reason to check.</p>
+
+      <p>The same discipline applies when you read anyone's requirements, including ours. Ask whether the number describes weights on disk or peak memory in use, and whether it was measured while the machine was doing something else.</p>
+
+      <h2>Method</h2>
+
+      <ul>
+        <li>Model: Outlier Vision, 35B mixture-of-experts with 3.6B active, MLX 4-bit, 19 GB on disk.</li>
+        <li>Peak resident set size measured during image analysis on an M1 Ultra Mac Studio: 22.22 GB.</li>
+        <li>Catalog minimum: 24 GB unified memory. Unchanged after measurement.</li>
+        <li>Vision answers questions about images. Text-only questions are routed to a text tier instead, so this measurement covers the work the tier is actually for.</li>
+      </ul>
+
+      <p><a href="https://outlier.host/">Outlier</a> runs on your own Mac, and its stated requirements are the ones we measured. The <a href="https://outlier.host/#faq">FAQ</a> lists what each tier needs, and <a href="https://outlier.host/#support">support</a> is one person.</p>
+    </div>
+  </article>
+
+  <footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
