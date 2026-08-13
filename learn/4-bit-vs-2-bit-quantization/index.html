@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When a smaller model is not a worse model, and when it is | Outlier</title>
+  <meta name="description" content="Mixed 3/4-bit shrank our 27B to 13.3 GB with no measurable quality loss. Pushing to 2-bit dropped MMLU to 32%, which is chance on a four-choice test.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-08-12">
+  <link rel="canonical" href="https://outlier.host/learn/4-bit-vs-2-bit-quantization/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="When a smaller model is not a worse model, and when it is">
+  <meta property="og:description" content="Mixed 3/4-bit shrank our 27B to 13.3 GB with no measurable quality loss. Pushing to 2-bit dropped MMLU to 32%, which is chance on a four-choice test.">
+  <meta property="og:url" content="https://outlier.host/learn/4-bit-vs-2-bit-quantization/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="When a smaller model is not a worse model, and when it is">
+  <meta name="twitter:description" content="4-bit held. 2-bit scored chance. The cliff is real.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+    <div class="wrap">
+      <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&#8250;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+      <h1>When a smaller model is not a worse model, and when it is</h1>
+      <div class="byline-row">
+        <span class="byline">Outlier &middot; solo-built in Grand Rapids &middot; published 2026-08-12</span>
+      </div>
+
+      <div class="quick-answer">
+        <span class="qa-label">Quick answer</span>
+        <ul>
+          <li>Quantisation shrinks a model by storing its weights at lower precision. Done carefully it costs almost nothing.</li>
+          <li>Our 27B at mixed 3/4-bit came to <strong>13.3 GB</strong> and streamed on a 16 GB Mac with no quality loss we could measure.</li>
+          <li>Pushing further, to a mixed 2/6-bit build, dropped MMLU to <strong>32%</strong>. On a four-choice test, guessing scores 25%.</li>
+          <li>So the answer is not "smaller is worse". It is that there is a cliff, and it is closer than the file size suggests.</li>
+        </ul>
+      </div>
+
+      <p>We wanted our 27B tier to run on a 16 GB Mac. The obvious lever is quantisation, and the obvious question is how far it can be pushed before the model stops being the model.</p>
+
+      <h2>What held</h2>
+
+      <p>A mixed 3/4-bit build brought the weights to 13.3 GB, small enough to stream on a 16 GB machine. On our evaluation it was near-lossless: the differences from the shipping 4-bit build were inside the noise of the test. That is a real result, and it is the one we are pursuing.</p>
+
+      <h2>What broke</h2>
+
+      <p>A more aggressive mixed 2/6-bit build scored 32% on MMLU. That number is the interesting part, because MMLU is four-choice multiple choice. Random guessing scores about 25%. A model at 32% is not a degraded model. It is barely distinguishable from a coin.</p>
+
+      <p>We treat any score near chance as a signal to check the harness before believing the model, because a broken prompt path produces exactly the same number. In this case the harness was fine and the build really had collapsed. Two-bit is dead for this architecture on our evaluation, and we stopped rather than tuning around it.</p>
+
+      <h2>Why the cliff is sharp</h2>
+
+      <p>Precision loss does not degrade a model evenly. Most weights tolerate coarse rounding; a small number carry structure that falls apart without fine resolution. Mixed-precision schemes exist to spend the bits where they matter. At 3/4-bit there are enough bits left for the sensitive parts. At 2-bit there are not, and no amount of clever allocation elsewhere compensates.</p>
+
+      <h2>What this means if you are choosing a local model</h2>
+
+      <p>File size is a poor proxy for quality across quantisation levels. Two builds of the same model, one 40% smaller, can be equivalent or one of them can be broken, and the download page will not tell you which. Look for an evaluation at the exact quantisation you are downloading, and be suspicious of any score close to what guessing would give.</p>
+
+      <h2>Method</h2>
+
+      <ul>
+        <li>Base model: our 27B tier. Builds compared: shipping MLX 4-bit, a mixed 3/4-bit variant at 13.3 GB, and a mixed 2/6-bit variant.</li>
+        <li>MMLU, four-choice, deterministic sample, greedy decoding at temperature 0 with a fixed seed. Chance is 25%.</li>
+        <li>Measured on an M1 Ultra Mac Studio. The 2/6-bit result was 32%.</li>
+        <li>Not yet shipped. The 3/4-bit build is a candidate we are still evaluating, not a tier you can download today.</li>
+      </ul>
+
+      <p><a href="https://outlier.host/">Outlier</a> publishes what its tiers actually score, including the experiments that failed. The <a href="https://outlier.host/#faq">FAQ</a> covers the shipping lineup, and <a href="https://outlier.host/#support">support</a> is one person.</p>
+    </div>
+  </article>
+
+  <footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
