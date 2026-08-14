@@ -49,7 +49,17 @@ _TAG = re.compile(r"<(script|style)[^>]*>.*?</\1>", re.S | re.I)
 # any well-templated site look like a duplicate farm — the first run of this linter flagged
 # two pages at 30% whose only overlap was the footer and a shared comparison table. Shared
 # chrome is fine; shared PHRASING is the actual spam signal, so measure only the body.
-_CHROME = re.compile(r"<(nav|footer)[^>]*>.*?</\1>", re.S | re.I)
+_CHROME = re.compile(
+    r"<(nav|footer)[^>]*>.*?</\1>"
+    # Repeated CTA / related-links / breadcrumb blocks are chrome too. They are not
+    # inside <nav> or <footer>, but a download button and a "Related pages" list that
+    # appear identically on 20 pages are exactly the shared furniture the nav/footer
+    # exclusion already exists for. Counting them made 20 honest hardware pages look
+    # like a duplicate farm, and the only way to "fix" that would be rewriting one
+    # download button 20 ways -- writing for the linter instead of the reader.
+    r'|<div class="(cta|related|foot|crumbs)"[^>]*>.*?</div>',
+    re.S | re.I,
+)
 _HTML = re.compile(r"<[^>]+>")
 
 
