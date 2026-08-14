@@ -1,15 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Run Outlier Plus on Mac Studio M1 Ultra — Local AI on Apple Silicon | Outlier</title>
 <meta name="description" content="How Outlier Plus (397B MoE / 17B active, 209 GB) runs on Mac Studio M1 Ultra (64|128 GB unified memory, 800 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
 <link rel="canonical" href="https://outlier.host/seo/run/run-plus-on-m1-ultra-mac-studio/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Run Outlier Plus on Mac Studio M1 Ultra — Local AI on Apple Silicon | Outlier">
 <meta property="og:description" content="How Outlier Plus (397B MoE / 17B active, 209 GB) runs on Mac Studio M1 Ultra (64|128 GB unified memory, 800 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
@@ -22,7 +21,7 @@
 <meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Run on your Mac","item":"https://outlier.host/seo/run/"},{"@type":"ListItem","position":3,"name":"Run Outlier Plus on Mac Studio M1 Ultra","item":"https://outlier.host/seo/run/run-plus-on-m1-ultra-mac-studio/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Run Outlier Plus on Mac Studio M1 Ultra — Local AI on Apple Silicon | Outlier","description":"How Outlier Plus (397B MoE / 17B active, 209 GB) runs on Mac Studio M1 Ultra (64|128 GB unified memory, 800 GB/s bandwidth). Verified throughput, RAM headroom, install steps.","url":"https://outlier.host/seo/run/run-plus-on-m1-ultra-mac-studio/","datePublished":"2026-06-17","dateModified":"2026-06-18","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Run Outlier Plus on Mac Studio M1 Ultra — Local AI on Apple Silicon | Outlier","description":"How Outlier Plus (397B MoE / 17B active, 209 GB) runs on Mac Studio M1 Ultra (64|128 GB unified memory, 800 GB/s bandwidth). Verified throughput, RAM headroom, install steps.","url":"https://outlier.host/seo/run/run-plus-on-m1-ultra-mac-studio/","datePublished":"2026-06-17","dateModified":"2026-08-14","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will Outlier Plus actually fit on a Mac Studio M1 Ultra?","acceptedAnswer":{"@type":"Answer","text":"It needs at least 64 GB of unified memory. The base Mac Studio M1 Ultra ships with 64|128 GB."}},{"@type":"Question","name":"How fast is Outlier Plus on Mac Studio M1 Ultra?","acceptedAnswer":{"@type":"Answer","text":"M1 Ultra reference is 1.59 tok/s. Bandwidth-scaled estimate for Mac Studio M1 Ultra: ~1.6 tok/s [estimated from family-bandwidth ratio]."}},{"@type":"Question","name":"Does Outlier send any data off the Mac?","acceptedAnswer":{"@type":"Answer","text":"No prompts or responses leave the device during chat. Model downloads are one-time HTTPS pulls from Hugging Face."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -58,26 +57,26 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Run on your Mac</span>
 <h1>Run Outlier Plus on Mac Studio M1 Ultra</h1>
-<p class="byline">Last updated 2026-06-18</p>
+<p class="byline">Last updated 2026-08-14 &middot; Outlier v1.11.628</p>
 
 <div class="qa"><strong>Quick answer</strong><p><strong>Outlier Plus</strong> on <strong>Mac Studio M1 Ultra</strong>: fits comfortably. Minimum unified memory required: <strong>64 GB</strong>. Disk size: <strong>209 GB</strong>. Default context window: <strong>32K tokens</strong>. Measured throughput on this exact machine: <strong>1.59 tok/s</strong> (M1 Ultra 64 GB, 5-rep median, 4096 prefill + 256 generate, mlx_lm 0.31.3, MLX 4-bit). Source: <code>FINAL_LAUNCH_NUMBERS.md</code>.</p></div>
 
 <h2>What does Outlier Plus run like on Mac Studio M1 Ultra?</h2>
 <p>The pairing under examination is <strong>Outlier Plus</strong> (209 GB MLX 4-bit, Qwen3.5-397B-A17B base, 32K default context, 64 GB unified memory minimum) on a <strong>Mac Studio M1 Ultra</strong> (Apple M1 Ultra, 20 CPU cores, 48-64 GPU cores, 64|128 GB unified memory, 800 GB/s, 2022). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact Mac Studio M1 Ultra scales as the ratio 800&nbsp;/&nbsp;800 = <strong>1.00&times;</strong> the published M1 Ultra number.</p>
-<h2>How much memory does Plus need on an M1 Ultra Mac Studio?</h2>
+<h2>How much memory does the model take during generation?</h2>
 <p>Outlier&rsquo;s Outlier Plus has a measured peak generation footprint of about 14.04 GB. The Mac Studio M1 Ultra base configuration ships with 64|128 GB unified, and the rule of thumb is to leave roughly 4 GB for the OS and one open browser tab. Measured throughput on this exact machine: <strong>1.59 tok/s</strong> (M1 Ultra 64 GB, 5-rep median, 4096 prefill + 256 generate, mlx_lm 0.31.3, MLX 4-bit). Source: <code>FINAL_LAUNCH_NUMBERS.md</code>.</p>
 <h2>What is the install path on Mac Studio M1 Ultra for Outlier Plus?</h2>
 <p>The 2022 Mac Studio M1 Ultra ships with 64|128 GB of unified memory, so headroom for the 64 GB Outlier Plus requirement is 0 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M1 Ultra machine is that the 209 GB pull from <code>mlx-community/Qwen3.5-397B-A17B-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/plus/</code> and download time is bandwidth-limited by the network, not by the 20-core Apple M1 Ultra CPU.</p>
 <h2>What context window can I use on a 64 GB Mac?</h2>
 <p>The Outlier Plus tier defaults to 32K context and caps at 256K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 64|128 GB Mac Studio M1 Ultra, the default context is the safe starting point.</p>
-<h2>What Plus handles well on an M1 Ultra Mac Studio, and what it doesn't</h2>
+<h2>What works well on this pairing, and what is still rough?</h2>
 <ul><li>The Mac Studio M1 Ultra (Apple M1 Ultra, 800 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Plus on this exact machine is approximately 800 divided by 209 GB tokens per second.</li><li>The Mac Studio M1 Ultra chassis dissipates heat well; sustained decode at the Outlier Plus tier did not show thermal throttling in our 2026-05 internal soak.</li><li>Cold boot of Outlier on a 20-core Apple M1 Ultra is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
 <h2>What is the unique number for Outlier Plus on Mac Studio M1 Ultra?</h2>
 <p>209 GB on disk against 64|128 GB unified memory means the weights alone consume about <strong>327%</strong> of the base SKU&rsquo;s RAM on the Mac Studio M1 Ultra.</p>
-<h2>Is Plus the right tier for an M1 Ultra Mac Studio?</h2>
+<h2>Should I pick a different tier?</h2>
 <p>For lighter-weight work on this Apple M1 Ultra, the Code tier is the next step down and runs visibly faster. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for Mac Studio M1 Ultra is 1.00&times; M1 Ultra reference.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.787/Outlier-1.11.787-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.477/Outlier-1.11.477-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported. macOS 12+.</p>
 
 <div class="related">

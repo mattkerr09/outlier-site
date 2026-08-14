@@ -1,15 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Outlier vs hosted LLM APIs for brainstorming | Outlier</title>
 <meta name="description" content="How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is brainstorming. Throughput, privacy, and friction compared.">
 <link rel="canonical" href="https://outlier.host/seo/vs/hosted-llm-apis-for-brainstorming/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Outlier vs hosted LLM APIs for brainstorming | Outlier">
 <meta property="og:description" content="How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is brainstorming. Throughput, privacy, and friction compared.">
@@ -22,7 +21,7 @@
 <meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compared to","item":"https://outlier.host/seo/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs hosted LLM APIs for brainstorming","item":"https://outlier.host/seo/vs/hosted-llm-apis-for-brainstorming/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs hosted LLM APIs for brainstorming | Outlier","description":"How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is brainstorming. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/hosted-llm-apis-for-brainstorming/","datePublished":"2026-06-17","dateModified":"2026-06-18","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs hosted LLM APIs for brainstorming | Outlier","description":"How an on-device, MLX-quantized model differs from hosted LLM APIs when the task is brainstorming. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/hosted-llm-apis-for-brainstorming/","datePublished":"2026-06-17","dateModified":"2026-08-14","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Outlier a drop-in alternative to hosted LLM APIs for brainstorming?","acceptedAnswer":{"@type":"Answer","text":"Outlier is positioned as an alternative to hosted LLM APIs when the user wants the prompt to stay on the Mac. Whether it fully covers a given workflow depends on tooling integrations the user already relies on."}},{"@type":"Question","name":"Does Outlier work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the one-time model download, no network is required for chat or generation."}},{"@type":"Question","name":"Which Mac do I need?","acceptedAnswer":{"@type":"Answer","text":"Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -58,7 +57,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Compared to</span>
 <h1>Outlier vs hosted LLM APIs for brainstorming</h1>
-<p class="byline">Last updated 2026-06-18</p>
+<p class="byline">Last updated 2026-08-14 &middot; Outlier v1.11.628</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Generating product or naming candidates without a network round-trip. The hosted LLM APIs category answers this with a remote model and an account; Outlier answers it with the on-device quick tier. This page is the side-by-side specifically for brainstorming workloads.</p></div>
 
@@ -71,7 +70,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>What is the switching friction from hosted LLM APIs?</h2>
 <p>Moving a brainstorming workflow from hosted LLM APIs to Outlier is a one-time DMG install plus a 15.61 GB pull for the quick tier. The sign-in step that hosted LLM APIs typically requires has no equivalent on the Outlier side: there is no account, no per-token meter, and no rate-limit page to redirect through. The brainstorming loop after install is open-prompt to local-decode.</p>
 <h2>What about quality at the quick tier for brainstorming?</h2>
-<p>For a brainstorming workload moving off hosted LLM APIs onto the quick tier: Quick is a reasoning-strong MoE tier but comparatively weak on code-shaped tasks; pick it for exploration, not for code. See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier breakdown. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set).</p>
+<p>For a brainstorming workload moving off hosted LLM APIs onto the quick tier: Quick is a reasoning-strong MoE tier but comparatively weak on code-shaped tasks; pick it for exploration, not for code. The <a href="/seo/learn/mlx-explained/">MLX explainer</a> has the per-tier breakdown if you want to see how it compares with hosted LLM APIs. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set), and for brainstorming specifically: that figure rewards a single correct answer, which is the opposite of what brainstorming wants — breadth of candidates matters more than pass@1 here.</p>
 <h2>What is the shape of brainstorming as a workload?</h2>
 <p>Brainstorming is an exploration mode where the prompts are short and the value comes from many candidate completions. Quick&rsquo;s MoE architecture is well-suited to this even though its HumanEval score is poor.</p>
 <h2>How does the hosted LLM APIs category look operationally for brainstorming?</h2>
@@ -81,7 +80,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>One-line summary</h2>
 <p>For brainstorming: one network round-trip per prompt with hosted LLM APIs versus zero round-trips with Outlier on the quick tier &mdash; the difference is unbounded latency variance against bandwidth-bound, repeatable local throughput.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.787/Outlier-1.11.787-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.477/Outlier-1.11.477-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported. macOS 12+.</p>
 
 <div class="related">

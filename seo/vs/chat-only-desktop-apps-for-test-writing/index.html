@@ -1,15 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Outlier vs chat-only local desktop apps for writing unit tests | Outlier</title>
 <meta name="description" content="How an on-device, MLX-quantized model differs from chat-only local desktop apps when the task is writing unit tests. Throughput, privacy, and friction compared.">
 <link rel="canonical" href="https://outlier.host/seo/vs/chat-only-desktop-apps-for-test-writing/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Outlier vs chat-only local desktop apps for writing unit tests | Outlier">
 <meta property="og:description" content="How an on-device, MLX-quantized model differs from chat-only local desktop apps when the task is writing unit tests. Throughput, privacy, and friction compared.">
@@ -22,7 +21,7 @@
 <meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compared to","item":"https://outlier.host/seo/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs chat-only local desktop apps for writing unit tests","item":"https://outlier.host/seo/vs/chat-only-desktop-apps-for-test-writing/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs chat-only local desktop apps for writing unit tests | Outlier","description":"How an on-device, MLX-quantized model differs from chat-only local desktop apps when the task is writing unit tests. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/chat-only-desktop-apps-for-test-writing/","datePublished":"2026-06-17","dateModified":"2026-06-18","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Outlier vs chat-only local desktop apps for writing unit tests | Outlier","description":"How an on-device, MLX-quantized model differs from chat-only local desktop apps when the task is writing unit tests. Throughput, privacy, and friction compared.","url":"https://outlier.host/seo/vs/chat-only-desktop-apps-for-test-writing/","datePublished":"2026-06-17","dateModified":"2026-08-14","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Is Outlier a drop-in alternative to chat-only local desktop apps for writing unit tests?","acceptedAnswer":{"@type":"Answer","text":"Outlier is positioned as an alternative to chat-only local desktop apps when the user wants the prompt to stay on the Mac. Whether it fully covers a given workflow depends on tooling integrations the user already relies on."}},{"@type":"Question","name":"Does Outlier work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the one-time model download, no network is required for chat or generation."}},{"@type":"Question","name":"Which Mac do I need?","acceptedAnswer":{"@type":"Answer","text":"Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -58,7 +57,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Compared to</span>
 <h1>Outlier vs chat-only local desktop apps for writing unit tests</h1>
-<p class="byline">Last updated 2026-06-18</p>
+<p class="byline">Last updated 2026-08-14 &middot; Outlier v1.11.628</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Generating focused unit tests against a function under test. The chat-only local desktop apps category answers this with a remote model and an account; Outlier answers it with the on-device code tier. This page is the side-by-side specifically for writing unit tests workloads.</p></div>
 
@@ -71,7 +70,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>What is the switching friction from chat-only local desktop apps?</h2>
 <p>Moving a writing unit tests workflow from chat-only local desktop apps to Outlier is a one-time DMG install plus a 15.13 GB pull for the code tier. The sign-in step that chat-only local desktop apps typically requires has no equivalent on the Outlier side: there is no account, no per-token meter, and no rate-limit page to redirect through. The writing unit tests loop after install is open-prompt to local-decode.</p>
 <h2>What about quality at the code tier for writing unit tests?</h2>
-<p>For a writing unit tests workload moving off chat-only local desktop apps onto the code tier: Code shares Core's weights; the difference is configuration (wider default context, code-first prompt), not model quality. See the <a href="/seo/learn/mlx-explained/">MLX explainer</a> for the per-tier breakdown. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set).</p>
+<p>For a writing unit tests workload moving off chat-only local desktop apps onto the code tier: Code shares Core's weights; the difference is configuration (wider default context, code-first prompt), not model quality. The <a href="/seo/learn/mlx-explained/">MLX explainer</a> has the per-tier breakdown if you want to see how it compares with chat-only local desktop apps. The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% (pass@1, full 164-set), and for writing unit tests specifically: that figure is itself a pass-rate on generated code, so of the tasks here it is the one the metric speaks to most directly.</p>
 <h2>What is the shape of writing unit tests as a workload?</h2>
 <p>Test scaffolding is bursty: ten short turns to land a green suite. Cloud round-trip variance shows up here because each turn is small enough that the network is half the latency.</p>
 <h2>How does the chat-only local desktop apps category look operationally for writing unit tests?</h2>
@@ -81,7 +80,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>One-line summary</h2>
 <p>For writing unit tests: one network round-trip per prompt with chat-only local desktop apps versus zero round-trips with Outlier on the code tier &mdash; the difference is unbounded latency variance against bandwidth-bound, repeatable local throughput.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.787/Outlier-1.11.787-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.477/Outlier-1.11.477-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported. macOS 12+.</p>
 
 <div class="related">

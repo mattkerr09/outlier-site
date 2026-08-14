@@ -1,15 +1,14 @@
 <!doctype html>
 <html lang="en">
 <head>
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Run Outlier Core on MacBook Pro M2 Max — Local AI on Apple Silicon | Outlier</title>
 <meta name="description" content="How Outlier Core (27B dense, 15.13 GB) runs on MacBook Pro M2 Max (32|64|96 GB unified memory, 400 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
 <link rel="canonical" href="https://outlier.host/seo/run/run-compact-on-m2-max-macbook-pro/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Run Outlier Core on MacBook Pro M2 Max — Local AI on Apple Silicon | Outlier">
 <meta property="og:description" content="How Outlier Core (27B dense, 15.13 GB) runs on MacBook Pro M2 Max (32|64|96 GB unified memory, 400 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
@@ -22,7 +21,7 @@
 <meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Run on your Mac","item":"https://outlier.host/seo/run/"},{"@type":"ListItem","position":3,"name":"Run Outlier Core on MacBook Pro M2 Max","item":"https://outlier.host/seo/run/run-compact-on-m2-max-macbook-pro/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Run Outlier Core on MacBook Pro M2 Max — Local AI on Apple Silicon | Outlier","description":"How Outlier Core (27B dense, 15.13 GB) runs on MacBook Pro M2 Max (32|64|96 GB unified memory, 400 GB/s bandwidth). Verified throughput, RAM headroom, install steps.","url":"https://outlier.host/seo/run/run-compact-on-m2-max-macbook-pro/","datePublished":"2026-06-17","dateModified":"2026-06-18","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Run Outlier Core on MacBook Pro M2 Max — Local AI on Apple Silicon | Outlier","description":"How Outlier Core (27B dense, 15.13 GB) runs on MacBook Pro M2 Max (32|64|96 GB unified memory, 400 GB/s bandwidth). Verified throughput, RAM headroom, install steps.","url":"https://outlier.host/seo/run/run-compact-on-m2-max-macbook-pro/","datePublished":"2026-06-17","dateModified":"2026-08-14","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will Outlier Core actually fit on a MacBook Pro M2 Max?","acceptedAnswer":{"@type":"Answer","text":"It needs at least 24 GB of unified memory. The base MacBook Pro M2 Max ships with 32|64|96 GB."}},{"@type":"Question","name":"How fast is Outlier Core on MacBook Pro M2 Max?","acceptedAnswer":{"@type":"Answer","text":"M1 Ultra reference is 20.7 tok/s. Bandwidth-scaled estimate for MacBook Pro M2 Max: ~10.3 tok/s [estimated from family-bandwidth ratio]."}},{"@type":"Question","name":"Does Outlier send any data off the Mac?","acceptedAnswer":{"@type":"Answer","text":"No prompts or responses leave the device during chat. Model downloads are one-time HTTPS pulls from Hugging Face."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -58,26 +57,26 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Run on your Mac</span>
 <h1>Run Outlier Core on MacBook Pro M2 Max</h1>
-<p class="byline">Last updated 2026-06-18</p>
+<p class="byline">Last updated 2026-08-14 &middot; Outlier v1.11.628</p>
 
 <div class="qa"><strong>Quick answer</strong><p><strong>Outlier Core</strong> on <strong>MacBook Pro M2 Max</strong>: fits comfortably. Minimum unified memory required: <strong>24 GB</strong>. Disk size: <strong>15.13 GB</strong>. Default context window: <strong>32K tokens</strong>. On MacBook Pro M2 Max the Outlier Core bandwidth-scaled estimate is <strong>~10.3 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 20.7 tok/s on M1 Ultra &times; (400&nbsp;/&nbsp;800) bus ratio for the Apple M2 Max. Treat as a first-order projection &mdash; the Outlier Core number on this 2023 machine has not been formally measured.</p></div>
 
 <h2>What does Outlier Core run like on MacBook Pro M2 Max?</h2>
 <p>The pairing under examination is <strong>Outlier Core</strong> (15.13 GB MLX 4-bit, Qwen3.6-27B base, 32K default context, 24 GB unified memory minimum) on a <strong>MacBook Pro M2 Max</strong> (Apple M2 Max, 12 CPU cores, 30-38 GPU cores, 32|64|96 GB unified memory, 400 GB/s, 2023). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact MacBook Pro M2 Max scales as the ratio 400&nbsp;/&nbsp;800 = <strong>0.50&times;</strong> the published M1 Ultra number.</p>
-<h2>How much memory does Core need on an M2 Max MacBook Pro?</h2>
+<h2>How much memory does the model take during generation?</h2>
 <p>Outlier&rsquo;s Outlier Core has a measured peak generation footprint of about 16 GB. The MacBook Pro M2 Max base configuration ships with 32|64|96 GB unified, and the rule of thumb is to leave roughly 4 GB for the OS and one open browser tab. On MacBook Pro M2 Max the Outlier Core bandwidth-scaled estimate is <strong>~10.3 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 20.7 tok/s on M1 Ultra &times; (400&nbsp;/&nbsp;800) bus ratio for the Apple M2 Max. Treat as a first-order projection &mdash; the Outlier Core number on this 2023 machine has not been formally measured.</p>
 <h2>What is the install path on MacBook Pro M2 Max for Outlier Core?</h2>
 <p>The 2023 MacBook Pro M2 Max ships with 32|64|96 GB of unified memory, so headroom for the 24 GB Outlier Core requirement is 8 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M2 Max machine is that the 15.13 GB pull from <code>Outlier-Ai/Outlier-Core-27B-MLX-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/compact/</code> and download time is bandwidth-limited by the network, not by the 12-core Apple M2 Max CPU.</p>
 <h2>What context window can I use on a 32 GB Mac?</h2>
 <p>The Outlier Core tier defaults to 32K context and caps at 256K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 32|64|96 GB MacBook Pro M2 Max, the default context is the safe starting point.</p>
-<h2>What Core handles well on an M2 Max MacBook Pro, and what it doesn't</h2>
+<h2>What works well on this pairing, and what is still rough?</h2>
 <ul><li>The MacBook Pro M2 Max (Apple M2 Max, 400 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Core on this exact machine is approximately 400 divided by 15.13 GB tokens per second.</li><li>Cold boot of Outlier on a 12-core Apple M2 Max is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
 <h2>What is the unique number for Outlier Core on MacBook Pro M2 Max?</h2>
 <p>15.13 GB on disk against 32|64|96 GB unified memory means the weights alone consume about <strong>47%</strong> of the base SKU&rsquo;s RAM on the MacBook Pro M2 Max.</p>
-<h2>Is Core the right tier for an M2 Max MacBook Pro?</h2>
+<h2>Should I pick a different tier?</h2>
 <p>For lighter-weight work on this Apple M2 Max, the Lite tier is the next step down and runs visibly faster. For heavier work, the Code or Vision tier is the next step up; check that the 32|64|96 GB SKU you have can fit its weights before installing. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for MacBook Pro M2 Max is 0.50&times; M1 Ultra reference.</p>
 
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.787/Outlier-1.11.787-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.477/Outlier-1.11.477-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported. macOS 12+.</p>
 
 <div class="related">
