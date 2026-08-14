@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to organize AI chats into projects on your Mac | Outlier</title>
+  <meta name="description" content="Stop re-explaining your codebase every conversation. Projects give a local AI persistent context on macOS, so it starts each chat already knowing what you're working on.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-08-14">
+  <link rel="canonical" href="https://outlier.host/how-to/organize-ai-chats-into-projects-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to organize AI chats into projects on your Mac">
+  <meta property="og:description" content="Stop re-explaining your codebase every conversation. Projects give a local AI persistent context on macOS, so it starts each chat already knowing what you're working on.">
+  <meta property="og:url" content="https://outlier.host/how-to/organize-ai-chats-into-projects-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to organize AI chats into projects on your Mac">
+  <meta name="twitter:description" content="Give a local AI standing context so you stop re-explaining yourself.">
+<style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is an AI project folder?", "acceptedAnswer": {"@type": "Answer", "text": "A container that holds files, standing context and the chats for one piece of work, so every conversation starts with the background already loaded."}}, {"@type": "Question", "name": "Can a local AI read my whole codebase?", "acceptedAnswer": {"@type": "Answer", "text": "It indexes the codebase you attach so it can retrieve the relevant parts on demand. Everything stays on disk."}}, {"@type": "Question", "name": "How is a project different from memory?", "acceptedAnswer": {"@type": "Answer", "text": "Memory is cross-cutting knowledge about you. A project is scoped context about one body of work. They complement each other."}}, {"@type": "Question", "name": "Is project context uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Projects are local state on your Mac."}}]}
+  </script>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "headline": "How to organize AI chats into projects on your Mac", "description": "Stop re-explaining your codebase every conversation. Projects give a local AI persistent context on macOS, so it starts each chat already knowing what you're working on.", "datePublished": "2026-08-14", "dateModified": "2026-08-14", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/organize-ai-chats-into-projects-mac/", "image": "https://outlier.host/og-card.png"}
+  </script>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to organize AI chats into projects on your Mac", "item": "https://outlier.host/how-to/organize-ai-chats-into-projects-mac/"}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/how-to/">how-to</a></div>
+    <h1>How to organize AI chats into projects on your Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-08-14</span>
+      <span class="updated-pill">Last updated 2026-08-14</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>A project is a durable container: files, context and chats that belong to one piece of work.</li>
+        <li>It means not pasting the same background into every new conversation.</li>
+        <li>Point a project at a codebase and the AI can find the relevant file instead of guessing.</li>
+        <li>Everything stays on your machine — a project is local state, not a cloud workspace.</li>
+      </ul>
+    </div>
+
+    <p class="lead">The hidden tax on chat assistants is re-explanation. Every new conversation starts from nothing, so you paste the same context again, and the quality of the answer depends on how much of it you remembered to include.</p>
+
+    <h2>What a project changes</h2>
+    <p>Instead of context living in your head and being re-typed, it lives with the work. Open a chat inside a project and the assistant already has the background: the files, the constraints, the prior decisions.</p>
+    <p>For code the difference is sharper still. With a codebase attached, the assistant can locate the function you're describing rather than asking you to paste it — which is the difference between a colleague who has seen the repo and one who has not.</p>
+
+    <h2>Setting one up</h2>
+    <ol>
+    <li><strong>Create a project</strong> for a real unit of work, not a topic.</li>
+    <li><strong>Attach the files or codebase</strong> that define it.</li>
+    <li><strong>Add standing context</strong> — the conventions and constraints you'd otherwise repeat.</li>
+    <li><strong>Chat inside it</strong>, and stop re-explaining.</li>
+    </ol>
+
+    <h2>Getting more out of it</h2>
+    <ul>
+    <li><strong>Narrow beats broad.</strong> A project scoped to one codebase outperforms one scoped to "work".</li>
+    <li><strong>Write the constraints down.</strong> The things you'd tell a new teammate are exactly what belongs in standing context.</li>
+    <li><strong>Projects and memory are different.</strong> Memory is what the AI knows about <em>you</em> across everything; a project is what it knows about <em>this work</em>.</li>
+    </ul>
+
+
+    <h2>Common questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What is an AI project folder?</h3>
+        <p>A container that holds files, standing context and the chats for one piece of work, so every conversation starts with the background already loaded.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can a local AI read my whole codebase?</h3>
+        <p>It indexes the codebase you attach so it can retrieve the relevant parts on demand. Everything stays on disk.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How is a project different from memory?</h3>
+        <p>Memory is cross-cutting knowledge about you. A project is scoped context about one body of work. They complement each other.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is project context uploaded anywhere?</h3>
+        <p>No. Projects are local state on your Mac.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try it on your own Mac</h3>
+      <p>One signed, notarized download. No account, no token bill, and it keeps working with the Wi-Fi off.</p>
+      <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=how-to-organize-ai-chats-into-projects-mac">Get Outlier for Mac</a>
+    </div>
+
+    <div class="related">
+      Related: <a href="/how-to/make-ai-run-your-tests-mac/">Make AI run your tests</a> · <a href="/learn/why-ai-forgets-conversations/">Why AI forgets conversations</a> · <a href="/learn/why-local-ai-keeps-code-private/">Why local AI keeps code private</a>
+    </div>
+  </div>
+</article>
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
