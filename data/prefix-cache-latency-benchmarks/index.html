@@ -97,6 +97,9 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is there still about 25 seconds per step after the v662 fix?", "acceptedAnswer": {"@type": "Answer", "text": "Because most of what's left is decoding, not prefill. Those steps generate about 160 tokens each, and generation time doesn't shrink when prefill gets cheaper. The prefix cache only removes the cost of re-reading the prompt."}}, {"@type": "Question", "name": "Do these numbers transfer to other Macs?", "acceptedAnswer": {"@type": "Answer", "text": "This data can't tell you. Every run was on one Mac Studio M1 Ultra (Mac13,2) with 64 GB of unified memory, in one configuration. The shape of the result — flat per-step latency instead of linear growth — should hold anywhere the cache hits, but the absolute seconds will differ by chip and model tier."}}, {"@type": "Question", "name": "Why did step 1 in the v660 table get slower?", "acceptedAnswer": {"@type": "Answer", "text": "It went from 8.4 s to 10.7 s, and I've left it in the table rather than hiding it. This page doesn't establish why. It's one before-and-after pair on one machine, and nothing measured here isolates the cause."}}]}
   </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 </head>
 <body>
 <nav>

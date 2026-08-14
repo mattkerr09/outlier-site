@@ -94,6 +94,9 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does local AI take so long to start answering?", "acceptedAnswer": {"@type": "Answer", "text": "That gap is prefill. Before the model can write a single word it has to read your entire prompt, and in a chat app the prompt is the whole conversation so far, not just what you typed. The longer that history gets, the longer the wait, unless the runtime can reuse a cached prefix from the previous turn."}}, {"@type": "Question", "name": "Does more RAM make local AI faster?", "acceptedAnswer": {"@type": "Answer", "text": "Not directly. RAM doesn't raise the tokens-per-second ceiling of a model that already fits. What it does is keep you out of the collapse: once a model exceeds free RAM, macOS swaps to SSD and decode drops to roughly 1-3 tokens per second. More RAM means more models stay on the right side of that line."}}, {"@type": "Question", "name": "Should I turn thinking mode off to go faster?", "acceptedAnswer": {"@type": "Answer", "text": "Often yes, and it may not cost you accuracy. On a 30-question GSM8K run against the shipping Nano model, thinking off scored 80% versus 63.3% with thinking on, and finished 32% faster. That's one model on one task, so don't treat it as a universal law, but it's worth trying before assuming more reasoning tokens always mean better answers."}}]}
   </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 </head>
 <body>
 <nav>

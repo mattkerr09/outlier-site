@@ -94,6 +94,9 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does a local AI agent check its own work?", "acceptedAnswer": {"@type": "Answer", "text": "When a test fails, the agent computes the true answer itself and arbitrates: it decides whether the code is wrong or the test asserts a wrong value, then fixes whichever side is actually incorrect. Selection is based on running the tests, not on the model approving itself."}}, {"@type": "Question", "name": "What stops the agent from cheating a failing test?", "acceptedAnswer": {"@type": "Answer", "text": "An anti-gaming guard blocks the agent from weakening a test that already asserts the correct value. It cannot 'fix' a red test by editing the assertion to match buggy output when the original assertion was right."}}, {"@type": "Question", "name": "Why does an execution oracle beat self-approval?", "acceptedAnswer": {"@type": "Answer", "text": "A model asked to grade its own answer is unreliable, especially a 4-bit small model. Running the tests is an external, objective signal. In our measurements, selecting on run-the-tests rather than 'it compiles' or 'the model approves itself' is the single biggest lever on local coding accuracy."}}]}
   </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 </head>
 <body>
 <nav>

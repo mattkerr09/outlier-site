@@ -93,6 +93,9 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What engine does Outlier use for Plus now?", "acceptedAnswer": {"@type": "Answer", "text": "V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at about 2.1 tok/s with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired."}}, {"@type": "Question", "name": "Why were the streaming engines retired?", "acceptedAnswer": {"@type": "Answer", "text": "V10 and V11 per-token expert streaming committed 57 to 58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30 to 40 percent tok/s gain. V9 paged uses 3.6 GB Wired (15x less). On a footprint-first tier, that trade favors V9."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
   </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 </head>
 <body>
 <nav>

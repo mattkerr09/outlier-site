@@ -94,6 +94,9 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can you really run a 397B model on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Outlier's V9 paged engine runs Qwen3.5-397B-A17B on a 64 GB Mac Studio at about 2.1 tokens per second, using roughly 11 GB of peak memory by streaming expert weights from the SSD on demand."}}, {"@type": "Question", "name": "How much disk space does the 397B model need?", "acceptedAnswer": {"@type": "Answer", "text": "About 209 GB for the MLX 4-bit weights. They download once, then inference streams from those local files with no further network use."}}, {"@type": "Question", "name": "Why does a 397B MoE model fit when a 70B dense model might not?", "acceptedAnswer": {"@type": "Answer", "text": "Because a Mixture-of-Experts model activates only a fraction of its parameters per token (17B of 397B here), so the engine keeps active experts in RAM and pages the rest from disk."}}]}
   </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 </head>
 <body>
 <nav>

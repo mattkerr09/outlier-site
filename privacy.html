@@ -59,7 +59,7 @@
     <h2>What Outlier does NOT do</h2>
     <ul>
       <li>No inference telemetry. We do not log your prompts, model outputs, or which questions you ask.</li>
-      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host uses Plausible for anonymous pageview counts only — no cookies, no IP storage, no cross-site tracking.)</li>
+      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host uses Plausible for anonymous pageview counts — no cookies, no IP storage, no cross-site tracking — and Sled for affiliate attribution, described below.)</li>
       <!-- Added 2026-08-13. This page listed Plausible as the only thing the marketing site
            touched, which read as a complete list and was not one: outlier.host loads its four
            typefaces from Google Fonts and Fontshare, and loading a font is an HTTP request that
@@ -68,7 +68,22 @@
            argument, and a page that enumerates what it does NOT do has to be complete or the
            enumeration is the misleading part. kerrandcompanyholdings.com already discloses its
            Google Fonts request in exactly these terms; this brings outlier.host in line. -->
-      <li>No third-party assets on this site except type. outlier.host loads its typefaces from
+      <!-- Added 2026-08-14, for the same reason as the note above. The site now loads
+           Sled, which credits the right person when somebody recommends Outlier. It is
+           the first thing here that can set a cookie, so the line above no longer says
+           Plausible is used "only", and this gets its own entry rather than a
+           parenthesis. The distinction that matters is that it is CONDITIONAL: arrive
+           through an affiliate link and it sets one ta_ref cookie; arrive from a search
+           result, a bookmark or a link of ours and it sets nothing at all, which is what
+           almost every visitor does. It records which affiliate sent a visit, never who
+           the visitor is. "One cookie, sometimes" is the only honest version — "no
+           cookies" would now be false and "we use cookies" would overstate it. -->
+      <li>One conditional cookie, from <a href="https://usesled.com">Sled</a>. If you reach
+      outlier.host through an affiliate link, a single <code>ta_ref</code> cookie records
+      which affiliate sent you so they are credited if you buy. Reach the site any other
+      way and no cookie is set. It never records who you are, and the desktop app does not
+      request it — the shipping bundle contains no reference to that host.</li>
+      <li>No third-party assets on this site except type and the two scripts above. outlier.host loads its typefaces from
       <a href="https://fonts.google.com/">Google Fonts</a> (<code>fonts.googleapis.com</code>,
       <code>fonts.gstatic.com</code>) and <a href="https://www.fontshare.com/">Fontshare</a>
       (<code>api.fontshare.com</code>). Requesting a font file exposes your IP address to those
