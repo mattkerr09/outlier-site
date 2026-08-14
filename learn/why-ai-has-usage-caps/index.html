@@ -92,7 +92,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Why every cloud AI has usage caps (the unit economics)", "item": "https://outlier.host/learn/why-ai-has-usage-caps/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will AI usage caps go away as compute gets cheaper?", "acceptedAnswer": {"@type": "Answer", "text": "They'll loosen, but the structure stays. As long as a flat fee covers a non-zero per-token cost, there's a usage level that loses the provider money, and they'll cap against it. Cheaper compute raises the cap; it doesn't delete it."}}, {"@type": "Question", "name": "Isn't the API 'uncapped'?", "acceptedAnswer": {"@type": "Answer", "text": "The API has no hard usage wall, but it meters every token and bills you for it, plus rate limits per minute. It trades a cap for a variable bill. Heavy agent use through an API routinely costs hundreds of dollars a month."}}, {"@type": "Question", "name": "How does Outlier afford to be uncapped?", "acceptedAnswer": {"@type": "Answer", "text": "Because your Mac supplies the compute. Outlier sells the software once (or $20/month); it doesn't pay for your GPU time, so heavy use costs it nothing. That's the structural difference between local and cloud, not a promotional choice."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Will AI usage caps go away as compute gets cheaper?", "acceptedAnswer": {"@type": "Answer", "text": "They'll loosen, but the structure stays. As long as a flat fee covers a non-zero per-token cost, there's a usage level that loses the provider money, and they'll cap against it. Cheaper compute raises the cap; it doesn't delete it."}}, {"@type": "Question", "name": "Isn't the API 'uncapped'?", "acceptedAnswer": {"@type": "Answer", "text": "The API has no hard usage wall, but it meters every token and bills you for it, plus rate limits per minute. It trades a cap for a variable bill. Heavy agent use through an API routinely costs hundreds of dollars a month."}}, {"@type": "Question", "name": "How does Outlier afford to be uncapped?", "acceptedAnswer": {"@type": "Answer", "text": "Because your Mac supplies the compute. Outlier sells the software once (or $9/month); it doesn't pay for your GPU time, so heavy use costs it nothing. That's the structural difference between local and cloud, not a promotional choice."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -123,12 +123,12 @@
       <ul>
         <li>Cloud inference costs the provider real money per token: GPU time, power, cooling, datacenter overhead.</li>
         <li>A flat monthly fee plus unlimited usage would mean heavy users cost more than they pay. Caps close that gap.</li>
-        <li>That's why caps survive every pricing tier, including the $200/month ones.</li>
+        <li>That's why caps survive every pricing tier, including the $249/month ones.</li>
         <li>Local AI has no marginal token cost, so there's nothing to cap. The economics, not generosity.</li>
       </ul>
     </div>
 
-    <p class="lead">People talk about usage caps like they're a temporary annoyance the providers will eventually fix. They won't, and it's worth understanding why. The cap is not a bug or a capacity hiccup. It's arithmetic. Every token a cloud model generates burns GPU-seconds someone has to pay for, and a flat $20 subscription only buys so many of them.</p>
+    <p class="lead">People talk about usage caps like they're a temporary annoyance the providers will eventually fix. They won't, and it's worth understanding why. The cap is not a bug or a capacity hiccup. It's arithmetic. Every token a cloud model generates burns GPU-seconds someone has to pay for, and a flat $9 subscription only buys so many of them.</p>
 
     <h2>What a token actually costs</h2>
     <p>When a cloud model answers you, a rack of GPUs spends real seconds computing your tokens. Those GPUs cost tens of thousands of dollars each, draw kilowatts, and sit in datacenters with cooling and networking overhead. The provider pays for all of it whether you notice or not.</p>
@@ -137,7 +137,7 @@
     <p>A subscription is a bet: the provider bets the average user consumes less compute than the fee covers. Light users subsidize heavy users. That works until the heavy users get too heavy, and AI made them very heavy. One person running coding agents all day can burn hundreds of times the compute of someone asking three questions a week.</p>
     <p>So the provider has two choices: price the plan for the heaviest users (and lose everyone else), or cap usage so the heaviest users can't sink the pool. Every provider picked the cap. Anthropic added weekly limits on top of Claude's rolling five-hour windows in 2025 specifically because, in their own words, a small number of users were running Claude continuously. OpenAI meters its top models by message count and downgrades you when you run out.</p>
     <h2>Why paying more doesn't remove the cap</h2>
-    <p>The $100 and $200 tiers raise the limit because they cover more compute. They don't remove it, because the arithmetic never goes away. Whatever the fee, there's a usage level where you cost more than you pay, and the provider has to protect against it. That's why the fine print on every tier, including Max and Pro, keeps the throttle clause.</p>
+    <p>The $100 and $249 tiers raise the limit because they cover more compute. They don't remove it, because the arithmetic never goes away. Whatever the fee, there's a usage level where you cost more than you pay, and the provider has to protect against it. That's why the fine print on every tier, including Max and Pro, keeps the throttle clause.</p>
     <div class="receipts"><strong>Receipts:</strong> Anthropic's help center documents the rolling reset windows; the 2025 weekly-cap change was announced by Anthropic and widely reported, with the company citing users running Claude "continuously in the background." OpenAI publishes per-plan message limits in its own documentation. None of this is hidden; it's just rarely added up.</div>
     <h2>The one architecture with nothing to cap</h2>
     <p>Run the model on your own machine and the marginal cost of a token lands on hardware you already own. There's no provider absorbing your GPU time, so there's no pool to protect and nothing to cap. This isn't a pricing decision a local tool gets to brag about. It's structural. Outlier doesn't cap usage for the same reason your text editor doesn't: your Mac does the work.</p>
@@ -155,12 +155,12 @@
       </div>
       <div class="faq-item">
         <h3>How does Outlier afford to be uncapped?</h3>
-        <p>Because your Mac supplies the compute. Outlier sells the software once (or $20/month); it doesn't pay for your GPU time, so heavy use costs it nothing. That's the structural difference between local and cloud, not a promotional choice.</p>
+        <p>Because your Mac supplies the compute. Outlier sells the software once (or $9/month); it doesn't pay for your GPU time, so heavy use costs it nothing. That's the structural difference between local and cloud, not a promotional choice.</p>
       </div>
     </div>
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro $20/mo adds everything (all 7 model tiers incl. Plus 397B). Founders Lifetime is $200 once. Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro $9/mo adds everything (all 7 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=why-ai-has-usage-caps">Download for Mac</a>
     </div>
 
