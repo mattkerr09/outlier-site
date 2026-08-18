@@ -31,6 +31,35 @@ import re
 import sys
 from pathlib import Path
 
+
+#: WHERE EACH HEADLINE FIGURE COMES FROM — recorded so nobody re-audits these, and
+#: so a future edit has to argue with a source rather than a memory.
+#:
+#:   MMLU (53.0 / 77.5 / 81.5 / 89.5, n=200)
+#:       The SHIPPING 4-bit build measured on this hardware. Deliberately NOT the
+#:       same evaluation as FINAL_LAUNCH_NUMBERS.md, which reports the BF16 base on
+#:       a B200 cluster at n=14042 (Nano 0.7250, Core 0.8467, int4 0.8408). Both are
+#:       real; the page publishes the build a customer downloads and names it.
+#:
+#:   SWE-bench 46.0% (23/50, blind, official Docker, v1.11.757)
+#:       docs/analysis/SWE_BLIND_v757_DENOMINATOR_2026-08-09.md. The run's own
+#:       artifact said 24/54 = 44.4% and was CONTAMINATED — four rows left over from
+#:       an unrelated run were graded. Scoped to the seed-42 N=50 sample it is
+#:       23/50 = 46.0%, verified complete with `missing = pick50 - submitted == 0`.
+#:       Note the contamination LOWERED the headline, so an unimpressive number is
+#:       not evidence of a clean one.
+#:       ⚠️ FINAL_SWE_BLIND_RESULTS.md in the parent repo reports 0/50 for compact
+#:       on 2026-06-25 and CONTRADICTS this. It is a failed run, not a result: the
+#:       same period measured 18/40 = 45.0%. Do not treat that file as authority.
+#:
+#:   Plus decode 1.59 tok/s
+#:       sprints/v18_plus_ship/artifacts/K_SWEEP_RESULTS.md, the pre-ship sweep that
+#:       locked the setting ("K=20 stays locked"). 2.1 had no artifact anywhere.
+#:
+#:   Quick decode — page says "Not measured", and that is RIGHT.
+#:       models.csv carries 14.6, which OUTLIER_SESSION_HISTORY_RECON.md records as
+#:       "site-only". The data file holds the unsourced figure, not the page.
+
 #: Known, deliberate divergences. Each needs a reason and, where it exists, the
 #: conflicting sources — so an exception cannot be added without stating its case.
 CONFLICTS = {
