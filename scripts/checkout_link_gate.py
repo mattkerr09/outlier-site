@@ -22,6 +22,33 @@ and never equals the `polar_cl_...` link id. Asserting equality would fail
 permanently on a healthy checkout — a red gate for a correct reason, which is how
 gates get switched off.
 
+CONSOLIDATED 2026-08-18. A sibling session and I independently built a checkout
+gate within the hour — both GET, both assert /checkout/, both refuse HEAD, both
+refuse to compare url_effective. Two validators for one property is the failure
+this repo keeps hitting: they drift, one rots, and the rotted one is the one
+somebody trusts. scripts/checkout_gate.py (977c6f17) was deleted in favour of
+this file, and its one unique assertion merged in — see the price check below.
+
+THE PRICE CHECK, AND WHY IT READS THE LABEL. This gate proved the door opens and
+deferred the amount to ops/bin/checkout-price-gate.py, which lives OUTSIDE this
+repo — so within outlier-site the price was unchecked. It now asserts the price
+too, read out of EXPECTED's label rather than restated. A price typed twice is
+the bug that started this night; the declared set already carried the number.
+
+I MADE THIS GATE LIE, THEN CAUGHT IT. The first merge left the reachability
+failure firing whenever `ok` went false, so a price-only mismatch printed
+"A customer clicking Buy does not reach a card form" — false: the page loads,
+the card form is right there, only the amount is wrong. A gate that misreports
+its own finding is exactly the defect class it exists to catch. The two failures
+are now distinguished and separately control-tested.
+
+MY FIRST DEAD-LINK CONTROL PROVED NOTHING, which is worth recording because it
+looked like it worked. I swapped the token inside this script's EXPECTED, so the
+bogus URL appeared on no page and was never fetched. It reported zero card-form
+claims and I nearly read that as the fix landing. A control has to exercise the
+path it claims to: rebuilt with the dead link actually ON a page in a temp tree,
+it then correctly reported unreachable (200, 157,875 bytes, landed on polar.sh/).
+
 WHAT IT CHECKS
   1. the set of checkout links on the site is exactly the DECLARED set, so a
      rotated, removed or newly added link is noticed rather than assumed
