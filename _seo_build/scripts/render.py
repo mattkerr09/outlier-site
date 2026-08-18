@@ -797,7 +797,7 @@ def build_howto_pages() -> list[dict]:
         ("upgrade-to-the-pro-tier", "How to upgrade to Outlier Pro",
          "Pro unlocks the Quick, Core, Code, Plus, and Vision tiers in v1.11.469.",
          [("Open Settings &gt; Pro", "The Pro section appears on the General tab in v1.11.469."),
-          ("Buy on Polar.sh", "Pro is $9/month. Lifetime is one-time: Founders Lifetime at $249."),
+          ("Buy on Polar.sh", "Pro is a one-time purchase: Founders Lifetime at $249."),
           ("Paste your Polar license key", "Settings &gt; license &gt; Activate. The key is verified against api.polar.sh and your tier is derived from the key&rsquo;s benefit ID."),
           ("Restart the app", "The Pro-gated tiers appear in the model picker after restart.")]),
     ]
@@ -1011,7 +1011,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "For a 500-line diff, Code&rsquo;s 64K default context holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s 32K default context is more than enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
-            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Code, Plus, and Vision; the free tier is Nano + Lite. Pro is $9/month. Lifetime is one-time: Founders Lifetime at $249. Paste your Polar license key into Settings &gt; license &gt; Activate; it is verified against api.polar.sh and your tier is derived from the key&rsquo;s benefit ID regardless of which Polar product you bought.",
+            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Code, Plus, and Vision; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your Polar license key into Settings &gt; license &gt; Activate; it is verified against api.polar.sh and your tier is derived from the key&rsquo;s benefit ID regardless of which Polar product you bought.",
         }
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
