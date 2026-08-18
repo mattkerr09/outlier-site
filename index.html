@@ -201,7 +201,7 @@
     .chat-top{display:flex;align-items:center;gap:.6rem;padding:.72rem 1.15rem;border-bottom:1px solid #17131f;}
     .chat-top-title{font-family:var(--head);font-weight:600;font-size:0.9rem;color:var(--text);}
     .chat-top-model{margin-left:auto;font-family:var(--mono);font-size:0.65rem;color:var(--text-dim);border:1px solid var(--border);border-radius:100px;padding:.16rem .58rem;}
-    .thread{flex:1;padding:1.2rem 1.15rem;display:flex;flex-direction:column;gap:1.1rem;overflow:hidden;}
+    .thread{flex:1;padding:1.2rem 1.15rem;display:flex;flex-direction:column;gap:1.1rem;overflow:hidden;max-height:400px;overflow-y:auto;}
     .msg{display:flex;gap:.65rem;max-width:100%;}
     .msg .avatar{width:25px;height:25px;border-radius:7px;flex:none;display:grid;place-items:center;font-size:0.65rem;font-weight:700;font-family:var(--mono);}
     .avatar.u{background:#26213a;color:var(--text-mid);}
@@ -598,7 +598,7 @@
           <aside class="side">
             <div class="side-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg> New chat</div>
             <div class="side-label">Recent</div>
-            <div class="side-item active">Refactor auth middleware</div>
+            <div class="side-item active">Merge overlapping intervals</div>
             <div class="side-item">Explain this stack trace</div>
             <div class="side-item">Unit tests for the parser</div>
             <div class="side-item">Summarize research/*.pdf</div>
@@ -611,29 +611,46 @@
           </aside>
           <section class="chat">
             <div class="chat-top">
-              <span class="chat-top-title">Refactor auth middleware</span>
+              <span class="chat-top-title">Merge overlapping intervals</span>
               <span class="chat-top-model">Outlier Core 27B</span>
             </div>
             <div class="thread">
               <div class="msg user">
                 <div class="avatar u">You</div>
-                <div class="bubble">Refactor this Express middleware to async/await and add proper error handling.</div>
+                <div class="bubble">Write a Python function that merges overlapping intervals, then name the edge case most implementations get wrong.</div>
               </div>
               <div class="msg ai">
                 <div class="avatar a">◆</div>
                 <div class="bubble">
-                  <p>Here's the middleware rewritten with <code style="font-family:var(--mono);font-size:.9em">async/await</code> and clean error propagation:</p>
-<pre class="code"><span class="tok-key">export async function</span> <span class="tok-fn">auth</span>(req, res, next) {
-  <span class="tok-key">try</span> {
-    <span class="tok-key">const</span> token = req.headers.authorization?.<span class="tok-fn">split</span>(<span class="tok-str">' '</span>)[<span class="tok-num">1</span>];
-    <span class="tok-key">if</span> (!token) <span class="tok-key">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">401</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">'No token'</span> });
-    req.user = <span class="tok-key">await</span> <span class="tok-fn">verify</span>(token);
-    <span class="tok-fn">next</span>();
-  } <span class="tok-key">catch</span> (err) {
-    <span class="tok-fn">next</span>(err); <span class="tok-com">// forward to the error handler</span>
-  }
-}</pre>
-                  <p class="msg-note">Generated locally on your Mac — nothing left your device</p>
+                  <pre class="code"><span class="tok-key">def</span> <span class="tok-fn">merge_intervals</span>(intervals: list[list[int]]) -&gt; list[list[int]]:
+    <span class="tok-str">"""Merge overlapping intervals.
+
+    Args:
+        intervals: List of [start, end] pairs (inclusive).
+
+    Returns:
+        List of merged non-overlapping intervals.
+    """</span>
+    <span class="tok-key">if not</span> intervals:
+        <span class="tok-key">return</span> []
+
+    <span class="tok-com"># Sort by start time</span>
+    sorted_intervals = <span class="tok-fn">sorted</span>(intervals, key=<span class="tok-key">lambda</span> x: x[<span class="tok-num">0</span>])
+
+    merged = [sorted_intervals[<span class="tok-num">0</span>]]
+
+    <span class="tok-key">for</span> current <span class="tok-key">in</span> sorted_intervals[<span class="tok-num">1</span>:]:
+        last = merged[-<span class="tok-num">1</span>]
+
+        <span class="tok-com"># Overlap or adjacency: merge them</span>
+        <span class="tok-key">if</span> current[<span class="tok-num">0</span>] &lt;= last[<span class="tok-num">1</span>]:
+            merged[-<span class="tok-num">1</span>] = [last[<span class="tok-num">0</span>], <span class="tok-fn">max</span>(last[<span class="tok-num">1</span>], current[<span class="tok-num">1</span>])]
+        <span class="tok-key">else</span>:
+            merged.<span class="tok-fn">append</span>(current)
+
+    <span class="tok-key">return</span> merged</pre>
+                  <p><strong>The edge case most implementations get wrong:</strong> <strong>adjacent intervals</strong> (e.g., <code style="font-family:var(--mono);font-size:.9em">[1, 2]</code> and <code style="font-family:var(--mono);font-size:.9em">[2, 3]</code>). Many implementations use <code style="font-family:var(--mono);font-size:.9em">&lt;</code> instead of <code style="font-family:var(--mono);font-size:.9em">&lt;=</code>, which fails to merge intervals that touch at a single point.</p>
+                  <p class="msg-note">Real output, Outlier Core on an M1 Ultra &mdash; 21 socket samples during this answer, 0 left the Mac</p>
                 </div>
               </div>
             </div>
