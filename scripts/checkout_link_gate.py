@@ -118,6 +118,20 @@ def main() -> int:
             continue
 
         ok = 200 <= status < 300 and "/checkout/" in final and size >= MIN_BYTES
+        # MERGED FROM checkout_gate.py (977c6f17), which this file now replaces:
+        # reaching a checkout page is not the same as reaching the RIGHT one. The
+        # price is already declared in EXPECTED's label, so it is read from there
+        # rather than retyped — a price typed twice is the bug that started all this.
+        want = re.search(r"\$\d+", EXPECTED.get(link_id, "") or "")
+        price_ok = True
+        if ok and want:
+            text = body.decode("utf-8", "replace") if isinstance(body, (bytes, bytearray)) else body
+            price_ok = bool(re.search(re.escape(want.group(0)) + r"(?!\d)", text))
+            if not price_ok:
+                failures.append(
+                    f"    {EXPECTED[link_id]} ({link_id[:26]}...) opens a real checkout, but "
+                    f"{want.group(0)} is NOT on that page. The door opens onto the wrong till.")
+        ok = ok and price_ok
         print(f"  {label:16s} {link_id[:26]}...  {status}  {size:,}b  "
               f"{'checkout' if '/checkout/' in final else 'NOT a checkout page'}"
               f"  x{len(where)}{injected}")
@@ -148,8 +162,9 @@ def main() -> int:
         return 1
 
     print(f"OK: {len(found)} checkout link(s), each reaching a real Polar checkout page.")
-    print("This proves the door opens, not that the till is right — ops/bin/checkout-price-gate.py")
-    print("checks the amount against the live product.")
+    print("Each also carries the price declared for it in EXPECTED, so this proves the")
+    print("door opens AND the till reads right. ops/bin/checkout-price-gate.py still")
+    print("checks the amount against the live Polar product, which is the other half.")
     return 0
 
 

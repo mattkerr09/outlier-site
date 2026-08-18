@@ -269,6 +269,60 @@ def build_run_pages(models, macs) -> list[dict]:
             f"{mac['memory_bandwidth_gbs']}&nbsp;/&nbsp;800 = <strong>{bw_ratio:.2f}&times;</strong> "
             f"the published M1 Ultra number.</p>"
         )
+        # ── sustained vs burst: the one axis these pages could not differentiate on ──
+        #
+        # WHY THIS EXISTS. seo_lint reported 291 DUP pairs, worst at 78%, and the
+        # worst was run-nano-on-m1-mac-mini ~ run-nano-on-m1-macbook-air. That was
+        # not a writing problem. In macs.csv those two rows were IDENTICAL on every
+        # field this renderer had — same chip, same 8 CPU cores, same 8|16 GB, same
+        # 68.25 GB/s, same year. A generator cannot differentiate pages when its
+        # inputs do not differ, so no amount of rephrasing would have fixed it.
+        #
+        # `cooling` and `chassis` were added to macs.csv for this. They are plain
+        # verifiable facts from Apple's own spec pages — six MacBook Airs are
+        # fanless, the other twenty-one are actively cooled — not a score anyone has
+        # to trust us on.
+        #
+        # NO THROUGHPUT NUMBERS ARE INVENTED HERE, deliberately. The honest claim is
+        # the mechanism and its direction; the magnitude has not been measured on
+        # these machines, and the paragraph says so. A figure a stranger cannot
+        # reproduce is the thing this site exists to argue against.
+        body.append(f"<h2>Does {mac['name']} hold that speed on a long job?</h2>")
+        decode_load = ("a long unattended run" if float(m["disk_gb"]) >= 20
+                       else "a sustained back-and-forth session")
+        if mac["cooling"] == "fanless":
+            body.append(
+                f"<p>The {mac['name']} is <strong>fanless</strong>. The figure above is a "
+                f"burst ceiling, and burst is not what {decode_load} asks for: decoding "
+                f"{m['display_name']} keeps the GPU busy continuously, the chassis is the "
+                f"only heatsink, and the SoC down-clocks once it saturates. Expect the "
+                f"first minutes to look like the number above and a long job to settle "
+                f"below it. On battery it settles lower again. "
+                f"<em>Direction verified, magnitude not measured on this machine</em> — "
+                f"we publish the mechanism rather than a throttle figure we have not "
+                f"reproduced.</p>"
+            )
+        elif mac["chassis"] == "desktop":
+            body.append(
+                f"<p>The {mac['name']} is a <strong>desktop with active cooling</strong>, "
+                f"which is the configuration that comes closest to holding the figure "
+                f"above through {decode_load}. There is no battery to trade against and "
+                f"no lap to keep cool, so the limit on {m['display_name']} here is the "
+                f"{mac['memory_bandwidth_gbs']} GB/s memory bus rather than the thermal "
+                f"envelope. This is the shape of machine to pick if the job runs "
+                f"unattended.</p>"
+            )
+        else:
+            body.append(
+                f"<p>The {mac['name']} is a <strong>laptop with active cooling</strong> — "
+                f"it holds clocks through {decode_load} far longer than a fanless Air, "
+                f"and it will be audible while it does. Its thermal envelope is still "
+                f"smaller than a desktop of the same chip, so a {m['disk_gb']} GB model "
+                f"decoding for a long stretch sits between the two: closer to the figure "
+                f"above than an Air, not quite a Mac Studio. Plugged in matters here as "
+                f"much as it does on any laptop.</p>"
+            )
+
         body.append("<h2>How much memory does the model take during generation?</h2>")
         body.append(
             f"<p>Outlier&rsquo;s {m['display_name']} has a measured peak generation footprint of about "
