@@ -213,6 +213,21 @@
     .msg.ai .bubble p{margin:0 0 .55rem;line-height:1.55;}
     .code{font-family:var(--mono);font-size:0.65rem;line-height:1.68;color:#d8d2ec;background:#0e0b1a;border:1px solid #221d38;
       border-radius:10px;padding:.7rem .82rem;overflow-x:auto;white-space:pre;margin:.18rem 0 .5rem;}
+
+    /* offline proof — real lsof capture, see #why */
+    .proof{margin-top:1.15rem;border:1px solid var(--border);background:#0b0916;border-radius:12px;overflow:hidden;}
+    .proof-head{display:flex;align-items:center;gap:.5rem;padding:.58rem .85rem;border-bottom:1px solid var(--border);
+      font-family:var(--mono);font-size:0.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dim);}
+    .proof-head b{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);flex:none;}
+    .proof pre{font-family:var(--mono);font-size:0.63rem;line-height:1.72;color:#d8d2ec;padding:.75rem .85rem;
+      overflow-x:auto;white-space:pre;margin:0;}
+    .proof .p-cmd{color:var(--v0);}
+    .proof .p-lo{color:var(--green-light);}
+    .proof .p-dim{color:var(--text-faint);}
+    .proof-foot{padding:.62rem .85rem .78rem;border-top:1px solid var(--border);font-size:0.79rem;
+      color:var(--text-mid);line-height:1.62;}
+    .proof-foot strong{color:var(--text);}
+    .proof-foot code{font-family:var(--mono);font-size:.88em;color:var(--v0);}
     .tok-key{color:#c77dff;}.tok-fn{color:#8ab4ff;}.tok-str{color:#6ee7b7;}.tok-num{color:#fbbf24;}.tok-com{color:var(--text-faint);}
     .msg-note{font-family:var(--mono);font-size:0.65rem;color:var(--text-faint);display:flex;align-items:center;gap:.4rem;}
     .msg-note::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
@@ -654,6 +669,14 @@
         <h2>Your prompts never<br><span class="accent">leave your Mac.</span></h2>
       </div>
       <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Only model downloads and optional web search ever touch the network</strong> — and only when you choose. No telemetry on inference. The open-weight models are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>.</p>
+      <div class="proof reveal d2">
+        <div class="proof-head"><b></b>Verified while the model was answering</div>
+<pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
+outlier-c 62303  22u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<span class="p-lo">127.0.0.1</span>:56293 (ESTABLISHED)
+outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTEN)
+<span class="p-dim"># sampled 17&times; across a real 27s answer — sockets leaving this Mac: 0</span></pre>
+        <div class="proof-foot">Every socket Outlier holds is <strong>127.0.0.1</strong> &mdash; your own machine. We sampled it seventeen times while a model was mid-answer and found <strong>zero</strong> connections to anywhere else. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns 357 sockets belonging to every <em>other</em> process &mdash; which is how a check like this can quietly prove nothing.</div>
+      </div>
     </div>
     <div class="flowcard reveal d1">
       <div class="flow good">
