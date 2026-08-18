@@ -74,8 +74,18 @@ UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
 
 #: The checkout links this site is supposed to have. Declared, so that a link
 #: quietly disappearing is a failure rather than a smaller number.
+#
+# MONTHLY REMOVED 2026-08-18. Matthew: "lets not do monthly and only do 249 for
+# outlier." The Pro $9/mo tier and its checkout link are gone from the site, so the
+# entry for polar_cl_jpQY... is deleted here rather than left to fail — the gate
+# correctly caught its disappearance, which is what the "quietly disappearing is a
+# failure" rule above is for.
+#
+# ⚠️ THE POLAR MONTHLY CHECKOUT ITSELF IS STILL LIVE AND STILL CHARGES $9/mo.
+# Removing the offer from the site hides the link; it does not close the product.
+# Closing it needs Polar access nobody on this machine has, and is with Matthew.
+
 EXPECTED = {
-    "polar_cl_jpQYwPwQEvX2zBw10oD2KfKP9yYTcn59JShy82GiJom": "Pro, $9/mo",
     "polar_cl_9tPoCY5d2jVaRY7aU7DOH9pd3lV5kelZatIzJ2tZH6h": "Lifetime, $249",
 }
 
