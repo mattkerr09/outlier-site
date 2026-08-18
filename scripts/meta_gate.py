@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Every gate must be unable to report a false clean. This checks that, by running them.
 
-WHY THIS EXISTS. The single largest error class in this repo's session audit
-(~/ops/AUDIT-outlier-site-2026-08-18.md) was twelve instances of one mistake:
+WHY THIS EXISTS. The single largest error class in this repo's session review was
+twelve instances of one mistake:
 *inspecting an artefact that was not the one a conclusion was drawn about*. The
 corollary is that **a clean result is only as wide as the thing you pointed at** —
 a check narrowed to part of a problem reports clean about that part forever.
