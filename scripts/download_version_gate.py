@@ -19,7 +19,19 @@ WHAT IT CHECKS
   1. every download URL names the latest published tag
   2. the tag segment and the filename segment agree with each other (they drifted
      apart once already: byline said 1.11.628 while the button said 1.11.477)
-  3. it actually found some URLs — see below
+  3. the three places index.html states the current version in PROSE rather than
+     in an href — the nav badge, the hero trust line, and the JSON-LD
+     softwareVersion that search engines read. 68b5a062 fixed exactly this: the
+     page advertised 788 in words beside a 790 button, and a gate that only reads
+     hrefs reported PASS throughout.
+
+     It does NOT touch the version numbers in the benchmark rows ("0/50 · blind ·
+     all 50 patches empty · v1.11.788") or the methodology line. Those are
+     provenance — which build produced which score — and bumping them to the
+     current release would turn a true record into a false claim. That is why
+     each prose site is matched by an exact anchor instead of a blanket
+     "every version must be current" sweep.
+  4. it actually found some URLs, and every prose anchor still matches — see below
 
 THE VACUITY GUARD IS NOT OPTIONAL. A scan that finds zero URLs prints exactly
 what a clean scan prints. Three separate instruments lied by returning empty
@@ -48,6 +60,15 @@ MIN_URLS = 40
 DL_RE = re.compile(
     r"releases/download/v(\d+\.\d+\.\d+)/Outlier-(\d+\.\d+\.\d+)-arm64\.dmg"
 )
+
+#: Places index.html asserts the CURRENT downloadable version in prose. Each entry
+#: must match at least once: a pattern that stops matching has silently stopped
+#: covering its site, which reads identically to a clean pass.
+PROSE_SITES = [
+    ("nav badge",           re.compile(r'class="nav-ver">v(\d+\.\d+\.\d+)')),
+    ("hero trust line",     re.compile(r'class="trust[^"]*">v(\d+\.\d+\.\d+)\s*&middot;|class="trust[^"]*">v(\d+\.\d+\.\d+)\s*·')),
+    ("JSON-LD softwareVersion", re.compile(r'"softwareVersion":\s*"(\d+\.\d+\.\d+)"')),
+]
 
 
 def latest_tag() -> str:
@@ -107,9 +128,35 @@ def main(root_arg: str = ".") -> int:
         print("\n  These URLs almost certainly return 200 — GitHub keeps old assets.")
         print("  A link checker cannot catch this; that is why this gate exists.")
 
-    if stale or mismatched:
+    # --- prose sites: the half an href-only gate cannot see -------------------
+    prose_fails = []
+    index = root / "index.html"
+    if not index.exists():
+        prose_fails.append(f"index.html not found at {index} — prose checks did not run")
+    else:
+        text = index.read_text(encoding="utf-8", errors="ignore")
+        for label, rx in PROSE_SITES:
+            found = [g for m in rx.finditer(text) for g in m.groups() if g]
+            if not found:
+                prose_fails.append(
+                    f"{label}: pattern matched NOTHING. Either the markup changed or the "
+                    f"line was removed — either way this site is no longer covered, which "
+                    f"looks exactly like passing. Re-point the anchor.")
+                continue
+            bad = [v for v in found if v != current]
+            print(f"  prose {label:<24} v{found[0]}" + ("  <- STALE" if bad else ""))
+            if bad:
+                prose_fails.append(f"{label}: says v{bad[0]}, current release is v{current}")
+
+    if prose_fails:
+        print(f"\nFAIL: {len(prose_fails)} prose version problem(s):")
+        for f in prose_fails:
+            print(f"  {f}")
+        print("\n  These are words, not links, so the download-URL check above cannot see them.")
+
+    if stale or mismatched or prose_fails:
         return 1
-    print(f"\nPASS — all {len(hits)} download URLs name v{current}")
+    print(f"\nPASS — {len(hits)} download URLs and {len(PROSE_SITES)} prose sites all name v{current}")
     return 0
 
 
