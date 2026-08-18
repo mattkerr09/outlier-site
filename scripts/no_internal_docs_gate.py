@@ -64,7 +64,10 @@ def main(root_arg: str = ".") -> int:
     rx = re.compile("|".join(MARKERS), re.I | re.M)
 
     # Vacuity control: the detector must flag a known-bad sample every run.
-    if not rx.search("If you are outlier-fa: STAND DOWN"):
+    # Synthetic fixture, deliberately not a real note: this file is served, and
+    # quoting an actual internal line as a test sample would publish the thing
+    # the gate exists to keep unpublished.
+    if not rx.search("handoff: the other worker should stand down"):
         print("FAIL: detector does not flag known internal text. Instrument broken.")
         return 1
 
@@ -94,7 +97,7 @@ def main(root_arg: str = ".") -> int:
         for f, hits in bad:
             print(f"  {f}  ->  {', '.join(hits[:5])}")
         print("\n  This repo IS the website: every tracked file is published. Move it to")
-        print("  ~/ops or the parent repo, or delete it. Do not solve it by renaming.")
+        print("  a directory outside this repository, or delete it. Renaming is not a fix.")
         return 1
 
     print(f"\nPASS — no internal coordination text in {len(files)} servable files.")
