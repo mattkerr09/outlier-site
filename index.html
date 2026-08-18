@@ -271,6 +271,13 @@
 
     /* ---------- privacy split (Outlier-native "on-device vs cloud") ---------- */
     .split{display:grid;grid-template-columns:1.02fr .98fr;gap:3rem;align-items:center;max-width:1080px;margin:0 auto;}
+    /* Grid items default to min-width:auto, so a child that cannot wrap (the offline
+       proof's white-space:pre block) sets the column's minimum and blows it past the
+       viewport — 501px inside a 333px container on a 375px phone. That defeats the
+       pre's own overflow-x:auto (it never overflows, so it never scrolls) and .proof's
+       overflow:hidden then CLIPS the rest. min-width:0 lets the column shrink so the
+       pre scrolls inside itself instead. */
+    .split > *{min-width:0;}
     .split .sec-head{text-align:left;margin:0;max-width:none;}
     .split .kicker{margin-bottom:1rem;}
     .split h2{text-align:left;}
