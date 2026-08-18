@@ -31,7 +31,11 @@ import re
 import sys
 from pathlib import Path
 
-HREF = re.compile(r'href="([^"]+)"')
+HREF = re.compile(r'(?:href|src|poster)="([^"]+)"')
+#: Absolute URLs to our OWN domain are internal links wearing an external coat.
+#: Three broken nav logos were invisible to a filesystem scan for exactly this
+#: reason — https://outlier.host/icon.png 404s just as surely as /icon.png does.
+SELF = re.compile(r'^https?://(?:www\.)?outlier\.host')
 SKIP = ("http://", "https://", "mailto:", "tel:", "#", "data:", "javascript:")
 MIN_LINKS = 500
 
@@ -58,7 +62,9 @@ def main(root_arg: str = ".") -> int:
         except OSError:
             continue
         for href in HREF.findall(text):
-            if href.startswith(SKIP):
+            if SELF.match(href):
+                href = SELF.sub("", href) or "/"
+            elif href.startswith(SKIP):
                 continue
             target = href.split("#")[0].split("?")[0]
             if not target:
