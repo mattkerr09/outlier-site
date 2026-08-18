@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
 TPL_DIR = ROOT / "_seo_build" / "templates"
 SITE_URL = "https://outlier.host"
-APP_VERSION = "1.11.788"
+APP_VERSION = "1.11.790"
 TODAY = date.today().isoformat()
 
 env = Environment(
