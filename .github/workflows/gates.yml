@@ -43,6 +43,7 @@ jobs:
           python3 scripts/internal_link_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
+          python3 scripts/figure_provenance_gate.py .
           python3 scripts/meta_gate.py .
 
       - name: Gates that check live third parties
