@@ -117,7 +117,8 @@ def main() -> int:
             failures.append(f"    {label} ({link_id[:26]}...): checkout unreachable — {exc}")
             continue
 
-        ok = 200 <= status < 300 and "/checkout/" in final and size >= MIN_BYTES
+        reachable = 200 <= status < 300 and "/checkout/" in final and size >= MIN_BYTES
+        ok = reachable
         # MERGED FROM checkout_gate.py (977c6f17), which this file now replaces:
         # reaching a checkout page is not the same as reaching the RIGHT one. The
         # price is already declared in EXPECTED's label, so it is read from there
@@ -135,7 +136,11 @@ def main() -> int:
         print(f"  {label:16s} {link_id[:26]}...  {status}  {size:,}b  "
               f"{'checkout' if '/checkout/' in final else 'NOT a checkout page'}"
               f"  x{len(where)}{injected}")
-        if not ok:
+        # Only claim the button is unreachable when it actually is. When the page
+        # loads fine and only the PRICE is wrong, the price failure above already
+        # said so precisely — adding "does not reach a card form" would be false,
+        # and a gate that misreports its own finding is the bug it exists to catch.
+        if not ok and not (reachable and not price_ok):
             failures.append(
                 f"    {label} ({link_id[:26]}...): GET returned {status}, {size} bytes, "
                 f"landed on {final}. A customer clicking Buy does not reach a card form.")
