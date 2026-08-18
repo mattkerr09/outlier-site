@@ -731,12 +731,12 @@
       </div>
       <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Only model downloads and optional web search ever touch the network</strong> — and only when you choose. No telemetry on inference. The open-weight models are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>.</p>
       <div class="proof reveal d2">
-        <div class="proof-head"><b></b>Verified while the model was answering</div>
+        <div class="proof-head"><b></b>Verified while the model was answering &mdash; 2026-08-18, Outlier Core</div>
 <pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
 outlier-c 62303  22u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<span class="p-lo">127.0.0.1</span>:56293 (ESTABLISHED)
 outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTEN)
 <span class="p-dim"># sampled 17&times; across a real 27s answer — sockets leaving this Mac: 0</span></pre>
-        <div class="proof-foot">Every socket Outlier holds is <strong>127.0.0.1</strong> &mdash; your own machine. We sampled it seventeen times while a model was mid-answer and found <strong>zero</strong> connections to anywhere else. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns 357 sockets belonging to every <em>other</em> process &mdash; which is how a check like this can quietly prove nothing.</div>
+        <div class="proof-foot">Every socket Outlier holds is <strong>127.0.0.1</strong> &mdash; your own machine. We sampled it seventeen times while a model was mid-answer and found <strong>zero</strong> connections to anywhere else. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns every socket on the machine instead &mdash; 347 when this was captured, and a different number each time you run it, because it counts every other process too. That is how a check like this can quietly prove nothing.</div>
       </div>
     </div>
     <div class="flowcard reveal d1">

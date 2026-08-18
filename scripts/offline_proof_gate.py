@@ -57,7 +57,12 @@ CONTROL = re.compile(r"-a</code>\s*is load-bearing|<code>-a</code> is load-beari
                      r"-a\s+is load-bearing")
 SEVEN_NUM = re.compile(r"sampled\s+17\s*(?:&times;|×)")
 SEVEN_WORD = re.compile(r"sampled it seventeen times", re.I)
-THREE57 = re.compile(r"\b357\b")
+# The machine-wide socket count FLUCTUATES — 324/328/347/357 were all observed
+# within minutes on 2026-08-18. Pinning one exact figure pinned a number no
+# reader could ever reproduce; the page now cites 347 (what the capture itself
+# recorded) and says plainly that it differs every run. What must survive is the
+# EXPLANATION, not a specific integer.
+THREE57 = re.compile(r"returns every socket on the machine|\b3[0-9]{2}\b")
 
 
 def main() -> int:
