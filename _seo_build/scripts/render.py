@@ -374,11 +374,31 @@ def build_run_pages(models, macs) -> list[dict]:
             )
 
         body.append("<h2>How much memory does the model take during generation?</h2>")
+        # ── PER-SKU HEADROOM: the one axis that is a function of BOTH model and Mac ──
+        #
+        # The negative result at the top of this file stands: branch text is constant
+        # within its branch, so a paragraph keyed on a CATEGORY both pages share adds
+        # only shared shingles. This is keyed on neither category — it is arithmetic
+        # over this tier's ram_peak_gb and THIS Mac's full memory ladder, so the digits
+        # differ for almost every cell of the grid. Measured: of the 15 same-model
+        # pairs above 0.50, twelve differ on unified_ram_gb or memory_bandwidth_gbs.
+        #
+        # Only the ladder is printed, never a throughput figure — nothing here is
+        # measured on these machines, and the existing bandwidth-ratio paragraph
+        # already says so.
+        rungs = [int(x) for x in str(mac["unified_ram_gb"]).split("|") if x.strip().isdigit()]
+        peak = float(m["ram_peak_gb"])
+        parts = []
+        for gb in rungs:
+            left = gb - peak - 4          # 4 GB for OS + a browser tab, stated below
+            parts.append(f"{gb}&nbsp;GB &rarr; {left:.1f} GB free" if left >= 0
+                         else f"{gb}&nbsp;GB &rarr; {abs(left):.1f} GB short")
+        ladder = "; ".join(parts)
         body.append(
             f"<p>Outlier&rsquo;s {m['display_name']} has a measured peak generation footprint of about "
-            f"{m['ram_peak_gb']} GB. The {mac['name']} base configuration ships with "
-            f"{mac['unified_ram_gb']} GB unified, and the rule of thumb is to leave roughly 4 GB for the "
-            f"OS and one open browser tab. {est_line}</p>"
+            f"{m['ram_peak_gb']} GB. The rule of thumb is to leave roughly 4 GB for the OS and one open "
+            f"browser tab, so across the {mac['name']} memory options that leaves "
+            f"{ladder}. {est_line}</p>"
         )
         body.append(f"<h2>What is the install path on {mac['name']} for {m['display_name']}?</h2>")
         # Mac-flavored opener (year + chip + RAM) keeps the install paragraph distinct
