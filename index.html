@@ -25,10 +25,27 @@
   <meta name="twitter:title" content="Outlier — A private, offline alternative to cloud AI like Claude and ChatGPT.">
   <meta name="twitter:description" content="A private, offline alternative to cloud AI like Claude and ChatGPT — local AI on your Mac, no caps, no data centers, nothing leaves your device. Help build the offline coding-agent platform.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&f[]=satoshi@500,700,900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- FONTS ARE SELF-HOSTED. This is a product claim, not a performance tweak.
+       Outlier's headline is that nothing leaves your Mac. Until 2026-08-18 this
+       page opened four connections to Google and Fontshare before a visitor
+       read a word, so the network tab disproved the hero copy on the way in —
+       to the privacy-minded buyer who is the best customer here, and the most
+       likely to look. crispvideo.app fixed the same contradiction and now
+       loads zero third-party hosts for an ordinary visitor; this follows it.
+
+       It also fixed a real bug. The Fontshare request asked for clash-display
+       AND satoshi in one call, and their API silently returns only the first
+       family — verified 2026-08-18: satoshi requested alone returns 3 faces,
+       requested alongside clash-display returns none. So --head:'Satoshi' has
+       been falling back to Clash Display on all 11 headings, after paying a
+       round trip for a font that never arrived. Self-hosting makes that
+       impossible to regress: the file is either in the repo or it is not.
+
+       woff2 only (every browser since 2016 has it); the woff/ttf fallbacks the
+       providers ship were dropped. 17 files, 330 KB, served first-party. -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/304cd1e39b.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/a18ee4a68c.woff2" crossorigin>
+  <link rel="stylesheet" href="/fonts/fonts.css">
   <style>
     /* ============================================================
        OUTLIER — the most powerful private AI, fully on your Mac.
