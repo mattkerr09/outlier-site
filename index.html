@@ -278,6 +278,11 @@
        overflow:hidden then CLIPS the rest. min-width:0 lets the column shrink so the
        pre scrolls inside itself instead. */
     .split > *{min-width:0;}
+    /* Same defect one level down: .app is a grid whose item (section.chat) also
+       defaulted to min-width:auto, so the real captured code in pre.code (443px,
+       white-space:pre) set a 518px floor inside a 331px window and .macwin's
+       overflow:hidden clipped both chat bubbles off the right of a phone screen. */
+    .app > *{min-width:0;}
     .split .sec-head{text-align:left;margin:0;max-width:none;}
     .split .kicker{margin-bottom:1rem;}
     .split h2{text-align:left;}
