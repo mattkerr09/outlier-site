@@ -62,7 +62,7 @@
       --glass:rgba(20,16,36,.58);
       --border:#211c37; --border-lit:#332b52; --hair:rgba(255,255,255,.07);
 
-      --text:#f3f1fa; --text-mid:#a9a3c0; --text-dim:#6f688c; --text-faint:#4c4668;
+      --text:#f3f1fa; --text-mid:#a9a3c0; --text-dim:#9691ad; --text-faint:#8780a9;
 
       /* signature spectrum: magenta-violet → violet → indigo */
       --v0:#e4c7ff; --v1:#c77dff; --v2:#a855f7; --v3:#7b6cf6; --v4:#6366f1;
@@ -352,7 +352,22 @@
        conditions stated - and it was set at 12.48px in #6f688c, which is
        3.89:1 against this background and FAILS WCAG AA for text this size.
        Centred, too, which is wrong for prose this long. Now 15.2px in
-       --text-mid (8.37:1) and left-aligned. Measured, not eyeballed. */
+       --text-mid (8.37:1) and left-aligned. Measured, not eyeballed.
+
+       2026-08-18: that fix moved THIS element and left the token alone, so
+       every other use of --text-dim (22) and --text-faint (9) went on failing
+       - and they are the smallest text on the page, 10.4px and 12.3px, which
+       is the hardest to read given the worst contrast. Backwards.
+
+       Both tokens are now lifted at the source, keeping hue and saturation and
+       keeping the ladder visible so the three tiers still read as three tiers:
+         --text-mid    #a9a3c0  7.03:1   (unchanged)
+         --text-dim    #6f688c -> #9691ad  3.26 -> 5.60
+         --text-faint  #4c4668 -> #8780a9  1.93 -> 4.60
+       Ratios are against --surface-3 #1d1836, the LIGHTEST background these
+       sit on and therefore the worst case for light text. AA needs 4.5 at
+       these sizes; the old --text-faint was 1.93, which fails even the 3.0
+       large-text floor it was never eligible for. */
     .provenance{font-family:var(--mono);font-size:0.9rem;color:var(--text-mid);text-align:left;margin:1.4rem auto 0;line-height:1.7;max-width:78ch;}
 
     /* ---------- hardware fit ---------- */
