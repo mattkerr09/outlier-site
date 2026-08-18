@@ -16,6 +16,18 @@ for the vocabulary of internal process — task-routing chatter, internal tool
 paths, commit-trailer actors, hand-off instructions. A file is internal because
 of what it says, not what it is called, so renaming is not a way past it.
 
+NOTHING IS EXCLUDED AT THE HOST, SO THIS GATE IS THE ONLY PROTECTION. Verified
+2026-08-18: outlier.host is served by a static host (`server: openresty`,
+`x-service: pixie-sh`), NOT GitHub Pages — the Pages API returns 404 for this
+repo. The whole repository is synced to that host, and path exclusion is
+configured there, outside this repo. A Jekyll _config.yml was tried and had no
+effect at all; it was reverted rather than left in place, because an inert
+safety mechanism is worse than none — it stops the next person looking for the
+real one.
+
+So the contents of every tracked file must be safe to read. There is no second
+line of defence to fall back on.
+
 SCOPE IS EVERY SERVABLE FILE, NOT JUST PROSE. An earlier version checked only
 .md/.txt/.json/.yml and reported clean while the .py files beside it were served
 too. Static hosting does not care about file extensions; if it is tracked, it is
