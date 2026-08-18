@@ -1,0 +1,33 @@
+# Stops GitHub Pages serving files that are in this repo to BUILD the site
+# rather than to BE the site.
+#
+# Until now nothing was excluded: there was no _config.yml and no .nojekyll, so
+# every tracked file was readable over HTTP. scripts/*.py, .github/workflows/,
+# _seo_build/ and .gitignore all returned 200 — verified by request, not assumed.
+# The gate written to stop internal notes being published was itself published,
+# quoting the note it existed to protect.
+#
+# Sanitising those files was the first fix and it was the smaller one: it made
+# the contents safe to read. This makes them not served at all, which is the
+# property actually wanted.
+#
+# SAFE HERE, MEASURED BEFORE ENABLING: introducing this file switches Jekyll on.
+# Jekyll renders pages with YAML front matter and runs Liquid over them; every
+# other file it copies verbatim. Checked first — no page under this root has
+# front matter, and no served .html contains {{ or {%. The single file with
+# Liquid syntax is _seo_build/templates/_base.html, which is excluded below and
+# is a build input, never served. So there is nothing for Liquid to mangle.
+#
+# Fully reversible: delete this file and Pages goes back to serving the branch
+# raw. Verify after any change to it by REQUESTING the paths, not by reading it.
+
+exclude:
+  - scripts/          # the gates: build tooling, not site content
+  - _seo_build/       # generator source and templates
+  - .github/          # CI workflows
+  - .gitignore
+  - README.md         # repo-facing, not visitor-facing
+  - "*.py"
+
+# Nothing else about the site is Jekyll-driven. No theme, no layouts, no
+# collections — the HTML is hand-written and generated, and is copied as-is.
