@@ -344,6 +344,16 @@
     .flow-arrow svg{width:18px;height:18px;}
 
     /* ---------- tables (comparison / models) ---------- */
+    /* measured-data chart — four tiers that have an MMLU number; Plus and Vision
+       are deliberately absent because theirs is "Not measured". */
+    .bchart{width:100%;height:auto;max-width:640px;margin:0 0 1.6rem;display:block;}
+    .bchart .cg{stroke:var(--hair);stroke-width:1;}
+    .bchart .cl{font-family:var(--mono);font-size:10px;fill:var(--text-faint);}
+    .bchart .ca{text-anchor:end;} .bchart .cc{text-anchor:middle;} .bchart .ce{text-anchor:end;}
+    .bchart .cn{fill:var(--text-mid);font-size:11px;}
+    .bchart .cpath{fill:none;stroke:var(--v2);stroke-width:2;stroke-linecap:round;opacity:.55;}
+    .bchart .cdot{fill:var(--v1);stroke:var(--bg);stroke-width:2;}
+    .chart-note{font-family:var(--mono);font-size:0.66rem;color:var(--text-faint);margin:-.9rem 0 1.7rem;}
     .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
     table{border-collapse:collapse;width:100%;font-size:0.9rem;}
     th,td{padding:.9rem 1.05rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
@@ -908,6 +918,8 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       <h2>Every number here <span class="accent">came from a run.</span></h2>
       <p>Benchmarks for the shipping tiers, measured on this hardware against the shipping build. Where a tier has not been measured, the cell says so rather than carrying an estimate.</p>
     </div>
+    <svg viewBox="0 0 640 300" class="bchart" role="img" aria-label="MMLU against required unified memory for the four measured tiers: Nano 53% at 6 GB, Lite 77.5% at 12 GB, Quick 81.5% at 16 GB, Core 89.5% at 24 GB."><line x1="52" y1="234.5" x2="622" y2="234.5" class="cg"/><text x="44" y="238.5" class="cl ca">50</text><line x1="52" y1="183.4" x2="622" y2="183.4" class="cg"/><text x="44" y="187.4" class="cl ca">60</text><line x1="52" y1="132.3" x2="622" y2="132.3" class="cg"/><text x="44" y="136.3" class="cl ca">70</text><line x1="52" y1="81.3" x2="622" y2="81.3" class="cg"/><text x="44" y="85.3" class="cl ca">80</text><line x1="52" y1="30.2" x2="622" y2="30.2" class="cg"/><text x="44" y="34.2" class="cl ca">90</text><text x="99.5" y="282" class="cl cc">6 GB</text><text x="242.0" y="282" class="cl cc">12 GB</text><text x="337.0" y="282" class="cl cc">16 GB</text><text x="527.0" y="282" class="cl cc">24 GB</text><path d="M99.5 219.1 L242.0 94.0 L337.0 73.6 L527.0 32.8" class="cpath"/><circle cx="99.5" cy="219.1" r="7.5" class="cdot"/><text x="99.5" y="204.6" class="cl cc cn">Nano 53.0%</text><circle cx="242.0" cy="94.0" r="8.2" class="cdot"/><text x="242.0" y="78.8" class="cl cc cn">Lite 77.5%</text><circle cx="337.0" cy="73.6" r="10.0" class="cdot"/><text x="337.0" y="56.7" class="cl cc cn">Quick 81.5%</text><circle cx="527.0" cy="32.8" r="9.9" class="cdot"/><text x="527.0" y="15.9" class="cl cc cn">Core 89.5%</text><text x="12" y="14" class="cl">MMLU</text><text x="622" y="282" class="cl ce">RAM your Mac needs</text></svg>
+    <p class="chart-note">Dot size follows disk footprint. Plus and Vision are absent because their MMLU is not measured &mdash; the table below says so rather than filling the gap.</p>
     <div class="tbl-wrap models reveal d1">
       <table>
         <thead>
