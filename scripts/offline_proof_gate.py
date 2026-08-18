@@ -55,8 +55,12 @@ PRE = re.compile(r"(?is)<pre[^>]*>(.*?)</pre>")
 TAG = re.compile(r"<[^>]+>")
 CONTROL = re.compile(r"-a</code>\s*is load-bearing|<code>-a</code> is load-bearing|"
                      r"-a\s+is load-bearing")
-SEVEN_NUM = re.compile(r"sampled\s+17\s*(?:&times;|×)")
-SEVEN_WORD = re.compile(r"sampled it seventeen times", re.I)
+# The two spellings must AGREE with each other and with the capture actually
+# displayed in the hero. They were 17/seventeen (capture #1) while the hero showed
+# capture #2's answer — two real runs, but a reader joins them and finds the timings
+# disagree. Now both cite the run whose answer is on the page: 21 across 33s.
+SEVEN_NUM = re.compile(r"sampled\s+21\s*(?:&times;|×)")
+SEVEN_WORD = re.compile(r"sampled it twenty-one times", re.I)
 # The machine-wide socket count FLUCTUATES — 324/328/347/357 were all observed
 # within minutes on 2026-08-18. Pinning one exact figure pinned a number no
 # reader could ever reproduce; the page now cites 347 (what the capture itself
