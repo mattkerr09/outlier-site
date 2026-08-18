@@ -8,13 +8,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Running a 397B model on a 64 GB Mac | Outlier</title>
-  <meta name="description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 10 GB resident by streaming experts from SSD. Measured: 2.1 tok/s. Slow, and it works.">
+  <meta name="description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 10 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-08-12">
   <link rel="canonical" href="https://outlier.host/learn/397b-model-on-64gb-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Running a 397B model on a 64 GB Mac">
-  <meta property="og:description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 10 GB resident by streaming experts from SSD. Measured: 2.1 tok/s. Slow, and it works.">
+  <meta property="og:description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 10 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
   <meta property="og:url" content="https://outlier.host/learn/397b-model-on-64gb-mac/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -23,7 +23,7 @@
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Running a 397B model on a 64 GB Mac">
-  <meta name="twitter:description" content="397B active on a desktop. 10 GB resident, 2.1 tok/s.">
+  <meta name="twitter:description" content="397B active on a desktop. 10 GB resident, 1.59 tok/s.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -113,7 +113,7 @@
         <ul>
           <li>Outlier Plus is a 397B-parameter mixture-of-experts, 17B active per token. The weights are a <strong>209 GB</strong> download.</li>
           <li>It runs on a 64 GB Mac at roughly <strong>10 GB peak resident memory</strong>, because only the experts a token needs are ever in memory.</li>
-          <li>Measured speed: <strong>2.1 tokens per second</strong> on an M1 Ultra. That is slow enough to matter and fast enough to use for hard questions.</li>
+          <li>Measured speed: <strong>1.59 tokens per second</strong> on an M1 Ultra. That is slow enough to matter and fast enough to use for hard questions.</li>
           <li>The constraint is disk, not memory. You need room for 209 GB of weights.</li>
         </ul>
       </div>
@@ -128,7 +128,7 @@
 
       <h2>What it costs</h2>
 
-      <p>Speed. 2.1 tokens per second is roughly a slow typist. You would not hold a conversation at that rate. You would hand it something hard, go and do something else, and come back to an answer that a 9B model would not have produced.</p>
+      <p>Speed. 1.59 tokens per second is roughly a slow typist. You would not hold a conversation at that rate. You would hand it something hard, go and do something else, and come back to an answer that a 9B model would not have produced.</p>
 
       <p>That is the honest positioning. Plus is not the tier you chat with. It is the tier you escalate to.</p>
 
@@ -142,7 +142,7 @@
 
       <ul>
         <li>Peak resident memory measured 2026-06-12 on an M1 Ultra Mac Studio, 64 GB, running the shipping V9 paged engine: 10 GB.</li>
-        <li>Decode speed 2.1 tokens per second, same machine and engine. Speed varies by Mac; SSD bandwidth matters more here than for tiers that fit in memory.</li>
+        <li>Decode speed 1.59 tokens per second, same machine and engine. Speed varies by Mac; SSD bandwidth matters more here than for tiers that fit in memory.</li>
         <li>Model: Qwen3.5-397B-A17B, top-10 routing of 512 experts, MLX 4-bit. 209 GB on disk.</li>
         <li>Minimum memory in our catalog is 64 GB, set from the kernel wired-memory limit rather than from the model size.</li>
       </ul>

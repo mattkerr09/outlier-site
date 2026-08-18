@@ -92,7 +92,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How a 397B model runs on consumer hardware — the architecture", "item": "https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does a 397B model fit on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Four stacked choices: MoE routing, 4-bit quantization, paged expert streaming, and Apple's unified memory. Each cuts the requirement by roughly an order of magnitude."}}, {"@type": "Question", "name": "Why does Apple Silicon help specifically?", "acceptedAnswer": {"@type": "Answer", "text": "Unified memory means SSD-streamed expert weights land directly in GPU-accessible memory with no PCIe copy step, which a PC build would need."}}, {"@type": "Question", "name": "Is it as fast as the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. About 2.1 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How does a 397B model fit on a 64 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Four stacked choices: MoE routing, 4-bit quantization, paged expert streaming, and Apple's unified memory. Each cuts the requirement by roughly an order of magnitude."}}, {"@type": "Question", "name": "Why does Apple Silicon help specifically?", "acceptedAnswer": {"@type": "Answer", "text": "Unified memory means SSD-streamed expert weights land directly in GPU-accessible memory with no PCIe copy step, which a PC build would need."}}, {"@type": "Question", "name": "Is it as fast as the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. About 1.59 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -124,7 +124,7 @@
         <li>Four design choices stacked: MoE routing, 4-bit quantization, paged streaming, Apple unified memory.</li>
         <li>Each one buys roughly 10×. Stack them and 800 GB naive collapses to <strong>11 GB peak RAM</strong>.</li>
         <li>Apple unified memory kills the PCIe copy step a PC build is stuck with.</li>
-        <li>End result: a 397B-parameter MoE model running on a 64 GB Mac at ~2.1 tok/s.</li>
+        <li>End result: a 397B-parameter MoE model running on a 64 GB Mac at ~1.59 tok/s.</li>
       </ul>
     </div>
 
@@ -140,7 +140,7 @@
 
     <h2>Choice 3: paged expert streaming</h2>
     <p>209 GB still doesn't fit in 64 GB of RAM. So you don't load all of it. Paged expert streaming keeps the shared backbone resident, holds a bounded cache of the experts you've used recently, and pulls the rest off the SSD only when a token actually calls for them. The router picks the experts for each token, and the runtime fires off a queue of concurrent SSD reads so the latency hides behind the compute.</p>
-    <p>That's what Outlier's V9 paged engine does. On an M1 Ultra with 64 GB, here's what it measures out to: peak OS-level RSS around 11 GB, decode holding steady at about 2.1 tok/s.</p>
+    <p>That's what Outlier's V9 paged engine does. On an M1 Ultra with 64 GB, here's what it measures out to: peak OS-level RSS around 11 GB, decode holding steady at about 1.59 tok/s.</p>
 
     <h2>Choice 4: Apple unified memory + fast SSD</h2>
     <p>The Mac happens to be built for exactly this pattern. Two reasons stand out.</p>
@@ -161,7 +161,7 @@
     <p>Every step knocks off an order of magnitude. No single trick gets you there. Stacked together, they put the model on hardware a working developer can actually buy.</p>
 
     <h2>The honest tradeoff</h2>
-    <p>None of this beats the cloud on raw speed. Run the same model on a server with 8 H100 GPUs and it's far quicker. Plus 397B does about 2.1 tok/s on your Mac against ~50–80 tok/s on a dedicated server, and that's a real gap, not a rounding error. So what do you get back? No API key. No rate limit. Your code never leaves the machine. No bill once the weights are on disk. For long-form coding, architecture review, anything where waiting a bit is fine, that trade tends to pay off.</p>
+    <p>None of this beats the cloud on raw speed. Run the same model on a server with 8 H100 GPUs and it's far quicker. Plus 397B does about 1.59 tok/s on your Mac against ~50–80 tok/s on a dedicated server, and that's a real gap, not a rounding error. So what do you get back? No API key. No rate limit. Your code never leaves the machine. No bill once the weights are on disk. For long-form coding, architecture review, anything where waiting a bit is fine, that trade tends to pay off.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -175,7 +175,7 @@
       </div>
       <div class="faq-item">
         <h3>Is it as fast as the cloud?</h3>
-        <p>No. About 2.1 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill.</p>
+        <p>No. About 1.59 tok/s locally versus 50 to 80 on a dedicated server. You trade speed for privacy, no API key, and no recurring bill.</p>
       </div>
     </div>
 

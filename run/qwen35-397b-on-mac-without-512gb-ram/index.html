@@ -92,7 +92,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Qwen3.5-397B on a Mac without 512 GB of RAM", "item": "https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you need 512 GB of RAM to run Qwen3.5-397B?", "acceptedAnswer": {"@type": "Answer", "text": "No. With paged expert streaming the model runs on a 64 GB Mac at about 2.1 tok/s and roughly 11 GB peak RAM."}}, {"@type": "Question", "name": "Where are the model weights stored?", "acceptedAnswer": {"@type": "Answer", "text": "On your SSD as MLX 4-bit safetensors, about 209 GB. Experts stream into memory on demand as the router selects them."}}, {"@type": "Question", "name": "Does SSD speed matter?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Internal Apple Silicon NVMe sustaining 5 to 15 GB/s is needed; external Thunderbolt SSDs are roughly half the throughput and run correspondingly slower."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do you need 512 GB of RAM to run Qwen3.5-397B?", "acceptedAnswer": {"@type": "Answer", "text": "No. With paged expert streaming the model runs on a 64 GB Mac at about 1.59 tok/s and roughly 11 GB peak RAM."}}, {"@type": "Question", "name": "Where are the model weights stored?", "acceptedAnswer": {"@type": "Answer", "text": "On your SSD as MLX 4-bit safetensors, about 209 GB. Experts stream into memory on demand as the router selects them."}}, {"@type": "Question", "name": "Does SSD speed matter?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Internal Apple Silicon NVMe sustaining 5 to 15 GB/s is needed; external Thunderbolt SSDs are roughly half the throughput and run correspondingly slower."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -123,7 +123,7 @@
       <ul>
         <li>The MoE design fires only <strong>10 of 512 experts</strong> for any given token.</li>
         <li>Paged expert streaming parks the active experts in RAM and pulls the rest off the SSD.</li>
-        <li>What you get: <strong>11 GB peak RAM, 2.1 tok/s</strong> on a 64 GB Mac Studio Ultra.</li>
+        <li>What you get: <strong>11 GB peak RAM, 1.59 tok/s</strong> on a 64 GB Mac Studio Ultra.</li>
         <li>You'll want an internal NVMe SSD (5–15 GB/s read). External Thunderbolt SSDs run ~2× slower.</li>
       </ul>
     </div>
@@ -140,10 +140,10 @@
       <li>A cache of the experts you've used recently, sized to whatever RAM you've got free.</li>
       <li>An on-disk copy of all 512 experts, ready to read into the cache the moment one's missing.</li>
     </ul>
-    <p>On a 64 GB Mac Studio Ultra running Outlier's V9 paged engine, peak OS-level RSS during Plus 397B generation lands around <strong>11 GB</strong>. The other ~50 GB of RAM goes to the OS and whatever else you've got open. Generation runs at roughly <strong>2.1 tokens per second</strong>. Memory isn't the bottleneck. The SSD is. Specifically, how fast it can pull an expert's weights when the router asks for one that isn't cached.</p>
+    <p>On a 64 GB Mac Studio Ultra running Outlier's V9 paged engine, peak OS-level RSS during Plus 397B generation lands around <strong>11 GB</strong>. The other ~50 GB of RAM goes to the OS and whatever else you've got open. Generation runs at roughly <strong>1.59 tokens per second</strong>. Memory isn't the bottleneck. The SSD is. Specifically, how fast it can pull an expert's weights when the router asks for one that isn't cached.</p>
 
     <h2>What the SSD needs to be</h2>
-    <p>This is where the SSD earns its keep. Apple's first-party Mac Studio SSDs sustain several GB/s of sequential read. A first-generation M1 Ultra reads at ~7 GB/s, and M2 Ultra and M3 Max go higher. Plenty to feed the expert demand for one decoded token every ~340 ms, which is the regime that lands you at ~2.1 tok/s.</p>
+    <p>This is where the SSD earns its keep. Apple's first-party Mac Studio SSDs sustain several GB/s of sequential read. A first-generation M1 Ultra reads at ~7 GB/s, and M2 Ultra and M3 Max go higher. Plenty to feed the expert demand for one decoded token every ~340 ms, which is the regime that lands you at ~1.59 tok/s.</p>
     <p>Two things follow from that.</p>
     <ul>
       <li>External Thunderbolt SSDs are slower, usually 2–3 GB/s sustained. Plus still runs on one, just slower. Figure roughly half the tok/s.</li>
@@ -152,7 +152,7 @@
 
     <h2>The honest tradeoff</h2>
     <p>Nothing here is free, so let's be straight about it. Against the capacity engine (the path that crams everything into RAM), V9 paged inference burns about 10× less peak memory, and the price is being SSD-bound rather than memory-bound. On long contexts, once expert usage settles, the cache holds the hot set and SSD reads taper off. On a fresh prompt the experts are all cold, so every token misses and triggers a read. Your first response is always the slowest one.</p>
-    <p>Against cloud inference, the math is a speed hit of about ~30× (2.1 tok/s versus the ~80–100 you'd get from Claude Opus). In return you get no API key, no rate limit, no shipping your code off to someone's server, and no monthly bill once the model's on disk. If you're doing an architecture review or grinding through a long debugging session or a real code refactor, that swap usually favors running local. For "what's the syntax for X in Python," it doesn't.</p>
+    <p>Against cloud inference, the math is a speed hit of about ~30× (1.59 tok/s versus the ~80–100 you'd get from Claude Opus). In return you get no API key, no rate limit, no shipping your code off to someone's server, and no monthly bill once the model's on disk. If you're doing an architecture review or grinding through a long debugging session or a real code refactor, that swap usually favors running local. For "what's the syntax for X in Python," it doesn't.</p>
 
     <h2>Setting it up</h2>
     <p>Easiest route is Outlier's Mac app. Download the DMG, install it, switch to the Pro tier. Plus 397B needs that Pro tier: $249 lifetime (Founding 200, first 200 seats), or $249 lifetime (Founders 500). The app takes care of the model download, the streaming engine, and the chat / agent UI for you. You can roll your own with <code>mlx-lm</code> and a custom streaming loader, but that's a pile of Python plumbing and you lose everything around it.</p>
@@ -161,7 +161,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Do you need 512 GB of RAM to run Qwen3.5-397B?</h3>
-        <p>No. With paged expert streaming the model runs on a 64 GB Mac at about 2.1 tok/s and roughly 11 GB peak RAM.</p>
+        <p>No. With paged expert streaming the model runs on a 64 GB Mac at about 1.59 tok/s and roughly 11 GB peak RAM.</p>
       </div>
       <div class="faq-item">
         <h3>Where are the model weights stored?</h3>

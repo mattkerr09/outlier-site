@@ -155,7 +155,7 @@
         <tr><td>V11 hybrid LRU</td><td>3.0</td><td>13 GB</td><td>58 GB</td><td>retired v1.11.71</td></tr>
       </tbody>
     </table>
-    <p>Look at the Wired Memory column. That's the one that mattered. V10 and V11 streamed experts per token, which committed 57–58 GB of Metal command-buffer memory during prefill, enough to take down a 32 GB Mac on the very first generation. The payoff was a ~30–40% tok/s bump over V9. V9 paged holds 3.6 GB Wired at 2.1 tok/s, 15× less. This tier exists to fit a 209 GB model on a small Mac, so footprint beats speed and V9 ships.</p>
+    <p>Look at the Wired Memory column. That's the one that mattered. V10 and V11 streamed experts per token, which committed 57–58 GB of Metal command-buffer memory during prefill, enough to take down a 32 GB Mac on the very first generation. The payoff was a ~30–40% tok/s bump over V9. V9 paged holds 3.6 GB Wired at 2.1 tok/s, 15× less. This tier exists to fit a 209 GB model on a small Mac, so footprint beats speed and V9 ships. <strong>On the 2.1 figure:</strong> that is this benchmark's own per-token RSS protocol. The pre-ship K-override sweep, run at the shipped K=20 setting over 5 prompts of 80 tokens with model load timed separately, measures 1.59 tok/s (per-prompt 1.35&ndash;1.65) and 14.04 GB peak. Where the two disagree the rest of this site publishes the lower, shipping-config number; the comparison below is kept on one protocol so the engines stay comparable to each other.</p>
 
     <h2>Vision 35B-A3B — engine comparison</h2>
     <table>

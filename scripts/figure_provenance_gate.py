@@ -98,6 +98,109 @@ def page_figures(root: Path):
     return out
 
 
+
+def check_plus_decode_sitewide(root):
+    """Every page stating a Plus decode rate on an M1 Ultra must state models.csv's.
+
+    Shipped defect this exists for: models.csv and the home page said 1.59 while 73
+    occurrences across 43 other pages said 2.1 -- a ~32% overstatement of the
+    flagship tier, several citing FINAL_LAUNCH_NUMBERS.md, which says 1.59. Twelve
+    gates stayed green because this gate compared only the HOME page against
+    models.csv. A figure is not sourced because one page agrees with the data file.
+
+    Attribution is by NEAREST TIER NAME, not proximity. A first attempt flagged
+    Core's 20.7 and Nano's 71.7 on pages where the word "Plus" merely appeared
+    within 190 characters -- on a lineup page every number is near every tier.
+    """
+    import html as _h
+    root = Path(root)
+    mp = root / "seo" / "_data" / "models.csv"
+    if not mp.is_file():
+        return ["models.csv missing -- cannot verify Plus decode"]
+    plus = next((r for r in csv.DictReader(mp.open()) if r["tier_id"] == "plus"), None)
+    if not plus or not plus.get("m1_ultra_toks"):
+        return ["models.csv has no Plus m1_ultra_toks -- cannot verify"]
+    want = float(plus["m1_ultra_toks"])
+
+    # The engine-comparison dataset measures V9/V10/V11 against each other on its own
+    # per-token RSS protocol; its V9 row must stay on that protocol or the comparison
+    # stops being like-for-like. It carries an inline note reconciling the two.
+    EXEMPT = {"data/v11-streaming-engine-benchmarks/index.html"}
+    TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Vision|Plus|397B)\b", re.I)
+    # models.csv's column is m1_ultra_toks. A figure explicitly about other silicon
+    # is a different measurement, not a contradiction.
+    OTHER_SILICON = re.compile(r"\bM[234]\b|\bM1 (Pro|Max)\b", re.I)
+
+    bad, scanned, checked = [], 0, 0
+    for f in sorted(root.rglob("*.html")):
+        rel = f.relative_to(root).as_posix()
+        if "_seo_build" in rel or rel in EXEMPT:
+            continue
+        scanned += 1
+        raw = f.read_text(errors="replace")
+        # Meta/og/twitter descriptions live INSIDE a tag, so stripping tags deletes
+        # them -- and they are exactly the text search engines and AI crawlers show.
+        # A control aimed at one of them found the gate reading clean on a page whose
+        # search snippet carried the wrong number.
+        metas = " ".join(mm.group(1) for mm in re.finditer(
+            r'<meta[^>]+content="([^"]*)"', raw, re.I))
+        txt = _h.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw) + " " + metas))
+        # A page whose whole subject is Plus states its speed without re-naming the
+        # tier every time; attribution-by-nearest-name alone skips the page's point.
+        page_is_plus = bool(re.search(r"397b|plus", rel, re.I) or
+                            re.search(r"<title>[^<]*(397B|Plus)", raw, re.I))
+        # The site spells the unit at least three ways. A gate that knows one spelling
+        # reports clean on the other two: the first version of this check matched only
+        # "tok/s" and sailed past a control that reintroduced the bug as
+        # "2.1 tokens per second".
+        for m in re.finditer(r"(?<![\d.])(\d+\.\d+)\s*(?:tok/s|tokens?[ /](?:per[ ])?sec(?:ond)?s?\b|tok/sec\b)", txt):
+            before = txt[max(0, m.start() - 260): m.start()]
+            names = TIER.findall(before)
+            if names:
+                if names[-1].lower() not in ("plus", "397b"):
+                    continue                  # nearest tier is not Plus -- not its number
+            elif not page_is_plus:
+                continue                      # unattributed on a page not about Plus
+            # A number carrying its own qualifier ("71.7 tok/s for a 4B model") belongs
+            # to that model, however recently Plus was named in the prose before it.
+            near = txt[max(0, m.start() - 46): m.start() + 46]
+            if re.search(r"\b(4B|9B|26B|27B|35B)\b", near) or re.search(
+                    r"\b(Nano|Lite|Quick|Core|Code|Vision)\b", near, re.I):
+                continue
+            if OTHER_SILICON.search(txt[max(0, m.start() - 160): m.start() + 80]):
+                continue                      # a different machine, not a different claim
+            if re.search(r"estimate|scaled|projected|approx", txt[max(0, m.start() - 200): m.start() + 120], re.I):
+                continue                      # labelled as derived, not measured -- allowed to differ
+            checked += 1
+            if abs(float(m.group(1)) - want) > 0.005:
+                bad.append(f"{rel}: Plus stated at {m.group(1)} tok/s, models.csv says {want}")
+        # Bare figures in a table cell carry no unit -- the unit is in the column
+        # header. Ten of the shipped 2.1s had this shape ("<td>Plus 397B (V9 paged,
+        # K=20)</td><td>2.1</td>"), so a unit-anchored scan alone reports clean on the
+        # single most common form of the defect.
+        for row in re.finditer(r"<tr[^>]*>(.*?)</tr>", raw, re.S | re.I):
+            body = row.group(1)
+            if not re.search(r"Plus|397B", body, re.I):
+                continue
+            if re.search(r"\b(Nano|Lite|Quick|Core|Code|Vision)\b", body, re.I):
+                continue          # a lineup row naming several tiers -- not attributable
+            if re.search(r"estimate|scaled|projected|V10|V11", body, re.I):
+                continue
+            for cell in re.finditer(r"<t[dh][^>]*>\s*~?(\d+\.\d+)\s*(?:tok/s)?\s*</t[dh]>", body, re.I):
+                got = float(cell.group(1))
+                if got > 60 or abs(got - want) <= 0.005:
+                    continue      # >60 cannot be a 397B decode rate; equal is fine
+                if abs(got - want) > 0.005 and got < 60:
+                    bad.append(f"{rel}: Plus table cell says {cell.group(1)}, models.csv says {want}")
+                    checked += 1
+
+    if scanned < 120:
+        return [f"VACUITY: only {scanned} pages scanned; expected 120+"]
+    if checked < 20:
+        return [f"VACUITY: only {checked} Plus decode claims matched; the scan is likelier broken than the site"]
+    return bad
+
+
 def main(root_arg: str = ".") -> int:
     root = Path(root_arg)
     csv_path = root / "seo" / "_data" / "models.csv"
@@ -134,7 +237,17 @@ def main(root_arg: str = ".") -> int:
         print("\n  Either correct one side, or add an entry to CONFLICTS stating which "
               "sources disagree and why the page keeps its value.")
         return 1
-    print(f"\nPASS — every page figure matches models.csv, or is a declared conflict.")
+    sitewide = check_plus_decode_sitewide(root)
+    if sitewide:
+        print(f"\nFAIL ({len(sitewide)}) — Plus decode disagrees with models.csv off the home page:")
+        for f in sitewide[:25]:
+            print(f"  {f}")
+        if len(sitewide) > 25:
+            print(f"  ... and {len(sitewide) - 25} more")
+        return 1
+
+    print("\nPASS — home-page figures match models.csv (or are declared conflicts), "
+          "and every other page agrees on Plus decode.")
     return 0
 
 

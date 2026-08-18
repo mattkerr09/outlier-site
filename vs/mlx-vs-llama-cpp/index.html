@@ -176,7 +176,7 @@
 
     <p><strong>Pick both</strong> if different models in your product want different engines and you can afford two paths.</p>
 
-    <p>For Outlier the constraints decided it. It's Apple Silicon only, M1 or later — no Intel, no Windows, no Linux, no mobile app — so llama.cpp's portability, its strongest card, buys me nothing. MLX gave me room to build what isn't in either runtime: the Plus tier is a 397B-a17b MoE that streams experts from SSD, running 209 GB of weights at roughly 11 GB peak RSS on a 64 GB Mac (~2.1 tok/s on my M1 Ultra), which needed paging control no general-purpose engine hands you. The trade is real — I wrote my own serving layer, prompt caching and model manager, all of which llama-server would have given me free.</p>
+    <p>For Outlier the constraints decided it. It's Apple Silicon only, M1 or later — no Intel, no Windows, no Linux, no mobile app — so llama.cpp's portability, its strongest card, buys me nothing. MLX gave me room to build what isn't in either runtime: the Plus tier is a 397B-a17b MoE that streams experts from SSD, running 209 GB of weights at roughly 11 GB peak RSS on a 64 GB Mac (~1.59 tok/s on my M1 Ultra), which needed paging control no general-purpose engine hands you. The trade is real — I wrote my own serving layer, prompt caching and model manager, all of which llama-server would have given me free.</p>
 
     <p>One last piece of advice: the author of apple-silicon-llm-bench warns about session-to-session variance and recommends benchmarking the exact artifact you ship — quantization method and build flags move the numbers as much as runtime choice does.</p>
 

@@ -134,7 +134,7 @@
 
     <p>Sizing below it is your job. Ollama publishes no minimum RAM figure — only that required RAM scales with <code>OLLAMA_NUM_PARALLEL</code> × <code>OLLAMA_CONTEXT_LENGTH</code>, and that a model which doesn't fit gets split across CPU and GPU (its example: 48%/52%).</p>
 
-    <p>For scale: Outlier's largest tier, a 397B-A17B MoE, is a 209 GB download needing 64 GB of RAM, and manages 2.1 tok/s by streaming experts off the SSD. I won't rank open weights against frontier models on benchmarks here — the memory ceiling is the part that doesn't need my word for it.</p>
+    <p>For scale: Outlier's largest tier, a 397B-A17B MoE, is a 209 GB download needing 64 GB of RAM, and manages 1.59 tok/s by streaming experts off the SSD. I won't rank open weights against frontier models on benchmarks here — the memory ceiling is the part that doesn't need my word for it.</p>
 
     <h2>Data path, retention and licensing</h2>
     <p>"Cloud means they train on your prompts" is false at the paid tiers. Anthropic doesn't by default use commercial-product inputs or outputs for training, except what you submit as feedback or a bug report; OpenAI doesn't train on API data unless you opt in. The real distinctions are narrower. OpenAI generates abuse-monitoring logs for <em>all</em> API usage, retained up to 30 days by default, and its Zero Data Retention needs prior approval and isn't available on every endpoint (<code>/v1/conversations</code> and <code>/v1/assistants</code> aren't eligible). Tiers differ: on Google's Gemini API <strong>Unpaid</strong> tier, Google uses submitted content and responses to improve its products, and human reviewers may read and annotate API input and output. A free prototyping key isn't the paid terms.</p>

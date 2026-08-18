@@ -154,11 +154,11 @@
       <tbody>
         <tr><td><strong>Nano 4B</strong></td><td>M4 Air</td><td>about 32 tok/s</td></tr>
         <tr><td><strong>Core 27B</strong></td><td>M1 Ultra</td><td>about 20.7 tok/s</td></tr>
-        <tr><td><strong>Plus 397B</strong></td><td>M1 Ultra (paged expert streaming, ~11 GB peak RSS)</td><td>about 2.1 tok/s</td></tr>
+        <tr><td><strong>Plus 397B</strong></td><td>M1 Ultra (paged expert streaming, ~11 GB peak RSS)</td><td>about 1.59 tok/s</td></tr>
       </tbody>
     </table>
 
-    <p>Plus at 2.1 tok/s is slow, and I won't pretend otherwise — it's a 397-billion-parameter model streaming experts from disk at around 11 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
+    <p>Plus at 1.59 tok/s is slow, and I won't pretend otherwise — it's a 397-billion-parameter model streaming experts from disk at around 11 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
 
     <h2>Symptom → cause → fix</h2>
     <table>
@@ -182,7 +182,7 @@
     <p>A fanless MacBook Air will throttle on a long sustained generation. There's no fan to move the heat out, so the chip slows itself down. That's physics, not a bug in your setup, and no setting reverses it. Plugged in and on a hard surface instead of a couch cushion helps at the margin; shorter generations help more, because the machine never gets hot enough to care.</p>
     <p>Likewise, a big model on a small machine is still a big model on a small machine. Paged streaming makes it run at all, which is useful, but it doesn't make it quick. Quality and responsiveness at once is a hardware conversation, not a settings one.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates — Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~2.1 tok/s (at ~11 GB peak RSS) on an M1 Ultra — were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
+    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates — Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~1.59 tok/s (at ~11 GB peak RSS) on an M1 Ultra — were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">

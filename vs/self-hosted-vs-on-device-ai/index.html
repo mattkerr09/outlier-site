@@ -127,7 +127,7 @@
     <h2>What on-device actually involves</h2>
     <p>On-device, the weights load into the same process the user is clicking around in, and inference runs on whatever accelerator the machine has. On Apple Silicon that's Metal, usually via MLX (MIT), built around unified memory: "Arrays in MLX live in shared memory. Operations on MLX arrays can be performed on any of the supported device types without transferring data."</p>
 
-    <p>Outlier is one instance of that shape — an example here, not the conclusion. Its Core tier is Qwen3.6-27B at 15.13 GB, wants 24 GB of RAM and runs about 20.7 tok/s on an M1 Ultra. Its largest is a 397B-a17b MoE, a 209 GB download that pages experts off the SSD to keep peak RSS near 11 GB on a 64 GB Mac — at 2.1 tok/s, which is the honest shape of the ceiling. Those Core weights are the same Apache-2.0 checkpoint you'd serve from vLLM, though: on-device doesn't mean a weaker model family.</p>
+    <p>Outlier is one instance of that shape — an example here, not the conclusion. Its Core tier is Qwen3.6-27B at 15.13 GB, wants 24 GB of RAM and runs about 20.7 tok/s on an M1 Ultra. Its largest is a 397B-a17b MoE, a 209 GB download that pages experts off the SSD to keep peak RSS near 11 GB on a 64 GB Mac — at 1.59 tok/s, which is the honest shape of the ceiling. Those Core weights are the same Apache-2.0 checkpoint you'd serve from vLLM, though: on-device doesn't mean a weaker model family.</p>
 
     <h2>Side by side</h2>
     <table>
