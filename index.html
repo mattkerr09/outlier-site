@@ -191,28 +191,22 @@
 
     /* ---------- product showcase (cinematic Mac render · CSS chat mock) ---------- */
     .showcase{position:relative;margin:2.2rem auto 0;max-width:1040px;}
-    /* Two-column hero from 1200px up. The headline is capped at 19ch for line
-       length, which left 597px -- more than half the content column -- empty to
-       its right at EVERY viewport width, not just wide ones. Every reference site
-       fills that space with the product; ours had the product sitting directly
-       underneath it. Same markup, same element, moved into the gap. */
+    /* The headline is capped at 19ch for line length, which left 597px unused to
+       its right inside an 1180px column at every viewport. First attempt moved the
+       product window into that gap, which squeezed the demo to 548px and clipped
+       the code -- Matthew's call, and right: the demo is the one thing on this page
+       that must never be cropped. So the DEMO STAYS FULL WIDTH and the copy fills
+       the gap instead: headline left, supporting paragraph and buttons right. */
     @media (min-width:1200px){
-      .hero .wrap{display:grid;grid-template-columns:minmax(0,36.5rem) minmax(0,1fr);
-        column-gap:3rem;
-        /* min-content rows, centred as a block. With default `auto` rows the four
-           copy rows stretched to match the 667px product window and pulled the
-           headline, paragraph and buttons far apart -- the measurement said the
-           dead space was gone while the screenshot showed it had moved. */
-        grid-template-rows:repeat(4,min-content);align-content:center;row-gap:0;}
-      .hero .wrap > .eyebrow,.hero .wrap > h1,.hero .wrap > p.sub,
-      .hero .wrap > .cta-bar{grid-column:1;align-self:start;}
-      .hero .showcase{grid-column:2;grid-row:1 / span 4;margin:0;max-width:none;
-        align-self:center;}
-      .hero .showcase .macwin{transform:none;}
-      /* the code pane is ~250px narrower in two columns; keep the signature line
-         readable rather than relying on its horizontal scrollbar */
-      .hero .showcase .code{font-size:.6rem;}
-      .hero .wrap > .checks{grid-column:1 / -1;margin-top:2.2rem;}
+      .hero .wrap{display:grid;
+        grid-template-columns:minmax(0,36.5rem) minmax(0,1fr);
+        column-gap:3.5rem;align-items:start;}
+      .hero .wrap > .eyebrow{grid-column:1 / -1;grid-row:1;}
+      .hero .wrap > h1{grid-column:1;grid-row:2 / span 2;margin-bottom:0;align-self:start;}
+      .hero .wrap > p.sub{grid-column:2;grid-row:2;margin-top:.5rem;max-width:none;}
+      .hero .wrap > .cta-bar{grid-column:2;grid-row:3;align-self:start;}
+      .hero .showcase{grid-column:1 / -1;grid-row:4;}
+      .hero .wrap > .checks{grid-column:1 / -1;grid-row:5;}
     }
     .showcase::before{content:"";position:absolute;inset:-6% 2% -18% 2%;z-index:-1;border-radius:50%;
       background:radial-gradient(ellipse at center,rgba(168,85,247,.42),rgba(99,102,241,.16) 45%,transparent 72%);
