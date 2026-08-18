@@ -1251,7 +1251,9 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
   }
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){ if(e.isIntersecting){ play(); io.disconnect(); } });
-  }, {threshold:.35});
+  }, {threshold:0.12, rootMargin:'0px 0px -8% 0px'});   /* the block is ~500px tall and
+     sits below a 720px fold; .35 demanded 174px of it before firing, so on a laptop it
+     only played after a deliberate scroll past it. */
   io.observe(el);
 })();
 </script>
