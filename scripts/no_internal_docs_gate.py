@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
-"""Internal coordination notes must not be servable from outlier.host.
+"""Operational notes must not be servable from this domain.
 
-On 2026-08-18 https://outlier.host/OWNERSHIP.md returned 200 to anybody who
-asked, and read:
+This repository IS the website: every tracked file is published at the site root.
+That includes files committed purely as internal working notes, which is easy to
+do without noticing, because reviewing a commit asks "is this change correct"
+and never "should this file be public".
 
-    "Placed by the CEO session, because messages are not reaching the session
-     they are addressed to." ... "If you are outlier-fa: STAND DOWN."
+It has happened here. Internal working notes were committed to the repo root and
+were readable over HTTP until they were removed. They are gone; this stops the
+next one.
 
-That is internal automation process on a customer-facing domain. It happened the
-ordinary way: coordination files were committed into the site repo because
-messages between sessions were unreliable, and this repo IS the website — every
-tracked file at the root is published. I pushed two of them myself, having
-checked that the commits were benign without once asking whether the FILES
-should be public. DESIGN-BRIEF.md went the same way.
+WHY IT MATCHES CONTENT RATHER THAN FILENAMES. A denylist of names only catches
+the file that already leaked; the next one is called something else. This looks
+for the vocabulary of internal process — task-routing chatter, internal tool
+paths, commit-trailer actors, hand-off instructions. A file is internal because
+of what it says, not what it is called, so renaming is not a way past it.
 
-Both are gone. This stops the next one.
+SCOPE IS EVERY SERVABLE FILE, NOT JUST PROSE. An earlier version checked only
+.md/.txt/.json/.yml and reported clean while the .py files beside it were served
+too. Static hosting does not care about file extensions; if it is tracked, it is
+readable. Code files are checked for the same reason.
 
-WHY IT MATCHES CONTENT, NOT FILENAMES. A denylist of names (OWNERSHIP.md,
-DESIGN-BRIEF.md, HANDOFF.md...) only ever catches the file that already leaked;
-the next one will be called something else. So it looks for what makes a file
-internal: session names, stand-down orders, routing complaints, ops paths,
-commit-trailer actors. A file is internal because of what it says.
-
-The site's own pages are exempt by extension — .html is the product. This checks
-the text files that sit alongside it and get served just as readily.
+THIS FILE IS ITS OWN EXCEPTION, and that is not a loophole: a detector has to
+contain the patterns it detects. It is listed in ALLOWED explicitly so the
+exemption is a visible decision rather than an accident.
 
     python3 scripts/no_internal_docs_gate.py
 """
@@ -45,9 +45,11 @@ MARKERS = [
     r"\bClaude session\b", r"\bthis repo belongs to\b",
 ]
 #: Extensions Pages will serve as plain text alongside the site.
-TEXTY = (".md", ".txt", ".json", ".yml", ".yaml")
+TEXTY = (".md", ".txt", ".json", ".yml", ".yaml", ".py")
 #: Legitimately public, checked anyway — listed so an exemption is a decision.
-ALLOWED = {"README.md", "NOTICES.txt", "llms.txt", "robots.txt"}
+ALLOWED = {"README.md", "NOTICES.txt", "llms.txt", "robots.txt",
+           # a detector must contain the patterns it detects
+           "scripts/no_internal_docs_gate.py"}
 
 MIN_FILES = 5
 
@@ -67,7 +69,7 @@ def main(root_arg: str = ".") -> int:
         return 1
 
     files = [f for f in tracked(root)
-             if f.lower().endswith(TEXTY) and not f.startswith(".github/")]
+             if f.lower().endswith(TEXTY)]
     print(f"tracked servable text files: {len(files)}")
     if len(files) < MIN_FILES:
         print(f"\nFAIL: only {len(files)} found, expected >= {MIN_FILES}. Scan likely broken.")

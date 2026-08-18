@@ -22,12 +22,10 @@ and never equals the `polar_cl_...` link id. Asserting equality would fail
 permanently on a healthy checkout — a red gate for a correct reason, which is how
 gates get switched off.
 
-CONSOLIDATED 2026-08-18. A sibling session and I independently built a checkout
-gate within the hour — both GET, both assert /checkout/, both refuse HEAD, both
+CONSOLIDATED 2026-08-18. Two overlapping checkout gates existed in this repo at once — both GET, both assert /checkout/, both refuse HEAD, both
 refuse to compare url_effective. Two validators for one property is the failure
 this repo keeps hitting: they drift, one rots, and the rotted one is the one
-somebody trusts. scripts/checkout_gate.py (977c6f17) was deleted in favour of
-this file, and its one unique assertion merged in — see the price check below.
+somebody trusts. The duplicate was deleted in favour of this file, and its one unique assertion merged in — see the price check below.
 
 THE PRICE CHECK, AND WHY IT READS THE LABEL. This gate proved the door opens and
 deferred the amount to ops/bin/checkout-price-gate.py, which lives OUTSIDE this
