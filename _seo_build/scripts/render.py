@@ -174,6 +174,56 @@ def write_page(category: str, slug: str, title: str, description: str,
 
 # ---------- page builders ----------
 
+# ── A MEASURED NEGATIVE RESULT, 2026-08-18. Do not repeat this. ──────────────
+#
+# After the cooling/chassis split cleared 64 DUP pairs (seo_lint 309 -> 245), the
+# worst remaining pair was run-code-on-m4-pro-macbook-pro ~
+# run-compact-on-m4-pro-macbook-pro at 81% — same machine, different model. The
+# obvious next move looked identical to the one that had just worked: find what
+# differs per tier and write about it.
+#
+# I tried two sections: dense-vs-MoE (branching on `params`) and a shared-weights
+# note (branching on `source`). Both are TRUE and both are well-grounded — a
+# 26B MoE with 4B active really does behave nothing like a 27B dense at the same
+# disk size, and Code really does share Core's weights.
+#
+# IT MADE THINGS WORSE, and the numbers are the point:
+#
+#     seo_lint FAIL      245 -> 251
+#     DUP pairs          227 -> 233
+#     the target pair    81% -> 80%
+#
+# WHY, and this is the transferable part. Branch text is CONSTANT WITHIN ITS
+# BRANCH. There are 4 dense tiers and 3 MoE tiers, so the dense paragraph is
+# byte-identical across every dense page. The worst pairs are WITHIN a branch —
+# compact and code are both dense AND both share weights, so both pages received
+# both new paragraphs, identically. Every word added was a shared shingle.
+#
+# The cooling fix worked for the opposite reason: its branches SPLIT THE PAIRS
+# THAT WERE FAILING. m1-macbook-air is fanless and m1-mac-mini is a cooled
+# desktop, so that pair landed in different branches and diverged.
+#
+# THE RULE THIS BUYS: on programmatic pages, prose only reduces duplication when
+# the two pages that are too close land on DIFFERENT SIDES of it. Explanation
+# shared by a group is pure added duplication, however true and however
+# well-written. Before adding a section, check which branch each failing pair
+# falls into — if both fall in the same one, it will make the number worse.
+#
+# What is left for the model axis therefore has to VARY PER PAGE, not per group:
+# arithmetic on the tier's own numbers (disk_gb, min_ram_gb, ram_peak_gb,
+# context_default) crossed with the machine's, so no two pages share the
+# sentence. That is real work and it is not this.
+#
+# ONE DATA QUESTION RAISED AND DELIBERATELY NOT ACTED ON: compact and code carry
+# the SAME ram_peak_gb (16) while code defaults to double the context (65536 vs
+# 32768). KV cache scales linearly with context, so one figure cannot describe
+# both unless it was measured at a stated context. models.csv marks both
+# verified:true, sourced to FINAL_LAUNCH_NUMBERS.md, which is not in this repo.
+# Not changed here: inventing a KV figure to win a duplicate check is exactly
+# what this site argues against, and the data belongs to the app repo. Raised
+# with its owner instead.
+
+
 def build_run_pages(models, macs) -> list[dict]:
     """20 'Run [tier] on [Mac]' pages — pick (tier, mac) combos that fit."""
     by_tier = {m["tier_id"]: m for m in models}
