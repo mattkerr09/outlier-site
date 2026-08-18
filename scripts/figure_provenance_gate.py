@@ -34,10 +34,6 @@ from pathlib import Path
 #: Known, deliberate divergences. Each needs a reason and, where it exists, the
 #: conflicting sources — so an exception cannot be added without stating its case.
 CONFLICTS = {
-    ("plus", "toks"): (
-        "page says 2.1, models.csv 1.59, benchmarks.csv 1.31-1.61 (K_SWEEP_RESULTS), "
-        "v11_engine_modes.md 1.67. UNRESOLVED — needs whoever owns the measurement. "
-        "The page currently publishes the fastest of the four."),
     ("quick", "toks"): (
         "models.csv has 14.6; the page says 'Not measured'. The page is the more "
         "conservative claim, so it is safe to leave while the provenance of 14.6 "
