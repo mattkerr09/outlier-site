@@ -202,7 +202,13 @@
         grid-template-columns:minmax(0,36.5rem) minmax(0,1fr);
         column-gap:3.5rem;align-items:start;}
       .hero .wrap > .eyebrow{grid-column:1 / -1;grid-row:1;}
-      .hero .wrap > h1{grid-column:1;grid-row:2 / span 2;margin-bottom:0;align-self:start;}
+      /* The headline carries this column. At the shared 3rem cap it ran two
+         lines (104px) against a 291px copy column, leaving a ~340px hole
+         hanging under it -- the gap Matthew pointed at. Sizing it to the
+         column and centring it against the copy closes that, and a split
+         hero is where a large headline belongs anyway. */
+      .hero .wrap > h1{grid-column:1;grid-row:2 / span 2;margin-bottom:0;
+        align-self:center;font-size:clamp(3.25rem,4.35vw,4.5rem);max-width:15ch;}
       .hero .wrap > p.sub{grid-column:2;grid-row:2;margin-top:.5rem;max-width:none;}
       .hero .wrap > .cta-bar{grid-column:2;grid-row:3;align-self:start;}
       .hero .showcase{grid-column:1 / -1;grid-row:4;}
@@ -659,7 +665,7 @@
 <section class="hero">
   <div class="wrap">
     <div class="eyebrow reveal in"><span class="dot"></span> Runs entirely on your Mac · notarized by Apple</div>
-    <h1 class="reveal d1 in">The most powerful AI<br><span class="accent">that never leaves your Mac.</span></h1>
+    <h1 class="reveal d1 in">The most powerful AI<br><span class="accent">that never leaves your&nbsp;Mac.</span></h1>
     <p class="sub reveal d2 in">A private, offline alternative to cloud AI like Claude and ChatGPT. Outlier <strong>reads your codebase, edits files, runs the tests, researches the web, and keeps working on long jobs unattended</strong> &mdash; all on Apple Silicon, with no caps and no data centre.</p>
     <div class="cta-bar">
       <div class="cta-row reveal d3 in">
