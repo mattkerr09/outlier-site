@@ -162,7 +162,7 @@
     .btn svg{width:17px;height:17px;flex:none;}
 
     /* ---------- hero ---------- */
-    .hero{position:relative;padding:6rem 0 0;text-align:left;}
+    .hero{position:relative;padding:3.6rem 0 0;text-align:left;}
     .eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.36rem .9rem;border-radius:999px;
       border:1px solid var(--border-lit);background:var(--glass);backdrop-filter:blur(10px);
       color:var(--v0);font-size:0.77rem;font-weight:600;letter-spacing:.01em;margin-bottom:1.7rem;}
@@ -172,20 +172,25 @@
       letter-spacing:-.026em;word-spacing:.04em;font-weight:600;margin:0 0 1.75rem;}
     h1 .accent{display:inline-block;}
     .hero .sub{font-size:clamp(1.1rem,1.85vw,1.32rem);color:var(--text-mid);max-width:46ch;
-      margin:0 0 2.3rem;line-height:1.6;}
+      margin:0 0 1.75rem;line-height:1.6;}
     .hero .sub strong{color:var(--text);font-weight:600;}
     .cta-row{display:flex;gap:.85rem;justify-content:center;flex-wrap:wrap;}
     .hero .cta-row{justify-content:flex-start;}
     .hero h1{max-width:19ch;}
     .hero .showcase{margin-left:0;margin-right:0;max-width:none;}
     .hero .showcase figcaption{text-align:center;}
+    /* hero: the CTA row carries the version/proof line inline on its right, the way
+       the reference heroes do, which lifts the product surface into the first screen. */
+    .cta-bar{display:flex;align-items:center;gap:1.15rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+    .cta-bar .trust{margin:0;}
+    @media(max-width:760px){.cta-bar{gap:.7rem;}.cta-bar .trust{width:100%;}}
     .trust{margin-top:1.2rem;font-family:var(--mono);font-size:0.77rem;color:var(--text-dim);letter-spacing:.01em;}
     .checks{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.7rem 1.9rem;margin:2.3rem 0 0;}
     .checks span{display:inline-flex;align-items:center;gap:.45rem;font-size:0.9rem;color:var(--text-mid);font-weight:500;}
     .checks svg{width:15px;height:15px;color:var(--v1);flex:none;}
 
     /* ---------- product showcase (cinematic Mac render · CSS chat mock) ---------- */
-    .showcase{position:relative;margin:4rem auto 0;max-width:1040px;}
+    .showcase{position:relative;margin:2.2rem auto 0;max-width:1040px;}
     .showcase::before{content:"";position:absolute;inset:-6% 2% -18% 2%;z-index:-1;border-radius:50%;
       background:radial-gradient(ellipse at center,rgba(168,85,247,.42),rgba(99,102,241,.16) 45%,transparent 72%);
       filter:blur(60px);}
@@ -629,19 +634,15 @@
     <div class="eyebrow reveal in"><span class="dot"></span> Runs entirely on your Mac · notarized by Apple</div>
     <h1 class="reveal d1 in">The most powerful AI<br><span class="accent">that never leaves your Mac.</span></h1>
     <p class="sub reveal d2 in">A private, offline alternative to cloud AI like Claude and ChatGPT. Outlier <strong>reads your codebase, edits files, runs the tests, researches the web, and keeps working on long jobs unattended</strong> &mdash; all on Apple Silicon, with no caps and no data centre.</p>
-    <div class="cta-row reveal d3 in">
+    <div class="cta-bar">
+      <div class="cta-row reveal d3 in">
       <a class="btn btn-primary" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.790/Outlier-1.11.790-arm64.dmg" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 19h16"/></svg>
         Download for Mac
       </a>
       <a class="btn btn-ghost" href="#pricing">See pricing</a>
     </div>
-    <p class="trust reveal d3 in">v1.11.790 · notarized Mac DMG · Apple Silicon (M1–M4)</p>
-    <div class="checks reveal d3 in">
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 100% offline</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Nothing leaves your Mac</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No token caps</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No account</span>
+      <p class="trust reveal d3 in">v1.11.790 · notarized Mac DMG · Apple Silicon (M1–M4)</p>
     </div>
 
     <!-- product render: Outlier chat, on macOS -->
@@ -722,6 +723,12 @@
       </div>
       <figcaption>Interface illustration &mdash; the conversation inside it is a real captured exchange, unedited: prompt, answer and timings from Outlier Core on an M1&nbsp;Ultra.</figcaption>
     </figure>
+    <div class="checks reveal d3 in">
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 100% offline</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Nothing leaves your Mac</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No token caps</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No account</span>
+    </div>
   </div>
 </section>
 
