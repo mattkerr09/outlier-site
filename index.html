@@ -250,6 +250,16 @@
     .proof-foot strong{color:var(--text);}
     .proof-foot code{font-family:var(--mono);font-size:.88em;color:var(--v0);}
     .tok-key{color:#c77dff;}.tok-fn{color:#8ab4ff;}.tok-str{color:#6ee7b7;}.tok-num{color:#fbbf24;}.tok-com{color:var(--text-faint);}
+
+    /* hero replay — plays the REAL captured generation at its recorded timings */
+    .replay-caret{display:inline-block;width:7px;height:1em;vertical-align:-2px;margin-left:1px;
+      background:var(--v1);animation:caret-phase 1.05s steps(1,end) infinite;}
+    @keyframes caret-phase{0%,55%{opacity:1;}56%,100%{opacity:0;}}
+    .replay-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin:.5rem .95rem 0;
+      font-family:var(--mono);font-size:0.62rem;color:var(--text-faint);letter-spacing:.02em;}
+    .replay-meta b{font-weight:500;color:var(--text-dim);}
+    .replay-meta .rm-net{color:var(--green-light);}
+    @media(prefers-reduced-motion:reduce){.replay-caret{animation:none;opacity:0;}}
     .msg-note{font-family:var(--mono);font-size:0.65rem;color:var(--text-faint);display:flex;align-items:center;gap:.4rem;}
     .msg-note::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
     .composer{margin:.4rem .95rem 1.05rem;display:flex;align-items:center;gap:.6rem;background:#120f22;border:1px solid #251f3c;border-radius:13px;padding:.62rem .78rem;}
@@ -699,6 +709,7 @@
     <span class="tok-key">return</span> merged</pre>
                   <p><strong>The edge case most implementations get wrong:</strong> <strong>adjacent intervals</strong> (e.g., <code style="font-family:var(--mono);font-size:.9em">[1, 2]</code> and <code style="font-family:var(--mono);font-size:.9em">[2, 3]</code>). Many implementations use <code style="font-family:var(--mono);font-size:.9em">&lt;</code> instead of <code style="font-family:var(--mono);font-size:.9em">&lt;=</code>, which fails to merge intervals that touch at a single point.</p>
                   <p class="msg-note">Real output, Outlier Core on an M1 Ultra &mdash; 21 socket samples during this answer, 0 left the Mac</p>
+                  <div class="replay-meta"><b>22.4s</b> to first token<span>&middot;</span><b>10.7s</b> decode<span>&middot;</span><span class="rm-net">0 of 21 socket samples left the Mac</span></div>
                 </div>
               </div>
             </div>
@@ -1202,5 +1213,47 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
   // of 200. A countdown nobody is racing is a claim about demand.
 </script>
 
+
+<script type="application/json" id="replay-data">{"t":"```python\ndef merge_intervals(intervals: list[list[int]]) -> list[list[int]]:\n    \"\"\"Merge overlapping intervals.\n    \n    Args:\n        intervals: List of [start, end] pairs (inclusive).\n        \n    Returns:\n        List of merged non-overlapping intervals.\n    \"\"\"\n    if not intervals:\n        return []\n    \n    # Sort by start time\n    sorted_intervals = sorted(intervals, key=lambda x: x[0])\n    \n    merged = [sorted_intervals[0]]\n    \n    for current in sorted_intervals[1:]:\n        last = merged[-1]\n        \n        # Overlap or adjacency: merge them\n        if current[0] <= last[1]:\n            merged[-1] = [last[0], max(last[1], current[1])]\n        else:\n            merged.append(current)\n    \n    return merged\n```\n\n**The edge case most implementations get wrong:** **adjacent intervals** (e.g., `[1, 2]` and `[2, 3]`).\n\nMany implementations use `<` instead of `<=` when checking for overlap (`current[0] < last[1]`), which fails to merge intervals that touch at a single point. Whether adjacency should merge depends on the problem spec (inclusive vs. exclusive endpoints), but the most common bug is silently dropping or failing to merge `[1, 2]` and `[2, 3]` into `[1, 3]`.","s":[[0,81],[62,82],[104,85],[150,92],[194,102],[284,111],[329,115],[373,121],[418,122],[462,126],[507,133],[596,135],[690,136],[852,139],[900,140],[945,142],[991,143],[1035,148],[1080,151],[1124,158],[1169,160],[1214,162],[1257,168],[1303,178],[1348,179],[1437,182],[1526,187],[1570,191],[1615,195],[1660,203],[1704,206],[1749,213],[1794,223],[1883,225],[1928,226],[1973,228],[2017,229],[2062,236],[2106,241],[2152,243],[2197,250],[2243,252],[2287,253],[2332,254],[2376,255],[2421,264],[2466,271],[2555,278],[2600,281],[2645,284],[2690,294],[2734,295],[2780,301],[2825,306],[2869,307],[2914,314],[2959,317],[3003,325],[3048,326],[3093,327],[3137,328],[3182,331],[3227,336],[3271,337],[3363,340],[3405,341],[3450,352],[3494,359],[3540,361],[3584,362],[3674,365],[3719,367],[3764,371],[3809,372],[3854,373],[3899,375],[3943,379],[3988,384],[4077,386],[4122,388],[4169,396],[4213,397],[4257,398],[4303,401],[4347,402],[4392,409],[4437,414],[4482,415],[4526,416],[4571,427],[4617,434],[4661,441],[4706,449],[4795,451],[4839,456],[4883,459],[4929,466],[4973,473],[5018,474],[5063,477],[5108,479],[5152,481],[5198,484],[5243,489],[5332,499],[5376,515],[5455,519],[5516,525],[5560,528],[5604,531],[5649,534],[5693,539],[5738,549],[5783,551],[5828,553],[5872,554],[5917,556],[5962,558],[6006,561],[6052,562],[6186,565],[6230,566],[6275,567],[6320,571],[6365,574],[6409,575],[6454,576],[6543,578],[6589,579],[6634,582],[6679,584],[6724,588],[6769,604],[6813,608],[6858,611],[6903,612],[6948,620],[6993,623],[7037,625],[7082,627],[7126,628],[7171,633],[7216,642],[7261,646],[7306,654],[7351,657],[7395,664],[7440,665],[7485,666],[7529,667],[7574,669],[7619,674],[7664,675],[7708,676],[7753,677],[7798,678],[7843,680],[7887,686],[7932,692],[7978,695],[8022,701],[8069,711],[8112,716],[8157,722],[8203,725],[8248,727],[8293,733],[8337,740],[8381,741],[8427,749],[8472,759],[8516,766],[8560,772],[8603,780],[8646,783],[8689,787],[8733,795],[8776,800],[8819,802],[8863,811],[8905,814],[8950,815],[8996,825],[9041,835],[9086,837],[9131,841],[9176,845],[9221,850],[9266,857],[9311,861],[9355,864],[9401,873],[9446,882],[9491,885],[9535,893],[9581,896],[9625,902],[9670,905],[9715,906],[9760,907],[9850,909],[9895,910],[9940,911],[9985,915],[10029,918],[10074,919],[10119,920],[10209,922],[10254,923],[10300,924],[10345,929],[10390,932],[10433,933],[10479,934],[10569,936],[10612,937],[10657,939],[10718,1195]],"ttft":22.37,"decode":10.72,"samples":21,"ext":0,"model":"Outlier Core","host":"M1 Ultra"}</script>
+<script>
+/* Replays the captured generation in the hero at the timings it was actually
+   recorded with. The <pre> already contains the finished, highlighted answer —
+   that is the no-JS fallback and the end state; this only animates getting there.
+   Nothing here invents output: `t` is the verbatim text the model produced and
+   `s` is [ms-since-first-token, characters-emitted] from the capture. */
+(function(){
+  var el = document.querySelector('.hero .thread .msg.ai pre.code');
+  var data = document.getElementById('replay-data');
+  if(!el || !data) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var D; try{ D = JSON.parse(data.textContent); }catch(e){ return; }
+  var finalHTML = el.innerHTML, running = false;
+  var kw = /\b(def|return|if|else|for|in|not|None|True|False|import|class|while|and|or)\b/g;
+  function paint(n){
+    var txt = D.t.slice(0, n);
+    var html = txt.replace(/[&<>]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];})
+      .replace(/(&quot;&quot;&quot;[\s\S]*?&quot;&quot;&quot;|"[^"\n]*"|'[^'\n]*')/g,'<span class="tok-str">$1</span>')
+      .replace(/(#[^\n]*)/g,'<span class="tok-com">$1</span>')
+      .replace(kw,'<span class="tok-key">$1</span>')
+      .replace(/\b(\d+)\b/g,'<span class="tok-num">$1</span>');
+    el.innerHTML = html + '<span class="replay-caret"></span>';
+  }
+  function play(){
+    if(running) return; running = true;
+    var i = 0, t0 = performance.now();
+    (function step(){
+      var now = performance.now() - t0;
+      while(i < D.s.length && D.s[i][0] <= now) i++;
+      paint(i ? D.s[i-1][1] : 0);
+      if(i < D.s.length){ requestAnimationFrame(step); }
+      else { el.innerHTML = finalHTML; running = false; setTimeout(play, 4200); }
+    })();
+  }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ play(); io.disconnect(); } });
+  }, {threshold:.35});
+  io.observe(el);
+})();
+</script>
 </body>
 </html>
