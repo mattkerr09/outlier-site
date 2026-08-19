@@ -523,7 +523,12 @@
     .demo.in .drow:nth-of-type(2){transition-delay:.32s;}
     .demo.in .drow:nth-of-type(3){transition-delay:.42s;}
     .demo.in .drow:nth-of-type(4){transition-delay:.52s;}
-    .demo.in .dnote{transition-delay:.60s;}
+    /* The agent demo grew to 5 rows. Without these the 5th and 6th get a 0s
+       delay and appear BEFORE the staggered ones -- the cascade runs out of
+       order rather than simply ending. */
+    .demo.in .drow:nth-of-type(5){transition-delay:.62s;}
+    .demo.in .drow:nth-of-type(6){transition-delay:.72s;}
+    .demo.in .dnote{transition-delay:.80s;}
     /* Reduced motion: the observer never runs and .in is added to everything, so
        these must not depend on it. Pin them visible outright. */
     @media(prefers-reduced-motion:reduce){
@@ -987,18 +992,21 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           <div class="dbody">
             <div class="dq"><b>Task</b><span>Add a retry with backoff to the upload client, then run the tests.</span></div>
             <div class="dperm">
-              <div class="dperm-h">Agent wants to <strong>write</strong> <code>src/upload/client.ts</code></div>
-              <div class="drow"><span class="dbadge">plan</span><span>3 steps &middot; 1 file write &middot; 1 shell command</span></div>
-              <div class="dbtns"><span class="dbtn pri">Allow once</span><span class="dbtn">Always allow</span><span class="dbtn">Deny</span></div>
+              <div class="dperm-h">Plan review &mdash; 4 steps, before anything runs</div>
+              <div class="drow"><span class="dbadge">1</span><span><code>search_files</code> &mdash; find the upload client</span></div>
+              <div class="drow"><span class="dbadge">2</span><span><code>read_file</code> &mdash; src/upload/client.ts</span></div>
+              <div class="drow"><span class="dbadge">3</span><span><code>edit_file</code> &mdash; add retry with backoff</span></div>
+              <div class="drow"><span class="dbadge">4</span><span><code>run_bash</code> &mdash; npm test</span></div>
+              <div class="dbtns"><span class="dbtn pri">Approve</span><span class="dbtn">Approve edited</span><span class="dbtn">Deny</span></div>
             </div>
-            <div class="drow"><span class="dbadge ok">audit</span><span>wrote src/upload/client.ts &mdash; +18 &minus;2</span></div>
-            <div class="drow"><span class="dbadge ok">audit</span><span>ran npm test &mdash; 41 passed</span></div>
-            <div class="dnote">Permission modes &middot; plan-review card &middot; repair loop &middot; audit log &middot; running cost $0.00</div>
+            <div class="dnote">19 tools &mdash; read_file, edit_file, run_bash, git_diff, git_commit, search_files, web_search, spawn_subagent, mac_screenshot &hellip; &middot; every plan is reviewable and editable before it runs &middot; running cost $0.00</div>
           </div>
         </div>
-        <figcaption>Agent tools, drawn in CSS. The approval card, audit lines and
-        the $0.00 cost display mirror the shipped permission flow; the file and
-        test output are illustrative.</figcaption>
+        <figcaption><strong>Read from the shipped agent.</strong> The three responses
+        are the app&rsquo;s own &mdash; <code>approve</code>, <code>approve_edited</code>,
+        <code>deny</code> &mdash; so a plan can be edited before it runs, and the
+        tool names are the real registry of 19. The example task is illustrative;
+        the mechanism is not.</figcaption>
       </figure>
 
       <figure class="demo reveal">
