@@ -77,7 +77,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h2>What is the specific thing to know about this guide?</h2>
 <p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
 <h2>What can go wrong with this guide?</h2>
-<ul><li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: Plausible analytics on the website and the Tauri auto-updater both make external calls; turn the auto-updater off if you want strict no-network.</li></ul>
+<ul><li>If web search is left enabled, the search backend reaches the network even though chat itself does not &mdash; and it queries several hosts in parallel, not one: DuckDuckGo, Mojeek and Wikipedia for the general web, plus OpenAlex, Crossref, Stack&nbsp;Exchange and Hacker&nbsp;News depending on the question.</li><li>Telemetry: Plausible analytics on the website and the Tauri auto-updater both make external calls; turn the auto-updater off if you want strict no-network.</li></ul>
 <h2>How does this guide differ from the cloud equivalent?</h2>
 <p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;packets do not leave the device&rsquo;, which is verifiable with a network monitor.</p>
 <p><p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code> &mdash; the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p></p>
