@@ -323,24 +323,27 @@
        on that. */
     section::before{
       content:"";position:absolute;pointer-events:none;z-index:-1;
-      left:50%;top:0;transform:translate(-50%,-34%);
-      width:min(1240px,100%);
-      /* Scales with the panel it sits behind. A fixed 560px cap starved the
-         tall sections -- the 2457px one got 23% coverage and read as a dark
-         band between two lit ones, which is the opposite of the ask. */
-      height:min(1500px,84%);
-      background:radial-gradient(ellipse 52% 50% at 50% 50%,
-        rgba(168,85,247,.42), rgba(168,85,247,.13) 44%, transparent 72%);
+      left:50%;top:0;transform:translate(-50%,0);
+      width:min(1240px,100%);height:100%;
+      /* TILED, not one ellipse sized to the box. A single glow cannot light an
+         arbitrarily long section: a fixed 560px cap gave the 2457px section 23%
+         coverage, and raising the cap to 1500px still left vs/index.html -- one
+         4566px section -- with 3500px dark and a measured +0.000 delta at every
+         scroll past 1400. Repeating the light makes coverage independent of
+         section length. */
+      background-repeat:repeat-y;background-size:100% 1150px;
+      background-image:radial-gradient(ellipse 58% 46% at 50% 8%,
+        rgba(168,85,247,.40), rgba(168,85,247,.12) 42%, transparent 70%);
     }
     /* Rotate the hue so a long page does not pulse in one colour. Same three
        hues the drift blobs already use, so it reads as one light rig. */
     section:nth-of-type(3n+2)::before{
-      background:radial-gradient(ellipse 52% 50% at 50% 50%,
-        rgba(217,70,239,.36), rgba(217,70,239,.11) 44%, transparent 72%);
+      background-image:radial-gradient(ellipse 58% 46% at 50% 8%,
+        rgba(217,70,239,.34), rgba(217,70,239,.10) 42%, transparent 70%);
     }
     section:nth-of-type(3n+3)::before{
-      background:radial-gradient(ellipse 52% 50% at 50% 50%,
-        rgba(99,102,241,.40), rgba(99,102,241,.12) 44%, transparent 72%);
+      background-image:radial-gradient(ellipse 58% 46% at 50% 8%,
+        rgba(99,102,241,.38), rgba(99,102,241,.11) 42%, transparent 70%);
     }
     /* The closer is the page's last beat; give it a wider, warmer throw. */
     .final::before{
