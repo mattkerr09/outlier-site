@@ -22,6 +22,7 @@ from pathlib import Path
 CSV_TO_LABEL = {
     "nano": "Nano", "lite": "Lite", "quick": "Quick", "compact": "Core",
     "code": "Code", "plus": "Plus", "vision": "Vision",
+    "vision38": "Vision 3.8",
 }
 MIN_TIERS = 5   # vacuity guard: fewer than this and the csv scan is broken
 
@@ -46,7 +47,12 @@ def main(root_arg: str = ".") -> int:
 
     html = page.read_text(errors="replace")
     # the hero's model list: <div class="tierchip"...><span>Nano · 4B</span>
-    chips = re.findall(r'class="tierchip[^"]*"[^>]*>\s*<span>\s*([A-Za-z]+)', html)
+    # Capture the whole label up to the size separator, not just the first word.
+    # The original r'([A-Za-z]+)' collapsed "Vision 3.8 · 27B" and "Vision · 35B"
+    # to the same token "Vision", so adding a second Vision-family tier read as
+    # ALREADY PRESENT and the gate passed while the hero omitted it. Any two tiers
+    # sharing a first word had the same blindness.
+    chips = re.findall(r'class="tierchip[^"]*"[^>]*>\s*<span>\s*([^<·&]+)', html)
     shown = {c.strip() for c in chips}
     if not shown:
         print("FAIL: no tier chips found in index.html. The hero product shot has no")
