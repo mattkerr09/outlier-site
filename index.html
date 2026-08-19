@@ -307,50 +307,6 @@
 
     /* ---------- sections ---------- */
     section{padding:6.6rem 0;position:relative;z-index:1;}
-    /* BACKLIGHT — every section reads as lit from behind its leading edge.
-       The three existing drift blobs are page-level and top-anchored, so
-       everything below the fold was flat: measured p95-p05 luminance 0.249,
-       the narrowest tonal range of the six reference sites. This puts a light
-       source behind each section instead of decorating the page once.
-
-       section already sets position:relative + z-index:1, which makes it a
-       stacking context, so a z-index:-1 child paints ABOVE the section's own
-       background (including .alt's) and BELOW its content. No markup change,
-       no layout effect, nothing to clip.
-
-       Width is capped at the section's own box so it can never widen the page
-       -- body carries overflow-x:hidden, but a backlight is not worth relying
-       on that. */
-    section::before{
-      content:"";position:absolute;pointer-events:none;z-index:-1;
-      left:50%;top:0;transform:translate(-50%,0);
-      width:min(1240px,100%);height:100%;
-      /* TILED, not one ellipse sized to the box. A single glow cannot light an
-         arbitrarily long section: a fixed 560px cap gave the 2457px section 23%
-         coverage, and raising the cap to 1500px still left vs/index.html -- one
-         4566px section -- with 3500px dark and a measured +0.000 delta at every
-         scroll past 1400. Repeating the light makes coverage independent of
-         section length. */
-      background-repeat:repeat-y;background-size:100% 1150px;
-      background-image:radial-gradient(ellipse 58% 46% at 50% 8%,
-        rgba(168,85,247,.40), rgba(168,85,247,.12) 42%, transparent 70%);
-    }
-    /* Rotate the hue so a long page does not pulse in one colour. Same three
-       hues the drift blobs already use, so it reads as one light rig. */
-    section:nth-of-type(3n+2)::before{
-      background-image:radial-gradient(ellipse 58% 46% at 50% 8%,
-        rgba(217,70,239,.34), rgba(217,70,239,.10) 42%, transparent 70%);
-    }
-    section:nth-of-type(3n+3)::before{
-      background-image:radial-gradient(ellipse 58% 46% at 50% 8%,
-        rgba(99,102,241,.38), rgba(99,102,241,.11) 42%, transparent 70%);
-    }
-    /* The closer is the page's last beat; give it a wider, warmer throw. */
-    .final::before{
-      width:min(1500px,100%);height:min(700px,86%);transform:translate(-50%,-30%);
-      background:radial-gradient(ellipse 55% 50% at 50% 50%,
-        rgba(168,85,247,.5), rgba(217,70,239,.16) 46%, transparent 74%);
-    }
     section.alt{background:var(--bg-2);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);}
     .sec-head{max-width:66ch;margin:0 auto 3.4rem;text-align:center;}
     .kicker{display:inline-block;font-family:var(--mono);font-size:0.77rem;font-weight:600;letter-spacing:.15em;
@@ -421,13 +377,7 @@
     .bchart .cpath{fill:none;stroke:var(--v1);stroke-width:2.5;stroke-linecap:round;opacity:.95;}
     .bchart .dchart{max-width:640px;margin-top:2.2rem;}.cbar{fill:url(#barfill);opacity:.92;}.cbar-none{stroke:var(--hair);stroke-width:2;stroke-dasharray:3 3;}.cnone{fill:var(--text-faint);opacity:.75;}.cnote{fill:var(--text-faint);font-size:9px;}.cdot{fill:var(--v0);stroke:var(--bg);stroke-width:2;}
     .chart-note{font-family:var(--mono);font-size:0.66rem;color:var(--text-faint);margin:-.9rem 0 1.7rem;}
-    .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);
-      /* A large opaque panel sitting on the section backlight blocks it, and
-         a 775px card read as a dead rectangle mid-section -- measured: the
-         viewport at scroll 5400 was the only one the backlight did not move
-         at all. Rim-light it so the light behind the section reads through
-         the panel rather than stopping at its edge. */
-      box-shadow:inset 0 1px 0 rgba(168,85,247,.16), 0 0 70px -26px rgba(168,85,247,.55);}
+    .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
     table{border-collapse:collapse;width:100%;font-size:0.9rem;}
     th,td{padding:.9rem 1.05rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
     thead th{background:var(--surface-2);font-family:var(--mono);font-weight:500;font-size:0.65rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);}
