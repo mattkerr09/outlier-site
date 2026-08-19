@@ -1221,9 +1221,17 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       els.forEach(function (el) { el.classList.add('in'); });
       return;
     }
+    // Two-way: reveal on the way down, un-reveal on the way back up, so the
+    // page animates in both directions instead of filling in once and staying
+    // filled. The observer is deliberately NOT unobserved -- that call was what
+    // made the effect one-shot.
+    //
+    // Safe for reduced-motion without a second code path: the early return above
+    // adds .in to everything and never constructs this observer, and the
+    // prefers-reduced-motion media block pins .reveal to opacity:1 regardless.
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        e.target.classList.toggle('in', e.isIntersecting);
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     els.forEach(function (el) { io.observe(el); });
