@@ -502,7 +502,28 @@
     .foot-attrib{margin-top:1.9rem;padding-top:1.6rem;border-top:1px solid var(--hair);font-size:0.77rem;line-height:1.7;color:var(--text-faint);max-width:92ch;}
 
     /* ---------- scroll reveal ---------- */
-    .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+    .reveal{opacity:0;transform:translate(var(--rx,0),var(--ry,26px)) scale(var(--rs,1));transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1);}
+    /* Direction is set with CUSTOM PROPERTIES, not by overriding transform on a
+       more specific selector. `.grid > .reveal:nth-child(odd)` outranks
+       `.reveal.in`, so writing the offset there would win against the settled
+       state and the element would never arrive. Variables carry the intent and
+       leave `.reveal.in{transform:none}` the only rule that sets transform. */
+    /* Row grids: cards arrive from the side they sit on. */
+    .grid > .reveal:nth-child(odd){--rx:-38px;--ry:8px;}
+    .grid > .reveal:nth-child(even){--rx:38px;--ry:8px;}
+    .tiers > .reveal:nth-child(1){--rx:-46px;--ry:0;}
+    .tiers > .reveal:nth-child(2){--ry:34px;--rs:.97;}
+    .tiers > .reveal:nth-child(3){--rx:46px;--ry:0;}
+    .hw-grid > .reveal:nth-child(odd){--rx:-28px;--ry:6px;}
+    .hw-grid > .reveal:nth-child(even){--rx:28px;--ry:6px;}
+    /* Big surfaces settle rather than slide -- a 1000px table sliding sideways
+       reads as a glitch, not as motion. */
+    .tbl-wrap.reveal{--ry:22px;--rs:.975;}
+    .showcase.reveal{--ry:38px;--rs:.985;}
+    .sec-head.reveal{--ry:30px;}
+    /* Footnotes and provenance lines fade only. Moving the small print that
+       says where a number came from is the wrong thing to draw the eye to. */
+    .provenance.reveal{--ry:0;}
     .reveal.in{opacity:1;transform:none;}
     .reveal.d1{transition-delay:.08s;}.reveal.d2{transition-delay:.16s;}.reveal.d3{transition-delay:.24s;}
 
@@ -531,7 +552,7 @@
     }
     @media(prefers-reduced-motion:reduce){
       *{animation:none!important;transition:none!important;scroll-behavior:auto!important;}
-      .reveal{opacity:1;transform:none;}
+      .reveal{opacity:1;transform:none;--rx:0;--ry:0;--rs:1;}
       .mesh b{animation:none!important;}
     }
   </style>
