@@ -42,8 +42,12 @@
        impossible to regress: the file is either in the repo or it is not.
 
        woff2 only (every browser since 2016 has it); the woff/ttf fallbacks the
-       providers ship were dropped. 17 files, 330 KB, served first-party. -->
-  <link rel="preload" as="font" type="font/woff2" href="/fonts/304cd1e39b.woff2" crossorigin>
+       providers ship were dropped. 17 files, 330 KB, served first-party.
+
+       2026-08-18: display + headings moved off Clash Display onto Satoshi, so the
+       preload points at Satoshi 700 -- it was still fetching Clash Display 700,
+       a face nothing renders any more. -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/f41d89b144.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/fonts/a18ee4a68c.woff2" crossorigin>
   <link rel="stylesheet" href="/fonts/fonts.css">
   <style>
@@ -74,8 +78,8 @@
       --green:#34d399; --green-light:#6ee7b7;
       --amber:#fbbf24;
 
-      --display:'Clash Display',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      --head:'Satoshi','Clash Display',-apple-system,sans-serif;
+      --display:'Satoshi',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --head:'Satoshi',-apple-system,sans-serif;
       --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
       --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
 
@@ -169,7 +173,7 @@
     .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--green);
       box-shadow:0 0 9px var(--green);}
     h1{font-family:var(--display);font-size:clamp(2.35rem,4.6vw,3rem);line-height:1.08;
-      letter-spacing:-.026em;word-spacing:.04em;font-weight:600;margin:0 0 1.75rem;}
+      letter-spacing:-.026em;word-spacing:.04em;font-weight:700;margin:0 0 1.75rem;}
     h1 .accent{display:inline-block;}
     .hero .sub{font-size:clamp(1.1rem,1.85vw,1.32rem);color:var(--text-mid);max-width:46ch;
       margin:0 0 1.75rem;line-height:1.6;}
@@ -312,7 +316,7 @@
     .kicker{display:inline-block;font-family:var(--mono);font-size:0.77rem;font-weight:600;letter-spacing:.15em;
       text-transform:uppercase;color:var(--v0);margin-bottom:1rem;padding:.26rem .75rem;
       background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--border-lit);border-radius:100px;}
-    h2{font-family:var(--display);font-size:clamp(2rem,4vw,3rem);font-weight:600;letter-spacing:-.034em;line-height:1.06;margin:0 0 1rem;}
+    h2{font-family:var(--display);font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.034em;line-height:1.06;margin:0 0 1rem;}
     .sec-head p{font-size:1.04rem;color:var(--text-mid);margin:0;line-height:1.72;}
     .sec-head p strong{color:var(--text);font-weight:600;}
 
