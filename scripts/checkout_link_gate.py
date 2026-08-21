@@ -8,8 +8,8 @@ are unrelated statements.
 
 WHY HEAD IS FORBIDDEN HERE, measured rather than assumed:
 
-    curl -I  https://buy.polar.sh/polar_cl_jpQY...  ->  200, lands on https://polar.sh/
-    curl -L  https://buy.polar.sh/polar_cl_jpQY...  ->  200, 48,436 bytes,
+    curl -I  https://checkout.dodopayments.com/buy/polar_cl_jpQY...  ->  200, lands on https://polar.sh/
+    curl -L  https://checkout.dodopayments.com/buy/polar_cl_jpQY...  ->  200, 48,436 bytes,
                                      lands on https://polar.sh/checkout/polar_c_NHp3...
 
 HEAD follows the redirect to Polar's HOMEPAGE and reports 200. A retired,
@@ -85,15 +85,21 @@ UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
 # Removing the offer from the site hides the link; it does not close the product.
 # Closing it needs Polar access nobody on this machine has, and is with Matthew.
 
+# 2026-08-21: Polar retired. The live Dodo checkout was READ IN A BROWSER before
+# this moved -- curl alone would not have proved it, since the page is a JS app
+# (the same blindness that made a sibling session report Crisp's Buy button dead).
+# Observed rendered: "Kerr and Company LLC", "Outlier - Founders Lifetime $249.00",
+# "Includes License Key", a tax-calculating form, and a "Continue to Payment" step.
+# Not test mode.
 EXPECTED = {
-    "polar_cl_9tPoCY5d2jVaRY7aU7DOH9pd3lV5kelZatIzJ2tZH6h": "Lifetime, $249",
+    "pdt_0Nlgdu1f0s30YekSmpGwA": "Lifetime, $249",
 }
 
 #: ⚠️ SIZE IS NOT A SIGNAL, and my first version of this gate assumed it was.
 #: Control-tested with a bogus link id on 2026-08-18:
 #:
 #:   real   polar_cl_jpQY...  -> 200,  48,438 b, final https://polar.sh/checkout/polar_c_...
-#:   bogus  polar_cl_thisDoesNotExist... -> 200, 157,875 b, final https://polar.sh/
+#:   bogus  pdt_thisDoesNotExist... -> 200, 157,875 b, final https://polar.sh/
 #:
 #: The DEAD link returns three times MORE bytes than the live one, because it
 #: lands on Polar's marketing homepage. A `size >= 10_000` floor — which is what
@@ -106,8 +112,15 @@ EXPECTED = {
 #: useless too.
 MIN_BYTES = 10_000
 
-LINK = re.compile(r"https://buy\.polar\.sh/(polar_cl_[A-Za-z0-9_]+)")
-HREF = re.compile(r'href\s*=\s*["\']https://buy\.polar\.sh/(polar_cl_[A-Za-z0-9_]+)')
+
+# Dodo lands on /session/cks_<id>; Polar landed on /checkout/polar_c_<id>. Both are
+# per-request session urls, so the test is the SHAPE of the landing path, never
+# equality with the configured link. Verified in a browser before this changed:
+# the Dodo session page renders the order summary, the $249 total, "Includes
+# License Key", and a "Continue to Payment" step.
+CHECKOUT_PATH = re.compile(r"/(?:checkout|session)/")
+LINK = re.compile(r"https://checkout\.dodopayments\.com/buy/(pdt_[A-Za-z0-9_]+)")
+HREF = re.compile(r'href\s*=\s*["\']https://checkout\.dodopayments\.com/buy/(pdt_[A-Za-z0-9_]+)')
 
 
 def pages(root: Path):
@@ -144,7 +157,7 @@ def main() -> int:
         # 2. GET to a real checkout
         try:
             r = urllib.request.urlopen(
-                urllib.request.Request(f"https://buy.polar.sh/{link_id}", headers=UA), timeout=30)
+                urllib.request.Request(f"https://checkout.dodopayments.com/buy/{link_id}", headers=UA), timeout=30)
             body = r.read()
             final, status, size = r.geturl(), r.status, len(body)
         except Exception as exc:
@@ -152,7 +165,7 @@ def main() -> int:
             failures.append(f"    {label} ({link_id[:26]}...): checkout unreachable — {exc}")
             continue
 
-        reachable = 200 <= status < 300 and "/checkout/" in final and size >= MIN_BYTES
+        reachable = 200 <= status < 300 and bool(CHECKOUT_PATH.search(final)) and size >= MIN_BYTES
         ok = reachable
         # MERGED FROM checkout_gate.py (977c6f17), which this file now replaces:
         # reaching a checkout page is not the same as reaching the RIGHT one. The
@@ -169,7 +182,7 @@ def main() -> int:
                     f"{want.group(0)} is NOT on that page. The door opens onto the wrong till.")
         ok = ok and price_ok
         print(f"  {label:16s} {link_id[:26]}...  {status}  {size:,}b  "
-              f"{'checkout' if '/checkout/' in final else 'NOT a checkout page'}"
+              f"{'checkout' if CHECKOUT_PATH.search(final) else 'NOT a checkout page'}"
               f"  x{len(where)}{injected}")
         # Only claim the button is unreachable when it actually is. When the page
         # loads fine and only the PRICE is wrong, the price failure above already
@@ -201,10 +214,14 @@ def main() -> int:
         print("  checkout session id is minted per request.")
         return 1
 
-    print(f"OK: {len(found)} checkout link(s), each reaching a real Polar checkout page.")
+    print(f"OK: {len(found)} checkout link(s), each reaching a real Dodo checkout page.")
     print("Each also carries the price declared for it in EXPECTED, so this proves the")
     print("door opens AND the till reads right. ops/bin/checkout-price-gate.py still")
-    print("checks the amount against the live Polar product, which is the other half.")
+    print("checks the amount against the live product, which is the other half.")
+    print("Note Dodo 404s a bogus product id, where Polar answered 200 with a")
+    print("marketing page — so the size floor Polar made necessary is now")
+    print("belt-and-braces rather than the only thing standing between a dead")
+    print("link and a green gate.")
     return 0
 
 
