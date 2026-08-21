@@ -152,7 +152,7 @@
     <p>Attention layers produce key and value tensors, and the KV cache holds them across tokens so each new one doesn't re-scan every word before it. Skip it and generation crawls. The catch: the cache grows with your context length. Push context far enough and the KV cache outgrows the model weights themselves.</p>
 
     <h2>Tok/s (tokens per second)</h2>
-    <p>The number you watch for raw speed. Decode tok/s is how many output tokens stream out per second after prefill. Core 27B hits about 22 tok/s on an M1 Ultra; Plus 397B on the V9 paged engine lands around 1.59 tok/s. Bigger model, slower stream. That's the trade.</p>
+    <p>The number you watch for raw speed. Decode tok/s is how many output tokens stream out per second after prefill. Core 27B hits about 20.7 tok/s on an M1 Ultra; Plus 397B on the V9 paged engine lands around 1.59 tok/s. Bigger model, slower stream. That's the trade.</p>
 
     <h2>TTFT — time to first token</h2>
     <p>The wait between hitting send and the first token landing. Almost all of it is prefill, the model chewing through your prompt before it answers. Long prompt? TTFT can stretch to several seconds, even on a quick model. Outlier's prefill heartbeat exists for that moment, so the UI keeps a pulse instead of freezing.</p>
