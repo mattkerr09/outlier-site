@@ -84,11 +84,27 @@ def main(root_arg: str = ".") -> int:
     # So this checks only two shapes that unambiguously count OUR lineup, and
     # requires the sentence to be about Outlier. Everything else is left alone:
     # a gate that cries wolf gets ignored, and an ignored gate hides real drift.
+    NUMS = "|".join(WORD.values())
     OURS = re.compile(r'\bOutlier\b|\bour\b|\bmy\b|\bships?\b|\blineup\b', re.I)
     #  "six of our seven tiers"  -> second number is the TOTAL
     OF_SHAPE = re.compile(r'\b(\w+) of (?:our |my |the )?(\w+) tiers?\b', re.I)
-    #  "seven tiers", "all seven tiers" -> the TOTAL, but NOT when preceded by "of"
-    TOTAL_SHAPE = re.compile(r'(?<!of )(?<!of our )(?<!of my )\b(\w+) tiers?\b', re.I)
+    #  "seven tiers" -> the TOTAL, but NOT when preceded by "of".
+    #  ADJECTIVES INTERVENE CONSTANTLY and an earlier version missed all of them:
+    #  "seven MODEL tiers", "seven FIXED tiers", "seven CURATED tiers", "seven
+    #  ON-DEVICE tiers", "seven READY-TO-RUN tiers". With `(\w+) tiers?` the capture
+    #  lands on the adjective, which is not a number word, so the claim is silently
+    #  skipped -- 34 occurrences across 21 files, every one of which would have gone
+    #  stale on build day while this gate reported PASS.
+    #  The capture MUST be anchored on number words. A version using (\w+) with
+    #  optional intervening words captured "the" in "the seven model tiers" -- the
+    #  number was eaten as an adjective and matched claims fell from 46 to 21, which
+    #  the vacuity guard caught.
+    TOTAL_SHAPE = re.compile(
+        rf'(?<!of )(?<!of our )(?<!of my )\b({NUMS})[\s-]+(?:[\w-]+[\s-]+){{0,2}}tiers?\b', re.I)
+    #  "Seven-tier lineup" -- hyphenated, no plural
+    HYPHEN_SHAPE = re.compile(rf'\b({NUMS})-tier\b', re.I)
+    #  "Pro unlocks all seven", "one of the seven" -- the noun is dropped entirely
+    BARE_SHAPE = re.compile(rf'\b(?:all|of the|of)\s+({NUMS})\b(?![\s-]*[\w-]*[\s-]*tiers?)', re.I)
 
     bad, pages, claims = [], 0, 0
     for f in sorted(root.rglob("*.html")):
@@ -144,6 +160,31 @@ def main(root_arg: str = ".") -> int:
             if word in (WORD.get(total - 1), WORD.get(total + 1)):
                 claims += 1
                 bad.append(f"{rel}: says '{word} tiers' but {total} ship. …{ctx.strip()[:110]}")
+
+        # hyphenated and noun-dropped forms, same rules
+        for pat, label in ((HYPHEN_SHAPE, "-tier"), (BARE_SHAPE, "bare count")):
+            for m in pat.finditer(txt):
+                if any(a <= m.start() < b for a, b in consumed):
+                    continue
+                word = m.group(1).lower()
+                if word not in WORD.values():
+                    continue
+                ctx = txt[max(0, m.start() - 130): m.start() + 130]
+                if not OURS.search(ctx):
+                    continue
+                if label == "bare count" and not re.search(r'tier', ctx, re.I):
+                    continue          # "all seven" about something else entirely
+                if word == WORD.get(total):
+                    claims += 1
+                    continue
+                if word == WORD.get(total - 1) and re.search(r'\bother\b', ctx, re.I):
+                    continue
+                if word == WORD.get(total - 1) and (
+                        re.search(r'Apache', ctx, re.I) and re.search(r'Gemma', ctx, re.I)):
+                    continue
+                if word in (WORD.get(total - 1), WORD.get(total + 1)):
+                    claims += 1
+                    bad.append(f"{rel}: '{word}' ({label}) but {total} ship. …{ctx.strip()[:110]}")
 
     if pages < MIN_PAGES:
         print(f"FAIL: only {pages} pages scanned, expected >= {MIN_PAGES}.")
