@@ -51,6 +51,38 @@ plausible.init()
   t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
   document,'script','https://connect.facebook.net/en_US/fbevents.js');
   fbq('init','1592291422272376');fbq('track','PageView');
+  // Purchase, fired ONLY when the page carries a checkout_id.
+  //
+  // Three things this deliberately does NOT do:
+  //
+  // 1. Fire on every view. This URL is bookmarkable, crawlable and shareable. An
+  //    unconditional Purchase would count refreshes, the marketing team opening
+  //    the page, and any bot that follows the link -- then Meta would optimise the
+  //    campaign toward whatever produces those, which is not buyers. The
+  //    checkout_id is the only evidence on this page that a checkout happened.
+  //
+  // 2. Double-count. A refresh re-runs this script with the same id in the URL, so
+  //    the id is recorded in sessionStorage and a repeat is skipped. Keyed on the
+  //    id itself, not a bare flag, so two genuine purchases in one session are two
+  //    events.
+  //
+  // 3. Trust the URL for the amount. The value is the one price this product has.
+  //    Reading it from a query parameter would let anyone inflate our reported
+  //    revenue by editing their address bar, and Meta would then bid against a
+  //    number a stranger chose.
+  //
+  // eventID is the checkout id so a future CAPI call can send the same id and Meta
+  // will deduplicate browser and server events into one purchase instead of two.
+  try {
+    var _cid = new URLSearchParams(window.location.search).get('checkout_id');
+    if (_cid) {
+      var _k = 'outlier_purchase_' + _cid;
+      if (!sessionStorage.getItem(_k)) {
+        sessionStorage.setItem(_k, '1');
+        fbq('track', 'Purchase', {value: 249.00, currency: 'USD'}, {eventID: _cid});
+      }
+    }
+  } catch (e) { /* private mode blocks sessionStorage; never break the page */ }
   </script>
   <noscript><img height="1" width="1" style="display:none" alt=""
     src="https://www.facebook.com/tr?id=1592291422272376&ev=PageView&noscript=1"></noscript>
