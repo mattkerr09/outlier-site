@@ -112,7 +112,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Continue is an Apache-2.0, model-agnostic coding agent for VS Code, JetBrains and the terminal. It ships no model, so whether your code leaves the machine depends on the backend you configure — and after Cursor acquired Continue Dev, Inc. in June 2026, the hosted hub is off and the repository calls itself read-only and no longer maintained. Outlier is a native macOS app with seven on-device tiers, no account and nothing uploaded, but it's a standalone app rather than an editor extension, and its local 27B measured ~45% on a blind SWE-bench Verified slice.</p>
+      <p>Continue is an Apache-2.0, model-agnostic coding agent for VS Code, JetBrains and the terminal. It ships no model, so whether your code leaves the machine depends on the backend you configure — and after Cursor acquired Continue Dev, Inc. in June 2026, the hosted hub is off and the repository calls itself read-only and no longer maintained. Outlier is a native macOS app with eight on-device tiers, no account and nothing uploaded, but it's a standalone app rather than an editor extension, and its local 27B measured ~45% on a blind SWE-bench Verified slice.</p>
     </div>
 
     <p class="lead">I'm Matt Kerr and I build Outlier, so read this as a comparison written by an interested party. These two solve overlapping problems from opposite ends: Continue is a client you bring a model to; Outlier is a model you bring nothing to.</p>
@@ -125,14 +125,14 @@
     <h2>Where each one lives, and which model does the work</h2>
     <p>Continue meets you inside the tool you already use, its best design decision — but it needs VS Code, a JetBrains IDE or Node. No native desktop app, no mobile app, and since the hub shut down, no web UI. Which model powers it is whatever you configured; Continue's Ollama guide points at open-weight options like Qwen2.5-Coder, DeepSeek-Coder 6.7B and DeepSeek-R1 32B, budgeting about 32 GB of RAM for a 32B.</p>
 
-    <p>Outlier goes the other way: one macOS app, Apple Silicon only (M1 or later, macOS 12+), models included. Seven tiers, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on my M1 Ultra) through Code 27B (15.13 GB, 24 GB RAM) to Plus 397B-a17b, which streams MoE experts from SSD and wants 64 GB. Six tiers are Apache 2.0 weights; Quick is Gemma Terms of Use. No extension, no plugin, no Windows or Linux build — if you work in an IDE on Linux, Continue wins by default.</p>
+    <p>Outlier goes the other way: one macOS app, Apple Silicon only (M1 or later, macOS 12+), models included. Eight tiers, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on my M1 Ultra) through Code 27B (15.13 GB, 24 GB RAM) to Plus 397B-a17b, which streams MoE experts from SSD and wants 64 GB. Eight tiers are Apache 2.0 weights; Quick is Gemma Terms of Use. No extension, no plugin, no Windows or Linux build — if you work in an IDE on Linux, Continue wins by default.</p>
 
     <h2>Does your code leave the machine — and what does it cost?</h2>
     <p>Continue's honest answer is "up to you." Pointed at Ollama the endpoint is <code>http://localhost:11434</code> and nothing leaves; the docs call that privacy-focused offline assistance. Pointed at a cloud provider, your prompts and code go to that third party on their terms. There's an official no-internet guide: disable Allow Anonymous Telemetry (which posted to PostHog before 2.0.0 stripped it out, so on the final 2.x that step is already moot — another sign the docs lag the README), configure a local model, install from a <code>.vsix</code>. A real air-gapped story, better documented than most commercial assistants manage — but nothing is local by default.</p>
 
     <p>One gap worth naming: the privacy policy, updated 2026-02-05, says you aren't required to provide personal data to use the open-source software — but it never states whether user code is used for training, and no opt-out is documented. It's silent, and I won't turn silence into an answer.</p>
 
-    <p>On price, the extension and CLI were always free; the paid tiers covered the hosted hub and credits, not the tooling. Snapshotted 2026-06-03: Starter at $3 per million tokens in and out; Team at $9 per seat per month with $10 of credits and SSO; Company at custom pricing with SAML/OIDC, BYOK and an SLA. All historical — the hub is gone. Continue now costs your provider's rates, or nothing on local weights. Outlier is free on Nano and Lite; Pro covers all seven tiers.</p>
+    <p>On price, the extension and CLI were always free; the paid tiers covered the hosted hub and credits, not the tooling. Snapshotted 2026-06-03: Starter at $3 per million tokens in and out; Team at $9 per seat per month with $10 of credits and SSO; Company at custom pricing with SAML/OIDC, BYOK and an SLA. All historical — the hub is gone. Continue now costs your provider's rates, or nothing on local weights. Outlier is free on Nano and Lite; Pro covers all eight tiers.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -152,7 +152,7 @@
         <tr>
           <td><strong>Which model</strong></td>
           <td>Whatever you configure — Ollama or a cloud API</td>
-          <td>Seven built-in tiers, Nano 4B to Plus 397B</td>
+          <td>Eight built-in tiers, Nano 4B to Plus 397B</td>
         </tr>
         <tr>
           <td><strong>Code leaves machine?</strong></td>
