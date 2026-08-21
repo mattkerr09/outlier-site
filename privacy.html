@@ -29,6 +29,20 @@
     ul { padding-left: 1.4rem; }
     li { margin-bottom: 0.4rem; }
   </style>
+
+  <!-- Meta pixel. Disclosed in /privacy.html, which names it, names the _fbp
+       cookie it sets, and no longer claims this site avoids cross-site tracking.
+       The policy changed in the SAME commit as this tag. -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init','1592291422272376');fbq('track','PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt=""
+    src="https://www.facebook.com/tr?id=1592291422272376&ev=PageView&noscript=1"></noscript>
 </head>
 <body>
   <div class="wrap">
@@ -59,7 +73,7 @@
     <h2>What Outlier does NOT do</h2>
     <ul>
       <li>No inference telemetry. We do not log your prompts, model outputs, or which questions you ask.</li>
-      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host uses Plausible for anonymous pageview counts — no cookies, no IP storage, no cross-site tracking — and Sled for affiliate attribution, described below.)</li>
+      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host runs three third-party scripts, listed below: Plausible, which sets no cookies and stores no IP addresses; Sled, for affiliate attribution; and the Meta pixel, which does track across sites. None of them are in the app.)</li>
       <!-- Added 2026-08-13. This page listed Plausible as the only thing the marketing site
            touched, which read as a complete list and was not one: outlier.host loads its four
            typefaces from Google Fonts and Fontshare, and loading a font is an HTTP request that
@@ -78,18 +92,20 @@
            almost every visitor does. It records which affiliate sent a visit, never who
            the visitor is. "One cookie, sometimes" is the only honest version — "no
            cookies" would now be false and "we use cookies" would overstate it. -->
-      <li>One conditional cookie, from <a href="https://usesled.com">Sled</a>. If you reach
-      outlier.host through an affiliate link, a single <code>ta_ref</code> cookie records
-      which affiliate sent you so they are credited if you buy. Reach the site any other
-      way and no cookie is set. It never records who you are, and the desktop app does not
-      request it — the shipping bundle contains no reference to that host.</li>
+      <li>Cookies, and exactly what sets them. <a href="https://usesled.com">Sled</a> sets a
+      single <code>ta_ref</code> cookie only if you arrive through an affiliate link, so that
+      affiliate is credited if you buy; it never records who you are. The Meta pixel sets its
+      own <code>_fbp</code> cookie on every visit, however you arrived, and that identifier is
+      what lets Meta connect this visit to your activity on their platforms. Neither is
+      requested by the desktop app — the shipping bundle contains no reference to either
+      host.</li>
       <!-- Rewritten 2026-08-18, when the fonts became first-party. The previous
            version of this paragraph was accurate and that was the problem: it
            correctly disclosed that reading this page exposed your IP to Google
            and Fontshare, on a site whose headline is that nothing leaves your
            Mac. An honest disclosure of a contradiction is still a
            contradiction. -->
-      <li>No third-party assets on this site except the two scripts above.
+      <li>No third-party assets on this site except the three scripts above.
       <strong>The typefaces are served from outlier.host itself.</strong> They used to be
       requested from Google Fonts (<code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>)
       and Fontshare (<code>api.fontshare.com</code>), which meant simply opening this page
