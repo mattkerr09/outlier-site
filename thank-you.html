@@ -25,6 +25,14 @@
     .steps li { margin: 0.7rem 0; }
     .btn { display: inline-block; background: var(--accent); color: #07060b; font-weight: 600;
            padding: 0.85rem 1.4rem; border-radius: 10px; text-decoration: none; margin: 0.6rem 0 0.2rem; }
+    /* Licence-key panel. Deliberately NO `display` property in these rules:
+       `hidden` is enforced by the UA rule [hidden]{display:none}, and any class
+       selector outbids it — a display here would show an EMPTY key box to every
+       visitor who did not arrive from a checkout. */
+    .keybox { border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin: 0 0 1.4rem; background: rgba(255,255,255,.03); }
+    .keybox-label { margin: 0 0 .5rem; font-size: .85rem; letter-spacing: .02em; opacity: .75; }
+    .keybox-key { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1.02rem; word-break: break-all; user-select: all; }
+    .btn-copy { margin: .75rem 0 .4rem; font-size: .85rem; padding: .4rem .9rem; }
     .note { border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin: 1.6rem 0; }
     .foot { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 1.2rem; font-size: 0.92rem; }
     code { background: rgba(255,255,255,0.06); padding: 0.1rem 0.35rem; border-radius: 4px; }
@@ -73,13 +81,25 @@ plausible.init()
   //
   // eventID is the checkout id so a future CAPI call can send the same id and Meta
   // will deduplicate browser and server events into one purchase instead of two.
+  //
+  // v1.11.798: this gate read `checkout_id`. Dodo does not send that. It appends
+  // payment_id, status, license_key and email — so the event could not have
+  // fired even once a buyer reached this page. Two separate faults stacked: the
+  // buy links were bare so nobody arrived, and the gate watched for a parameter
+  // that never arrives. Either one alone makes Purchase silently unreachable.
+  //
+  // status is checked because Dodo redirects here for FAILURES too. Firing on a
+  // declined card would teach Meta to optimise toward people whose payments
+  // fail, which is worse than no signal at all.
   try {
-    var _cid = new URLSearchParams(window.location.search).get('checkout_id');
-    if (_cid) {
-      var _k = 'outlier_purchase_' + _cid;
+    var _q = new URLSearchParams(window.location.search);
+    var _pid = _q.get('payment_id');
+    var _status = (_q.get('status') || '').toLowerCase();
+    if (_pid && _status === 'succeeded') {
+      var _k = 'outlier_purchase_' + _pid;
       if (!sessionStorage.getItem(_k)) {
         sessionStorage.setItem(_k, '1');
-        fbq('track', 'Purchase', {value: 249.00, currency: 'USD'}, {eventID: _cid});
+        fbq('track', 'Purchase', {value: 249.00, currency: 'USD'}, {eventID: _pid});
       }
     }
   } catch (e) { /* private mode blocks sessionStorage; never break the page */ }
@@ -100,8 +120,23 @@ plausible.init()
     <p class="dim">Version 1.11.797 &middot; Apple Silicon DMG</p>
 
     <h2>2. Activate</h2>
+
+    <!-- Licence key, shown only when Dodo redirects here with one on the query
+         string. Until v1.11.798 the buy links were BARE, so a buyer stayed on
+         Dodo's confirmation page and never reached this page at all. Adding
+         redirect_url WITHOUT this panel would have been strictly worse than
+         doing nothing: Dodo's own page is where the key was visible, so we
+         would have redirected the buyer away from the one screen showing it,
+         in order to tell them to check their email. -->
+    <div class="keybox" id="licence-box" hidden>
+      <p class="keybox-label">Your licence key</p>
+      <code class="keybox-key" id="licence-key"></code>
+      <button class="btn btn-copy" id="licence-copy" type="button">Copy</button>
+      <p class="dim">Also emailed to you. Paste it into Outlier under <strong>Activate</strong>.</p>
+    </div>
+
     <ol class="steps">
-      <li>Check your email for the receipt from Dodo Payments. Your licence key is in it.</li>
+      <li id="step-receipt">Check your email for the receipt from Dodo Payments. Your licence key is in it.</li>
       <li>Open Outlier, go to <strong>Activate</strong>, and paste the key.</li>
       <li>That unlocks every tier and every Pro feature on this Mac.</li>
     </ol>
@@ -132,5 +167,47 @@ plausible.init()
         <a href="/learn/">Guides</a></p>
     </div>
   </div>
+<script>
+  // Render the licence key Dodo puts on the query string. textContent, never
+  // innerHTML: the value is attacker-controllable via the address bar, and this
+  // page is linkable, so injecting it as markup would be an XSS on our own
+  // thank-you page. Nothing here decides entitlement — the app still verifies
+  // the key against the issuer; this only saves the buyer a trip to their inbox.
+  (function () {
+    try {
+      var q = new URLSearchParams(window.location.search);
+      var key = q.get('license_key');
+      if (!key) return;                       // no key -> panel stays hidden
+      // Hide the key on an EXPLICIT failure. Dodo probably never sends a key
+      // with status=failed, but "probably never" is the assumption that shows a
+      // licence key to someone whose card was declined. Deliberately permissive
+      // when status is ABSENT: a key with no status is still evidence of a
+      // purchase, and suppressing it would strand a real buyer.
+      var st = (q.get('status') || '').toLowerCase();
+      if (st && st !== 'succeeded') return;
+      var box = document.getElementById('licence-box');
+      var out = document.getElementById('licence-key');
+      var btn = document.getElementById('licence-copy');
+      var step = document.getElementById('step-receipt');
+      if (!box || !out) return;
+      out.textContent = key;
+      box.hidden = false;
+      if (step) {
+        step.textContent = 'Your licence key is above \u2014 a copy is also in the '
+          + 'receipt Dodo Payments emailed you.';
+      }
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 2000); };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(key).then(done, function () { btn.textContent = 'Select it above'; });
+          } else {
+            btn.textContent = 'Select it above';   // http/older browsers: no clipboard API
+          }
+        });
+      }
+    } catch (e) { /* never break the page a buyer just landed on */ }
+  })();
+</script>
 </body>
 </html>
