@@ -66,7 +66,7 @@
       <li><strong>Cloud API providers (OpenAI / Anthropic / OpenAI-compatible)</strong> — only when you explicitly switch to a cloud model in the picker AND provide your own API key. Your prompts and conversation history are sent to that provider per their terms. Your API key is stored locally; we never see it.</li>
       <li><strong>Web search</strong> — only when you toggle 🌐 search on for a turn. Sends your search query (not your full prompt history) to DuckDuckGo, Mojeek, and Wikipedia (and, during Deep Research only, additionally Crossref, OpenAlex, StackExchange, and Hacker News / Algolia). Results are then fed back into the local model.</li>
       <li><strong>App update check</strong> — Outlier periodically polls <a href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json" target="_blank" rel="noopener noreferrer">a public GitHub URL</a> for new release metadata. HTTP GET only. Update payloads are cryptographically signed (minisign) and verified before install.</li>
-      <li><strong>Founders / Pro license activation</strong> — when you paste your Polar license key into Settings → license, the key is sent to <code>api.polar.sh</code> (Polar's customer-portal endpoint) to verify your tier, along with a device label (your Mac's hostname plus a short random install id) so you can tell your activated devices apart in the customer portal. No prompts, files, or usage data leave your Mac during activation.</li>
+      <li><strong>Founders / Pro license activation</strong> &mdash; when you paste your license key into Settings &rarr; license, the key is sent to the vendor that issued it: <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026. The app decides from the key itself and sends it to one vendor only, along with a device name so the seat can be counted against your five activations.</li>
     </ul>
     <p class="dim">All of the above are surfaced in the in-app Privacy Ledger (Settings → Privacy → Privacy ledger). The list there is generated from the literal <code>fetch()</code> call sites in the source.</p>
 
@@ -119,7 +119,7 @@
     </ul>
 
     <h2>Payments</h2>
-    <p>Paid tiers (Pro, Founders Lifetime $249) are processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a>. Polar handles payment, license issuance, and customer portal. We do not see or store your payment method. Refund requests within 14 days: email matt@outlier.host.</p>
+      <p>Paid tiers (Pro, Founders Lifetime $249) are processed by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer">Dodo Payments</a>, which handles payment, licence issuance and the customer portal. Purchases made before 23 August 2026 were processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a> and those licences remain valid. We never see your card details. If Dodo offers an instalment option at checkout &mdash; Klarna or Afterpay, where they operate &mdash; that agreement is between you and the provider, who will run their own checks; Outlier is not party to it and receives only confirmation that the order was paid.</p>
 
     <h2>Children</h2>
     <p>Outlier is not directed at children under 13.</p>

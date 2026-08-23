@@ -456,6 +456,11 @@
     .tier .btn{width:100%;margin-top:auto;}
     .tier .seat{font-family:var(--mono);font-size:0.77rem;color:var(--v0);margin-top:.75rem;text-align:center;}
     .price-note{text-align:center;color:var(--text-dim);font-size:0.9rem;margin:1.8rem auto 0;max-width:64ch;line-height:1.75;}
+    /* Instalment line beside the buy button. Sits closer than .price-note because it
+       belongs to the price, and stays quieter than the button it follows. Defined now
+       even though the copy ships hidden — an unstyled paragraph appearing the moment a
+       flag flips is how a launch-day change looks broken. */
+    .bnpl-note{text-align:center;color:var(--text-dim);font-size:0.85rem;margin:0.75rem auto 0;max-width:52ch;line-height:1.65;}
     .price-note a{color:var(--v0);text-decoration:underline;text-underline-offset:2px;}
 
     /* ---------- impact / planet ---------- */
@@ -1283,6 +1288,12 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No seat cap, no countdown</li>
         </ul>
         <a class="btn btn-ghost" href="https://checkout.dodopayments.com/buy/pdt_0Nlgdu1f0s30YekSmpGwA" target="_blank" rel="noopener noreferrer">Own Pro forever — $249</a>
+        <!-- INSTALMENTS. Empty until OUTLIER_BNPL_LIVE is set at the foot of this
+             file. Klarna and Afterpay sell Pay in 4: four payments TWO WEEKS apart,
+             six weeks end to end — NOT a monthly plan. A draft that said
+             "$62/month for 4 months" was a payment schedule no provider offers,
+             printed beside a price. It never shipped. -->
+        <p class="bnpl-note" data-outlier-bnpl hidden></p>
         
       </div>
     </div>
@@ -1499,6 +1510,42 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
      only played after a deliberate scroll past it. */
   io.observe(el);
 })();
+</script>
+
+<script>
+/* INSTALMENTS — AUTHORED DARK, DELIBERATELY.
+   Dodo's docs list Klarna (USD, min $50.01) and Afterpay (USD/GBP, min $50.01),
+   and $249 clears both floors — but that is a fact about DODO, not about this
+   merchant account. Four independent renders of live Dodo checkouts, here and on
+   Crisp and Docket, found no occurrence of klarna, afterpay or affirm in the
+   payload. The likely cause is that Dodo has not finished verifying the business,
+   so no method is enabled yet.
+
+   A price page promising instalments the checkout will not offer is a
+   consumer-finance claim we cannot honour, on the page where money changes hands.
+   Same rule as the pixel: the copy goes live in the change that makes it true,
+   never before.
+
+   TWO THINGS THAT MUST SURVIVE THE FLIP:
+   - Pay in 4 is four payments TWO WEEKS apart, six weeks end to end. Never
+     "monthly" — no provider sells that schedule. Never name Affirm; Dodo does not
+     offer it. "No extra cost from us", never "interest-free": Klarna's own terms
+     carry late fees, and that promise is theirs to make, not ours.
+   - COVERAGE IS NOT UNIVERSAL. Klarna is the US plus 19 European countries;
+     Afterpay is the US and UK only. An unqualified "four payments" is false for a
+     reader in Canada, Australia, Japan, Brazil or India, so the sentence names
+     where it applies. */
+  var OUTLIER_BNPL_LIVE = false;
+  if (OUTLIER_BNPL_LIVE) {
+    var bnpl = document.querySelectorAll('[data-outlier-bnpl]');
+    for (var b = 0; b < bnpl.length; b++) {
+      bnpl[b].textContent = 'Or four payments of $62.25 with Klarna or Afterpay '
+        + 'in the US, UK and much of Europe, two weeks apart \u2014 the last one '
+        + 'six weeks after the first, at no extra cost from us. Then it stops, '
+        + 'and it is yours.';
+      bnpl[b].hidden = false;
+    }
+  }
 </script>
 </body>
 </html>
