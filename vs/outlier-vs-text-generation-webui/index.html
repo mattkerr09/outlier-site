@@ -112,7 +112,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Both run models entirely on your own hardware, so privacy is not the difference between them. text-generation-webui — renamed TextGen in its 4.x releases — is free, AGPL-3.0 open source, runs on Windows, Linux and macOS, and loads any model across five swappable inference backends, but you bring your own weights and flags. Outlier is a closed-source, Mac-only app that ships eight ready-to-run tiers and picks the settings for you.</p>
+      <p>Both run models entirely on your own hardware, so privacy is not the difference between them. text-generation-webui — renamed TextGen in its 4.x releases — is free, AGPL-3.0 open source, runs on Windows, Linux and macOS, and loads any model across five swappable inference backends, but you bring your own weights and flags. Outlier is a closed-source, Mac-only app that ships seven ready-to-run tiers and picks the settings for you.</p>
     </div>
 
     <p class="lead">I'm Matt Kerr. I build Outlier, so I have an obvious stake here — read this with that in mind. Every claim about TextGen is verifiable in its repo, release notes or requirements files. And on several axes, TextGen is the more capable software.</p>
@@ -126,7 +126,7 @@
 
     <h2>What Outlier is</h2>
     <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12 or newer. No Intel Macs, no Windows, no Linux, no mobile app. Models run fully on-device, no account, no usage caps.</p>
-    <p>Eight tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which needs 64 GB and streams experts from SSD at about 11 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase for all seven. Weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>; the app itself is not open source.</p>
+    <p>Seven tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which needs 64 GB and streams experts from SSD at about 11 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase for all seven. Weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>; the app itself is not open source.</p>
 
     <h2>Interface, setup, and what's in the box</h2>
     <p>This is the real dividing line. TextGen is a Gradio web UI wrapped, since v4.7.3, in a bundled Electron shell, so it opens in its own window rather than a browser tab. It's also a server: run it with <code>--api</code> and you get an OpenAI- <em>and</em> Anthropic-compatible endpoint on port 5000, with streaming and tool calling. There's no interactive chat CLI — the command line is for configuration (<code>--cpu</code>, <code>--split-mode</code>, <code>--spec-type</code>), not conversation. The portable builds don't need installing, but on macOS the release notes tell you to run <code>xattr -cr</code> on the folder first, because the builds aren't notarized.</p>
@@ -150,7 +150,7 @@
         <tr><td><strong>Interface</strong></td><td>Gradio UI in an Electron window + API server; CLI is config, not chat</td><td>Native Mac window; no CLI, optional local API server</td></tr>
         <tr><td><strong>Who it's for</strong></td><td>Developers, tinkerers, self-hosters</td><td>End users who want it to just work</td></tr>
         <tr><td><strong>Setup</strong></td><td>Unzip, <code>xattr -cr</code> on macOS, then pick a model yourself</td><td>Install, pick a tier, done</td></tr>
-        <tr><td><strong>Models</strong></td><td>Bring your own, from all of Hugging Face</td><td>Eight curated tiers, 4B to 397B</td></tr>
+        <tr><td><strong>Models</strong></td><td>Bring your own, from all of Hugging Face</td><td>Seven curated tiers, 4B to 397B</td></tr>
         <tr><td><strong>Bundled vs assembled</strong></td><td>App bundled, model assembled by you</td><td>Both bundled</td></tr>
         <tr><td><strong>Backends</strong></td><td>Five, swappable live; on Mac, llama.cpp + Transformers (no ExLlamaV3 or TensorRT-LLM)</td><td>One, not user-selectable</td></tr>
         <tr><td><strong>Platforms</strong></td><td>Windows, Linux, macOS (arm64 + x86_64)</td><td>Apple Silicon Macs only</td></tr>
@@ -165,8 +165,8 @@
     <ul>
       <li><strong>It's free and it's yours.</strong> AGPL source plus free binaries, no account, no metering, no vendor who can change the terms.</li>
       <li><strong>It runs on everything.</strong> Windows, Linux and macOS, same workflow. Outlier covers one platform.</li>
-      <li><strong>Any model, day one.</strong> The whole Hugging Face ecosystem — niche fine-tunes, uncensored models, brand-new releases the week they drop. Outlier gives you our eight tiers and nothing else.</li>
-      <li><strong>It's a server, and a better one.</strong> One <code>--api</code> flag gives you an OpenAI- <em>and</em> Anthropic-compatible endpoint, fronting whatever model you loaded, reachable from other machines with <code>--listen</code>. Outlier does ship an OpenAI-compatible endpoint — it's off until you turn it on in Settings › Developer, then it's <code>http://127.0.0.1:8766/v1</code> with a required API key — but it's localhost-only, no Anthropic route, and it only serves our eight tiers.</li>
+      <li><strong>Any model, day one.</strong> The whole Hugging Face ecosystem — niche fine-tunes, uncensored models, brand-new releases the week they drop. Outlier gives you our seven tiers and nothing else.</li>
+      <li><strong>It's a server, and a better one.</strong> One <code>--api</code> flag gives you an OpenAI- <em>and</em> Anthropic-compatible endpoint, fronting whatever model you loaded, reachable from other machines with <code>--listen</code>. Outlier does ship an OpenAI-compatible endpoint — it's off until you turn it on in Settings › Developer, then it's <code>http://127.0.0.1:8766/v1</code> with a required API key — but it's localhost-only, no Anthropic route, and it only serves our seven tiers.</li>
       <li><strong>LoRA fine-tuning built in</strong>, including CPU-mode training. One sharp edge: per the compatibility doc, LoRA loading and training both need the Transformers loader, not llama.cpp, which is what most local users run. On a Mac that's still a live option — <code>requirements_apple_silicon.txt</code> installs Transformers, <code>peft</code> and <code>accelerate</code> — but it means leaving the GGUF path you probably started on.</li>
       <li><strong>Wider modality coverage.</strong> Vision, PDF and .docx attachments, image generation via diffusers, TTS and voice extensions, MCP support. Outlier has vision but no image generation, no voice, no web search.</li>
       <li><strong>It serves the household.</strong> One capable machine plus <code>--listen</code> puts every phone and laptop on the LAN into the same model.</li>

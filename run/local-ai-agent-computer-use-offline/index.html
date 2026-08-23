@@ -92,7 +92,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "A local AI agent with computer use, fully offline on a Mac", "item": "https://outlier.host/run/local-ai-agent-computer-use-offline/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can an AI control my Mac offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. With screen perception from Vision 35B and macOS Accessibility permission, the agent can see the screen and click or type, fully locally."}}, {"@type": "Question", "name": "How good is local computer use versus cloud?", "acceptedAnswer": {"@type": "Answer", "text": "It works but trails on visual reasoning for crowded or unusual interfaces, and each look, decide, act loop takes a few seconds."}}, {"@type": "Question", "name": "Is computer use safe?", "acceptedAnswer": {"@type": "Answer", "text": "Every action with side effects is gated behind an approval prompt by default; you can scope-grant a single workflow to run uninterrupted."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can an AI control my Mac offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. With screen perception from Vision 3.8 27B and macOS Accessibility permission, the agent can see the screen and click or type, fully locally."}}, {"@type": "Question", "name": "How good is local computer use versus cloud?", "acceptedAnswer": {"@type": "Answer", "text": "It works but trails on visual reasoning for crowded or unusual interfaces, and each look, decide, act loop takes a few seconds."}}, {"@type": "Question", "name": "Is computer use safe?", "acceptedAnswer": {"@type": "Answer", "text": "Every action with side effects is gated behind an approval prompt by default; you can scope-grant a single workflow to run uninterrupted."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -122,7 +122,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Computer use means the AI reads screenshots and then clicks or types through macOS Accessibility.</li>
-        <li><strong>Vision 35B</strong> does the screen-reading locally on a 24 GB+ Mac (~16 tok/s on the V9 engine).</li>
+        <li><strong>Vision 3.8 27B</strong> does the screen-reading locally on a 24 GB+ Mac (~16 tok/s on the V9 engine).</li>
         <li>By default it asks before every action. You can scope-grant a whole workflow so it stops asking.</li>
         <li>You give up some visual-reasoning quality versus cloud. You get nothing on your screen ever leaving the machine.</li>
       </ul>
@@ -133,20 +133,20 @@
     <h2>The three primitives</h2>
     <p>Three things have to be in place.</p>
     <ol>
-      <li><strong>Screen perception.</strong> A model that can take a screenshot as input and actually reason about what's in it. In Outlier that's the Vision 35B-A3B tier, a multimodal MoE that handles image plus text.</li>
+      <li><strong>Screen perception.</strong> A model that can take a screenshot as input and actually reason about what's in it. In Outlier that's the Vision 3.8 27B tier, a multimodal MoE that handles image plus text.</li>
       <li><strong>Action emission.</strong> The model emits structured tool calls. Things like "click at (x, y)" or "type 'hello'." Outlier's agent loop takes those and hands them to a sandboxed executor.</li>
       <li><strong>Action execution.</strong> A small driver that does the physical part: moves the mouse, presses keys, types. macOS exposes this through the Accessibility framework. You grant the app Accessibility permission once and you're done.</li>
     </ol>
     <p>Not one of those steps touches the network. The screenshot is captured on your machine, the model runs on your machine, the clicks happen on your machine.</p>
 
-    <h2>What Vision 35B sees and decides</h2>
-    <p>Vision 35B is a 35-billion-parameter Mixture-of-Experts model with an image encoder, and only 3.6B of those parameters fire per token. You need a 24 GB+ Mac. It runs on the V9 paged engine at roughly 16 tok/s. On a 64 GB Mac Studio you've got plenty of room left over for long image-heavy sessions.</p>
+    <h2>What Vision 3.8 27B sees and decides</h2>
+    <p>Vision 3.8 27B is a 35-billion-parameter Mixture-of-Experts model with an image encoder, and only 3.6B of those parameters fire per token. You need a 24 GB+ Mac. It runs on the V9 paged engine at roughly 16 tok/s. On a 64 GB Mac Studio you've got plenty of room left over for long image-heavy sessions.</p>
     <p>The prompt for a computer-use task looks about like this. "Here's a screenshot of my desktop. The user wants the export-to-PDF button in this app. Where do I click?" The model hands back rough coordinates or a description of the element it found. Then the Outlier agent does one of three things: clicks it, asks you first, or gives control back.</p>
 
     <h2>Where the local version trails</h2>
     <p>No point pretending it's even with cloud. It isn't, in three places.</p>
     <ul>
-      <li><strong>Visual reasoning quality.</strong> Vision 35B is genuinely good, but it's a smaller model than Claude's vision stack. Hand it a crowded or low-contrast UI (older Mac apps, dense data tables, custom themes) and it slips up more often.</li>
+      <li><strong>Visual reasoning quality.</strong> Vision 3.8 27B is genuinely good, but it's a smaller model than Claude's vision stack. Hand it a crowded or low-contrast UI (older Mac apps, dense data tables, custom themes) and it slips up more often.</li>
       <li><strong>Latency.</strong> Each look-then-decide-then-act loop runs in seconds, because every time the model has to encode the screenshot, reason about it, then emit the action. Cloud isn't wildly faster, but over a long sequence the gap shows.</li>
       <li><strong>Tool ergonomics.</strong> The computer-use surface is newer than the chat and agent surfaces. Rougher edges. More approval prompts than you'd like.</li>
     </ul>
@@ -159,13 +159,13 @@
     </ul>
 
     <h2>How to try it</h2>
-    <p>Open the Outlier app and switch to Vision 35B. Any Pro tier includes it ($249 lifetime). Go into Agent mode. Grant Accessibility permission when it asks. Then try something small: "open Calculator and compute the square root of 169." The agent grabs a screenshot, works out what to do, asks for your OK, and acts. That approval gate is on by default for anything with side effects. If you'd rather it run start to finish without interrupting, scope-grant the workflow.</p>
+    <p>Open the Outlier app and switch to Vision 3.8 27B. Any Pro tier includes it ($249 lifetime). Go into Agent mode. Grant Accessibility permission when it asks. Then try something small: "open Calculator and compute the square root of 169." The agent grabs a screenshot, works out what to do, asks for your OK, and acts. That approval gate is on by default for anything with side effects. If you'd rather it run start to finish without interrupting, scope-grant the workflow.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>Can an AI control my Mac offline?</h3>
-        <p>Yes. With screen perception from Vision 35B and macOS Accessibility permission, the agent can see the screen and click or type, fully locally.</p>
+        <p>Yes. With screen perception from Vision 3.8 27B and macOS Accessibility permission, the agent can see the screen and click or type, fully locally.</p>
       </div>
       <div class="faq-item">
         <h3>How good is local computer use versus cloud?</h3>

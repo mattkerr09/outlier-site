@@ -125,9 +125,9 @@
     <p>The hardware surface is enormous — Metal, CUDA, HIP, Vulkan, SYCL, OpenVINO, WebGPU and more, with prebuilt binaries for macOS, Linux, Windows, Android and an iOS XCFramework. Apple Silicon isn't an afterthought: ARM NEON, Accelerate and Metal are explicitly optimized.</p>
 
     <h2>What Outlier is</h2>
-    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). You double-click it and the model is already there. No account, no usage caps, works with Wi-Fi off. Eight tiers ship in it: Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 35B-a3b, and Plus 397B-a17b, which needs a 64 GB Mac (209 GB on disk, 1.59 tok/s) and streams experts from SSD to hold ~11 GB peak RSS.</p>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). You double-click it and the model is already there. No account, no usage caps, works with Wi-Fi off. Seven tiers ship in it: Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 3.8 27B-a3b, and Plus 397B-a17b, which needs a 64 GB Mac (209 GB on disk, 1.59 tok/s) and streams experts from SSD to hold ~11 GB peak RSS.</p>
 
-    <p>Nano and Lite are free. Pro covers all eight tiers, Founders Lifetime at $249. The base weights are Qwen and Gemma models — eight tiers Apache 2.0, Quick under the Gemma Terms of Use — and I publish the quantized weights at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. The app itself is not open source.</p>
+    <p>Nano and Lite are free. Pro covers all seven tiers, Founders Lifetime at $249. The base weights are Qwen and Gemma models — seven tiers Apache 2.0, Quick under the Gemma Terms of Use — and I publish the quantized weights at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. The app itself is not open source.</p>
 
     <h2>Interface, setup, and who each one is for</h2>
     <p>This is the axis that decides it for most people. llama.cpp is command-line first: even the Homebrew path ends with you running a server binary with flags, then opening a browser tab at <code>127.0.0.1:8080</code>. There's no native macOS app, no .dmg, no App Store listing, no auto-updating desktop client. The only first-party GUI is the WebUI <code>llama-server</code> serves.</p>
@@ -158,7 +158,7 @@
         <tr><td><strong>Interface</strong></td><td>CLI + local HTTP server with browser WebUI</td><td>Native macOS app window</td></tr>
         <tr><td><strong>Who it's for</strong></td><td>Developers and tinkerers</td><td>End users on a Mac</td></tr>
         <tr><td><strong>Setup effort</strong></td><td>Install, choose flags, run a server binary</td><td>Download, double-click</td></tr>
-        <tr><td><strong>Model management</strong></td><td>Bring your own GGUF; auto-discovery, dropdown switching</td><td>Eight fixed tiers, quantized for you; Plus 397B needs a 64 GB Mac</td></tr>
+        <tr><td><strong>Model management</strong></td><td>Bring your own GGUF; auto-discovery, dropdown switching</td><td>Seven fixed tiers, quantized for you; Plus 397B needs a 64 GB Mac</td></tr>
         <tr><td><strong>Bundled vs assembled</strong></td><td>Engine only — no model</td><td>Model, UI and tuning in one download</td></tr>
         <tr><td><strong>Platforms</strong></td><td>macOS, Linux, Windows, Android, iOS</td><td>Apple Silicon Macs only</td></tr>
         <tr><td><strong>License</strong></td><td>MIT, fully open source</td><td>Proprietary app; weights published</td></tr>

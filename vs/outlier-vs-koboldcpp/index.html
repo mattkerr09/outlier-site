@@ -125,7 +125,7 @@
     <p>On macOS, the release ships exactly one artifact: <code>koboldcpp-mac-arm64</code>. You <code>chmod +x</code> it and run it from Terminal, and it serves a UI at <code>localhost:5001</code>. There's a launcher dialog, but it's a Python customtkinter window, not a Cocoa app. There is no <code>.app</code> bundle, no menu bar presence, and the binary is unsigned — the README notes that on newer macOS you may need to whitelist it in security settings.</p>
 
     <h2>What Outlier is</h2>
-    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). Models run on-device. No account, no usage caps, nothing uploaded, and it works with Wi-Fi off. Eight tiers ship inside the app: Nano 4B (2.37 GB, 6 GB RAM), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 35B-a3b, and Plus 397B-a17b, which streams experts from SSD and peaks around 11 GB of RSS on a 64 GB machine. Nano and Lite are free with no account. Pro is a one-time purchase for all eight; Founders Lifetime is $249.</p>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 12+). Models run on-device. No account, no usage caps, nothing uploaded, and it works with Wi-Fi off. Seven tiers ship inside the app: Nano 4B (2.37 GB, 6 GB RAM), Lite 9B, Quick 26B-a4b, Core 27B, Code 27B, Vision 3.8 27B-a3b, and Plus 397B-a17b, which streams experts from SSD and peaks around 11 GB of RSS on a 64 GB machine. Nano and Lite are free with no account. Pro is a one-time purchase for all seven; Founders Lifetime is $249.</p>
 
     <p>Outlier isn't open source. No image generation, no video, no music, no mobile app, no Windows or Linux build. Web research, voice-to-text, and an OpenAI- and Anthropic-compatible local API server do exist, but all three are Pro features that stay off until you ask for them — research is a per-turn toggle, the API server is a settings switch. The chat window is the product; the server is secondary to it. If any of that is a dealbreaker, this comparison ends early.</p>
 
@@ -162,12 +162,12 @@
         <tr>
           <td><strong>Model management</strong></td>
           <td>Bring your own GGUF; any architecture, any quant</td>
-          <td>Eight curated tiers plus a fixed ~25-model MLX catalog; no arbitrary GGUF loading</td>
+          <td>Seven curated tiers plus a fixed ~25-model MLX catalog; no arbitrary GGUF loading</td>
         </tr>
         <tr>
           <td><strong>Bundled models</strong></td>
           <td>None — not included with the download</td>
-          <td>All eight, in-app</td>
+          <td>All seven, in-app</td>
         </tr>
         <tr>
           <td><strong>Beyond text</strong></td>
@@ -206,9 +206,9 @@
     <p>This section isn't a courtesy. KoboldCpp wins outright on several axes that matter.</p>
     <ul>
       <li><strong>Platform reach.</strong> Outlier is Mac-only, Apple Silicon only. That's a straightforward disadvantage. KoboldCpp runs on Windows, Linux, macOS ARM64, and Android through Termux, and it still ships "oldpc" builds for hardware that modern apps have dropped. If your machines aren't all recent Macs, this comparison has one answer.</li>
-      <li><strong>It's free, with no tiers at all.</strong> No account, no license key, no upsell. Every feature is available to everyone on day one. Outlier gates five of eight tiers behind a one-time $249.</li>
+      <li><strong>It's free, with no tiers at all.</strong> No account, no license key, no upsell. Every feature is available to everyone on day one. Outlier gates five of seven tiers behind a one-time $249.</li>
       <li><strong>It's open source.</strong> AGPL-3.0, with the llama.cpp and GGML pieces under MIT. Its privacy claims are auditable rather than promised — you can read the code or compile it. Outlier's app is closed source; only the weights are published. If verifiability matters to you, that's a real point against me.</li>
-      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you eight tiers plus a fixed 25-model MLX catalog — no arbitrary model loading, and nothing outside what I've packaged.</li>
+      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you seven tiers plus a fixed 25-model MLX catalog — no arbitrary model loading, and nothing outside what I've packaged.</li>
       <li><strong>Feature breadth.</strong> Image generation and editing, video, speech-to-text, multiple TTS engines, music, and vision, all in the same binary. Outlier does text and vision, and that's it.</li>
       <li><strong>It's a server first.</strong> KoboldCpp is designed as a backend: OpenAI- and Ollama-compatible routes drop it into existing pipelines on any of its platforms, for free, with no tier to buy. Outlier ships an OpenAI- and Anthropic-compatible local API server too, but it's Pro-only, off until you enable it in settings, and built to serve the chat app rather than the other way around.</li>
       <li><strong>Release velocity.</strong> Ten releases between February and July 2026, tracking upstream llama.cpp closely, so new architectures land fast.</li>

@@ -91,11 +91,17 @@ def main(root_arg: str = ".") -> int:
     # knowing one spelling of a unit, which is what let "tokens per second" slip
     # past the decode-rate check.
     NUMS = "|".join(list(WORD.values()) + [str(k) for k in WORD])
+    # v1.11.797: a digit that is part of a VERSION is not a count. Naming a tier
+    # "Vision 3.8" put a decimal beside the noun this gate counts, and \b8\b finds
+    # a word boundary after the ".", so "its Vision 3.8 27B tier reads images"
+    # parsed as a claim of eight tiers. Four pages failed the moment the tier was
+    # renamed, and the prose was right every time.
+    NOT_A_VERSION = r"(?<![.\d])"
     OURS = re.compile(r'\bOutlier\b|\bour\b|\bmy\b|\bships?\b|\blineup\b', re.I)
     #  "six of our seven tiers"  -> second number is the TOTAL
     # BOTH tokens must be numbers. `(\w+) of ... (\w+) tiers` matched "two VERSIONS of one tier"
     # on a disk-space page and read it as a lineup count of one.
-    OF_SHAPE = re.compile(rf'\b({NUMS}) of (?:our |my |the )?({NUMS}) tiers?\b', re.I)
+    OF_SHAPE = re.compile(rf'{NOT_A_VERSION}\b({NUMS}) of (?:our |my |the )?({NUMS}) tiers?\b', re.I)
     #  "seven tiers" -> the TOTAL, but NOT when preceded by "of".
     #  ADJECTIVES INTERVENE CONSTANTLY and an earlier version missed all of them:
     #  "seven MODEL tiers", "seven FIXED tiers", "seven CURATED tiers", "seven
@@ -108,11 +114,11 @@ def main(root_arg: str = ".") -> int:
     #  number was eaten as an adjective and matched claims fell from 46 to 21, which
     #  the vacuity guard caught.
     TOTAL_SHAPE = re.compile(
-        rf'(?<!of )(?<!of our )(?<!of my )\b({NUMS})[\s-]+(?:[\w-]+[\s-]+){{0,2}}tiers?\b', re.I)
+        rf'(?<!of )(?<!of our )(?<!of my ){NOT_A_VERSION}\b({NUMS})[\s-]+(?:[\w-]+[\s-]+){{0,2}}tiers?\b', re.I)
     #  "Seven-tier lineup" -- hyphenated, no plural
-    HYPHEN_SHAPE = re.compile(rf'\b({NUMS})-tier\b', re.I)
+    HYPHEN_SHAPE = re.compile(rf'{NOT_A_VERSION}\b({NUMS})-tier\b', re.I)
     #  "Pro unlocks all seven", "one of the seven" -- the noun is dropped entirely
-    BARE_SHAPE = re.compile(rf'\b(?:all|of the|of)\s+({NUMS})\b(?![\s-]*[\w-]*[\s-]*tiers?)', re.I)
+    BARE_SHAPE = re.compile(rf'\b(?:all|of the|of)\s+{NOT_A_VERSION}({NUMS})\b(?![\s-]*[\w-]*[\s-]*tiers?)', re.I)
 
     bad, pages, claims = [], 0, 0
     for f in sorted(root.rglob("*.html")):
