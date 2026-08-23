@@ -84,10 +84,18 @@ def main(root_arg: str = ".") -> int:
     # So this checks only two shapes that unambiguously count OUR lineup, and
     # requires the sentence to be about Outlier. Everything else is left alone:
     # a gate that cries wolf gets ignored, and an ignored gate hides real drift.
-    NUMS = "|".join(WORD.values())
+    # v1.11.794: DIGITS TOO. This gate matched only spelled-out numbers, so it
+    # reported PASS while 114 places said "7 model tiers" in digit form — the
+    # standard CTA boilerplate on 104 pages, every one of them stale the day an
+    # eighth tier shipped. Knowing one spelling of a number is the same hole as
+    # knowing one spelling of a unit, which is what let "tokens per second" slip
+    # past the decode-rate check.
+    NUMS = "|".join(list(WORD.values()) + [str(k) for k in WORD])
     OURS = re.compile(r'\bOutlier\b|\bour\b|\bmy\b|\bships?\b|\blineup\b', re.I)
     #  "six of our seven tiers"  -> second number is the TOTAL
-    OF_SHAPE = re.compile(r'\b(\w+) of (?:our |my |the )?(\w+) tiers?\b', re.I)
+    # BOTH tokens must be numbers. `(\w+) of ... (\w+) tiers` matched "two VERSIONS of one tier"
+    # on a disk-space page and read it as a lineup count of one.
+    OF_SHAPE = re.compile(rf'\b({NUMS}) of (?:our |my |the )?({NUMS}) tiers?\b', re.I)
     #  "seven tiers" -> the TOTAL, but NOT when preceded by "of".
     #  ADJECTIVES INTERVENE CONSTANTLY and an earlier version missed all of them:
     #  "seven MODEL tiers", "seven FIXED tiers", "seven CURATED tiers", "seven
@@ -116,48 +124,56 @@ def main(root_arg: str = ".") -> int:
         metas = " ".join(m.group(1) for m in re.finditer(
             r'<meta[^>]+content="([^"]*)"', raw, re.I))
         txt = html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw) + " " + metas))
+        # v1.11.795: ON A PAGE THAT IS ENTIRELY ABOUT US, EVERY TIER COUNT IS OURS.
+        # The ownership check looks for "Outlier"/"our"/"lineup" within 120 chars, and
+        # the home page's own pricing answer — "Pro includes everything: all eight
+        # tiers and every feature" — carries none of them, because a page about
+        # Outlier does not keep saying Outlier. A planted regression there went
+        # undetected: the gate skipped the claim rather than judging it.
+        page_is_ours = (rel == "index.html" or rel.endswith("/index.html") and
+                        re.search(r"<title>[^<]*Outlier", raw, re.I) is not None)
         consumed = []
         for m in OF_SHAPE.finditer(txt):
             ctx = txt[max(0, m.start() - 120): m.start() + 120]
-            if not OURS.search(ctx):
+            if not (page_is_ours or OURS.search(ctx)):
                 continue
             word = m.group(2).lower()
-            if word not in WORD.values():
+            if word not in WORD.values() and not word.isdigit():
                 continue
             consumed.append((m.start(), m.end()))
             claims += 1
-            if WORD.get(total) != word:
+            if word != WORD.get(total) and word != str(total):
                 bad.append(f"{rel}: 'of our {word} tiers' — {total} ship. …{ctx.strip()[:110]}")
         for m in TOTAL_SHAPE.finditer(txt):
             if any(a <= m.start() < b for a, b in consumed):
                 continue
             word = m.group(1).lower()
-            if word not in WORD.values():
+            if word not in WORD.values() and not word.isdigit():
                 continue
             ctx = txt[max(0, m.start() - 120): m.start() + 120]
-            if not OURS.search(ctx):
+            if not (page_is_ours or OURS.search(ctx)):
                 continue
             # a number word that is not the total may be counting a legitimate
             # SUBSET ("the other five", "four tiers that have an MMLU number").
             # Only flag the exact word that WAS the total before a tier landed,
             # i.e. a stale count, never an unfamiliar one.
-            if word == WORD.get(total):
+            if word == WORD.get(total) or word == str(total):
                 claims += 1
                 continue
-            if word == WORD.get(total - 1) and re.search(r'\bother\b', ctx, re.I):
+            if word in (WORD.get(total - 1), str(total - 1)) and re.search(r'\bother\b', ctx, re.I):
                 continue                     # "the other six" — a subset, not the total
             # BOTH names required. An earlier version matched 'weights' too, which
             # is common enough that it swallowed real stale counts — the control
             # then failed on the vacuity guard instead of naming them, i.e. the
             # exclusion ate the signal it was meant to sit beside.
-            if word == WORD.get(total - 1) and (
+            if word in (WORD.get(total - 1), str(total - 1)) and (
                     re.search(r'Apache', ctx, re.I) and re.search(r'Gemma', ctx, re.I)):
                 continue                     # "six tiers on Apache 2.0 ... one on Gemma"
                                              # counts the LICENCE subset. Quick ships under
                                              # the Gemma Terms of Use, so total-1 is right
                                              # here and stays right when a tier is added —
                                              # provided the new tier is Apache too.
-            if word in (WORD.get(total - 1), WORD.get(total + 1)):
+            if word in (WORD.get(total - 1), WORD.get(total + 1), str(total - 1), str(total + 1)):
                 claims += 1
                 bad.append(f"{rel}: says '{word} tiers' but {total} ship. …{ctx.strip()[:110]}")
 
@@ -167,22 +183,22 @@ def main(root_arg: str = ".") -> int:
                 if any(a <= m.start() < b for a, b in consumed):
                     continue
                 word = m.group(1).lower()
-                if word not in WORD.values():
+                if word not in WORD.values() and not word.isdigit():
                     continue
                 ctx = txt[max(0, m.start() - 130): m.start() + 130]
                 if not OURS.search(ctx):
                     continue
                 if label == "bare count" and not re.search(r'tier', ctx, re.I):
                     continue          # "all seven" about something else entirely
-                if word == WORD.get(total):
+                if word == WORD.get(total) or word == str(total):
                     claims += 1
                     continue
-                if word == WORD.get(total - 1) and re.search(r'\bother\b', ctx, re.I):
+                if word in (WORD.get(total - 1), str(total - 1)) and re.search(r'\bother\b', ctx, re.I):
                     continue
-                if word == WORD.get(total - 1) and (
+                if word in (WORD.get(total - 1), str(total - 1)) and (
                         re.search(r'Apache', ctx, re.I) and re.search(r'Gemma', ctx, re.I)):
                     continue
-                if word in (WORD.get(total - 1), WORD.get(total + 1)):
+                if word in (WORD.get(total - 1), WORD.get(total + 1), str(total - 1), str(total + 1)):
                     claims += 1
                     bad.append(f"{rel}: '{word}' ({label}) but {total} ship. …{ctx.strip()[:110]}")
 
