@@ -21,7 +21,7 @@
 <meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"What is a paged Mixture-of-Experts model?","item":"https://outlier.host/seo/learn/paged-moe-explained/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is a paged Mixture-of-Experts model? | Outlier","description":"A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.","url":"https://outlier.host/seo/learn/paged-moe-explained/","datePublished":"2026-06-17","dateModified":"2026-08-18","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What is a paged Mixture-of-Experts model? | Outlier","description":"A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.","url":"https://outlier.host/seo/learn/paged-moe-explained/","datePublished":"2026-06-17","dateModified":"2026-08-23","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does this affect which tier I should choose?","acceptedAnswer":{"@type":"Answer","text":"Yes. Concept-level differences map directly to tier choice; the run pages on this site work the mapping out for the common Mac SKUs in the lineup."}},{"@type":"Question","name":"Is the shipping Outlier model based on this?","acceptedAnswer":{"@type":"Answer","text":"Read the body above for the specific answer; some of these concepts ship today and some are research directions covered by the April 2026 patent filings."}},{"@type":"Question","name":"Where can I see the raw provenance?","acceptedAnswer":{"@type":"Answer","text":"Every benchmark on the site links to a source file path in the public Outlier repo, with the original command and stderr preserved."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -61,7 +61,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Concept</span>
 <h1>What is a paged Mixture-of-Experts model?</h1>
-<p class="byline">Last updated 2026-08-18 &middot; Outlier v1.11.797</p>
+<p class="byline">Last updated 2026-08-23 &middot; Outlier v1.11.797</p>
 
 <div class="qa"><strong>Quick answer</strong><p>A 397B-parameter MoE that does not fit in unified memory has to be paged from disk. The router picks a subset of experts per token; the engine keeps the top-K resident in RAM and reads the rest on demand.</p></div>
 
@@ -80,7 +80,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <p>The Plus-tier paging logic and the K_override sweep that produced the locked configuration live in <code>sprints/v18_plus_ship/artifacts/K_SWEEP_RESULTS.md</code> and <code>K_SWEEP_RESULTS</code> JSON files; the engine code is in <code>desktop_app/backend/engine_v9_loader.py</code>.</p>
 <h2>How does the Outlier paged engine actually fetch experts?</h2><p>The V9 paged loader patches the SwitchGLU forward pass so that on the routing step, the IDs of the top-K experts are computed first, then the weights for any expert not currently in the LRU cache are pulled from the safetensors shard files via standard <code>seek</code>+<code>read</code> calls. Memory-mapped reads were tried and rejected (<code>OUTLIER_MMAP_EXPERTS=1</code> caused an 8&times; throughput regression in our 2026-04 testing).</p><p>The cache is keyed on (layer, expert_id). At <code>cache_gb=8.0</code> the LRU holds roughly 240 expert tensors at the model&rsquo;s 4-bit quantization. Cache hits are free; cache misses pay the disk-read latency, which is why NVMe is mandatory.</p>
 <h2>How does &ldquo;what is a paged mixture-of-experts model&rdquo; connect to specific tiers?</h2>
-<p>This concept is what makes the Plus tier possible at all. The other seven tiers (Nano through Vision) are dense or small-MoE and load entirely into unified memory; only Plus needs the paged loader.</p>
+<p>This concept is what makes the Plus tier possible at all. The other six tiers (Nano through Vision) are dense or small-MoE and load entirely into unified memory; only Plus needs the paged loader.</p>
 <h2>What is the smallest configuration that exercises this concept?</h2>
 <p>You need a 32 GB or larger Mac plus 209 GB of free disk to load the Plus tier and reproduce the paging behavior. There is no smaller-tier proxy for the routed-expert page-fault path.</p>
 <h2>One unique number</h2>

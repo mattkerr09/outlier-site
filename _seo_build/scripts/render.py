@@ -30,7 +30,35 @@ ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
 TPL_DIR = ROOT / "_seo_build" / "templates"
 SITE_URL = "https://outlier.host"
-APP_VERSION = "1.11.790"
+# v1.11.798: was a hardcoded "1.11.790" while the site shipped 1.11.797, so a
+# re-render silently walked 50 bylines BACKWARDS seven versions. Nothing caught
+# it because the renderer is only run when someone changes the SEO copy, and the
+# constant lives 700 lines from the byline it feeds.
+#
+# Derived from index.html's own nav-ver, which is the version the site already
+# advertises and which download_version_gate.py independently checks against the
+# real release. The constant below is only a fallback for the case where that
+# markup changes shape; if the two disagree the build stops rather than quietly
+# publishing a version that was never released.
+_APP_VERSION_FALLBACK = "1.11.797"
+
+
+def _detect_app_version() -> str:
+    try:
+        idx = (ROOT / "index.html").read_text(encoding="utf-8")
+        found = sorted(set(re.findall(r'class="nav-ver">v(\d+\.\d+\.\d+)<', idx)))
+        if len(found) == 1:
+            return found[0]
+        if len(found) > 1:
+            raise SystemExit(
+                f"render.py: index.html advertises {len(found)} different versions "
+                f"{found} — cannot pick one for the SEO bylines")
+    except FileNotFoundError:
+        pass
+    return _APP_VERSION_FALLBACK
+
+
+APP_VERSION = _detect_app_version()
 TODAY = date.today().isoformat()
 
 env = Environment(
@@ -250,12 +278,24 @@ def build_run_pages(models, macs) -> list[dict]:
         ("code", "m4-pro-macbook-pro"),
         ("plus", "m1-ultra-mac-studio"),
         ("plus", "m4-ultra-mac-studio"),
-        ("vision", "m3-max-macbook-pro"),
+        ("vision38", "m3-max-macbook-pro"),
     ]
+    # The URL token is deliberately NOT the tier id. Vision 3.6 was retired for
+    # Vision 3.8 and models.csv moved to "vision38", but this page has been
+    # indexed as run-vision-on-m3-max-macbook-pro and is in sitemap.xml — the
+    # guide is about "Outlier Vision", which is still what ships, so changing
+    # the slug would retire a ranking URL to say the same thing. Data comes from
+    # the real tier id; the slug stays stable.
+    #
+    # This also fixes a hard build break: the curated list still said "vision"
+    # after the retirement, so by_tier["vision"] raised KeyError and render.py
+    # aborted before writing ANY page. The whole programmatic-SEO build has been
+    # unrunnable since then, which is silent — nobody re-renders on a normal day.
+    slug_token = {"vision38": "vision"}
     for tier_id, mac_slug in curated:
         m = by_tier[tier_id]
         mac = next(x for x in macs if x["slug"] == mac_slug)
-        slug = f"run-{tier_id}-on-{mac_slug}"
+        slug = f"run-{slug_token.get(tier_id, tier_id)}-on-{mac_slug}"
         h1 = f"Run {m['display_name']} on {mac['name']}"
         title = f"{h1} — Local AI on Apple Silicon | Outlier"
         description = (
@@ -468,9 +508,9 @@ def build_run_pages(models, macs) -> list[dict]:
         body.append("<h2>Should I pick a different tier?</h2>")
         # Tier-and-mac-keyed adjacent-tier suggestions (varied phrasing).
         smaller = {"lite": "Nano", "quick": "Lite", "compact": "Lite", "code": "Compact",
-                   "plus": "Code", "vision": "Compact"}.get(tier_id)
+                   "plus": "Code", "vision38": "Compact"}.get(tier_id)
         bigger = {"nano": "Lite", "lite": "Quick or Core", "quick": "Core",
-                  "compact": "Code or Vision", "code": "Plus", "vision": "Plus"}.get(tier_id)
+                  "compact": "Code or Vision", "code": "Plus", "vision38": "Plus"}.get(tier_id)
         guidance = []
         if smaller:
             guidance.append(
@@ -797,8 +837,8 @@ def build_howto_pages() -> list[dict]:
         ("upgrade-to-the-pro-tier", "How to upgrade to Outlier Pro",
          "Pro unlocks the Quick, Core, Code, Plus, and Vision tiers in v1.11.469.",
          [("Open Settings &gt; Pro", "The Pro section appears on the General tab in v1.11.469."),
-          ("Buy on Polar.sh", "Pro is a one-time purchase: Founders Lifetime at $249."),
-          ("Paste your Polar license key", "Settings &gt; license &gt; Activate. The key is verified against api.polar.sh and your tier is derived from the key&rsquo;s benefit ID."),
+          ("Buy through Dodo Payments", "Pro is a one-time purchase: Founders Lifetime at $249."),
+          ("Paste your license key", "Settings &gt; license &gt; Activate. The key is verified against whichever issuer sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the key."),
           ("Restart the app", "The Pro-gated tiers appear in the model picker after restart.")]),
     ]
     # Per-page extras keep prose visibly different between guides.
@@ -854,11 +894,12 @@ def build_howto_pages() -> list[dict]:
                "<p>Both permissions are genuinely required and they do different jobs: Accessibility exposes the window titles and control labels the companion reads, while Screen Recording is what macOS asks for before any app can see window contents. Granting one and not the other produces a companion that opens and then appears to know nothing about the app in front of it. Both are revocable at any time in System Settings &gt; Privacy &amp; Security, and the companion degrades to a plain chat window rather than failing.</p>",
              "The companion is an additional Tauri WebviewWindow; it shares the same FastAPI sidecar but renders a separate, narrower chat surface."),
         "upgrade-to-the-pro-tier":
-            ("<p>Pro tier gating in v1.11.469 uses Polar licensing: paste your Polar license key into "
-             "Settings &gt; license &gt; Activate, the app verifies it against api.polar.sh, and your tier is "
-             "derived from the key&rsquo;s benefit ID. The Polar.sh purchase issues the license key "
-             "after checkout.</p>",
-             "Free tiers (Nano, Lite) work without a Pro license; Quick, Core, Code, Plus, and Vision are gated by the Polar license key."),
+            ("<p>Pro tier gating uses a license key: paste it into "
+             "Settings &gt; license &gt; Activate and the app verifies it against the issuer that sold it "
+             "&mdash; <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> "
+             "for keys bought before 23 August 2026 &mdash; then derives your tier from the key. "
+             "Checkout issues the key straight after payment.</p>",
+             "Free tiers (Nano, Lite) work without a Pro license; Quick, Core, Code, Plus, and Vision are gated by the license key."),
     }
     deep_blocks = {
         "install-outlier-on-mac":
@@ -923,10 +964,11 @@ def build_howto_pages() -> list[dict]:
             "<code>Info.plist</code>.</p>",
         "upgrade-to-the-pro-tier":
             "<h2>How does the v1.11.469 Pro gate work?</h2>"
-            "<p>Pro gating in v1.11.469 uses Polar licensing. You paste your Polar license key into "
-            "Settings &gt; license &gt; Activate; the app verifies the key against "
-            "<code>api.polar.sh</code> and derives your tier from the key&rsquo;s benefit ID. The "
-            "Polar.sh checkout issues the license key, and the verified benefit ID is what unlocks "
+            "<p>Pro gating uses a license key. You paste it into "
+            "Settings &gt; license &gt; Activate; the app sends it to the issuer that sold it &mdash; "
+            "<code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for "
+            "keys bought before 23 August 2026 &mdash; and derives your tier from the verified reply. "
+            "Checkout issues the key, and that verified tier is what unlocks "
             "the Quick, Core, Code, Plus, and Vision tiers.</p>",
     }
     pages = []
@@ -936,7 +978,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                "<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 32 GB for Plus). Internet is required only for the one-time model download.</p>",
+                "<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
@@ -955,7 +997,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "<li>Diffs over 1000 lines may exceed Code&rsquo;s default 64K context if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li>",
             "draft-shell-scripts-with-the-nano-tier": "<li>Nano is a 4B model; it occasionally hallucinates flag names. Always read the script before running it.</li><li>The 32 tok/s on M4 Air is single-prompt; back-to-back prompts may slow under thermal load.</li>",
             "set-up-the-companion-window": "<li>If Accessibility permission is denied, the companion has no app context to read.</li><li>Screen Recording permission is per-app and prompts on first capture only; deny once and it stays denied until reset in System Settings.</li>",
-            "upgrade-to-the-pro-tier": "<li>Save your Polar license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by Polar.sh, not Outlier directly.</li>",
+            "upgrade-to-the-pro-tier": "<li>Save your license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by the payment processor &mdash; Dodo Payments for new purchases &mdash; not by Outlier directly.</li>",
         }
         body.append("<ul>" + slug_pitfalls.get(slug, "") + "</ul>")
         # Per-slug-specific cloud-equivalent comparison; varies enough to avoid 50-word collisions.
@@ -969,7 +1011,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "<p>Cloud PR review tools transmit the diff. Outlier&rsquo;s Code mode keeps it on the Mac, which matters when the diff has untested mitigations or unreleased features.</p>",
             "draft-shell-scripts-with-the-nano-tier": "<p>Hosted shell-script tools are usually overkill for a 4B-class job. Nano on a 16 GB Mac handles this turn-by-turn at roughly 32 tok/s.</p>",
             "set-up-the-companion-window": "<p>Cloud-side context-aware assistants typically read whatever the user pastes. The Outlier companion reads the active app via the macOS Accessibility tree, locally.</p>",
-            "upgrade-to-the-pro-tier": "<p>Cloud Pro tiers gate behind a server-side license check tied to your account. Outlier Pro gates behind a Polar license key you paste into Settings &gt; license &gt; Activate; it is verified against api.polar.sh and your tier is derived from the key&rsquo;s benefit ID.</p>",
+            "upgrade-to-the-pro-tier": "<p>Cloud Pro tiers gate behind a server-side license check tied to your account. Outlier Pro gates behind a license key you paste into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026, and your tier is derived from the key.</p>",
         }
         body.append(f"<h2>How does this guide differ from the cloud equivalent?</h2>")
         body.append(cloud_compare.get(slug, "<p>The cloud equivalent of this guide adds a network round-trip per turn.</p>"))
@@ -996,7 +1038,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "v1.8.1 fixed the chat-history persistence on mode switch, so reviewing a PR now keeps the previous prompts visible when you flip from chat into Code mode mid-review.",
             "draft-shell-scripts-with-the-nano-tier": "v1.8.1 added a Nano thinking-mode loop fix (a <code>/no_think</code> directive plus a 2048-token repetition-penalty cap) that makes shell-script generation noticeably less prone to runaway repetition.",
             "set-up-the-companion-window": "v1.8.1 added a companion-mode loop guard for the &lsquo;no relevant window&rsquo; state and injected the screen-recording, microphone, and Apple-events permissions into Info.plist before codesign.",
-            "upgrade-to-the-pro-tier": "v1.8.1 introduced the Settings tab <code>featured</code> flag so the Pro section appears on the General tab; the Pro gate verifies a Polar license key against api.polar.sh and derives your tier from the key&rsquo;s benefit ID.",
+            "upgrade-to-the-pro-tier": "v1.8.1 introduced the Settings tab <code>featured</code> flag so the Pro section appears on the General tab; the Pro gate verifies your license key against the issuer that sold it and derives your tier from the verified reply.",
         }
         # v1.11.469 launch: dropped the per-guide "What changed in v1.8.1?" FAQ —
         # accurate history but reads stale (458 builds old) on a v1.11.469 launch site.
@@ -1011,7 +1053,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "For a 500-line diff, Code&rsquo;s 64K default context holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s 32K default context is more than enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
-            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Code, Plus, and Vision; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your Polar license key into Settings &gt; license &gt; Activate; it is verified against api.polar.sh and your tier is derived from the key&rsquo;s benefit ID regardless of which Polar product you bought.",
+            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Code, Plus, and Vision; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the verified reply regardless of which product you bought.",
         }
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
@@ -1019,7 +1061,7 @@ def build_howto_pages() -> list[dict]:
         unique_claim = f"{len(steps)} steps, zero network requests after the model is downloaded. {extra_unique}"
         body.append(f"<p>{unique_claim}</p>")
         faq = [
-            ("Do I need to create an account?", "No. The free tiers (Nano, Lite) work without any account or Polar license key."),
+            ("Do I need to create an account?", "No. The free tiers (Nano, Lite) work without any account or license key."),
             ("Will my code or prompts be sent anywhere?", "No. After the one-time model download, the chat path makes no network requests."),
             ("How big is the download?", "The DMG itself is around 460 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."),
         ]
