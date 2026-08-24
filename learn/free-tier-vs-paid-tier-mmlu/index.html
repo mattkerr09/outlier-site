@@ -8,13 +8,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Our free model and our paid model scored the same | Outlier</title>
-  <meta name="description" content="Outlier Lite (5.04 GB, free) scored 77.5% on MMLU against Quick (15.61 GB, paid) at 81.5%. n=200, and the gap is inside the confidence interval.">
+  <meta name="description" content="Outlier Lite (5.04 GB, free) scored 77.0% on MMLU against Quick (15.61 GB, paid) at 81.0%. n=200, and the gap is inside the confidence interval.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-08-12">
   <link rel="canonical" href="https://outlier.host/learn/free-tier-vs-paid-tier-mmlu/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Our free model and our paid model scored the same">
-  <meta property="og:description" content="Outlier Lite (5.04 GB, free) scored 77.5% on MMLU against Quick (15.61 GB, paid) at 81.5%. n=200, and the gap is inside the confidence interval.">
+  <meta property="og:description" content="Outlier Lite (5.04 GB, free) scored 77.0% on MMLU against Quick (15.61 GB, paid) at 81.0%. n=200, and the gap is inside the confidence interval.">
   <meta property="og:url" content="https://outlier.host/learn/free-tier-vs-paid-tier-mmlu/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -111,8 +111,8 @@
       <div class="quick-answer">
         <span class="qa-label">Quick answer</span>
         <ul>
-          <li>Outlier Lite: 9B, 5.04 GB on disk, included free. MMLU <strong>77.5%</strong> (155/200).</li>
-          <li>Outlier Quick: 26B, 15.61 GB on disk, part of Pro. MMLU <strong>81.5%</strong> (163/200).</li>
+          <li>Outlier Lite: 9B, 5.04 GB on disk, included free. MMLU <strong>77.0%</strong> (154/200).</li>
+          <li>Outlier Quick: 26B, 15.61 GB on disk, part of Pro. MMLU <strong>81.0%</strong> (162/200).</li>
           <li>At n=200 the interval near those scores is roughly &plusmn;6 points. A 4-point gap sits inside it, so on this test the two are tied.</li>
           <li>Three times the disk, three times the memory, no separation we can demonstrate on general knowledge.</li>
         </ul>
@@ -122,7 +122,7 @@
 
       <h2>The numbers</h2>
 
-      <p>All five tiers, same run, same machine, same settings: Nano 53.0%, Lite 77.5%, Quick 81.5%, Core 89.5%, Code 89.5%. Core and Code scoring identically is not a coincidence and not a bug. They share weights, and we publish them that way. The run was a control as much as a measurement, and it behaved.</p>
+      <p>Every measured tier, same run, same machine, same settings: Nano 52.0%, Lite 77.0%, Quick 81.0%, Core 89.5%, Vision 3.8 82.5%. When this was first written there was also a Code tier, and it scored 89.5% &mdash; identical to Core, because the two were the same weights with a different configuration. That is exactly why Code is no longer a separate tier: it now ships as Core, and the benchmark saying so was the argument for folding it in. The run was a control as much as a measurement, and it behaved.</p>
 
       <p>The interesting pair is Lite and Quick. Lite is a 9B model in a 5 GB download. Quick is a 26B mixture-of-experts in a 15.6 GB download that needs 16 GB of memory rather than 12. On general knowledge, the extra 10 GB bought about four points, which at this sample size we cannot distinguish from noise.</p>
 

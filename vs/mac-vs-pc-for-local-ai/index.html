@@ -123,7 +123,7 @@
     <h2>What actually fits</h2>
     <p>Weights are the floor, not the total — you also need the KV cache, which grows with context, plus the runtime and the OS. Apple's ML research team measured footprints on a 24 GB MacBook Pro — Qwen 8B is 17.46 GB at BF16 and 5.61 GB at 4-bit, Qwen 14B 4-bit is 9.16 GB, GPT-OSS 20B at MXFP4 is 12.08 GB, and a Qwen 30B MoE 4-bit is 17.31 GB.</p>
 
-    <p>Our own tiers line up. Nano (4B) is 2.37 GB and wants 6 GB of RAM; Lite (9B) 5.04 GB at 12 GB; Quick (26B-a4b) 15.61 GB at 16 GB; Core and Code (both 27B) 15.13 GB at 24 GB; Vision (35B-a3b) 19.0 GB at 24 GB; Plus (397B-a17b) is 209 GB on a 64 GB machine, paging MoE experts off the SSD at ~11 GB resident. Against a 32 GB card, a 4-bit model up to about 30B is comfortable and quick; a 70B isn't. That's the capacity argument.</p>
+    <p>Our own tiers line up. Nano (4B) is 2.37 GB and wants 6 GB of RAM; Lite (9B) 5.04 GB at 12 GB; Quick (26B-a4b) 15.61 GB at 16 GB; Core (27B) 15.13 GB at 24 GB; Vision 3.8 (27B) 15.5 GB at 24 GB; Plus (397B-a17b) is 209 GB on a 64 GB machine, paging MoE experts off the SSD at ~11 GB resident. Against a 32 GB card, a 4-bit model up to about 30B is comfortable and quick; a 70B isn't. That's the capacity argument.</p>
 
     <h2>Speed: bandwidth is the ceiling, and the PC has more of it</h2>
     <p>Token generation is bound by memory bandwidth, not compute — Apple's research group says so, and its measurements show it. M4 to M5 lifted bandwidth from 120 GB/s to 153 GB/s and produced time-to-first-token speedups of 3.33×–4.06×, but generation speedups of only 1.19×–1.27×.</p>
