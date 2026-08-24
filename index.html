@@ -495,6 +495,16 @@
     .final p{color:var(--text-mid);max-width:58ch;margin:0 auto 2.2rem;position:relative;z-index:2;line-height:1.7;}
     .final .cta-row{margin-bottom:1.1rem;position:relative;z-index:2;}
     .final .req{position:relative;z-index:2;font-family:var(--mono);font-size:0.77rem;color:var(--text-dim);}
+    .subscribe{max-width:56ch;margin:0 auto;text-align:center;}
+    .subscribe-why{color:var(--text-mid);line-height:1.75;margin:0 0 1.6rem;}
+    .subscribe-form{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;align-items:center;}
+    .subscribe-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-input{flex:1 1 22ch;min-width:0;padding:.85rem 1rem;border-radius:10px;
+      border:1px solid rgba(255,255,255,0.14);background:var(--surface-2);color:var(--text);font-size:1rem;}
+    .subscribe-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-btn{flex:0 0 auto;}
+    .subscribe-note{color:var(--text-dim);font-size:0.85rem;line-height:1.7;margin:1.1rem auto 0;max-width:52ch;}
+
     .final .req strong{color:var(--text-mid);}
 
     /* ---------- footer ---------- */
@@ -1356,6 +1366,34 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
   </div>
 </section>
 
+<!-- ============ KEEP ME POSTED ============ -->
+<section>
+  <div class="wrap">
+    <div class="subscribe">
+      <h2>New models worth running</h2>
+      <p class="subscribe-why">Open weights ship constantly and most of them are not worth your disk.
+      When one is &mdash; a model that beats a tier Outlier already has, on hardware you already own &mdash;
+      we say so, and what it replaces. That is the only reason we will email you.</p>
+      <form class="subscribe-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+        <input type="hidden" name="source" value="outlier-homepage">
+        <label class="subscribe-label" for="sub-email">Email</label>
+        <input class="subscribe-input" id="sub-email" name="email" type="email" required
+               autocomplete="email" placeholder="you@example.com">
+        <!-- A bot fills every field it finds. A person never sees this one. -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px">
+          <label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <button class="btn btn-primary subscribe-btn" type="submit">Keep me posted</button>
+      </form>
+      <p class="subscribe-note" role="status" aria-live="polite">
+        Your address and which page you sent it from. No IP, no user agent, no referer, and no tracking pixel on this
+        form &mdash; it sends nothing until you press the button. One click to leave, on every email.
+        <a href="https://outlier.host/privacy.html">Privacy</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ FOOTER ============ -->
 <footer>
   <div class="wrap">
@@ -1523,6 +1561,36 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       bnpl[b].hidden = false;
     }
   }
+</script>
+<script>
+  (function () {
+    var f = document.querySelector('.subscribe-form');
+    if (!f) return;
+    var note = document.querySelector('.subscribe-note');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = f.querySelector('button[type=submit]');
+      btn.disabled = true;
+      fetch(f.action, { method: 'POST', body: new FormData(f) })
+        .then(function (r) {
+          return r.json().catch(function () { return {}; })
+            .then(function (d) { return { ok: r.ok && d && d.ok, err: d && d.error }; });
+        })
+        .then(function (res) {
+          if (res.ok) {
+            note.textContent = "You're on the list. We'll write when a model is worth your disk, and not otherwise.";
+            f.style.display = 'none';
+          } else {
+            note.textContent = res.err || 'That did not save. Try again, or email matt@outlier.host.';
+            btn.disabled = false;
+          }
+        })
+        .catch(function () {
+          note.textContent = 'Could not reach the server. Try again, or email matt@outlier.host.';
+          btn.disabled = false;
+        });
+    });
+  })();
 </script>
 </body>
 </html>
