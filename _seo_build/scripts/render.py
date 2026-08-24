@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
 TPL_DIR = ROOT / "_seo_build" / "templates"
 SITE_URL = "https://outlier.host"
-# v1.11.798: was a hardcoded "1.11.790" while the site shipped 1.11.797, so a
+# v1.11.798: was a hardcoded "1.11.790" while the site shipped 1.11.798, so a
 # re-render silently walked 50 bylines BACKWARDS seven versions. Nothing caught
 # it because the renderer is only run when someone changes the SEO copy, and the
 # constant lives 700 lines from the byline it feeds.
@@ -40,7 +40,7 @@ SITE_URL = "https://outlier.host"
 # real release. The constant below is only a fallback for the case where that
 # markup changes shape; if the two disagree the build stops rather than quietly
 # publishing a version that was never released.
-_APP_VERSION_FALLBACK = "1.11.797"
+_APP_VERSION_FALLBACK = "1.11.798"
 
 
 def _detect_app_version() -> str:
