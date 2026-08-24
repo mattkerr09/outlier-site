@@ -947,7 +947,7 @@ def build_howto_pages() -> list[dict]:
         "free-up-disk-space-for-large-models":
             "<h2>How big is each Outlier tier on disk?</h2>"
             "<p>Nano 2.37 GB, Lite 5.04 GB, Quick 15.61 GB, Core 15.13 GB, Code 15.13 GB (shares "
-            "Core weights), Vision 19.0 GB, Plus 209 GB. Plus alone is more than half a typical "
+            "Core weights), Vision 3.8 15.5 GB, Plus 209 GB. Plus alone is more than half a typical "
             "512 GB SSD&rsquo;s usable capacity once the OS is accounted for; the v1.9 streaming "
             "engine improvements only reduce the working RAM requirement, not the disk requirement.</p>",
         "write-unit-tests-with-local-ai":
@@ -1059,11 +1059,11 @@ def build_howto_pages() -> list[dict]:
         # accurate history but reads stale (458 builds old) on a v1.11.469 launch site.
         _ = v181_blurbs  # retained for reference; intentionally not emitted
         related_tier_lines = {
-            "install-outlier-on-mac": "After install, the model picker shows six tiers in display order: Nano (2.37 GB), Lite (5.04 GB), Quick (15.61 GB), Core (15.13 GB), Plus (209 GB), and Vision (19.0 GB). Tiers above the Mac&rsquo;s unified-memory headroom appear greyed out.",
-            "download-a-model-tier": "The Plus tier is the outlier on size: 209 GB versus the next-largest Vision at 19 GB. Most users start with Nano or Lite, then graduate to Core once they have a use case that exercises the heavier weights.",
+            "install-outlier-on-mac": "After install, the model picker shows six tiers in display order: Nano (2.37 GB), Lite (5.04 GB), Quick (15.61 GB), Core (15.13 GB), Vision 3.8 (15.5 GB), and Plus (209 GB). Tiers above the Mac&rsquo;s unified-memory headroom appear greyed out.",
+            "download-a-model-tier": "The Plus tier is the outlier on size: 209 GB versus the next-largest Quick at 15.61 GB. Most users start with Nano or Lite, then graduate to Core once they have a use case that exercises the heavier weights.",
             "run-a-local-coding-assistant-on-mac": "Code mode pairs naturally with the project chip and the .outlierignore file. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.",
             "keep-prompts-private-on-mac": "If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and avoid the web-search toggle. Once both are off, the running app touches only loopback for the chat path.",
-            "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision adds 19 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
+            "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision 3.8 adds 15.5 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
             "write-unit-tests-with-local-ai": "Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.",
             "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s 32K default context is more than enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
