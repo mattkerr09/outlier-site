@@ -40,6 +40,25 @@ h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
 .cta:hover{background:#000}
 .foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
 .foot a{color:var(--mut)}
+
+/* Email capture. Injected into the pages the SEO renderer does not own.
+   Every custom property carries a fallback, and the fallbacks inherit rather
+   than hardcode: these 16 pages split across two themes — the five top-level
+   ones render dark (rgb(7,6,11)) and define no variables at all, while the
+   seo/ section indexes render light and define --bd/--mut. A single literal
+   colour would have been invisible on one half. `currentColor` plus opacity
+   is correct on both, which is the same failure that put .lede at
+   rgb(240,238,245) on a light page earlier today. */
+.sublist{border-top:1px solid var(--bd,rgba(127,127,127,.28));margin-top:40px;padding-top:24px}
+.sublist h3{margin:0 0 6px;font-size:15px;color:inherit}
+.sublist p{font-size:13px;color:var(--mut,currentColor);opacity:.72;margin:0 0 12px;line-height:1.6;max-width:60ch}
+.sublist form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sublist input[type=email]{flex:1 1 240px;min-width:0;padding:9px 11px;font:inherit;font-size:14px;color:inherit;background:transparent;border:1px solid var(--bd,rgba(127,127,127,.4));border-radius:7px}
+.sublist button{padding:9px 16px;font:inherit;font-size:14px;color:inherit;border-radius:7px;border:1px solid var(--bd,rgba(127,127,127,.55));background:transparent;cursor:pointer}
+.sublist button:hover:not(:disabled){border-color:currentColor}
+.sublist button:disabled{opacity:.55;cursor:default}
+.sublist .note{font-size:12px;color:var(--mut,currentColor);opacity:.72;margin:10px 0 0;min-height:1em}
+.sublist .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -66,5 +85,36 @@ h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
 <a class="cta" href="/">Download Outlier</a>
 <div class="foot"><p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). <a href="/">Back to home</a>.</p></div>
 </div>
+
+<div class="sublist">
+<h3>New models worth running</h3>
+<p>Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+<form method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+<input type="hidden" name="source" value="outlier-host">
+<label class="vh" for="sub-email">Email</label>
+<input id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+<div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+<button type="submit">Keep me posted</button>
+</form>
+<p class="note" role="status" aria-live="polite">Your address and which site you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+</div>
+<script>
+(function(){
+  var f=document.querySelector('.sublist form'); if(!f) return;
+  var n=document.querySelector('.sublist .note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
 </body>
 </html>
