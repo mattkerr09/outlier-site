@@ -145,7 +145,7 @@
     <p>Speed feel matters, so here's a real reference point: even Outlier's much larger Core 27B runs around 20.7 tok/s on an M1 Ultra. The small tiers on a 16 GB chip are built to feel quicker than that for chat-length work, fast enough to read along as it types, which is the bar that actually matters day to day.</p>
 
     <h2>What to skip on 16 GB, and why</h2>
-    <p>Outlier publishes seven model tiers, and the heaviest ones (Core 27B, Vision 3.8 27B, and especially the Plus 397B flagship) want a lot more memory than a 16 GB laptop has. You'll see those advertised running on a 64 GB Mac Studio, and that's not marketing sleight of hand: it's a genuinely different class of machine.</p>
+    <p>Outlier publishes six model tiers, and the heaviest ones (Core 27B, Vision 3.8 27B, and especially the Plus 397B flagship) want a lot more memory than a 16 GB laptop has. You'll see those advertised running on a 64 GB Mac Studio, and that's not marketing sleight of hand: it's a genuinely different class of machine.</p>
     <p>Here's the nuance worth being straight about. Outlier's paged inference engine can stream a model that's bigger than the Mac's RAM: on a 64 GB Studio it runs 209 GB of weights at roughly 11 GB peak memory by paging expert layers in and out. That's a real, patent-pending trick. But paging has a cost. It leans on disk and memory bandwidth, and a 16 GB machine has less of both to spare once your other apps are loaded. So the right call on 16 GB isn't to force the 397B model through a straw; it's to run a model sized for the hardware. The 397B-on-64 GB story is impressive precisely because it's a different setup. On your 16 GB Mac, Nano and Lite are the correct tools, full stop.</p>
     <div class="receipts"><strong>Receipts:</strong> Nano's 81.1% is the full HumanEval set; Core 27B's 20.7 tok/s figure is measured on an M1 Ultra. The 209 GB-at-~11 GB-peak number is paged expert streaming on a 64 GB Mac Studio. All of Outlier's weights are open and inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>; model sizes span roughly 2.4–209 GB, so the smaller tiers are the ones that fit a 16 GB machine.</div>
 
@@ -173,7 +173,7 @@
     </div>
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro is a one-time $249 and adds everything (all 7 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p>
+      <p>Free Nano + Lite — local, private, no account. Pro is a one-time $249 and adds everything (all 6 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=run-ai-on-16gb-mac">Download for Mac</a>
     </div>
 

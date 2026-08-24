@@ -1,114 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Run Outlier Code on MacBook Pro M4 Pro — Local AI on Apple Silicon | Outlier</title>
-<meta name="description" content="How Outlier Code (27B dense, 15.13 GB) runs on MacBook Pro M4 Pro (24|48 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
-<link rel="canonical" href="https://outlier.host/seo/run/run-code-on-m4-pro-macbook-pro/">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Run Outlier Code on MacBook Pro M4 Pro — Local AI on Apple Silicon | Outlier">
-<meta property="og:description" content="How Outlier Code (27B dense, 15.13 GB) runs on MacBook Pro M4 Pro (24|48 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
-<meta property="og:url" content="https://outlier.host/seo/run/run-code-on-m4-pro-macbook-pro/">
-<meta property="og:site_name" content="Outlier">
-<meta property="og:image" content="https://outlier.host/og-card.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Run Outlier Code on MacBook Pro M4 Pro — Local AI on Apple Silicon | Outlier">
-<meta name="twitter:description" content="How Outlier Code (27B dense, 15.13 GB) runs on MacBook Pro M4 Pro (24|48 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.">
-<meta name="twitter:image" content="https://outlier.host/og-card.png">
-<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Run on your Mac","item":"https://outlier.host/seo/run/"},{"@type":"ListItem","position":3,"name":"Run Outlier Code on MacBook Pro M4 Pro","item":"https://outlier.host/seo/run/run-code-on-m4-pro-macbook-pro/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Run Outlier Code on MacBook Pro M4 Pro — Local AI on Apple Silicon | Outlier","description":"How Outlier Code (27B dense, 15.13 GB) runs on MacBook Pro M4 Pro (24|48 GB unified memory, 273 GB/s bandwidth). Verified throughput, RAM headroom, install steps.","url":"https://outlier.host/seo/run/run-code-on-m4-pro-macbook-pro/","datePublished":"2026-06-17","dateModified":"2026-08-23","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will Outlier Code actually fit on a MacBook Pro M4 Pro?","acceptedAnswer":{"@type":"Answer","text":"It needs at least 24 GB of unified memory. The base MacBook Pro M4 Pro ships with 24|48 GB."}},{"@type":"Question","name":"How fast is Outlier Code on MacBook Pro M4 Pro?","acceptedAnswer":{"@type":"Answer","text":"M1 Ultra reference is 20.7 tok/s. Bandwidth-scaled estimate for MacBook Pro M4 Pro: ~7.1 tok/s [estimated from family-bandwidth ratio]."}},{"@type":"Question","name":"Does Outlier send any data off the Mac?","acceptedAnswer":{"@type":"Answer","text":"No prompts or responses leave the device during chat. Model downloads are one-time HTTPS pulls from Hugging Face."}}]}</script>
-<style>
-:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
-*{box-sizing:border-box}
-body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
-.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
-nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
-nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
-h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
-h2{font-size:22px;margin:32px 0 8px}
-h3{font-size:17px;margin:20px 0 6px}
-p{margin:0 0 20px}li{margin:0 0 12px}
-.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
-.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
-.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
-table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
-th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
-th{font-weight:600;background:#fafafa}
-.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
-.cta:hover{background:#000}
-.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
-.related ul{padding-left:18px}
-.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
-.foot a{color:var(--mut)}
-code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
-.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
-</style>
-<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY when a visitor arrives
-     through an affiliate link; an ordinary visitor gets none. Disclosed in
-     /privacy.html as one conditional cookie. -->
-<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Outlier Code is now Outlier Core — Outlier</title>
+  <link rel="canonical" href="https://outlier.host/seo/run/run-compact-on-m4-pro-macbook-pro/">
+  <meta name="robots" content="noindex, follow">
+  <meta http-equiv="refresh" content="0; url=/seo/run/run-compact-on-m4-pro-macbook-pro/">
+  <!-- v1.11.798: Outlier Code was folded into Outlier Core — the same 27B
+       weights, which is what they always were. This URL described running a
+       coding model on an M4 Pro MacBook Pro, and the Core page for that exact
+       Mac already exists, so this page and that one would now be the same page.
+       It is a redirect rather than a deletion because the URL is indexed.
+
+       No Meta pixel here on purpose. The destination carries one, and a stub
+       that fires its own PageView before redirecting would count every visit
+       twice. This and the Google verification stub are the only two pages on
+       the site without one. -->
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+         max-width:38rem;margin:18vh auto;padding:0 1.5rem;line-height:1.7;
+         color:#1d1d1f;background:#fff}
+    a{color:#0066cc}
+    @media (prefers-color-scheme:dark){body{background:#000;color:#f5f5f7}a{color:#2997ff}}
+  </style>
 </head>
 <body>
-<div class="wrap">
-<nav class="crumbs">
-<a href="/">Home</a> &rsaquo; <a href="/seo/run/">Run on your Mac</a> &rsaquo; <span>Run Outlier Code on MacBook Pro M4 Pro</span>
-</nav>
-<span class="tag">Run on your Mac</span>
-<h1>Run Outlier Code on MacBook Pro M4 Pro</h1>
-<p class="byline">Last updated 2026-08-23 &middot; Outlier v1.11.798</p>
-
-<div class="qa"><strong>Quick answer</strong><p><strong>Outlier Code</strong> on <strong>MacBook Pro M4 Pro</strong>: fits comfortably. Minimum unified memory required: <strong>24 GB</strong>. Disk size: <strong>15.13 GB</strong>. Default context window: <strong>64K tokens</strong>. On MacBook Pro M4 Pro the Outlier Code bandwidth-scaled estimate is <strong>~7.1 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 20.7 tok/s on M1 Ultra &times; (273&nbsp;/&nbsp;800) bus ratio for the Apple M4 Pro. Treat as a first-order projection &mdash; the Outlier Code number on this 2024 machine has not been formally measured.</p></div>
-
-<h2>What does Outlier Code run like on MacBook Pro M4 Pro?</h2>
-<p>The pairing under examination is <strong>Outlier Code</strong> (15.13 GB MLX 4-bit, Qwen3.6-27B base, 64K default context, 24 GB unified memory minimum) on a <strong>MacBook Pro M4 Pro</strong> (Apple M4 Pro, 12-14 CPU cores, 16-20 GPU cores, 24|48 GB unified memory, 273 GB/s, 2024). Outlier loads this tier as one mlx_lm process inside the bundled FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, so the ceiling on this exact MacBook Pro M4 Pro scales as the ratio 273&nbsp;/&nbsp;800 = <strong>0.34&times;</strong> the published M1 Ultra number.</p>
-<h2>Does MacBook Pro M4 Pro hold that speed on a long job?</h2>
-<p>The MacBook Pro M4 Pro is a <strong>laptop with active cooling</strong> — it holds clocks through a sustained back-and-forth session far longer than a fanless Air, and it will be audible while it does. Its thermal envelope is still smaller than a desktop of the same chip, so a 15.13 GB model decoding for a long stretch sits between the two: closer to the figure above than an Air, not quite a Mac Studio. Plugged in matters here as much as it does on any laptop.</p>
-<h2>How much memory does the model take during generation?</h2>
-<p>Outlier&rsquo;s Outlier Code has a measured peak generation footprint of about 16 GB. The rule of thumb is to leave roughly 4 GB for the OS and one open browser tab, so across the MacBook Pro M4 Pro memory options that leaves 24&nbsp;GB &rarr; 4.0 GB free; 48&nbsp;GB &rarr; 28.0 GB free. On MacBook Pro M4 Pro the Outlier Code bandwidth-scaled estimate is <strong>~7.1 tok/s [estimated from family-bandwidth ratio]</strong>; derivation: 20.7 tok/s on M1 Ultra &times; (273&nbsp;/&nbsp;800) bus ratio for the Apple M4 Pro. Treat as a first-order projection &mdash; the Outlier Code number on this 2024 machine has not been formally measured.</p>
-<h2>What is the install path on MacBook Pro M4 Pro for Outlier Code?</h2>
-<p>The 2024 MacBook Pro M4 Pro ships with 24|48 GB of unified memory, so headroom for the 24 GB Outlier Code requirement is 0 GB on the base SKU. Step-by-step install instructions live on the <a href="/seo/how-to/install-outlier-on-mac/">install guide</a>; the part that varies for this Apple M4 Pro machine is that the 15.13 GB pull from <code>Outlier-Ai/Outlier-Code-27B-MLX-4bit</code> over HTTPS lands in <code>~/Library/Application Support/Outlier/models/code/</code> and download time is bandwidth-limited by the network, not by the 12-14-core Apple M4 Pro CPU.</p>
-<h2>What context window can I use on a 24 GB Mac?</h2>
-<p>The Outlier Code tier defaults to 64K context and caps at 256K. KV cache scales linearly with context length on dense models, so longer contexts trade headroom for capacity. On a 24|48 GB MacBook Pro M4 Pro, the default context is the safe starting point.</p>
-<h2>What works well on this pairing, and what is still rough?</h2>
-<ul><li>The MacBook Pro M4 Pro (Apple M4 Pro, 273 GB/s) is bandwidth-bound on dense 4-bit decode; the throughput ceiling for Outlier Code on this exact machine is approximately 273 divided by 15.13 GB tokens per second.</li><li>The Apple M4 Pro (273 GB/s, 16-20 GPU cores) is current Apple Store silicon as of 2025; new-purchase tok-per-second-per-dollar is best in the lineup at the Outlier Code tier.</li><li>Cold boot of Outlier on a 12-14-core Apple M4 Pro is roughly 50 seconds while the bundled Python.framework warms; this is documented on the v1.9 backlog under the boot-time investigation thread.</li></ul>
-<h2>What is the unique number for Outlier Code on MacBook Pro M4 Pro?</h2>
-<p>15.13 GB on disk against 24|48 GB unified memory means the weights alone consume about <strong>63%</strong> of the base SKU&rsquo;s RAM on the MacBook Pro M4 Pro.</p>
-<h2>Should I pick a different tier?</h2>
-<p>For lighter-weight work on this Apple M4 Pro, the Compact tier is the next step down and runs visibly faster. For heavier work, the Plus tier is the next step up; check that the 24|48 GB SKU you have can fit its weights before installing. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for MacBook Pro M4 Pro is 0.34&times; M1 Ultra reference.</p>
-
-<a class="cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.798/Outlier-1.11.798-arm64.dmg" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
-<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported. macOS 12+.</p>
-
-<div class="related">
-<h3>Related pages</h3>
-<ul>
-<li><a href="/seo/learn/what-is-unified-memory/">What is unified memory on Apple Silicon?</a></li><li><a href="/seo/learn/mlx-explained/">What is MLX and why does Outlier use it?</a></li><li><a href="/seo/how-to/install-outlier-on-mac/">How to install Outlier on a Mac</a></li><li><a href="/seo/vs/cloud-coding-assistants-for-code-review/">Outlier vs cloud-based coding assistants for code review</a></li><li><a href="/seo/learn/k-override-explained/">What is K_override on the Plus tier?</a></li>
-</ul>
-</div>
-
-<div class="foot">
-<p>Outlier runs entirely on your Mac. No prompts leave the device. macOS 12+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">Back to home</a>.</p>
-</div>
-</div>
-<script>
-// UTM forwarding to Download CTA
-(function(){
-  try{
-    var p=new URLSearchParams(location.search);
-    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
-    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
-    if(pairs.length){
-      var a=document.getElementById('dl-cta');
-      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
-    }
-  }catch(e){}
-})();
-</script>
+  <h1>Outlier Code is now Outlier Core</h1>
+  <p>They were always the same 27B model. Code differed only in its default
+     context window and a code-tuned configuration, so it is now a mode of
+     Core rather than a separate tier.</p>
+  <p>Taking you to
+     <a href="/seo/run/run-compact-on-m4-pro-macbook-pro/">Run Outlier Core on MacBook Pro M4 Pro</a>.</p>
 </body>
 </html>

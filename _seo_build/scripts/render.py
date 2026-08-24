@@ -274,8 +274,18 @@ def build_run_pages(models, macs) -> list[dict]:
         ("compact", "m4-pro-macbook-pro"),
         ("compact", "m4-pro-mac-mini"),
         ("compact", "m2-max-macbook-pro"),
-        ("code", "m4-max-macbook-pro"),
-        ("code", "m4-pro-macbook-pro"),
+        # v1.11.798: Code folded into Core — same 27B weights, and the app no
+        # longer lists it as a tier. These two pages are about running a coding
+        # model on a MacBook Pro, which Core still is, so the DATA moves to
+        # compact while the indexed URL stays put (same reasoning as the vision
+        # slug below: do not retire a ranking URL to say the same thing).
+        #
+        # Only m4-max survives as a page. ("compact", "m4-pro-macbook-pro") is
+        # already in this list, so keeping the m4-pro code pair would emit two
+        # pages for one (tier, Mac) — which is literally why the shingle check
+        # failed the build: five MacBook Pro pages shared 82 identical 50-word
+        # runs. That page becomes a redirect instead.
+        ("compact", "m4-max-macbook-pro", "run-code-on-m4-max-macbook-pro"),
         ("plus", "m1-ultra-mac-studio"),
         ("plus", "m4-ultra-mac-studio"),
         ("vision38", "m3-max-macbook-pro"),
@@ -292,10 +302,12 @@ def build_run_pages(models, macs) -> list[dict]:
     # aborted before writing ANY page. The whole programmatic-SEO build has been
     # unrunnable since then, which is silent — nobody re-renders on a normal day.
     slug_token = {"vision38": "vision"}
-    for tier_id, mac_slug in curated:
+    for _entry in curated:
+        tier_id, mac_slug = _entry[0], _entry[1]
+        _slug_override = _entry[2] if len(_entry) > 2 else None
         m = by_tier[tier_id]
         mac = next(x for x in macs if x["slug"] == mac_slug)
-        slug = f"run-{slug_token.get(tier_id, tier_id)}-on-{mac_slug}"
+        slug = _slug_override or f"run-{slug_token.get(tier_id, tier_id)}-on-{mac_slug}"
         h1 = f"Run {m['display_name']} on {mac['name']}"
         title = f"{h1} — Local AI on Apple Silicon | Outlier"
         description = (
@@ -1044,11 +1056,11 @@ def build_howto_pages() -> list[dict]:
         # accurate history but reads stale (458 builds old) on a v1.11.469 launch site.
         _ = v181_blurbs  # retained for reference; intentionally not emitted
         related_tier_lines = {
-            "install-outlier-on-mac": "After install, the model picker shows seven tiers in display order: Nano (2.37 GB), Lite (5.04 GB), Quick (15.61 GB), Core (15.13 GB), Code (15.13 GB, shares Core), Plus (209 GB), and Vision (19.0 GB). Tiers above the Mac&rsquo;s unified-memory headroom appear greyed out.",
-            "download-a-model-tier": "The Plus tier is the outlier on size: 209 GB versus the next-largest Vision at 19 GB. Most users start with Nano or Lite, then graduate to Core or Code once they have a use case that exercises the heavier weights.",
+            "install-outlier-on-mac": "After install, the model picker shows six tiers in display order: Nano (2.37 GB), Lite (5.04 GB), Quick (15.61 GB), Core (15.13 GB), Plus (209 GB), and Vision (19.0 GB). Tiers above the Mac&rsquo;s unified-memory headroom appear greyed out.",
+            "download-a-model-tier": "The Plus tier is the outlier on size: 209 GB versus the next-largest Vision at 19 GB. Most users start with Nano or Lite, then graduate to Core once they have a use case that exercises the heavier weights.",
             "run-a-local-coding-assistant-on-mac": "Code mode pairs naturally with the project chip and the .outlierignore file. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.",
             "keep-prompts-private-on-mac": "If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and avoid the web-search toggle. Once both are off, the running app touches only loopback for the chat path.",
-            "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Code shares Core (no extra disk), Vision adds 19 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
+            "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision adds 19 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
             "write-unit-tests-with-local-ai": "Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.",
             "review-a-pull-request-locally": "For a 500-line diff, Code&rsquo;s 64K default context holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s 32K default context is more than enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
