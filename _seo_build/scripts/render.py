@@ -519,10 +519,13 @@ def build_run_pages(models, macs) -> list[dict]:
         body.append(f"<p>{unique_claim}</p>")
         body.append("<h2>Should I pick a different tier?</h2>")
         # Tier-and-mac-keyed adjacent-tier suggestions (varied phrasing).
-        smaller = {"lite": "Nano", "quick": "Lite", "compact": "Lite", "code": "Compact",
-                   "plus": "Code", "vision38": "Compact"}.get(tier_id)
+        # Display names, not catalog ids — "Compact" is the internal id for Core and
+        # was leaking into prose. The ladder is by unified-memory floor:
+        # Nano 6, Lite 12, Quick 16, Core 24, Vision 3.8 24, Plus 64.
+        smaller = {"lite": "Nano", "quick": "Lite", "compact": "Quick",
+                   "plus": "Core", "vision38": "Quick"}.get(tier_id)
         bigger = {"nano": "Lite", "lite": "Quick or Core", "quick": "Core",
-                  "compact": "Code or Vision", "code": "Plus", "vision38": "Plus"}.get(tier_id)
+                  "compact": "Vision 3.8 or Plus", "vision38": "Plus"}.get(tier_id)
         guidance = []
         if smaller:
             guidance.append(
@@ -571,7 +574,7 @@ TIER_QUALITY_NOTE = {
     "lite": "Lite sits on a 9B base &mdash; a step up in reasoning and code over Nano while still fitting a 16 GB Mac.",
     "quick": "Quick is a reasoning-strong MoE tier but comparatively weak on code-shaped tasks; pick it for exploration, not for code.",
     "compact": "Core is the best general-purpose tier in the lineup for code and reasoning quality.",
-    "code": "Code shares Core's weights; the difference is configuration (wider default context, code-first prompt), not model quality.",
+    "code": "Core is the coding tier. It was briefly split into a separate \u201cCode\u201d entry that shared the identical weights; that split is gone and Core carries the code-first defaults.",
     "vision": "Vision is the multimodal-first tier; solid general quality with image understanding the others lack.",
     "plus": "Plus is the 397B-A17B flagship; the heaviest tier in the lineup for the hardest work.",
 }
@@ -637,7 +640,7 @@ def quality_block(tier_id: str, u: dict, c: dict, u_slug: str = "") -> str:
 
 VS_FLAVOR = {
     "code-review": "A code review pass is structurally short-prompt, long-context: many small files with one focused question. Local decoding wins on tail latency and on never having to redact secrets out of the diff first.",
-    "refactoring": "Refactoring runs are long-prompt, long-output: paste a function and ask for the rewrite. The Code tier&rsquo;s 64K default context is wider than Core&rsquo;s 32K, which matters when the input is a whole file.",
+    "refactoring": "Refactoring runs are long-prompt, long-output: paste a function and ask for the rewrite. Core sizes its context window to the memory your Mac actually has free rather than to a fixed number, so a whole file and its imports fit without truncation.",
     "test-writing": "Test scaffolding is bursty: ten short turns to land a green suite. Cloud round-trip variance shows up here because each turn is small enough that the network is half the latency.",
     "documentation": "Documentation generation is throughput-friendly: the model emits tokens steadily, no need for multi-turn corrections. Local decode tok/s is the visible quality of life.",
     "summarization": "Summarization on long-source material wants the wider context windows on the heavier tiers. Core defaults to 32K context, with 256K available; Plus also defaults to 32K with the same ceiling.",
@@ -806,7 +809,7 @@ def build_howto_pages() -> list[dict]:
           ("Switch tiers in chat", "The active tier is shown in the bottom bar of the chat window.")]),
         ("run-a-local-coding-assistant-on-mac", "How to run a local coding assistant on a Mac",
          "Use the Code-tuned variant of the Core model for code review and refactor without a network round-trip.",
-         [("Install Outlier", "Per the install guide. macOS 12+ Apple Silicon, 24 GB RAM minimum for the Code tier."),
+         [("Install Outlier", "Per the install guide. macOS 12+ Apple Silicon, 24 GB RAM minimum for Core."),
           ("Switch to Code mode", "The mode toggle is in the chat composer. The system prompt is tuned for terse code-first responses."),
           ("Open a project", "Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>."),
           ("Ask for a focused review", "Quote a single function. Bigger asks blow the context budget on smaller tiers.")]),
@@ -847,7 +850,7 @@ def build_howto_pages() -> list[dict]:
           ("Pin the floating window", "The companion stays above other windows but does not capture clicks."),
           ("Ask about the active app", "The accessibility tree exposes window titles and labels; pixel-level vision requires the Vision tier.")]),
         ("upgrade-to-the-pro-tier", "How to upgrade to Outlier Pro",
-         "Pro unlocks the Quick, Core, Code, Plus, and Vision tiers in v1.11.469.",
+         "Pro unlocks the Quick, Core, Vision 3.8, and Plus tiers.",
          [("Open Settings &gt; Pro", "The Pro section appears on the General tab in v1.11.469."),
           ("Buy through Dodo Payments", "Pro is a one-time purchase: Founders Lifetime at $249."),
           ("Paste your license key", "Settings &gt; license &gt; Activate. The key is verified against whichever issuer sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the key."),
@@ -872,8 +875,8 @@ def build_howto_pages() -> list[dict]:
             ("<p>Code mode in v1.11.469 was renamed from Agent mode. The system prompt is tuned for "
              "code-first responses, default temperature is lowered, and the autonomy mode toggles "
              "default to manual approval.</p>"
-               "<p>The Code tier defaults to a 64K context window against Core&rsquo;s 32K, which is the practical reason to pick it for this work: a whole file plus its imports fits without truncation. It needs 24 GB of unified memory. Below that, drop to Core and scope each question to a single function rather than a file.</p>",
-             "The Code tier shares safetensors with Core; the difference is configuration, not weights."),
+               "<p>Core sizes its context window to the memory your Mac has free rather than to a fixed number, so a whole file plus its imports fits without truncation on a machine with room for it. It needs 24 GB of unified memory. Below that, drop to Quick and scope each question to a single function rather than a whole file.</p>",
+             "Core is one model; the separate Code entry that shared its safetensors has been folded back in."),
         "keep-prompts-private-on-mac":
             ("<p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code> &mdash; the "
              "FastAPI sidecar bound to localhost. The Tauri Content Security Policy in "
@@ -890,7 +893,7 @@ def build_howto_pages() -> list[dict]:
                "<p>Ask for one test at a time and the local tiers hold up well; ask for a whole suite in one turn and quality falls off sharply as the response lengthens. The practical loop is narrow: name the function, name the single behaviour you want covered, run what comes back, and paste the failure in unedited. Failures are the most useful thing you can give a smaller model, because they replace guesswork about your codebase with the actual error text. Keep the function under test in view &mdash; a test written against a signature the model inferred rather than read is the common way this goes wrong.</p>",
              "Recommended pattern: one test per turn, paste the failure into the next turn, iterate until green."),
         "review-a-pull-request-locally":
-            ("<p>For PR review, the Code tier&rsquo;s default 64K context window is wider than Core&rsquo;s "
+            ("<p>For PR review, Core sizes its context window to the memory your Mac has free, rather than to a fixed "
              "32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p>"
                "<p>Large diffs are the limiting factor, not the review itself. Split anything past a few hundred lines by file and review each in its own turn; a diff that overruns the context window gets silently truncated, and a review of half a change reads exactly like a review of all of it. Asking for one axis per pass &mdash; correctness, then style, then performance &mdash; also keeps each answer short enough to check.</p>",
              "Asking along a single axis at a time (correctness, then style, then perf) holds quality better than a single &lsquo;review this&rsquo; ask."),
@@ -911,7 +914,7 @@ def build_howto_pages() -> list[dict]:
              "&mdash; <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> "
              "for keys bought before 23 August 2026 &mdash; then derives your tier from the key. "
              "Checkout issues the key straight after payment.</p>",
-             "Free tiers (Nano, Lite) work without a Pro license; Quick, Core, Code, Plus, and Vision are gated by the license key."),
+             "Free tiers (Nano, Lite) work without a Pro license; Quick, Core, Vision 3.8, and Plus are gated by the license key."),
     }
     deep_blocks = {
         "install-outlier-on-mac":
@@ -958,7 +961,7 @@ def build_howto_pages() -> list[dict]:
             "<p>Code defaults to 64K context against Core&rsquo;s 32K, with both capped at 256K. The "
             "two share the same safetensors and produce identical answer quality; the difference is "
             "the chat template and decoding configuration. For PR review on diffs over 500 lines, "
-            "Code&rsquo;s wider default keeps the whole diff plus the relevant surrounding code "
+            "Core&rsquo;s memory-sized window keeps the whole diff plus the relevant surrounding code "
             "addressable in a single turn.</p>",
         "draft-shell-scripts-with-the-nano-tier":
             "<h2>How fast is Nano on a 16 GB M4 Air?</h2>"
@@ -981,7 +984,7 @@ def build_howto_pages() -> list[dict]:
             "<code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for "
             "keys bought before 23 August 2026 &mdash; and derives your tier from the verified reply. "
             "Checkout issues the key, and that verified tier is what unlocks "
-            "the Quick, Core, Code, Plus, and Vision tiers.</p>",
+            "the Quick, Core, Vision 3.8, and Plus tiers.</p>",
     }
     pages = []
     for slug, h1, lead, steps in items:
@@ -990,7 +993,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                "<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 24 GB for Core / Code / Vision, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
+                "<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick, 24 GB for Core and Vision 3.8, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
@@ -1002,11 +1005,11 @@ def build_howto_pages() -> list[dict]:
         slug_pitfalls = {
             "install-outlier-on-mac": "<li>Gatekeeper prompts on first launch surprise users; the DMG is Developer-ID-signed (cert <code>9N3Z6J63T4</code>), so right-click + Open clears it permanently.</li><li>Some macOS versions move the app to a quarantine folder; <code>xattr -d com.apple.quarantine /Applications/Outlier.app</code> bypasses this.</li>",
             "download-a-model-tier": "<li>Hugging Face download interrupted partway leaves a half-checkpoint; the picker UI detects this on next launch and offers to resume.</li><li>Slow networks make the Plus tier&rsquo;s 209 GB pull effectively a multi-hour task.</li>",
-            "run-a-local-coding-assistant-on-mac": "<li>Code mode without Pro unlock falls back to the free tier (Nano/Lite) which is weaker on code; for top code quality you need to unlock the Code tier.</li><li>Project chip context can blow the window if the folder is large.</li>",
+            "run-a-local-coding-assistant-on-mac": "<li>Without a Pro unlock the agent falls back to the free tiers (Nano/Lite), which are weaker on code; for top code quality you need Pro, which includes Core.</li><li>Project chip context can blow the window if the folder is large.</li>",
             "keep-prompts-private-on-mac": "<li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs three third-party scripts &mdash; Plausible (no cookies, no IP storage), Sled for affiliate attribution, and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites &mdash; and the Tauri auto-updater makes external calls. None of the three scripts are in the desktop app; turn the auto-updater off if you want strict no-network. The full list is on the <a href='/privacy.html'>privacy page</a>.</li>",
             "free-up-disk-space-for-large-models": "<li>Hugging Face cache may hold prior tier snapshots after an update.</li><li>The model picker&rsquo;s Delete button removes weights but leaves their config metadata; safe to ignore.</li>",
             "write-unit-tests-with-local-ai": "<li>Lite&rsquo;s code quality is good, not great; tricky tests sometimes need a manual second pass.</li><li>Long batches of tests in one prompt drop quality; break them up.</li>",
-            "review-a-pull-request-locally": "<li>Diffs over 1000 lines may exceed Code&rsquo;s default 64K context if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li>",
+            "review-a-pull-request-locally": "<li>Very large diffs can still exceed Core&rsquo;s context window if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li>",
             "draft-shell-scripts-with-the-nano-tier": "<li>Nano is a 4B model; it occasionally hallucinates flag names. Always read the script before running it.</li><li>The 32 tok/s on M4 Air is single-prompt; back-to-back prompts may slow under thermal load.</li>",
             "set-up-the-companion-window": "<li>If Accessibility permission is denied, the companion has no app context to read.</li><li>Screen Recording permission is per-app and prompts on first capture only; deny once and it stays denied until reset in System Settings.</li>",
             "upgrade-to-the-pro-tier": "<li>Save your license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by the payment processor &mdash; Dodo Payments for new purchases &mdash; not by Outlier directly.</li>",
@@ -1016,7 +1019,7 @@ def build_howto_pages() -> list[dict]:
         cloud_compare = {
             "install-outlier-on-mac": "<p>The cloud equivalent of installing a coding assistant is creating an account and pasting an API key. Outlier&rsquo;s install replaces both with a signed DMG.</p>",
             "download-a-model-tier": "<p>Cloud-side model selection happens in a dropdown bound to a billing tier. Outlier&rsquo;s model picker happens once, against on-disk weights you fetched yourself.</p>",
-            "run-a-local-coding-assistant-on-mac": "<p>Hosted coding assistants stream from a remote endpoint that your code went to. The Outlier Code mode streams from a local sidecar at <code>127.0.0.1:8766</code>.</p>",
+            "run-a-local-coding-assistant-on-mac": "<p>Hosted coding assistants stream from a remote endpoint that your code went to. Outlier streams from a local sidecar at <code>127.0.0.1:8766</code>.</p>",
             "keep-prompts-private-on-mac": "<p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;packets do not leave the device&rsquo;, which is verifiable with a network monitor.</p>",
             "free-up-disk-space-for-large-models": "<p>Cloud models do not consume your disk. They consume your wallet per token instead. The trade-off is direct.</p>",
             "write-unit-tests-with-local-ai": "<p>Hosted test-writing tools log your function-under-test alongside the prompt. Outlier&rsquo;s local path leaves no log on a third-party server.</p>",
@@ -1062,10 +1065,10 @@ def build_howto_pages() -> list[dict]:
             "keep-prompts-private-on-mac": "If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and avoid the web-search toggle. Once both are off, the running app touches only loopback for the chat path.",
             "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision adds 19 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
             "write-unit-tests-with-local-ai": "Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.",
-            "review-a-pull-request-locally": "For a 500-line diff, Code&rsquo;s 64K default context holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
+            "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s 32K default context is more than enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
-            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Code, Plus, and Vision; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the verified reply regardless of which product you bought.",
+            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the verified reply regardless of which product you bought.",
         }
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
@@ -1136,14 +1139,14 @@ def build_learn_pages() -> list[dict]:
             "<p>The catch is quality. Naive round-to-ternary loses several points of MMLU. The "
             "patent filings cover a distillation pipeline that recovers most of the lost quality "
             "at training time. The shipping Outlier tiers are MLX 4-bit precisely because the "
-            "ternary research is not yet at parity for the 27B class on which Core/Code ride.</p>",
+            "ternary research is not yet at parity for the 27B class on which Core rides.</p>",
         "mlx-explained":
             "<h2>Where does mlx_lm fit in the Outlier sidecar?</h2>"
             "<p>The Outlier sidecar is a FastAPI server packaged by PyInstaller into a single "
             "binary at <code>Contents/Resources/outlier-cli/</code>. mlx_lm 0.31.3 is bundled inside, "
             "with all submodules collected at build time. The Tauri front end speaks to the sidecar "
             "over <code>http://127.0.0.1:8766</code>; the sidecar in turn calls into mlx_lm for the "
-            "standard tiers (Nano, Lite, Quick, Core, Code, Vision).</p>"
+            "standard tiers (Nano, Lite, Quick, Core, Vision 3.8).</p>"
             "<p>The Plus tier is the exception. mlx_lm cannot stream a 209 GB checkpoint that does "
             "not fit in unified memory, so the V9 paged loader sits next to it and intercepts the "
             "model-load and SwitchGLU forward paths. From the front end&rsquo;s point of view, both "
@@ -1266,7 +1269,7 @@ def build_learn_pages() -> list[dict]:
             {
                 "paged-moe-explained": "<p>This concept is what makes the Plus tier possible at all. The other six tiers (Nano through Vision) are dense or small-MoE and load entirely into unified memory; only Plus needs the paged loader.</p>",
                 "ternary-quantization-explained": "<p>Today this concept does not ship in any Outlier tier. The shipping tiers are MLX 4-bit. The ternary direction is research and is what the three April-2026 patent filings cover.</p>",
-                "mlx-explained": "<p>Every Outlier tier uses MLX 4-bit at the leaf level: Nano, Lite, Quick, Core, Code, and Vision via standard mlx_lm; Plus via the V9 paged loader sitting next to mlx_lm in the same FastAPI sidecar.</p>",
+                "mlx-explained": "<p>Every Outlier tier uses MLX 4-bit at the leaf level: Nano, Lite, Quick, Core, and Vision 3.8 via standard mlx_lm; Plus via the V9 paged loader sitting next to mlx_lm in the same FastAPI sidecar.</p>",
                 "k-override-explained": "<p>K_override is Plus-tier-only. The other six tiers either load entirely into unified memory or need not page experts; their inference path does not even consult the K_override knob.</p>",
                 "what-is-unified-memory": "<p>This concept is foundational to every Outlier tier. The smallest Mac that exercises it is a 6 GB M1 base running Nano; the largest is a 192 GB M4 Ultra running Plus.</p>",
             }.get(slug, "<p>This concept is general across the Outlier lineup.</p>"),

@@ -122,7 +122,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Claude Code's loop is plan → tool calls → execute → loop. None of it needs the cloud.</li>
-        <li>Run it locally with <strong>Core 27B or Code 27B</strong>, MCP tools, and on-disk memory.</li>
+        <li>Run it locally with <strong>Core 27B or Core 27B</strong>, MCP tools, and on-disk memory.</li>
         <li>Outlier bundles the whole thing in one app. Claude Desktop plus a filesystem MCP also works.</li>
         <li>You give up roughly 4× in speed feel. You get offline operation and zero API token cost.</li>
       </ul>
@@ -140,7 +140,7 @@
     <p>The cloud version of Claude Code uses Claude Opus 4.7 for piece one and a slick terminal UI for the other two. The local version just swaps piece one for a model that runs on your Mac. The tool executor stays local. The whole thing lives in a Mac-native UI instead of a terminal.</p>
 
     <h2>What you need locally</h2>
-    <p>Piece one needs a model that's been fine-tuned to emit structured tool calls. Outlier's Core 27B and Code 27B both do this. They're the strongest coding tier, which means the model holds its own on real refactors instead of folding on the first hard diff. Piece two wants a sandboxed shell, a filesystem driver, and approval gates. Piece three wants a project-aware UI that remembers your chat history. Outlier ships all of it in one app, sitting behind MCP (Model Context Protocol) so the tool surface stays portable.</p>
+    <p>Piece one needs a model that's been fine-tuned to emit structured tool calls. Outlier's Core 27B both do this. They're the strongest coding tier, which means the model holds its own on real refactors instead of folding on the first hard diff. Piece two wants a sandboxed shell, a filesystem driver, and approval gates. Piece three wants a project-aware UI that remembers your chat history. Outlier ships all of it in one app, sitting behind MCP (Model Context Protocol) so the tool surface stays portable.</p>
 
     <h2>Setting it up</h2>
     <ol>
@@ -155,7 +155,7 @@
     <table>
       <thead><tr><th>Dimension</th><th>Claude Code (cloud)</th><th>Outlier Agent (local)</th></tr></thead>
       <tbody>
-        <tr><td>Model</td><td>Claude Opus 4.7</td><td>Core 27B / Code 27B / Plus 397B</td></tr>
+        <tr><td>Model</td><td>Claude Opus 4.7</td><td>Core 27B / Plus 397B</td></tr>
         <tr><td>Speed</td><td>~80–100 tok/s</td><td>~20.7 tok/s (Core), ~1.59 tok/s (Plus)</td></tr>
         <tr><td>API key</td><td>Yes</td><td>None</td></tr>
         <tr><td>Usage limit</td><td>Per-plan token cap</td><td>None — your hardware is the limit</td></tr>

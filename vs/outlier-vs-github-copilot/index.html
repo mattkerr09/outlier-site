@@ -112,7 +112,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>GitHub Copilot lives in six IDEs, a terminal CLI, a desktop app and GitHub.com, and every suggestion is computed on remote infrastructure run by GitHub, OpenAI, Anthropic, Google or AWS — your source code leaves the machine. Outlier is a standalone Mac app whose 27B coding model runs entirely on your own Apple Silicon: no caps, works with Wi-Fi off. The free tiers, Nano and Lite, need no account; Code 27B is part of Pronth. Copilot has the higher ceiling and deeper repository integration; Outlier uploads nothing.</p>
+      <p>GitHub Copilot lives in six IDEs, a terminal CLI, a desktop app and GitHub.com, and every suggestion is computed on remote infrastructure run by GitHub, OpenAI, Anthropic, Google or AWS — your source code leaves the machine. Outlier is a standalone Mac app whose 27B coding model runs entirely on your own Apple Silicon: no caps, works with Wi-Fi off. The free tiers, Nano and Lite, need no account; Core 27B is part of Pronth. Copilot has the higher ceiling and deeper repository integration; Outlier uploads nothing.</p>
     </div>
 
     <p class="lead">I built Outlier, so treat this as a comparison written by an interested party. Every claim about Copilot comes from GitHub’s own docs, cited at the bottom, and I’ve been blunt about where Copilot is the better tool. Copilot is a cloud service that reaches into your editor; Outlier is a local app that reaches into nothing.</p>
@@ -125,7 +125,7 @@
     <h2>Which model is doing the work</h2>
     <p>Copilot routes to other companies’ models: OpenAI’s GPT-5 family, Anthropic’s Claude Haiku 4.5 through Opus 4.8, Google’s Gemini 3.x, GitHub’s Raptor mini, Microsoft’s MAI-Code-1-Flash, Moonshot’s Kimi K2.7 Code — a lot of frontier capability behind one login. You can’t download those weights, pin a version, or archive one, and the free tier offers no model choice at all: auto selection only.</p>
 
-    <p>Outlier ships six tiers you download once, from Nano 4B up to Plus 397B-a17b, including <strong>Code 27B</strong> (15.13 GB, 24 GB RAM). Six are Apache 2.0, Quick is under the Gemma Terms of Use, and the weights are published openly — what you’ve downloaded can’t be deprecated out from under you.</p>
+    <p>Outlier ships six tiers you download once, from Nano 4B up to Plus 397B-a17b, including <strong>Core 27B</strong> (15.13 GB, 24 GB RAM). Six are Apache 2.0, Quick is under the Gemma Terms of Use, and the weights are published openly — what you’ve downloaded can’t be deprecated out from under you.</p>
 
     <h2>What Copilot sends to GitHub, and what it trains on</h2>
     <p>With Copilot, yes, and GitHub documents where: OpenAI models on OpenAI’s and GitHub’s Azure infrastructure, Anthropic models on AWS, Anthropic and Google Cloud, Google’s on Google Cloud. GitHub holds zero-data-retention agreements with OpenAI and Anthropic, and says Google commits not to train on GitHub data — better than a default API relationship.</p>
@@ -144,7 +144,7 @@
     <h2>Agentic ability and repo-scale context</h2>
     <p>This is Copilot’s strongest ground. Agent mode runs in the major editors, cloud agents run on GitHub’s infrastructure and open pull requests, and the desktop app runs several isolated sessions at once, each with its own git worktree and branch, so parallel agents don’t collide. Cloud sandboxes, in public preview, keep long runs off your battery.</p>
 
-    <p>Now my numbers, unflattering part first. Code 27B scores <strong>0.866 on HumanEval</strong>. On a blind slice of SWE-bench Verified, the local 27B resolved <strong>18 of 40 issues, about 45%</strong> — measured in my own harness, not a leaderboard submission, and below what the strongest cloud coding agents report. Core 27B separately matched Claude Opus on <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">98.9% of rubric checks across 54 prompts</a>. Strong on well-specified work, behind on long autonomous repo work, and there’s no GitHub integration at all.</p>
+    <p>Now my numbers, unflattering part first. Core 27B scores <strong>0.866 on HumanEval</strong>. On a blind slice of SWE-bench Verified, the local 27B resolved <strong>18 of 40 issues, about 45%</strong> — measured in my own harness, not a leaderboard submission, and below what the strongest cloud coding agents report. Core 27B separately matched Claude Opus on <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">98.9% of rubric checks across 54 prompts</a>. Strong on well-specified work, behind on long autonomous repo work, and there’s no GitHub integration at all.</p>
 
     <h2>Copilot and Outlier, line by line</h2>
     <table>
@@ -160,7 +160,7 @@
         <tr>
           <td><strong>Model</strong></td>
           <td>Hosted OpenAI, Anthropic, Google, Microsoft, Moonshot</td>
-          <td>6 downloadable tiers incl. Code 27B, open weights</td>
+          <td>6 downloadable tiers incl. Core 27B, open weights</td>
         </tr>
         <tr>
           <td><strong>Code leaves machine</strong></td>

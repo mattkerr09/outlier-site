@@ -126,7 +126,7 @@
 
     <h2>What Outlier is</h2>
     <p>Outlier is a native macOS app for Apple Silicon — M1 or later, macOS 12 or newer. No Intel Macs, no Windows, no Linux, no mobile app. Models run fully on-device, no account, no usage caps.</p>
-    <p>Six tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B and Code 27B up to Plus 397B-a17b, which needs 64 GB and streams experts from SSD at about 11 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase for all seven. Weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>; the app itself is not open source.</p>
+    <p>Six tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B up to Plus 397B-a17b, which needs 64 GB and streams experts from SSD at about 11 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase for all seven. Weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>; the app itself is not open source.</p>
 
     <h2>Interface, setup, and what's in the box</h2>
     <p>This is the real dividing line. TextGen is a Gradio web UI wrapped, since v4.7.3, in a bundled Electron shell, so it opens in its own window rather than a browser tab. It's also a server: run it with <code>--api</code> and you get an OpenAI- <em>and</em> Anthropic-compatible endpoint on port 5000, with streaming and tool calling. There's no interactive chat CLI — the command line is for configuration (<code>--cpu</code>, <code>--split-mode</code>, <code>--spec-type</code>), not conversation. The portable builds don't need installing, but on macOS the release notes tell you to run <code>xattr -cr</code> on the folder first, because the builds aren't notarized.</p>
@@ -175,7 +175,7 @@
     <p>One counterweight, not a gotcha: v4.9 restricted CORS to localhost "to prevent drive-by API access" and closed a path-traversal vector, so earlier versions were exposed to a web page quietly calling your local API. Active hardening is a good sign — but you run the server.</p>
 
     <h2>Where Outlier fits better</h2>
-    <p>Outlier's argument is narrow: one signed, notarized Mac app where the model, settings and interface arrive together, with published numbers for what you get. Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest; the Code tier scores 0.866 on HumanEval. TextGen can't publish numbers like that — it's model-agnostic by design, so its quality is whatever you loaded, which is the whole point of it.</p>
+    <p>Outlier's argument is narrow: one signed, notarized Mac app where the model, settings and interface arrive together, with published numbers for what you get. Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest; Core scores 0.866 on HumanEval. TextGen can't publish numbers like that — it's model-agnostic by design, so its quality is whatever you loaded, which is the whole point of it.</p>
     <p>The other thing you get is the absence of decisions: no quantization, no flags, no Terminal. If that sounds like an insult to your intelligence, you're not the customer and TextGen is the better tool.</p>
 
     <h2>Who should pick which</h2>

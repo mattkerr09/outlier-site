@@ -125,7 +125,7 @@
     <h2>Where each one lives, and which model does the work</h2>
     <p>Continue meets you inside the tool you already use, its best design decision — but it needs VS Code, a JetBrains IDE or Node. No native desktop app, no mobile app, and since the hub shut down, no web UI. Which model powers it is whatever you configured; Continue's Ollama guide points at open-weight options like Qwen2.5-Coder, DeepSeek-Coder 6.7B and DeepSeek-R1 32B, budgeting about 32 GB of RAM for a 32B.</p>
 
-    <p>Outlier goes the other way: one macOS app, Apple Silicon only (M1 or later, macOS 12+), models included. Six tiers, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on my M1 Ultra) through Code 27B (15.13 GB, 24 GB RAM) to Plus 397B-a17b, which streams MoE experts from SSD and wants 64 GB. Five tiers are Apache 2.0 weights; Quick is Gemma Terms of Use. No extension, no plugin, no Windows or Linux build — if you work in an IDE on Linux, Continue wins by default.</p>
+    <p>Outlier goes the other way: one macOS app, Apple Silicon only (M1 or later, macOS 12+), models included. Six tiers, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on my M1 Ultra) through Core 27B (15.13 GB, 24 GB RAM) to Plus 397B-a17b, which streams MoE experts from SSD and wants 64 GB. Five tiers are Apache 2.0 weights; Quick is Gemma Terms of Use. No extension, no plugin, no Windows or Linux build — if you work in an IDE on Linux, Continue wins by default.</p>
 
     <h2>Does your code leave the machine — and what does it cost?</h2>
     <p>Continue's honest answer is "up to you." Pointed at Ollama the endpoint is <code>http://localhost:11434</code> and nothing leaves; the docs call that privacy-focused offline assistance. Pointed at a cloud provider, your prompts and code go to that third party on their terms. There's an official no-internet guide: disable Allow Anonymous Telemetry (which posted to PostHog before 2.0.0 stripped it out, so on the final 2.x that step is already moot — another sign the docs lag the README), configure a local model, install from a <code>.vsix</code>. A real air-gapped story, better documented than most commercial assistants manage — but nothing is local by default.</p>
@@ -172,7 +172,7 @@
         <tr>
           <td><strong>Repo-scale context</strong></td>
           <td>Your backend's context window</td>
-          <td>Tier and Mac RAM (24 GB for Code 27B)</td>
+          <td>Tier and Mac RAM (24 GB for Core 27B)</td>
         </tr>
         <tr>
           <td><strong>Maintenance</strong></td>
@@ -183,7 +183,7 @@
     </table>
 
     <h2>Agentic ability, repo context, and my honest numbers</h2>
-    <p>On a blind slice of SWE-bench Verified — real repositories, real issues, an agent that reads code, edits files and runs tests — Outlier's local 27B measured <strong>about 45%, or 18 of 40</strong>. Code 27B scores <strong>0.866 on HumanEval</strong>. I measured both on my own hardware; they aren't leaderboard placements; read them as a floor for what a 15 GB model on an M1 Ultra can do.</p>
+    <p>On a blind slice of SWE-bench Verified — real repositories, real issues, an agent that reads code, edits files and runs tests — Outlier's local 27B measured <strong>about 45%, or 18 of 40</strong>. Core 27B scores <strong>0.866 on HumanEval</strong>. I measured both on my own hardware; they aren't leaderboard placements; read them as a floor for what a 15 GB model on an M1 Ultra can do.</p>
 
     <p>They also sit below the strongest cloud coding agents, and I won't dress that up. Frontier hosted tools resolve a higher share of SWE-bench Verified, carry far larger context windows, and don't slow down because your machine is compiling something else. On sprawling multi-repo refactors a cloud agent does better — that's arithmetic, not modesty.</p>
 
@@ -214,7 +214,7 @@
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite are free forever — no login, no caps. Pro adds Code 27B.</p>
+      <p>Nano and Lite are free forever — no login, no caps. Pro adds Core 27B.</p>
       <a class="btn" href="https://outlier.host/?utm_source=organic&amp;utm_medium=seo&amp;utm_campaign=outlier-vs-continue-dev">Download for Mac</a>
     </div>
 

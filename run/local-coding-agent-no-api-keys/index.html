@@ -92,7 +92,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to set up a local coding agent on macOS without API keys", "item": "https://outlier.host/run/local-coding-agent-no-api-keys/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a coding agent run without any API key?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A local agent runs the model on your Mac, so there is no cloud API and no key to configure."}}, {"@type": "Question", "name": "What can the local agent do?", "acceptedAnswer": {"@type": "Answer", "text": "Read and write files, run shell commands, search your project, and use web search, each behind an approval gate via MCP."}}, {"@type": "Question", "name": "Which model should power the agent?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B or Code 27B — the strongest coding tier — for daily multi-file work; Plus 397B for the hardest cases on a 64 GB Mac."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a coding agent run without any API key?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. A local agent runs the model on your Mac, so there is no cloud API and no key to configure."}}, {"@type": "Question", "name": "What can the local agent do?", "acceptedAnswer": {"@type": "Answer", "text": "Read and write files, run shell commands, search your project, and use web search, each behind an approval gate via MCP."}}, {"@type": "Question", "name": "Which model should power the agent?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B or Core 27B — the strongest coding tier — for daily multi-file work; Plus 397B for the hardest cases on a 64 GB Mac."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -123,7 +123,7 @@
       <ul>
         <li>The whole thing runs on your Mac. <strong>No API key required</strong>.</li>
         <li>Outlier hands the model filesystem, shell, search, and web tools over MCP, each behind an approval gate.</li>
-        <li>Core 27B or Code 27B covers daily refactors. Plus 397B is there when a job is genuinely hard.</li>
+        <li>Core 27B or Core 27B covers daily refactors. Plus 397B is there when a job is genuinely hard.</li>
         <li>You give up roughly 4× the speed of Claude Code. You get a zero token bill and code that never leaves the machine.</li>
       </ul>
     </div>
@@ -133,7 +133,7 @@
     <h2>The pieces you need</h2>
     <p>Three things. All of them can live on your Mac.</p>
     <ol>
-      <li><strong>A local language model</strong> that's actually good at code. Outlier's Core 27B is the strongest coding tier, plenty for most real refactors. Quick 26B and Code 27B run the same code-tuned config.</li>
+      <li><strong>A local language model</strong> that's actually good at code. Outlier's Core 27B is the strongest coding tier, plenty for most real refactors. Quick 26B and Core 27B runs the same code-tuned config.</li>
       <li><strong>An agent loop</strong>. It takes your message, runs the model, pulls the tool calls out of the response, runs those tools, and feeds the results back in. Outlier ships it as "Agent" mode.</li>
       <li><strong>Tools</strong> the model is allowed to call. The usual suspects: read a file, write a file, run a shell command, search the project, hit the web. Outlier wires these up through MCP (the Model Context Protocol).</li>
     </ol>
@@ -154,7 +154,7 @@
       User: "Find the function that handles login retries and add exponential backoff."<br>
       Agent: searches the project, opens 3 files, picks one, drafts a diff, asks for approval to write, runs the test suite, reports what passed and what didn't.
     </blockquote>
-    <p>How far the agent gets depends entirely on the model behind it. Nano 4B is fine for small refactors and explaining code. Once you're touching several files at once, reach for Core 27B or Code 27B. On a 64 GB Mac you can also load Plus 397B, though it crawls (~1.59 tok/s). I save it for the rare complex architectural change where I want the strongest local model on the job and don't mind waiting.</p>
+    <p>How far the agent gets depends entirely on the model behind it. Nano 4B is fine for small refactors and explaining code. Once you're touching several files at once, reach for Core 27B or Core 27B. On a 64 GB Mac you can also load Plus 397B, though it crawls (~1.59 tok/s). I save it for the rare complex architectural change where I want the strongest local model on the job and don't mind waiting.</p>
 
     <h2>Where it still trails cloud agents</h2>
     <p>It trails in three real ways, and I'm not going to pretend otherwise.</p>
@@ -177,7 +177,7 @@
       </div>
       <div class="faq-item">
         <h3>Which model should power the agent?</h3>
-        <p>Core 27B or Code 27B — the strongest coding tier — for daily multi-file work; Plus 397B for the hardest cases on a 64 GB Mac.</p>
+        <p>Core 27B or Core 27B — the strongest coding tier — for daily multi-file work; Plus 397B for the hardest cases on a 64 GB Mac.</p>
       </div>
     </div>
 

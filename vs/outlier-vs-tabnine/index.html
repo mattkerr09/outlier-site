@@ -112,7 +112,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Tabnine is a commercial, enterprise-oriented coding assistant — IDE plugins plus a terminal CLI — where the model runs on a Tabnine-operated or customer-operated GPU cluster, priced at $39 and $59 per user/month, annual only, with LLM token charges on top. Outlier is a one-time $249 Mac app that runs the model on your own Apple Silicon: no inference account, no token meter, no code uploaded. Tabnine can route you to Claude Opus or GPT-5.x class models; Outlier's Code 27B measured HumanEval 0.866, and its general-purpose Core 27B resolved about 45% on a blind SWE-bench Verified slice — below the strongest cloud coding agents.</p>
+      <p>Tabnine is a commercial, enterprise-oriented coding assistant — IDE plugins plus a terminal CLI — where the model runs on a Tabnine-operated or customer-operated GPU cluster, priced at $39 and $59 per user/month, annual only, with LLM token charges on top. Outlier is a one-time $249 Mac app that runs the model on your own Apple Silicon: no inference account, no token meter, no code uploaded. Tabnine can route you to Claude Opus or GPT-5.x class models; Outlier's Core 27B measured HumanEval 0.866, and its general-purpose Core 27B resolved about 45% on a blind SWE-bench Verified slice — below the strongest cloud coding agents.</p>
     </div>
 
     <p class="lead">Disclosure first: I build Outlier, so read this as a comparison written by an interested party. Every claim about Tabnine comes from its own pricing page and docs, linked at the bottom. These products barely overlap in shape — one is procurement software for engineering organizations, the other is a $9 app you download — so the question isn't which is better, it's which constraints you can live with.</p>
@@ -125,9 +125,9 @@
     <h2>Tabnine rents any model; Outlier ships seven</h2>
     <p>Tabnine is model-agnostic and open about it. Beyond its own proprietary hosted models, the docs list Anthropic Claude (4.8 Opus down through 4 Sonnet), OpenAI (GPT-5.5, GPT-5.3 Codex, GPT-4o), Google Gemini 3.x, plus open weights — Devstral, MiniMax-M2.7, GLM-4.7, Qwen-3-Coder-480B. Enterprise admins can point it at their own endpoints instead: Bedrock, Azure, any OpenAI-compatible URL, Vertex AI.</p>
 
-    <p>Outlier ships six fixed local tiers, Nano 4B up to Plus 397B-a17b. For coding, most people sit on Code 27B: a 15.13 GB download that wants 24 GB of RAM. Six tiers are Apache 2.0 and the weights are published, so you can inspect what you're running.</p>
+    <p>Outlier ships six fixed local tiers, Nano 4B up to Plus 397B-a17b. For coding, most people sit on Core 27B: a 15.13 GB download that wants 24 GB of RAM. Six tiers are Apache 2.0 and the weights are published, so you can inspect what you're running.</p>
 
-    <p>Here's the honest number. Code 27B measured <strong>HumanEval 0.866</strong>, and on a blind slice of SWE-bench Verified the general-purpose Core 27B resolved <strong>about 45% (18 of 40)</strong> — my own measurement on my own hardware, not a leaderboard submission, and a 40-instance slice is noisy. It sits below the strongest cloud coding agents: if Tabnine hands your hard multi-file refactor to Claude Opus, that's a stronger model than anything fitting in 24 GB of unified memory. The gap narrows outside code: on a separate 54-prompt benchmark spanning reasoning and knowledge, Outlier's general-purpose Core 27B tier matched Claude Opus 4.7 on 98.9% of rubric checks.</p>
+    <p>Here's the honest number. Core 27B measured <strong>HumanEval 0.866</strong>, and on a blind slice of SWE-bench Verified the general-purpose Core 27B resolved <strong>about 45% (18 of 40)</strong> — my own measurement on my own hardware, not a leaderboard submission, and a 40-instance slice is noisy. It sits below the strongest cloud coding agents: if Tabnine hands your hard multi-file refactor to Claude Opus, that's a stronger model than anything fitting in 24 GB of unified memory. The gap narrows outside code: on a separate 54-prompt benchmark spanning reasoning and knowledge, Outlier's general-purpose Core 27B tier matched Claude Opus 4.7 on 98.9% of rubric checks.</p>
 
     <h2>Does your code leave the machine?</h2>
     <p>With Tabnine, yes, by design. The architecture docs describe the plugin querying a remote cluster with the relevant context window, where a GPU-accelerated inference service does the work; the client requirements list a connection to that cluster on port 443. Four deployment models exist — Secure SaaS, your own VPC, on-premises, and a fully air-gapped install — all on Kubernetes, the last three Enterprise-only. None runs inference on a developer's laptop.</p>
@@ -164,7 +164,7 @@
         <tr>
           <td><strong>Model</strong></td>
           <td>Tabnine's own, plus Claude / GPT-5.x / Gemini 3.x and open weights; bring-your-own endpoint</td>
-          <td>Six local tiers; Code 27B for coding</td>
+          <td>Six local tiers; Core 27B for coding</td>
         </tr>
         <tr>
           <td><strong>Code leaves the machine</strong></td>
@@ -201,7 +201,7 @@
 
     <h2>Where Tabnine genuinely wins</h2>
     <ul>
-      <li><strong>Frontier-model quality on demand.</strong> Server-side inference means a hard problem can go to a Claude Opus or GPT-5.x class model. That ceiling sits above anything that fits in a laptop's RAM, Code 27B included.</li>
+      <li><strong>Frontier-model quality on demand.</strong> Server-side inference means a hard problem can go to a Claude Opus or GPT-5.x class model. That ceiling sits above anything that fits in a laptop's RAM, Core 27B included.</li>
       <li><strong>It lives where you already work.</strong> Inline completion in your editor is less friction than copying code into a separate window, and Tabnine covers enterprise IDEs — Eclipse, Visual Studio — that most AI coding tools ignore.</li>
       <li><strong>Deployment options a Mac app can't offer an organization.</strong> SaaS, customer VPC, on-prem Kubernetes, air-gapped. For a regulated company that must keep everything inside its own perimeter but still wants shared infrastructure, that's rare and real.</li>
       <li><strong>Governance.</strong> Admin console, per-model toggles, policy enforcement, code review, license scanning, provenance and attribution. Outlier has none of it, and at 300 engineers that's the difference between adoption and a stalled security review.</li>
@@ -217,7 +217,7 @@
     <p><strong>Plenty of people should use both.</strong> I run local models for most of my own work and still reach for a frontier model when a problem is genuinely hard. That's not a concession — it's how the tools differ.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> plan prices, annual billing, the "actual LLM provider prices + 5% handling fee" charge and the Headless Agents add-on, and the Agentic Platform's "Context Engine that understands your organization and its standards, included with your subscription" plus its unlimited codebase connections, all from <a href="https://www.tabnine.com/pricing/">tabnine.com/pricing</a>; the standalone $5,800 Enterprise Context Engine listing, which states no billing period, from <a href="https://context.tabnine.com/pricing/">context.tabnine.com/pricing</a>; architecture, deployment, models, privacy, telemetry, editor support and release notes from <a href="https://docs.tabnine.com/">docs.tabnine.com</a>; zero-retention wording from <a href="https://www.tabnine.com/code-privacy/">tabnine.com/code-privacy</a>. Checked 2026-07-23 — <strong>competitor pricing and policies change, so verify before you buy.</strong> Outlier's Code 27B HumanEval 0.866 and Core 27B's ~45% (18/40) SWE-bench Verified slice were measured by me on my own hardware; the 98.9% rubric parity figure is in the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>.
+      <strong>Sources and receipts:</strong> plan prices, annual billing, the "actual LLM provider prices + 5% handling fee" charge and the Headless Agents add-on, and the Agentic Platform's "Context Engine that understands your organization and its standards, included with your subscription" plus its unlimited codebase connections, all from <a href="https://www.tabnine.com/pricing/">tabnine.com/pricing</a>; the standalone $5,800 Enterprise Context Engine listing, which states no billing period, from <a href="https://context.tabnine.com/pricing/">context.tabnine.com/pricing</a>; architecture, deployment, models, privacy, telemetry, editor support and release notes from <a href="https://docs.tabnine.com/">docs.tabnine.com</a>; zero-retention wording from <a href="https://www.tabnine.com/code-privacy/">tabnine.com/code-privacy</a>. Checked 2026-07-23 — <strong>competitor pricing and policies change, so verify before you buy.</strong> Outlier's Core 27B HumanEval 0.866 and Core 27B's ~45% (18/40) SWE-bench Verified slice were measured by me on my own hardware; the 98.9% rubric parity figure is in the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>.
     </div>
 
     <div class="cta">
