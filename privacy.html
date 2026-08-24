@@ -62,15 +62,16 @@
 
     <h2>What does leave your Mac (only when you opt in)</h2>
     <ul>
-      <li><strong>The mailing list, if you type an address into the form on outlier.host</strong> &mdash; the
-      homepage has a &ldquo;new models worth running&rdquo; form. It sends nothing on page load; it posts once, when you
-      press the button. What is stored is the address you typed and which page you sent it from, on our own Cloudflare
+      <li><strong>The mailing list, if you type an address into a form on outlier.host</strong> &mdash; the
+      homepage and the guide pages carry a &ldquo;new models worth running&rdquo; form. It sends nothing on page load; it posts once, when you
+      press the button. What is stored is the address you typed and which of our sites you sent it from, on our own Cloudflare
       Worker and D1 database at <code>kerr-subscribe.kerrco.workers.dev</code> &mdash; not a marketing SaaS, because
       dropping one of those onto a site that sells &ldquo;nothing leaves your machine&rdquo; would make the claim false in
       order to collect an email address. <strong>No IP address, no user agent, no referer, no fingerprint.</strong> That
       is a statement about the code: the insert binds the address and the source and nothing else, and the worker reads no
-      client header beyond the ones a browser needs to make the request at all. Consent is per site &mdash; the same
-      address given here and on another of our products is two separate rows, and leaving one does not leave the other.
+      client header beyond the ones a browser needs to make the request at all. Consent is per site, not per page &mdash; every form on outlier.host records the same source, so subscribing
+      from two of our pages is one entry and one email, while the same
+      address given on another of our products is a separate row, and leaving one does not leave the other.
       Every email carries a one-click unsubscribe. The desktop app never sends this; there is no mailing-list code in the
       app at all.</li>
       <li><strong>Model downloads from HuggingFace</strong> — when you activate a tier for the first time, the weights download from <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer">huggingface.co/Outlier-Ai</a>. HuggingFace sees your IP and which repo you fetched. No prompts, no chats, no model output is sent. After the download, the model runs locally forever.</li>
