@@ -170,5 +170,26 @@
     "source_dataset_last_updated": "2026-05-20",
     "note": "Carried over from the local-AI-benchmarks dataset (last updated 2026-05-20), so these are an older measurement round than the MMLU and SWE-bench columns, which were taken on 2026-08-09. Speed varies by Mac. Plus is the exception: 1.59 tok/s comes from the pre-ship K-override sweep at the shipped K=20 setting (5 prompts x 80 tokens, isolated subprocess, model load excluded and timed separately at 3.0 s). Per-prompt rates in that run were 1.35/1.52/1.62/1.65/1.64. The engine-comparison dataset separately reports ~2.1 tok/s for V9 paged under its own per-token RSS protocol; where the two disagree this dataset publishes the lower, shipping-config figure."
   },
-  "note": "Published because a benchmark table without its conditions is not a benchmark. Every figure states its sample size, decoding settings and date; every gap says why it is a gap."
+  "note": "Published because a benchmark table without its conditions is not a benchmark. Every figure states its sample size, decoding settings and date; every gap says why it is a gap.",
+  "humaneval": {
+    "method": "Full HumanEval, all 164 problems. The model is asked to complete the function; the completion is assembled with the problem's own test suite and check(entry_point) and executed in a subprocess with a 10s timeout. A solution counts only if the official tests pass. The scorer self-validates before any run: a known-correct completion must pass AND a known-wrong one must fail.",
+    "n": 164,
+    "decoding": "greedy, temperature 0, thinking disabled",
+    "date": "2026-08-24",
+    "build": "1.11.804",
+    "results": {
+      "core": {
+        "pass_at_1_pct": 95.1,
+        "passed": 156,
+        "n": 164
+      },
+      "vision38": {
+        "pass_at_1_pct": 94.5,
+        "passed": 155,
+        "n": 164
+      }
+    },
+    "paired_comparison": "Core and Vision 3.8 were given the IDENTICAL 164 problems, so the right test is paired, not a comparison of two independent percentages. McNemar on the discordant pairs: Core solved 4 that 3.8 missed, 3.8 solved 3 that Core missed, 152 both, 5 neither. Exact two-sided p = 1.000. On single-function coding these two models are not distinguishable at this sample size.",
+    "contamination_caveat": "HumanEval was published in 2021 and is very likely inside the training data of any 2026 model, so 95% partly measures memorisation rather than coding ability. We publish it because it is comparable across the tiers here - both faced the same contaminated set - not because it predicts how a model handles your codebase. The agentic SWE-bench figures are the harder and more honest test."
+  }
 }
