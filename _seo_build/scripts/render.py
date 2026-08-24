@@ -40,7 +40,7 @@ SITE_URL = "https://outlier.host"
 # real release. The constant below is only a fallback for the case where that
 # markup changes shape; if the two disagree the build stops rather than quietly
 # publishing a version that was never released.
-_APP_VERSION_FALLBACK = "1.11.801"
+_APP_VERSION_FALLBACK = "1.11.803"
 
 
 def _detect_app_version() -> str:
