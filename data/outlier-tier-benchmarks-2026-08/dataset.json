@@ -5,53 +5,93 @@
   "creator": "Outlier (Matt Kerr)",
   "license": "CC-BY-4.0",
   "datePublished": "2026-08-09",
-  "dateModified": "2026-08-17",
+  "dateModified": "2026-08-24",
   "hardware": "Apple M1 Ultra, 64 GB unified memory, macOS",
-  "app_version": "1.11.757",
+  "app_version": "1.11.804",
   "mmlu": {
     "method": "Deterministic stratified sample across all 57 MMLU subjects (round-robin by subject, no RNG, reproducible). Zero-shot: question + A-D choices, answer with the letter only. Scored by letter extraction; the scorer self-validates against 6 known cases before every run. Requests go through the shipping app's /chat path so the measurement exercises the same code users run.",
     "n": 200,
     "decoding": "greedy, temperature 0, fixed seed, thinking disabled",
-    "date": "2026-08-09",
+    "date": "2026-08-24",
+    "build": "1.11.804",
+    "measured_through": "Mounted the shipped 1.11.804 DMG, asserted /health reported 1.11.804, and queried that sidecar. Every row records the model that produced it and every run recorded zero transport errors.",
     "confidence_note": "95% interval at n=200 is roughly +/-7 points near 50% and +/-4 points near 90%. Lite and Quick are a statistical tie.",
     "results": {
       "nano": {
-        "accuracy_pct": 53.0,
-        "correct": 106,
+        "accuracy_pct": 52.0,
+        "correct": 104,
         "n": 200
       },
       "lite": {
-        "accuracy_pct": 77.5,
-        "correct": 155,
+        "accuracy_pct": 77.0,
+        "correct": 154,
         "n": 200
       },
       "quick": {
-        "accuracy_pct": 81.5,
-        "correct": 163,
+        "accuracy_pct": 81.0,
+        "correct": 162,
         "n": 200
       },
       "core": {
         "accuracy_pct": 89.5,
         "correct": 179,
-        "n": 200
-      },
-      "code": {
-        "accuracy_pct": 89.5,
-        "correct": 179,
         "n": 200,
-        "note": "Identical to Core by construction: Code is Core's weights with a code-specialized configuration. Run as a consistency check, not as an independent measurement."
+        "note": "Reproduced the 2026-08-09 figure exactly (179/200) on a later build, which is why this row is unchanged while the smaller tiers each moved by half a point to a point."
+      },
+      "vision38": {
+        "accuracy_pct": 82.5,
+        "correct": 165,
+        "n": 200,
+        "note": "Vision 3.8 answers text-only questions, so MMLU is measurable through the product. The superseded record below says Vision could not be measured; that was true of the retired Vision 3.6, which declined text-only requests, and is not true of 3.8."
       },
       "plus": {
         "measured": false,
         "reason": "The 209 GB weights are not currently on the test machine (131 GB free), so MMLU has not been run. This is a download gap, not a capability limit: Plus runs on this 64 GB M1 Ultra at 2.1 tok/s with roughly 10 GB resident, streaming experts from SSD via the V9 paged engine."
-      },
-      "vision": {
-        "measured": false,
-        "reason": "Not measurable through the product. Outlier Vision answers questions about an attached image and declines text-only questions, so a text MMLU score would describe a capability the app does not expose. Verified on 2026-08-09 against the shipping app path: a text request to the vision tier is refused, and the server continued to report the previously loaded text model."
       }
     },
     "cross_check": "An earlier independent run at n=50, using a different harness, gave nano 52, quick 82 and core 90 - within one point of these results on every tier.",
-    "build": "1.11.757"
+    "change_note": "Re-measured because three of these figures had no surviving results file. nano, lite and quick each came in slightly BELOW the 2026-08-09 run (1.0, 0.5 and 0.5 points). Sampling noise scatters both ways, so a one-sided shift suggests a small systematic difference between builds 1.11.757 and 1.11.804. Every difference is far inside the stated interval. The retired Code tier is dropped: it was Core's weights under a second name and never an independent measurement.",
+    "superseded": {
+      "build": "1.11.757",
+      "date": "2026-08-09",
+      "note": "The original run. Kept because the figures above replaced it on the site.",
+      "results": {
+        "nano": {
+          "accuracy_pct": 53.0,
+          "correct": 106,
+          "n": 200
+        },
+        "lite": {
+          "accuracy_pct": 77.5,
+          "correct": 155,
+          "n": 200
+        },
+        "quick": {
+          "accuracy_pct": 81.5,
+          "correct": 163,
+          "n": 200
+        },
+        "core": {
+          "accuracy_pct": 89.5,
+          "correct": 179,
+          "n": 200
+        },
+        "code": {
+          "accuracy_pct": 89.5,
+          "correct": 179,
+          "n": 200,
+          "note": "Identical to Core by construction: Code is Core's weights with a code-specialized configuration. Run as a consistency check, not as an independent measurement."
+        },
+        "plus": {
+          "measured": false,
+          "reason": "The 209 GB weights are not currently on the test machine (131 GB free), so MMLU has not been run. This is a download gap, not a capability limit: Plus runs on this 64 GB M1 Ultra at 2.1 tok/s with roughly 10 GB resident, streaming experts from SSD via the V9 paged engine."
+        },
+        "vision": {
+          "measured": false,
+          "reason": "Not measurable through the product. Outlier Vision answers questions about an attached image and declines text-only questions, so a text MMLU score would describe a capability the app does not expose. Verified on 2026-08-09 against the shipping app path: a text request to the vision tier is refused, and the server continued to report the previously loaded text model."
+        }
+      }
+    }
   },
   "swebench": {
     "method": "SWE-bench Verified, blind: the agent receives the issue text and the repository at base commit only - no test patch, no candidate-file hint, no FAIL_TO_PASS feedback. Patches graded by the official swebench.harness Docker evaluation. Fixed random sample, seed 42. Instances that produce no patch are counted as unresolved.",

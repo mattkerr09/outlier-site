@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Outlier tier benchmarks — MMLU for every shipping tier | Outlier</title>
+  <meta name="description" content="MMLU for every shipping Outlier tier, measured through the shipped 1.11.804 build on an M1 Ultra. Nano 52.0%, Lite 77.0%, Quick 81.0%, Core 89.5%, Vision 3.8 82.5%. n=200, with the superseded 1.11.757 run kept for comparison.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-05-20">
+  <link rel="canonical" href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Outlier tier benchmarks — MMLU for every shipping tier">
+  <meta property="og:description" content="MMLU for every shipping Outlier tier, measured through the shipped 1.11.804 build on an M1 Ultra: Nano 52.0%, Lite 77.0%, Quick 81.0%, Core 89.5%, Vision 3.8 82.5%. n=200.">
+  <meta property="og:url" content="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Outlier tier benchmarks — MMLU for every shipping tier">
+  <meta name="twitter:description" content="MMLU for every shipping Outlier tier, measured through the shipped 1.11.804 build on an M1 Ultra: Nano 52.0%, Lite 77.0%, Quick 81.0%, Core 89.5%, Vision 3.8 82.5%. n=200.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(820px, calc(100% - 2rem)); margin: 0 auto; }
+    .lede{color:var(--text-mid);font-size:17px;margin:0 0 28px;max-width:62ch}
+    .meta{font-size:0.9rem;color:var(--text-mid);}
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.05rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.05rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.9em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.9rem; }
+    article th, article td { padding: 0.5rem 0.6rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .notice { padding: 1rem 1.2rem; background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.22); border-radius: var(--radius); margin: 1.5rem 0; color: var(--text); }
+    .notice strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Dataset", "name": "Outlier tier benchmarks, August 2026", "description": "MMLU, agentic SWE-bench and decode speed for every shipping Outlier tier, measured on an M1 Ultra against the shipping v1.11.757 build. Unmeasured tiers are marked as such rather than estimated.", "url": "https://outlier.host/data/outlier-tier-benchmarks-2026-08/", "creator": {"@type": "Organization", "name": "Outlier"}, "license": "https://creativecommons.org/licenses/by/4.0/", "datePublished": "2026-08-09", "dateModified": "2026-08-24", "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://outlier.host/data/outlier-tier-benchmarks-2026-08/dataset.json"}], "measurementTechnique": "Deterministic stratified sample across all 57 MMLU subjects (round-robin by subject, no RNG, reproducible). Zero-shot: question + A-D choices, answer with the letter only. Scored by letter extraction; the scorer self-validates against 6 known cases before every run. Requests go through the shipping app's /chat path so the measurement exercises the same code users run."}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Data", "item": "https://outlier.host/data/"}, {"@type": "ListItem", "position": 3, "name": "Tier benchmarks", "item": "https://outlier.host/data/outlier-tier-benchmarks-2026-08/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which build were these measured on?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier 1.11.804. Each run mounted the shipped DMG, asserted the sidecar reported 1.11.804, and queried that sidecar, so the figures describe the app people download rather than a development tree."}}, {"@type": "Question", "name": "Why did some scores go down from the earlier run?", "acceptedAnswer": {"@type": "Answer", "text": "Nano, Lite and Quick each came in slightly below the 2026-08-09 run, by 1.0, 0.5 and 0.5 points. Sampling noise scatters both ways, so a one-sided shift suggests a small systematic difference between builds. Every difference is far inside the stated confidence interval, and the superseded figures are kept on the page."}}, {"@type": "Question", "name": "Why is Plus not measured?", "acceptedAnswer": {"@type": "Answer", "text": "The 209 GB of weights are not on the test machine. That is a download gap rather than a capability limit."}}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <p class="crumb"><a href="https://outlier.host/">Outlier</a> &rsaquo; <a href="https://outlier.host/data/">data</a></p>
+    <h1>Outlier tier benchmarks &mdash; MMLU on every shipping tier</h1>
+    <p class="byline-row">
+      <span class="byline">Outlier &middot; solo-built in Grand Rapids &middot; published 2026-08-09 &middot; re-measured 2026-08-24</span>
+    </p>
+
+    <p class="lede">Every shipping tier's MMLU score, measured through the app people actually download.
+    The raw record is <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/dataset.json">dataset.json</a> (CC&#8209;BY&#8209;4.0).</p>
+
+    <h2>MMLU, build 1.11.804, 2026-08-24</h2>
+    <table>
+      <thead><tr><th>Tier</th><th>MMLU</th><th>Correct</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nano</strong></td><td><strong>52.0%</strong></td><td class="meta">104/200</td></tr>
+        <tr><td><strong>Lite</strong></td><td><strong>77.0%</strong></td><td class="meta">154/200</td></tr>
+        <tr><td><strong>Quick</strong></td><td><strong>81.0%</strong></td><td class="meta">162/200</td></tr>
+        <tr><td><strong>Core 27B</strong></td><td><strong>89.5%</strong></td><td class="meta">179/200</td></tr>
+        <tr><td><strong>Vision 3.8</strong></td><td><strong>82.5%</strong></td><td class="meta">165/200</td></tr>
+        <tr><td><strong>Plus 397B</strong></td><td colspan="2" class="meta">Not measured &mdash; see the dataset for why</td></tr>
+      </tbody>
+    </table>
+
+    <h2>How these were measured</h2>
+    <p>Mounted the shipped 1.11.804 DMG, asserted /health reported 1.11.804, and queried that sidecar. Every row records the model that produced it and every run recorded zero transport errors.</p>
+    <p>Deterministic stratified sample across all 57 MMLU subjects (round-robin by subject, no RNG, reproducible). Zero-shot: question + A-D choices, answer with the letter only. Scored by letter extraction; the scorer self-validates against 6 known cases before every run. Requests go through the shipping app's /chat path so the measurement exercises the same code users run.</p>
+    <p><strong>Decoding:</strong> greedy, temperature 0, fixed seed, thinking disabled. <strong>Sample:</strong> n&nbsp;=&nbsp;200.</p>
+    <p class="meta">95% interval at n=200 is roughly +/-7 points near 50% and +/-4 points near 90%. Lite and Quick are a statistical tie.</p>
+
+    <h2>What changed, and why the numbers moved</h2>
+    <p>Re-measured because three of these figures had no surviving results file. nano, lite and quick each came in slightly BELOW the 2026-08-09 run (1.0, 0.5 and 0.5 points). Sampling noise scatters both ways, so a one-sided shift suggests a small systematic difference between builds 1.11.757 and 1.11.804. Every difference is far inside the stated interval. The retired Code tier is dropped: it was Core's weights under a second name and never an independent measurement.</p>
+    <table>
+      <thead><tr><th>Tier</th><th>MMLU on 1.11.757</th><th>Correct</th></tr></thead>
+      <tbody>
+        <tr><td>Nano</td><td>53.0%</td><td class="meta">106/200</td></tr>
+        <tr><td>Lite</td><td>77.5%</td><td class="meta">155/200</td></tr>
+        <tr><td>Quick</td><td>81.5%</td><td class="meta">163/200</td></tr>
+        <tr><td>Core 27B</td><td>89.5%</td><td class="meta">179/200</td></tr>
+      </tbody>
+    </table>
+    <p class="meta">The original run. Kept because the figures above replaced it on the site. Superseded figures are kept rather than deleted, because a number that was published once should stay checkable.</p>
+
+    <h2>An independent cross-check</h2>
+    <p>An earlier independent run at n=50, using a different harness, gave nano 52, quick 82 and core 90 - within one point of these results on every tier.</p>
+
+    <div class="receipts"><strong>Receipts and limits:</strong> MMLU is multiple-choice general knowledge.
+    It says nothing about reasoning over a long context, about tool use, or about how a model behaves when it has to plan.
+    These are our own runs on our own hardware, not a third-party leaderboard, and they are published so they can be argued with.</div>
+  </div>
+
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+</body>
+</html>
