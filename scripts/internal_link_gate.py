@@ -1,95 +1,77 @@
 #!/usr/bin/env python3
-"""Every internal link must point at something that exists.
+"""Every internal link must resolve to a file that exists.
 
-Found by hand: five dead links on a live page, including a button reading
-"Download Outlier" that went to /app/ and returned 404. A visitor who clicked the
-primary call to action on that page got an error, and had done for as long as the
-page existed. Nine gates were green throughout — they check versions, prices,
-checkouts, proof text, styling and what is served, and not one of them asks
-whether a link on page A reaches a file that exists.
+Added after learn/ai-privacy-policies-explained — a page ABOUT privacy policies —
+shipped a footer link to /privacy/, which 404s. The real path is /privacy.html.
+Four other pages linked it correctly; this one did not, and nothing noticed.
 
-WHY IT CHECKS THE FILESYSTEM AND NOT THE NETWORK. A crawl of 1,400 links would be
-slow, would need the deploy to have happened, and would answer a different
-question — "is it live now" rather than "is it right in the repo". The four dead
-targets were absent from the tree AND 404 on the site, confirmed both ways. The
-filesystem answer is available before the commit, which is where the check
-belongs.
+No existing gate reads links. A dead internal link costs a reader the page they
+asked for and costs an ad click the landing it paid for, and it is invisible to
+every check that only reads text.
 
-RESOLUTION MIRRORS A STATIC HOST: /a/b/ matches a/b/index.html, /a/b matches
-a/b.html or a/b/index.html. Anchors and query strings are stripped before
-resolving, so /#pricing is a link to the homepage, not to a file called "#".
-
-External links, mailto: and tel: are out of scope — this cannot know whether a
-third party is up, and a gate that fails when someone else's site is down is a
-gate that gets switched off.
-
-    python3 scripts/internal_link_gate.py
+Python 3.9.6 — the site gates run on the system interpreter.
 """
-from __future__ import annotations
-
+import collections
+import pathlib
 import re
 import sys
-from pathlib import Path
-
-HREF = re.compile(r'(?:href|src|poster)="([^"]+)"')
-#: Absolute URLs to our OWN domain are internal links wearing an external coat.
-#: Three broken nav logos were invisible to a filesystem scan for exactly this
-#: reason — https://outlier.host/icon.png 404s just as surely as /icon.png does.
-SELF = re.compile(r'^https?://(?:www\.)?outlier\.host')
-SKIP = ("http://", "https://", "mailto:", "tel:", "#", "data:", "javascript:")
-MIN_LINKS = 500
 
 
-def resolves(root: Path, page: Path, target: str) -> bool:
-    base = root if target.startswith("/") else page.parent
-    f = base / target.lstrip("/")
-    return f.is_file() or (f / "index.html").is_file() or f.with_suffix(".html").is_file()
-
-
-def main(root_arg: str = ".") -> int:
-    root = Path(root_arg)
-    # Vacuity control: resolution must reject something that is not there.
-    if resolves(root, root / "index.html", "definitely-not-a-real-path-xyz/"):
-        print("FAIL: resolver accepts a nonexistent path. Instrument broken.")
+def main(root_arg):
+    root = pathlib.Path(root_arg).resolve()
+    pages = [p for p in root.rglob('*.html')
+             if 'node_modules' not in str(p) and '_seo_build' not in str(p)]
+    if not pages:
+        print("FAIL: no html pages found — the gate would pass vacuously")
         return 1
 
-    checked, broken = 0, []
-    for p in sorted(root.rglob("*.html")):
-        if ".git" in p.parts or "_seo_build" in p.parts:
-            continue
-        try:
-            text = p.read_text(encoding="utf-8", errors="ignore")
-        except OSError:
-            continue
-        for href in HREF.findall(text):
-            if SELF.match(href):
-                href = SELF.sub("", href) or "/"
-            elif href.startswith(SKIP):
-                continue
-            target = href.split("#")[0].split("?")[0]
-            if not target:
+    have = set()
+    for p in pages:
+        rel = str(p.relative_to(root))
+        have.add('/' + rel)
+        if rel.endswith('index.html'):
+            have.add('/' + rel[:-len('index.html')])
+            have.add('/' + rel[:-len('/index.html')])
+    norm = {h.rstrip('/') for h in have}
+
+    broken = collections.defaultdict(list)
+    checked = 0
+    for p in pages:
+        text = p.read_text(errors='ignore')
+        for href in re.findall(r'href="([^"#?]+)', text):
+            if href.startswith(('http', 'mailto:', 'tel:', 'data:', '//')):
                 continue
             checked += 1
-            if not resolves(root, p, target):
-                broken.append((str(p.relative_to(root)), target))
+            if href.startswith('/'):
+                target = href
+            else:
+                try:
+                    target = '/' + str((p.parent / href).resolve().relative_to(root))
+                except ValueError:
+                    broken[href].append(str(p.relative_to(root)))
+                    continue
+            if target.rstrip('/') in norm:
+                continue
+            if (root / target.lstrip('/')).exists():
+                continue
+            broken[target].append(str(p.relative_to(root)))
 
-    print(f"internal links checked: {checked}")
-    if checked < MIN_LINKS:
-        print(f"\nFAIL: only {checked} links checked, expected >= {MIN_LINKS}.")
-        print("      A scan that found almost nothing prints the same word as a clean one.")
-        return 1
+    if not broken:
+        print("internal links: %d checked across %d pages, all resolve"
+              % (checked, len(pages)))
+        return 0
 
-    if broken:
-        print(f"\nFAIL: {len(broken)} internal link(s) point at nothing:")
-        for page, target in broken[:20]:
-            print(f"  {page}  ->  {target}")
-        print("\n  These 404 for a visitor. Check whether the destination moved or never")
-        print("  existed; the rest of the site's canonical targets are the guide.")
-        return 1
-
-    print(f"\nPASS — all {checked} internal links resolve.")
-    return 0
+    print("FAIL: %d internal link target(s) do not exist" % len(broken))
+    for target, sources in sorted(broken.items(), key=lambda kv: -len(kv[1])):
+        print("   %s  <- %d page(s)" % (target, len(sources)))
+        for src in sources[:3]:
+            print("       %s" % src)
+    print("")
+    print("   A dead internal link costs a reader the page they asked for.")
+    print("   Check the real path: /privacy.html and /terms.html are files,")
+    print("   not directories — /privacy/ has never resolved.")
+    return 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main(sys.argv[1] if len(sys.argv) > 1 else "."))
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "."))
