@@ -56,6 +56,14 @@ PROSE = re.compile(r'(?i)\b' + _SUBJ + r'\b\s+(?:is|at|costs?)' + _FILL +
                    r'(\$\s?\d+(?:\.\d\d)?\s*(?:/\s*(?:mo\b|month)|\s+(?:per|a)\s+month|\s+monthly))')
 RETIRED = re.compile(r'(?i)\b' + _SUBJ + r'\b\s+(?:is|at|costs?)' + _FILL + r'(\$9\b(?!\.99))')
 
+# A markdown pricing line has no verb: "- Pro: $9/mo - all six tiers…". The
+# verb-based patterns above are blind to it, which I only learned by running
+# this gate against the real pre-fix llms.txt and watching it report OK on the
+# exact line that motivated the gate. A label, a colon, a price.
+LABELLED = re.compile(
+    r'(?im)^[\s*\-\u2022]*(?:outlier\s+)?(?:pro|founders(?:\s+lifetime)?|lifetime)\s*[:\u2013\u2014-]'
+    r'[^\n]*?(\$\s?\d+(?:\.\d\d)?\s*(?:/\s*(?:mo\b|month)|\s+(?:per|a)\s+month|\s+monthly))')
+
 CELL = re.compile(r'(?is)<t([hd])[^>]*>(.*?)</t\1>')
 BLOCK = re.compile(r'(?is)<(p|li|td|th|h[1-6]|figcaption|summary|dd|blockquote)\b[^>]*>(.*?)</\1>')
 
@@ -85,16 +93,42 @@ def check_tables(src):
     return out
 
 
+def _scan(flat, where):
+    out = []
+    for rx, label in ((PROSE, 'monthly price'), (RETIRED, 'the retired $9 price')):
+        for m in rx.finditer(flat):
+            out.append(f'{label} in {where}: …{flat[max(0, m.start() - 50):m.end() + 25].strip()}…')
+    return out
+
+
 def check_prose(src):
     body = re.sub(r'(?is)<(script|style|nav|footer)\b.*?</\1>', ' ', src)
     out = []
     for tag, inner in BLOCK.findall(body):
         flat = text_of(inner)
+        if flat:
+            out += _scan(flat, f'<{tag}>')
+    return out
+
+
+def check_plain_text(src):
+    """llms.txt and friends are served too, and a line is their block element.
+
+    This gate shipped walking *.html only, and llms.txt — the file whose entire
+    job is telling AI crawlers what we cost — advertised "Pro: $9/mo" straight
+    through it. robots.txt names GPTBot, ClaudeBot and PerplexityBot explicitly,
+    so the one place the dead price survived was the one place aimed squarely at
+    the systems a buyer asks about us. A gate that skips a category eventually
+    reports clean on a defect inside it.
+    """
+    out = []
+    for i, line in enumerate(src.splitlines(), 1):
+        flat = re.sub(r'\s+', ' ', line).strip()
         if not flat:
             continue
-        for rx, label in ((PROSE, 'monthly price'), (RETIRED, 'the retired $9 price')):
-            for m in rx.finditer(flat):
-                out.append(f'{label} in <{tag}>: …{flat[max(0, m.start() - 50):m.end() + 25].strip()}…')
+        out += _scan(flat, f'line {i}')
+        for m in LABELLED.finditer(flat):
+            out += [f'a plan line priced monthly, line {i}: …{flat[:90].strip()}…']
     return out
 
 
@@ -104,12 +138,15 @@ def main(root):
     for dirpath, dirnames, filenames in os.walk(root):
         dirnames[:] = [d for d in dirnames if d not in ('.git', 'node_modules', 'fonts', '_seo_build')]
         for name in filenames:
-            if not name.endswith('.html'):
+            is_html = name.endswith('.html')
+            is_text = name.endswith(('.txt', '.md'))
+            if not (is_html or is_text):
                 continue
             path = os.path.join(dirpath, name)
             src = open(path, encoding='utf-8', errors='replace').read()
             checked += 1
-            for problem in check_tables(src) + check_prose(src):
+            problems = (check_tables(src) + check_prose(src)) if is_html else check_plain_text(src)
+            for problem in problems:
                 failures.append(f'{os.path.relpath(path, root)}: {problem}')
 
     if not checked:
