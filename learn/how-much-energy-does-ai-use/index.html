@@ -72,6 +72,18 @@
     article li { margin-bottom: 0.4rem; }
     article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
     article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    /* These pages carry no scroll wrapper, so a table wider than the column
+       pushed the whole page sideways on a phone. Measured at 375px:
+       /vs/outlier-vs-chatgpt/ overflowed by 88px and
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px — the page itself
+       slid, not just the table. display:block makes the table its own scroll
+       container; the content keeps its full width (measured 447px scrolling
+       inside a 343px box) instead of being squeezed. The two pinned layers
+       are an edge shadow and the two local ones scroll with the content, so
+       an edge shows only on a side that still has columns behind it. Alpha
+       zero is spelled with the background colour, not `transparent`, which
+       some engines interpolate through transparent-black as a grey smear. */
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
     article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
     article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
     .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
