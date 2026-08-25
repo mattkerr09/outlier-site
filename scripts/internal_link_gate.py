@@ -39,6 +39,14 @@ def main(root_arg):
     for p in pages:
         text = p.read_text(errors='ignore')
         for href in re.findall(r'href="([^"#?]+)', text):
+            # An absolute link to our own domain is an INTERNAL link wearing a
+            # hostname. Skipping everything that starts with http left 3233 of
+            # them unchecked — the same class of defect, invisible to the gate
+            # that exists to catch it.
+            for own in ('https://outlier.host', 'http://outlier.host'):
+                if href.startswith(own):
+                    href = href[len(own):] or '/'
+                    break
             if href.startswith(('http', 'mailto:', 'tel:', 'data:', '//')):
                 continue
             checked += 1
