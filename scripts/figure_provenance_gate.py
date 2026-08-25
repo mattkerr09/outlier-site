@@ -93,7 +93,14 @@ def page_figures(root: Path):
         if not tier:
             continue
         tier = "compact" if tier == "core" else tier
-        tok = re.search(r"([\d.]+)\s*tok/s", cells[3])
+        # Find the decode cell by CONTENT, not position. This read cells[3]
+        # until a HumanEval column was inserted at index 2 and shifted Decode
+        # to index 4 — the gate then reported four tiers as "page says None",
+        # i.e. it failed because the TABLE changed shape, not because a figure
+        # diverged. Only the decode column carries "tok/s", so scanning is
+        # both safe and immune to future columns.
+        tok = next((re.search(r"([\d.]+)\s*tok/s", c) for c in cells[1:]
+                    if re.search(r"([\d.]+)\s*tok/s", c)), None)
         out[tier] = tok.group(1) if tok else None
     return out
 
