@@ -164,7 +164,7 @@
         <tr><td>Quick 26B</td><td>26B-a4b MoE</td><td>~16 GB</td><td>~17 GB</td><td>14.6 <span style="opacity:.7">&mdash; re-measured 43.6 on 2026-08-24 (v1.11.804); the 14.6 is what this 2026-04-29 bench recorded and is left as run</span></td></tr>
         <tr><td>Core 27B</td><td>27B dense</td><td>~16 GB</td><td>~17 GB</td><td><strong>20.7</strong></td></tr>
         <tr><td>Vision 35B-A3B</td><td>35B-A3B MoE</td><td>~20 GB</td><td>~18 GB (cap) / ~3.5 GB (V10)</td><td>~8 (V10) / 16 (cap)</td></tr>
-        <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~11 GB (V9 paged)</td><td><strong>1.59 (V9)</strong></td></tr>
+        <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~11 GB (V9 paged)</td><td><strong>1.59 (V9)</strong> &mdash; this page's dataset.json reports 2.1 for the same tier. Both are real: 1.59 is the pre-ship K-override sweep at the shipped K=20 (5 prompts &times; 80 tokens, model load excluded; per-prompt 1.35/1.52/1.62/1.65/1.64), while 2.1 comes from the engine-comparison run under its own per-token RSS protocol. Where they disagree we publish the lower, shipping-config figure.</td></tr>
       </tbody>
     </table>
     <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code>. The M1 Ultra Mac tok/s bench ran 2026-04-29. Accuracy figures are still being finalized; the only fully-published, verified number is Nano HumanEval 81.1% pass@1 (full 164-set).</p>
