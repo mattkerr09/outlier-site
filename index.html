@@ -382,6 +382,59 @@
     .bchart .dchart{max-width:640px;margin-top:2.2rem;}.cbar{fill:url(#barfill);opacity:.92;}.cbar-none{stroke:var(--hair);stroke-width:2;stroke-dasharray:3 3;}.cnone{fill:var(--text-faint);opacity:.75;}.cnote{fill:var(--text-faint);font-size:9px;}.cdot{fill:var(--v0);stroke:var(--bg);stroke-width:2;}
     .chart-note{font-family:var(--mono);font-size:0.66rem;color:var(--text-faint);margin:-.9rem 0 1.7rem;}
     .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
+    /* These tables are wider than a phone. Measured on a 375px viewport: the
+       benchmark table is 722px inside a 325px window, so four of its six columns
+       — HumanEval, SWE-bench, Decode, Disk — sat off-screen with nothing on the
+       page indicating they existed. A reader saw Tier, a clipped MMLU, and a
+       clean right edge that looked like the end of the table. These two shadow
+       layers are pinned to the box while the two cover layers scroll with the
+       content, so an edge appears only on the side that still has columns behind
+       it and fades out once you reach that end. Alpha-zero is spelled with the
+       surface colour rather than `transparent`, which some engines interpolate
+       through transparent-black and render as a grey smear. */
+    .tbl-wrap{background-image:
+        linear-gradient(to right,var(--surface),rgba(16,13,28,0)),
+        linear-gradient(to left,var(--surface),rgba(16,13,28,0)),
+        linear-gradient(to right,rgba(243,241,250,.13),rgba(243,241,250,0)),
+        linear-gradient(to left,rgba(243,241,250,.13),rgba(243,241,250,0));
+      background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;
+      background-size:30px 100%,30px 100%,22px 100%,22px 100%;
+      background-attachment:local,local,scroll,scroll;}
+    /* On a phone the scroll affordance is a consolation prize, not a fix: the
+       benchmark table carries a hard min-width of 740px, so a 375px visitor got
+       Tier plus a clipped MMLU and had to drag each of six rows sideways to read
+       the numbers the table exists to show. Below 640px each row becomes a card —
+       the first cell is its heading and every other cell prints its own column
+       name from data-label — so nothing is behind a scroll and the header row is
+       no longer needed. The min-width overrides are the point: without them the
+       block layout still inherits 740px and the page itself starts scrolling. */
+    @media (max-width:640px){
+      .tbl-wrap{overflow-x:visible;background-image:none;}
+      .tbl-wrap table,.tbl-wrap tbody,.tbl-wrap tr,.tbl-wrap td{display:block;}
+      /* .models/.cmp set min-width:740px/700px later in this sheet, so an
+         equal-specificity override here would lose on source order alone.
+         .tbl-wrap.models is one class heavier and wins wherever it sits. */
+      .tbl-wrap.models table,.tbl-wrap.cmp table,.tbl-wrap table{min-width:0;width:100%;}
+      .tbl-wrap thead{display:none;}
+      .tbl-wrap tbody tr{padding:.85rem 1.05rem;border-bottom:1px solid var(--border);}
+      .tbl-wrap tbody tr:last-child{border-bottom:none;}
+      /* flex-end plus margin-right:auto on the label, not space-between: a cell
+         like MMLU holds two children (the figure and its 179/200 fraction) and
+         space-between shoved them to opposite edges with the label between, which
+         read as three unrelated columns. This pins the label left and keeps the
+         value and its qualifier together on the right, where they belong. */
+      .tbl-wrap td,.cmp td{padding:.3rem 0;border-bottom:none;display:flex;
+        gap:.4rem;flex-wrap:wrap;row-gap:.1rem;
+        align-items:baseline;justify-content:flex-end;text-align:right;}
+      .tbl-wrap td::before{content:attr(data-label);flex:0 0 auto;text-align:left;
+        margin-right:auto;padding-right:.6rem;
+        font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;
+        text-transform:uppercase;color:var(--text-dim);}
+      .tbl-wrap td:first-child,.cmp td:first-child{display:block;text-align:left;
+        padding:0 0 .55rem;}
+      .tbl-wrap td:first-child::before{display:none;}
+      .tbl-wrap tbody tr:hover td{background:none;}
+    }
     table{border-collapse:collapse;width:100%;font-size:0.9rem;}
     th,td{padding:.9rem 1.05rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
     thead th{background:var(--surface-2);font-family:var(--mono);font-weight:500;font-size:0.65rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);}
@@ -1078,45 +1131,45 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
         <tbody>
           <tr>
             <td><div class="tname">Outlier Nano</div><div class="tbase">Qwen3.5-4B · MLX 4-bit</div></td>
-            <td><span class="plan free">Free</span></td>
-            <td class="meta">Fast iteration, lightweight chat, small Macs</td>
-            <td class="meta">2.37 GB · 6 GB min RAM</td>
-            <td class="meta">~30–70 tok/s (Mac-dependent)</td>
+            <td data-label="Plan"><span class="plan free">Free</span></td>
+            <td class="meta" data-label="Best for">Fast iteration, lightweight chat, small Macs</td>
+            <td class="meta" data-label="Disk / RAM">2.37 GB · 6 GB min RAM</td>
+            <td class="meta" data-label="Speed / note">~30–70 tok/s (Mac-dependent)</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Lite</div><div class="tbase">Qwen3.5-9B · MLX 4-bit</div></td>
-            <td><span class="plan free">Free</span></td>
-            <td class="meta">Daily local AI, writing, search, Q&amp;A</td>
-            <td class="meta">5.04 GB · 12 GB min RAM</td>
-            <td class="meta">Mac-dependent</td>
+            <td data-label="Plan"><span class="plan free">Free</span></td>
+            <td class="meta" data-label="Best for">Daily local AI, writing, search, Q&amp;A</td>
+            <td class="meta" data-label="Disk / RAM">5.04 GB · 12 GB min RAM</td>
+            <td class="meta" data-label="Speed / note">Mac-dependent</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Quick</div><div class="tbase">Gemma-4-26B MoE</div></td>
-            <td><span class="plan pro">Pro</span></td>
-            <td class="meta">Thinking-mode reasoning, not a code substitute</td>
-            <td class="meta">15.61 GB · 16 GB min RAM</td>
-            <td class="meta">Mac-dependent</td>
+            <td data-label="Plan"><span class="plan pro">Pro</span></td>
+            <td class="meta" data-label="Best for">Thinking-mode reasoning, not a code substitute</td>
+            <td class="meta" data-label="Disk / RAM">15.61 GB · 16 GB min RAM</td>
+            <td class="meta" data-label="Speed / note">Mac-dependent</td>
           </tr>
           <tr class="flag">
             <td><div class="tname">Outlier Core</div><div class="tbase">Qwen3.6-27B · text-only</div></td>
-            <td><span class="plan pro">Pro</span></td>
-            <td class="meta">Best default quality, reasoning, coding</td>
-            <td class="meta">15.13 GB · 24 GB min RAM</td>
-            <td class="meta">High-end quality, fully offline</td>
+            <td data-label="Plan"><span class="plan pro">Pro</span></td>
+            <td class="meta" data-label="Best for">Best default quality, reasoning, coding</td>
+            <td class="meta" data-label="Disk / RAM">15.13 GB · 24 GB min RAM</td>
+            <td class="meta" data-label="Speed / note">High-end quality, fully offline</td>
           </tr>
           <tr class="flag">
             <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged</div></td>
-            <td><span class="plan pro">Pro</span></td>
-            <td class="meta">Largest local tier · 397B MoE on high-end Macs. <strong>Slow on purpose-built hardware: 1.59 tok/s measured at the shipped K=20 setting on an M1&nbsp;Ultra, 60&ndash;90s to first token on 64&nbsp;GB.</strong> Use Core for everyday work.</td>
-            <td class="meta">209 GB disk · 64 GB min, 128 GB recommended</td>
-            <td class="meta">For depth, not for speed</td>
+            <td data-label="Plan"><span class="plan pro">Pro</span></td>
+            <td class="meta" data-label="Best for">Largest local tier · 397B MoE on high-end Macs. <strong>Slow on purpose-built hardware: 1.59 tok/s measured at the shipped K=20 setting on an M1&nbsp;Ultra, 60&ndash;90s to first token on 64&nbsp;GB.</strong> Use Core for everyday work.</td>
+            <td class="meta" data-label="Disk / RAM">209 GB disk · 64 GB min, 128 GB recommended</td>
+            <td class="meta" data-label="Speed / note">For depth, not for speed</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Vision 3.8</div><div class="tbase">Qwen3.8-27B &middot; images + text</div></td>
-              <td><span class="plan pro">Pro</span></td>
-              <td class="meta">Images, screenshots, diagrams &mdash; and plain text questions too</td>
-              <td class="meta">15.5 GB &middot; 24 GB min RAM</td>
-              <td class="meta">17.2 tok/s</td>
+              <td data-label="Plan"><span class="plan pro">Pro</span></td>
+              <td class="meta" data-label="Best for">Images, screenshots, diagrams &mdash; and plain text questions too</td>
+              <td class="meta" data-label="Disk / RAM">15.5 GB &middot; 24 GB min RAM</td>
+              <td class="meta" data-label="Speed / note">17.2 tok/s</td>
           </tr>
         </tbody>
       </table>
@@ -1143,45 +1196,45 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
         <tbody>
           <tr>
             <td><div class="tname">Outlier Nano</div><div class="tbase">Qwen3.5-4B · MLX 4-bit</div></td>
-            <td><strong>52.0%</strong><div class="meta">104/200</div></td><td class="meta">Not measured</td>
-            <td class="meta">Not measured</td>
-            <td class="meta">71.7 tok/s</td>
-            <td class="meta">2.37 GB</td>
+            <td data-label="MMLU"><strong>52.0%</strong><div class="meta">104/200</div></td><td class="meta" data-label="HumanEval">Not measured</td>
+            <td class="meta" data-label="SWE-bench (agentic)">Not measured</td>
+            <td class="meta" data-label="Decode">71.7 tok/s</td>
+            <td class="meta" data-label="Disk">2.37 GB</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Lite</div><div class="tbase">Qwen3.5-9B · MLX 4-bit</div></td>
-            <td><strong>77.0%</strong><div class="meta">154/200</div></td><td class="meta">Not measured</td>
-            <td class="meta">Not measured</td>
-            <td class="meta">53.4 tok/s</td>
-            <td class="meta">5.04 GB</td>
+            <td data-label="MMLU"><strong>77.0%</strong><div class="meta">154/200</div></td><td class="meta" data-label="HumanEval">Not measured</td>
+            <td class="meta" data-label="SWE-bench (agentic)">Not measured</td>
+            <td class="meta" data-label="Decode">53.4 tok/s</td>
+            <td class="meta" data-label="Disk">5.04 GB</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Quick</div><div class="tbase">Gemma-4-26B MoE</div></td>
-            <td><strong>81.0%</strong><div class="meta">162/200</div></td><td class="meta">Not measured</td>
-            <td><strong>0%</strong><div class="meta">0/50 · blind · all 50 patches empty · v1.11.788</div></td>
-            <td class="meta">43.6 tok/s</td>
-            <td class="meta">15.61 GB</td>
+            <td data-label="MMLU"><strong>81.0%</strong><div class="meta">162/200</div></td><td class="meta" data-label="HumanEval">Not measured</td>
+            <td data-label="SWE-bench (agentic)"><strong>0%</strong><div class="meta">0/50 · blind · all 50 patches empty · v1.11.788</div></td>
+            <td class="meta" data-label="Decode">43.6 tok/s</td>
+            <td class="meta" data-label="Disk">15.61 GB</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Core</div><div class="tbase">Qwen3.6-27B · text-only</div></td>
-            <td><strong>89.5%</strong><div class="meta">179/200</div></td><td class="meta"><strong>95.1%</strong><br>156/164</td>
-            <td><strong>46.0%</strong><div class="meta">23/50 · blind · official Docker · v1.11.757</div></td>
-            <td class="meta">20.7 tok/s</td>
-            <td class="meta">15.13 GB</td>
+            <td data-label="MMLU"><strong>89.5%</strong><div class="meta">179/200</div></td><td class="meta" data-label="HumanEval"><strong>95.1%</strong><br>156/164</td>
+            <td data-label="SWE-bench (agentic)"><strong>46.0%</strong><div class="meta">23/50 · blind · official Docker · v1.11.757</div></td>
+            <td class="meta" data-label="Decode">20.7 tok/s</td>
+            <td class="meta" data-label="Disk">15.13 GB</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged</div></td>
-            <td class="meta">Not measured &mdash; the 209&nbsp;GB weights are not on the test machine. Plus itself runs here at 1.59&nbsp;tok/s, 14.04&nbsp;GB peak during generation, streaming experts from SSD; MMLU awaits a re-download, not a hardware limit.</td><td class="meta">Not measured</td>
-            <td class="meta">Not measured</td>
-            <td class="meta">1.59 tok/s</td>
-            <td class="meta">209 GB</td>
+            <td class="meta" data-label="MMLU">Not measured &mdash; the 209&nbsp;GB weights are not on the test machine. Plus itself runs here at 1.59&nbsp;tok/s, 14.04&nbsp;GB peak during generation, streaming experts from SSD; MMLU awaits a re-download, not a hardware limit.</td><td class="meta" data-label="HumanEval">Not measured</td>
+            <td class="meta" data-label="SWE-bench (agentic)">Not measured</td>
+            <td class="meta" data-label="Decode">1.59 tok/s</td>
+            <td class="meta" data-label="Disk">209 GB</td>
           </tr>
           <tr>
             <td><div class="tname">Outlier Vision 3.8</div><div class="tbase">Qwen3.8-27B &middot; images + text</div></td>
-              <td><strong>82.5%</strong><div class="meta">165/200</div></td><td class="meta"><strong>94.5%</strong><br>155/164</td>
-              <td class="meta">Not measured</td>
-              <td class="meta">17.2 tok/s</td>
-              <td class="meta">15.5 GB</td>
+              <td data-label="MMLU"><strong>82.5%</strong><div class="meta">165/200</div></td><td class="meta" data-label="HumanEval"><strong>94.5%</strong><br>155/164</td>
+              <td class="meta" data-label="SWE-bench (agentic)">Not measured</td>
+              <td class="meta" data-label="Decode">17.2 tok/s</td>
+              <td class="meta" data-label="Disk">15.5 GB</td>
           </tr>
         </tbody>
       </table>
@@ -1225,12 +1278,12 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           <tr><th></th><th>Cloud AI tools</th><th>Cloud coding agents</th><th class="us">Outlier Free</th><th class="us">Outlier Pro</th></tr>
         </thead>
         <tbody>
-          <tr><td class="lbl">Monthly cost</td><td class="n">$9+</td><td class="n">Often much higher</td><td class="y us">$0</td><td class="y us">$249 once</td></tr>
-          <tr><td class="lbl">Usage model</td><td class="n">Server-side limits</td><td class="n">Usage windows / caps</td><td class="y us">No token meter</td><td class="y us">No token meter</td></tr>
-          <tr><td class="lbl">Where inference runs</td><td class="n">Provider cloud</td><td class="n">Provider cloud</td><td class="y us">Your Mac</td><td class="y us">Your Mac</td></tr>
-          <tr><td class="lbl">Privacy default</td><td class="n">Remote request</td><td class="n">Remote repo / context</td><td class="y us">Local by default</td><td class="y us">Local by default</td></tr>
-          <tr><td class="lbl">Offline use</td><td class="n">No</td><td class="n">No</td><td class="y us">Yes, once downloaded</td><td class="y us">Yes, once downloaded</td></tr>
-          <tr><td class="lbl">Current maturity</td><td style="color:var(--v0)">Very mature</td><td style="color:var(--v0)">Very mature</td><td class="us">Useful beta</td><td class="us">Ambitious beta</td></tr>
+          <tr><td class="lbl">Monthly cost</td><td class="n" data-label="Cloud AI tools">$9+</td><td class="n" data-label="Cloud coding agents">Often much higher</td><td class="y us" data-label="Outlier Free">$0</td><td class="y us" data-label="Outlier Pro">$249 once</td></tr>
+          <tr><td class="lbl">Usage model</td><td class="n" data-label="Cloud AI tools">Server-side limits</td><td class="n" data-label="Cloud coding agents">Usage windows / caps</td><td class="y us" data-label="Outlier Free">No token meter</td><td class="y us" data-label="Outlier Pro">No token meter</td></tr>
+          <tr><td class="lbl">Where inference runs</td><td class="n" data-label="Cloud AI tools">Provider cloud</td><td class="n" data-label="Cloud coding agents">Provider cloud</td><td class="y us" data-label="Outlier Free">Your Mac</td><td class="y us" data-label="Outlier Pro">Your Mac</td></tr>
+          <tr><td class="lbl">Privacy default</td><td class="n" data-label="Cloud AI tools">Remote request</td><td class="n" data-label="Cloud coding agents">Remote repo / context</td><td class="y us" data-label="Outlier Free">Local by default</td><td class="y us" data-label="Outlier Pro">Local by default</td></tr>
+          <tr><td class="lbl">Offline use</td><td class="n" data-label="Cloud AI tools">No</td><td class="n" data-label="Cloud coding agents">No</td><td class="y us" data-label="Outlier Free">Yes, once downloaded</td><td class="y us" data-label="Outlier Pro">Yes, once downloaded</td></tr>
+          <tr><td class="lbl">Current maturity</td><td style="color:var(--v0)" data-label="Cloud AI tools">Very mature</td><td style="color:var(--v0)" data-label="Cloud coding agents">Very mature</td><td class="us" data-label="Outlier Free">Useful beta</td><td class="us" data-label="Outlier Pro">Ambitious beta</td></tr>
         </tbody>
       </table>
     </div>
