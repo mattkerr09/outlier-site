@@ -118,6 +118,11 @@
     article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
     article li { margin-bottom: 0.4rem; }
     article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
     article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
     /* These pages carry no scroll wrapper, so a table wider than the column
        pushed the whole page sideways on a phone. Measured at 375px:
