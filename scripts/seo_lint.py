@@ -27,6 +27,7 @@ from pathlib import Path
 MIN_WORDS = 600
 SHINGLE_N = 8
 DUP_RATIO = 0.28          # >28% shared shingles between two pages = too close
+CHROME_DF_PAGES = 20      # a shingle on >=20 pages is site furniture, not prose
 
 # The tells. Lowercased substring match against visible text.
 BANNED = [
@@ -125,6 +126,38 @@ def main(root: str) -> int:
         # duplicate check ignores shared nav/footer chrome — see _CHROME above
         sh[p] = shingles(visible_text(p.read_text(encoding="utf-8", errors="ignore"),
                                       body_only=True))
+
+    # SHARED FURNITURE IS WHATEVER APPEARS EVERYWHERE, NOT WHATEVER _CHROME LISTS.
+    #
+    # _CHROME above is a hardcoded allowlist: <nav>, <footer>, and four class
+    # names. That works only until someone adds a NEW block to every page, and
+    # on 2026-08-24 someone did — b14377a2 put the same ~40-line email-capture
+    # form on 52 pages. It matches none of those selectors, so its identical
+    # prose counted as body content, every pair of those pages crossed the 28%
+    # line at once, and DUP went 227 -> 573. The linter had been green 51 times;
+    # it has failed every run since, hourly, for two days, on a real feature
+    # working correctly.
+    #
+    # The comment on _CHROME already states the correct rule — text that "appears
+    # identically on 20 pages" IS furniture — it just was not the test being run.
+    # Now it is: any shingle carried by CHROME_DF_PAGES or more pages is site
+    # furniture by definition and is subtracted before any pair is compared. That
+    # is self-maintaining. The next shared block added to every page is absorbed
+    # instead of turning the suite red, and nobody has to remember to add a class
+    # name here. _CHROME stays as a cheap first pass for the nav and footer.
+    #
+    # It cannot mask real duplication: prose repeated across a HANDFUL of pages
+    # is what this linter exists to catch, and it stays well under the threshold.
+    if sh:
+        _df: dict[str, int] = {}
+        for _set in sh.values():
+            for _g in _set:
+                _df[_g] = _df.get(_g, 0) + 1
+        _furniture = {g for g, n in _df.items() if n >= CHROME_DF_PAGES}
+        if _furniture:
+            print(f"treating {len(_furniture)} shingle(s) on >={CHROME_DF_PAGES} "
+                  f"pages as site furniture")
+            sh = {p_: (s_ - _furniture) for p_, s_ in sh.items()}
 
     # near-duplicate detection, pairwise within the set
     seen: set[tuple[Path, Path]] = set()

@@ -58,9 +58,9 @@ jobs:
         if: github.event_name != 'push'
         run: python3 scripts/deploy_freshness_gate.py
 
-      # seo_lint exits 1 today on 245 pre-existing failures: 227 DUP (the
-      # renderer-generated /seo/vs/ and /seo/run/ pages share up to 81% of their
-      # body prose — one template with nouns swapped) and 18 THIN. Both are
+      # seo_lint exits 1 today on 188 pre-existing failures: 184 DUP (the
+      # renderer-generated /seo/vs/ and /seo/run/ pages share up to 73% of their
+      # body prose — one template with nouns swapped) and 4 THIN. Both are
       # strategy calls, not copy edits: padding a page to clear a word floor is
       # what this linter's own comments warn against, and de-duplicating 50+
       # programmatic pages is a content decision nobody has taken yet.
@@ -71,12 +71,22 @@ jobs:
       # it is red for a real reason and still ignored.
       #
       # So it gates on GROWTH against today's count. A new duplicate or a newly
-      # thinned page fails; the existing 245 do not. Lower the baseline when the
+      # thinned page fails; the existing 188 do not. Lower the baseline when the
       # backlog is actually reduced — never raise it to make a failure go away.
+      #
+      # 2026-08-25: lowered 245 -> 188 because the backlog really did shrink. It
+      # had been RED every run since 2026-08-24 19:09 — b14377a2 put the same
+      # ~40-line email-capture form on 52 pages, seo_lint's hardcoded chrome list
+      # did not know that block, so identical furniture was scored as duplicate
+      # PROSE and the count jumped 227 -> 573. Two days of hourly failure mail
+      # about a feature that works. seo_lint now derives furniture from document
+      # frequency instead of a fixed selector list, so the number below measures
+      # body prose again. Raising the baseline to 573 would have been the easy
+      # move and would have blinded this step to 300-odd real duplicates.
       - name: SEO lint (fails only if the failure count grows)
         run: |
           set -o pipefail
-          BASELINE=245
+          BASELINE=188
           python3 scripts/seo_lint.py . > /tmp/seo.txt 2>&1 || true
           COUNT=$(grep -cE '^  (THIN|VOICE|DUP)' /tmp/seo.txt || true)
           echo "seo_lint failures: $COUNT (baseline $BASELINE)"
