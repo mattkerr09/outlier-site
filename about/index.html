@@ -126,6 +126,15 @@
     <p>The short version: I kept hitting the usage cap. I was paying around $249 a month across cloud AI tools, and the good model would still cut me off at 11 PM and tell me to come back later. The work didn't keep office hours, but the AI did. So I spent a few months building the thing that doesn't stop — a frontier-scale model that runs on the Mac I already owned, offline, with no meter on it.</p>
     <p>The deeper reason is ownership. Every other tool on my Mac is mine: the editor doesn't phone home to open a file, the terminal doesn't have a monthly quota. AI became the one tool everyone <em>rents</em>, on terms that change while you're using it. Outlier is the argument that you can own it instead — the weights are open files on your disk, and files don't have a terms of service.</p>
 
+    <p>That argument is not only about AI, and Outlier is not the only thing I
+    have built on it. <a href="https://crispvideo.app/">Crisp</a> restores and
+    upscales video to 4K on your Mac, fully offline, with a real timeline
+    editor — one payment, no subscription.
+    <a href="https://docketseo.app/">Docket SEO</a> audits a website from your
+    Mac: 97 checks across SEO, copy, brand and AI search visibility, and a
+    ranked plan of what to fix first. Different jobs, same bargain — the work
+    happens on hardware you own and nothing is uploaded.</p>
+
     <h2>How it's tested — first-hand, with receipts</h2>
     <p>I don't ask anyone to take the quality on faith. I run the models myself, on real work, and publish the raw results. The headline test is a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head against Claude Opus</a> with the side-by-side outputs posted in full: Outlier's local Core 27B matched Opus on 98.9% of the rubric checks overall, and 100% on the nine hardest (a chess engine, Raft and Paxos, zero-knowledge proofs). The <a href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">tok/s and memory numbers</a> are measured on my own M1 Ultra, with the method written down.</p>
     <p>The thing that makes Outlier unusual is the engine underneath: a patent-pending paged Mixture-of-Experts inference runtime that streams expert weights off the SSD, so a <a href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">397-billion-parameter model runs on a 64 GB Mac</a> at about 11 GB of peak memory — a model bigger than the RAM it runs in. The weights are open and <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">published on HuggingFace</a>, so none of this is a black box.</p>
