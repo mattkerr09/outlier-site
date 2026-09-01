@@ -103,7 +103,7 @@ In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns 
 <h2>What <code>tool_choice: "required"</code> does</h2>
 <p>OpenAI's API has a field for exactly this, and Outlier's OpenAI-compatible endpoint now implements it. The mechanism is structural: when a request sets <code>tool_choice: "required"</code>, Outlier ends the prompt with the exact opening syntax of a tool call — so the only thing the model <em>can</em> generate is the rest of one.</p>
 <pre>{
-  "model": "outlier-code",
+  "model": "outlier-compact",
   "messages": [...],
   "tools": [...],
   "tool_choice": "required"

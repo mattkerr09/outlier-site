@@ -103,7 +103,8 @@ client = OpenAI(
 )
 
 r = client.chat.completions.create(
-    model="outlier-nano",          # or outlier-lite / core / code / plus
+    model="outlier-nano",          # outlier-lite / outlier-quick / outlier-compact (Core)
+                                   # outlier-vision38 / outlier-plus
     messages=[{"role": "user", "content": "Three taglines for a coffee truck"}],
 )
 print(r.choices[0].message.content)</code></pre>
@@ -144,11 +145,11 @@ msg = llm.invoke("What's the weather in Berlin?")
 print(msg.tool_calls)</code></pre>
 
     <h2>5 · Cursor / Continue</h2>
-    <p>In the model settings, add a custom OpenAI-compatible model: base URL <code>http://127.0.0.1:8766/v1</code>, your Outlier key, model <code>outlier-code</code> (the coding tier) or <code>outlier-nano</code> for speed.</p>
+    <p>In the model settings, add a custom OpenAI-compatible model: base URL <code>http://127.0.0.1:8766/v1</code>, your Outlier key, model <code>outlier-compact</code> (the Core tier, the strongest one that fits most Macs) or <code>outlier-nano</code> for speed.</p>
 
     <h2>6 · Codex CLI</h2>
     <pre><code># ~/.codex/config.toml
-model = "outlier-code"
+model = "outlier-compact"
 model_provider = "outlier"
 
 [model_providers.outlier]
