@@ -104,11 +104,27 @@ client = OpenAI(
 
 r = client.chat.completions.create(
     model="outlier-nano",          # outlier-lite / outlier-quick / outlier-compact (Core)
-                                   # outlier-vision38 / outlier-plus
+                                   # outlier-plus
+                                   # Vision 3.8 answers text here too, but this
+                                   # endpoint takes no images — see below.
     messages=[{"role": "user", "content": "Three taglines for a coffee truck"}],
 )
 print(r.choices[0].message.content)</code></pre>
     <p>Streaming, <code>max_tokens</code>, <code>temperature</code>, and <code>finish_reason</code> behave like the reference API.</p>
+
+    <p><strong>Images do not go through this endpoint.</strong> Sending
+    OpenAI's multimodal form — a <code>content</code> array of
+    <code>{"type": "image_url", ...}</code> parts — returns
+    <code>400 messages.0.content: Input should be a valid string</code>, because
+    <code>/v1/chat/completions</code> takes text only. Vision 3.8 will answer a
+    text prompt here like any other tier; it just cannot see anything you send
+    it this way. Pictures go to Outlier's own endpoint instead:</p>
+
+    <pre><code>POST http://127.0.0.1:8766/chat/vision
+Authorization: Bearer YOUR-OUTLIER-KEY</code></pre>
+
+    <p>Verified against 1.11.806 rather than assumed, which is why the error
+    text above is quoted rather than described.</p>
 
     <h2>3 · Function calling (tools)</h2>
     <pre><code>r = client.chat.completions.create(
