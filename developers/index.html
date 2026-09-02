@@ -187,7 +187,29 @@ r = litellm.completion(
 
     <div class="note">Privacy note: requests to this endpoint are handled entirely on your Mac by the locally-running model. Your prompts, code, and tool results never leave your machine.</div>
 
-    <h2>8 · Which parameters actually do something</h2>
+    <h2>8 · What the app does that this endpoint does not</h2>
+    <p>The endpoint runs the same models as the app, and deliberately not the
+    same product around them. If you compare an answer here against the same
+    question typed into Outlier and they differ, this is usually why:</p>
+    <ul>
+      <li><strong>No web search.</strong> The app can search and cite sources.
+          A request to this endpoint is answered from the model alone.</li>
+      <li><strong>No memory.</strong> Nothing you send here is read from or
+          written to the app&rsquo;s saved facts. Each request stands alone.</li>
+      <li><strong>No project or codebase context.</strong> The app can attach
+          the files you are working on. Here, the messages you send are the
+          whole input.</li>
+      <li><strong>No history trimming.</strong> The app shortens a long
+          conversation to fit the context window. This endpoint sends what you
+          sent — dropping messages a client deliberately included would be the
+          wrong default for an API, so a long conversation stays intact and
+          simply takes longer.</li>
+    </ul>
+    <p>None of this is a limitation of the model; it is the line between an
+    application and an API. It is listed because the difference is invisible
+    until an answer surprises you.</p>
+
+    <h2>9 · Which parameters actually do something</h2>
     <p>A drop-in endpoint that accepts a parameter and then ignores it is worse
     than one that rejects it, because your code carries on believing the
     constraint applied. Every field below was sent to a running 1.11.808 engine
