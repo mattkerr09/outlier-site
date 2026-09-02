@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Outlier has no monthly plan. Fail if any page prices it as though it does.
+"""Outlier has no monthly plan, and $249 is not anybody's monthly price.
+
+Fail if any page prices Outlier as a subscription, or renders our one-time
+$249 as a monthly figure -- which is how a rival's price gets overwritten.
 
 Matthew retired the monthly offer ("lets not do monthly and only do 249").
 Commit 77ee3242 recorded that the offer was "now at ZERO across the site" —
@@ -56,6 +59,42 @@ PROSE = re.compile(r'(?i)\b' + _SUBJ + r'\b\s+(?:is|at|costs?)' + _FILL +
                    r'(\$\s?\d+(?:\.\d\d)?\s*(?:/\s*(?:mo\b|month)|\s+(?:per|a)\s+month|\s+monthly))')
 RETIRED = re.compile(r'(?i)\b' + _SUBJ + r'\b\s+(?:is|at|costs?)' + _FILL + r'(\$9\b(?!\.99))')
 
+# THE MIRROR: their price rendered as ours.
+#
+# The same corruption runs both ways, and only one way was being watched. The
+# commit that raised our lifetime price to $249 and retired the $9 monthly one
+# did it as a blind find-and-replace, so every OTHER $200 and $20 on the site
+# moved too -- Claude Max, ChatGPT Pro, a GitHub Copilot credit allowance, a
+# Microsoft Copilot Pro plan, and a sentence about what Matthew himself used to
+# spend. Ten false statements about two named companies' prices, live for
+# eighteen days, three of them inside JSON-LD where no reader would see them.
+#
+# No attribution logic is needed here and none is used. $249 is a ONE-TIME
+# price; there is no sentence in which it is correct with a monthly unit
+# attached, whoever it is about. Same for "the $249 tier" -- we do not sell a
+# tier at $249, we sell a one-time licence, so that phrasing is always somebody
+# else's plan wearing our number.
+#
+# What it does not catch, stated plainly so nobody trusts it further than it
+# goes. Replayed against the six pre-fix pages, there were TWELVE defects and
+# this fires on ten. The two it misses:
+#
+#   "Max $100 with $249"   a Copilot credit allowance -- no unit, no tier word.
+#                          Every rule I tried for our price sitting in a list of
+#                          someone else's figures also matched honest comparison
+#                          tables, which is the false-positive trap this file
+#                          already warns about.
+#   "the standalone $9/month consumer plan"   Microsoft's, correctly attributed
+#                          to Microsoft. The $9 rule above deliberately requires
+#                          the price to be bound to US, and relaxing that is what
+#                          produced fifteen false hits the first time.
+#
+# The count above is read off the control run, not estimated. An earlier draft
+# of this comment said "9 of the 10" from memory and was wrong twice over.
+ONE_TIME_AS_MONTHLY = re.compile(
+    r'(?i)(\$\s?249\s*(?:/\s*(?:mo\b|month)|\s+(?:per|a)\s+month|\s+monthly))')
+ONE_TIME_AS_TIER = re.compile(r'(?i)(\$\s?249\s+tiers?\b)')
+
 # A markdown pricing line has no verb: "- Pro: $9/mo - all six tiers…". The
 # verb-based patterns above are blind to it, which I only learned by running
 # this gate against the real pre-fix llms.txt and watching it report OK on the
@@ -95,9 +134,29 @@ def check_tables(src):
 
 def _scan(flat, where):
     out = []
-    for rx, label in ((PROSE, 'monthly price'), (RETIRED, 'the retired $9 price')):
+    for rx, label in ((PROSE, 'monthly price'),
+                      (RETIRED, 'the retired $9 price'),
+                      (ONE_TIME_AS_MONTHLY, 'our one-time $249 priced monthly'),
+                      (ONE_TIME_AS_TIER, 'our one-time $249 called a tier')):
         for m in rx.finditer(flat):
             out.append(f'{label} in {where}: …{flat[max(0, m.start() - 50):m.end() + 25].strip()}…')
+    return out
+
+
+def check_structured_data(src):
+    """JSON-LD is stripped with <script>, and it is the worst place to miss one.
+
+    check_prose drops every <script> before it starts, which is right for
+    JavaScript and wrong for application/ld+json: that block is prose, it is
+    the answer text search engines and AI crawlers quote, and no reader will
+    ever see it to notice it is wrong. On the page that motivated this check
+    the same false sentence appeared twice -- once in the visible FAQ and once
+    in the FAQPage schema -- and only the visible one was caught.
+    """
+    out = []
+    for m in re.finditer(r'(?is)<script[^>]*ld\+json[^>]*>(.*?)</script>', src):
+        flat = re.sub(r'\s+', ' ', html.unescape(m.group(1)))
+        out += _scan(flat, 'JSON-LD')
     return out
 
 
@@ -145,7 +204,9 @@ def main(root):
             path = os.path.join(dirpath, name)
             src = open(path, encoding='utf-8', errors='replace').read()
             checked += 1
-            problems = (check_tables(src) + check_prose(src)) if is_html else check_plain_text(src)
+            problems = ((check_tables(src) + check_prose(src)
+                         + check_structured_data(src))
+                        if is_html else check_plain_text(src))
             for problem in problems:
                 failures.append(f'{os.path.relpath(path, root)}: {problem}')
 
