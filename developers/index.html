@@ -187,6 +187,53 @@ r = litellm.completion(
 
     <div class="note">Privacy note: requests to this endpoint are handled entirely on your Mac by the locally-running model. Your prompts, code, and tool results never leave your machine.</div>
 
+    <h2>8 · Which parameters actually do something</h2>
+    <p>A drop-in endpoint that accepts a parameter and then ignores it is worse
+    than one that rejects it, because your code carries on believing the
+    constraint applied. Every field below was sent to a running 1.11.808 engine
+    and the reply read back on 1 September 2026, so this is what was observed
+    rather than what the schema permits.</p>
+
+    <p><strong>Honoured — the effect was measured, not assumed.</strong></p>
+    <ul>
+      <li><code>temperature</code>, <code>max_tokens</code>,
+          <code>max_completion_tokens</code></li>
+      <li><code>stop</code> — truncates the reply and comes back with
+          <code>finish_reason: "stop"</code></li>
+      <li><code>stream</code> — <code>text/event-stream</code>, a stable id
+          across chunks, <code>role</code> in the first delta,
+          <code>finish_reason</code> on the last, terminated by
+          <code>[DONE]</code></li>
+      <li><code>stream_options: {"include_usage": true}</code> — adds a final
+          chunk carrying real token counts</li>
+      <li><code>response_format: {"type": "json_object"}</code> — genuinely
+          constrains the reply. Without it the same prompt came back as prose
+          with markdown headings, which is how we know the flag is doing the
+          work and not the model's habit</li>
+      <li><code>tools</code> and <code>tool_choice</code>, both left to the
+          model and forced to a named function</li>
+    </ul>
+
+    <p><strong>Refused on purpose.</strong> <code>n</code> greater than 1
+    returns <code>400</code> and says why: this endpoint returns a single
+    choice. Silently handing back one choice would have been the easier
+    behaviour and the wrong one.</p>
+
+    <p><strong>Images do not travel through this endpoint.</strong> A message
+    whose <code>content</code> is a list containing an <code>image_url</code>
+    part is refused with an error naming <code>POST /chat/vision</code>, which
+    is where Outlier Vision 3.8 reads pictures. The model list says the same
+    thing in the tier's own description, so a client that reads the catalogue
+    before choosing is not misled.</p>
+
+    <p><strong>Accepted, effect not measured here.</strong>
+    <code>top_p</code>, <code>seed</code>, <code>presence_penalty</code>,
+    <code>frequency_penalty</code>, <code>logit_bias</code>,
+    <code>logprobs</code>, <code>user</code>, <code>metadata</code> and
+    <code>parallel_tool_calls</code> are all accepted without error. They are
+    listed separately because accepting a field is not the same as acting on
+    it, and only the ones above were checked end to end.</p>
+
     <p style="margin-top:40px"><a href="/">← outlier.host</a></p>
   </main>
 

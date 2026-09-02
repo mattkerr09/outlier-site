@@ -76,6 +76,27 @@ def shingles(text: str, n: int = SHINGLE_N) -> set[str]:
     return {" ".join(w[i:i + n]) for i in range(max(0, len(w) - n + 1))}
 
 
+_REDIRECT_REFRESH = re.compile(r'http-equiv=["\']refresh["\']', re.I)
+_REDIRECT_NOINDEX = re.compile(r'\bnoindex\b', re.I)
+
+
+def _is_redirect_stub(raw):
+    """A page that redirects and is marked noindex is not a thin article.
+
+    seo/run/run-code-on-m4-pro-macbook-pro is the one on this site: the Code
+    tier became a mode of Core, so the old URL keeps working by bouncing to the
+    new one. It is 58 words because it is a signpost, and it carries noindex —
+    so it is not in the index this rule exists to protect. Reporting it as THIN
+    made the linter red every run, and a permanently red gate is one nobody
+    reads, which is how the two genuinely thin pages underneath it went unread.
+
+    BOTH signals are required. `noindex` alone would exempt any page someone
+    had quietly deindexed, which is exactly the page you want the word floor to
+    keep complaining about.
+    """
+    return bool(_REDIRECT_REFRESH.search(raw) and _REDIRECT_NOINDEX.search(raw))
+
+
 def _is_section_hub(p: Path) -> bool:
     """True for an index.html whose directory holds further page directories.
 
@@ -98,11 +119,13 @@ def main(root: str) -> int:
     fails: list[str] = []
     sh: dict[Path, set[str]] = {}
 
+    skipped_stubs = []
     for p in pages:
         try:
-            text = visible_text(p.read_text(encoding="utf-8", errors="ignore"))
+            raw = p.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
+        text = visible_text(raw)
         words = len(text.split())
         low = text.lower()
 
@@ -120,8 +143,10 @@ def main(root: str) -> int:
         # ".../site/legal/refunds" and exempted it, while `seo_lint.py .` from inside the site
         # produced "legal/refunds" with no leading slash and failed it. Same tree, same page, two
         # answers — and the failing one is the invocation a person is most likely to try.
+        if _is_redirect_stub(raw):
+            skipped_stubs.append(p)
         if words < MIN_WORDS and "legal" not in p.parts \
-                and not _is_section_hub(p):
+                and not _is_section_hub(p) and not _is_redirect_stub(raw):
             fails.append(f"THIN   {p}: {words}w (min {MIN_WORDS})")
         # duplicate check ignores shared nav/footer chrome — see _CHROME above
         sh[p] = shingles(visible_text(p.read_text(encoding="utf-8", errors="ignore"),
@@ -173,6 +198,11 @@ def main(root: str) -> int:
                 fails.append(f"DUP    {a.parent.name} ~ {b.parent.name}: {overlap:.0%} shared")
 
     print(f"checked {len(pages)} pages")
+    # Say what was exempted. A skip nobody prints reads exactly like a page
+    # that passed, and the point of the word floor is that silence means checked.
+    if skipped_stubs:
+        print(f"word floor not applied to {len(skipped_stubs)} noindex redirect "
+              f"stub(s): {', '.join(str(x) for x in skipped_stubs)}")
     if not fails:
         print("PASS — no voice, thin, or duplicate failures")
         return 0
