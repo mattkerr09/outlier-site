@@ -40,22 +40,33 @@ SITE_URL = "https://outlier.host"
 # real release. The constant below is only a fallback for the case where that
 # markup changes shape; if the two disagree the build stops rather than quietly
 # publishing a version that was never released.
-_APP_VERSION_FALLBACK = "1.11.804"
-
-
 def _detect_app_version() -> str:
+    """The version every byline is stamped with, read off the homepage.
+
+    Finding TWO versions was already fatal. Finding NONE was not: it fell
+    through to a hardcoded "1.11.804", which by the time this was noticed was
+    five releases stale — so a change to the homepage's nav markup would have
+    silently stamped a wrong version onto all 61 generated pages, and the only
+    signal would have been bylines quietly disagreeing with the download
+    button. Ambiguity and absence are the same problem and now fail the same
+    way.
+
+    A missing index.html is fatal for the same reason rather than a different
+    one: ROOT would be wrong, and this script writes pages under it.
+    """
+    idx_path = ROOT / "index.html"
     try:
-        idx = (ROOT / "index.html").read_text(encoding="utf-8")
-        found = sorted(set(re.findall(r'class="nav-ver">v(\d+\.\d+\.\d+)<', idx)))
-        if len(found) == 1:
-            return found[0]
-        if len(found) > 1:
-            raise SystemExit(
-                f"render.py: index.html advertises {len(found)} different versions "
-                f"{found} — cannot pick one for the SEO bylines")
+        idx = idx_path.read_text(encoding="utf-8")
     except FileNotFoundError:
-        pass
-    return _APP_VERSION_FALLBACK
+        raise SystemExit(
+            f"render.py: {idx_path} does not exist, so the site root is wrong "
+            f"and the pages would be written somewhere they do not belong")
+    found = sorted(set(re.findall(r'class="nav-ver">v(\d+\.\d+\.\d+)<', idx)))
+    if len(found) == 1:
+        return found[0]
+    raise SystemExit(
+        f"render.py: index.html advertises {len(found)} versions {found} — "
+        f"expected exactly one to stamp into the SEO bylines")
 
 
 APP_VERSION = _detect_app_version()
@@ -309,7 +320,15 @@ def build_run_pages(models, macs) -> list[dict]:
         mac = next(x for x in macs if x["slug"] == mac_slug)
         slug = _slug_override or f"run-{slug_token.get(tier_id, tier_id)}-on-{mac_slug}"
         h1 = f"Run {m['display_name']} on {mac['name']}"
-        title = f"{h1} — Local AI on Apple Silicon | Outlier"
+        # The suffix is 38 characters and Google renders about 60, so this
+        # formula could not produce a fitting title for ANY input: all 19
+        # pages it built were over, the longest at 82, cut mid-phrase in the
+        # search result. The h1 already names a specific Apple Silicon Mac,
+        # so "Local AI on Apple Silicon" was saying it twice.
+        #
+        # Matching the suffix the other two builders use leaves 50 characters
+        # for the topic and takes the longest of these to 54.
+        title = f"{h1} | Outlier"
         description = (
             f"How {m['display_name']} ({m['params']}, {m['disk_gb']} GB) runs on "
             f"{mac['name']} ({mac['unified_ram_gb']} GB unified memory, "
