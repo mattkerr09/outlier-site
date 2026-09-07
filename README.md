@@ -31,6 +31,31 @@ The GitHub Pages API also 404s for this repository. The whole repo is synced to
 the host, and **path exclusion lives in the host configuration, outside this
 repo** — `_config.yml`, `.nojekyll` and `exclude:` lists have no effect here.
 
+### How long a change takes to reach a visitor, and the one that never does
+
+Measured 2026-09-07, twice, on two different paths: a push is still serving the OLD copy at
+~7 minutes and is live by ~11-12. The home page pushed 19:08:59 was stale at 19:16 and live
+by 19:20; a root .txt pushed 19:18:17 was stale at 19:25 and live by 19:30. So when a gate
+says the deploy is behind, give it twelve minutes before believing it.
+
+**A DELETION NEVER PROPAGATES BY ITSELF.** The edge (openresty / `x-service: pixie-sh`,
+Porkbun static hosting) serves stale while revalidating and treats the origin's 404 as an
+error to keep serving stale through — `proxy_cache_use_stale` behaviour. Measured: a file
+deleted from the repo still answered 200 with `x-cache: STALE` fifty-five minutes later,
+while `?cb=<random>` and `Cache-Control: no-cache` both returned 404 from the origin.
+
+So **to unpublish something here, replace its contents; do not `git rm` it.** A 200
+revalidates successfully and the edge takes the new body. Removing the file puts the edge
+straight back into stale-on-404, holding the last 200 it saw, indefinitely.
+
+Verify with a PLAIN GET. Busting the cache asks the origin, which is not what a visitor,
+a crawler or a verifier sees, and it will tell you the deletion worked when it has not.
+
+⚠️ **`67223b34aed54ecb802e8ffcbacb9ec2.txt` must STAY in this repo.** It is a superseded
+IndexNow key file whose body is now `revoked`, which is what makes the old key stop
+validating. Deleting it would return the edge to serving the original body — the key —
+with no way to clear it from here. It looks like dead weight; it is a live control.
+
 ### The consequence that matters
 
 **Every tracked file in this repository is readable over HTTP.** There is no
