@@ -22,9 +22,18 @@ scream "deploy is stale" when nothing is wrong with the deploy. So the
 comparison is always deployed-vs-HEAD, and uncommitted local edits are reported
 separately as information, not as failure.
 
-GitHub Pages serves these files verbatim — verified 2026-08-18, local and
-deployed index.html were byte-identical at sha256 b8d29032. So an exact hash
-comparison is the right instrument; no normalisation, nothing to tune.
+The host serves these files verbatim — verified 2026-08-18, local and deployed
+index.html were byte-identical at sha256 b8d29032. So an exact hash comparison is
+the right instrument; no normalisation, nothing to tune. (This site is NOT served
+by GitHub Pages; see README. An earlier version of this docstring said it was.)
+
+WHAT "THE SITE IS THE COMMIT" HAS TO MEAN. Matching the files that exist is only
+half of it. A file deleted from the repo is unpublished only if the host stops
+serving it, and nothing above could ever see that: every check starts from a path
+that is present at HEAD. outlier.host served a superseded IndexNow key file — a
+standing authorisation for whoever holds it to submit URLs for this host — and
+this gate would have printed PASS beside it forever. So deletions are checked too,
+from git history rather than from a list somebody remembers to update.
 
 THE CONTROL. A gate that fetches a URL and compares hashes fails open in the
 most ordinary way imaginable: if the fetch quietly returns something unexpected
@@ -40,6 +49,7 @@ from __future__ import annotations
 import hashlib
 import subprocess
 import sys
+import time
 import urllib.request
 
 SITE = "https://outlier.host"
@@ -54,6 +64,16 @@ FILES = {
     "og-card.png": "/og-card.png",
 }
 MIN_FILES = 3
+
+#: Files deleted from the repo must stop being served. Suffixes the host will
+#: serve as-is; a deletion of anything else cannot be a publication problem.
+SERVABLE_SUFFIXES = (".html", ".txt", ".xml", ".png", ".jpg", ".svg", ".json", ".css", ".js", ".ico", ".md")
+#: A deletion pushed minutes ago has not had time to propagate, and flagging it
+#: would make every removal red until the sync ran. Older than this and "still
+#: served" is no longer explainable by lag.
+GRACE_S = 45 * 60
+#: How far back to look for deletions. Bounded so the gate stays fast.
+LOG_DEPTH = 400
 
 
 def sha(b: bytes) -> str:
@@ -74,6 +94,59 @@ def fetch(url: str) -> bytes | None:
             return r.read()
     except Exception:
         return None
+
+
+def status(url: str) -> int | None:
+    """Status code only. A deleted file is a question about presence, not bytes."""
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": UA}, method="GET")
+        with urllib.request.urlopen(req, timeout=45) as r:
+            return r.getcode()
+    except urllib.error.HTTPError as e:
+        return e.code
+    except Exception:
+        return None
+
+
+def check_deletions() -> tuple[int, list[tuple[str, str, float]], int]:
+    """Every path deleted in the last LOG_DEPTH commits and never re-added.
+
+    Derived from history rather than from a hand-kept list, so a file someone
+    removes tomorrow is covered without anyone remembering to add it here.
+    """
+    out = subprocess.run(
+        ["git", "log", f"-{LOG_DEPTH}", "--diff-filter=D", "--name-only", "--format=%x00%ct"],
+        capture_output=True, text=True).stdout
+    when: dict[str, int] = {}
+    ts = None
+    for line in out.split("\n"):
+        if line.startswith("\x00"):
+            ts = int(line[1:])
+            continue
+        path = line.strip()
+        if path and ts is not None and path.endswith(SERVABLE_SUFFIXES):
+            when.setdefault(path, ts)  # most recent deletion of that path
+
+    now = time.time()
+    confirmed, still_served, in_flight = 0, [], 0
+    for path, t in sorted(when.items()):
+        if at_head(path) is not None:
+            continue  # deleted once, then re-added
+        age = now - t
+        if age < GRACE_S:
+            in_flight += 1
+            continue
+        url = SITE + "/" + (path[: -len("index.html")] if path.endswith("index.html") else path)
+        code = status(url)
+        if code == 200:
+            still_served.append((path, url, age / 3600))
+            print(f"  [SERVED] {url} — deleted, still 200")
+        elif code is None:
+            print(f"  [?] {url} — no answer, not counted either way")
+        else:
+            confirmed += 1
+            print(f"  [gone] {url} ({code})")
+    return confirmed, still_served, in_flight
 
 
 def main() -> int:
@@ -121,12 +194,32 @@ def main() -> int:
         print(f"\nFAIL: compared {checked} file(s), expected {MIN_FILES}.")
         print("      A gate that checked nothing prints the same word as a clean one.")
         return 1
+    # The other half of "the site is the commit": what was deleted must be gone.
+    gone, still_served, in_flight = check_deletions()
+    if still_served:
+        for path, url, age_h in still_served:
+            fails.append(
+                f"{path}: deleted from the repo but still served at {url} (200).\n"
+                f"       Removed {age_h:.1f}h ago, well past the {GRACE_S // 60}m sync window.\n"
+                f"       A file is unpublished only when the host stops serving it.")
+
     if fails:
         print(f"\nFAIL ({len(fails)}):")
         for f in fails:
             print(f"  {f}")
         return 1
-    print(f"\nPASS — all {checked} served files byte-match HEAD; the site is the commit.")
+    if gone:
+        print(f"\nPASS — {checked} served files byte-match HEAD, and {gone} file(s) deleted from")
+        print("       the repo are confirmed gone from the host. The site is the commit,")
+        print("       in both directions.")
+    else:
+        print(f"\nPASS — all {checked} served files byte-match HEAD.")
+        print("       Deletions: NOT MEASURED — no removal in the last "
+              f"{LOG_DEPTH} commits is both still absent at HEAD and older than "
+              f"{GRACE_S // 60}m. This half of the claim was not tested.")
+    if in_flight:
+        print(f"\n  note: {in_flight} recent deletion(s) inside the {GRACE_S // 60}m window,")
+        print("        not checked yet — they will be on the next run.")
     return 0
 
 
