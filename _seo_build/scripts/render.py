@@ -1415,6 +1415,21 @@ def _is_renderer_leaf(loc: str) -> bool:
     return len([seg for seg in rest.split("/") if seg]) == 2
 
 
+def _page_lastmod_from_disk(url: str) -> str | None:
+    """A page's own dateModified, or None if there is no page or no date.
+
+    Same source as _page_lastmod uses for managed URLs; separate function
+    because a preserved block must be left exactly as it is when there is no
+    honest date to add, rather than being stamped with today.
+    """
+    rel = url.replace(SITE_URL, "").strip("/")
+    f = ROOT / rel / "index.html"
+    if not f.exists():
+        return None
+    m = re.search(r'"dateModified":"(\d{4}-\d{2}-\d{2})"', f.read_text(errors="replace"))
+    return m.group(1) if m else None
+
+
 def _page_lastmod(url: str, prev: dict[str, str] | None = None) -> str:
     """The page's OWN dateModified, not the build clock.
 
@@ -1514,6 +1529,23 @@ def write_sitemap(pages: list[dict]) -> Path:
                 if lm:
                     prev_lastmod[loc_m.group(1).strip().rstrip("/")] = lm.group(1).strip()
                 continue  # renderer owns this URL; re-emit below
+            # v1.11.821: a hand-authored block with NO <lastmod> can only ever
+            # be announced once, when the URL first appears — a later content
+            # change is invisible to IndexNow's --changed submitter, which keys
+            # on lastmod. Six of the 250 URLs were in that state, all of them
+            # pages that match the renderer-leaf SHAPE without being in its page
+            # list, so nothing ever gave them a date.
+            #
+            # Fill it from the page's own dateModified, the same rule the managed
+            # URLs use. NOT from the file's git date: these files were touched
+            # today by a version-string bump, and their content last changed in
+            # July. An existing <lastmod> is never altered — this only fills a
+            # gap, and only when the page can be resolved and carries a date.
+            if "<lastmod>" not in block and loc_m:
+                _d = _page_lastmod_from_disk(loc_m.group(1).strip())
+                if _d:
+                    block = block.replace(
+                        "</loc>", "</loc>\n    <lastmod>%s</lastmod>" % _d, 1)
             preserved_blocks.append(block.strip())
 
     parts: list[str] = [header, ""]
