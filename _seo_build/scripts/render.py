@@ -1509,6 +1509,31 @@ def main():
     pages += build_howto_pages()
     pages += build_learn_pages()
 
+    # A related link the generator itself knows is dead must not be written.
+    #
+    # validate() has warned "related link /seo/run/run-code-on-m4-pro-macbook-pro/
+    # does not resolve in this batch" for seven pages since 2026-08-23, when the
+    # Code tier stopped shipping and that page was withdrawn (noindex, the only
+    # noindexed page on the site). The warning went into build_report.json, the
+    # link went into the HTML, and nobody read the report. Warning about a link
+    # while emitting it is not a check.
+    #
+    # Dropping is right rather than repointing: the target is not in the
+    # generated set any more, and the page it describes is a tier we no longer
+    # sell. Non-/seo/ links are left alone — they are hand-written and live
+    # outside this generator's knowledge.
+    _valid = {f"/seo/{q['category']}/{q['slug']}/" for q in pages}
+    _dropped = []
+    for p in pages:
+        _keep = []
+        for r in p["related"]:
+            u = r["url"]
+            if u.startswith("/seo/") and u not in _valid:
+                _dropped.append(f"{p['category']}/{p['slug']} -> {u}")
+            else:
+                _keep.append(r)
+        p["related"] = _keep
+
     # write
     written = {}
     for p in pages:
@@ -1521,6 +1546,14 @@ def main():
 
     sitemap = write_sitemap(pages)
     report = validate(pages, written)
+    # Say what was dropped. Removing the link without saying so would replace a
+    # warning nobody read with silence nobody can read.
+    if _dropped:
+        report["dropped_related_links"] = _dropped
+        report["warnings"].append(
+            f"{len(_dropped)} related link(s) dropped: target not in the generated "
+            f"set (see dropped_related_links)"
+        )
 
     out_report = ROOT / "_seo_build" / "output" / "build_report.json"
     out_report.parent.mkdir(parents=True, exist_ok=True)
