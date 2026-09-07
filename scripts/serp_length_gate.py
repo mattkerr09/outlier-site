@@ -28,6 +28,15 @@ is precisely the thing that went wrong on this site once already.
 So: hold the line where the traffic is, and leave the rest recorded rather than
 enforced. If the other pages are ever rewritten, widen the ONLY_PAGES list.
 
+2026-09-07: "recorded" is now literal. serp_length_baseline.json holds every
+page currently over a limit -- 109 titles, 151 descriptions, 169 pages -- and
+the gate FAILS on a violation that is not in it, or one that got worse. The
+reasoning above is unchanged and this does not touch it: the backlog stays
+un-enforced, the homepage stays enforced. What changes is that the pile can no
+longer grow. That matters now because an SEO article is being added every
+cycle, and without this each new page could quietly join the 169.
+A page that is fixed is reported so its baseline line can be deleted.
+
 Not checked here, deliberately: og: and twitter: fields. They have different
 consumers and different limits -- a social card is not a search result -- and
 shortening them to a SERP budget would lose information for no gain.
@@ -35,6 +44,7 @@ shortening them to a SERP budget would lose information for no gain.
 Run: python3 scripts/serp_length_gate.py <site-root>
 """
 import html
+import json
 import re
 import sys
 from pathlib import Path
@@ -56,6 +66,35 @@ def _field(pattern, src):
 def main(root: str) -> int:
     base = Path(root)
     failures, checked = [], 0
+
+    # The ratchet: every page, measured against what it was already guilty of.
+    baseline_path = Path(__file__).with_name("serp_length_baseline.json")
+    baseline = {}
+    if baseline_path.exists():
+        baseline = json.loads(baseline_path.read_text())
+    new_bad, fixed, still = [], [], 0
+    for path in sorted(base.rglob("*.html")):
+        if ".git" in str(path) or "_seo_build" in str(path):
+            continue
+        rel_s = str(path.relative_to(base))
+        src_s = path.read_text(encoding="utf-8", errors="replace")
+        was = baseline.get(rel_s, {})
+        for field_name, limit in (("title", TITLE_MAX), ("description", DESC_MAX)):
+            val = _field(_TITLE if field_name == "title" else _DESC, src_s)
+            n = len(val) if val is not None else 0
+            if n <= limit:
+                if field_name in was:
+                    fixed.append(f"{rel_s}: {field_name} now {n} — drop it from the baseline")
+                continue
+            if field_name not in was:
+                new_bad.append(f"{rel_s}: {field_name} {n} chars (max {limit}) — "
+                               f"NEW, not in the baseline")
+            elif n > was[field_name]:
+                new_bad.append(f"{rel_s}: {field_name} grew {was[field_name]} → {n} "
+                               f"(max {limit})")
+            else:
+                still += 1
+
     for rel in ONLY_PAGES:
         path = base / rel
         if not path.exists():
@@ -79,6 +118,11 @@ def main(root: str) -> int:
 
     print(f"serp_length_gate: checked {checked} page(s) "
           f"(title<={TITLE_MAX}, description<={DESC_MAX})")
+    print(f"serp_length_gate: backlog {still} known violation(s) across "
+          f"{len(baseline)} page(s), not enforced — see serp_length_baseline.json")
+    for f in fixed:
+        print("  fixed: " + f)
+    failures = new_bad + failures
     if failures:
         print(f"serp_length_gate: FAIL ({len(failures)})", file=sys.stderr)
         for f in failures:
