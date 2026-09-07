@@ -1415,6 +1415,35 @@ def _is_renderer_leaf(loc: str) -> bool:
     return len([seg for seg in rest.split("/") if seg]) == 2
 
 
+def _page_lastmod(url: str, prev: dict[str, str] | None = None) -> str:
+    """The page's OWN dateModified, not the build clock.
+
+    write_page already keeps dates honest: it preserves datePublished across
+    rebuilds and bumps dateModified only when the rendered content actually
+    changes, because "cosmetic date churn on every build demotes trust". The
+    sitemap ignored all of that and stamped TODAY on all 51 managed URLs every
+    run — so a build that changed seven pages told search engines that fifty-one
+    had changed, while each page's own JSON-LD said otherwise. Two contradictory
+    dates for the same page is worse than a stale one.
+
+    Read it back from the page just written. Falling back to TODAY only when
+    there is no page or no date keeps a brand-new URL honest too.
+    """
+    rel = url.replace(SITE_URL, "").strip("/")
+    f = ROOT / rel / "index.html"
+    if f.exists():
+        m = re.search(r'"dateModified":"(\d{4}-\d{2}-\d{2})"', f.read_text(errors="replace"))
+        if m:
+            return m.group(1)
+    # No date on the page: keep what we last published rather than inventing a
+    # change. Only a URL we have never published gets TODAY.
+    if prev:
+        keep = prev.get(url.rstrip("/"))
+        if keep:
+            return keep
+    return TODAY
+
+
 def write_sitemap(pages: list[dict]) -> Path:
     """MERGE renderer leaf URLs into the existing sitemap.xml.
 
@@ -1469,12 +1498,21 @@ def write_sitemap(pages: list[dict]) -> Path:
     # Collect preserved (hand-authored) <url> blocks from the existing file,
     # dropping any renderer-managed URLs (they will be re-emitted fresh).
     preserved_blocks: list[str] = []
+    # What each managed URL was last published as. Used when a page carries no
+    # dateModified of its own (/developers/ is hand-authored and has none): the
+    # honest answer is the date we last published, not today. Stamping TODAY
+    # there would churn one line on every build forever — the same disease at
+    # 1/51 the size.
+    prev_lastmod: dict[str, str] = {}
     if out.exists():
         existing = out.read_text()
         for m in re.finditer(r"<url>.*?</url>", existing, re.DOTALL):
             block = m.group(0)
             loc_m = re.search(r"<loc>\s*(.*?)\s*</loc>", block, re.DOTALL)
             if loc_m and managed(loc_m.group(1).strip()):
+                lm = re.search(r"<lastmod>\s*(.*?)\s*</lastmod>", block, re.DOTALL)
+                if lm:
+                    prev_lastmod[loc_m.group(1).strip().rstrip("/")] = lm.group(1).strip()
                 continue  # renderer owns this URL; re-emit below
             preserved_blocks.append(block.strip())
 
@@ -1483,12 +1521,12 @@ def write_sitemap(pages: list[dict]) -> Path:
         parts.extend(preserved_blocks)
         parts.append("")
 
-    parts.append(f"  <!-- renderer-managed /seo/ leaf pages + /developers/ ({TODAY}) -->")
+    parts.append("  <!-- renderer-managed /seo/ leaf pages + /developers/ -->")
     for u in managed_urls:
         parts.append(
             "  <url>\n"
             f"    <loc>{u}</loc>\n"
-            f"    <lastmod>{TODAY}</lastmod>\n"
+            f"    <lastmod>{_page_lastmod(u, prev_lastmod)}</lastmod>\n"
             "    <changefreq>monthly</changefreq>\n"
             "    <priority>0.6</priority>\n"
             "  </url>"
