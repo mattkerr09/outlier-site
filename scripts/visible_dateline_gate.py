@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """The date a reader sees, not the one a crawler reads.
 
-The renderer keeps `dateModified` in JSON-LD honest — `_page_lastmod` reads each
-page's own structured data — so every check that reads JSON-LD reports this site
-accurate. Measured 2026-09-08, that was true and useless: 151 of 163 pages carried
+This gate was written believing the renderer kept `dateModified` in JSON-LD
+honest, so that only the human-readable line had rotted. **That premise was
+measured on 2026-09-08 and is FALSE**: 155 of 226 pages declare a `dateModified`
+more than 30 days behind their own last body-text change, the worst by 111 days.
+Both axes had rotted; only this one was ever checked. See
+`jsonld_dateline_gate.py`, which is this gate's pair — same corpus, same
+body-text comparison, the other axis. Measured 2026-09-08, the visible half: 151 of 163 pages carried
 a VISIBLE "Last updated <date>" line more than 30 days older than the page's last
 body-text change, the worst by 106 days. A reader checking whether our
 competitor-pricing page was current was told it had not moved since May; its body
