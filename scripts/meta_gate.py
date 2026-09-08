@@ -57,6 +57,29 @@ def run(script: Path, root: str) -> int:
         return -1
 
 
+def says(script: Path, root: str) -> str:
+    """What the gate prints when aimed at `root`."""
+    try:
+        r = subprocess.run([sys.executable, str(script), root],
+                           capture_output=True, text=True, timeout=180)
+        return r.stdout
+    except subprocess.TimeoutExpired:
+        return "<timeout>"
+
+
+def proves_it_is_aimed(script: Path, empty: str, repo: str) -> bool:
+    """Aimed at two different trees, an aimable gate says two different things.
+
+    The check this replaces was `"argv[1]" in src` -- a substring test standing in
+    for a behaviour. It has a hole in each direction. It passes a gate that only
+    MENTIONS argv[1] in a comment, and it failed derived_price_gate.py, which reads
+    `sys.argv[1:]` to skip flags and is demonstrably aimable (pointed at vs/ it
+    reported 27 figures; pointed at the site root, 35). Running it settles what
+    reading it could not: a gate that ignores its root scans the same tree twice.
+    """
+    return says(script, empty) != says(script, repo)
+
+
 def main(repo: str = ".") -> int:
     root = Path(repo)
     gates = sorted((root / "scripts").glob("*_gate.py"))
@@ -71,7 +94,10 @@ def main(repo: str = ".") -> int:
     with tempfile.TemporaryDirectory() as empty:
         for g in gates:
             src = g.read_text(encoding="utf-8", errors="ignore")
-            reachable = "argv[1]" in src
+            # Cheap first; if the source does not spell it the expected way,
+            # make the gate DEMONSTRATE that it is aimed rather than assume it is not.
+            reachable = ("argv[1]" in src
+                         or proves_it_is_aimed(g, empty, repo))
 
             if g.name in EXEMPT:
                 reason, needle = EXEMPT[g.name]
