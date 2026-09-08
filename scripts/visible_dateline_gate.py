@@ -106,9 +106,16 @@ def last_body_change(path: str):
     return None
 
 
-def survey():
+def survey(site_root: str = "."):
+    """Walk `site_root` so meta_gate can point this at an empty tree.
+
+    meta_gate refuses to accept a gate it cannot aim: a gate that ignores argv[1]
+    can only ever be probed against the real site, and "it passed on the real site"
+    proves nothing about whether it CAN fail. It caught this one the day it was
+    written, which is the whole point of having a gate over the gates.
+    """
     out = {}
-    for root, dirs, files in os.walk("."):
+    for root, dirs, files in os.walk(site_root):
         if any(x in root for x in (".git", "_seo_build", "scripts", "node_modules")):
             continue
         for f in files:
@@ -130,9 +137,12 @@ def survey():
 
 def main() -> int:
     self_check = "--self-check" in sys.argv
-    found = survey()
+    roots = [a for a in sys.argv[1:] if not a.startswith("-")]
+    site_root = roots[0] if roots else "."
+    found = survey(site_root)
     if len(found) < MIN_PAGES:
-        print(f"FAIL: surveyed {len(found)} dated page(s), expected at least {MIN_PAGES}.")
+        print(f"FAIL: surveyed {len(found)} dated page(s) under {site_root!r}, "
+              f"expected at least {MIN_PAGES}.")
         print("      A gate that checked nothing prints the same word as a clean one.")
         return 1
 
