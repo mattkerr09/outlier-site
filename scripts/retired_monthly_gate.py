@@ -14,10 +14,16 @@ line. This gate is the thing that holds it.
 
 Two checks, because the damage took two shapes:
 
-1. Structural. In any comparison table, find the price row and the columns
-   whose header names Outlier, then assert those cells carry no per-month
-   unit. This is the check that catches a table cell, where prose patterns do
-   not apply and where a wrong number is most likely to be believed.
+1. Structural, on BOTH AXES. In any comparison table, find the price row and
+   the columns whose header names Outlier, and equally the Outlier ROW and the
+   price columns; assert neither carries a per-month unit. This is the check
+   that catches a table cell, where prose patterns do not apply and where a
+   wrong number is most likely to be believed.
+
+   The row half was added 2026-09-08. Until then this gate could only see
+   tables that put products across the top, and the site uses both layouts --
+   best/best-ai-assistant-mac-2026/ lists Outlier down the first column, so a
+   monthly price in our own row was invisible to the check forbidding it.
 
 2. Attribution. In prose, a monthly figure bound directly to Outlier by a verb
    ("Outlier Pro is $9/mo", "Our Pro at $9 a month"). Deliberately tight: an
@@ -119,16 +125,38 @@ def check_tables(src):
         if len(rows) < 2:
             continue
         header = [text_of(c[1]) for c in CELL.findall(rows[0])]
+        body = [[text_of(c[1]) for c in CELL.findall(r)] for r in rows[1:]]
+        body = [c for c in body if c]
+
+        # COLUMN-ORIENTED: Outlier names a column; the price ROW carries the value.
         ours = [i for i, h in enumerate(header) if OUTLIER_COL.search(h)]
-        if not ours:
-            continue
-        for row in rows[1:]:
-            cells = [text_of(c[1]) for c in CELL.findall(row)]
-            if not cells or not PRICE_ROW.match(cells[0]):
+        for cells in body if ours else []:
+            if not PRICE_ROW.match(cells[0]):
                 continue
             for i in ours:
                 if i < len(cells) and MONTHLY.search(cells[i]):
                     out.append(f'table column {header[i]!r}, row {cells[0]!r}: {cells[i]!r}')
+
+        # ROW-ORIENTED: Outlier names a ROW; a price COLUMN carries the value.
+        #
+        # This half was missing. Found 2026-09-08 by sweeping every table-reading gate
+        # after rival_price_gate reported "$249 appears in no rival column" while three
+        # rivals carried our price -- in a table where the products are ROWS. The same
+        # shape is here: best/best-ai-assistant-mac-2026/ lists Outlier down the first
+        # column with a "Cost" header across the top, so "$249 / month" in our own row
+        # would have been invisible to the check that exists to forbid exactly that.
+        #
+        # This gate holds a decision Matthew made -- no monthly, only $249 -- and a
+        # decision enforced on one axis of a two-axis format is enforced by nobody on
+        # the other. Neither pass is a superset of the other, so both run.
+        priceish = [i for i, h in enumerate(header) if i > 0 and PRICE_ROW.match(h)]
+        for cells in body:
+            if not OUTLIER_COL.search(cells[0]):
+                continue
+            for i in (priceish or range(1, len(cells))):
+                if i < len(cells) and MONTHLY.search(cells[i]):
+                    col = header[i] if i < len(header) else f'col {i}'
+                    out.append(f'table row {cells[0]!r}, column {col!r}: {cells[i]!r}')
     return out
 
 
