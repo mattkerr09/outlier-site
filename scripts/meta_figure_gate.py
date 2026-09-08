@@ -52,6 +52,24 @@ MONEY = re.compile(r"\$\d[\d,]*(?:\.\d\d)?")
 DESCRIPTIVE = re.compile(r"(?i)(description|title)")
 
 
+def amount(fig: str) -> str:
+    """Compare money by VALUE, not by typography.
+
+    Added after sweeping the same meta/JSON-LD position for non-money claims. RAM
+    figures produced 22 findings and every one was formatting: the body writes
+    "16 GB", the description writes "16GB", same fact. Money escaped that because
+    this site writes "$1,080" consistently -- but nothing enforces the comma, and a
+    description saying "$1080" against a body saying "$1,080" would have been
+    reported as a contradiction that is not one. Strip the separators and compare
+    the number.
+    """
+    value = fig.lstrip("$").replace(",", "")
+    try:
+        return f"{float(value):.2f}"
+    except ValueError:
+        return fig
+
+
 def body_text(raw: str) -> str:
     """What a reader sees -- the same tag-strip every other gate uses, on purpose."""
     b = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", raw, flags=re.S)
@@ -103,14 +121,14 @@ def survey(site_root: str = "."):
             path = os.path.join(root, f)
             rel = os.path.relpath(path, site_root)
             raw = open(path, encoding="utf-8", errors="replace").read()
-            seen = set(MONEY.findall(body_text(raw)))
+            seen = {amount(x) for x in MONEY.findall(body_text(raw))}
             page_has_money = False
             for where, text in described(raw):
                 figs = MONEY.findall(text)
                 if figs:
                     page_has_money = True
                 for fig in figs:
-                    if fig not in seen:
+                    if amount(fig) not in seen:
                         bad.append((rel, where, fig, text[:90]))
             if page_has_money:
                 with_money += 1
@@ -134,8 +152,15 @@ def main() -> int:
         assert ("JSON-LD description", "costs $7") in described(ld), \
             "self-check: JSON-LD description not read"
         assert "$7" not in body_text(ld), "self-check: JSON-LD leaked into the body text"
-        print("self-check: meta and JSON-LD figures are read, and neither reaches the "
-              "body text the other gates use. OK")
+        assert amount("$1,080") == amount("$1080") == "1080.00", \
+            "self-check: the comma is being treated as part of the number"
+        assert amount("$20") == amount("$20.00") == "20.00", \
+            "self-check: cents normalisation is wrong"
+        assert amount("$20") != amount("$2"), \
+            "self-check: normalisation collapses different amounts — the first version of " \
+            "this helper used rstrip('.0'), which turns $20.00 into $2"
+        print("self-check: meta and JSON-LD figures are read, neither reaches the body text "
+              "the other gates use, and $1,080/$1080 compare equal while $20/$2 do not. OK")
 
     bad, with_money = survey(site_root)
     if with_money < MIN_PAGES:
