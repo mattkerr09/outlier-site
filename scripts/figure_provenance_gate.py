@@ -1,27 +1,42 @@
 #!/usr/bin/env python3
 """Performance figures on the page must match seo/_data/models.csv.
 
-The page and its own data file drifted apart without anyone noticing, and the
-drift ran in the flattering direction on the one that matters:
+THE DRIFT THAT CAUSED THIS GATE (2026-08, since resolved -- kept because it is the
+shape to watch for, not the current state):
 
     tier     models.csv        index.html
-    plus     1.59 tok/s        2.1 tok/s      <- page is 32% FASTER than the data
-    quick    14.6 tok/s        "Not measured" <- page is more conservative
-    vision   (blank)           16.31 tok/s    <- page has a figure the data lacks
+    plus     1.59 tok/s        2.1 tok/s      <- page was 32% FASTER than the data
+    quick    14.6 tok/s        "Not measured" <- page was more conservative
 
-Plus is the serious one. benchmarks.csv records K_SWEEP_RESULTS at 1.31/1.55/
-1.59/1.61 tok/s across K=4/20/32/48, models.csv carries 1.59, and
-docs/v11_engine_modes.md reports 1.67 for the V9 stable default. Nothing measured
-is 2.1. The page is publishing the best of several conflicting runs, which is the
-failure this site exists to argue against — a figure a reader cannot reproduce.
+Plus was the serious one. benchmarks.csv recorded 1.31/1.55/1.59/1.61 tok/s across
+K=4/20/32/48, models.csv carried 1.59, docs/v11_engine_modes.md reported 1.67.
+Nothing measured was 2.1. The page was publishing the best of several conflicting
+runs -- a figure a reader cannot reproduce, which is the failure this site exists to
+argue against. All six tiers agree today.
 
-WHY THIS IS A GATE AND NOT A CORRECTION. Which run is authoritative is not mine
-to decide: 1.59, 1.67 and 2.1 all claim M1 Ultra and V9, so picking one silently
-would replace an unsourced number with a differently-unsourced number. The
-conflict is recorded in CONFLICTS below, where it is visible in code and in CI
-output, until someone who owns the measurement resolves it.
+WHAT THIS GATE GOT WRONG ABOUT ITSELF (found 2026-09-08). It reported
+
+    [known] vision   page=17.2   csv=(blank)   "models.csv is blank..."
+
+and passed. models.csv was NOT blank: it carries 17.2 for vision with its own
+provenance line. The lookup missed because the page tier is "vision" and the csv
+tier_id is "vision38" -- the same rename that needed three changes in the desktop
+app needed one here too, and did not get it. `want or "(blank)"` then printed a
+MISSING ROW and an EMPTY FIELD as the same word, so the miss was invisible, and a
+CONFLICTS entry excusing a tier the gate could not compare made it look deliberate.
+
+Proved by running the previous version against a copy of the site with the home
+page's Vision decode moved 17.2 -> 19.9: it exited 0. This version exits 1 with
+"vision38: page says 19.9, models.csv says 17.2". Both other conflict entries were
+dead the same way, so CONFLICTS now ships EMPTY.
+
+A RESOLVED CONFLICT IS NOW A FAILURE. If a tier listed in CONFLICTS has page and csv
+agreeing, the gate fails and asks for the entry to be deleted. A suppressed check
+that would now pass can never fail again -- the same defect as a non-strict xfail
+that xpasses, which sat green here for weeks.
 
     python3 scripts/figure_provenance_gate.py
+    python3 scripts/figure_provenance_gate.py <root>
 """
 from __future__ import annotations
 
@@ -62,15 +77,20 @@ from pathlib import Path
 
 #: Known, deliberate divergences. Each needs a reason and, where it exists, the
 #: conflicting sources — so an exception cannot be added without stating its case.
-CONFLICTS = {
-    ("quick", "toks"): (
-        "models.csv has 14.6; the page says 'Not measured'. The page is the more "
-        "conservative claim, so it is safe to leave while the provenance of 14.6 "
-        "is confirmed."),
-    ("vision", "toks"): (
-        "models.csv is blank; the page says 16.31, which IS sourced — "
-        "docs/v11_engine_modes.md lists 16.31 for the V9 stable default. "
-        "The data file is the one with the gap."),
+CONFLICTS: dict[tuple[str, str], str] = {
+    # EMPTY, and the check below keeps it honest.
+    #
+    # It held two entries until 2026-09-08 and BOTH had gone dead:
+    #   ("quick","toks")  said models.csv has 14.6 and the page says "Not measured".
+    #                     Both are 43.6 today.
+    #   ("vision","toks") said models.csv is blank and the page says 16.31, sourced to
+    #                     docs/v11_engine_modes.md. Both halves false: models.csv
+    #                     carries 17.2 with its own provenance, the page says 17.2,
+    #                     and the 16.31 in that doc is a DIFFERENT MODEL (Vision
+    #                     35B-A3B, not Vision 3.8 27B dense).
+    #
+    # The vision entry was also hiding a lookup failure -- see the tier map above --
+    # so the tier it excused was one the gate could not have compared anyway.
 }
 
 MIN_TIERS = 5
@@ -92,7 +112,11 @@ def page_figures(root: Path):
                      if t in name), None)
         if not tier:
             continue
-        tier = "compact" if tier == "core" else tier
+        # models.csv keys the vision row as "vision38", not "vision". Without this
+        # the lookup missed, `want` came back empty, and the gate printed
+        # "csv=(blank)" for a row that holds 17.2 -- a MISSING ROW and an EMPTY
+        # FIELD printed the same word. A retired/renamed tier is never one change.
+        tier = {"core": "compact", "vision": "vision38"}.get(tier, tier)
         # Find the decode cell by CONTENT, not position. This read cells[3]
         # until a HumanEval column was inserted at index 2 and shifted Decode
         # to index 4 — the gate then reported four tiers as "page says None",
@@ -226,10 +250,21 @@ def main(root_arg: str = ".") -> int:
     fails, noted = [], []
     for tier, shown in page.items():
         want = (data.get(tier, {}).get("m1_ultra_toks") or "").strip()
+        key = (tier, "toks")
+        if tier not in data:
+            fails.append(f"  {tier}: on the page but NOT A ROW in models.csv. This is a "
+                         f"lookup miss, not a blank field — the two used to print the "
+                         f"same word. Add the row, or map the page's name to its tier_id.")
+            continue
         same = (shown or "") == want
         if same:
+            if key in CONFLICTS:
+                fails.append(
+                    f"  {tier}: page and models.csv now AGREE at {want}, but {key} is "
+                    f"still listed in CONFLICTS, which suppresses this comparison. A "
+                    f"resolved conflict left in place is a check that can never fail "
+                    f"again. Delete the entry.")
             continue
-        key = (tier, "toks")
         if key in CONFLICTS:
             noted.append(f"  [known] {tier:<8} page={shown!s:<8} csv={want or '(blank)':<8} {CONFLICTS[key]}")
         else:
