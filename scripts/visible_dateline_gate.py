@@ -150,13 +150,28 @@ def main() -> int:
         print("      A gate that checked nothing prints the same word as a clean one.")
         return 1
 
+    #: SELF-CHECK, PLANTED BEFORE THE COMPARISON SO IT RUNS THE REAL PATH.
+    #:
+    #: ⚠️ The previous version asserted only `(today - probe).days > GRACE_DAYS` — that
+    #: 2016 is more than thirty days ago — and then printed "the comparison fires. OK".
+    #: That is arithmetic on two dates, a PRECONDITION; the gate's own comparison never
+    #: ran. Proved 2026-09-08 by mutation: replacing the loop's `if gap <= GRACE_DAYS:`
+    #: with `if True:` — disabling staleness detection ENTIRELY — left this self-check
+    #: exiting 0 and still printing that line. The comment above it claimed to "prove the
+    #: instrument fires" and the instrument was never touched.
+    #:
+    #: Identical to the defect found the same evening in adplaybook-site's
+    #: source_freshness_gate: A SELF-CHECK CAN ASSERT A PRECONDITION AND PRINT A
+    #: CAPABILITY. The sentence it prints is not the sentence it tests, and no amount of
+    #: reading the assertion against the implementation shows it — only the mutation does.
+    SELF_PAGE = "__self_check_planted__"
     if self_check:
-        # Prove the instrument fires: a claim a decade stale must be a violation.
         probe = datetime.date(2016, 1, 1)
         today = datetime.date.today()
-        assert (today - probe).days > GRACE_DAYS, "self-check probe is not stale"
-        print(f"self-check: a 2016 dateline against a {today} body change is "
-              f"{(today - probe).days} days stale — the comparison fires. OK")
+        assert (today - probe).days > GRACE_DAYS, \
+            "self-check: the probe is not stale — it would prove nothing"
+        found = dict(found)
+        found[SELF_PAGE] = ("2016-01-01", today.isoformat(), (today - probe).days)
 
     baseline = {}
     if os.path.exists(BASELINE):
@@ -170,6 +185,18 @@ def main() -> int:
             new.append((p, claim, body, gap))
         elif gap > baseline[p] + GRACE_DAYS:
             worse.append((p, claim, body, gap, baseline[p]))
+
+    if self_check:
+        # The property, on the observable outcome: the planted decade-stale page must
+        # have been REPORTED by the ordinary comparison above.
+        planted = [row for row in new if row[0] == SELF_PAGE]
+        assert planted, \
+            "self-check: THE COMPARISON IS DEAD — a planted 2016 dateline against a " \
+            "today body change was not reported. The gate would pass a decade-stale page."
+        new = [row for row in new if row[0] != SELF_PAGE]
+        found = {k: v for k, v in found.items() if k != SELF_PAGE}
+        print("self-check: a planted 2016 dateline was reported by the real comparison "
+              "and removed from the result. OK")
 
     print(f"visible_dateline_gate: {len(found)} page-level dateline(s); "
           f"{sum(1 for v in found.values() if v[2] > GRACE_DAYS)} diverge by more than {GRACE_DAYS} days")
