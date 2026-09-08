@@ -7,22 +7,22 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apple MLX vs llama.cpp: which is faster on a Mac | Outlier</title>
-  <meta name="description" content="MLX generates tokens faster for small and mid-size models on Apple silicon; llama.cpp supports far more architectures and hardware. How to pick.">
+  <title>MLX is faster on small models; llama.cpp runs more | Outlier</title>
+  <meta name="description" content="On a Mac, MLX generates tokens faster for small and mid-size models. llama.cpp runs far more architectures and hardware. That is the whole trade.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/mlx-vs-llama-cpp/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Apple MLX vs llama.cpp: picking a local inference runtime on Mac">
-  <meta property="og:description" content="MLX is Apple's array framework for Apple silicon; llama.cpp is a dependency-free C/C++ engine that runs everywhere. Mechanism, trade-offs, and when each is correct.">
+  <meta property="og:title" content="MLX is faster on small models; llama.cpp runs more of them">
+  <meta property="og:description" content="On a Mac, MLX generates tokens faster for small and mid-size models. llama.cpp runs far more architectures and hardware.">
   <meta property="og:url" content="https://outlier.host/vs/mlx-vs-llama-cpp/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Apple MLX vs llama.cpp: picking a local inference runtime on Mac">
-  <meta name="twitter:description" content="Unified memory, GGUF vs MLX, llama-server vs mlx-lm — the real trade-offs between the two runtimes on Apple silicon.">
+  <meta name="twitter:title" content="MLX is faster on small models; llama.cpp runs more of them">
+  <meta name="twitter:description" content="On a Mac, MLX generates tokens faster for small and mid-size models. llama.cpp runs far more architectures and hardware.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -107,7 +107,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Apple MLX vs llama.cpp: picking a local inference runtime on Mac","description":"A technical comparison of Apple MLX and llama.cpp as local LLM inference runtimes on Apple silicon — unified memory, GGUF vs MLX formats, serving layers, and when each one is the right call.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mlx-vs-llama-cpp/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"MLX is faster on small models; llama.cpp runs more of them","description":"On a Mac, MLX generates tokens faster for small and mid-size models. llama.cpp runs far more architectures and hardware.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mlx-vs-llama-cpp/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Apple MLX vs llama.cpp","item":"https://outlier.host/vs/mlx-vs-llama-cpp/"}]}
@@ -131,7 +131,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
-    <h1>Apple MLX vs llama.cpp: picking a local inference runtime on Mac</h1>
+    <h1>MLX is faster on small models; llama.cpp runs more of them</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-07-23</span>
