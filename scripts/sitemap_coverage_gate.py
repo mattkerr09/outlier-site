@@ -57,6 +57,7 @@ def main(root_arg: str) -> int:
         encoding="utf-8", errors="replace"))}
 
     missing, skipped, checked = [], 0, 0
+    contradicting: list = []
     for page in sorted(root.rglob("index.html")):
         if any(part in SKIP_DIRS for part in page.parts):
             continue
@@ -64,6 +65,16 @@ def main(root_arg: str) -> int:
         checked += 1
         if _NOINDEX.search(raw):
             skipped += 1
+            # THE OTHER DIRECTION, added 2026-09-08. This gate asked only "is an indexable page
+            # IN the sitemap" and skipped noindex pages outright -- so a page asserting BOTH
+            # "crawl this" (a sitemap entry is a request) and "do not index this" (robots
+            # noindex) passed in silence. Google reports that pair as "Submitted URL marked
+            # noindex"; we reported nothing. Found because a retirement redirect stub --
+            # correctly noindex, correctly canonical to its replacement -- was sitting in
+            # sitemap.xml. One axis of a two-axis question, and the FIFTH gate here to have
+            # had exactly that.
+            if url_for(page, root).rstrip("/") in listed:
+                contradicting.append(page.parent.relative_to(root).as_posix())
             continue
         if url_for(page, root).rstrip("/") not in listed:
             title = re.search(r"<title>(.*?)</title>", raw, re.S)
@@ -77,6 +88,13 @@ def main(root_arg: str) -> int:
         return 1
 
     print(f"checked {checked} pages against {len(listed)} sitemap URLs")
+    if contradicting:
+        print(f"\nFAIL ({len(contradicting)}): marked noindex AND listed in sitemap.xml.")
+        print("      A sitemap entry asks Google to crawl it; robots noindex tells Google not to")
+        print("      index it. Pick one — a redirect stub wants the noindex and no entry.")
+        for c in contradicting[:10]:
+            print(f"  {c}")
+        return 1
     # Say what was exempted. A skip nobody prints reads exactly like a page
     # that passed.
     if skipped:
