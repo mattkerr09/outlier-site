@@ -45,7 +45,7 @@ import sys
 
 BASELINE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                         "meta_figure_baseline.json")
-MIN_PAGES = 5          # vacuity guard: pages carrying money in a description at all
+MIN_DESCRIBED = 150    # vacuity guard on REACH -- see the note in main()
 
 MONEY = re.compile(r"\$\d[\d,]*(?:\.\d\d)?")
 #: the meta names whose content is quoted back to a reader
@@ -111,7 +111,7 @@ def described(raw: str):
 
 def survey(site_root: str = "."):
     """(page, where, figure) for each description figure missing from the body."""
-    bad, with_money = [], 0
+    bad, with_desc = [], 0
     for root, _d, files in os.walk(site_root):
         if any(x in root for x in (".git", "_seo_build", "scripts", "node_modules")):
             continue
@@ -122,17 +122,15 @@ def survey(site_root: str = "."):
             rel = os.path.relpath(path, site_root)
             raw = open(path, encoding="utf-8", errors="replace").read()
             seen = {amount(x) for x in MONEY.findall(body_text(raw))}
-            page_has_money = False
-            for where, text in described(raw):
+            here = described(raw)
+            for where, text in here:
                 figs = MONEY.findall(text)
-                if figs:
-                    page_has_money = True
                 for fig in figs:
                     if amount(fig) not in seen:
                         bad.append((rel, where, fig, text[:90]))
-            if page_has_money:
-                with_money += 1
-    return bad, with_money
+            if here:
+                with_desc += 1
+    return bad, with_desc
 
 
 def main() -> int:
@@ -162,18 +160,22 @@ def main() -> int:
         print("self-check: meta and JSON-LD figures are read, neither reaches the body text "
               "the other gates use, and $1,080/$1080 compare equal while $20/$2 do not. OK")
 
-    bad, with_money = survey(site_root)
-    if with_money < MIN_PAGES:
-        print(f"FAIL: only {with_money} page(s) under {site_root!r} carry a money figure "
-              f"in a description; expected at least {MIN_PAGES}.")
-        print("      A gate that read no descriptions prints the same word as a clean one.")
+    bad, with_desc = survey(site_root)
+    if with_desc < MIN_DESCRIBED:
+        print(f"FAIL: only {with_desc} page(s) under {site_root!r} have a description this "
+              f"gate could read; expected at least {MIN_DESCRIBED}.")
+        print("      GUARDED ON REACH, NOT ON FINDINGS. This counted pages carrying money in")
+        print("      a description until 2026-09-08, which is fine while seven do — but the")
+        print("      AdPlaybook port has ZERO such pages by editorial habit, and that guard")
+        print("      would have failed a clean site forever. A guard that counts findings")
+        print("      cannot tell \"nothing wrong\" from \"nothing read\".")
         return 1
 
     baseline = json.load(open(BASELINE)) if os.path.exists(BASELINE) else {}
     new = [b for b in bad if f"{b[0]}|{b[2]}" not in baseline]
 
-    print(f"meta_figure_gate: {with_money} page(s) put a money figure in a description; "
-          f"{len(bad)} figure(s) are not in the body they describe")
+    print(f"meta_figure_gate: {with_desc} page(s) with a readable description; "
+          f"{len(bad)} figure(s) in one are not in the body it describes")
     print(f"meta_figure_gate: {len(baseline)} baselined")
 
     if new:
