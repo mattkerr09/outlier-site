@@ -10,10 +10,15 @@ through a full drift audit, because every one of them is a well-formed table
 containing a real price. Nothing about the markup is wrong; only the attribution
 is, and no gate we had could see attribution.
 
-The invariant is narrow on purpose: in a table that has at least one column
-naming Outlier and at least one that does not, no cell under a non-Outlier
-column may contain our canonical price. Column 0 is skipped — it holds row
-labels, not values.
+The invariant is narrow on purpose, and it runs on BOTH AXES: in a table where
+Outlier names one column and something else names another, no cell under a
+non-Outlier column may hold our canonical price; in a table where Outlier names
+one ROW and something else names another, no cell in a non-Outlier row may hold
+it either. Column 0 is skipped in the column pass — it holds row labels.
+
+The row half was missing until 2026-09-08, and its absence was not theoretical:
+this gate printed "$249 appears in no rival column and no rival row" while three rivals carried
+our price live. It was telling the truth about columns.
 
 The price is read from index.html's price block rather than written here, so
 there is exactly one place in the repo where that number lives. A gate carrying
@@ -57,18 +62,42 @@ def check(src, price):
         if len(rows) < 2:
             continue
         header = [text_of(c[1]) for c in CELL.findall(rows[0])]
+        body = [[text_of(c[1]) for c in CELL.findall(r)] for r in rows[1:]]
+        body = [c for c in body if c]
+
+        # COLUMN-ORIENTED: products across the top, one column per product.
         ours = {i for i, h in enumerate(header) if OUTLIER.search(h)}
         theirs = [i for i in range(1, len(header)) if i not in ours]
-        if not ours or not theirs:
-            continue
-        tables += 1
-        for row in rows[1:]:
-            cells = [text_of(c[1]) for c in CELL.findall(row)]
-            if not cells:
-                continue
-            for i in theirs:
-                if i < len(cells) and re.search(re.escape(price) + r'\b', cells[i]):
-                    found.append(f'column {header[i]!r}, row {cells[0]!r}: {cells[i]!r}')
+        if ours and theirs:
+            tables += 1
+            for cells in body:
+                for i in theirs:
+                    if i < len(cells) and re.search(re.escape(price) + r'\b', cells[i]):
+                        found.append(
+                            f'column {header[i]!r}, row {cells[0]!r}: {cells[i]!r}')
+
+        # ROW-ORIENTED: products down the first column, one ROW per product. This is
+        # the half that was missing, and it is not hypothetical: on 2026-09-08
+        # best/best-ai-assistant-mac-2026/ had ChatGPT, Claude and Copilot each
+        # showing "Free / $249 once" -- our lifetime price under three rivals' names,
+        # LIVE on outlier.host -- while this gate reported "$249 appears in no rival
+        # column". It was right about columns. Outlier was a ROW, so the table never
+        # entered the loop at all. A gate that checks one axis of a two-axis format
+        # reports clean on the other one.
+        #
+        # The Outlier row must EXIST for this pass to run. Without that guard a table
+        # of our own plans (learn/cloud-ai-vs-local-ai-cost/ lists "Free" and "Pro"
+        # down the first column and never writes "Outlier") reads as a rival pricing
+        # itself at our price -- checked, and it is a false positive this avoids.
+        our_rows = [c for c in body if c and OUTLIER.search(c[0])]
+        their_rows = [c for c in body if c and not OUTLIER.search(c[0])]
+        if our_rows and their_rows:
+            tables += 1
+            for cells in their_rows:
+                for i, cell in enumerate(cells[1:], start=1):
+                    if re.search(re.escape(price) + r'\b', cell):
+                        col = header[i] if i < len(header) else f'col {i}'
+                        found.append(f'row {cells[0]!r}, column {col!r}: {cell!r}')
     return tables, found
 
 
@@ -103,7 +132,7 @@ def main(root):
             print(f'  {f}', file=sys.stderr)
         print(f'\n{price} is our price. It must not appear under a competitor.', file=sys.stderr)
         return 1
-    print(f'rival_price_gate: ok ({tables} comparison tables, {price} appears in no rival column)')
+    print(f'rival_price_gate: ok ({tables} comparison tables, {price} appears in no rival column and no rival row)')
     return 0
 
 
