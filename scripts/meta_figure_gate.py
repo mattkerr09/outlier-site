@@ -164,6 +164,17 @@ def survey(site_root: str = "."):
                     if dead == "vision":
                         continue
                     d = re.escape(dead)
+                    # A RETIREMENT ANNOUNCEMENT NAMES THE TIER; IT DOES NOT CLAIM IT.
+                    # seo/run/run-code-on-m4-pro-macbook-pro/ is titled "Outlier Code is now
+                    # Outlier Core" — the whole page exists to say the name is gone. Flagging that
+                    # would be the Docket case where "Sample text:" as a HEADING was reported as
+                    # filler somebody forgot: the phrase is being NAMED, not USED. A naming always
+                    # carries the replacement or a past-tense marker, so look for one before firing.
+                    # (That page has no meta description today, so this gate passed it by ABSENCE
+                    # rather than by design — luck is not a discriminator, hence the explicit rule.)
+                    if re.search(r"(?i)\bis now\b|\bformerly\b|\brenamed\b|\bused to be\b|"
+                                 r"\bretired\b|\bfolded into\b|\bwas replaced\b", text):
+                        continue
                     if re.search(rf"(?i)\bOutlier\s+{d}\b|\b{d}\s*27B\b|\bthe\s+{d}\s+tier\b",
                                  text):
                         bad.append((rel, where, f"retired tier {dead!r}", text[:90]))
