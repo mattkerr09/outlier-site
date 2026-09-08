@@ -669,6 +669,18 @@ VS_FLAVOR = {
     "regex": "Regex generation is fluency-only: a 4B-class model is enough. The Nano tier is the right fit and the round-trip economics of doing this through a hosted API are strange to begin with.",
 }
 
+def _lower_first(text: str) -> str:
+    """Lowercase only the FIRST character, never the whole string.
+
+    `.lower()` on a description destroys acronyms: competitors.csv carries
+    "Local model UIs that lack agent or code execution surfaces" and
+    "llama.cpp-style runners that consume GGUF quantized weights", which came out
+    as "uis" and "gguf" on the live pages. A sentence-case join needs the first
+    letter, not the sentence.
+    """
+    return text[:1].lower() + text[1:] if text else text
+
+
 def build_vs_pages(competitors, use_cases) -> list[dict]:
     """15 'Outlier vs [safe category] for [use case]' pages."""
     pairs = [
@@ -701,11 +713,38 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             f"when the task is {u['name']}. Throughput, privacy, and friction compared."
         )
         privacy_axis = "Network round-trip every prompt" if c["category"] == "cloud" else "Local execution, varies by tool"
-        quick = (
-            f"<p>{u['one_liner']}. The {c['short_name']} category answers this with a remote model "
-            f"and an account; Outlier answers it with the on-device {u['recommended_tier']} tier. "
-            f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
-        )
+        # 2026-09-08: this paragraph, and the consequences paragraph below, asserted
+        # "a remote model and an account" and "the network adds unbounded variance per
+        # turn" for EVERY rival category -- including the four the data file marks
+        # category=local (chat-only local desktop apps, container-based local model
+        # runners, GGUF-based local runners, other local AI runtimes). Those tools run
+        # on the reader's own hardware; the claim was simply false, on six live pages.
+        #
+        # The generator already HAD the answer. `privacy_axis` on the line above branches
+        # on exactly this flag, so a local page rendered "Local execution, varies by tool"
+        # and then, in the next sentence, "the network adds unbounded variance per turn".
+        # It contradicted itself with data it had already computed. Same shape as the
+        # right-value-silently-overwritten class: the correct branch exists and the
+        # adjacent prose ignores it.
+        #
+        # Against a local rival the data path is NOT the difference, and saying so is
+        # both true and a better page. The difference is the surface around the model,
+        # which competitors.csv already states per category.
+        is_cloud = c["category"] == "cloud"
+        if is_cloud:
+            quick = (
+                f"<p>{u['one_liner']}. The {c['short_name']} category answers this with a remote model "
+                f"and an account; Outlier answers it with the on-device {u['recommended_tier']} tier. "
+                f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
+            )
+        else:
+            quick = (
+                f"<p>{u['one_liner']}. The {c['short_name']} category runs open weights on your own "
+                f"hardware, as Outlier does, so the deciding difference for {u['name']} is not the "
+                f"data path but the surface around the model: {_lower_first(c['description'])}. Outlier "
+                f"answers it with the on-device {u['recommended_tier']} tier and an agent loop. "
+                f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
+            )
         rec_tier = u["recommended_tier"]
         # Tier-friendly Mac suggestions for related links (avoid 16 GB on 24 GB-min tiers)
         if rec_tier in ("compact", "code", "vision"):
@@ -733,14 +772,26 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             f"checkpoint without a network round-trip per turn.</p>"
         )
         body.append(f"<h2>How does the data path differ for {u['name']} on {c['short_name']}?</h2>")
-        body.append(
-            f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the practical "
-            f"consequences are tail-latency variance (the network adds unbounded variance per turn) "
-            f"and exposure to provider-side logging of the {u['name']} prompts. Outlier&rsquo;s chat "
-            f"path on the {rec_tier} tier issues no outbound HTTPS once the model is on disk; the "
-            f"only network request in the lifecycle is the one-time {by_tier_disk(rec_tier)} GB tier "
-            f"download from Hugging Face.</p>"
-        )
+        if is_cloud:
+            body.append(
+                f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the practical "
+                f"consequences are tail-latency variance (the network adds unbounded variance per turn) "
+                f"and exposure to provider-side logging of the {u['name']} prompts. Outlier&rsquo;s chat "
+                f"path on the {rec_tier} tier issues no outbound HTTPS once the model is on disk; the "
+                f"only network request in the lifecycle is the one-time {by_tier_disk(rec_tier)} GB tier "
+                f"download from Hugging Face.</p>"
+            )
+        else:
+            # No network per turn on either side, so no tail-latency or provider-logging
+            # claim is available here. Say what IS true and stop, rather than reaching for
+            # a consequence that does not exist.
+            body.append(
+                f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the prompt "
+                f"stays on the machine on both sides, so neither tail latency nor provider-side "
+                f"logging separates them. Outlier&rsquo;s chat path on the {rec_tier} tier issues no "
+                f"outbound HTTPS once the model is on disk; the only network request in the lifecycle "
+                f"is the one-time {by_tier_disk(rec_tier)} GB tier download from Hugging Face.</p>"
+            )
         body.append(f"<h2>Which Outlier tier handles {u['name']} best as an alternative to {c['short_name']}?</h2>")
         body.append(
             f"<p>If you are coming from {c['short_name']} for {u['name']}, the right starting "
