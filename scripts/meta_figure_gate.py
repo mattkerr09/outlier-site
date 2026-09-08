@@ -52,6 +52,32 @@ MONEY = re.compile(r"\$\d[\d,]*(?:\.\d\d)?")
 DESCRIPTIVE = re.compile(r"(?i)(description|title)")
 
 
+#: The app's own retirement map, read rather than copied. A retired tier name is
+#: exactly the kind of claim that survives in a description: _RETIRED_TIER_ALIAS
+#: keeps a stored selection working, so nothing in the product breaks, and the four
+#: defects this family already cost were all "a retirement is THREE changes" -- the
+#: catalog, the alias, and every hand-written mention. A meta description is a
+#: hand-written mention that no gate reads.
+#:
+#: PROVED before shipping: planting "Outlier Code 27B" in the home page's meta
+#: description is invisible to all four dedicated tier gates AND to this one, because
+#: every one of them reaches the page through a tag-strip. This closes that.
+ALIAS_SRC = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                         "..", "desktop_app", "backend", "server.py")
+
+
+def retired_tiers() -> set[str]:
+    """Names the app has retired, read from _RETIRED_TIER_ALIAS, never typed here."""
+    try:
+        src = open(ALIAS_SRC, encoding="utf-8", errors="replace").read()
+    except OSError:
+        return set()
+    m = re.search(r"_RETIRED_TIER_ALIAS[^{]*\{(.*?)\n\}", src, re.S)
+    if not m:
+        return set()
+    return {k for k in re.findall(r'^\s*"([a-z0-9]+)"\s*:', m.group(1), re.M)}
+
+
 def amount(fig: str) -> str:
     """Compare money by VALUE, not by typography.
 
@@ -109,6 +135,9 @@ def described(raw: str):
     return out
 
 
+RETIRED = retired_tiers()
+
+
 def survey(site_root: str = "."):
     """(page, where, figure) for each description figure missing from the body."""
     bad, with_desc = [], 0
@@ -124,6 +153,20 @@ def survey(site_root: str = "."):
             seen = {amount(x) for x in MONEY.findall(body_text(raw))}
             here = described(raw)
             for where, text in here:
+                for dead in RETIRED:
+                    # THE QUALIFIER IS THE WHOLE CHECK. A first draft made "Outlier"
+                    # optional and produced 97 findings, every one the ordinary English
+                    # word -- "It edits code, runs tests". A retired tier is only being
+                    # NAMED when it is qualified: "Outlier Code", "Code 27B", "the Code
+                    # tier". "vision" is skipped entirely: it retired to vision38, so
+                    # "Outlier Vision 3.8" is the CURRENT name and matching it would flag
+                    # the live product.
+                    if dead == "vision":
+                        continue
+                    d = re.escape(dead)
+                    if re.search(rf"(?i)\bOutlier\s+{d}\b|\b{d}\s*27B\b|\bthe\s+{d}\s+tier\b",
+                                 text):
+                        bad.append((rel, where, f"retired tier {dead!r}", text[:90]))
                 figs = MONEY.findall(text)
                 for fig in figs:
                     if amount(fig) not in seen:
