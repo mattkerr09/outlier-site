@@ -243,3 +243,19 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+# CORRECTION to the commit that added the two-fetch check (1fb00efc). It cited
+# "129,940 bytes" for a response that lacked the new links. That number was a
+# Python len(str) — CHARACTERS — compared against byte counts from wc -c and
+# len(live). The same response measures 130,684 bytes and 130,393 characters:
+# 291 multi-byte characters, mostly em dashes. So the three-version enumeration
+# in that message was wrong; two of its numbers were not comparable.
+#
+# What survives, on unit-safe evidence: a content check found 0 of 3 new links in
+# a response at 23:10 and 3 of 3 two minutes later (a boolean, not a size), and
+# this gate measured 130,590 served bytes against 130,684 at HEAD — both byte
+# counts, from len() over bytes. The edge did serve an older copy after serving a
+# newer one. The oscillation is real; my arithmetic for it was not.
+#
+# NEVER compare a Python len(str) to wc -c. One counts characters, the other
+# counts bytes, and on this site they differ by ~291 on every page.
