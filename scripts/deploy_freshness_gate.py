@@ -162,7 +162,25 @@ def main() -> int:
         if head_bytes is None:
             fails.append(f"{path}: not present at HEAD — is the path right?")
             continue
+        # TWO fetches, because this edge can serve an OLDER copy after having
+        # served a newer one. Measured 2026-09-07: the home page verified live
+        # with a change at 22:47, answered WITHOUT it at 23:10 (129,940 bytes),
+        # and answered with it again at 23:12 (130,684). Six consecutive probes
+        # in between were identical, so it is not per-request randomness — it is
+        # nodes disagreeing, and a single sample cannot see that.
+        #
+        # Disagreement is reported as its OWN state rather than folded into
+        # pass/fail: "stale" and "inconsistent" need different responses. Stale
+        # means wait; inconsistent means the edge is mid-propagation and any
+        # verdict from one sample is luck.
         live = fetch(SITE + url_path)
+        live2 = fetch(SITE + url_path)
+        if live is not None and live2 is not None and sha(live) != sha(live2):
+            fails.append(
+                f"{path}: the edge served TWO DIFFERENT copies of {url_path} within one run "
+                f"({len(live)} bytes then {len(live2)} bytes). Not stale — inconsistent. Any "
+                f"single-sample verification of this path right now is luck; re-run once it settles.")
+            continue
         if live is None:
             fails.append(f"{path}: could not fetch {SITE}{url_path}")
             continue
