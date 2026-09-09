@@ -50,8 +50,8 @@ import subprocess
 import sys
 
 BASELINE = os.path.join(os.path.dirname(__file__), "visible_dateline_baseline.json")
-GRACE_DAYS = 30
-MIN_PAGES = 50
+#: Shared with jsonld_dateline_gate — same question, same corpus, one rule.
+from dateline_policy import GRACE_DAYS, MIN_PAGES, is_stale   # noqa: F401
 
 MONTHS = {m.lower()[:3]: i + 1 for i, m in enumerate(
     ["January", "February", "March", "April", "May", "June", "July",
@@ -171,7 +171,11 @@ def main() -> int:
         assert (today - probe).days > GRACE_DAYS, \
             "self-check: the probe is not stale — it would prove nothing"
         found = dict(found)
-        found[SELF_PAGE] = ("2016-01-01", today.isoformat(), (today - probe).days)
+        # ⚠️ DATE objects, not strings. survey() stores (claim: date, body: date, gap: int)
+        # and this planted row used strings — harmless only while the decision read the
+        # int `gap`. Moving the decision onto dateline_policy.is_stale(claim, body) would
+        # have thrown TypeError on the plant. Found by the refactor, not by the tests.
+        found[SELF_PAGE] = (probe, today, (today - probe).days)
 
     baseline = {}
     if os.path.exists(BASELINE):
@@ -179,7 +183,9 @@ def main() -> int:
 
     new, worse = [], []
     for p, (claim, body, gap) in sorted(found.items()):
-        if gap <= GRACE_DAYS:
+        # The decision is dateline_policy's, not this gate's. `gap` is kept for the
+        # message; the RULE is asked, never reimplemented.
+        if not is_stale(claim, body):
             continue
         if p not in baseline:
             new.append((p, claim, body, gap))

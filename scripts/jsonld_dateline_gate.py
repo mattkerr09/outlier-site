@@ -54,8 +54,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from visible_dateline_gate import last_body_change  # ONE implementation, not two
 
 BASELINE = os.path.join(os.path.dirname(__file__), "jsonld_dateline_baseline.json")
-GRACE_DAYS = 30
-MIN_PAGES = 50          # vacuity guard: count REACH, not findings
+#: The staleness rule and the vacuity floor are SHARED with visible_dateline_gate — they
+#: answer the same question about the same corpus, so two copies would drift. See
+#: dateline_policy.py for why this is a predicate rather than a number.
+from dateline_policy import GRACE_DAYS, MIN_PAGES, is_stale   # noqa: F401  (GRACE_DAYS in messages)
 
 #: Both spacings. The whole point.
 DATEMOD = re.compile(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"')
@@ -83,8 +85,9 @@ def survey(site_root: str = "."):
             body = last_body_change(path)
             if body is None:
                 continue
-            days = (body - datetime.date.fromisoformat(m.group(1))).days
-            if days > GRACE_DAYS:
+            _declared = datetime.date.fromisoformat(m.group(1))
+            days = (body - _declared).days
+            if is_stale(_declared, body):
                 out[rel] = days
     return out, checked
 
