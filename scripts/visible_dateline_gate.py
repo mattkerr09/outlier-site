@@ -77,13 +77,35 @@ def claim_date(text: str):
     return None
 
 
-def visible_text(path: str) -> str:
-    s = open(path, encoding="utf-8", errors="replace").read()
+def visible_text_of(s: str) -> str:
+    """The notion of 'body text' used everywhere: script/style blocks removed WHOLE."""
     body = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", s, flags=re.S)
-    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body)))
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body))).strip()
+
+
+def visible_text(path: str) -> str:
+    return visible_text_of(open(path, encoding="utf-8", errors="replace").read())
 
 
 def changed_body_text(diff: str) -> bool:
+    """⚠️ LINE-SCANNING KEPT ONLY FOR THE FIXTURES. Do NOT use it to date a commit.
+
+    It strips TAGS (`<[^>]*>`) and accepts any remaining segment of 25+ chars. But a
+    <style> block's CSS and comments are TEXT BETWEEN TAGS, and HEADISH only skips
+    the line carrying the opening `<style`; every interior line sails through. So a
+    pure stylesheet edit reads as a body-text change.
+
+    That is not hypothetical. `5f992e2e` ("125 content pages slid sideways on a phone
+    when a table was too wide") edited only CSS inside <style>, and this function
+    dated 132 pages to it. Those 132 are most of jsonld_dateline_gate's headline 149,
+    and I nearly used them to rewrite 149 `dateModified` values — announcing to Google
+    that 132 pages of content had changed when only a table's overflow rule had. The
+    grace period exists to prevent exactly that false freshness claim.
+
+    `compare_visible(before, after)` is the honest test: it reuses visible_text_of,
+    which removes script/style blocks WHOLE, instead of approximating it a second
+    time. One notion of body text, not two.
+    """
     for line in diff.split("\n"):
         if not line or line[0] not in "+-" or line[:3] in ("+++", "---"):
             continue
@@ -96,6 +118,20 @@ def changed_body_text(diff: str) -> bool:
     return False
 
 
+def _at(rev: str, path: str) -> str | None:
+    r = subprocess.run(["git", "show", f"{rev}:{path}"], capture_output=True, text=True)
+    return r.stdout if r.returncode == 0 else None
+
+
+def compare_visible(before: str | None, after: str | None) -> bool:
+    """True when the READER-VISIBLE text differs. A first commit (no `before`) counts."""
+    if after is None:
+        return False
+    if before is None:
+        return bool(visible_text_of(after))
+    return visible_text_of(before) != visible_text_of(after)
+
+
 def last_body_change(path: str):
     log = subprocess.run(["git", "log", "-8", "--format=%H %ad", "--date=short", "--", path],
                          capture_output=True, text=True).stdout.split("\n")
@@ -103,9 +139,12 @@ def last_body_change(path: str):
         if not line.strip():
             continue
         h, d = line.split()[0], line.split()[1]
-        diff = subprocess.run(["git", "show", h, "--", path],
-                              capture_output=True, text=True).stdout
-        if changed_body_text(diff):       # refinement 1
+        #: Compare the page's VISIBLE TEXT at this commit and its parent, rather than
+        #: scanning diff lines. See changed_body_text's docstring: line-scanning counts
+        #: a CSS edit as a body change and mis-dated 132 pages to one stylesheet sweep.
+        rel = subprocess.run(["git", "ls-files", "--full-name", path],
+                             capture_output=True, text=True).stdout.strip() or path
+        if compare_visible(_at(h + "^", rel), _at(h, rel)):
             return datetime.date.fromisoformat(d)
     return None
 

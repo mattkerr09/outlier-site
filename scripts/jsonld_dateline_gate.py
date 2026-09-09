@@ -34,9 +34,33 @@ MATCH BOTH SPACINGS. 140 pages write `"dateModified":"..."` and 86 write
 `"dateModified": "..."`. A regex for one of them reads clean over the other 62%
 of the site — which is exactly how this went unmeasured for so long.
 
-RATCHET. The 155 are baselined; only NEW or WORSENED divergence fails. Fixing
-the backlog is a renderer change, not a gate's job. Edit the baseline BY REMOVAL
-ONLY.
+RATCHET. The backlog is baselined; only NEW or WORSENED divergence fails. Edit the
+baseline BY REMOVAL ONLY.
+
+⚠️ DO NOT "FIX THE BACKLOG" BY REWRITING dateModified. I built that backfill on
+2026-09-09 and threw it away, one command before running it on 149 pages. The
+count is real; what it MEANS is not what the number looks like.
+
+  - 132 of the 149 dated to a single day, 2026-08-25. That was `5f992e2e`, a CSS
+    fix for tables overflowing on phones across "125 content pages". It changed no
+    prose. The old line-scanning detector counted it because it strips TAGS and
+    then accepts any 25+ char segment — and a <style> block's CSS is text BETWEEN
+    tags. Fixed: last_body_change now compares visible_text_of (script/style
+    removed WHOLE) at the commit and its parent.
+  - After that fix the count barely moved, 149 -> 147, and 105 pages simply
+    re-concentrated on 2026-08-24 — `1d7e826a`, "Email capture on the remaining
+    184 pages". That one DID change visible text. It is still not a content
+    update; it is a form inserted into every page's chrome.
+
+So even a correct visible-text comparison cannot tell an article edit from a
+sitewide chrome insertion, because both change visible text on every page.
+Rewriting these datelines would tell Google that 147 pages of content had
+changed when what changed was a table's overflow rule and a subscribe box —
+the exact false freshness claim the 30-day grace exists to prevent.
+
+A dateline may only be moved on evidence that THAT PAGE'S OWN prose changed.
+Scoping the comparison to <article> is the obvious next step and is only a
+partial answer: 178 of 248 pages have one.
 
     python3 scripts/jsonld_dateline_gate.py               # check
     python3 scripts/jsonld_dateline_gate.py --self-check  # prove it can fail
