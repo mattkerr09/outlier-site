@@ -83,6 +83,51 @@ def visible_text_of(s: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body))).strip()
 
 
+#: Captures the FIRST <article>…</article> region. Non-greedy so a page with two
+#: articles takes the first rather than swallowing everything between them.
+_ARTICLE_RE = re.compile(r"<article\b[^>]*>(.*?)</article>", re.S | re.I)
+
+
+def article_text_of(s: str) -> str:
+    """The page's ARTICLE text if it has one, else its whole visible text.
+
+    WHY THIS EXISTS. Comparing whole-page visible text cannot tell an article edit from
+    a sitewide chrome insertion — both change visible text on every page. Measured
+    2026-09-09: after fixing the CSS-counts-as-prose bug, jsonld_dateline's count barely
+    moved (149 -> 147) and 105 pages simply re-concentrated on 2026-08-24, which was
+    `1d7e826a` "Email capture on the remaining 184 pages" — a subscribe form inserted
+    into every page's chrome. That is not a content update, and dating 105 pages to it
+    would have been a mass false freshness claim.
+
+    Scoping to <article> removes shared chrome from the comparison for the pages that
+    have one. It is a PARTIAL answer and says so: 178 of 248 pages carry an <article>,
+    and the rest fall back to whole-page text and keep the old ambiguity. A partial fix
+    that is honest about its coverage beats a whole-page comparison that is quietly wrong
+    everywhere.
+    """
+    m = _ARTICLE_RE.search(s)
+    return _norm_churn(visible_text_of(m.group(1) if m else s))
+
+
+#: Version strings and datelines are CHURN, not content — and they live INSIDE the
+#: article, not in the chrome. Measured 2026-09-09: 15 of 16 sampled seo/vs pages carry
+#: "Outlier v1.11.NNN" inside <article>, so every ship (three on 2026-09-09 alone)
+#: registered as an article content change on those pages and pushed their declared
+#: dateline "stale" against an edit that was only a version number.
+#:
+#: Normalised for COMPARISON only — never for output — so a pure version bump or dateline
+#: touch compares equal while any real prose change still differs.
+_CHURN_RE = re.compile(r"v?\d+\.\d+\.\d+|\d{4}-\d{2}-\d{2}")
+
+
+def _norm_churn(t: str) -> str:
+    return _CHURN_RE.sub("<>", t)
+
+
+def has_article(s: str) -> bool:
+    return _ARTICLE_RE.search(s) is not None
+
+
 def visible_text(path: str) -> str:
     return visible_text_of(open(path, encoding="utf-8", errors="replace").read())
 
@@ -124,12 +169,17 @@ def _at(rev: str, path: str) -> str | None:
 
 
 def compare_visible(before: str | None, after: str | None) -> bool:
-    """True when the READER-VISIBLE text differs. A first commit (no `before`) counts."""
+    """True when the reader-visible ARTICLE text differs. A first commit counts.
+
+    Uses article_text_of, so a sitewide header/footer/subscribe-box change does not read
+    as a content edit on the 178 pages that have an <article>. Pages without one still
+    compare whole-page text — see article_text_of for why that is stated rather than hidden.
+    """
     if after is None:
         return False
     if before is None:
-        return bool(visible_text_of(after))
-    return visible_text_of(before) != visible_text_of(after)
+        return bool(article_text_of(after))
+    return article_text_of(before) != article_text_of(after)
 
 
 def last_body_change(path: str):
