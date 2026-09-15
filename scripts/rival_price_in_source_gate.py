@@ -54,10 +54,26 @@ def check(path: str, html: str | None = None) -> list[str]:
     h = html if html is not None else open(path, encoding="utf-8", errors="replace").read()
     srcs = cited(h)
     corpus = "\n".join(fetch(u) for u in srcs)
+    if not srcs:
+        # Cites nothing external at all. The instinct is to hand this to
+        # rival_price_source_gate ("N pages cite no vendor pricing URL") and
+        # skip. I CHECKED THAT HANDOFF BEFORE TRUSTING IT, and it does not
+        # hold: of the 14 pages here citing nothing, exactly two state a rival
+        # price -- outlier-vs-gemini ($9.99) and outlier-vs-windsurf ($20/$40/
+        # $80/$200) -- and BOTH are baselined in that gate. Skipping them here
+        # would have dropped them through both gates at once.
+        #
+        # So: skip only when there is genuinely nothing to check. A page that
+        # prices a rival while citing nothing is reported HERE, by name.
+        rivals = prices(visible(h))
+        if not rivals:
+            return ["SKIP " + path]
+        return [f"{path}: prices a rival ({', '.join(rivals)}) and cites no external source"]
     if not corpus.strip():
-        # An empty corpus would pass every price vacuously. That is the failure
-        # mode this whole file exists to prevent, so it is an error, not a pass.
-        return [f"{path}: NO SOURCE CONTENT FETCHED ({len(srcs)} urls) -- cannot check"]
+        # It DOES cite sources and every fetch came back empty. Unlike the case
+        # above this is my problem: an empty corpus would pass every price
+        # vacuously, which is the exact failure this file exists to prevent.
+        return [f"{path}: cites {len(srcs)} url(s) but NONE returned content -- cannot check"]
     base = _baseline().get(_key(path), {})
     seen = prices(visible(h))
     der = derived(seen)
@@ -124,10 +140,16 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     if not args or args[0] == "--self-check":
         sys.exit(self_check())
-    fails: list[str] = []
+    out: list[str] = []
     for p in args:
-        fails += check(p)
+        out += check(p)
+    skips = [o for o in out if o.startswith("SKIP ")]
+    fails = [o for o in out if not o.startswith("SKIP ")]
     for f in fails:
         print(f)
-    print(f"\n{'FAIL' if fails else 'PASS'} — {len(args)} page(s), {len(fails)} unsourced price claim(s).")
+    if skips:
+        print(f"\nskipped {len(skips)} page(s) citing no external source "
+              f"(rival_price_source_gate's business, not this one)")
+    print(f"{'FAIL' if fails else 'PASS'} — {len(args)} page(s), "
+          f"{len(fails)} unsourced price claim(s), {len(skips)} skipped.")
     sys.exit(1 if fails else 0)
