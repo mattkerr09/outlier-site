@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How often do AI code edits fail? Ours fail 5.8% | Outlier</title>
+  <meta name="description" content="Measured, not guessed: across 129 agent traces our edits applied 94.2% of the time &mdash; 434 str_replace calls, 25 failures, with the causes broken out.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-09-15">
+  <link rel="canonical" href="https://outlier.host/learn/how-often-ai-code-edits-fail/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How often do AI code edits fail? Ours failed 5.8% of the time">
+  <meta property="og:description" content="We counted every file edit our agent made across 129 preserved traces: 434 str_replace calls, 25 failures, 94.2% applied. Here are the three failure causes, why the rate is that high, and the well-reviewed technique we dropped because the number said it could not help us.">
+  <meta property="og:url" content="https://outlier.host/learn/how-often-ai-code-edits-fail/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How often do AI code edits fail? Ours failed 5.8% of the time">
+  <meta name="twitter:description" content="434 edits, 25 failures, 94.2% applied &mdash; measured across 129 of our own agent traces, with the failure causes broken out.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How often do AI code edits fail? Ours failed 5.8% of the time", "description": "We counted every file edit our agent made across 129 preserved traces: 434 str_replace calls, 25 failures, 94.2% applied. The three failure causes, why the rate is that high, and the technique we dropped because the number said it could not help us.", "datePublished": "2026-09-15", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/how-often-ai-code-edits-fail/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How often do AI code edits fail?", "item": "https://outlier.host/learn/how-often-ai-code-edits-fail/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What counts as a failed edit?", "acceptedAnswer": {"@type": "Answer", "text": "A refusal by the edit tool, recorded in the trace: the agent quotes the text it wants replaced, and if that anchor is missing or appears more than once, the tool writes nothing and returns an error. That is the event we counted, 25 of 434 calls. It measures mechanics, not correctness — an edit can apply perfectly and still be the wrong change."}}, {"@type": "Question", "name": "Is 94.2% a good apply rate?", "acceptedAnswer": {"@type": "Answer", "text": "Good enough that the failures left are cheap. All 25 came back as errors the agent could read and retry against, not as silently corrupted files, and both dominant causes are fixed by re-reading the file and quoting a longer anchor. It is specific to our agent and our traces, so it does not carry across to another harness."}}, {"@type": "Question", "name": "Why did you not adopt SWE-Edit?", "acceptedAnswer": {"@type": "Answer", "text": "Because our own number made its gain unavailable to us. Microsoft's report describes lifting edit success on open reasoning models from a 75.6–82.0% band to 93.9–95.9%, via a viewer/editor subagent split plus a whole-file-rewrite fallback. At 94.2% we were already inside that post-fix band, so the benefit lifts a floor we do not stand on, while the costs would still have been ours to pay."}}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>How often do AI code edits fail? Ours failed 5.8% of the time</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-09-15</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>On 2026-07-28 we counted every edit our agent made across 129 preserved traces: <strong>434 str_replace calls, 25 failures</strong> &mdash; a <strong>94.2% apply rate</strong>.</li>
+        <li>Nearly all are anchor problems: 11 quoted text appearing more than once in the file, 11 quoted text not in the file as written, 3 bad arguments or a missing file.</li>
+        <li>The rate is that high because the loop forgives whitespace, nudges the agent to re-read when an anchor misses, and tells it to quote the line above and below its target.</li>
+        <li>This is our agent on our own traces. It is not a measurement of any other coding tool.</li>
+      </ul>
+    </div>
+
+    <p class="lead">Ask how often an AI coding agent's edits fail and you get a shrug, a vibe, or a figure someone half-remembers from a thread. That is odd, because it is trivially countable: the edit either landed or the tool refused it, and the refusal is written down in the trace with its reason attached. So we counted ours. On 2026-07-28, across 129 preserved traces, our agent issued 434 str_replace edits and 25 came back as errors.</p>
+
+    <h2>What the number measures</h2>
+    <p>A str_replace edit is the surgical option: instead of rewriting a file, the agent quotes the exact text it wants replaced along with its replacement, and the tool swaps them. If that anchor cannot be found, or turns up in more than one place, the tool refuses, writing nothing and returning an error saying which. That refusal is the failure we counted, so it costs a retry rather than a corrupted file.</p>
+    <p>Two things it is not. Not correctness: an edit can apply cleanly and still be the wrong change. And not a benchmark of the field &mdash; one agent, one harness, one set of traces.</p>
+
+    <h2>The 25 failures, by cause</h2>
+    <p>Sorted by the error returned, the whole tail fits in three rows:</p>
+    <table>
+      <thead>
+        <tr><th>Cause</th><th>Count</th><th>What it means</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>&ldquo;Found N matches for old_str&rdquo;</td><td>11</td><td>The anchor was real but not unique &mdash; a repeated import, a boilerplate line, a block appearing twice. The tool refuses rather than pick one.</td></tr>
+        <tr><td>&ldquo;No match for old_str (even ignoring whitespace)&rdquo;</td><td>11</td><td>The anchor did not exist as written &mdash; the agent quoting from memory, or from a version an earlier edit had changed.</td></tr>
+        <tr><td>Bad arguments or file not found</td><td>3</td><td>A malformed call, or a path that was not there. The smallest slice.</td></tr>
+        <tr><td><strong>Total</strong></td><td><strong>25</strong></td><td><strong>5.8% of 434 calls</strong></td></tr>
+      </tbody>
+    </table>
+    <p>The split is the useful part. The anchor causes are dead even at 11 apiece &mdash; all but three of the 25 between them &mdash; and both are failures of <em>quoting</em> rather than of reasoning: the agent knew the change it wanted and described the target badly, once too vaguely to be unique and once simply wrongly. Almost nothing here is the model misunderstanding the task, which is what people picture when they imagine an edit failing.</p>
+
+    <h2>Why the rate is as high as it is</h2>
+    <p>This is the part worth taking away, because none of it is exotic. Three cheap mechanisms sit in the loop already, each aimed at a cause in that table.</p>
+    <ul>
+      <li><strong>A whitespace-tolerant match.</strong> If the anchor differs from the file only in indentation or trailing spaces, the edit still applies, removing a whole category of near-miss. The surviving error reads &ldquo;even ignoring whitespace&rdquo; &mdash; the tolerance announcing it was already tried.</li>
+      <li><strong>A re-read nudge when an anchor misses.</strong> A failed match comes back with a prompt to go and look at the file again, turning the commonest self-inflicted failure into one wasted turn rather than a loop.</li>
+      <li><strong>Explicit guidance to disambiguate.</strong> The agent is told to include the line above and below its target. A three-line anchor is far likelier to be unique than a one-line one &mdash; the direct remedy for the &ldquo;found N matches&rdquo; row.</li>
+    </ul>
+    <p>None of that needed a bigger model or a second agent. It is error-message design and prompt guidance, applied to the path an edit takes when it goes wrong.</p>
+
+    <h2>The decision this number drove</h2>
+    <p>Here is the part that makes measuring worth the effort, and it is not a boast. Our 2026-07-28 technique scan put Microsoft's SWE-Edit top of the shortlist. Microsoft's report describes lifting edit success on open reasoning models from a 75.6&ndash;82.0% band to 93.9&ndash;95.9%, using a viewer/editor subagent split plus a whole-file-rewrite fallback. A large, well-evidenced gain &mdash; and we did not adopt it.</p>
+    <table>
+      <thead>
+        <tr><th>Measurement</th><th>Edit success</th><th>Verdict</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Our agent &mdash; 129 traces, 434 calls, 2026-07-28</td><td>94.2%</td><td>Our measured baseline</td></tr>
+        <tr><td>Open reasoning models before SWE-Edit (Microsoft's report)</td><td>75.6&ndash;82.0%</td><td>A floor we are not standing on</td></tr>
+        <tr><td>The same models after SWE-Edit (Microsoft's report)</td><td>93.9&ndash;95.9%</td><td>A band we are already inside</td></tr>
+        <tr><td>SWE-Edit, adoption decision</td><td>&mdash;</td><td><strong>Dropped &mdash; no headroom for us</strong></td></tr>
+      </tbody>
+    </table>
+    <p>Read the rows together and the logic is plain. SWE-Edit's gain is almost entirely the distance from the low band to the high one, and we start inside the high one. Its benefit comes from lifting models off a floor we are not standing on, while the costs stay real: more model calls per edit, and a fallback that rewrites a file wholesale where three lines would have done.</p>
+    <p>None of that was knowable without the baseline. With no number the shortlist item reads as a straightforward upgrade, you adopt it, and you pay for a gain you cannot collect. The most useful result of measuring your own system is finding out which improvements cannot help you.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Our own measurement, taken on <strong>2026-07-28</strong> across <strong>129 preserved agent traces</strong>: <strong>434 str_replace calls</strong>, <strong>25 failures</strong>, 94.2% applied &mdash; 11 non-unique anchors, 11 anchors with no match, 3 bad arguments or missing files. This describes our agent on our traces only, not any other tool. The 75.6&ndash;82.0% and 93.9&ndash;95.9% edit-success bands are Microsoft's published figures for SWE-Edit, from Microsoft's own report, quoted here as published.</div>
+
+    <h2>How to decide</h2>
+    <p>Weighing a technique like this, three questions do most of the work:</p>
+    <ul>
+      <li><strong>What is your own number?</strong> Count the tool refusals in your traces before reading anyone's benchmark. A headline gain means nothing until you know which end of its range you stand on.</li>
+      <li><strong>Does the gain come from lifting a floor you are on?</strong> Most improvements are measured on systems failing in one specific way. If yours does not fail that way, the gain is not transferable, however sound the study.</li>
+      <li><strong>What does it cost if it lands neutral?</strong> Price the extra model calls, the added latency and the new failure modes, then assume the benefit is zero. If your own count sits in Microsoft's pre-fix band rather than near ours, start with the three cheap fixes above instead.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What counts as a failed edit?</h3>
+        <p>A refusal by the edit tool, recorded in the trace: the agent quotes the text it wants replaced, and if that anchor is missing or appears more than once, the tool writes nothing and returns an error. That is the event we counted, 25 of 434 calls. It measures mechanics, not correctness &mdash; an edit can apply perfectly and still be the wrong change.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is 94.2% a good apply rate?</h3>
+        <p>Good enough that the failures left are cheap. All 25 came back as errors the agent could read and retry against, not as silently corrupted files, and both dominant causes are fixed by re-reading the file and quoting a longer anchor. It is specific to our agent and our traces, so it does not carry across to another harness.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why did you not adopt SWE-Edit?</h3>
+        <p>Because our own number made its gain unavailable to us. Microsoft's report describes lifting edit success on open reasoning models from a 75.6&ndash;82.0% band to 93.9&ndash;95.9%, via a viewer/editor subagent split plus a whole-file-rewrite fallback. At 94.2% we were already inside that post-fix band, so the benefit lifts a floor we do not stand on, while the costs would still have been ours to pay.</p>
+      </div>
+    </div>
+
+    <div class="cta"><h3>Try Outlier free</h3><p>Free Nano + Lite &mdash; local, private, no account. Pro is a one-time $249 and adds everything (all 6 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p><a class="btn" href="https://outlier.host/">Download for Mac</a></div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> &middot; <a href="https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/">What a local AI coding agent can actually build</a> &middot; <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">Chat coding vs agentic coding</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+</body>
+</html>
