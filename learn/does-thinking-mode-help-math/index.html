@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turning off 'thinking' made our local model better at math: 24/30 vs 19/30 | Outlier</title>
+  <meta name="description" content="We ran the same 30 math problems through our Nano tier twice, greedy, thinking on and off. Off scored 80.0% against 63.3% — and answered 1.2s faster per query.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-09-15">
+  <link rel="canonical" href="https://outlier.host/learn/does-thinking-mode-help-math/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Turning off 'thinking' made our local model better at math: 24/30 vs 19/30">
+  <meta property="og:description" content="We ran the same 30 math problems through our Nano tier twice, greedy, thinking on and off. Off scored 80.0% against 63.3% — and answered 1.2s faster per query.">
+  <meta property="og:url" content="https://outlier.host/learn/does-thinking-mode-help-math/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Turning off 'thinking' made our local model better at math: 24/30 vs 19/30">
+  <meta name="twitter:description" content="We ran the same 30 math problems through our Nano tier twice, greedy, thinking on and off. Off scored 80.0% against 63.3% — and answered 1.2s faster per query.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  </style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Turning off thinking made our local model better at math: 46/60 vs 33/60", "description": "We ran GSM8K through our Nano tier twice, greedy, thinking on and off. Off scored 76.7% against 55.0% at n=60, z=3.52, and finished 36% faster. The reason is a token budget, not a theory about reasoning.", "datePublished": "2026-09-15", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/does-thinking-mode-help-math/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Does thinking mode help math?", "item": "https://outlier.host/learn/does-thinking-mode-help-math/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does turning off thinking mode always make a model better at math?", "acceptedAnswer": {"@type": "Answer", "text": "No, and our own result says why not. The gain came from a specific collision: the model had a 400-token answer budget, and its thinking preamble spent 200 to 300 of those tokens before it started the arithmetic. Remove the preamble and the budget reaches the answer. On a model with room to reason, or a task where the reasoning is the point rather than overhead, you should expect the opposite. Measure it on your own prompts before you trust either direction."}}, {"@type": "Question", "name": "Why would less reasoning produce a better answer?", "acceptedAnswer": {"@type": "Answer", "text": "Because the reasoning is not free. On a small local model the visible chain of thought is generated into the same output budget as the answer, so a long preamble competes with the result rather than supporting it. In our run the model would talk itself through the setup and then run out of room at the point where it should have produced the number. Turning thinking off did not make the model smarter; it stopped the model spending its budget before it answered."}}, {"@type": "Question", "name": "Does this mean larger reasoning models are pointless?", "acceptedAnswer": {"@type": "Answer", "text": "No. This is a measurement about a small model under a tight token budget, not a claim about reasoning in general. Frontier reasoning models are given far more room to think and are trained for it. What our result does show is that a technique borrowed from large models can invert on a small one, which is why every tier setting in Outlier is chosen by running the benchmark rather than by copying what the big models do."}}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Turning off &lsquo;thinking&rsquo; made our local model better at math: 46/60 vs 33/60</h1>
+    <div class="byline-row">
+      <span class="byline">Outlier &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-09-15</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>On our smallest shipping model, <strong>turning thinking off made it better at maths</strong>: 46/60 correct against 33/60, or 76.7% against 55.0%.</li>
+        <li>That is <strong>+21.7 points at z&nbsp;=&nbsp;3.52</strong> on GSM8K, and it finished <strong>36% faster</strong> at the same time.</li>
+        <li>The cause is not philosophical. The model had a <strong>400-token budget</strong> and its &ldquo;let me consider&hellip;&rdquo; preamble was spending 200&ndash;300 of them <em>before</em> it reached the arithmetic.</li>
+        <li>So the rule is narrow: <strong>when the reasoning competes with the answer for the same budget, the reasoning loses.</strong> On a model with room to think, expect the opposite.</li>
+      </ul>
+    </div>
+
+    <p class="lead">The received wisdom is that making a model think out loud helps it with maths. Chain-of-thought is one of the most replicated results in the field, and every reasoning model ships on the strength of it. So when we turned thinking <em>off</em> on our smallest tier and watched the maths score go up by more than twenty points, the first assumption was that the benchmark was broken. It was not. The explanation turned out to be mundane, mechanical, and much more useful than the headline.</p>
+
+    <h2>What we ran</h2>
+    <p>Two configurations, identical in every other respect: the same GSM8K problems, the same production weights of our Nano tier, greedy decoding both times so there was no sampling luck to argue about. The only difference was the chat template&rsquo;s native <code>enable_thinking</code> switch. We ran it first at n&nbsp;=&nbsp;30, saw a gap large enough to distrust, and re-ran it at n&nbsp;=&nbsp;60 to find out whether it survived.</p>
+
+    <table>
+      <thead><tr><th>Setting</th><th>Correct (GSM8K, n=60)</th><th>Accuracy</th><th>Wall time</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>Thinking <strong>on</strong>, greedy</td><td>33 / 60</td><td>55.0%</td><td>baseline</td><td>&mdash;</td></tr>
+        <tr><td>Thinking <strong>off</strong>, greedy</td><td><strong>46 / 60</strong></td><td><strong>76.7%</strong></td><td><strong>&minus;36%</strong></td><td><strong>&larr; Winner</strong></td></tr>
+      </tbody>
+    </table>
+
+    <p>It survived. +21.7 points, z&nbsp;=&nbsp;3.52 &mdash; about three and a half standard deviations, which is not a result you get from thirty coin flips going your way. And it was faster, which is the part that should make you suspicious in a good way: the cheaper configuration won. Usually you pay for accuracy.</p>
+
+    <h2>The n=30 run, including the part that failed</h2>
+    <p>The earlier pass is worth showing because it tested something else at the same time and that something else did nothing. Self-consistency &mdash; sampling the model five times and taking the majority answer &mdash; is the standard way to buy accuracy with compute. Here it is against the free change:</p>
+
+    <table>
+      <thead><tr><th>Configuration</th><th>Correct (n=30)</th><th>Accuracy</th><th>Generations spent</th></tr></thead>
+      <tbody>
+        <tr><td>Thinking on, greedy</td><td>19 / 30</td><td>63.3%</td><td>30</td></tr>
+        <tr><td>Thinking off, greedy</td><td><strong>24 / 30</strong></td><td><strong>80.0%</strong></td><td><strong>30</strong></td></tr>
+        <tr><td>Thinking on, self-consistency &times;5</td><td>22 / 30</td><td>73.3%</td><td>150</td></tr>
+        <tr><td>Thinking off, self-consistency &times;5</td><td>23 / 30</td><td>76.7%</td><td>150</td></tr>
+      </tbody>
+    </table>
+
+    <p>Read the bottom two rows against the second. Five times the compute bought <em>nothing</em> &mdash; 23/30 against 24/30 for plain greedy with thinking off. Once the preamble stopped eating the budget, the extra samples had no error left to average away. That is worth knowing before you spend five times the electricity on a local model.</p>
+
+    <h2>Why it happens, which is the whole point</h2>
+    <p>Here is the mechanism, and it is boring in the way real explanations usually are. Our Nano tier answers inside a 400-token budget. With thinking enabled, the model opens with two to three hundred tokens of <em>&ldquo;let me consider what the question is asking&hellip;&rdquo;</em> before it touches the sum. That preamble is generated into the same budget as the answer. So the model reasons its way carefully up to the edge of the cliff and then runs out of room at precisely the moment it should have produced a number.</p>
+    <p>Turning thinking off did not make the model cleverer. It stopped it spending its allowance before arriving at the shop. That is why the win is not transferable as a slogan: on a model with a generous budget, or on a task where the chain of reasoning genuinely does the work, the same switch should cost you accuracy rather than buy it. <strong>The finding is about a collision between two things sharing one budget, not about whether reasoning is good.</strong></p>
+    <p>It also generalised further than maths on our tier: factual accuracy went from 91.7% to 100% under the same change, for the same reason.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Our own benchmark runs on shipping Nano production weights, greedy decoding, GSM8K. Precursor <code>fast_batch_15</code> at n=30 (63.3% &rarr; 80.0%, +16.7pp, 1.2s faster per query); confirmation <code>fast_batch_18</code> at n=60 on <strong>2026-05-28</strong> (55.0% &rarr; 76.7%, +21.7pp, z=3.52, &minus;36% wall time). Switch is the Qwen3-Next chat template&rsquo;s native <code>enable_thinking=False</code> kwarg. Figures are ours and measured, not quoted from a vendor.</div>
+
+    <h2>How to decide for your own setup</h2>
+    <ul>
+      <li><strong>Is your output budget tight?</strong> If the model has a few hundred tokens to answer in, a visible reasoning preamble is competing with your answer. That is the case where turning it off can win outright.</li>
+      <li><strong>Is the reasoning the product, or the overhead?</strong> For a multi-step proof you want the chain. For &ldquo;what is 17% of 340&rdquo; you want the number, and the chain is rent.</li>
+      <li><strong>Can you run thirty of your own prompts both ways?</strong> That is an afternoon, and it beats every blog post including this one. Our result is ours; the mechanism is what should travel.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Does turning off thinking mode always make a model better at math?</h3>
+        <p>No, and our own result says why not. The gain came from a specific collision: the model had a 400-token answer budget, and its thinking preamble spent 200 to 300 of those tokens before it started the arithmetic. Remove the preamble and the budget reaches the answer. On a model with room to reason, or a task where the reasoning is the point rather than overhead, you should expect the opposite. Measure it on your own prompts before you trust either direction.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why would less reasoning produce a better answer?</h3>
+        <p>Because the reasoning is not free. On a small local model the visible chain of thought is generated into the same output budget as the answer, so a long preamble competes with the result rather than supporting it. In our run the model would talk itself through the setup and then run out of room at the point where it should have produced the number. Turning thinking off did not make the model smarter; it stopped the model spending its budget before it answered.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does this mean larger reasoning models are pointless?</h3>
+        <p>No. This is a measurement about a small model under a tight token budget, not a claim about reasoning in general. Frontier reasoning models are given far more room to think and are trained for it. What our result does show is that a technique borrowed from large models can invert on a small one, which is why every tier setting in Outlier is chosen by running the benchmark rather than by copying what the big models do. See <a href="https://outlier.host/learn/what-is-ai-reasoning/">what AI reasoning actually is</a>.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free Nano + Lite &mdash; local, private, no account. Pro is a one-time $249 and adds everything (all 6 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p>
+      <a class="btn" href="https://outlier.host/">Download for Mac</a>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/learn/what-is-ai-reasoning/">What is AI reasoning</a> &middot; <a href="https://outlier.host/learn/what-is-a-token-in-ai/">What is a token</a> &middot; <a href="https://outlier.host/learn/free-tier-vs-paid-tier-mmlu/">Free tier vs paid tier, measured</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+</body>
+</html>
