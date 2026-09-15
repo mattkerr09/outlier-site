@@ -106,7 +106,24 @@ def article_text_of(s: str) -> str:
     everywhere.
     """
     m = _ARTICLE_RE.search(s)
-    return _norm_churn(visible_text_of(m.group(1) if m else s))
+    return _norm_churn(visible_text_of(_INARTICLE_CHROME_RE.sub(" ", m.group(1) if m else s)))
+
+
+#: NOT ALL CHROME IS OUTSIDE <article>. Scoping to <article> above catches a chrome
+#: insertion in the header or footer, but the same reasoning applies to furniture that
+#: lives INSIDE the article: breadcrumbs, the download CTA, and the "More:" / "From the
+#: same builder" link rows. Measured 2026-09-15: a cross-site links block added to 171
+#: pages in one commit sits inside <article>, and this gate reported 10 pages as having
+#: a stale dateline on the strength of it. Dating those pages to a links row is the same
+#: mass false freshness claim the <article> scoping was written to prevent -- the block
+#: just landed on the other side of the tag.
+#:
+#: This is deliberately the SAME set seo_lint's _CHROME already excludes from its
+#: duplicate check. Two gates in one repo disagreeing about what "body text" means is
+#: how the word floor came to count nav and footer as prose (fixed 2026-09-15,
+#: e0a5951f). One notion of body text, not three.
+_INARTICLE_CHROME_RE = re.compile(
+    r'<div class="(?:related|cta|crumb|crumbs|foot)"[^>]*>.*?</div>', re.S | re.I)
 
 
 #: Version strings and datelines are CHURN, not content — and they live INSIDE the
