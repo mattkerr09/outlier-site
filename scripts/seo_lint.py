@@ -26,6 +26,7 @@ from pathlib import Path
 
 MIN_WORDS = 600
 SHINGLE_N = 8
+STUB_SHARE_MAX = 0.10   # more than 10% of pages 'redirect stubs' means the detector broke, not the site
 DUP_RATIO = 0.28          # >28% shared shingles between two pages = too close
 CHROME_DF_PAGES = 20      # a shingle on >=20 pages is site furniture, not prose
 
@@ -155,14 +156,31 @@ def main(root: str) -> int:
         # ".../site/legal/refunds" and exempted it, while `seo_lint.py .` from inside the site
         # produced "legal/refunds" with no leading slash and failed it. Same tree, same page, two
         # answers — and the failing one is the invocation a person is most likely to try.
-        if _is_redirect_stub(raw):
+        stub = _is_redirect_stub(raw)
+        if stub:
             skipped_stubs.append(p)
         if body_words < MIN_WORDS and "legal" not in p.parts \
-                and not _is_section_hub(p) and not _is_redirect_stub(raw):
+                and not _is_section_hub(p) and not stub:
             fails.append(f"THIN   {p}: {body_words}w body (min {MIN_WORDS})")
         # duplicate check ignores shared nav/footer chrome — see _CHROME above
-        sh[p] = shingles(visible_text(p.read_text(encoding="utf-8", errors="ignore"),
-                                      body_only=True))
+        #
+        # AND IGNORES NOINDEX REDIRECT STUBS, for the reason the word floor already
+        # ignores them, stated the other way round: a stub is not an article, and a
+        # page carrying `noindex` is not in the index, so it cannot be the duplicate
+        # of anything in a search result. Two stubs share the same six-line signpost
+        # by design — that IS the pattern — so every pair of them crosses the 28%
+        # line the moment a second one exists. On 2026-09-15 the /run/ consolidation
+        # wrote three at once and DUP went 171 -> 174: three failures describing a
+        # deliberate, invisible-to-search template. The same shape as the
+        # email-capture form above, and the same answer: subtract the furniture,
+        # do not raise the threshold.
+        #
+        # This narrows what the linter looks at, so it is guarded below: if stubs
+        # ever exceed STUB_SHARE_MAX of the site, `_is_redirect_stub` has started
+        # matching real pages and the DUP check has been quietly switched off.
+        if not stub:
+            sh[p] = shingles(visible_text(p.read_text(encoding="utf-8", errors="ignore"),
+                                          body_only=True))
 
     # SHARED FURNITURE IS WHATEVER APPEARS EVERYWHERE, NOT WHATEVER _CHROME LISTS.
     #
@@ -213,8 +231,19 @@ def main(root: str) -> int:
     # Say what was exempted. A skip nobody prints reads exactly like a page
     # that passed, and the point of the word floor is that silence means checked.
     if skipped_stubs:
-        print(f"word floor not applied to {len(skipped_stubs)} noindex redirect "
-              f"stub(s): {', '.join(str(x) for x in skipped_stubs)}")
+        print(f"word floor and duplicate check not applied to {len(skipped_stubs)} "
+              f"noindex redirect stub(s): {', '.join(str(x) for x in skipped_stubs)}")
+        # VACUITY GUARD ON THE EXEMPTION ITSELF. An exemption's failure mode is not
+        # missing a page, it is swallowing the site: if `_is_redirect_stub` ever
+        # matched broadly, every page would leave `sh` and DUP would report a clean
+        # run having compared nothing. A signpost set is a rounding error on a real
+        # site; anything more is the detector, not the content.
+        share = len(skipped_stubs) / max(len(pages), 1)
+        if share > STUB_SHARE_MAX:
+            fails.append(f"FAIL   {len(skipped_stubs)} of {len(pages)} pages "
+                         f"({share:.0%}) were treated as redirect stubs and left out "
+                         f"of the duplicate check — over the {STUB_SHARE_MAX:.0%} "
+                         f"ceiling. _is_redirect_stub is matching real pages.")
     if not fails:
         print("PASS — no voice, thin, or duplicate failures")
         return 0
