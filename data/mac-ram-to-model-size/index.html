@@ -10,7 +10,7 @@
   <title>Mac RAM to AI model size — reference table | Outlier</title>
   <meta name="description" content="A reference table mapping Mac unified RAM to which local AI models fit, their disk sizes, and measured tokens/sec on an M1 Ultra. Plan your build or buy.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-06-09">
+  <meta name="last-modified" content="2026-09-15">
   <link rel="canonical" href="https://outlier.host/data/mac-ram-to-model-size/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Mac RAM to AI model size — the reference table">
@@ -112,7 +112,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Mac RAM to AI model size — the reference table", "description": "A reference table mapping Mac unified RAM to which local AI models fit, their disk sizes, and measured tokens/sec on an M1 Ultra. Plan your build or buy.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/data/mac-ram-to-model-size/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Mac RAM to AI model size — the reference table", "description": "A reference table mapping Mac unified RAM to which local AI models fit, their disk sizes, and measured tokens/sec on an M1 Ultra. Plan your build or buy.", "datePublished": "2026-06-09", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/data/mac-ram-to-model-size/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Mac RAM to AI model size — the reference table", "item": "https://outlier.host/data/mac-ram-to-model-size/"}]}
@@ -141,15 +141,15 @@
     <h1>Mac RAM to AI model size — the reference table</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-06-09</span>
-      <span class="updated-pill">Last updated 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
         <li><strong>16 GB</strong> handles Nano 4B and Lite 9B. <strong>32 GB</strong> gets you the 27B coding models. <strong>64 GB</strong> is where Plus 397B becomes an option.</li>
-        <li>On disk: Nano is 2.4 GB, Core 27B is 15.1 GB, Vision 35B is 19 GB. Plus 397B wants 209 GB.</li>
-        <li>Speed on my M1 Ultra: Nano hits 71.7 tok/s, Core 27B does 20.7, Plus 397B crawls at 2.1.</li>
+        <li>On disk: Nano is 2.4 GB, Core 27B is 15.1 GB, Vision 3.8 is 15.5 GB. Plus 397B wants 209 GB.</li>
+        <li>Speed on my M1 Ultra: Nano hits 71.7 tok/s, Core 27B does 20.7, Plus 397B crawls at 1.59.</li>
         <li>Quick math: usable model size is about your unified RAM minus a few GB for macOS.</li>
       </ul>
     </div>
@@ -159,18 +159,20 @@
     <h2>RAM → what you can run</h2>
     <table><thead><tr><th>Unified RAM</th><th>Typical Mac</th><th>Models that run</th></tr></thead><tbody>
       <tr><td>16 GB</td><td>MacBook Air</td><td>Nano 4B, Lite 9B</td></tr>
-      <tr><td>24 GB</td><td>MacBook Pro</td><td>+ Quick 26B, Core 27B, Vision 35B (tight)</td></tr>
+      <tr><td>24 GB</td><td>MacBook Pro</td><td>+ Quick 26B, Core 27B, Vision 3.8 27B (tight)</td></tr>
       <tr><td>32 GB</td><td>MacBook Pro</td><td>27B coding + Vision, comfortably</td></tr>
       <tr><td>64 GB</td><td>Mac Studio / MBP</td><td>All tiers, including Plus 397B</td></tr>
       <tr><td>96+ GB</td><td>Mac Studio</td><td>Plus 397B with headroom for long context</td></tr>
     </tbody></table>
     <h2>Model size and speed (measured, M1 Ultra)</h2>
+    <div class="receipts"><strong>Receipts:</strong> Decode speeds are my own runs on a 64&nbsp;GB M1 Ultra, the <strong>2026-06-09</strong> batch, and the table records that batch rather than being silently refreshed &mdash; where a figure has been re-measured since, the row says so and gives both. Disk sizes are read from the shipping tier catalog (checked <strong>2026-09-15</strong>): Nano 2.37&nbsp;GB &middot; Lite 5.04&nbsp;GB &middot; Quick 15.61&nbsp;GB &middot; Core 15.13&nbsp;GB &middot; Vision 3.8 15.5&nbsp;GB &middot; Plus 209&nbsp;GB. Corrected on the 2026-09-15 read: the quick answer said Plus ran at 2.1&nbsp;tok/s while this table said <strong>1.59</strong> &mdash; the table was right, and a page that disagrees with itself is worse than one that is simply out of date.</div>
+
     <table><thead><tr><th>Model</th><th>Params</th><th>Disk</th><th>Decode tok/s</th></tr></thead><tbody>
       <tr><td>Nano</td><td>4B</td><td>2.4 GB</td><td>71.7</td></tr>
       <tr><td>Lite</td><td>9B</td><td>5 GB</td><td>53.4</td></tr>
       <tr><td>Quick</td><td>26B MoE</td><td>15.6 GB</td><td>14.6 <span style="opacity:.7">&mdash; 43.6 when re-measured 2026-08-24 on v1.11.804; this table records the 2026-06-09 run</span></td></tr>
       <tr><td>Core</td><td>27B</td><td>15.1 GB</td><td>20.7</td></tr>
-      <tr><td>Vision</td><td>35B MoE</td><td>19 GB</td><td>16.3</td></tr>
+      <tr><td>Vision</td><td>35B MoE</td><td>19 GB</td><td>16.3 &mdash; this row is the 2026-06-09 run on <strong>Vision 3.6</strong>; the shipping tier is now <strong>Vision 3.8, 27B dense, 15.5 GB</strong>, not re-measured here</td></tr>
       <tr><td>Plus</td><td>397B MoE</td><td>209 GB</td><td>1.59</td></tr>
     </tbody></table>
     <p class="disclaim" style="margin-top:-0.6rem">Numbers are from an M1 Ultra, MLX 4-bit, batch size 1. Newer chips (M2/M3/M4) run faster, but the ranking stays the same.</p>
