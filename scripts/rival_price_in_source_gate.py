@@ -59,8 +59,41 @@ def check(path: str, html: str | None = None) -> list[str]:
         # mode this whole file exists to prevent, so it is an error, not a pass.
         return [f"{path}: NO SOURCE CONTENT FETCHED ({len(srcs)} urls) -- cannot check"]
     base = _baseline().get(_key(path), {})
-    bad = [p for p in prices(visible(h)) if p not in corpus and p not in base]
+    seen = prices(visible(h))
+    der = derived(seen)
+    bad = [p for p in seen if p not in corpus and p not in base and p not in der]
     return [f"{path}: {p} appears in no cited source" for p in bad]
+
+
+def derived(found: list[str]) -> set[str]:
+    """Figures this page COMPUTED, which by construction appear on no vendor page.
+
+    Not a new heuristic: derived_price_gate.py already established the
+    discriminator for this site, and established that a word-proximity one does
+    not work -- it wrongly flagged Msty's "$149/yr" and Poe's "$49.99/year",
+    both of which ARE on the vendor's own pricing page. The discriminator is the
+    arithmetic itself: a figure is derived when another figure on the SAME page
+    multiplies to it exactly. Reusing it rather than inventing a second rule --
+    two heuristics for one question is how they drift apart.
+    """
+    vals = {p: float(p[1:]) for p in found}
+    out: set[str] = set()
+    for big, bv in vals.items():
+        for small, sv in vals.items():
+            if sv <= 0 or small == big:
+                continue
+            q = bv / sv
+            # x12 ONLY -- the discriminator derived_price_gate.py actually
+            # validated (annual = monthly x 12). A first version here allowed
+            # any multiple 2..36 and promptly swallowed xAI's $300, which that
+            # gate's own docstring records as QUOTED and unverified: $30 x 10
+            # happens to appear on the page. Widening a proven rule without
+            # re-validating it is how a gate starts hiding the thing it exists
+            # to find. x24 and x36 are two- and three-year totals, same shape.
+            if abs(q - round(q)) < 1e-9 and round(q) in (12, 24, 36):
+                out.add(big)
+                break
+    return out
 
 
 def _key(path: str) -> str:
