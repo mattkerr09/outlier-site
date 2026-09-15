@@ -147,6 +147,25 @@ plausible.init()
          doing nothing: Dodo's own page is where the key was visible, so we
          would have redirected the buyer away from the one screen showing it,
          in order to tell them to check their email. -->
+    <!-- The Founders Lifetime bullets on the home page promise a "Private
+         founding-cohort Discord". Until 2026-09-15 nothing delivered it: the
+         Dodo product ships no Discord benefit (the retired Polar org did), so
+         the buyer was promised a room and never shown the door.
+
+         This is the post-purchase moment, and it is our own page -- the single
+         checkout on the site redirects here, so everyone who arrives from it
+         bought the one $249 product. Revealed by the SAME condition as the
+         licence key, deliberately: the page is publicly reachable, and a
+         private invite must not render for a passer-by. Same reason the keybox
+         rules carry no `display`. -->
+    <div class="keybox" id="discord-box" hidden>
+      <p class="keybox-label">Your founding-cohort Discord</p>
+      <p style="margin:0">
+        <a href="https://discord.gg/outlier" target="_blank" rel="noopener noreferrer">Join the private room</a>
+        <span class="dim"> &mdash; it is also in Settings &rarr; licence inside the app.</span>
+      </p>
+    </div>
+
     <div class="keybox" id="licence-box" hidden>
       <p class="keybox-label">Your licence key</p>
       <code class="keybox-key" id="licence-key"></code>
@@ -211,6 +230,9 @@ plausible.init()
       if (!box || !out) return;
       out.textContent = key;
       box.hidden = false;
+      // Same gate as the key, on purpose -- see the comment on #discord-box.
+      var dbox = document.getElementById('discord-box');
+      if (dbox) dbox.hidden = false;
       if (step) {
         step.textContent = 'Your licence key is above \u2014 a copy is also in the '
           + 'receipt Dodo Payments emailed you.';
