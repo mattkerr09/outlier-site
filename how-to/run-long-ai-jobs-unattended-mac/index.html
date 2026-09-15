@@ -10,7 +10,7 @@
   <title>How to run long AI jobs unattended on your Mac | Outlier</title>
   <meta name="description" content="Give a local AI a job that outlasts your attention span. Self-running tasks on macOS carry state forward, stop themselves on a budget, and keep a kill switch you control.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-08-14">
+  <meta name="last-modified" content="2026-09-15">
   <link rel="canonical" href="https://outlier.host/how-to/run-long-ai-jobs-unattended-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run long AI jobs unattended on your Mac">
@@ -102,7 +102,7 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI keep working while I'm away from my Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Self-running tasks continue across iterations, carrying state forward, with cycle and time budgets so a misunderstood goal cannot loop indefinitely."}}, {"@type": "Question", "name": "What stops it running forever?", "acceptedAnswer": {"@type": "Answer", "text": "Two explicit budgets — a maximum number of cycles and a maximum elapsed time — plus a kill switch the loop checks every iteration."}}, {"@type": "Question", "name": "Does a long job cost more?", "acceptedAnswer": {"@type": "Answer", "text": "No. Local inference has no per-token charge, which is exactly why letting something iterate is reasonable here and expensive in the cloud."}}, {"@type": "Question", "name": "Does it need internet?", "acceptedAnswer": {"@type": "Answer", "text": "No, unless the job itself asks for web research. The model and your files are local."}}]}
   </script>
   <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "headline": "How to run long AI jobs unattended on your Mac", "description": "Give a local AI a job that outlasts your attention span. Self-running tasks on macOS carry state forward, stop themselves on a budget, and keep a kill switch you control.", "datePublished": "2026-08-14", "dateModified": "2026-08-14", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/run-long-ai-jobs-unattended-mac/", "image": "https://outlier.host/og-card.png"}
+{"@context": "https://schema.org", "@type": "Article", "headline": "How to run long AI jobs unattended on your Mac", "description": "Give a local AI a job that outlasts your attention span. Self-running tasks on macOS carry state forward, stop themselves on a budget, and keep a kill switch you control.", "datePublished": "2026-08-14", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/run-long-ai-jobs-unattended-mac/", "image": "https://outlier.host/og-card.png"}
   </script>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to run long AI jobs unattended on your Mac", "item": "https://outlier.host/how-to/run-long-ai-jobs-unattended-mac/"}]}
@@ -130,7 +130,7 @@
     <h1>How to run long AI jobs unattended on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-08-14</span>
-      <span class="updated-pill">Last updated 2026-08-14</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
     </div>
 
     <div class="quick-answer">
@@ -144,6 +144,35 @@
     </div>
 
     <p class="lead">The reason people babysit AI is not enthusiasm — it is that a metered assistant with no memory of the last step will happily burn money going in circles. Remove the meter and add carry-forward, and leaving it running becomes reasonable.</p>
+
+    <h2>The three rails, and their actual values</h2>
+    <p>&ldquo;It self-limits&rdquo; is the sort of claim worth distrusting, so here are the limits
+    as the shipping app enforces them. Each is a default you can raise or lower per job; none of
+    them is advice.</p>
+    <table>
+      <thead><tr><th>Rail</th><th>Default</th><th>Checked</th><th>What happens when it trips</th></tr></thead>
+      <tbody>
+        <tr><td>Cycle budget</td><td><strong>200 iterations</strong></td><td>Before each iteration</td><td>Stops, reporting that it reached the cycle budget</td></tr>
+        <tr><td>Time budget</td><td><strong>24 hours</strong> from the start</td><td>Before each iteration</td><td>Stops, reporting that it reached the hour budget</td></tr>
+        <tr><td>Kill switch</td><td>&mdash;</td><td><strong>Every iteration</strong>, not only at start</td><td>Stops immediately and records the reason as the kill switch</td></tr>
+      </tbody>
+    </table>
+    <p>The third row is the one that matters most and the easiest to get wrong. A kill switch read
+    only at launch is decoration: by the time you want it, the job is already inside a loop that
+    never looks at it again. Checking it before every iteration is what makes stopping a job one
+    action rather than a negotiation &mdash; and it is why the other two rails can be generous
+    without being reckless.</p>
+    <p>Two budgets rather than one, because they fail differently. A job that is fast and wrong
+    burns through 200 iterations in minutes; a job that is slow and stuck may use ten and sit for
+    a day. Either alone leaves the other case running.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Read from the shipping app on
+    <strong>2026-09-15</strong>: the cycle budget defaults to <strong>200</strong> and the time
+    budget to <strong>24&nbsp;hours</strong>, both taken from the job if it sets them
+    (<code>src/main.js</code>, the iteration guard); the kill switch is checked at the top of every
+    iteration and returns a stopped state with the kill switch named as the reason
+    (<code>src/pro/lib/autonomy.js</code>). These are the values the code enforces, not
+    documentation of intent.</div>
 
     <h2>Why unattended is different from a long prompt</h2>
     <p>A long prompt is one turn. An unattended job is many, where each iteration has to know what the previous one learned, decide what is left, and stop when it is done or out of budget.</p>
