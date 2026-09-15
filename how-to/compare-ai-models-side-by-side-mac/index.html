@@ -10,7 +10,7 @@
   <title>How to compare AI models side by side on your Mac | Outlier</title>
   <meta name="description" content="Stop guessing which local model is better for your work. Ask several the same question at once on macOS and read the answers next to each other.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-08-14">
+  <meta name="last-modified" content="2026-09-15">
   <link rel="canonical" href="https://outlier.host/how-to/compare-ai-models-side-by-side-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to compare AI models side by side on your Mac">
@@ -102,7 +102,7 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I know which local AI model is best for me?", "acceptedAnswer": {"@type": "Answer", "text": "Ask two or three the same real question and read the answers side by side. Benchmarks describe average tasks; compare mode describes yours."}}, {"@type": "Question", "name": "Does comparing models cost extra?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs locally, so a comparison costs time and battery, not tokens."}}, {"@type": "Question", "name": "Can I compare a big model and a small one?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, and it is the most useful comparison there is — it tells you whether the extra RAM is buying you anything on the work you actually do."}}, {"@type": "Question", "name": "Do I need all the models downloaded first?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, each tier you want to compare has to be on disk, since inference runs on your machine."}}]}
   </script>
   <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "headline": "How to compare AI models side by side on your Mac", "description": "Stop guessing which local model is better for your work. Ask several the same question at once on macOS and read the answers next to each other.", "datePublished": "2026-08-14", "dateModified": "2026-08-14", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/compare-ai-models-side-by-side-mac/", "image": "https://outlier.host/og-card.png"}
+{"@context": "https://schema.org", "@type": "Article", "headline": "How to compare AI models side by side on your Mac", "description": "Stop guessing which local model is better for your work. Ask several the same question at once on macOS and read the answers next to each other.", "datePublished": "2026-08-14", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/compare-ai-models-side-by-side-mac/", "image": "https://outlier.host/og-card.png"}
   </script>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to compare AI models side by side on your Mac", "item": "https://outlier.host/how-to/compare-ai-models-side-by-side-mac/"}]}
@@ -130,7 +130,7 @@
     <h1>How to compare AI models side by side on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-08-14</span>
-      <span class="updated-pill">Last updated 2026-08-14</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
     </div>
 
     <div class="quick-answer">
@@ -148,6 +148,38 @@
     <h2>Why a leaderboard can't answer this</h2>
     <p>A benchmark score is an average over someone else's task distribution. Your work is not that distribution. We publish MMLU per tier — Nano 52.0%, Lite 77.0%, Quick 81.0%, Vision 3.8 82.5%, Core 89.5%, all n=200 — and those numbers are real, but they cannot tell you whether Lite is good enough for the summarizing you do all day.</p>
     <p>Two of our own tiers sit within the confidence interval of each other on MMLU while feeling quite different in use. The only way through that is to try both on something you actually care about.</p>
+
+    <h2>Where the leaderboard runs out, in our own numbers</h2>
+    <p>Here is the lineup with the gap to the next tier down, because the gap is the part a
+    single column hides. At n=200 the 95% interval is roughly <strong>&plusmn;7 points near
+    50%</strong> and <strong>&plusmn;4 near 90%</strong> &mdash; so a gap smaller than the
+    interval is not a ranking, it is noise wearing a decimal point.</p>
+    <table>
+      <thead><tr><th>Tier</th><th>MMLU (n=200)</th><th>Gap to the tier below</th><th>Is that gap bigger than the interval?</th></tr></thead>
+      <tbody>
+        <tr><td>Core</td><td><strong>89.5%</strong></td><td>+7.0</td><td>Yes &mdash; at the edge, near the &plusmn;4 end</td></tr>
+        <tr><td>Vision 3.8</td><td>82.5%</td><td>+1.5</td><td><strong>No</strong></td></tr>
+        <tr><td>Quick</td><td>81.0%</td><td>+4.0</td><td><strong>No &mdash; Lite and Quick are a statistical tie</strong></td></tr>
+        <tr><td>Lite</td><td>77.0%</td><td>+25.0</td><td>Yes, comfortably</td></tr>
+        <tr><td>Nano</td><td>52.0%</td><td>&mdash;</td><td>&mdash;</td></tr>
+      </tbody>
+    </table>
+    <p>Read the fourth column rather than the second. <strong>Three of the tiers measured here are not separated from their neighbour by more than the measurement can see</strong>, and
+    one gap
+    &mdash; Nano to Lite &mdash; is so large that no comparison is needed to feel it. That is the
+    whole case for comparing on your own prompts: for the tiers in the middle, the leaderboard
+    genuinely does not know which is better for you, and it is not being coy about it.</p>
+
+    <p><strong>Plus 397B is not in the table</strong>, and that is a fact about the measurement
+    rather than the tier: the n=200 MMLU re-run covered five of the six shipping tiers and Plus was not one of them. A table that quietly dropped the sixth would be the kind of thing this page
+    is arguing against.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> MMLU, <strong>n=200</strong>, deterministic
+    stratified sample across 57 subjects, greedy (temperature 0, fixed seed), thinking off, on an
+    M1&nbsp;Ultra; all tiers re-run <strong>2026-08-24</strong> through the shipping v1.11.804 path
+    so every figure comes from one regime on one build. Interval at that sample size is roughly
+    &plusmn;7 points near 50% and &plusmn;4 near 90%. Gaps are arithmetic on those published
+    figures, not a separate measurement.</div>
 
     <h2>Comparing</h2>
     <ol>
