@@ -86,10 +86,23 @@ jobs:
       # frequency instead of a fixed selector list, so the number below measures
       # body prose again. Raising the baseline to 573 would have been the easy
       # move and would have blinded this step to 300-odd real duplicates.
+      # Duplicate INTENT, which the shingle check above is structurally blind to.
+      # It reports and does not block: measured at about one useful finding in five
+      # (see the module docstring), and a check wrong three times in five must not
+      # be able to stop a deploy. It DOES fail if its own classifier stops
+      # classifying, because a broken classifier prints zero warnings and a clean
+      # site prints zero warnings, and those must not look the same in a log.
+      - name: Duplicate intent (warns; fails only if the classifier breaks)
+        run: python3 scripts/intent_warn.py .
+
       - name: SEO lint (fails only if the failure count grows)
         run: |
           set -o pipefail
-          BASELINE=188
+          # 188 was the count on the day the ratchet was set. It is 171 today, and a
+          # ratchet seventeen points above reality is seventeen new duplicates that
+          # can appear while this step stays green — the slack IS the hole. Lowered
+          # to what the site actually produces, 2026-09-15.
+          BASELINE=171
           python3 scripts/seo_lint.py . > /tmp/seo.txt 2>&1 || true
           COUNT=$(grep -cE '^  (THIN|VOICE|DUP)' /tmp/seo.txt || true)
           echo "seo_lint failures: $COUNT (baseline $BASELINE)"
