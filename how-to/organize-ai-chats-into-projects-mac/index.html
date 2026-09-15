@@ -10,7 +10,7 @@
   <title>How to organize AI chats into projects on your Mac | Outlier</title>
   <meta name="description" content="Stop re-explaining your codebase every conversation. Projects give a local AI persistent context on macOS, so it starts each chat already knowing what you're working on.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-08-14">
+  <meta name="last-modified" content="2026-09-15">
   <link rel="canonical" href="https://outlier.host/how-to/organize-ai-chats-into-projects-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to organize AI chats into projects on your Mac">
@@ -102,7 +102,7 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is an AI project folder?", "acceptedAnswer": {"@type": "Answer", "text": "A container that holds files, standing context and the chats for one piece of work, so every conversation starts with the background already loaded."}}, {"@type": "Question", "name": "Can a local AI read my whole codebase?", "acceptedAnswer": {"@type": "Answer", "text": "It indexes the codebase you attach so it can retrieve the relevant parts on demand. Everything stays on disk."}}, {"@type": "Question", "name": "How is a project different from memory?", "acceptedAnswer": {"@type": "Answer", "text": "Memory is cross-cutting knowledge about you. A project is scoped context about one body of work. They complement each other."}}, {"@type": "Question", "name": "Is project context uploaded anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. Projects are local state on your Mac."}}]}
   </script>
   <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "headline": "How to organize AI chats into projects on your Mac", "description": "Stop re-explaining your codebase every conversation. Projects give a local AI persistent context on macOS, so it starts each chat already knowing what you're working on.", "datePublished": "2026-08-14", "dateModified": "2026-08-14", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/organize-ai-chats-into-projects-mac/", "image": "https://outlier.host/og-card.png"}
+{"@context": "https://schema.org", "@type": "Article", "headline": "How to organize AI chats into projects on your Mac", "description": "Stop re-explaining your codebase every conversation. Projects give a local AI persistent context on macOS, so it starts each chat already knowing what you're working on.", "datePublished": "2026-08-14", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/organize-ai-chats-into-projects-mac/", "image": "https://outlier.host/og-card.png"}
   </script>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to organize AI chats into projects on your Mac", "item": "https://outlier.host/how-to/organize-ai-chats-into-projects-mac/"}]}
@@ -130,7 +130,7 @@
     <h1>How to organize AI chats into projects on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-08-14</span>
-      <span class="updated-pill">Last updated 2026-08-14</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
     </div>
 
     <div class="quick-answer">
@@ -148,6 +148,39 @@
     <h2>What a project changes</h2>
     <p>Instead of context living in your head and being re-typed, it lives with the work. Open a chat inside a project and the assistant already has the background: the files, the constraints, the prior decisions.</p>
     <p>For code the difference is sharper still. With a codebase attached, the assistant can locate the function you're describing rather than asking you to paste it — which is the difference between a colleague who has seen the repo and one who has not.</p>
+
+    <h2>What actually gets indexed, and why it depends on your Mac</h2>
+    <p>&ldquo;Point it at a codebase&rdquo; raises a fair question: all of it? The answer is that
+    the index is sized to the machine, in five bands, because an index that fits a 128&nbsp;GB
+    Studio would swamp an 8&nbsp;GB Air. These are the limits the shipping code applies.</p>
+    <table>
+      <thead><tr><th>Your Mac&rsquo;s RAM</th><th>Files indexed</th><th>Directories</th><th>Time allowed to walk the tree</th><th>Largest file read</th></tr></thead>
+      <tbody>
+        <tr><td>Under 16&nbsp;GB</td><td>3,000</td><td>1,000</td><td>45&nbsp;s</td><td>~1&nbsp;MB</td></tr>
+        <tr><td>16&ndash;32&nbsp;GB</td><td>10,000</td><td>3,000</td><td>90&nbsp;s</td><td>~2&nbsp;MB</td></tr>
+        <tr><td>32&ndash;64&nbsp;GB</td><td>25,000</td><td>8,000</td><td>180&nbsp;s</td><td>~3&nbsp;MB</td></tr>
+        <tr><td>64&ndash;128&nbsp;GB</td><td>50,000</td><td>15,000</td><td>300&nbsp;s</td><td>~4&nbsp;MB</td></tr>
+        <tr><td>128&nbsp;GB and up</td><td>200,000</td><td>60,000</td><td>600&nbsp;s</td><td>~16&nbsp;MB</td></tr>
+      </tbody>
+    </table>
+    <p>For scale: a real working repository &mdash; the one Outlier itself is built from &mdash;
+    indexes at about 3,000 files, which fits inside the smallest band. Most projects are not near
+    these numbers, and the bands exist for the monorepo that is.</p>
+    <p>The part worth knowing is what happens when a project <em>does</em> exceed them. It is not
+    silent. The index records that it stopped at the limit so the interface can say so, and the
+    file tree the assistant sees is paths-only and therefore far larger than the content budget
+    &mdash; so on a normal repository it sees the whole tree even though it has read only part of
+    the contents. When something is omitted, the assistant is told it can still open or search that
+    path on request. <strong>Nothing is hidden; some of it is merely not pre-read.</strong> That
+    distinction is the difference between an assistant that says &ldquo;I cannot see all the
+    code&rdquo; and one that quietly answers as though it had.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Read from the shipping backend on
+    <strong>2026-09-15</strong> (<code>codebase.py</code>, the RAM-tiered index limits): files
+    3,000 / 10,000 / 25,000 / 50,000 / 200,000 and directories 1,000 / 3,000 / 8,000 / 15,000 /
+    60,000 across the bands under&nbsp;16, 16&ndash;32, 32&ndash;64, 64&ndash;128 and 128+&nbsp;GB;
+    tree-walk budgets 45/90/180/300/600&nbsp;s; per-file read caps ~1/2/3/4/16&nbsp;MB. Truncation
+    is reported rather than silent. These are enforced values, not intentions.</div>
 
     <h2>Setting one up</h2>
     <ol>
