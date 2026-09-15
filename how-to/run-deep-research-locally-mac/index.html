@@ -10,7 +10,7 @@
   <title>How to run deep research locally on your Mac | Outlier</title>
   <meta name="description" content="Multi-step research with sources, run by a model on your own machine: it plans, reads across the web, and writes up what it found — with citations you can check.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-08-14">
+  <meta name="last-modified" content="2026-09-15">
   <link rel="canonical" href="https://outlier.host/how-to/run-deep-research-locally-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run deep research locally on your Mac">
@@ -102,7 +102,7 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a local AI do deep research?", "acceptedAnswer": {"@type": "Answer", "text": "Yes — planning, retrieval across multiple sources, and a written synthesis with citations. The reasoning happens on your Mac; the page fetches use the network."}}, {"@type": "Question", "name": "Does deep research work offline?", "acceptedAnswer": {"@type": "Answer", "text": "The reasoning does, but reading current web pages needs a connection. Offline, the model is limited to what it already knows and what you give it."}}, {"@type": "Question", "name": "Are the sources real?", "acceptedAnswer": {"@type": "Answer", "text": "Citations point at pages actually retrieved during the run, so you can open them and check. That is exactly why they're there."}}, {"@type": "Question", "name": "How long does it take?", "acceptedAnswer": {"@type": "Answer", "text": "Minutes rather than seconds — it is doing several rounds of retrieval and reading, not one."}}]}
   </script>
   <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "headline": "How to run deep research locally on your Mac", "description": "Multi-step research with sources, run by a model on your own machine: it plans, reads across the web, and writes up what it found — with citations you can check.", "datePublished": "2026-08-14", "dateModified": "2026-08-14", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/run-deep-research-locally-mac/", "image": "https://outlier.host/og-card.png"}
+{"@context": "https://schema.org", "@type": "Article", "headline": "How to run deep research locally on your Mac", "description": "Multi-step research with sources, run by a model on your own machine: it plans, reads across the web, and writes up what it found — with citations you can check.", "datePublished": "2026-08-14", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/run-deep-research-locally-mac/", "image": "https://outlier.host/og-card.png"}
   </script>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to run deep research locally on your Mac", "item": "https://outlier.host/how-to/run-deep-research-locally-mac/"}]}
@@ -130,7 +130,7 @@
     <h1>How to run deep research locally on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-08-14</span>
-      <span class="updated-pill">Last updated 2026-08-14</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
     </div>
 
     <div class="quick-answer">
@@ -144,6 +144,39 @@
     </div>
 
     <p class="lead">A one-shot answer to a research question is a guess with good grammar. Real research means deciding what to look up, reading more than one source, noticing where they disagree, and showing your work.</p>
+
+    <h2>What bounds each step, in seconds and tokens</h2>
+    <p>A research loop with no bounds does not fail, it runs all night &mdash; and the honest
+    version of &ldquo;it takes minutes&rdquo; is a list of the limits that make minutes the worst
+    case rather than the hope. These are the values the shipping code enforces.</p>
+    <table>
+      <thead><tr><th>Step</th><th>Time limit</th><th>Output limit</th><th>What it is for</th></tr></thead>
+      <tbody>
+        <tr><td>Plan the question</td><td>30&nbsp;s</td><td>300 tokens</td><td>Decide what to look up; a plan that rambles is a plan that has stopped planning</td></tr>
+        <tr><td>Search</td><td>30&nbsp;s</td><td>&mdash;</td><td>Fetching is the only step that touches the network</td></tr>
+        <tr><td>Summarise a source</td><td>60&nbsp;s</td><td>250 tokens</td><td>Per source, so one slow page cannot hold up the rest</td></tr>
+        <tr><td>Write up</td><td>180&nbsp;s</td><td>1,200 tokens</td><td>The long step, and the one worth waiting for</td></tr>
+        <tr><td>Synthesis pass</td><td>80&nbsp;s whole, <strong>30&nbsp;s to first token</strong></td><td>420 tokens</td><td>The first-token fuse abandons a pass that has stalled instead of waiting out the budget</td></tr>
+        <tr><td>Iterate (go back for more)</td><td>55&nbsp;s</td><td><strong>2 more queries, 5 new sources</strong></td><td>Bounded so &ldquo;notice what is missing&rdquo; cannot become an endless loop</td></tr>
+      </tbody>
+    </table>
+    <p>Two of those rows are worth reading twice. The <strong>first-token fuse</strong> is separate
+    from the overall budget because the two failures look nothing alike: a pass that is slow still
+    finishes, while a pass that never starts will sit there consuming the entire allowance and
+    produce nothing. And the <strong>iterate step is capped at two extra queries and five new
+    sources</strong> &mdash; the step that makes research deep is exactly the step that, unbounded,
+    makes it interminable.</p>
+    <p>There is also a floor, not just ceilings: a synthesis shorter than <strong>350
+    characters</strong> is rejected rather than returned. A two-line answer to a research question
+    is the failure mode that looks most like success.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Read from the shipping backend on
+    <strong>2026-09-15</strong> (<code>deep_research_v4.py</code>, the bounded-phase orchestrator):
+    plan 30&nbsp;s/300&nbsp;tok &middot; search 30&nbsp;s &middot; per-source summary
+    60&nbsp;s/250&nbsp;tok &middot; write-up 180&nbsp;s/1,200&nbsp;tok &middot; compose
+    80&nbsp;s budget with a 30&nbsp;s first-token fuse, 420&nbsp;tok cap and a 350-character
+    validation floor &middot; iterate 55&nbsp;s, 2 queries, 5 new sources. These are the enforced
+    values, not a description of intent.</div>
 
     <h2>What makes it "deep"</h2>
     <p>A normal answer is one pass: your question in, a paragraph out. Deep research is a loop — decompose the question, retrieve, read, notice what's missing, retrieve again, then synthesise.</p>
