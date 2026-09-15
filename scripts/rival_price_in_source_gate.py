@@ -136,10 +136,35 @@ def self_check() -> int:
     print("self-check: present price allowed ->", "PASS" if ok_pass else "FAIL")
     return 0 if (ok_fail and ok_pass) else 1
 
+def _expand(args: list[str]) -> list[str]:
+    """Accept page paths OR a site root, so meta_gate can aim this at a tree.
+
+    meta_gate enumerates scripts/*_gate.py and proves each one REFUSES to report
+    clean on an empty tree. It caught this file the day it was written: taking
+    only explicit page paths meant it could not be pointed anywhere, so the
+    empty-input probe proved nothing about it. A gate that cannot be aimed
+    cannot be audited.
+    """
+    import pathlib
+    out: list[str] = []
+    for a in args:
+        p = pathlib.Path(a)
+        if p.is_dir():
+            out += [str(x) for x in sorted(p.rglob("vs/**/index.html"))]
+        else:
+            out.append(a)
+    return out
+
+
 if __name__ == "__main__":
     args = sys.argv[1:]
     if not args or args[0] == "--self-check":
         sys.exit(self_check())
+    args = _expand(args)
+    if not args:
+        # Refusing to report clean on nothing is the whole point of meta_gate.
+        print("FAIL — no /vs/ pages found under the given root; nothing was checked.")
+        sys.exit(1)
     out: list[str] = []
     for p in args:
         out += check(p)
