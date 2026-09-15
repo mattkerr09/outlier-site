@@ -10,7 +10,7 @@
   <title>How to install local AI on a Mac (step by step) | Outlier</title>
   <meta name="description" content="Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-06-09">
+  <meta name="last-modified" content="2026-09-15">
   <link rel="canonical" href="https://outlier.host/how-to/install-local-ai-on-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to install local AI on a Mac (step by step)">
@@ -96,11 +96,13 @@
     .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
     .faq-item p { margin-bottom: 0; color: var(--text-mid); }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
   </style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to install local AI on a Mac (step by step)", "description": "Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/install-local-ai-on-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to install local AI on a Mac (step by step)", "description": "Install a private, offline AI on your Mac in about 5 minutes. Download, drag to Applications, run. Apple Silicon, macOS 12+, no account needed.", "datePublished": "2026-06-09", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/install-local-ai-on-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to install local AI on a Mac (step by step)", "item": "https://outlier.host/how-to/install-local-ai-on-mac/"}]}
@@ -151,6 +153,32 @@
       <li><strong>16 GB RAM</strong> is the sweet spot. The free tiers run fine here. Want bigger models? You'll want more.</li>
       <li><strong>~3 GB free disk</strong> for that first model. Add bigger tiers and it climbs.</li>
     </ul>
+    <h2>Which tiers your Mac can actually run</h2>
+    <p>The install is the same whatever your Mac; what differs is which tiers will load once
+    it is open. Both numbers below come from the shipping app&rsquo;s own tier catalog, so this
+    is what the app itself enforces rather than a rule of thumb.</p>
+    <table>
+      <thead><tr><th>Tier</th><th>Download</th><th>Minimum RAM</th><th>Runs on</th></tr></thead>
+      <tbody>
+        <tr><td>Nano</td><td>2.37&nbsp;GB</td><td><strong>6&nbsp;GB</strong></td><td>Any Apple Silicon Mac</td></tr>
+        <tr><td>Lite</td><td>5.04&nbsp;GB</td><td>12&nbsp;GB</td><td>16&nbsp;GB Air and up</td></tr>
+        <tr><td>Quick</td><td>15.61&nbsp;GB</td><td>16&nbsp;GB</td><td>16&nbsp;GB, with little to spare</td></tr>
+        <tr><td>Core</td><td>15.13&nbsp;GB</td><td>24&nbsp;GB</td><td>24&nbsp;GB and up</td></tr>
+        <tr><td>Vision 3.8</td><td>15.5&nbsp;GB</td><td>24&nbsp;GB</td><td>24&nbsp;GB and up &mdash; the tier that reads images</td></tr>
+        <tr><td>Plus 397B</td><td>209&nbsp;GB</td><td>64&nbsp;GB</td><td>64&nbsp;GB, and 220&nbsp;GB of free disk</td></tr>
+      </tbody>
+    </table>
+    <p>The practical reading: <strong>a base 8&nbsp;GB Mac runs Nano and nothing else</strong>, 16&nbsp;GB
+    adds Lite comfortably, and 24&nbsp;GB is where the 27B tiers become an option. You do not choose
+    any of this at install time &mdash; tiers download individually, on first use, so the only thing the
+    installer itself needs is room for Nano.</p>
+
+    <div class="receipts"><strong>Receipts:</strong> Download sizes and minimum RAM are read from the
+    shipping app&rsquo;s tier catalog (<code>server.py</code>), checked <strong>2026-09-15</strong>:
+    Nano 2.37&nbsp;GB/6&nbsp;GB &middot; Lite 5.04/12 &middot; Quick 15.61/16 &middot; Core 15.13/24
+    &middot; Vision 3.8 15.5/24 &middot; Plus 209&nbsp;GB/64&nbsp;GB with a 220&nbsp;GB disk floor.
+    These are the values the app enforces when it decides whether a tier will load, not estimates.</div>
+
     <h2>Step by step</h2>
     <ol>
       <li><strong>Download.</strong> Head to <a href="https://outlier.host/">outlier.host</a> and hit Download. You'll get a notarized <code>.dmg</code> (~150 MB).</li>
