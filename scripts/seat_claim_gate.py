@@ -40,11 +40,13 @@ COUNTS = re.compile(r'data-founding-left="\d+"|\bdata-founding\b'
 #: runtime, and reported clean. Matching the widget's `data-founding` attribute is what
 #: makes the claim visible to a checker that never executes the page.
 #:
-#: BASELINED, not fixed: index.html carries the widget AND the no-cap sentence today, and
-#: which one survives is Matthew's decision (one shared pool, 25 per app, or price only),
-#: put to him 2026-09-15. A gate left red for days pending a decision is a gate nobody
-#: reads, so the known pair is recorded here and any NEW page carrying both fails.
-BASELINE = {"index.html"}
+#: BASELINE IS EMPTY AGAIN, AND THAT IS THE POINT. index.html carried the widget AND a
+#: "No seat cap, no countdown" sentence while Matthew decided; that pair was recorded here
+#: rather than left failing, because a gate red for days pending a decision is a gate
+#: nobody reads. He decided on 2026-09-15 — 25 seats per app, each with its own code — the
+#: sentence was rewritten to match, and the exemption came straight back out. A baseline is
+#: a note about a decision in flight, never a permanent hole.
+BASELINE: set[str] = set()
 
 
 def main(root: str = ".") -> int:
@@ -73,34 +75,29 @@ def main(root: str = ".") -> int:
                   f"tell which is true, and neither can a checker.", file=sys.stderr)
         return 1
 
-    # If the site ever does count seats, the number must still come from Dodo.
+    # A RENDERED count is fine — the widget reads the worker, which reads the store, so
+    # it cannot drift. A HARDCODED one is the thing to catch: it is a second source, and a
+    # second source of truth is a contradiction generator rather than a backup. That is
+    # exactly how index.html came to carry three different seat claims on 2026-09-15.
     if counting:
-        try:
-            import founding_seats as fs
-            k = fs.key()
-            if not k:
-                print("FAIL: a page counts seats but DODO_API_KEY is unavailable, so the "
-                      "number is unverified. A gate that cannot compare must not report "
-                      "clean.", file=sys.stderr)
-                return 1
-            live = fs.CAP - fs.sold(k)
-            bad = False
-            for p in counting:
-                m = re.search(r'data-founding-left="(\d+)"',
-                              p.read_text(encoding="utf-8", errors="ignore"))
-                if m and int(m.group(1)) != live:
-                    print(f"FAIL: {p} says {m.group(1)} seats left; Dodo says {live}. "
-                          f"Re-run: python3 scripts/founding_seats.py --inject",
-                          file=sys.stderr)
-                    bad = True
-            if bad:
-                return 1
-        except Exception as e:
-            print(f"FAIL: a page counts seats and the count could not be checked ({e}).",
-                  file=sys.stderr)
+        import re as _re
+        hard = [(p, m.group(1)) for p in counting
+                for m in [_re.search(r'data-founding-left="(\d+)"',
+                                     p.read_text(encoding="utf-8", errors="ignore"))] if m]
+        if hard:
+            try:
+                import founding_seats as fs
+                live = str(fs.founding().get("left"))
+            except Exception:  # noqa: BLE001
+                live = None
+            for p, n in hard:
+                extra = f" The worker says {live}." if live else ""
+                print(f"FAIL: {p} hardcodes {n} seats left. The widget already renders the "
+                      f"worker's number; a second count on the page is a contradiction, "
+                      f"not a backup.{extra}", file=sys.stderr)
             return 1
-        print(f"seat_claim_gate: ok — {len(counting)} page(s) count seats, none also "
-              f"promise no cap, and the count matches Dodo")
+        print(f"seat_claim_gate: ok — {len(counting)} page(s) carry the founding widget, "
+              f"none hardcodes a count, and none also promises no seat cap")
         return 0
 
     if held:

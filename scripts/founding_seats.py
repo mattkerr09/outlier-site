@@ -1,126 +1,68 @@
 #!/usr/bin/env python3
-"""How many founding seats are left, counted from Dodo — never typed.
+"""How many founding seats Outlier has left — from the worker, which is the one source.
 
-    python3 scripts/founding_seats.py            # print the count as JSON
-    python3 scripts/founding_seats.py --inject   # write it into index.html
+    python3 scripts/founding_seats.py            # print the worker's answer as JSON
+    python3 scripts/founding_seats.py --check    # non-zero if the page and the worker disagree
 
-WHY THIS EXISTS. Matthew noticed on 2026-09-15 that outlier.host had no founding-seat
-bar at all. Putting one back means putting a NUMBER on the page, and a seat count typed
-by hand is wrong the moment the next seat sells — a scarcity claim that drifts is worse
-than no claim, because it is checkable and a buyer who checks finds us overstating.
+WHY THIS IS NOW A READER AND NOT A COUNTER. The first version of this script counted
+succeeded Dodo payments itself and injected the number into index.html. That produced a
+page with THREE seat claims at once on 2026-09-15 — my injected count, the shared widget
+already on the page, and a sentence promising no seat cap at all. Two of them were mine.
 
-So the number is DERIVED. This counts succeeded payments whose product_cart contains the
-founding product and subtracts from the cap. The list endpoint does NOT carry
-product_cart (measured 2026-09-15 — it returns payment_id, total_amount, status,
-created_at and no product attribution), so each succeeded payment is fetched
-individually. With single-digit order counts that is cheap and exact; if it ever is not,
-page it, do not guess.
+A second source of truth is not a safety net, it is a contradiction generator. The widget
+reads the worker; the worker reads Dodo; so this script reads the worker too, and the only
+number that can appear on the page is the one the widget renders.
 
-It counts QUANTITY, not payments: one order for two seats is two seats.
-
-IT ALSO COUNTS COMPS, AND THAT IS THE WHOLE JUDGEMENT. Measured 2026-09-15: the founding
-product has TWO succeeded orders, not one — pay_0Nmu3FOXHB501N4C2MGzp at $124.50 on
-09-04 (a real sale) and pay_0NltXCjE2joH5KpVHa7cM at $0.00 on 08-21 (a 100%-off comp).
-Counting paid sales alone gives "24 left"; counting seats a person actually holds gives
-23. A comped founding licence is a seat that is gone, so the bar says 23.
-
-The direction of the error is the reason: understating availability costs nothing and can
-always be honoured, while overstating tells a buyer a seat exists that does not, on the
-one page where they are being asked to hurry. If the business means paid-only, change CAP
-or filter on total_amount here — deliberately, in this file, not by typing a number into
-a page.
+THE SEAT DEFINITION, because counting is where copies drift (Matthew, 2026-09-15):
+a seat is a PAID, NON-REFUNDED order of the product. The $0.00 order of 2026-08-21 is a
+comp and holds no seat. Outlier therefore has 1 held and 24 left, not the 23 my own count
+produced by treating the comp as a seat. The rule is encoded once, in the Dodo code's
+usage_limit, and `left = usage_limit - times_used` — so nothing here re-derives it.
+Each app has its own 25 and its own code; Outlier's is FOUNDINGOUTLIER.
 """
 from __future__ import annotations
 
 import json
-import os
-import pathlib
 import re
 import sys
 import urllib.request
+from pathlib import Path
 
-FOUNDING_PRODUCT = "pdt_0Nlgdu1f0s30YekSmpGwA"
-CAP = 25
-API = "https://live.dodopayments.com"
-
-
-def key() -> str:
-    p = pathlib.Path.home() / ".dodo/secrets.env"
-    if p.exists():
-        for line in p.read_text().splitlines():
-            if line.startswith("DODO_API_KEY="):
-                return line.split("=", 1)[1].strip().strip('"').strip("'")
-    return os.environ.get("DODO_API_KEY", "")
+WORKER = "https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host"
 
 
-def _get(url: str, k: str):
-    r = urllib.request.Request(url, headers={"Authorization": f"Bearer {k}",
-                                             "User-Agent": "kerr-ops/1.0"})
-    return json.loads(urllib.request.urlopen(r, timeout=30).read())
-
-
-def sold(k: str) -> int:
-    n = 0
-    page = 0
-    while True:
-        d = _get(f"{API}/payments?page_size=100&page_number={page}", k)
-        items = d.get("items") or d.get("data") or []
-        if not items:
-            break
-        for it in items:
-            if it.get("status") != "succeeded":
-                continue
-            detail = _get(f"{API}/payments/{it['payment_id']}", k)
-            for line in detail.get("product_cart") or []:
-                if line.get("product_id") == FOUNDING_PRODUCT:
-                    n += int(line.get("quantity") or 1)
-        if len(items) < 100:
-            break
-        page += 1
-    return n
-
-
-BAR_RE = re.compile(r'<div class="founding-bar"[^>]*>.*?</div>', re.S)
-
-
-def bar_html(left: int, total: int) -> str:
-    return (f'<div class="founding-bar" data-founding-left="{left}">'
-            f'<strong>{left} of {total}</strong> founding seats left '
-            f'&middot; lifetime, one payment &middot; '
-            f'<a href="#pricing">see what it includes</a></div>')
+def founding() -> dict:
+    req = urllib.request.Request(WORKER, headers={"User-Agent": "kerr-ops/1.0"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.loads(r.read())
 
 
 def main(argv: list[str]) -> int:
-    k = key()
-    if not k:
-        print("DODO_API_KEY not found — refusing to emit a seat count from nothing.",
-              file=sys.stderr)
-        return 2
-    s = sold(k)
-    left = CAP - s
-    if not (0 <= left <= CAP):
-        print(f"REFUSING: derived {left} of {CAP} (sold {s}) — outside the cap, so the "
-              f"count or the cap is wrong. A scarcity number is not guessed.", file=sys.stderr)
+    try:
+        d = founding()
+    except Exception as e:  # noqa: BLE001
+        print(f"FAIL: could not read the founding worker ({e}). Refusing to emit a seat "
+              f"count from anything else — a second source is how the page ended up "
+              f"claiming three different things.", file=sys.stderr)
         return 1
-    if "--inject" in argv:
-        p = pathlib.Path(__file__).resolve().parent.parent / "index.html"
-        html = p.read_text(encoding="utf-8")
-        if BAR_RE.search(html):
-            html = BAR_RE.sub(bar_html(left, CAP), html, count=1)
-        else:
-            # The body tag carries attributes on this page, so match it rather
-            # than assuming "<body>" appears literally.
-            m = re.search(r"<body[^>]*>", html)
-            if not m:
-                print("no <body> tag found — refusing to guess an insertion point",
-                      file=sys.stderr)
-                return 1
-            i = m.end()
-            html = html[:i] + "\n" + bar_html(left, CAP) + html[i:]
-        p.write_text(html, encoding="utf-8")
-        print(f"injected: {left} of {CAP} founding seats left (sold {s})")
+    if "left" not in d or "of" not in d:
+        print(f"FAIL: the worker did not return a seat count: {d}", file=sys.stderr)
+        return 1
+
+    if "--check" in argv:
+        html = (Path(__file__).resolve().parent.parent / "index.html").read_text(encoding="utf-8")
+        hard = re.findall(r'data-founding-left="(\d+)"', html)
+        if hard:
+            print(f"FAIL: index.html hardcodes {hard} seats left. The widget renders the "
+                  f"worker's number; a second one on the page is a contradiction, not a "
+                  f"backup.", file=sys.stderr)
+            return 1
+        print(f"founding_seats: ok — the page carries no hardcoded count; the worker says "
+              f"{d['left']} of {d['of']} left ({d.get('claimed')} claimed, code "
+              f"{d.get('code')})")
         return 0
-    print(json.dumps({"sold": s, "cap": CAP, "left": left}))
+
+    print(json.dumps(d))
     return 0
 
 
