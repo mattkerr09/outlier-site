@@ -128,6 +128,18 @@ def main(root: str) -> int:
         text = visible_text(raw)
         words = len(text.split())
         low = text.lower()
+        # THIN COUNTS BODY TEXT ONLY — the same exclusion DUP has always used.
+        # This read the full visible text until 2026-09-15, so nav, footer, the
+        # CTA and the related-links blocks counted as "real body text" while the
+        # docstring above promised they did not. It was found by accident: a
+        # 33-word cross-site links block added to every page pushed
+        # how-to/run-deep-research-locally-mac from 583w to passing without a
+        # word of prose being written, and the failure count fell 173 -> 172.
+        # A floor any site-wide chrome addition can buy its way over is not a
+        # floor -- MIN_WORDS was really about 450 words of content, silently.
+        # VOICE deliberately still reads the FULL text: a banned phrase in a
+        # shared CTA is a real finding, and scoping it to the body would hide it.
+        body_words = len(visible_text(raw, body_only=True).split())
 
         hits = [b for b in BANNED if b in low]
         if NOT_JUST.search(text):
@@ -145,9 +157,9 @@ def main(root: str) -> int:
         # answers — and the failing one is the invocation a person is most likely to try.
         if _is_redirect_stub(raw):
             skipped_stubs.append(p)
-        if words < MIN_WORDS and "legal" not in p.parts \
+        if body_words < MIN_WORDS and "legal" not in p.parts \
                 and not _is_section_hub(p) and not _is_redirect_stub(raw):
-            fails.append(f"THIN   {p}: {words}w (min {MIN_WORDS})")
+            fails.append(f"THIN   {p}: {body_words}w body (min {MIN_WORDS})")
         # duplicate check ignores shared nav/footer chrome — see _CHROME above
         sh[p] = shingles(visible_text(p.read_text(encoding="utf-8", errors="ignore"),
                                       body_only=True))
