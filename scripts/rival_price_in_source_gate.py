@@ -46,6 +46,28 @@ def fetch(url: str) -> str:
     _cache[url] = (r.stdout or b"").decode("utf-8", "replace")
     return _cache[url]
 
+def fetch_all(urls: list[str]) -> list[str]:
+    """Fetch in parallel, because serial 25s timeouts are why this is unwired.
+
+    The gate is correct and has never run in CI: at one 25s curl per cited URL
+    it took over two minutes, and a slow gate wired carelessly is how a suite
+    stops being run at all. The work is entirely network wait, so the fix is
+    concurrency rather than fewer checks — the same URLs, the same timeout, the
+    same answers, in the time of the slowest one instead of the sum.
+
+    Bounded at 8: enough to collapse the wall time, few enough not to look like
+    a burst to any one host. Results come back in the caller's order, so the
+    corpus a page is checked against does not depend on which host answered
+    first — an order-dependent corpus would make this gate flaky rather than
+    fast.
+    """
+    if not urls:
+        return []
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=min(8, len(urls))) as pool:
+        return list(pool.map(fetch, urls))
+
+
 def visible(html: str) -> str:
     body = re.sub(r"(?is)<(script|style)\b.*?</\1>", " ", html)
     return re.sub(r"(?s)<[^>]+>", " ", body)
@@ -62,7 +84,7 @@ def cited(html: str) -> list[str]:
 def check(path: str, html: str | None = None) -> list[str]:
     h = html if html is not None else open(path, encoding="utf-8", errors="replace").read()
     srcs = cited(h)
-    corpus = "\n".join(fetch(u) for u in srcs)
+    corpus = "\n".join(fetch_all(srcs))
     if not srcs:
         # Cites nothing external at all. The instinct is to hand this to
         # rival_price_source_gate ("N pages cite no vendor pricing URL") and
