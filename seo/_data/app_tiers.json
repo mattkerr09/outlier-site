@@ -1,5 +1,5 @@
 {
-  "_why": "Written by the app's ship pipeline so CI can compare the site's tier list to what the app actually ships. CI has no access to the app repo, and a gate that cannot see its reference used to be skipped there \u2014 which made its only enforcement a no-op. The version field is what stops this going stale silently: the gate refuses unless it matches the version the site advertises.",
+  "_why": "Written by scripts/refresh_app_tiers.py so CI can compare the site's tier list to what the app ships. CI has no app checkout, and a gate that cannot see its reference must not be skipped when it is the only thing checking. cut_from_version is what stops this going stale silently: the gate refuses unless it matches the version the site advertises.",
   "cut_from_version": "1.11.839",
   "tier_display_order": [
     "nano",
