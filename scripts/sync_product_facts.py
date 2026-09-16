@@ -62,13 +62,32 @@ def build() -> dict:
     }
 
 
+#: Fields that change on every read without changing what the file CLAIMS.
+_VOLATILE = frozenset({"read_at"})
+
+
 def main(argv: list[str]) -> int:
     facts = build()
     text = json.dumps(facts, indent=2, sort_keys=True) + "\n"
     if "--check" in argv:
-        cur = OUT.read_text(encoding="utf-8") if OUT.is_file() else ""
-        if cur != text:
+        # ⚠️ COMPARE WHAT THE FILE CLAIMS, NOT WHEN IT WAS WRITTEN. A whole-text
+        # comparison includes read_at, so every re-read of the vendor made the
+        # published file "STALE" even when seats and price were identical. The
+        # question --check exists to answer is "does the published file disagree
+        # with the vendor?", and a timestamp cannot disagree with anything.
+        # Wired into CI as it was, this would have been a red on every run that
+        # happened to re-read — a gate that fails for a reason nobody can fix.
+        cur_raw = OUT.read_text(encoding="utf-8") if OUT.is_file() else ""
+        try:
+            cur_facts = json.loads(cur_raw) if cur_raw else {}
+        except Exception:
+            cur_facts = {}
+        material = lambda d: {k: v for k, v in d.items() if k not in _VOLATILE}
+        if material(cur_facts) != material(facts):
             print("sync_product_facts: data/product-facts.json is STALE — re-run without --check")
+            for k in sorted(set(material(cur_facts)) | set(material(facts))):
+                if cur_facts.get(k) != facts.get(k):
+                    print(f"  {k}: published {cur_facts.get(k)!r} vs vendor {facts.get(k)!r}")
             return 1
         print(f"sync_product_facts: up to date (seats={facts['seats']}, read_at={facts['read_at']})")
         return 0
