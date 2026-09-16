@@ -8,8 +8,8 @@ said 3 — a promise of two machines nobody had bought. The message was correcte
 in Dodo; this file is how the SITE stops drifting from it. A number typed into
 HTML is a copy that cannot be re-read, and the 5 got there the same way.
 
-The source is ~/ops/launch/dodo-facts.json, written by ~/ops/bin/dodo-facts.py
-straight from Dodo's product records. That script exits 1 on any product /
+The source is a fact file written straight from Dodo's product records by the
+release toolchain (SOURCE, below). That writer exits 1 on any product /
 entitlement mismatch, so a disagreement never reaches this file silently.
 
     python3 scripts/sync_product_facts.py            # write data/product-facts.json
@@ -33,7 +33,7 @@ OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "product-facts.j
 
 def build() -> dict:
     if not SOURCE.is_file():
-        sys.exit(f"sync_product_facts: no source at {SOURCE} — run ~/ops/bin/dodo-facts.py first")
+        sys.exit(f"sync_product_facts: no source at {SOURCE} — run the Dodo fact writer first")
     src = json.loads(SOURCE.read_text(encoding="utf-8"))
     prod = (src.get("products") or {}).get(PRODUCT_ID)
     if not prod:
