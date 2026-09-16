@@ -83,6 +83,28 @@ jobs:
           python3 scripts/seat_count_gate.py .
           python3 scripts/checkout_price_gate.py --break-test
           python3 scripts/checkout_price_gate.py .
+          # Wired 2026-09-16, after sitting unwired since it was written. Its
+          # sibling above asks whether a page pricing someone else CITES a
+          # vendor URL; this one asks whether the PRICE is in what it cites —
+          # citation presence and citation content are different properties and
+          # only the weaker one was gated. It reported 51 claims and was held
+          # back for it; four defects in the gate itself turned out to be the
+          # cause. It corroborated a rival's price against the byline link, it
+          # matched substrings so $20 was satisfied by $200, it read raw HTML so
+          # minified bundle tokens counted as prices, and it called a source it
+          # could not read a source that disagreed.
+          #
+          # Site-wide today: 0 unsourced across 60 pages. The ~112 findings it
+          # still reports are vendors that render prices in JavaScript, which it
+          # summarises rather than lists and does NOT fail on — fetching can
+          # neither confirm nor deny those, and failing them would pressure
+          # someone into deleting a true statement about another company.
+          #
+          # It self-checks (--self-check proves it fails on an absent price and
+          # passes on a present one) and takes ~3 minutes, which is network wait
+          # across ~50 hosts at 8 concurrent fetches, not compute.
+          python3 scripts/rival_price_in_source_gate.py --self-check
+          python3 scripts/rival_price_in_source_gate.py .
 
       # Only meaningful once Pages has rebuilt, so it is excluded from push runs.
       - name: Deploy freshness (scheduled and manual only)
