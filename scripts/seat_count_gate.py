@@ -28,7 +28,16 @@ import sys
 
 WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
          "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
-DEVICE = r"(?:macs?|machines?|devices?|computers?)"
+#: ⚠️ "activations" IS A DEVICE WORD HERE. privacy.html promised "your five
+#: activations" while Dodo sells three, and this gate read it as clean for as
+#: long as it existed: it handles spelled numbers fine (WORDS), so the hole
+#: was never the numeral — it was the NOUN. An enumerated noun list is an
+#: allowlist, and the count it misses is invisible rather than wrong.
+#: "seats" is deliberately NOT here: "five Macs instead of five seats" is the
+#: site's pricing metaphor about a five-person team, true on 19 of the 20
+#: pages that say "five", and a gate that fails on those teaches people to
+#: delete true sentences to silence it.
+DEVICE = r"(?:macs?|machines?|devices?|computers?|activations?)"
 UP_TO = re.compile(rf"up\s+to\s+(\d+|{'|'.join(WORDS)})\s+{DEVICE}\b", re.I)
 BARE = re.compile(rf"\b(\d+|{'|'.join(WORDS)})\s+{DEVICE}\b", re.I)
 LICENCE_CTX = re.compile(r"licen[cs]e|activat", re.I)
