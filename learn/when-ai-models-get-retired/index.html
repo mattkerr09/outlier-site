@@ -97,11 +97,17 @@
     .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
     .faq-item p { margin-bottom: 0; color: var(--text-mid); }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
-  </style>
+  
+  /* Horizontal scroll for the retirement table on a phone. Copied verbatim
+     from /vs/mlx-vs-llama-cpp/, which carries a table and this rule; this
+     page had the base `table` rule and not this one, so a four-column table
+     would have run off the side of the screen. */
+  @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+</style>
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Your favorite AI model will be retired. Then what?", "description": "GPT-4 is gone from ChatGPT. Claude's early models are deprecated. Every rented model eventually gets retired out from under you. Local weights don't.", "datePublished": "2026-06-09", "dateModified": "2026-06-09", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/when-ai-models-get-retired/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Your favorite AI model will be retired. Then what?", "description": "GPT-4 is gone from ChatGPT. Claude's early models are deprecated. Every rented model eventually gets retired out from under you. Local weights don't.", "datePublished": "2026-06-09", "dateModified": "2026-09-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/when-ai-models-get-retired/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Your favorite AI model will be retired. Then what?", "item": "https://outlier.host/learn/when-ai-models-get-retired/"}]}
@@ -130,7 +136,7 @@
     <h1>Your favorite AI model will be retired. Then what?</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-06-09</span>
-      <span class="updated-pill">Last updated 2026-06-09</span>
+      <span class="updated-pill">Last updated 2026-09-15</span>
     </div>
 
     <div class="quick-answer">
@@ -148,6 +154,61 @@
     <h2>The retirement ledger so far</h2>
     <p>A short, public history: OpenAI retired GPT-4 from ChatGPT in April 2025 and has cycled GPT-3.5 and a string of dated API checkpoints out of service on published deprecation schedules. Anthropic has formally deprecated its early Claude families the same way. Both companies maintain deprecation pages because this is routine fleet management for them: old models cost serving capacity that new models use better.</p>
     <p>Reasonable from their side. From yours, it means the tool you rely on has an expiry date you don't get to see in advance.</p>
+
+    <h2>We have retired models too. Twice. Here is what it cost.</h2>
+    <p>It would be easy to write this page as though retirement is something
+       other companies do. It is not. This app has retired two tiers, and the
+       interesting part is not that it happened — it is what the code has to do
+       so that it does not strand the person who was using the retired thing.</p>
+
+    <table>
+      <caption>Every tier retirement in Outlier to date, read from the shipped build</caption>
+      <thead>
+        <tr><th>Version</th><th>Retired id</th><th>Now resolves to</th><th>What actually changed</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>v1.11.796</td><td><code>vision</code></td><td><code>vision38</code> — Outlier Vision 3.8</td>
+          <td>3.5&nbsp;GB smaller, slightly faster, newer base, Apache&nbsp;2.0, and it matched the
+              old tier on every image in a like-for-like check.</td>
+        </tr>
+        <tr>
+          <td>v1.11.798</td><td><code>code</code></td><td><code>compact</code> — Outlier Core</td>
+          <td>Never two models. The same <code>.safetensors</code> from the same directory, so the
+              same tokenizer and the same chat template. Two real differences: a temperature
+              default of 0.2, and a context length of 65,536 against 32,768.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>A retirement is two changes, and only one of them is obvious</h2>
+    <p>Dropping the catalog entry is the obvious half. The other half is a line in
+       a table the user never sees, mapping the old id onto the new one. Skip it
+       and a stored selection carrying the retired id reaches the model loader and
+       gets <code>400 unknown model</code> — a hard error, not a fallback.</p>
+    <p>Which means the people it breaks are precisely the people who were using
+       the thing you retired. Everyone who had moved on already is fine. That is
+       the shape of most migration bugs: the blast radius is exactly the users
+       with the strongest claim on you.</p>
+
+    <h2>The context number that looked like a loss and was not</h2>
+    <p>Folding Code into Core took a tier with a 65,536-token default context and
+       pointed it at one with 32,768. On its face that is a halving, and it is the
+       kind of number a changelog gets shouted at over.</p>
+    <p>It was not a loss, and the reason is worth knowing because it is a real
+       property of running models on your own machine rather than someone else's.
+       The context default is raised from its base toward 262,144 depending on how
+       much RAM is actually free, so above roughly 16&nbsp;GB of headroom both
+       tiers already resolved to the same window. Below it they diverged — and the
+       retired tier took <em>more</em>, 4&nbsp;GB of key-value cache against 2&nbsp;GB,
+       only because the gate never returns below a tier's declared base. Both tiers
+       ask for 24&nbsp;GB of RAM, and free memory after a 15.13&nbsp;GB model sits
+       well under that crossover.</p>
+    <p>So the retired tier's larger number was a bypass of the memory gate on the
+       smallest machines that could run it at all — the hardware least able to
+       spare 4&nbsp;GB for a cache. Removing it removed a way to over-commit, not a
+       capability.</p>
+    <p></p>
     <h2>Why 'the new model is better' doesn't fix it</h2>
     <p>Successors are usually stronger on benchmarks. They are also different. Different writing voice, different instruction-following quirks, different failure modes. The prompts you spent months refining behave differently overnight, and entire workflows built on one model's behavior quietly degrade. The recurring "did it get worse?" complaint threads after every silent model swap are this exact phenomenon: not weaker models, moved ones.</p>
     <p>For API users it's sharper. A deprecated endpoint is a production incident with a countdown attached, and re-validating an app against a new model is real engineering work you didn't schedule.</p>
