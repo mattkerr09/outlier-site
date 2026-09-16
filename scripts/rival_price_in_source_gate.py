@@ -31,10 +31,19 @@ def fetch(url: str) -> str:
     """curl, not urllib: Cloudflare bans the urllib UA on several of these hosts."""
     if url in _cache:
         return _cache[url]
+    # ⚠️ BYTES, NOT text=True. This gate fetches RIVALS' pages, whose encoding we
+    # do not control, and text=True decodes them as strict UTF-8. A page served
+    # in another charset — or one whose body curl cuts mid-multibyte at the 25s
+    # timeout — raised UnicodeDecodeError and took the whole gate down with it:
+    #   UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe2 ... invalid
+    #   continuation byte
+    # Measured on the live rival set. A gate that dies on someone else's
+    # encoding is a gate that can never be wired into CI, which is where this
+    # one has been sitting.
     r = subprocess.run(["curl", "-sL", "--max-time", "25", "-A",
                         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)", url],
-                       capture_output=True, text=True)
-    _cache[url] = r.stdout or ""
+                       capture_output=True)
+    _cache[url] = (r.stdout or b"").decode("utf-8", "replace")
     return _cache[url]
 
 def visible(html: str) -> str:
