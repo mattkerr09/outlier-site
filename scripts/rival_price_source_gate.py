@@ -111,6 +111,28 @@ def survey(site_root: str = "."):
     return out, tables
 
 
+#: ⚠️ A RATCHET YOU CAN EDIT WHILE CLAIMING CREDIT IS NOT A RATCHET.
+#: "Edit BY REMOVAL ONLY" is the rule and was only ever a comment. This pins it:
+#: the baseline's size is recorded here, and adding a page to the baseline —
+#: which is how you silence this gate without fixing anything — fails until the
+#: number is changed deliberately in the same commit. Lowering it is free, which
+#: is the direction the ratchet is supposed to turn.
+BASELINE_MAX = 14
+
+
+def assert_baseline_not_grown() -> int:
+    import json as _json
+    n = len(_json.load(open(BASELINE))) if os.path.exists(BASELINE) else 0
+    if n > BASELINE_MAX:
+        print(f"FAIL: the baseline holds {n} pages, was pinned at {BASELINE_MAX}.")
+        print("      A page was ADDED to the baseline. That silences this gate")
+        print("      without citing a source. Remove it, or change BASELINE_MAX")
+        print("      in the same commit and say why.")
+        return 1
+    print(f"rival_price_source_gate: baseline {n} of a pinned {BASELINE_MAX} — not grown")
+    return 0
+
+
 def main() -> int:
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     site_root = args[0] if args else "."
@@ -157,4 +179,7 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    # The ratchet check is its own invocation so CI shows which one failed.
+    if "--assert-baseline-not-grown" in sys.argv[1:]:
+        raise SystemExit(assert_baseline_not_grown())
     raise SystemExit(main())

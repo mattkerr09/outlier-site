@@ -62,6 +62,14 @@ jobs:
           python3 scripts/sitemap_coverage_gate.py .
           python3 scripts/tier_catalog_sync_gate.py .
           python3 scripts/tier_figure_gate.py .
+          # Wired 2026-09-16, ahead of the Product Hunt comparison pages: those
+          # pages state rivals' prices, and this is the gate that makes each one
+          # cite where it came from. It PASSES today (0.2s, refuses on an empty
+          # tree) and is a RATCHET — 14 legacy pages baselined, only NEW ones
+          # fail — which is exactly the shape you want before adding pages that
+          # quote someone else's money.
+          python3 scripts/rival_price_source_gate.py .
+          python3 scripts/rival_price_source_gate.py --assert-baseline-not-grown
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
           python3 scripts/meta_gate.py .
