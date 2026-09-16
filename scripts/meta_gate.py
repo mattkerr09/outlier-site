@@ -77,7 +77,18 @@ def proves_it_is_aimed(script: Path, empty: str, repo: str) -> bool:
     reported 27 figures; pointed at the site root, 35). Running it settles what
     reading it could not: a gate that ignores its root scans the same tree twice.
     """
-    return says(script, empty) != says(script, repo)
+    # ⚠️ A GATE THAT NEVER ANSWERED HAS NOT PROVED ANYTHING, AND THIS COUNTED IT
+    # AS PROOF. says() returns the literal "<timeout>" when a gate exceeds its
+    # bound, and "<timeout>" differs from an empty tree's output like any other
+    # string — so a gate that HUNG was reported AIMED, by the one file whose
+    # whole job is refusing to accept a result that proves nothing. Found
+    # 2026-09-16 while wiring a network gate that takes 86s against the repo
+    # inside a 180s bound: it passes today, and it would have "passed" at 300s
+    # too. Silence is not a distinct answer.
+    a, b = says(script, empty), says(script, repo)
+    if "<timeout>" in (a, b):
+        return False
+    return a != b
 
 
 def main(repo: str = ".") -> int:
