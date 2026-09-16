@@ -46,6 +46,31 @@ def fetch(url: str) -> str:
     _cache[url] = (r.stdout or b"").decode("utf-8", "replace")
     return _cache[url]
 
+#: ⚠️ TRIAGE NOTE, 2026-09-16 — READ BEFORE TRYING TO MAKE THIS WIRABLE.
+#: Run against the site it reports 51 unsourced claims across 22 pages, which is
+#: why it is not in gates.yml: a gate that lands red teaches people to ignore
+#: the suite.
+#:
+#: The claims are a MIX and separating them is the real work:
+#:   * a QUOTED rival price ("$8,565 at launch") must appear in a cited source;
+#:   * a DERIVED figure ("$1,999 MSRP … roughly $62/GB") is arithmetic on a
+#:     sourced number and can never appear verbatim anywhere.
+#:
+#: I tried to split them with a regex for "roughly|about|~|/GB|per million" and
+#: it scored 30 of 51 — but that heuristic is WRONG, and recording why saves the
+#: next attempt: it separates PER-UNIT-OR-APPROXIMATE from PLAIN, which is not
+#: the same distinction. DeepSeek's "$0.14 per million input tokens" is a
+#: genuine quoted price that SHOULD be sourced, and the regex called it derived.
+#:
+#: So there is no cheap split. A derived figure should have to show its
+#: arithmetic and cite its input — a different check from string-matching a
+#: corpus — and the 51 want per-page judgement, not a pattern.
+#:
+#: The risk is real and measured: a blind find-and-replace put four rivals'
+#: prices wrong on this site for eighteen days. This gate is the class that
+#: catches that. It is worth finishing, not deleting.
+
+
 def fetch_all(urls: list[str]) -> list[str]:
     """Fetch in parallel, because serial 25s timeouts are why this is unwired.
 
