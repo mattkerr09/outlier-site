@@ -60,23 +60,18 @@ jobs:
           python3 scripts/seat_claim_gate.py .
           python3 scripts/serp_length_gate.py .
           python3 scripts/sitemap_coverage_gate.py .
-          # ⚠️ THIS GATE HAS BEEN FAILING EVERY CI RUN, AND IT TOOK NINE OTHER
-          # STEPS DOWN WITH IT. It compares models.csv against TIER_DISPLAY_ORDER
-          # in the APP's server.py, which does not exist in this repo's checkout,
-          # so it correctly refused to report clean — and `set -e` meant "Gates
-          # that check live third parties", deploy freshness, visible datelines,
-          # intent and seo_lint were all SKIPPED, silently, on 21 consecutive
-          # runs. A red pipeline hides every check behind it.
+          # This gate compares models.csv to the app's TIER_DISPLAY_ORDER. The app
+          # is not in this checkout, and for a few hours today CI skipped it for
+          # that reason — which made its ONLY enforcement a no-op, because CI is
+          # the only thing that runs it (no pre-push hook, deploy is a push to
+          # Pages). The gate exists because the site once sold a dead tier.
           #
-          # The gate itself is right and its author wrote this escape for exactly
-          # this case: the skip is LOUD ("models.csv was NOT checked against the
-          # app catalog"), so nobody can read a pass as a comparison that
-          # happened. The real comparison runs where the app is present — locally
-          # it passes today, 6 tiers on both sides.
-          #
-          # To make it check here instead, give CI the app and drop this line:
-          #   OUTLIER_SERVER_PY=<path to desktop_app/backend/server.py>
-          OUTLIER_SKIP_CATALOG_SYNC=1 python3 scripts/tier_catalog_sync_gate.py .
+          # It now reads seo/_data/app_tiers.json, a snapshot the app's ship
+          # pipeline writes, and refuses unless the version that snapshot was cut
+          # from matches the version the site advertises — so a stale copy fails
+          # loudly instead of letting the tier list drift. With no app AND no
+          # snapshot it exits 1: blocked, never a quiet pass.
+          python3 scripts/tier_catalog_sync_gate.py .
           python3 scripts/tier_figure_gate.py .
           # Wired 2026-09-16, ahead of the Product Hunt comparison pages: those
           # pages state rivals' prices, and this is the gate that makes each one
