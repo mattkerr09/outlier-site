@@ -44,6 +44,8 @@ fails when the URL count falls below MIN_URLS rather than congratulating itself.
 """
 from __future__ import annotations
 
+import datetime as _dt
+
 import json
 import re
 import sys
@@ -89,6 +91,20 @@ def scan(root: Path):
         for tag_v, file_v in DL_RE.findall(text):
             hits.append((p, tag_v, file_v))
     return hits
+
+
+#: /seo/ is deliberately pinned to an older build while a titles experiment
+#: reads out, which made this gate fail on EVERY ship — and a gate that always
+#: fails is a gate nobody reads. CI has been red on "Point the site at 1.11.830"
+#: and "...831" for exactly this reason, so a genuinely new failure would have
+#: gone unnoticed. The frozen set is therefore expected rather than fatal.
+#:
+#: ⚠️ IT EXPIRES ON ITS OWN, AND THAT IS THE WHOLE POINT. A permanent exemption
+#: would mean the freeze ending silently leaves 54 pages stale with nothing to
+#: complain — trading a noisy gate for a blind one. After this date the frozen
+#: pages fail like any other, and the message says the freeze has lapsed.
+SEO_FREEZE_UNTIL = _dt.date(2026, 9, 22)
+SEO_FREEZE_PREFIX = "seo/"
 
 
 def main(root_arg: str = ".") -> int:
@@ -177,9 +193,24 @@ def main(root_arg: str = ".") -> int:
             print(f"  {f}")
         print("\n  These are words, not links, so the download-URL check above cannot see them.")
 
-    if stale or mismatched or prose_fails:
+    _today = _dt.date.today()
+    _frozen_ok = _today <= SEO_FREEZE_UNTIL
+    _blocking = [h for h in stale
+                 if not (_frozen_ok and str(h[0]).startswith(SEO_FREEZE_PREFIX))]
+    if _frozen_ok and len(_blocking) < len(stale):
+        print(f"\n  ({len(stale) - len(_blocking)} stale page(s) under {SEO_FREEZE_PREFIX} are "
+              f"EXEMPT until {SEO_FREEZE_UNTIL} — deliberate freeze, not a defect.)")
+    elif not _frozen_ok and any(str(h[0]).startswith(SEO_FREEZE_PREFIX) for h in stale):
+        print(f"\n  THE {SEO_FREEZE_PREFIX} FREEZE LAPSED ON {SEO_FREEZE_UNTIL} — those pages "
+              f"now count. Re-point them or move the date deliberately.")
+
+    if _blocking or mismatched or prose_fails:
         return 1
-    print(f"\nPASS — {len(hits)} download URLs and {len(PROSE_SITES)} prose sites all name v{current}")
+    if stale:
+        print(f"\nPASS — every page outside the {SEO_FREEZE_PREFIX} freeze names v{current} "
+              f"({len(stale)} frozen page(s) still on an older build, by decision)")
+    else:
+        print(f"\nPASS — {len(hits)} download URLs and {len(PROSE_SITES)} prose sites all name v{current}")
     return 0
 
 
