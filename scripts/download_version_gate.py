@@ -123,8 +123,31 @@ def main(root_arg: str = ".") -> int:
             seen[t] = seen.get(t, 0) + 1
         for v, n in sorted(seen.items(), key=lambda kv: -kv[1]):
             print(f"  {n:>4} page(s) still on v{v}")
-        for p, t, _f in stale[:8]:
-            print(f"       {p} -> v{t}")
+        # ⚠️ A DELIBERATELY FROZEN SET CAMOUFLAGES A FORGOTTEN PAGE.
+        # /seo/ is held at an older build on purpose while a titles experiment
+        # reads out, so this gate is EXPECTED to fail — and an expected failure
+        # is one nobody reads. On 2026-09-16 that hid `thank-you.html`, the page
+        # a customer lands on AFTER PAYING, five versions stale at v1.11.827,
+        # sitting inside a count of "55 page(s) still on v1.11.827" whose other
+        # 54 entries were frozen on purpose. Nothing was broken; the number was
+        # simply never read, because it always says the same thing.
+        #
+        # So the two groups are printed apart, and the NOT-frozen ones first and
+        # in full. A page outside /seo/ that has gone stale is nobody's decision
+        # — it is an oversight, and it should be the first thing on screen.
+        _frozen = [h for h in stale if str(h[0]).startswith("seo/")]
+        _loose = [h for h in stale if not str(h[0]).startswith("seo/")]
+        if _loose:
+            print(f"\n  NOT frozen — {len(_loose)} page(s) nobody decided to hold back:")
+            for p_, t_, _f in _loose:
+                print(f"       {p_} -> v{t_}")
+        if _frozen:
+            print(f"\n  under seo/ — {len(_frozen)} page(s), frozen deliberately while the")
+            print( "  titles experiment reads out; expected, and listed second for that reason:")
+            for p_, t_, _f in _frozen[:6]:
+                print(f"       {p_} -> v{t_}")
+            if len(_frozen) > 6:
+                print(f"       … and {len(_frozen) - 6} more under seo/")
         print("\n  These URLs almost certainly return 200 — GitHub keeps old assets.")
         print("  A link checker cannot catch this; that is why this gate exists.")
 
