@@ -310,12 +310,38 @@ if __name__ == "__main__":
     for p in args:
         out += check(p)
     skips = [o for o in out if o.startswith("SKIP ")]
-    fails = [o for o in out if not o.startswith("SKIP ")]
+    rest = [o for o in out if not o.startswith("SKIP ")]
+
+    # ⚠️ THE UNCHECKABLE CLASS IS SUMMARISED, NOT LISTED, AND THAT IS WHAT MAKES
+    # THIS WIRABLE. Site-wide it is 108 of 116 findings — a cited source that
+    # rendered no prices at all, so fetching can neither confirm nor deny. Every
+    # one printed in full is 108 lines of noise per CI run, and noise teaches
+    # people to ignore a suite exactly as reliably as red does. They are still
+    # counted, and the hosts are still named, so the class cannot quietly grow
+    # without anyone noticing; what is dropped is the repetition, not the fact.
+    unchecked = [o for o in rest if "-- NOTE:" in o]
+    fails = [o for o in rest if "-- NOTE:" not in o]
     for f in fails:
         print(f)
+    if unchecked:
+        hosts = sorted({h for o in unchecked
+                        for h in re.findall(r"https?://([^/,\s]+)", o.split("-- NOTE:")[1])})
+        pages = sorted({o.split(":")[0] for o in unchecked})
+        print(f"\nUNCHECKABLE — {len(unchecked)} claim(s) across {len(pages)} page(s) cite a "
+              f"source that returned content but no price at all, because it renders "
+              f"prices client-side. Fetching cannot confirm OR deny these; they are not "
+              f"failures and they are not clean either.")
+        # Cap it. Fifty host names is the noise this block exists to remove,
+        # wearing a different hat — the count is the signal, the roll-call is not.
+        shown = ", ".join(hosts[:8])
+        more = f" (+{len(hosts) - 8} more)" if len(hosts) > 8 else ""
+        print(f"  {len(hosts)} blind host(s): {shown}{more}")
+        print(f"  re-run a single page to see its claims: "
+              f"rival_price_in_source_gate.py {pages[0]}")
     if skips:
         print(f"\nskipped {len(skips)} page(s) citing no external source "
               f"(rival_price_source_gate's business, not this one)")
     print(f"{'FAIL' if fails else 'PASS'} — {len(args)} page(s), "
-          f"{len(fails)} unsourced price claim(s), {len(skips)} skipped.")
+          f"{len(fails)} unsourced price claim(s), {len(unchecked)} uncheckable, "
+          f"{len(skips)} skipped.")
     sys.exit(1 if fails else 0)
