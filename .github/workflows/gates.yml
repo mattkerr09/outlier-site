@@ -125,6 +125,9 @@ jobs:
       - name: Visible dateline honesty
         run: python3 scripts/visible_dateline_gate.py
 
+      - name: Every sitemap URL is reachable from the homepage
+        run: python3 scripts/orphan_page_gate.py
+
       # seo_lint exits 1 today on 188 pre-existing failures: 184 DUP (the
       # renderer-generated /seo/vs/ and /seo/run/ pages share up to 73% of their
       # body prose — one template with nouns swapped) and 4 THIN. Both are
