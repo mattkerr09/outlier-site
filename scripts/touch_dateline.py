@@ -9,7 +9,15 @@ of one of them. jsonld_dateline_gate now DETECTS that; this APPLIES the fix.
 
     python3 scripts/touch_dateline.py <page>...   # named pages
     python3 scripts/touch_dateline.py --changed   # every page git says I edited
+    python3 scripts/touch_dateline.py --date 2026-09-16 <page>...   # a date OTHER than today
     python3 scripts/touch_dateline.py --self-check
+
+⚠️ --date EXISTS BECAUSE "TODAY" IS OFTEN A LIE. touch() has always taken a date;
+main() never passed one, so the only claim the CLI could make was today's. Fixing
+a dateline the day after the edit — which is when you notice, because a gate tells
+you — then overstates the page's freshness by a day, in the one field Google reads
+to decide whether to recrawl. Pass the date the CONTENT changed, which
+visible_dateline_gate.last_body_change() will tell you.
 
 `datePublished` is never touched. A page was published when it was published;
 only `dateModified` is a claim about the edit you just made.
@@ -119,6 +127,30 @@ def self_check() -> int:
         none_ok = r["jsonld"] == 0 and r["visible"] == 0 and not r["changed"]
         ok &= none_ok
         print(f"  {'ok  ' if none_ok else 'FAIL'} page with no dates: reports zero, writes nothing")
+        # Wiring control: touch() has always honoured a date; main() dropped it.
+        # Drive the CLI the way a person does and assert the date SURVIVES.
+        import subprocess
+        p = os.path.join(tmp, "index.html")
+        open(p, "w", encoding="utf-8").write(
+            '<p>Last updated 2020-01-01</p><script>{"datePublished":"2019-05-05",'
+            '"dateModified":"2020-01-01"}</script>')
+        subprocess.run([sys.executable, __file__, "--date", "2026-09-16", p],
+                       capture_output=True, text=True)
+        got = open(p, encoding="utf-8").read()
+        wired = "2026-09-16" in got and TODAY not in got
+        ok &= wired
+        print(f"  {'ok  ' if wired else 'FAIL'} --date reaches the file through main() "
+              f"(not silently replaced by today)")
+
+        # And a future date must be refused rather than written.
+        open(p, "w", encoding="utf-8").write(
+            '<script>{"datePublished":"2019-05-05","dateModified":"2020-01-01"}</script>')
+        future = (datetime.date.today() + datetime.timedelta(days=5)).isoformat()
+        rc = subprocess.run([sys.executable, __file__, "--date", future, p],
+                            capture_output=True, text=True)
+        refused = rc.returncode != 0 and future not in open(p, encoding="utf-8").read()
+        ok &= refused
+        print(f"  {'ok  ' if refused else 'FAIL'} a future --date is refused, not written")
     print("self-check", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
@@ -126,12 +158,32 @@ def self_check() -> int:
 def main(argv) -> int:
     if "--self-check" in argv:
         return self_check()
+    when = TODAY
+    if "--date" in argv:
+        i = argv.index("--date")
+        if i + 1 >= len(argv):
+            print("--date needs a YYYY-MM-DD value")
+            return 2
+        when = argv[i + 1]
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", when):
+            print(f"--date {when!r} is not YYYY-MM-DD")
+            return 2
+        try:
+            datetime.date.fromisoformat(when)
+        except ValueError:
+            print(f"--date {when!r} is not a real date")
+            return 2
+        if datetime.date.fromisoformat(when) > datetime.date.today():
+            print(f"--date {when} is in the future — refusing to claim a page was "
+                  f"edited on a day that has not happened")
+            return 2
+        argv = argv[:i] + argv[i + 2:]
     paths = changed_pages() if "--changed" in argv else [a for a in argv[1:] if not a.startswith("--")]
     if not paths:
         print("nothing to do (no pages named, and git reports no edited index.html)")
         return 0
     for p in paths:
-        r = touch(p)
+        r = touch(p, when)
         if r.get("skipped"):
             print(f"  {'SKIPPED':<16} {p}  (_seo_build/scripts/render.py owns this page)")
             continue
