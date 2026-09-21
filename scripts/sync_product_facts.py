@@ -56,6 +56,17 @@ def build() -> dict:
         "product_name": prod.get("name"),
         "seats": seats,
         "price_cents": prod.get("price_cents"),
+        # 2026-09-21: every Kerr product's price, not only Outlier's. The /vs/
+        # pages name Crisp ($129) and Docket ($349) in their sibling-site line,
+        # and rival_price_in_source_gate read those as RIVAL claims (its own
+        # exclusion set was hand-typed and two entries long). One table here,
+        # generated from the same Dodo read, so a price change on any product
+        # reaches every gate at once.
+        "family_price_cents": {
+            str(v.get("name")): v.get("price_cents")
+            for v in (src.get("products") or {}).values()
+            if isinstance(v, dict) and v.get("price_cents")
+        },
         "activation_message": prod.get("activation_message_entitlement"),
         "source": str(src.get("source") or "dodo"),
         "read_at": src.get("read_at"),
