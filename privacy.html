@@ -43,6 +43,7 @@
   </script>
   <noscript><img height="1" width="1" style="display:none" alt=""
     src="https://www.facebook.com/tr?id=1592291422272376&ev=PageView&noscript=1"></noscript>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 </head>
 <body>
   <div class="wrap">
@@ -85,7 +86,7 @@
     <h2>What Outlier does NOT do</h2>
     <ul>
       <li>No inference telemetry. We do not log your prompts, model outputs, or which questions you ask.</li>
-      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host runs three third-party scripts, listed below: Plausible, which sets no cookies and stores no IP addresses; Sled, for affiliate attribution; and the Meta pixel, which does track across sites. None of them are in the app.)</li>
+      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host runs four scripts from other hosts, listed below: Plausible, which sets no cookies and stores no IP addresses; Sled, for affiliate attribution; the Meta pixel, which does track across sites; and our own affiliate-referral script, served from a Kerr &amp; Company worker, which only reads a partner code off the link you arrived by. None of them are in the app.)</li>
       <!-- Added 2026-08-13. This page listed Plausible as the only thing the marketing site
            touched, which read as a complete list and was not one: outlier.host loads its four
            typefaces from Google Fonts and Fontshare, and loading a font is an HTTP request that
@@ -117,7 +118,16 @@
            and Fontshare, on a site whose headline is that nothing leaves your
            Mac. An honest disclosure of a contradiction is still a
            contradiction. -->
-      <li>No third-party assets on this site except the three scripts above.
+      <!-- Added 2026-09-21 with the affiliate-referral script. Sled's cookie above and this
+           are two different mechanisms and both are disclosed: this one is not a cookie. -->
+      <li>Affiliate referrals. If you arrive from an affiliate or partner link, the link's
+      referral code is kept in your browser's local storage on this site (key
+      <code>kc_aff</code>) for 30 days and is attached to the checkout link if you buy, so the
+      partner who referred you is credited. This is first-party: it is stored only by this
+      site, is not a cookie, is not sent to any third party by this site, and is not read by
+      any other site. Dodo Payments, the checkout, receives the code as order metadata only
+      when you buy. Clearing your browser's site data removes it.</li>
+      <li>No third-party assets on this site except the four scripts above.
       <strong>The typefaces are served from outlier.host itself.</strong> They used to be
       requested from Google Fonts (<code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>)
       and Fontshare (<code>api.fontshare.com</code>), which meant simply opening this page
