@@ -844,7 +844,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             (f"Does Outlier work offline?",
              "Yes. After the one-time model download, no network is required for chat or generation."),
             (f"Which Mac do I need?",
-             "Apple Silicon, macOS 12 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."),
+             "Apple Silicon, macOS 26 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."),
         ]
         related = [
             {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},
@@ -865,7 +865,7 @@ def build_howto_pages() -> list[dict]:
     """10 how-to pages."""
     items = [
         ("install-outlier-on-mac", "How to install Outlier on a Mac",
-         "Step-by-step install for the signed Outlier DMG on macOS 12+ Apple Silicon.",
+         "Step-by-step install for the signed Outlier DMG on macOS 26+ Apple Silicon.",
          [("Download the signed DMG", "Pull the latest DMG from GitHub Releases. The download is signed by Developer ID and notarized by Apple."),
           ("Open the DMG", "Double-click. macOS verifies the notarization ticket; the first-open prompt is normal for Developer ID apps."),
           ("Drag Outlier.app to Applications", "The app is self-contained; no separate Python install is required."),
@@ -879,7 +879,7 @@ def build_howto_pages() -> list[dict]:
           ("Switch tiers in chat", "The active tier is shown in the bottom bar of the chat window.")]),
         ("run-a-local-coding-assistant-on-mac", "How to run a local coding assistant on a Mac",
          "Use the Code-tuned variant of the Core model for code review and refactor without a network round-trip.",
-         [("Install Outlier", "Per the install guide. macOS 12+ Apple Silicon, 24 GB RAM minimum for Core."),
+         [("Install Outlier", "Per the install guide. macOS 26+ Apple Silicon, 24 GB RAM minimum for Core."),
           ("Switch to Code mode", "The mode toggle is in the chat composer. The system prompt is tuned for terse code-first responses."),
           ("Open a project", "Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>."),
           ("Ask for a focused review", "Quote a single function. Bigger asks blow the context budget on smaller tiers.")]),
@@ -932,7 +932,7 @@ def build_howto_pages() -> list[dict]:
             ("<p>The DMG is signed by Developer ID <code>9N3Z6J63T4</code> and notarized via Apple&rsquo;s "
              "notarytool service. <code>spctl --assess</code> reports <em>accepted, source=Notarized "
              "Developer ID</em> on a clean machine.</p>"
-               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated &mdash; re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 through M4, macOS 12 or later, and Intel Macs cannot run it at all.</p>",
+               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated &mdash; re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 through M4, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
              "The complete install touches three locations: <code>/Applications/Outlier.app</code>, "
              "<code>~/Library/Application Support/Outlier/</code>, and <code>~/.outlier/</code>."),
         "download-a-model-tier":
@@ -1063,7 +1063,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                "<p>Apple Silicon Mac, macOS 12 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick, 24 GB for Core and Vision 3.8, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
+                "<p>Apple Silicon Mac, macOS 26 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick, 24 GB for Core and Vision 3.8, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
