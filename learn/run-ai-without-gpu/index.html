@@ -107,7 +107,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI on Mac without a discrete GPU (2026)","description":"Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.","datePublished":"2026-06-18","dateModified":"2026-09-08","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI on Mac without a discrete GPU (2026)","description":"Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.","datePublished":"2026-06-18","dateModified":"2026-09-23","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Run AI without a GPU","item":"https://outlier.host/learn/run-ai-without-gpu/"}]}
@@ -134,7 +134,7 @@
     <h1>How to run AI on Mac without a discrete GPU</h1>
     <div class="byline-row">
       <span class="byline">Outlier &mdash; Jun 18, 2026</span>
-      <span class="updated-pill">Updated September 8, 2026</span>
+      <span class="updated-pill">Updated September 23, 2026</span>
     </div>
 
     <div class="quick-answer">
@@ -244,14 +244,14 @@
 
     <h2>Getting started on Mac without a GPU</h2>
 
-    <p>The minimum you need: any M1 or newer Mac, macOS 13 Ventura or later, and model weights that fit in your available RAM. No discrete GPU, no CUDA, no NVIDIA driver setup.</p>
+    <p>The hardware minimum is any M1 or newer Mac with enough RAM to hold your model's weights &mdash; no discrete GPU, no CUDA, no NVIDIA driver setup. The macOS version depends on which app you run, so check each one's own requirement below.</p>
 
     <p>From there, you have a few paths:</p>
 
     <ul>
-      <li><strong>Outlier</strong> &mdash; native Mac app that manages models, runs inference via MLX and Metal, and supports models from 1.5B up to 397B with paged inference. Nano tier is free.</li>
+      <li><strong>Outlier</strong> &mdash; native Mac app that manages models, runs inference via MLX and Metal, and supports models from 1.5B up to 397B with paged inference. Nano tier is free. Requires macOS 26 or newer.</li>
       <li><strong>Ollama</strong> &mdash; command-line tool with a local HTTP API. Pulls models from a registry, uses llama.cpp with Metal acceleration under the hood.</li>
-      <li><strong>LM Studio</strong> &mdash; GUI application, good for browsing and testing models without writing any code.</li>
+      <li><strong>LM Studio</strong> &mdash; GUI application, good for browsing and testing models without writing any code. Requires macOS 14 or newer.</li>
     </ul>
 
     <p>All three use the Metal GPU backend on Apple Silicon, meaning they route matrix operations to your chip's GPU cores automatically. You don't configure anything; the Mac just works.</p>
@@ -262,7 +262,7 @@
 
     <div class="cta">
       <h3>Try local AI on your Mac</h3>
-      <p>Outlier runs on any M1 or newer Mac. Download the app, pick a model, and start running inference on your own hardware &mdash; no GPU, no cloud account required.</p>
+      <p>Outlier runs on any M1 or newer Mac with macOS 26 or newer. Download the app, pick a model, and start running inference on your own hardware &mdash; no GPU, no cloud account required.</p>
       <a class="btn" href="https://outlier.host/#app">Download Outlier</a>
     </div>
 
