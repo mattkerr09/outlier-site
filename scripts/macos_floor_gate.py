@@ -26,21 +26,39 @@ CLAIM = re.compile(r"macOS\s*(\d+(?:\.\d+)?)\s*(?:or later|or newer|and later|\+
 
 
 OURS_MARKS = ("Outlier", "outlier", "operatingSystem", "Intel Macs are not supported", "Which Mac do I need",
-              "Apple Silicon only", "Apple Silicon (M", "Mac app (Apple Silicon", "Apple Silicon, macOS", "Download")
-OTHER_MARKS = ("Windows", "Linux", "iOS", "Android", "CUDA", "OS floor", "hardware floor", "llama.cpp", "MLX", "Tabnine",
+              "Apple Silicon only", "Apple Silicon (M", "Mac app (Apple Silicon", "Apple Silicon, macOS", "Download",
+              "Apple Silicon Mac", "Apple Silicon Macs only")  # v2 2026-09-23: install prose + "…Macs only" cells
+OTHER_MARKS = ("Windows", "Linux", "iOS", "Android", "CUDA", "OS floor", "hardware floor", "llama.cpp", "MLX", "Tabnine", "Intel",
                "Grammarly", "GPT4All", "Notion", "Copilot", "this site supports")
 
 
 def _is_ours(around: str) -> bool:
-    """A requirement line for Outlier, not a fact about another product (or about the
-    website's own browser support). Another product's name in the same stretch wins
-    unless Outlier is named too — a comparison table's Outlier column says "Outlier"."""
+    """A requirement line for Outlier, not another product's (or the website's browser
+    support). v3 (2026-09-23): evaluated on the ENCLOSING cell only, so a neighbour cell's
+    text cannot leak in (that made Grammarly's own "macOS 11" look like ours). Apple-Silicon
+    exclusivity is decided BEFORE the rival-name check, because Outlier is the only
+    Apple-Silicon-only product on an outlier-vs-X page and its cell often names Windows/Linux
+    only to say it does NOT run them."""
     if "Outlier" in around or "outlier" in around or "operatingSystem" in around:
         return True
-    if any(k in around for k in OTHER_MARKS):
+    # Decisive Outlier signals — Apple-Silicon exclusivity — checked before any rival name.
+    for k in ("Apple Silicon only", "Apple Silicon Macs only", "Apple Silicon Mac",
+              "Apple Silicon (M", "Mac app (Apple Silicon", "Apple Silicon, macOS"):
+        if k in around:
+            return True
+    # A rival's platform, stated POSITIVELY (not "no Windows"/"not on Linux").
+    def _positive(mark: str) -> bool:
+        i = around.find(mark)
+        while i != -1:
+            if not re.search(r"\b(no|not|neither|nor|without)\b", around[max(0, i - 50): i], re.I):
+                return True
+            i = around.find(mark, i + 1)
         return False
+    if any(_positive(k) for k in OTHER_MARKS):
+        return False
+    if "Apple Silicon" in around:      # Apple-Silicon with no positive other-OS = ours
+        return True
     return any(k in around for k in OURS_MARKS)
-
 
 def main() -> int:
     bad = []; other = []; pages = 0; claims = 0
@@ -53,7 +71,12 @@ def main() -> int:
             # Only OUR requirement is checked: a sentence about Outlier, or the JSON-LD
             # operatingSystem field. "Grammarly needs macOS 11 or newer" is a fact about
             # Grammarly and stays as written.
-            around = t[max(0, m.start() - 160): m.end() + 60]
+            # v2 (2026-09-23): scope to the ENCLOSING element, not a flat 160-char window.
+            # In a comparison table the window caught the rival's name from an adjacent <td>
+            # and misfiled Outlier's own requirement as the rival's, so "macOS 12+" survived.
+            _lo = t.rfind(">", 0, m.start()); _hi = t.find("<", m.end())
+            cell = t[(_lo + 1): _hi] if (_lo >= 0 and _hi >= 0 and _hi - _lo < 400) else t[max(0, m.start() - 160): m.end() + 60]
+            around = cell
             if _is_ours(around):
                 ours.append(m.group(1))
             else:
