@@ -25,6 +25,8 @@ only `dateModified` is a claim about the edit you just made.
 from __future__ import annotations
 
 import datetime
+import json
+import os
 import re
 import subprocess
 import sys
@@ -51,20 +53,56 @@ def long_form(iso: str) -> str:
     return f"{MONTHS[d.month - 1]} {d.day}, {d.year}"
 
 
-#: _seo_build/scripts/render.py OWNS the /seo/ subtree: it preserves datePublished
+#: _seo_build/scripts/render.py OWNS the pages it writes: it preserves datePublished
 #: across rebuilds and bumps dateModified only when the rendered content really
-#: changes. Hand-editing a date there survives the next build (the renderer reads
-#: the previous value back), so a manual touch would plant a wrong date that looks
-#: maintained. Only 3 of the 155 baselined pages are under /seo/ — the backlog is
-#: the hand-written corpus, which is exactly what this tool is for.
-RENDERER_OWNED = "/seo/"
+#: changes. Hand-editing a date on one of THOSE survives the next build (the
+#: renderer reads the previous value back), so a manual touch would plant a wrong
+#: date that looks maintained.
+#:
+#: Ownership is the renderer's own record, not a folder name. Until 2026-09-23 this
+#: file refused every path containing "/seo/", which also refused seven hand-made
+#: pages the renderer never writes (seo/learn/mlx-explained/ and six more) — their
+#: dates could only be moved by hand-editing, the very thing this tool replaces.
+#: render.py now writes _seo_build/owned_pages.json on every run; a page is owned
+#: iff it is listed there. If that list cannot be read, every /seo/ page is treated
+#: as owned (the old, safe answer) and the tool says why.
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OWNED_MANIFEST = os.path.join(REPO_ROOT, "_seo_build", "owned_pages.json")
+_UNREAD = object()
 
 
-def touch(path: str, today: str = TODAY) -> dict:
-    """-> {'jsonld': n, 'visible': n, 'changed': bool}. Never writes datePublished."""
+def renderer_owned_pages(manifest: str = OWNED_MANIFEST):
+    """-> set of 'seo/<category>/<slug>/index.html' paths render.py writes, or None
+    when the list is missing or unreadable (callers must then fail closed)."""
+    try:
+        with open(manifest, encoding="utf-8") as f:
+            data = json.load(f)
+        if not isinstance(data, list) or not data:
+            return None
+        return {str(x) for x in data}
+    except Exception:
+        return None
+
+
+def _seo_key(path: str):
+    """'…/seo/learn/x/index.html' -> 'seo/learn/x/index.html'; None off /seo/."""
     norm = "/" + path.replace("\\", "/").lstrip("./")
-    if RENDERER_OWNED in norm:
-        return {"jsonld": 0, "visible": 0, "changed": False, "skipped": "renderer-owned"}
+    m = re.search(r"/(seo/.+)$", norm)
+    return m.group(1) if m else None
+
+
+def touch(path: str, today: str = TODAY, owned=_UNREAD) -> dict:
+    """-> {'jsonld': n, 'visible': n, 'changed': bool}. Never writes datePublished."""
+    key = _seo_key(path)
+    if key is not None:
+        if owned is _UNREAD:
+            owned = renderer_owned_pages()
+        if owned is None:
+            return {"jsonld": 0, "visible": 0, "changed": False,
+                    "skipped": "renderer-owned (owned_pages.json unreadable — run "
+                               "_seo_build/scripts/render.py --list-owned)"}
+        if key in owned:
+            return {"jsonld": 0, "visible": 0, "changed": False, "skipped": "renderer-owned"}
     with open(path, encoding="utf-8") as f:
         s = before = f.read()
 
@@ -151,6 +189,42 @@ def self_check() -> int:
         refused = rc.returncode != 0 and future not in open(p, encoding="utf-8").read()
         ok &= refused
         print(f"  {'ok  ' if refused else 'FAIL'} a future --date is refused, not written")
+
+        # Ownership comes from the renderer's list, not the folder name.
+        page = '<p>Last updated 2020-01-01</p><script>{"datePublished":"2019-05-05","dateModified":"2020-01-01"}</script>'
+        for leaf in ("rendered", "handmade"):
+            os.makedirs(os.path.join(tmp, "seo", "learn", leaf), exist_ok=True)
+            open(os.path.join(tmp, "seo", "learn", leaf, "index.html"), "w", encoding="utf-8").write(page)
+        owned = {"seo/learn/rendered/index.html"}
+        r_owned = touch(os.path.join(tmp, "seo", "learn", "rendered", "index.html"), "2026-09-08", owned=owned)
+        r_hand = touch(os.path.join(tmp, "seo", "learn", "handmade", "index.html"), "2026-09-08", owned=owned)
+        r_blind = touch(os.path.join(tmp, "seo", "learn", "handmade", "index.html"), "2026-09-09", owned=None)
+        owned_ok = bool(r_owned.get("skipped")) and "2020-01-01" in open(
+            os.path.join(tmp, "seo", "learn", "rendered", "index.html"), encoding="utf-8").read()
+        hand_ok = not r_hand.get("skipped") and r_hand["changed"]
+        blind_ok = bool(r_blind.get("skipped")) and "2026-09-09" not in open(
+            os.path.join(tmp, "seo", "learn", "handmade", "index.html"), encoding="utf-8").read()
+        ok &= owned_ok and hand_ok and blind_ok
+        print(f"  {'ok  ' if owned_ok else 'FAIL'} a page render.py lists is refused, file untouched")
+        print(f"  {'ok  ' if hand_ok else 'FAIL'} a hand-made page under /seo/ is updated")
+        print(f"  {'ok  ' if blind_ok else 'FAIL'} an unreadable ownership list refuses every /seo/ page")
+
+    # The real list must describe the real tree: every listed page exists, and it
+    # is not the whole /seo/ tree (hand-made pages exist and must be touchable).
+    real = renderer_owned_pages()
+    if real is None:
+        print("  FAIL _seo_build/owned_pages.json is missing or unreadable")
+        ok = False
+    else:
+        missing = sorted(p for p in real if not os.path.exists(os.path.join(REPO_ROOT, p)))
+        leaves = {os.path.relpath(os.path.join(d, "index.html"), REPO_ROOT)
+                  for d, _, files in os.walk(os.path.join(REPO_ROOT, "seo"))
+                  if "index.html" in files and d.count(os.sep) - REPO_ROOT.count(os.sep) == 3}
+        hand = sorted(leaves - real)
+        real_ok = not missing and len(real) > 0
+        ok &= real_ok
+        print(f"  {'ok  ' if real_ok else 'FAIL'} owned_pages.json: {len(real)} listed, "
+              f"{len(missing)} missing on disk; {len(hand)} hand-made /seo/ leaves stay touchable")
     print("self-check", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 

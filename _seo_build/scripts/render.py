@@ -1643,6 +1643,18 @@ def main():
     # generated set any more, and the page it describes is a tier we no longer
     # sell. Non-/seo/ links are left alone — they are hand-written and live
     # outside this generator's knowledge.
+    # The pages this renderer OWNS, written as a tracked list every run.
+    # scripts/touch_dateline.py reads it: a page in this list takes its dates from
+    # this renderer (a hand edit would be read back and kept, looking maintained),
+    # while a hand-made page that merely lives under /seo/ is not ours and must be
+    # touchable by hand. Until 2026-09-23 the tool guessed ownership from the
+    # "/seo/" prefix and refused seven hand-made pages this file never writes.
+    _owned = sorted(f"seo/{q['category']}/{q['slug']}/index.html" for q in pages)
+    (ROOT / "_seo_build" / "owned_pages.json").write_text(json.dumps(_owned, indent=1) + "\n")
+    if "--list-owned" in sys.argv:
+        print(f"owned_pages.json: {len(_owned)} pages (no page written)")
+        sys.exit(0)
+
     _valid = {f"/seo/{q['category']}/{q['slug']}/" for q in pages}
     _dropped = []
     for p in pages:

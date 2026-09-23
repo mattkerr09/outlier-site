@@ -47,6 +47,34 @@ def shapes(old: str, new: str) -> dict[str, str]:
     }
 
 
+def sweep_download_urls(new: str, skip: set[pathlib.Path], check: bool) -> tuple[int, list]:
+    """Re-point EVERY Download button on the site to `new`, using the gate's own
+    finder (download_version_gate.DL_RE / scan), so the two can never disagree
+    about what a download URL is.
+
+    Why: FILES above names three pages, while the gate reads all of them. On
+    2026-09-23 five hand-made /seo/ pages were still linking v1.11.827 — twenty-five
+    versions stale — because no bump had ever been told they existed, and the
+    /seo/ freeze had been hiding them. Only the DMG pointer (tag + filename) is
+    rewritten; prose version mentions are left alone, as everywhere else here.
+    -> (pages changed, [(path, new_text)]) — nothing is written here."""
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import download_version_gate as _gate  # one definition of "a download URL"
+    repl = f"releases/download/v{new}/Outlier-{new}-arm64.dmg"
+    planned = []
+    for p in sorted({h[0] for h in _gate.scan(ROOT)}):
+        p = p if p.is_absolute() else ROOT / p
+        if p in skip:
+            continue
+        s = p.read_text(encoding="utf-8")
+        t = _gate.DL_RE.sub(repl, s)
+        if t != s:
+            n = len(_gate.DL_RE.findall(s)) - s.count(repl)
+            print(f"  {p.relative_to(ROOT)}: {n} download URL(s) -> v{new}")
+            planned.append((p, t))
+    return len(planned), planned
+
+
 def current_version() -> str | None:
     m = re.search(r'"softwareVersion":\s*"([\d.]+)"',
                   (ROOT / "index.html").read_text(encoding="utf-8", errors="replace"))
@@ -62,6 +90,14 @@ def main(argv: list[str]) -> int:
     if not re.fullmatch(r"\d+\.\d+\.\d+", new):
         print(f"FAIL: {new!r} is not a version.")
         return 1
+    if "--sweep-only" in argv:
+        # Repair drift without a version bump: every Download button -> `new`.
+        n, planned = sweep_download_urls(new, set(), check)
+        if not check:
+            for p, s in planned:
+                p.write_text(s, encoding="utf-8")
+        print(f"  --sweep-only: {n} page(s) {'would change' if check else 'written'}.")
+        return 0
     old = current_version()
     if not old:
         print("FAIL: cannot read the version the site currently advertises.")
@@ -88,6 +124,10 @@ def main(argv: list[str]) -> int:
         print("  REFUSING to write: a count did not match, so a pointer shape has "
               "changed shape. Fix the shape list rather than forcing it through.")
         return 1
+
+    # Every OTHER page's Download button, found the way the gate finds them.
+    _n, _swept = sweep_download_urls(new, {p for p, _ in planned}, check)
+    planned.extend(_swept)
 
     if check:
         print("  --check: nothing written.")
