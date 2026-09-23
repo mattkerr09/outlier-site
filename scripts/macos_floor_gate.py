@@ -22,7 +22,7 @@ def _ver(v: str) -> tuple:
 
 
 FLOOR = _ver(FACTS["min_macos"])
-CLAIM = re.compile(r"macOS\s*(\d+(?:\.\d+)?)\s*(?:or later|or newer|and later|\+)")
+CLAIM = re.compile(r"macOS\s*(\d+(?:\.\d+)?)\s*(?:\([^)]*\)\s*)?(?:or later|or newer|and later|and up|\+)")  # v2: codename parenthetical + "and up"
 
 
 OURS_MARKS = ("Outlier", "outlier", "operatingSystem", "Intel Macs are not supported", "Which Mac do I need",
