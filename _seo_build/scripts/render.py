@@ -488,7 +488,7 @@ def build_run_pages(models, macs) -> list[dict]:
         body.append(f"<h2>What context window can I use on a {int(mac['unified_ram_gb'].split('|')[0])} GB Mac?</h2>")
         body.append(
             f"<p>The {m['display_name']} tier defaults to {int(m['context_default']) // 1024}K context and "
-            f"caps at {int(m['context_max']) // 1024}K. KV cache scales linearly with context length on dense "
+            f"caps at {min(int(m['context_max']), 131072) // 1024}K on Pro. KV cache scales linearly with context length on dense "
             f"models, so longer contexts trade headroom for capacity. On a {mac['unified_ram_gb']} GB "
             f"{mac['name']}, the default context is the safe starting point.</p>"
         )
@@ -932,7 +932,7 @@ def build_howto_pages() -> list[dict]:
             ("<p>The DMG is signed by Developer ID <code>9N3Z6J63T4</code> and notarized via Apple&rsquo;s "
              "notarytool service. <code>spctl --assess</code> reports <em>accepted, source=Notarized "
              "Developer ID</em> on a clean machine.</p>"
-               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated &mdash; re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 through M4, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
+               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated &mdash; re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
              "The complete install touches three locations: <code>/Applications/Outlier.app</code>, "
              "<code>~/Library/Application Support/Outlier/</code>, and <code>~/.outlier/</code>."),
         "download-a-model-tier":
@@ -1148,7 +1148,7 @@ def build_howto_pages() -> list[dict]:
         faq = [
             ("Do I need to create an account?", "No. The free tiers (Nano, Lite) work without any account or license key."),
             ("Will my code or prompts be sent anywhere?", "No. After the one-time model download, the chat path makes no network requests."),
-            ("How big is the download?", "The DMG itself is around 460 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."),
+            ("How big is the download?", "The DMG itself is about 290 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."),
         ]
         related = [
             {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},

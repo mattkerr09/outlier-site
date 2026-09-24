@@ -10,7 +10,7 @@
   <title>Outlier vs PrivateGPT: Mac app vs self-hosted API layer | Outlier</title>
   <meta name="description" content="Honest comparison of Outlier (native Mac local AI app) and PrivateGPT (Apache-2.0 self-hosted API layer). Both run privately — the real differences are interface, setup, model management, platforms and licensing.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-07-23">
+  <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-privategpt/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs PrivateGPT: Mac app vs self-hosted API layer">
@@ -107,7 +107,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs PrivateGPT: a Mac app vs a self-hosted API layer","description":"Honest comparison of Outlier (native Mac local AI app) and PrivateGPT (Apache-2.0 self-hosted API layer). Both run privately — the real differences are interface, setup, model management, platforms and licensing.","datePublished":"2026-07-23","dateModified":"2026-09-21","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-privategpt/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs PrivateGPT: a Mac app vs a self-hosted API layer","description":"Honest comparison of Outlier (native Mac local AI app) and PrivateGPT (Apache-2.0 self-hosted API layer). Both run privately — the real differences are interface, setup, model management, platforms and licensing.","datePublished":"2026-07-23","dateModified":"2026-09-24","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-privategpt/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs PrivateGPT","item":"https://outlier.host/vs/outlier-vs-privategpt/"}]}
@@ -135,7 +135,7 @@
     <h1>Outlier vs PrivateGPT: a Mac app vs a self-hosted API layer</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-09-21</span>
+      <span class="updated-pill">Updated 2026-09-24</span>
     </div>
 
     <div class="quick-answer">
@@ -236,7 +236,7 @@
     <h2>Where Outlier fits better</h2>
     <p>Outlier's advantage is narrow and specific: it's a finished product for one platform. One thing to install instead of two, no Python version to pin, no embedding model to choose, and a published RAM figure for every tier so you know before downloading whether it'll run on your 16 GB Mac. PrivateGPT publishes only example-model sizes — roughly 24 GB for its reference LLM under Ollama, about 18 GB as a Q4 GGUF, 670 MB for embeddings — not per-machine RAM floors. That's reasonable, since performance comes from whatever server you point it at, but "will this run well on my laptop?" still has no documented answer.</p>
 
-    <p>On quality, the only numbers I can show are for my own models. Core 27B matched Claude Opus on 98.9% of rubric checks across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>, and 100% on the nine hardest prompts; on a blind slice of SWE-bench Verified the local 27B measured about 45% (18/40). None of that says anything about PrivateGPT, which inherits whatever quality your chosen model has — that's the point of it.</p>
+    <p>On quality, the only numbers I can show are for my own models. On a blind slice of SWE-bench Verified the local 27B measured about 45% (18/40), and I published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself; Claude is still faster and stronger on the hardest work. None of that says anything about PrivateGPT, which inherits whatever quality your chosen model has — that's the point of it.</p>
 
     <p>Two more honest notes. "Private" in PrivateGPT describes a configuration, not an enforced property: <code>OPENAI_API_BASE</code> accepts a remote endpoint as happily as localhost, so a misconfigured deployment can quietly ship prompts to a third party. And its built-in web tools break locality by design — web search routes queries to Brave's API and needs a Brave key. Outlier's web research is Pro-only and opt-in, and its free tier has none; it also has no image generation, voice mode or cloud sync.</p>
 
@@ -253,8 +253,8 @@
 
     <div class="cta">
       <h3>Try Outlier free — no account needed</h3>
-      <p>Nano and Lite run on-device, free forever, with no login and no upload. Apple Silicon Macs only.</p>
-      <a class="btn" href="https://outlier.host/">Download for Mac</a>
+      <p>Nano and Lite run on-device, free forever, with no login and no upload. Apple Silicon Macs only.</p><p>Free: Nano + Lite. Pro: $249 once, $124.50 for the first 25. macOS 26+.</p>
+      <a class="btn" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg">Download free (290 MB)</a> <a class="btn" href="https://outlier.host/#pricing" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">See Pro</a>
     </div>
 
     <div class="related">

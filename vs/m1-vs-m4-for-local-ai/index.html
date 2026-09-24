@@ -10,7 +10,7 @@
   <title>Apple M1 vs M4 for local AI: 68 vs 120 GB/s | Outlier</title>
   <meta name="description" content="The base M1 tops out at 16GB and about 68GB/s; the M4 reaches 128GB on Max and about 120GB/s. Capacity decides what runs, bandwidth how fast.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-07-23">
+  <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/vs/m1-vs-m4-for-local-ai/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits">
@@ -107,7 +107,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits","description":"An engineering comparison of Apple M1 and M4 for running local AI models: unified memory ceilings, memory bandwidth, measured tokens per second, sustained load, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-09-08","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/m1-vs-m4-for-local-ai/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits","description":"An engineering comparison of Apple M1 and M4 for running local AI models: unified memory ceilings, memory bandwidth, measured tokens per second, sustained load, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-09-24","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/m1-vs-m4-for-local-ai/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Apple M1 vs M4 for local AI","item":"https://outlier.host/vs/m1-vs-m4-for-local-ai/"}]}
@@ -135,7 +135,7 @@
     <h1>Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-09-08</span>
+      <span class="updated-pill">Updated 2026-09-24</span>
     </div>
 
     <div class="quick-answer">
@@ -236,7 +236,7 @@
     <p>On raw throughput, a PC with a good discrete GPU is usually faster than a Mac at a similar price, and I'd rather say so than pretend otherwise. Dedicated graphics memory runs at bandwidths no base Apple chip approaches, and CUDA's tooling is deeper than Metal's. If your model fits comfortably in VRAM, buy the card.</p>
     <p>Apple's counter isn't speed, it's capacity per dollar and watts per token. A card makes you shrink the model to fit it; unified memory lets you scale the model to the machine — Apple markets M4 Max's 128GB as enough for models of nearly 200 billion parameters. Matching that in cards costs far more and draws far more power.</p>
     <p>The M1 gets written off too fast, too. Apple Intelligence still requires only "M1 and later," and LM Studio's minimum is Apple silicon on macOS 14. Apple's Foundation Models framework hands third-party apps a roughly 3B on-device model, free and offline, on any Apple Intelligence-capable Mac, though the weights aren't published. And 14 tok/s on a 7B model is faster than most people read.</p>
-    <p>What M4 buys is the ceiling, not the speedometer: 16GB to 32GB moves you out of "7-9B only" and into 27B-class territory — a category change, not a percentage. In Outlier's tiers that's Lite 9B versus Core 27B, which scored 98.9% of rubric checks against Claude Opus 4.7 across a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt head-to-head</a>.</p>
+    <p>What M4 buys is the ceiling, not the speedometer: 16GB to 32GB moves you out of "7-9B only" and into 27B-class territory — a category change, not a percentage. In Outlier's tiers that's Lite 9B versus Core 27B. We published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side of Core 27B and Claude Opus 4.7</a> so you can compare the answers yourself; Claude is still faster and stronger on the hardest work.</p>
 
     <h2>Pick the chip by the model you want to run</h2>
     <p><strong>You have an 8GB M1:</strong> capacity is your wall and tuning won't move it. A 4B model works well — Outlier's Nano is a 2.37GB download, 6GB minimum — and a 27B never will.</p>
@@ -252,8 +252,8 @@
 
     <div class="cta">
       <h3>Try local AI on the Mac you already have</h3>
-      <p>Outlier runs models on-device on any Apple Silicon Mac, M1 or later, macOS 26+. Nano and Lite are free — no account, no caps, works with Wi-Fi off.</p>
-      <a class="btn" href="https://outlier.host/">Download for Mac</a>
+      <p>Outlier runs models on-device on any Apple Silicon Mac, M1 or later, macOS 26+. Nano and Lite are free — no account, no caps, works with Wi-Fi off.</p><p>Free: Nano + Lite. Pro: $249 once, $124.50 for the first 25. macOS 26+.</p>
+      <a class="btn" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg">Download free (290 MB)</a> <a class="btn" href="https://outlier.host/#pricing" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">See Pro</a>
     </div>
 
     <div class="related">

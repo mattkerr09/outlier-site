@@ -6,9 +6,29 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
   <meta charset="UTF-8">
+  <meta name="referrer" content="same-origin">
+  <script>
+  /* FIRST SCRIPT ON THE PAGE, DELIBERATELY. Dodo's redirect appends payment_id, status,
+     license_key and email. Meta's pixel and Plausible both read the page URL, so before
+     this existed a buyer's licence key and email address were sent to Meta with the
+     PageView. Read the values into memory, then take them out of the address bar before
+     either script runs. Everything below reads window.__outlierReturn, never the URL. */
+  (function () {
+    var r = {};
+    try {
+      var q = new URLSearchParams(window.location.search);
+      r = { payment_id: q.get('payment_id'), status: (q.get('status') || '').toLowerCase(),
+            license_key: q.get('license_key'), email: q.get('email') };
+      if (q.has('license_key') || q.has('email') || q.has('payment_id') || q.has('status')) {
+        history.replaceState(null, '', window.location.pathname + window.location.hash);
+      }
+    } catch (e) {}
+    window.__outlierReturn = r;
+  })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thank you — Outlier</title>
-  <meta name="description" content="Your Outlier Pro purchase is complete. Download the app, activate with the key in your receipt email, and you are running locally.">
+  <meta name="description" content="Download Outlier for Mac and activate Pro with the licence key from your receipt email.">
   <link rel="canonical" href="https://outlier.host/thank-you.html">
   <meta name="robots" content="noindex,follow">
   <style>
@@ -112,14 +132,28 @@ plausible.init()
   // declined card would teach Meta to optimise toward people whose payments
   // fail, which is worse than no signal at all.
   try {
-    var _q = new URLSearchParams(window.location.search);
-    var _pid = _q.get('payment_id');
-    var _status = (_q.get('status') || '').toLowerCase();
+    var _r = window.__outlierReturn || {};
+    var _pid = _r.payment_id;
+    var _status = _r.status || '';
     if (_pid && _status === 'succeeded') {
       var _k = 'outlier_purchase_' + _pid;
       if (!sessionStorage.getItem(_k)) {
         sessionStorage.setItem(_k, '1');
-        fbq('track', 'Purchase', {value: 249.00, currency: 'USD'}, {eventID: _pid});
+        // VALUE: the price that was on offer when the buyer clicked Buy on this site.
+        // Dodo's redirect carries no amount and a static link cannot pre-apply the
+        // founders code, so the homepage records "founding" or "regular" in
+        // localStorage at the click (no personal data). Missing or older than a day:
+        // assume the full price. The exact paid amount needs Dodo's webhook sent to
+        // Meta server-side (CAPI), with the same eventID so Meta de-duplicates.
+        var _value = 249.00;
+        try {
+          var _o = JSON.parse(localStorage.getItem('outlier_offer') || 'null');
+          if (_o && _o.offer === 'founding' && (Date.now() - (_o.t || 0)) < 864e5) _value = 124.50;
+          localStorage.removeItem('outlier_offer');
+        } catch (e2) {}
+        window.__outlierValue = _value;
+        fbq('track', 'Purchase', {value: _value, currency: 'USD'}, {eventID: _pid});
+        if (window.plausible) plausible('Purchase', { revenue: { currency: 'USD', amount: _value } });
       }
     }
   } catch (e) { /* private mode blocks sessionStorage; never break the page */ }
@@ -129,15 +163,15 @@ plausible.init()
 </head>
 <body>
   <div class="wrap">
-    <h1>Thank you — you own it.</h1>
-    <p class="dim">Your payment went through. Outlier Pro is a one-time purchase, so this is the
-      last time you pay for it. Here is how to get running.</p>
+    <h1 id="ty-h">Get Outlier running</h1>
+    <p class="dim" id="ty-lead">Download the app, then activate Pro with the licence key from your
+      receipt email.</p>
 
     <h2>1. Download the app</h2>
-    <p>macOS on Apple Silicon (M1 or later), macOS&nbsp;12 or newer. The build is signed and
-      notarized by Apple.</p>
+    <p>An Apple Silicon Mac (M1 or newer) on macOS 26 or later, which is a free update. The
+      build is signed and notarized by Apple.</p>
     <a class="btn" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg">Download Outlier for Mac</a>
-    <p class="dim">Version 1.11.804 &middot; Apple Silicon DMG</p>
+    <p class="dim">v1.11.857 · notarized Apple Silicon DMG · 290 MB</p>
 
     <h2>2. Activate</h2>
 
@@ -148,25 +182,6 @@ plausible.init()
          doing nothing: Dodo's own page is where the key was visible, so we
          would have redirected the buyer away from the one screen showing it,
          in order to tell them to check their email. -->
-    <!-- The Founders Lifetime bullets on the home page promise a "Private
-         founding-cohort Discord". Until 2026-09-15 nothing delivered it: the
-         Dodo product ships no Discord benefit (the retired Polar org did), so
-         the buyer was promised a room and never shown the door.
-
-         This is the post-purchase moment, and it is our own page -- the single
-         checkout on the site redirects here, so everyone who arrives from it
-         bought the one $249 product. Revealed by the SAME condition as the
-         licence key, deliberately: the page is publicly reachable, and a
-         private invite must not render for a passer-by. Same reason the keybox
-         rules carry no `display`. -->
-    <div class="keybox" id="discord-box" hidden>
-      <p class="keybox-label">Your founding-cohort Discord</p>
-      <p style="margin:0">
-        <a href="https://discord.gg/outlier" target="_blank" rel="noopener noreferrer">Join the private room</a>
-        <span class="dim"> &mdash; it is also in Settings &rarr; licence inside the app.</span>
-      </p>
-    </div>
-
     <div class="keybox" id="licence-box" hidden>
       <p class="keybox-label">Your licence key</p>
       <code class="keybox-key" id="licence-key"></code>
@@ -214,15 +229,26 @@ plausible.init()
   // the key against the issuer; this only saves the buyer a trip to their inbox.
   (function () {
     try {
-      var q = new URLSearchParams(window.location.search);
-      var key = q.get('license_key');
+      var r = window.__outlierReturn || {};
+      var st0 = r.status || '';
+      var h = document.getElementById('ty-h'), lead = document.getElementById('ty-lead');
+      if (st0 === 'succeeded' || (r.license_key && !st0)) {
+        if (h) h.textContent = 'Thank you \u2014 you own it.';
+        if (lead) lead.textContent = 'Your payment went through. Outlier Pro is a one-time purchase, '
+          + 'so this is the last time you pay for it. Here is how to get running.';
+      } else if (st0) {
+        if (h) h.textContent = 'Your payment did not go through';
+        if (lead) lead.innerHTML = 'Nothing was charged. You can <a href="/#pricing">try again from the pricing page</a>, '
+          + 'or email <a href="mailto:matt@outlier.host">matt@outlier.host</a> and I will sort it out.';
+      }
+      var key = r.license_key;
       if (!key) return;                       // no key -> panel stays hidden
       // Hide the key on an EXPLICIT failure. Dodo probably never sends a key
       // with status=failed, but "probably never" is the assumption that shows a
       // licence key to someone whose card was declined. Deliberately permissive
       // when status is ABSENT: a key with no status is still evidence of a
       // purchase, and suppressing it would strand a real buyer.
-      var st = (q.get('status') || '').toLowerCase();
+      var st = st0;
       if (st && st !== 'succeeded') return;
       var box = document.getElementById('licence-box');
       var out = document.getElementById('licence-key');
@@ -231,9 +257,6 @@ plausible.init()
       if (!box || !out) return;
       out.textContent = key;
       box.hidden = false;
-      // Same gate as the key, on purpose -- see the comment on #discord-box.
-      var dbox = document.getElementById('discord-box');
-      if (dbox) dbox.hidden = false;
       if (step) {
         step.textContent = 'Your licence key is above \u2014 a copy is also in the '
           + 'receipt Dodo Payments emailed you.';

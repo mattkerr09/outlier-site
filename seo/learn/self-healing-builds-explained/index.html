@@ -23,7 +23,7 @@
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/seo/learn/"},{"@type":"ListItem","position":3,"name":"How Outlier self-heals multi-file builds","item":"https://outlier.host/seo/learn/self-healing-builds-explained/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How Outlier self-heals multi-file builds (and never fakes a green check) | Outlier","description":"Local models make mechanical slips. Outlier repairs each class deterministically, re-runs the tests, and only claims success it can prove.","datePublished":"2026-07-05","dateModified":"2026-07-05","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/self-healing-builds-explained/"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How Outlier self-heals multi-file builds (and never fakes a green check) | Outlier","description":"Local models make mechanical slips. Outlier repairs each class deterministically, re-runs the tests, and only claims success it can prove.","datePublished":"2026-07-05","dateModified":"2026-09-24","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/seo/learn/self-healing-builds-explained/"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Outlier edit my tests to make them pass?","acceptedAnswer":{"@type":"Answer","text":"No. A dedicated guard rejects any repair attempt that weakens or removes assertions, and a cross-turn monitor flags a build whose passing-test count silently shrinks. Repairs target source files, and every repair must make the real suite pass before the build may claim success."}},{"@type":"Question","name":"What happens when a repair doesn't work?","acceptedAnswer":{"@type":"Answer","text":"The changed file is rolled back to its original contents and the build reports its honest status — failed, or completed (unverified) when nothing objective confirmed the result. Outlier never reports a green check it cannot prove with a real test run."}}]}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
@@ -81,7 +81,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 </nav>
 <span class="tag">Concept</span>
 <h1>How Outlier self-heals multi-file builds (and never fakes a green check)</h1>
-<p class="byline">Last updated 2026-07-05</p>
+<p class="byline">Last updated 2026-09-24</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Small local models occasionally make mechanical slips a big cloud model wouldn&rsquo;t: a method indented into the wrong place, an import of a slightly-misnamed helper, a function a test expects that the module forgot to define. Outlier detects each class from the objective failure signal (a compile error, a collection ImportError, an AttributeError), repairs it deterministically or with a tightly-guarded generation, re-runs the full test suite, and only reports success the tests actually prove. A repair that doesn&rsquo;t earn a real green is rolled back.</p></div>
 
@@ -116,7 +116,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <p>An assistant that reports success it cannot prove poisons everything downstream &mdash; your trust, your git history, and any system that learns from its own results. Outlier&rsquo;s build verdicts are engineered adversarially: each repair and each verdict rule ships only after a review process that actively tries to construct false greens and false reds. The result is an on-device agent whose &ldquo;succeeded&rdquo; means something you can act on without re-checking by hand.</p>
 
 <a class="cta" id="dl-cta" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg" data-plausible="dl-selfhealing">Download Outlier for macOS</a>
-<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Requires <strong>Apple Silicon (M1, M2, M3, or M4)</strong> &mdash; Intel Macs are not supported.</p>
+<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Free &middot; M1 or newer &middot; macOS 26+ (free update) &middot; 290 MB. Intel Macs are not supported.</p>
 
 <div class="related">
 <h3>Related pages</h3>

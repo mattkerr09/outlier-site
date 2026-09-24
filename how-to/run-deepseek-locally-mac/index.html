@@ -10,7 +10,7 @@
   <title>How to run DeepSeek locally on a Mac (2026) | Outlier</title>
   <meta name="description" content="Yes, DeepSeek runs locally on an Apple Silicon Mac. The simplest path is a quantized GGUF through Ollama or LM Studio, sized to your RAM. Steps, a size/RAM table, and the honest trade-offs.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-06-14">
+  <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/how-to/run-deepseek-locally-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run DeepSeek locally on a Mac">
@@ -113,7 +113,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run DeepSeek locally on a Mac", "description": "Yes, DeepSeek runs locally on an Apple Silicon Mac. The simplest path is a quantized GGUF through Ollama or LM Studio, sized to your RAM. Steps, a size/RAM table, and the honest trade-offs.", "datePublished": "2026-06-14", "dateModified": "2026-06-14", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-deepseek-locally-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run DeepSeek locally on a Mac", "description": "Yes, DeepSeek runs locally on an Apple Silicon Mac. The simplest path is a quantized GGUF through Ollama or LM Studio, sized to your RAM. Steps, a size/RAM table, and the honest trade-offs.", "datePublished": "2026-06-14", "dateModified": "2026-09-24", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-deepseek-locally-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run DeepSeek locally on a Mac", "item": "https://outlier.host/how-to/run-deepseek-locally-mac/"}]}
@@ -143,7 +143,7 @@
     <h1>How to run DeepSeek locally on a Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-06-14</span>
-      <span class="updated-pill">Last updated 2026-06-14</span>
+      <span class="updated-pill">Last updated 2026-09-24</span>
     </div>
 
     <div class="quick-answer">
@@ -201,7 +201,7 @@
     <p>Running locally costs you two things. First, speed: a 14B or 32B on an M-series chip generates at a readable pace but won't match a cloud datacenter, and the bigger the model the slower the tokens. Second, ceiling: a quantized distill is smaller than the full DeepSeek, so on the hardest problems it gives up some quality. What you get in exchange is everything that matters about "local" — it's private, it runs with Wi-Fi off, there's no meter, and nobody can deprecate or reprice the file sitting on your disk.</p>
 
     <h2>Where Outlier fits</h2>
-    <p>If the terminal-and-GGUF route sounds like more setup than you want, that's the gap <a href="https://outlier.host/">Outlier</a> fills: one signed Mac download, no account, no Docker, no command line. Outlier doesn't ship DeepSeek by name. Its own models are built on the Qwen family — another strong open-weight line — and cover the same daily reasoning and coding work most people open DeepSeek for. On a 54-prompt comparison, Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks (the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">full results are public</a>). And because of a patent-pending paged inference engine, Outlier can run a model bigger than the Mac's RAM — a 397B-parameter model at roughly 11 GB peak memory on a 64 GB Mac Studio — which the RAM-bound GGUF tools above can't do.</p>
+    <p>If the terminal-and-GGUF route sounds like more setup than you want, that's the gap <a href="https://outlier.host/">Outlier</a> fills: one signed Mac download, no account, no Docker, no command line. Outlier doesn't ship DeepSeek by name. Its own models are built on the Qwen family — another strong open-weight line — and cover the same daily reasoning and coding work most people open DeepSeek for. We published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side of Core 27B and Claude Opus</a> so you can compare the answers yourself; cloud models like Claude and ChatGPT are still faster and stronger on the hardest work. And because of a patent-pending paged inference engine, Outlier can run a model bigger than the Mac's RAM — a 397B-parameter model at roughly 11 GB peak memory on a 64 GB Mac Studio — which the RAM-bound GGUF tools above can't do.</p>
     <p>If you specifically want DeepSeek itself, Outlier supports bring-your-own-model: import an MLX build and run it inside the same app. So the choice isn't DeepSeek <em>or</em> Outlier — it's a free GGUF runner when you want that exact model, or a no-setup Mac app for the everyday work, with a path to load your own model either way. If you're choosing a runner first, our <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> breakdown lays it out plainly.</p>
 
     <h2>Frequently asked questions</h2>
@@ -221,8 +221,8 @@
     </div>
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro is a one-time $249 and adds everything (all 6 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p>
-      <a class="btn" href="https://outlier.host/">Download for Mac</a>
+      <p>Free: Nano + Lite. Pro: $249 once, $124.50 for the first 25. macOS 26+.</p>
+      <a class="btn" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg">Download free (290 MB)</a> <a class="btn" href="https://outlier.host/#pricing" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">See Pro</a>
     </div>
 
     <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/best/local-llm-for-coding/">Best local LLM for coding</a> · <a href="https://outlier.host/learn/">All articles</a></div>

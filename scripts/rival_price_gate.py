@@ -39,19 +39,34 @@ import sys
 
 CELL = re.compile(r'(?is)<t([hd])[^>]*>(.*?)</t\1>')
 OUTLIER = re.compile(r'(?i)\boutlier\b')
-PRICE_IN_INDEX = re.compile(r'<div class="price">(\$\d[\d,]*)\s*<small>once</small></div>')
+#: The price block. Since 2026-09-24 the lifetime card leads with the founders price
+#: ("<span data-lt-price>$124.50</span> once", swapped to $249 by script once the 25
+#: founding seats are gone), and the old pattern stopped matching: the gate refused
+#: with "could not read the canonical price" and guarded nothing. It now reads the
+#: block in either shape AND the non-zero JSON-LD Offer prices, so the list price
+#: ($249) stays guarded while the founders price is the one on the card.
+PRICE_IN_INDEX = re.compile(
+    r'<div class="price">(?:<span[^>]*>)?(\$\d[\d,]*(?:\.\d\d)?)(?:</span>)?\s*<small>once</small></div>')
+OFFER_PRICE = re.compile(r'"price"\s*:\s*"(\d[\d,]*(?:\.\d\d)?)"')
 
 
 def text_of(fragment):
     return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', ' ', fragment))).strip()
 
 
-def canonical_price(root):
+def canonical_prices(root):
+    """Every price of ours the page states: the card's figure(s) and the JSON-LD
+    Offers above zero. Empty when the price block cannot be read -- a refusal,
+    never a pass."""
     index = os.path.join(root, 'index.html')
     if not os.path.exists(index):
-        return None
-    m = PRICE_IN_INDEX.search(open(index, encoding='utf-8', errors='replace').read())
-    return m.group(1) if m else None
+        return []
+    src = open(index, encoding='utf-8', errors='replace').read()
+    card = PRICE_IN_INDEX.findall(src)
+    if not card:
+        return []
+    offers = {f'${p}' for p in OFFER_PRICE.findall(src) if float(p.replace(',', '')) > 0}
+    return sorted(set(card) | offers)
 
 
 def check(src, price):
@@ -102,11 +117,12 @@ def check(src, price):
 
 
 def main(root):
-    price = canonical_price(root)
-    if not price:
+    prices = canonical_prices(root)
+    if not prices:
         print('rival_price_gate: could not read the canonical price from index.html — '
               'the check would have passed while testing nothing', file=sys.stderr)
         return 1
+    price = ' / '.join(prices)
 
     failures = []
     tables = 0
@@ -117,10 +133,12 @@ def main(root):
                 continue
             path = os.path.join(dirpath, name)
             src = open(path, encoding='utf-8', errors='replace').read()
-            n, found = check(src, price)
-            tables += n
-            for f in found:
-                failures.append(f'{os.path.relpath(path, root)}: {f}')
+            for one in prices:
+                n, found = check(src, one)
+                if one == prices[0]:
+                    tables += n
+                for f in found:
+                    failures.append(f'{os.path.relpath(path, root)}: {f}')
 
     if not tables:
         print('rival_price_gate: found no comparison table with both an Outlier column '

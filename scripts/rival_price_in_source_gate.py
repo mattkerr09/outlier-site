@@ -41,6 +41,16 @@ def _ours() -> set[str]:
                 out.add(f"${c // 100}" if c % 100 == 0 else f"${c / 100:.2f}")
     except Exception:
         pass
+    # 2026-09-24: the homepage card leads with the founders price ($124.50, 50% off
+    # for the first 25 via a Dodo discount code), and the article CTA box states it
+    # on every page. A discount is not a product field, so product-facts.json cannot
+    # carry it, and without this our own offer read as 14 unsourced rival claims.
+    # The price block on the homepage is where the site states what WE charge.
+    try:
+        home = (pathlib.Path(__file__).resolve().parent.parent / "index.html").read_text(encoding="utf-8")
+        out.update(re.findall(r'<div class="price">(?:<span[^>]*>)?(\$\d[\d,]*(?:\.\d\d)?)', home))
+    except Exception:
+        pass
     return out
 
 

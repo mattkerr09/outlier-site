@@ -10,7 +10,7 @@
   <title>How to run AI coding offline on Apple Silicon | Outlier</title>
   <meta name="description" content="A practical guide to running an AI coding workflow with no internet, no API keys, and no cloud, on M1/M2/M3/M4 Macs. Costs, tradeoffs, and the actual stack.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-05-19">
+  <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/run/offline-ai-coding-apple-silicon/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run AI coding offline on Apple Silicon">
@@ -113,13 +113,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI coding offline on Apple Silicon","description":"A practical guide to running an AI coding workflow with no internet, no API keys, and no cloud, on M1/M2/M3/M4 Macs.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/offline-ai-coding-apple-silicon/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI coding offline on Apple Silicon","description":"A practical guide to running an AI coding workflow with no internet, no API keys, and no cloud, on M1/M2/M3/M4 Macs.","datePublished":"2026-05-19","dateModified":"2026-09-24","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/offline-ai-coding-apple-silicon/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run AI coding offline on Apple Silicon", "item": "https://outlier.host/run/offline-ai-coding-apple-silicon/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI coding work completely offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, chat, agent runs, file edits, and project memory all work with wifi turned off on any Apple Silicon Mac."}}, {"@type": "Question", "name": "What Mac do I need for offline AI coding?", "acceptedAnswer": {"@type": "Answer", "text": "Any Apple Silicon Mac (M1 or newer) with 16 GB or more of RAM. Serious coding with Core 27B is best on 32 GB or more."}}, {"@type": "Question", "name": "How does offline local AI compare to cloud tools?", "acceptedAnswer": {"@type": "Answer", "text": "On everyday coding work, local Core 27B holds its own against Claude Opus on output quality. The main tradeoff is speed: roughly 20.7 tok/s locally versus 80 to 100 in the cloud."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI coding work completely offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, chat, agent runs, file edits, and project memory all work with wifi turned off on any Apple Silicon Mac."}}, {"@type": "Question", "name": "What Mac do I need for offline AI coding?", "acceptedAnswer": {"@type": "Answer", "text": "Any Apple Silicon Mac (M1 or newer) with 16 GB or more of RAM. Serious coding with Core 27B is best on 32 GB or more."}}, {"@type": "Question", "name": "How does offline local AI compare to cloud tools?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code is faster and better at editing large codebases; the cloud runs at roughly 80 to 100 tok/s versus about 20.7 tok/s locally. Outlier keeps your code on your Mac, offline and unmetered; in our own test its agent built a working app 9 of 9 times, using the default model for 8, 16 and 24 GB+ Macs."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -143,7 +143,7 @@
     <h1>How to run AI coding offline on Apple Silicon</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-05-20</span>
+      <span class="updated-pill">Last updated 2026-09-24</span>
     </div>
 
     <div class="quick-answer">
@@ -161,7 +161,7 @@
     <h2>The 30-second setup</h2>
     <p>Shortest path is a Mac-native app that bundles the inference runtime, the model weights, and a chat / agent UI in one download. Outlier is one of those. The whole sequence:</p>
     <ol>
-      <li>Grab the signed Mac DMG from <a href="https://outlier.host/">outlier.host</a>. The installer is about 150 MB.</li>
+      <li>Grab the signed Mac DMG from <a href="https://outlier.host/">outlier.host</a>. The installer is about 290 MB.</li>
       <li>First launch pulls Nano 4B (~3 GB) from HuggingFace. After that one download, inference never touches the network again.</li>
       <li>Want proof? Switch off your wifi. Chat, agent runs, file edits, project memory. All of it still runs.</li>
     </ol>
@@ -178,13 +178,13 @@
         <tr><td>96+ GB</td><td>Plus 397B in Speed mode (fully resident in RAM) for higher throughput</td></tr>
       </tbody>
     </table>
-    <p>For coding, Core 27B is the workhorse — the strongest coding tier in the lineup. When I ran a head-to-head against Claude Opus, I genuinely couldn't tell the outputs apart on refactors, reasoning, knowledge questions, writing, or translation.</p>
+    <p>For coding, Core 27B is the workhorse — the strongest coding tier in the lineup. Claude Code is faster and better at editing large codebases. Outlier keeps your code on your Mac, offline and unmetered; in our own test its agent built a working app 9 of 9 times, using the default model for 8, 16 and 24 GB+ Macs.</p>
 
     <h2>What the offline workflow gives up</h2>
     <p>Two things, and they're both real:</p>
     <ul>
-      <li><strong>Speed feel.</strong> Core 27B on my M1 Ultra runs about 20.7 tok/s. Claude Opus or GPT-5 in the cloud do 80 to 100. On a 5,000-token reply that works out to roughly 4 minutes locally against about 1 minute online. Same answer at the end. The wait is the price.</li>
-      <li><strong>Research-grade ceiling.</strong> Truly novel research, 50k+ token contexts, PhD-level multi-hop reasoning. The cloud flagships still win those. But for the everyday 95% (refactors, explanations, comparisons, debugging) Outlier's local Core 27B held its own against Claude on output quality, including the hardest cases I threw in (chess engine, raft/paxos explanation, ZK proofs, that kind of thing).</li>
+      <li><strong>Speed feel.</strong> Core 27B on my M1 Ultra runs about 20.7 tok/s. Claude Opus or GPT-5 in the cloud do 80 to 100. On a 5,000-token reply that works out to roughly 4 minutes locally against about 1 minute online. The wait is the price.</li>
+      <li><strong>Research-grade ceiling.</strong> Truly novel research, 50k+ token contexts, PhD-level multi-hop reasoning. The cloud flagships still win those.</li>
     </ul>
 
     <h2>What it gives you back</h2>
@@ -203,14 +203,14 @@
       </div>
       <div class="faq-item">
         <h3>How does offline local AI compare to cloud tools?</h3>
-        <p>On everyday coding work, local Core 27B holds its own against Claude Opus on output quality. The main tradeoff is speed: roughly 20.7 tok/s locally versus 80 to 100 in the cloud.</p>
+        <p>Claude Code is faster and better at editing large codebases; the cloud runs at roughly 80 to 100 tok/s versus about 20.7 tok/s locally. Outlier keeps your code on your Mac, offline and unmetered; in our own test its agent built a working app 9 of 9 times, using the default model for 8, 16 and 24 GB+ Macs.</p>
       </div>
     </div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro is a one-time $249 and adds everything (Plus 397B, Marathon mode, Computer use, Deep Research v3, long context to 128K). Founders Lifetime is $249 once. Apple Silicon only.</p>
-      <a class="btn" href="https://outlier.host/">Download for Mac</a>
+      <p>Free: Nano + Lite. Pro: $249 once, $124.50 for the first 25. macOS 26+.</p>
+      <a class="btn" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg">Download free (290 MB)</a> <a class="btn" href="https://outlier.host/#pricing" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">See Pro</a>
     </div>
 
     <div class="related">More: <a href="https://outlier.host/run/local-coding-agent-no-api-keys/">A local coding agent without API keys</a> · <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code</a> · <a href="https://outlier.host/learn/">All articles</a></div>

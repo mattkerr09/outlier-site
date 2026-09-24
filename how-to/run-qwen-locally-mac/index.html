@@ -10,7 +10,7 @@
   <title>How to run Qwen locally on a Mac (2026) | Outlier</title>
   <meta name="description" content="Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps + a RAM table.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-06-15">
+  <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/how-to/run-qwen-locally-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run Qwen locally on a Mac">
@@ -113,13 +113,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac", "description": "Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps plus a RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-06-15", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac", "description": "Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps plus a RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-09-24", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Qwen locally on a Mac", "item": "https://outlier.host/how-to/run-qwen-locally-mac/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Qwen good for coding?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Qwen is open-weight and one of the stronger open families at coding and multilingual work, which is why it's a common pick for a local coding assistant. Outlier's own models are built on the Qwen family; on a 54-prompt comparison Outlier's Core 27B matched Claude Opus on 98.9 percent of rubric checks. For local coding, run a code-tuned Qwen variant in Ollama or LM Studio sized to your RAM, or use Outlier's Core 27B."}}, {"@type": "Question", "name": "How much RAM do you need to run Qwen on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the size you pick. As a rough guide for quantized GGUF: a 7-8B Qwen runs on 8 GB (16 GB comfortable), a 14B wants 16 GB, a 32B wants about 32 GB, and 70B-class models want 64 GB or more. The model plus its context has to fit in unified memory. Outlier is the exception, since its paged inference engine runs a 397B-class Qwen-based model at about 11 GB peak RSS on a 64 GB Mac."}}, {"@type": "Question", "name": "What's the easiest way to run Qwen on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "For a no-terminal install, LM Studio gives you a model browser and chat window: search Qwen, pick a quant that fits your RAM, download, chat. Ollama is the developer favorite if you're comfortable with one command. Outlier is the batteries-included Mac-native route: one signed download, no terminal or Docker, and its own models are Qwen-based, including a 397B-class tier that runs on a 64 GB Mac."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Qwen good for coding?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Qwen is open-weight and one of the stronger open families at coding and multilingual work, which is why it's a common pick for a local coding assistant. Outlier's own models are built on the Qwen family; in our own test Outlier's coding agent built a working app 9 of 9 times, using the default model for 8, 16 and 24 GB+ Macs, though Claude Code is faster and better at editing large codebases. For local coding, run a code-tuned Qwen variant in Ollama or LM Studio sized to your RAM, or use Outlier's Core 27B."}}, {"@type": "Question", "name": "How much RAM do you need to run Qwen on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the size you pick. As a rough guide for quantized GGUF: a 7-8B Qwen runs on 8 GB (16 GB comfortable), a 14B wants 16 GB, a 32B wants about 32 GB, and 70B-class models want 64 GB or more. The model plus its context has to fit in unified memory. Outlier is the exception, since its paged inference engine runs a 397B-class Qwen-based model at about 11 GB peak RSS on a 64 GB Mac."}}, {"@type": "Question", "name": "What's the easiest way to run Qwen on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "For a no-terminal install, LM Studio gives you a model browser and chat window: search Qwen, pick a quant that fits your RAM, download, chat. Ollama is the developer favorite if you're comfortable with one command. Outlier is the batteries-included Mac-native route: one signed download, no terminal or Docker, and its own models are Qwen-based, including a 397B-class tier that runs on a 64 GB Mac."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -143,7 +143,7 @@
     <h1>How to run Qwen locally on a Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-06-15</span>
-      <span class="updated-pill">Last updated 2026-06-15</span>
+      <span class="updated-pill">Last updated 2026-09-24</span>
     </div>
 
     <div class="quick-answer">
@@ -197,7 +197,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Is Qwen good for coding?</h3>
-        <p>Yes. Qwen is open-weight and one of the stronger open families at coding and multilingual work, which is why it's a common pick for a local coding assistant. Outlier's own models are built on the Qwen family; on a 54-prompt comparison Outlier's Core 27B matched Claude Opus on 98.9% of rubric checks. For local coding, run a code-tuned Qwen variant in Ollama or LM Studio sized to your RAM, or use Outlier's Core 27B.</p>
+        <p>Yes. Qwen is open-weight and one of the stronger open families at coding and multilingual work, which is why it's a common pick for a local coding assistant. Outlier's own models are built on the Qwen family; in our own test Outlier's coding agent built a working app 9 of 9 times, using the default model for 8, 16 and 24 GB+ Macs, though Claude Code is faster and better at editing large codebases. For local coding, run a code-tuned Qwen variant in Ollama or LM Studio sized to your RAM, or use Outlier's Core 27B.</p>
       </div>
       <div class="faq-item">
         <h3>How much RAM do you need to run Qwen on a Mac?</h3>
@@ -210,8 +210,8 @@
     </div>
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free Nano + Lite — local, private, no account. Pro is a one-time $249 and adds everything (all 6 model tiers incl. Plus 397B). Founders Lifetime is $249 once. Apple Silicon only.</p>
-      <a class="btn" href="https://outlier.host/">Download for Mac</a>
+      <p>Free: Nano + Lite. Pro: $249 once, $124.50 for the first 25. macOS 26+.</p>
+      <a class="btn" href="https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.857/Outlier-1.11.857-arm64.dmg">Download free (290 MB)</a> <a class="btn" href="https://outlier.host/#pricing" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">See Pro</a>
     </div>
 
     <div class="related">More: <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">Run Qwen3.5-397B on a Mac without 512 GB of RAM</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/best/local-llm-for-coding/">Best local LLM for coding</a> · <a href="https://outlier.host/learn/">All articles</a></div>
