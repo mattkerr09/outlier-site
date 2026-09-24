@@ -722,6 +722,11 @@
     /* The "Ask a question" widget renders in a shadow root; on phones shrink it to its icon
        (its text stays in the DOM for screen readers) so it stops covering the hero buttons. */
     @media (max-width:640px){#kc-agent-host::part(button){font-size:0;gap:0;padding:.72rem;}}
+    /* Shrinking was not enough: at 375x812 "See pricing" sits on the fold, exactly where the
+       floating button is, so the icon still covered its right edge on load (measured
+       2026-09-25). While the hero's buttons are on screen the button steps aside; it comes
+       back once they scroll away. Only the button part hides, so an open chat is unaffected. */
+    @media (max-width:640px){html.hero-cta-on #kc-agent-host::part(button){visibility:hidden;}}
   </style>
   <!-- Privacy-friendly analytics by Plausible -->
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
@@ -1702,6 +1707,13 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
 <div data-win-notify style="max-width:520px;margin:1.25rem auto 0"></div>
 <script src="https://kerr-subscribe.kerrco.workers.dev/notify.js" defer></script>
 <script>
+(function () {
+  var bar = document.querySelector('.hero .cta-bar') || document.querySelector('.cta-bar');
+  if (!bar || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (es) {
+    document.documentElement.classList.toggle('hero-cta-on', es[0].isIntersecting);
+  }).observe(bar);
+})();
 document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
   b.addEventListener('click', function () {
     var url = 'https://outlier.host/?utm_source=phone-share&utm_medium=share';
