@@ -177,7 +177,9 @@ jobs:
           # ~ local-runtimes-for-regex, ~ local-runtimes-for-shell-scripts). They crossed the line because the
           # same blocks changed on all 60 /seo/ pages (macOS 12+ → 26+, the dateline, the pixel snippet),
           # not because any page copied another. Held at the new reality so the ratchet catches the NEXT one.
-          BASELINE=174
+          # Lowered 174 → 171 on 2026-09-25: stating Nano's and Lite's context per plan (8K on Free,
+          # 32K on Pro) made the /seo/run/ matrix pages measurably less alike. Held at the new reality.
+          BASELINE=171
           python3 scripts/seo_lint.py . > /tmp/seo.txt 2>&1 || true
           COUNT=$(grep -cE '^  (THIN|VOICE|DUP)' /tmp/seo.txt || true)
           echo "seo_lint failures: $COUNT (baseline $BASELINE)"

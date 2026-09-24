@@ -263,6 +263,29 @@ def write_page(category: str, slug: str, title: str, description: str,
 # with its owner instead.
 
 
+#: Free = Nano + Lite (the homepage: "Free to start: Nano + Lite"). The app clamps a
+#: Free licence's context to 8,192 tokens and Pro's to 131,072 (desktop_app/backend/
+#: server.py _resolve_context, PRICING-V3: free=8192, pro=131072), so a Free user on
+#: these tiers never gets the model's 32K default, and nobody gets the model's native
+#: 256K. Until 2026-09-25 these pages said "32K default" for Nano and Lite and "256K
+#: available" for Core; a context figure has to say which plan it is for.
+FREE_TIERS = {"nano", "lite"}
+FREE_CONTEXT_K = 8
+PRO_CONTEXT_CAP_K = 131072 // 1024
+
+
+def ctx_default_phrase(m) -> str:
+    k = int(m["context_default"]) // 1024
+    return (f"{FREE_CONTEXT_K}K tokens on Free, {k}K on Pro" if m["tier_id"] in FREE_TIERS
+            else f"{k}K tokens")
+
+
+def ctx_default_inline(m) -> str:
+    k = int(m["context_default"]) // 1024
+    return (f"{FREE_CONTEXT_K}K context on Free ({k}K on Pro)" if m["tier_id"] in FREE_TIERS
+            else f"{k}K default context")
+
+
 def build_run_pages(models, macs) -> list[dict]:
     """20 'Run [tier] on [Mac]' pages — pick (tier, mac) combos that fit."""
     by_tier = {m["tier_id"]: m for m in models}
@@ -371,7 +394,7 @@ def build_run_pages(models, macs) -> list[dict]:
             f"<p><strong>{m['display_name']}</strong> on <strong>{mac['name']}</strong>: "
             f"{ram_ok}. Minimum unified memory required: <strong>{m['min_ram_gb']} GB</strong>. "
             f"Disk size: <strong>{m['disk_gb']} GB</strong>. Default context window: "
-            f"<strong>{int(m['context_default']) // 1024}K tokens</strong>. {est_line}</p>"
+            f"<strong>{ctx_default_phrase(m)}</strong>. {est_line}</p>"
         )
         # Body — varied per (tier, mac) combo to keep shingles low
         body = []
@@ -380,7 +403,7 @@ def build_run_pages(models, macs) -> list[dict]:
         body.append(
             f"<p>The pairing under examination is <strong>{m['display_name']}</strong> "
             f"({m['disk_gb']} GB MLX 4-bit, {m['base_model']} base, "
-            f"{int(m['context_default']) // 1024}K default context, "
+            f"{ctx_default_inline(m)}, "
             f"{m['min_ram_gb']} GB unified memory minimum) on a <strong>{mac['name']}</strong> "
             f"({mac['chip']}, {mac['cpu_cores']} CPU cores, {mac['gpu_cores']} GPU cores, "
             f"{mac['unified_ram_gb']} GB unified memory, {mac['memory_bandwidth_gbs']} GB/s, "
@@ -487,8 +510,12 @@ def build_run_pages(models, macs) -> list[dict]:
         )
         body.append(f"<h2>What context window can I use on a {int(mac['unified_ram_gb'].split('|')[0])} GB Mac?</h2>")
         body.append(
-            f"<p>The {m['display_name']} tier defaults to {int(m['context_default']) // 1024}K context and "
-            f"caps at {min(int(m['context_max']), 131072) // 1024}K on Pro. KV cache scales linearly with context length on dense "
+            (f"<p>The {m['display_name']} tier runs at {FREE_CONTEXT_K}K context on Free; on Pro it defaults to "
+             f"{int(m['context_default']) // 1024}K and caps at {min(int(m['context_max']) // 1024, PRO_CONTEXT_CAP_K)}K. "
+             if m["tier_id"] in FREE_TIERS else
+             f"<p>The {m['display_name']} tier defaults to {int(m['context_default']) // 1024}K context and "
+             f"caps at {min(int(m['context_max']) // 1024, PRO_CONTEXT_CAP_K)}K on Pro. ") +
+            f"KV cache scales linearly with context length on dense "
             f"models, so longer contexts trade headroom for capacity. On a {mac['unified_ram_gb']} GB "
             f"{mac['name']}, the default context is the safe starting point.</p>"
         )
@@ -662,7 +689,7 @@ VS_FLAVOR = {
     "refactoring": "Refactoring runs are long-prompt, long-output: paste a function and ask for the rewrite. Core sizes its context window to the memory your Mac actually has free rather than to a fixed number, so a whole file and its imports fit without truncation.",
     "test-writing": "Test scaffolding is bursty: ten short turns to land a green suite. Cloud round-trip variance shows up here because each turn is small enough that the network is half the latency.",
     "documentation": "Documentation generation is throughput-friendly: the model emits tokens steadily, no need for multi-turn corrections. Local decode tok/s is the visible quality of life.",
-    "summarization": "Summarization on long-source material wants the wider context windows on the heavier tiers. Core defaults to 32K context, with 256K available; Plus also defaults to 32K with the same ceiling.",
+    "summarization": "Summarization on long-source material wants the wider context windows on the heavier tiers. Core defaults to 32K context and goes up to 128K on Pro; Plus also defaults to 32K with the same ceiling.",
     "data-cleaning": "Pandas-style work is interactive: try a transform, inspect, refine. Local decode keeps the loop tight; round-trip variance drops.",
     "brainstorming": "Brainstorming is an exploration mode where the prompts are short and the value comes from many candidate completions. Quick&rsquo;s MoE architecture is well-suited to this even though its HumanEval score is poor.",
     "shell-scripts": "Shell-script drafting is a Nano-tier task: short context, fast turnaround. The 2.37 GB Nano model fits a 16 GB Air with room to spare.",
@@ -1028,7 +1055,7 @@ def build_howto_pages() -> list[dict]:
             "fixtures or property-based testing, Core (24 GB RAM) is the upgrade.</p>",
         "review-a-pull-request-locally":
             "<h2>How does Code-tier context width compare to Core?</h2>"
-            "<p>Code defaults to 64K context against Core&rsquo;s 32K, with both capped at 256K. The "
+            "<p>Code defaults to 64K context against Core&rsquo;s 32K, with both capped at 128K on Pro. The "
             "two share the same safetensors and produce identical answer quality; the difference is "
             "the chat template and decoding configuration. For PR review on diffs over 500 lines, "
             "Core&rsquo;s memory-sized window keeps the whole diff plus the relevant surrounding code "
@@ -1136,7 +1163,7 @@ def build_howto_pages() -> list[dict]:
             "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision 3.8 adds 15.5 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
             "write-unit-tests-with-local-ai": "Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.",
             "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
-            "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s 32K default context is more than enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
+            "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s context (8K on Free, 32K on Pro) is enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
             "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the verified reply regardless of which product you bought.",
         }
