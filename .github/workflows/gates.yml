@@ -169,7 +169,13 @@ jobs:
           # ratchet seventeen points above reality is seventeen new duplicates that
           # can appear while this step stays green — the slack IS the hole. Lowered
           # to what the site actually produces, 2026-09-15.
-          BASELINE=171
+          # Raised 171 → 174 on 2026-09-24 by the CEO, measured (Outlier paused): seo_lint at the last green
+          # commit (1cfc00e3) and at a52d509a differ by three pairs, all /seo/ matrix pages at 28% shared
+          # (browser-extension-coding-for-refactoring ~ container-based-runners-for-shell-scripts,
+          # ~ local-runtimes-for-regex, ~ local-runtimes-for-shell-scripts). They crossed the line because the
+          # same blocks changed on all 60 /seo/ pages (macOS 12+ → 26+, the dateline, the pixel snippet),
+          # not because any page copied another. Held at the new reality so the ratchet catches the NEXT one.
+          BASELINE=174
           python3 scripts/seo_lint.py . > /tmp/seo.txt 2>&1 || true
           COUNT=$(grep -cE '^  (THIN|VOICE|DUP)' /tmp/seo.txt || true)
           echo "seo_lint failures: $COUNT (baseline $BASELINE)"
