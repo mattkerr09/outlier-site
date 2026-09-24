@@ -41,6 +41,8 @@ jobs:
           python3 scripts/no_internal_docs_gate.py .
           python3 scripts/styled_class_gate.py .
           python3 scripts/internal_link_gate.py .
+          python3 scripts/no_release_narration_gate.py --self-check
+          python3 scripts/no_release_narration_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
           python3 scripts/figure_provenance_gate.py .

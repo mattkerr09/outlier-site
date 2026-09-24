@@ -10,16 +10,18 @@ are set in different files, so doing them as two steps means one can be
 forgotten — and the forgetting is silent until CI fails. Done together they
 cannot diverge.
 
-⚠️ POINTER SHAPES ONLY, NEVER THE BARE VERSION STRING. index.html's provenance
-paragraph NARRATES the release history: "1.11.838 then fixed a step that looked
-like it had worked" is correct history that a blind replace would falsify. Same
-reason the app's own version bump leaves prose mentions alone. The counts below
-are asserted before anything is written, and a mismatch refuses outright —
-a shape that has changed shape is exactly where a blind replace does damage.
+⚠️ POINTER SHAPES ONLY, NEVER THE BARE VERSION STRING. The benchmark notes name
+the build each figure was measured on ("v1.11.804"); that is history a blind
+replace would falsify. Same reason the app's own version bump leaves prose
+mentions alone. The counts below are asserted before anything is written, and a
+mismatch refuses outright — a shape that has changed shape is exactly where a
+blind replace does damage.
 
-⚠️ TWO EDITS ARE LEFT TO A HUMAN ON PURPOSE, and this script names them rather
-than attempting them: the sentence saying which build the page links, and the
-new history sentence. Both are judgement about prose, not substitution.
+⚠️ THE HOMEPAGE DOES NOT NARRATE RELEASES. Until 2026-09-24 this script asked for
+"the new history sentence" on every bump, and the benchmark footnote on the
+pricing section grew to 57 sentences (~18,000 characters) of changelog. What
+changed in a release goes in its GitHub release notes; no_release_narration_gate.py
+fails the site if narration comes back.
 """
 from __future__ import annotations
 
@@ -30,9 +32,9 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
-#: published path -> how many bare "old version" mentions may legitimately remain
-#: (index.html keeps its history sentences; the others must reach zero).
-FILES = {"index.html": 2,
+#: published path -> how many bare "old version" mentions may legitimately remain.
+#: Every page must reach zero: the homepage no longer narrates release history.
+FILES = {"index.html": 0,
          "thank-you.html": 0,
          "learn/can-you-run-claude-locally/index.html": 0}
 
@@ -147,9 +149,8 @@ def main(argv: list[str]) -> int:
               "scripts/refresh_app_tiers.py with the app reachable.")
         return 1
 
-    print(f"\n  written. Two prose edits remain, deliberately not automated:")
-    print(f"    1. the sentence saying which build the page links -> {new}")
-    print(f"    2. append the {new} history sentence, LEAVING the {old} one intact")
+    print(f"\n  written. No prose edits: what changed in {new} belongs in its GitHub "
+          "release notes, never on the homepage (no_release_narration_gate.py).")
     return 0
 
 
