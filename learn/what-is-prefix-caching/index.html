@@ -7,14 +7,14 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>What is prefix caching (KV cache reuse)? | Outlier</title>
-  <meta name="description" content="Prefix caching reuses the key/value tensors a transformer already computed for a shared prompt prefix, so only the differing suffix gets prefilled. How it works, why it needs an exact token match, and the three bugs that silently killed it in our runtime.">
+  <title>What is prefix caching? KV cache reuse and how it breaks</title>
+  <meta name="description" content="Prefix caching reuses the KV tensors already computed for a matching prompt prefix, so only the new suffix is prefilled. It needs an exact token match.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-22">
   <link rel="canonical" href="https://outlier.host/learn/what-is-prefix-caching/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="What is prefix caching (KV cache reuse)?">
-  <meta property="og:description" content="Prefix caching reuses the key/value tensors a transformer already computed for a shared prompt prefix, so only the differing suffix gets prefilled. How it works, why it needs an exact token match, and the three bugs that silently killed it in our runtime.">
+  <meta property="og:title" content="What is prefix caching? KV cache reuse and how it breaks">
+  <meta property="og:description" content="Prefix caching reuses the KV tensors already computed for a matching prompt prefix, so only the new suffix is prefilled. It needs an exact token match.">
   <meta property="og:url" content="https://outlier.host/learn/what-is-prefix-caching/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -22,7 +22,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="What is prefix caching (KV cache reuse)?">
+  <meta name="twitter:title" content="What is prefix caching? KV cache reuse and how it breaks">
   <meta name="twitter:description" content="An exact token-level prefix match, or nothing. Three ways we broke it, and the design rules that came out.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
