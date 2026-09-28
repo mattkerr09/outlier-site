@@ -500,6 +500,14 @@
     .tier.pro .tn{color:var(--v0);}
     .tier .price{font-family:var(--display);font-size:2.8rem;font-weight:600;letter-spacing:-.03em;margin:.6rem 0 .1rem;color:var(--text);}
     .tier .price small{font-size:0.9rem;font-weight:500;color:var(--text-dim);letter-spacing:0;font-family:var(--sans);}
+    /* 2026-09-28, Matthew: pay-in-four "right next to the full price in the same font", then "this looks bad" when it was
+       the SAME SIZE (it wrapped). Same typeface, beside the price, ~40% of its size, bold, full-strength colour. */
+    .tier .price [data-lt-bnpl]{font-size:.42em;font-weight:600;letter-spacing:0;color:var(--text);white-space:nowrap;}
+    /* Phones: the split drops under the price as its own tight line, without the leading dot (::first-letter can't
+       target it, so the dot is its own span). */
+    .tier .price [data-lt-bnpl] .bnpl-dot{margin-right:.15em}
+    @media (max-width:480px){.tier .price [data-lt-bnpl]{display:block;line-height:1.25;margin-top:.25rem}.tier .price [data-lt-bnpl] .bnpl-dot{display:none}}
+    h2 .bnpl{font-size:.42em;font-weight:600;letter-spacing:0;white-space:nowrap;}
     .tier .sub2{color:var(--text-dim);font-size:0.77rem;min-height:1.1rem;}
     .tier .blurb{color:var(--text-mid);font-size:0.9rem;margin:1rem 0 1.3rem;line-height:1.55;}
     .tier ul{list-style:none;display:grid;gap:.62rem;margin:0 0 1.8rem;}
@@ -1044,7 +1052,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">Simple pricing</span>
-      <h2>Free to start. <span class="accent">Pro is $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25.</span></h2>
+      <h2>Free to start. <span class="accent">Pro is $249 once</span><span class="bnpl"> &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25</span></h2>
       <p>No investors and no API margins to protect — which is why Free is genuinely free. <strong>Pro includes everything: all six tiers and every feature.</strong></p>
     </div>
     <div class="tiers">
@@ -1067,7 +1075,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
 
       <div class="tier reveal d2" data-lifetime-card>
         <div class="tn" data-lt-name>Founders Lifetime</div>
-        <div class="price"><span data-lt-price>$124.50</span> <small>once</small> <span data-lt-bnpl>&middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span></div>
+        <div class="price"><span data-lt-price>$124.50</span> <small>once</small> <span data-lt-bnpl><span class="bnpl-dot">&middot;</span>or&nbsp;4&nbsp;&times;&nbsp;$31.13</span></div>
         <div class="payterms" data-lt-offer><strong>50% off $249</strong>, first 25 buyers. At checkout, enter <strong>FOUNDINGOUTLIER</strong> under &ldquo;Have a discount code?&rdquo;</div>
         <p class="blurb">Pro for the lifetime of the Outlier product: every tier, every feature, and every model release to come.</p>
         <ul>
@@ -1749,7 +1757,7 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
           founding = false;
           card.querySelector('[data-lt-name]').textContent = 'Lifetime';
           card.querySelector('[data-lt-price]').textContent = '$249';
-          card.querySelector('[data-lt-bnpl]').textContent = '·\u00a0or\u00a04\u00a0×\u00a0$62.25';
+          card.querySelector('[data-lt-bnpl]').innerHTML = '<span class="bnpl-dot">·</span>or\u00a04\u00a0×\u00a0$62.25';
           card.querySelector('[data-lt-offer]').hidden = true;
           card.querySelector('[data-lt-btn]').textContent = 'Get Pro Lifetime — $249 ·\u00a0or\u00a04\u00a0×\u00a0$62.25';
         }
