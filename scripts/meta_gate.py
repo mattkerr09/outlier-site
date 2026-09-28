@@ -48,6 +48,18 @@ EXEMPT = {
 #: If the scan finds fewer than this, assume it broke rather than that the gates left.
 MIN_GATES = 8
 
+# A network gate aimed at the whole site can outlast says()'s bound on a CI runner,
+# and a timeout proves nothing, so it was reported as ignoring argv[1] and CI's
+# `gates` job went red for days (2026-09-24 onward) while nothing was wrong.
+# rival_price_in_source_gate fetches every cited rival page serially, about 25s
+# each: 86s on the dev Mac, over 180s on ubuntu-latest. Such a gate is aimed at a
+# one-page sample of the site instead. It still has to say something different
+# from what it says about the empty tree, which is all "aimed" means; the sample
+# is 26s. The path must exist in the repo, or the probe fails loudly below.
+AIM_SAMPLE = {
+    "rival_price_in_source_gate.py": "vs/outlier-vs-lm-studio/index.html",
+}
+
 
 def run(script: Path, root: str) -> int:
     try:
@@ -107,8 +119,18 @@ def main(repo: str = ".") -> int:
             src = g.read_text(encoding="utf-8", errors="ignore")
             # Cheap first; if the source does not spell it the expected way,
             # make the gate DEMONSTRATE that it is aimed rather than assume it is not.
+            aim_root = repo
+            if g.name in AIM_SAMPLE:
+                sample = root / AIM_SAMPLE[g.name]
+                if not sample.is_file():
+                    fails.append(f"{g.name}: its AIM_SAMPLE {AIM_SAMPLE[g.name]} is not in the repo")
+                    continue
+                aim_root = tempfile.mkdtemp(prefix="meta_gate_sample_")
+                dest = Path(aim_root) / AIM_SAMPLE[g.name]
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_bytes(sample.read_bytes())
             reachable = ("argv[1]" in src
-                         or proves_it_is_aimed(g, empty, repo))
+                         or proves_it_is_aimed(g, empty, aim_root))
 
             if g.name in EXEMPT:
                 reason, needle = EXEMPT[g.name]
