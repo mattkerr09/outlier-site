@@ -51,6 +51,18 @@ def _ours() -> set[str]:
         out.update(re.findall(r'<div class="price">(?:<span[^>]*>)?(\$\d[\d,]*(?:\.\d\d)?)', home))
     except Exception:
         pass
+    # 2026-09-28: every price we show as the thing to pay carries its pay-in-4 amount
+    # beside it ("$249 · or 4 × $62.25"), so a quarter of each of our prices is ours
+    # too, rounded half up to the cent the way the pages print it ($124.50 -> $31.13).
+    from decimal import Decimal, ROUND_HALF_UP
+    for p in list(out):
+        try:
+            v = Decimal(p.lstrip("$").replace(",", ""))
+        except Exception:
+            continue
+        if v > 0:
+            q = (v / 4).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            out.add(f"${q:.2f}")
     return out
 
 

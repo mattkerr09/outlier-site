@@ -45,8 +45,11 @@ OUTLIER = re.compile(r'(?i)\boutlier\b')
 #: with "could not read the canonical price" and guarded nothing. It now reads the
 #: block in either shape AND the non-zero JSON-LD Offer prices, so the list price
 #: ($249) stays guarded while the founders price is the one on the card.
+#: 2026-09-28: the block now ends "... <small>once</small> <span data-lt-bnpl>· or 4 × $31.13</span>"
+#: (Matthew: the pay-in-4 amount beside the price, in the same font), so the pattern
+#: stops at "once" instead of requiring </div> straight after it.
 PRICE_IN_INDEX = re.compile(
-    r'<div class="price">(?:<span[^>]*>)?(\$\d[\d,]*(?:\.\d\d)?)(?:</span>)?\s*<small>once</small></div>')
+    r'<div class="price">(?:<span[^>]*>)?(\$\d[\d,]*(?:\.\d\d)?)(?:</span>)?\s*<small>once</small>')
 OFFER_PRICE = re.compile(r'"price"\s*:\s*"(\d[\d,]*(?:\.\d\d)?)"')
 
 
