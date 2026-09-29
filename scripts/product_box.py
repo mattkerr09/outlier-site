@@ -112,9 +112,10 @@ def page_tag(rel: str) -> str:
 SRC_MAX = 60
 
 
-def box(tag: str, spot: str, version: str) -> str:
+def box(tag: str, spot: str, version: str, src: str | None = None) -> str:
+    """The product box. `src` overrides the counting tag (typed_url_pages.py: "pricing-page")."""
     suffix = f"-box-{spot}"
-    src = tag[:SRC_MAX - len(suffix)].rstrip("-") + suffix
+    src = src or (tag[:SRC_MAX - len(suffix)].rstrip("-") + suffix)
     dmg = f"{REPO}/v{version}/Outlier-{version}-arm64.dmg"
     return (
         f'<div class="pbox" data-pbox="{spot}">\n'
