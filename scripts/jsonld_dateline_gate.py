@@ -122,6 +122,11 @@ def main(argv):
         if not a.startswith("--"):
             root = a
     found, checked = survey(root)
+    # What was examined goes to stdout before any verdict (2026-09-29): meta_gate proves a
+    # gate is aimed by what it SAYS about an empty tree versus a sample, and the only line
+    # this gate printed on a small tree was the stderr FAIL below, so both looked alike.
+    print(f"jsonld_dateline_gate: {checked} page(s) with a JSON-LD dateModified; "
+          f"{len(found)} lag their body text by more than {GRACE_DAYS} days")
 
     if "--rebaseline" in argv:
         json.dump(dict(sorted(found.items())), open(BASELINE, "w"), indent=1)
@@ -143,8 +148,6 @@ def main(argv):
         elif days > baseline[rel]:
             worse.append((rel, days, baseline[rel]))
 
-    print(f"jsonld_dateline_gate: {checked} page(s) with a JSON-LD dateModified; "
-          f"{len(found)} lag their body text by more than {GRACE_DAYS} days")
     print(f"jsonld_dateline_gate: {len(baseline)} baselined, not enforced — see "
           f"{os.path.basename(BASELINE)}")
     if not new and not worse:

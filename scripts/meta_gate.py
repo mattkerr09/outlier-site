@@ -58,6 +58,12 @@ MIN_GATES = 8
 # is 26s. The path must exist in the repo, or the probe fails loudly below.
 AIM_SAMPLE = {
     "rival_price_in_source_gate.py": "vs/outlier-vs-lm-studio/index.html",
+    # 2026-09-29: jsonld_dateline_gate reads git history for every page with a JSON-LD
+    # dateModified. On the whole site that took 184 s on the dev box, past the 180 s probe,
+    # so the probe timed out and this gate was reported as "ignores argv[1]", although it
+    # walks the root it is given. One page answers in 0.06 s: "1 page(s)" on stdout against
+    # the empty tree's "0 page(s)" (the gate now prints what it examined before its verdict).
+    "jsonld_dateline_gate.py": "learn/own-your-ai/index.html",
 }
 
 
