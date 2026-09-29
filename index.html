@@ -996,7 +996,7 @@
         <span class="kicker">Private by design</span>
         <h2>Your prompts never<br><span class="accent">leave your Mac.</span></h2>
       </div>
-      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Only model downloads and optional web search ever touch the network</strong> — and only when you choose. No telemetry on inference. The open-weight models are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>.</p>
+      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Nothing you type leaves your Mac unless you switch on web search</strong> (then the search query does). On its own the app goes online only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. The open-weight models are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>.</p>
       <div class="proof reveal d2">
         <div class="proof-head"><b></b>Verified while the model was answering &mdash; 2026-08-18, Outlier Core</div>
 <pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
@@ -1438,7 +1438,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       <details>
         <summary>Do I need an internet connection?</summary>
         <div class="body">Not to use it. The model runs on your Mac and answers with the network off &mdash; that is the whole point of the product, not a fallback mode.
-        You need a connection three times: to download a tier the first time (once per tier, then it is yours on disk), to activate your license, and if you ask the app to search the web, which is a thing you choose to do rather than something it does on its own.
+        You need a connection three times: to download a tier the first time (once per tier, then it is yours on disk), to activate your license, and if you ask the app to search the web, which is a thing you choose to do rather than something it does on its own. On its own it checks for updates, and when you open an upgrade window it fetches the price to show you; neither carries anything you wrote.
         The license check runs at startup and once a day after that. If it cannot reach us it <strong>keeps your Pro features working</strong> rather than locking you out &mdash; an unreachable server is treated as no answer, not as a refusal. Only an explicit revocation from the payment provider ever changes anything.</div>
       </details>
       <details>
