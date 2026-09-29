@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Put a product box on every page that answers a question but offers no way to act on it.
 
-    python3 scripts/product_box.py [--check]
+    python3 scripts/product_box.py [--check]          # the dead-end pages
+    python3 scripts/product_box.py --seo [--check]    # /seo/: the box after the Quick answer
 
 WHY (CEO, 2026-09-28/29 — ops/search/WHAT-WORKS-2026-09-28.md, checklist item 1). A page
 that answers the question and then only offers the menu's Download button is a dead end.
@@ -18,6 +19,12 @@ HOW IT STAYS HONEST
 - Idempotent: a page that already has a box (data-pbox) is left alone; --check writes nothing.
 - The four title-test arms are skipped until 2026-10-13, and so are legal pages, stubs,
   404 and verification files.
+
+/seo/ (--seo): every article under /seo/ already ends in a Download button, but on 28 of them
+that button was the first one, sitting after 60% of the page. --seo puts the box right after
+the Quick answer on every /seo/ article (not the withdrawn noindex page, not the hubs). The
+renderer's template (_seo_build/templates/_base.html) emits the SAME bytes through box(),
+STYLE and SCRIPT below, so a later render keeps the box instead of re-dating the pages.
 """
 from __future__ import annotations
 
@@ -82,8 +89,15 @@ def page_tag(rel: str) -> str:
     return re.sub(r"[^a-z0-9-]+", "-", rel.lower()).strip("-")[:80] or "page"
 
 
+#: The hub keeps 60 characters of a tag: checkout_link_gate reads it back from the 303's
+#: metadata_src, and a 61-character /seo/ tag came back cut, so the sale would not name its
+#: page and spot. The page part is shortened, never the "-box-<spot>" that says which box sold.
+SRC_MAX = 60
+
+
 def box(tag: str, spot: str, version: str) -> str:
-    src = f"{tag}-box-{spot}"[:80]
+    suffix = f"-box-{spot}"
+    src = tag[:SRC_MAX - len(suffix)].rstrip("-") + suffix
     dmg = f"{REPO}/v{version}/Outlier-{version}-arm64.dmg"
     return (
         f'<div class="pbox" data-pbox="{spot}">\n'
@@ -110,7 +124,7 @@ def _div_end(s: str, start: int) -> int:
     return -1
 
 
-def insert(s: str, rel: str, version: str, end_only: bool) -> str:
+def insert(s: str, rel: str, version: str, end_only: bool, answer_only: bool = False) -> str:
     tag = page_tag(rel)
     out = s
     if not end_only:
@@ -125,6 +139,8 @@ def insert(s: str, rel: str, version: str, end_only: bool) -> str:
         if at is None or at < 0:
             raise ValueError(f"{rel}: no place after the answer")
         out = out[:at] + "\n" + box(tag, "answer", version) + out[at:]
+    if answer_only:
+        return _style_and_script(out)
     # 2) at the end of the content
     e = out.find("</article>")
     if e >= 0:
@@ -138,7 +154,11 @@ def insert(s: str, rel: str, version: str, end_only: bool) -> str:
     if at < 0:
         raise ValueError(f"{rel}: no place at the end")
     out = out[:at] + box(tag, "end", version) + out[at:]
-    # style once in <head>, the founders script once before </body>
+    return _style_and_script(out)
+
+
+def _style_and_script(out: str) -> str:
+    """The style once in <head>, the founders script once before the last </body>."""
     if "data-pbox-style" not in out:
         h = out.find("</head>")
         out = out[:h] + STYLE + out[h:]
@@ -148,10 +168,35 @@ def insert(s: str, rel: str, version: str, end_only: bool) -> str:
     return out
 
 
+def seo_targets() -> list[str]:
+    """Every /seo/ article with a Quick answer and no answer box yet — not a hub, not withdrawn."""
+    out = []
+    for p in sorted((ROOT / "seo").glob("*/*/index.html")):
+        s = p.read_text(encoding="utf-8")
+        if 'name="robots" content="noindex' in s or 'http-equiv="refresh"' in s.lower():
+            continue
+        if not re.search(r'<div class="(?:quick-answer|qa)"', s) or 'data-pbox="answer"' in s:
+            continue
+        out.append(str(p.relative_to(ROOT)))
+    return out
+
+
 def main(argv: list[str]) -> int:
     check = "--check" in argv
     version = current_version()
     changed = 0
+    if "--seo" in argv:
+        for rel in seo_targets():
+            if any(a in rel for a in ARMS):
+                print(f"  SKIP (title-test arm) {rel}")
+                continue
+            p = ROOT / rel
+            new = insert(p.read_text(encoding="utf-8"), rel, version, False, answer_only=True)
+            changed += 1
+            if not check:
+                p.write_text(new, encoding="utf-8")
+        print(f"  {changed} /seo/ page(s) {'would change' if check else 'written'} (v{version})")
+        return 0
     for rel, end_only in [(r, False) for r in TARGETS_BOTH] + [(r, True) for r in TARGETS_END_ONLY]:
         if any(a in rel for a in ARMS):
             print(f"  SKIP (title-test arm) {rel}")

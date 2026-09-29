@@ -26,6 +26,12 @@ from typing import Iterable
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+# The product box after the Quick answer comes from scripts/product_box.py — the one
+# implementation, so the pages that script boxed and the pages this renders are byte-identical
+# and a render never re-dates a page for its box (2026-09-29).
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+import product_box  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
 TPL_DIR = ROOT / "_seo_build" / "templates"
@@ -168,6 +174,7 @@ def write_page(category: str, slug: str, title: str, description: str,
     out = out_dir / "index.html"
     canonical = f"{SITE_URL}/seo/{category}/{slug}/"
     tpl = env.get_template("_base.html")
+    _page_tag = re.sub(r"[^a-z0-9-]+", "-", f"seo/{category}/{slug}".lower()).strip("-")[:80]
 
     def _render(published: str, modified: str) -> str:
         return tpl.render(
@@ -188,7 +195,10 @@ def write_page(category: str, slug: str, title: str, description: str,
             app_version=APP_VERSION,
             # 2026-09-29: the Download button's counting-link tag — the SAME value
             # scripts/wrap_counting_links.py derives from the page's path.
-            page_tag=re.sub(r"[^a-z0-9-]+", "-", f"seo/{category}/{slug}".lower()).strip("-")[:80],
+            page_tag=_page_tag,
+            pbox_answer=product_box.box(_page_tag, "answer", APP_VERSION),
+            pbox_style=product_box.STYLE,
+            pbox_script=product_box.SCRIPT,
             unique_claim=unique_claim,
         )
 
