@@ -884,7 +884,7 @@
 
       <div class="nosub reveal d3 in">
         <p class="nosub-lead">Free to start: Nano + Lite.</p>
-        <p class="nosub-foot">Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.</p>
+        <p class="nosub-foot">Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden> &mdash; or $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. No subscription, no per-token cost.</p>
       </div>
 
     <!-- product render: Outlier chat, on macOS -->
@@ -1777,6 +1777,11 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
     }
   }, true);
 })();
+</script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
 </script>
 </body>
 </html>

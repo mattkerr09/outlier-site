@@ -4,6 +4,7 @@
     python3 scripts/product_box.py [--check]          # the dead-end pages
     python3 scripts/product_box.py --seo [--check]    # /seo/: the box after the Quick answer
     python3 scripts/product_box.py --bare [--check]   # the price + Buy under a bare Download
+    python3 scripts/product_box.py --std-cta [--check]  # "See Pro" -> Buy Pro in the standard end block
 
 WHY (CEO, 2026-09-28/29 — ops/search/WHAT-WORKS-2026-09-28.md, checklist item 1). A page
 that answers the question and then only offers the menu's Download button is a dead end.
@@ -188,6 +189,79 @@ def bare_targets() -> list[str]:
     return out
 
 
+#: The standard end block ("Try Outlier free" + this price line + Download free + "See Pro"),
+#: on 166 articles (div.cta) and 7 hubs (div.cta-band). CEO, 2026-09-29: "See Pro" (to /#pricing,
+#: one click short of checkout) becomes Buy Pro through the hub. The refund goes in, in terms.html's
+#: words. The founders half moves into the /founding-driven hidden span, so no page hard-codes
+#: $124.50 / 4 x $31.13 once the seats are gone.
+STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25; "
+                 "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
+                 "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
+STD_PRICE_NEW = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25"
+                 "<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;"
+                 "&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four "
+                 "payments, two weeks apart. Refund window: 14 days, no questions asked.")
+_STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
+                  'var(--border);margin:.5rem 0 0 .5rem"')
+STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_STYLE}>See Pro</a>'
+#: The homepage's no-subscription line says the same founders price, statically.
+HOME_OLD = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 "
+            "for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.")
+HOME_NEW = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding "
+            "hidden> &mdash; or $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. "
+            "No subscription, no per-token cost.")
+_FOUNDERS_SHOWN = re.compile(r"124\.50|31\.13")
+
+
+def _founders_visible(s: str) -> list[str]:
+    """Founders figures left in the page's text outside the hidden /founding span, the founding bar's
+    data-now attribute and scripts: what a visitor would read after the seats sell out."""
+    t = re.sub(r"<span data-pbox-founding hidden>[^<]*</span>", "", s)
+    t = re.sub(r"(?s)<script\b.*?</script>", "", t)
+    t = re.sub(r'data-now="[^"]*"', "", t)
+    t = re.sub(r"(?s)<[^>]+>", " ", t)
+    return [t[max(0, m.start() - 60):m.end() + 20].strip() for m in _FOUNDERS_SHOWN.finditer(t)]
+
+
+def _script_only(out: str) -> str:
+    if "data-pbox-script" not in out:
+        b = out.rfind("</body>")
+        out = out[:b] + SCRIPT + out[b:]
+    return out
+
+
+def std_cta(s: str, rel: str) -> str:
+    """Rewrite the one standard end block on a page. Raises unless it finds exactly that block."""
+    blocks = [m for m in re.finditer(r'<div class="(?:cta|cta-band)">', s)]
+    hits = []
+    for m in blocks:
+        e = _div_end(s, m.start())
+        blk = s[m.start():e]
+        if STD_SEE_OLD in blk and STD_PRICE_OLD in blk and "/dl/outlier?src=" in blk:
+            hits.append((m.start(), e, blk))
+    if len(hits) != 1:
+        raise ValueError(f"{rel}: {len(hits)} standard end blocks (want exactly 1)")
+    a, e, blk = hits[0]
+    if blk.count(STD_SEE_OLD) != 1 or blk.count(STD_PRICE_OLD) != 1:
+        raise ValueError(f"{rel}: the block repeats its price line or button")
+    tag = re.search(r"/dl/outlier\?src=([a-z0-9-]+)", blk).group(1)
+    suffix = "-end"
+    src = tag[:SRC_MAX - len(suffix)].rstrip("-") + suffix
+    buy = f'<a class="btn" href="{HUB}/buy/outlier?src={src}" {_STD_SEE_STYLE}>Buy Pro</a>'
+    new_blk = blk.replace(STD_PRICE_OLD, STD_PRICE_NEW).replace(STD_SEE_OLD, buy)
+    return _script_only(s[:a] + new_blk + s[e:])
+
+
+def std_cta_targets() -> list[str]:
+    out = []
+    for f in sorted(ROOT.rglob("*.html")):
+        if ".git" in f.parts or "_seo_build" in f.parts:
+            continue
+        if STD_SEE_OLD in f.read_text(encoding="utf-8", errors="ignore"):
+            out.append(str(f.relative_to(ROOT)))
+    return out
+
+
 def _div_end(s: str, start: int) -> int:
     """Index just past the </div> that closes the <div ...> opening at `start`."""
     depth, i = 0, start
@@ -262,6 +336,36 @@ def main(argv: list[str]) -> int:
     check = "--check" in argv
     version = current_version()
     changed = 0
+    if "--std-cta" in argv:
+        problems = []
+        for rel in std_cta_targets():
+            if any(a in rel for a in ARMS):
+                print(f"  SKIP (title-test arm) {rel}")
+                continue
+            p = ROOT / rel
+            try:
+                new = std_cta(p.read_text(encoding="utf-8"), rel)
+            except ValueError as e:
+                problems.append(str(e))
+                continue
+            left = _founders_visible(new)
+            if left:
+                problems.append(f"{rel}: founders price still shown: {left[:2]}")
+                continue
+            changed += 1
+            if not check:
+                p.write_text(new, encoding="utf-8")
+        home = ROOT / "index.html"
+        h = home.read_text(encoding="utf-8")
+        if HOME_OLD in h:
+            h = _script_only(h.replace(HOME_OLD, HOME_NEW))
+            changed += 1
+            if not check:
+                home.write_text(h, encoding="utf-8")
+        for pr in problems:
+            print("  NOT CHANGED", pr)
+        print(f"  {changed} page(s) {'would change' if check else 'written'}; {len(problems)} refused")
+        return 1 if problems else 0
     if "--bare" in argv:
         for rel in bare_targets():
             if any(a in rel for a in ARMS):
