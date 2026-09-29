@@ -76,6 +76,9 @@ def _detect_app_version() -> str:
 
 
 APP_VERSION = _detect_app_version()
+# What a tier needs beyond its weights to run fully in memory — the same 4 GB the app's
+# recommender uses (desktop_app/backend/server.py WORKING_SET_GB).
+WORKING_SET_GB = 4.0
 TODAY = date.today().isoformat()
 
 env = Environment(
@@ -403,7 +406,20 @@ def build_run_pages(models, macs) -> list[dict]:
                 "Operator-reported throughput: <strong>~32 tok/s</strong> on a 16 GB M4 Air "
                 "(2026-05-04, single-prompt observation, not yet σ-qualified — treat as indicative)."
             )
-        ram_ok = "fits comfortably" if int(mac["unified_ram_gb"].split("|")[0]) >= int(m["min_ram_gb"]) else "needs the higher-RAM SKU"
+        # 2026-09-29: "fits" means what the app's recommender means: the weights plus a
+        # working set fit in memory (server.py _tier_fits_resident, WORKING_SET_GB). The
+        # catalog's min_ram_gb is only the floor the picker lets someone TRY a tier at, so
+        # Quick's 16 GB told a 16 GB base SKU "fits comfortably" while the same page said it
+        # swaps. Plus keeps the floor test: its pages already describe SSD streaming.
+        _base_ram = int(mac["unified_ram_gb"].split("|")[0])
+        if tier_id == "plus":
+            ram_ok = "fits comfortably" if _base_ram >= int(m["min_ram_gb"]) else "needs the higher-RAM SKU"
+        elif _base_ram >= float(m["disk_gb"]) + WORKING_SET_GB:
+            ram_ok = "fits comfortably"
+        elif _base_ram >= int(m["min_ram_gb"]):
+            ram_ok = "loads on the base SKU but needs a higher-RAM SKU to run fully in memory"
+        else:
+            ram_ok = "needs the higher-RAM SKU"
         quick = (
             f"<p><strong>{m['display_name']}</strong> on <strong>{mac['name']}</strong>: "
             f"{ram_ok}. Minimum unified memory required: <strong>{m['min_ram_gb']} GB</strong>. "
@@ -1104,7 +1120,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                "<p>Apple Silicon Mac, macOS 26 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick, 24 GB for Core and Vision 3.8, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
+                "<p>Apple Silicon Mac, macOS 26 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). Internet is required only for the one-time model download.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
