@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """Does every Buy button on this site still reach a real checkout?
 
+⚠️ 2026-09-29 — THE METHOD CHANGED. Every Buy button now goes through the counting link
+(kerr-affiliate-hub /buy/outlier?src=<page>), and a GET of that link MINTS A REAL DODO
+CHECKOUT SESSION each time, while a browser user agent is counted as a customer (CEO). So
+this gate now sends ONE HEAD per distinct Buy link, redirect NOT followed, as
+"kerr-ops/1.0 (checkout_link_gate)", and reads the 303's Location: this product's Dodo buy
+link, the thank-you return, and the page's tag. A control (an unknown product → 404) runs
+first. The history below explains why a FOLLOWED HEAD proved nothing on Polar; an unfollowed
+HEAD reads the redirect itself, which is the thing being checked.
+
 Written 2026-08-18. The site takes money through exactly two Polar links and
 nothing checked either of them. A link checker cannot: Polar answers 200 for a
 dead link too — see below — so "all links healthy" and "the customer can pay"
@@ -66,11 +75,10 @@ from __future__ import annotations
 
 import re
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
-
-UA = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"}
+from urllib.parse import parse_qs, urlparse
 
 #: The checkout links this site is supposed to have. Declared, so that a link
 #: quietly disappearing is a failure rather than a smaller number.
@@ -130,6 +138,37 @@ WORKER_PRODUCT = "pdt_0Nlgdu1f0s30YekSmpGwA"
 WORKER = re.compile(r"https://kerr-affiliate-hub\.kerrco\.workers\.dev/buy/outlier\?src=[a-z0-9-]+")
 WORKER_HREF = re.compile(r'href\s*=\s*["\'](https://kerr-affiliate-hub\.kerrco\.workers\.dev/buy/outlier\?src=[a-z0-9-]+)')
 
+# 2026-09-29 (CEO): link checks were being COUNTED as customers, and a GET of a /buy link
+# mints a real Dodo checkout session every time. So a hub link is checked with HEAD, WITHOUT
+# following the redirect, under a user agent that says what we are. The worker answers a
+# HEAD with a 303 whose Location is the product's own Dodo buy link, and that Location is
+# the whole door: the right product, the thank-you return, and the page's src tag carried
+# through. Nothing is minted and nothing is counted. The PRICE is no longer read here (that
+# would take a GET); ~/ops/bin/checkout-price-gate.py reads it from the live product.
+HUB_UA = {"User-Agent": "kerr-ops/1.0 (checkout_link_gate)"}
+THANK_YOU = "https://outlier.host/thank-you.html"
+CONTROL_URL = "https://kerr-affiliate-hub.kerrco.workers.dev/buy/nosuchproduct-control?src=ops-gate-control"
+
+
+class _NoFollow(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        return None
+
+
+_OPENER = urllib.request.build_opener(_NoFollow)
+
+
+def head_no_follow(url: str) -> tuple[int, str]:
+    """(status, Location) for one HEAD, redirects NOT followed. (0, '') if it could not be made."""
+    req = urllib.request.Request(url, method="HEAD", headers=HUB_UA)
+    try:
+        with _OPENER.open(req, timeout=30) as r:
+            return r.status, r.headers.get("Location", "") or ""
+    except urllib.error.HTTPError as e:
+        return e.code, (e.headers.get("Location", "") if e.headers else "") or ""
+    except Exception:
+        return 0, ""
+
 
 def pages(root: Path):
     for f in sorted(root.rglob("*.html")):
@@ -144,20 +183,35 @@ def main() -> int:
 
     found: dict[str, list[str]] = {}
     as_href: set[str] = set()
-    fetch_url: dict[str, str] = {}
+    bare: dict[str, list[str]] = {}
+    worker_urls: dict[str, set[str]] = {}
     for f in pages(root):
         text = f.read_text(encoding="utf-8", errors="replace")
+        rel = f.relative_to(root).as_posix()
         for m in LINK.finditer(text):
             found.setdefault(m.group(1), []).append(f.name)
+            bare.setdefault(m.group(1), []).append(rel)
         for m in HREF.finditer(text):
             as_href.add(m.group(1))
         for m in WORKER.finditer(text):
             found.setdefault(WORKER_PRODUCT, []).append(f.name)
         for m in WORKER_HREF.finditer(text):
             as_href.add(WORKER_PRODUCT)
-            fetch_url.setdefault(WORKER_PRODUCT, m.group(1))
+            worker_urls.setdefault(WORKER_PRODUCT, set()).add(m.group(1))
 
     print(f"  {len(found)} distinct checkout link(s) across {len(list(pages(root)))} page(s)\n")
+
+    # THE CONTROL FIRST: a product the worker does not sell must NOT come back as a door to
+    # Dodo, or a 303 below proves nothing.
+    c_status, c_loc = head_no_follow(CONTROL_URL)
+    if c_status == 0:
+        print("FAIL: the control HEAD could not be made at all — network or worker problem.")
+        return 1
+    if c_status in (301, 302, 303, 307, 308) and "checkout.dodopayments.com" in c_loc:
+        print(f"FAIL: the control (an unknown product) answered {c_status} → {c_loc}.")
+        print("      The worker sends anything to a checkout, so a 303 cannot prove a Buy link works.")
+        return 1
+    print(f"  control (unknown product) -> {c_status}  ✓ a wrong link really does fail\n")
 
     for link_id, where in sorted(found.items()):
         label = EXPECTED.get(link_id, "UNDECLARED")
@@ -168,45 +222,47 @@ def main() -> int:
                 f"    {link_id[:26]}... appears but never as a plain <a href>. If it is "
                 f"injected by a selector, the button goes inert the moment the selector "
                 f"stops matching and the page still looks perfect.")
-        # 2. GET to a real checkout
-        try:
-            r = urllib.request.urlopen(
-                urllib.request.Request(fetch_url.get(link_id) or f"https://checkout.dodopayments.com/buy/{link_id}",
-                                       headers=UA), timeout=30)
-            body = r.read()
-            final, status, size = r.geturl(), r.status, len(body)
-        except Exception as exc:
-            print(f"  {label:16s} {link_id[:26]}...  GET FAILED: {exc}")
-            failures.append(f"    {label} ({link_id[:26]}...): checkout unreachable — {exc}")
-            continue
-
-        reachable = 200 <= status < 300 and bool(CHECKOUT_PATH.search(final)) and size >= MIN_BYTES
-        ok = reachable
-        # MERGED FROM checkout_gate.py (977c6f17), which this file now replaces:
-        # reaching a checkout page is not the same as reaching the RIGHT one. The
-        # price is already declared in EXPECTED's label, so it is read from there
-        # rather than retyped — a price typed twice is the bug that started all this.
-        want = re.search(r"\$\d+", EXPECTED.get(link_id, "") or "")
-        price_ok = True
-        if ok and want:
-            text = body.decode("utf-8", "replace") if isinstance(body, (bytes, bytearray)) else body
-            price_ok = bool(re.search(re.escape(want.group(0)) + r"(?!\d)", text))
-            if not price_ok:
-                failures.append(
-                    f"    {EXPECTED[link_id]} ({link_id[:26]}...) opens a real checkout, but "
-                    f"{want.group(0)} is NOT on that page. The door opens onto the wrong till.")
-        ok = ok and price_ok
-        print(f"  {label:16s} {link_id[:26]}...  {status}  {size:,}b  "
-              f"{'checkout' if CHECKOUT_PATH.search(final) else 'NOT a checkout page'}"
-              f"  x{len(where)}{injected}")
-        # Only claim the button is unreachable when it actually is. When the page
-        # loads fine and only the PRICE is wrong, the price failure above already
-        # said so precisely — adding "does not reach a card form" would be false,
-        # and a gate that misreports its own finding is the bug it exists to catch.
-        if not ok and not (reachable and not price_ok):
+        # 2. Every Buy button goes through the counting link (CEO 2026-09-28): a bare Dodo
+        #    link is a Buy button nobody counts, and fetching one would mint a session.
+        if bare.get(link_id):
+            where_bare = ", ".join(sorted(set(bare[link_id]))[:5])
             failures.append(
-                f"    {label} ({link_id[:26]}...): GET returned {status}, {size} bytes, "
-                f"landed on {final}. A customer clicking Buy does not reach a card form.")
+                f"    {label} ({link_id[:26]}...): a bare Dodo link on {where_bare} — route it "
+                f"through /buy/outlier?src=<page> (python3 scripts/wrap_counting_links.py).")
+        urls = sorted(worker_urls.get(link_id, set()))
+        if not urls:
+            print(f"  {label:16s} {link_id[:26]}...  no counting Buy link  x{len(where)}{injected}")
+            failures.append(f"    {label} ({link_id[:26]}...): no counting Buy link carries it.")
+            continue
+        # 3. HEAD each distinct counting link; the 303's Location is the door.
+        for url in urls:
+            status, loc = head_no_follow(url)
+            src = parse_qs(urlparse(url).query).get("src", [""])[0]
+            lu = urlparse(loc) if loc else None
+            lq = parse_qs(lu.query) if lu else {}
+            door = (status == 303 and lu is not None and lu.netloc == "checkout.dodopayments.com"
+                    and lu.path == f"/buy/{link_id}")
+            back = lq.get("redirect_url", [""])[0] == THANK_YOU
+            tag = lq.get("metadata_src", [""])[0] == src
+            print(f"  {label:16s} src={src:10s} HEAD {status} -> "
+                  f"{(lu.netloc + lu.path) if lu else 'no Location'}  "
+                  f"return={'thank-you' if back else 'WRONG'}  tag={'kept' if tag else 'LOST'}"
+                  f"  x{len(where)}{injected}")
+            if not door:
+                failures.append(
+                    f"    {label} (src={src}): HEAD answered {status} -> {loc or 'no Location'}. "
+                    f"A customer clicking Buy does not reach this product's Dodo checkout.")
+                continue
+            if not back:
+                failures.append(
+                    f"    {label} (src={src}): the checkout returns to "
+                    f"{lq.get('redirect_url', ['nothing'])[0]}, not {THANK_YOU} — the buyer "
+                    f"dead-ends after paying.")
+            if not tag:
+                failures.append(
+                    f"    {label} (src={src}): the page tag did not reach the checkout "
+                    f"(metadata_src={lq.get('metadata_src', [''])[0]!r}) — the sale cannot be "
+                    f"traced to the page.")
 
     # 1. declared set
     for missing in sorted(set(EXPECTED) - set(found)):
@@ -224,19 +280,15 @@ def main() -> int:
         print(f"FAIL: {len(failures)} checkout problem(s).")
         for f in failures:
             print(f)
-        print("\n  Test with GET, never HEAD: HEAD follows to polar.sh/ and answers 200 for a")
-        print("  dead link. And never assert the final URL equals the configured one — the")
-        print("  checkout session id is minted per request.")
+        print("\n  Hub links are checked with HEAD and the redirect NOT followed: a GET of /buy")
+        print("  mints a real Dodo checkout session, and a browser user agent is counted as a")
+        print("  customer. The 303's Location names the product, the return page and the tag.")
         return 1
 
-    print(f"OK: {len(found)} checkout link(s), each reaching a real Dodo checkout page.")
-    print("Each also carries the price declared for it in EXPECTED, so this proves the")
-    print("door opens AND the till reads right. ops/bin/checkout-price-gate.py still")
-    print("checks the amount against the live product, which is the other half.")
-    print("Note Dodo 404s a bogus product id, where Polar answered 200 with a")
-    print("marketing page — so the size floor Polar made necessary is now")
-    print("belt-and-braces rather than the only thing standing between a dead")
-    print("link and a green gate.")
+    print(f"OK: {len(found)} checkout link(s); every Buy button goes through the counting link,")
+    print("and the worker's 303 lands on this product's Dodo checkout, returns to the thank-you")
+    print("page and carries the page's tag. Nothing was minted or counted (HEAD, kerr-ops UA).")
+    print("The price is ~/ops/bin/checkout-price-gate.py's job, against the live product.")
     return 0
 
 
