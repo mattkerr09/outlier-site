@@ -200,7 +200,12 @@ def compare_visible(before: str | None, after: str | None) -> bool:
 
 
 def last_body_change(path: str):
-    log = subprocess.run(["git", "log", "-8", "--format=%H %ad", "--date=short", "--", path],
+    #: 2026-09-29: the look-back was 8 commits. Every release moves ~240 pages' Download
+    #: href (invisible here, correctly), and 09-28 alone added a counting-link wrap and two
+    #: version bumps — so after the 1.11.860 bump most pages had no visible change in their
+    #: last 8 commits, dropped out of the survey (10 left), and the vacuity guard failed on
+    #: every push. 40 commits surveys 165 pages again (94 s locally); each release costs one.
+    log = subprocess.run(["git", "log", "-40", "--format=%H %ad", "--date=short", "--", path],
                          capture_output=True, text=True).stdout.split("\n")
     for line in log:
         if not line.strip():

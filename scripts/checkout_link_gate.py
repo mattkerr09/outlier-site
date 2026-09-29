@@ -144,7 +144,7 @@ WORKER_HREF = re.compile(r'href\s*=\s*["\'](https://kerr-affiliate-hub\.kerrco\.
 # HEAD with a 303 whose Location is the product's own Dodo buy link, and that Location is
 # the whole door: the right product, the thank-you return, and the page's src tag carried
 # through. Nothing is minted and nothing is counted. The PRICE is no longer read here (that
-# would take a GET); ~/ops/bin/checkout-price-gate.py reads it from the live product.
+# would take a GET); a separate price check reads it from the live product.
 HUB_UA = {"User-Agent": "kerr-ops/1.0 (checkout_link_gate)"}
 THANK_YOU = "https://outlier.host/thank-you.html"
 CONTROL_URL = "https://kerr-affiliate-hub.kerrco.workers.dev/buy/nosuchproduct-control?src=ops-gate-control"
@@ -288,7 +288,7 @@ def main() -> int:
     print(f"OK: {len(found)} checkout link(s); every Buy button goes through the counting link,")
     print("and the worker's 303 lands on this product's Dodo checkout, returns to the thank-you")
     print("page and carries the page's tag. Nothing was minted or counted (HEAD, kerr-ops UA).")
-    print("The price is ~/ops/bin/checkout-price-gate.py's job, against the live product.")
+    print("The price is checked separately, against the live product.")
     return 0
 
 
