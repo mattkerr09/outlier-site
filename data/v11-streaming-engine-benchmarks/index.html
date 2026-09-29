@@ -11,7 +11,7 @@
   <title>Streaming engine benchmarks (Plus + Vision) | Outlier</title>
   <meta name="description" content="Raw tok/s and memory data for Outlier's MoE engines on Plus 397B and Vision 35B. Why both streaming engines (V10, V11) were retired in favor of V9 paged. 5-run methodology.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-05-20">
+  <meta name="last-modified" content="2026-09-29">
   <link rel="canonical" href="https://outlier.host/data/v11-streaming-engine-benchmarks/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon">
@@ -113,13 +113,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Decode tok/s, RSS, and Metal-wired-memory data for Outlier's V9 paged engine (current) and the retired V10/V11 streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-08-18","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/v11-streaming-engine-benchmarks/dataset.json"}}
+  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Decode tok/s, RSS, and Metal-wired-memory data for Outlier's V9 paged engine (current) and the retired V10/V11 streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-09-29","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/v11-streaming-engine-benchmarks/dataset.json"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon", "item": "https://outlier.host/data/v11-streaming-engine-benchmarks/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What engine does Outlier use for Plus now?", "acceptedAnswer": {"@type": "Answer", "text": "V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at about 2.1 tok/s with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired."}}, {"@type": "Question", "name": "Why were the streaming engines retired?", "acceptedAnswer": {"@type": "Answer", "text": "V10 and V11 per-token expert streaming committed 57 to 58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30 to 40 percent tok/s gain. V9 paged uses 3.6 GB Wired (15x less). On a footprint-first tier, that trade favors V9."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What engine does Outlier use for Plus now?", "acceptedAnswer": {"@type": "Answer", "text": "V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at 1.59 tok/s at the shipped K=20 setting (the 2026-05-01 K sweep), with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired."}}, {"@type": "Question", "name": "Why were the streaming engines retired?", "acceptedAnswer": {"@type": "Answer", "text": "V10 and V11 per-token expert streaming committed 57 to 58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30 to 40 percent tok/s gain. V9 paged uses 3.6 GB Wired (15x less). On a footprint-first tier, that trade favors V9."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -143,13 +143,14 @@
     <h1>Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-05-09</span>
-      <span class="updated-pill">Last updated 2026-08-18</span>
+      <span class="updated-pill">Last updated 2026-09-29</span>
     </div>
+    <p><em>Corrected 2026-09-29: the quick answer and FAQ said ~2.1 tok/s; that is this benchmark&rsquo;s protocol, and the shipping figure is 1.59.</em></p>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>Current engine (V9 paged):</strong> Plus 397B runs at <strong>~2.1 tok/s, ~11 GB RSS, 3.6 GB Wired Memory</strong> on a 64 GB Mac.</li>
+        <li><strong>Current engine (V9 paged):</strong> Plus 397B runs at <strong>1.59 tok/s</strong> at the shipped K=20 setting (the 2026-05-01 K sweep: 5 prompts &times; 80 tokens, fresh process), with <strong>~11 GB RSS and 3.6 GB Wired Memory</strong> on a 64 GB Mac.</li>
         <li><strong>Both streaming engines retired:</strong> V11 in v1.11.71, V10 two builds later in v1.11.73.</li>
         <li><strong>Why:</strong> per-token streaming on V10/V11 committed <strong>57–58 GB of Metal-wired memory</strong> during prefill. That's enough to crash a 32 GB Mac, and all it bought was a ~30–40% tok/s gain.</li>
         <li>V9 paged (K=20 hot experts + 8 GB LRU) sits at 3.6 GB, <strong>15× less wired memory</strong>. On a footprint-first tier, that's the trade you want.</li>
@@ -220,7 +221,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>What engine does Outlier use for Plus now?</h3>
-        <p>V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at about 2.1 tok/s with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired.</p>
+        <p>V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at 1.59 tok/s at the shipped K=20 setting (the 2026-05-01 K sweep), with ~11 GB RSS and 3.6 GB Wired Memory. The V10 and V11 streaming engines were retired.</p>
       </div>
       <div class="faq-item">
         <h3>Why were the streaming engines retired?</h3>

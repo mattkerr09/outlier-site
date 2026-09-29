@@ -156,7 +156,16 @@ def check_plus_decode_sitewide(root):
     # The engine-comparison dataset measures V9/V10/V11 against each other on its own
     # per-token RSS protocol; its V9 row must stay on that protocol or the comparison
     # stops being like-for-like. It carries an inline note reconciling the two.
-    EXEMPT = {"data/v11-streaming-engine-benchmarks/index.html"}
+    #
+    # 2026-09-29: the exemption used to cover the WHOLE page, so the page's quick answer
+    # and FAQ ("It runs Plus 397B at about 2.1 tok/s" -- the current engine's speed, the
+    # line a skimmer reads) went unchecked for months while the rest of the site said
+    # 1.59. Only the comparison section itself is exempt now, cut out between these two
+    # headings. A heading that goes missing is a failure, not a quiet wider exemption.
+    PROTOCOL_SECTIONS = {
+        "data/v11-streaming-engine-benchmarks/index.html":
+            ("<h2>Plus 397B-A17B — engine comparison</h2>", "<h2>Vision 35B-A3B — engine comparison</h2>"),
+    }
     TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Vision|Plus|397B)\b", re.I)
     # models.csv's column is m1_ultra_toks. A figure explicitly about other silicon
     # is a different measurement, not a contradiction.
@@ -165,10 +174,18 @@ def check_plus_decode_sitewide(root):
     bad, scanned, checked = [], 0, 0
     for f in sorted(root.rglob("*.html")):
         rel = f.relative_to(root).as_posix()
-        if "_seo_build" in rel or rel in EXEMPT:
+        if "_seo_build" in rel:
             continue
         scanned += 1
         raw = f.read_text(errors="replace")
+        if rel in PROTOCOL_SECTIONS:
+            start, end = PROTOCOL_SECTIONS[rel]
+            a, b = raw.find(start), raw.find(end)
+            if a < 0 or b < a:
+                bad.append(f"{rel}: protocol-section headings not found -- cannot tell the "
+                           f"exempt comparison from the page's own claims")
+                continue
+            raw = raw[:a] + raw[b:]
         # Meta/og/twitter descriptions live INSIDE a tag, so stripping tags deletes
         # them -- and they are exactly the text search engines and AI crawlers show.
         # A control aimed at one of them found the gate reading clean on a page whose
@@ -202,6 +219,8 @@ def check_plus_decode_sitewide(root):
                 continue                      # a different machine, not a different claim
             if re.search(r"estimate|scaled|projected|approx", txt[max(0, m.start() - 200): m.start() + 120], re.I):
                 continue                      # labelled as derived, not measured -- allowed to differ
+            if re.search(r"Corrected \d{4}-\d{2}-\d{2}\b[^.]*\bsaid\b[^.]*$", txt[max(0, m.start() - 160): m.start()]):
+                continue                      # a dated correction notice quoting the figure it replaced
             checked += 1
             if abs(float(m.group(1)) - want) > 0.005:
                 bad.append(f"{rel}: Plus stated at {m.group(1)} tok/s, models.csv says {want}")
