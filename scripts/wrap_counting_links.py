@@ -31,6 +31,9 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import hub_nofollow  # noqa: E402
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DL_WORKER = "https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier"
 BUY_WORKER = "https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier"
@@ -60,6 +63,8 @@ def pages():
 def wrap(text: str, tag: str) -> str:
     text = BARE_DL_RE.sub(lambda m: f'href="{DL_WORKER}?src={tag}&amp;to={m.group(1)}"', text)
     text = BARE_BUY_RE.sub(f'href="{BUY_WORKER}?src={tag}"', text)
+    # 2026-09-29: a hub link is a counting redirect, not a page to crawl (hub_nofollow.py).
+    text, _ = hub_nofollow.add_nofollow(text)
     return text
 
 

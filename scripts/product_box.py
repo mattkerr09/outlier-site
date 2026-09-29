@@ -120,8 +120,8 @@ def box(tag: str, spot: str, version: str) -> str:
         f'<div class="pbox" data-pbox="{spot}">\n'
         f'<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25'
         f'<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>\n'
-        f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}">Download free</a> '
-        f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}">Buy Pro</a></p>\n'
+        f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}" rel="nofollow">Download free</a> '
+        f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. '
         f'{REFUND}</p>\n'
         f'</div>\n'
@@ -140,7 +140,7 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
         f'<div class="pbox" data-pbox="end">\n'
         f'<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25'
         f'<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>\n'
-        f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}">Buy Pro</a></p>\n'
+        f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">{req}{REFUND}</p>\n'
         f'</div>\n'
     )
@@ -251,7 +251,7 @@ def std_cta(s: str, rel: str) -> str:
     tag = re.search(r"/dl/outlier\?src=([a-z0-9-]+)", blk).group(1)
     suffix = "-end"
     src = tag[:SRC_MAX - len(suffix)].rstrip("-") + suffix
-    buy = f'<a class="btn" href="{HUB}/buy/outlier?src={src}" {_STD_SEE_STYLE}>Buy Pro</a>'
+    buy = f'<a class="btn" href="{HUB}/buy/outlier?src={src}" rel="nofollow" {_STD_SEE_STYLE}>Buy Pro</a>'
     new_blk = blk.replace(STD_PRICE_OLD, STD_PRICE_NEW).replace(STD_SEE_OLD, buy)
     return _script_only(s[:a] + new_blk + s[e:])
 
