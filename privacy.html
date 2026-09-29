@@ -86,7 +86,7 @@
       <li><strong>The price in an upgrade window</strong> &mdash; when you open a window that offers Pro, the app asks <code>kerr-lead-agent.kerrco.workers.dev</code> whether founding seats are left, so it can show the right price. The request names the site and nothing else: no license key, no device id, nothing you typed. It is never sent on a timer.</li>
       <li><strong>Founders / Pro license activation</strong> &mdash; when you paste your license key into Settings &rarr; license, the key is sent to the vendor that issued it: <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026. The app decides from the key itself and sends it to one vendor only, along with a device name so the seat can be counted against your three activations. After that the app re-checks the key with the same vendor at startup and once a day; if the vendor can't be reached, Pro keeps working.</li>
     </ul>
-    <p class="dim">The in-app Privacy Ledger (Settings → Privacy → Privacy ledger) lists the app&rsquo;s built-in destinations. Two are not in it yet: the license check and the upgrade-window price check. It is kept by hand from the app&rsquo;s own network calls.</p>
+    <p class="dim">The in-app Privacy Ledger (Settings → Privacy → Privacy ledger) lists the app&rsquo;s built-in destinations, the license check and the upgrade-window price check included (from version 1.11.866). It is kept by hand from the app&rsquo;s own network calls, and a test checks it against the hosts the app&rsquo;s code actually contacts.</p>
 
     <h2>What Outlier does NOT do</h2>
     <ul>
