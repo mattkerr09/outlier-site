@@ -152,9 +152,32 @@ plausible.init()
           if (_o && _o.offer === 'founding' && (Date.now() - (_o.t || 0)) < 864e5) _value = 124.50;
           localStorage.removeItem('outlier_offer');
         } catch (e2) {}
-        window.__outlierValue = _value;
-        fbq('track', 'Purchase', {value: _value, currency: 'USD'}, {eventID: _pid});
-        if (window.plausible) plausible('Purchase', { revenue: { currency: 'USD', amount: _value } });
+        // 2026-09-29 (CEO): the REAL amount, from the payment itself. /paid answers
+        // {"amount":124.5,"currency":"USD","app":"outlier"} for a succeeded payment of the
+        // last 72 hours and a plain 404 for anything else — nothing about the buyer; CORS
+        // is open to outlier.host only. The guess above stays the fallback (3 s, or any
+        // failure), and Purchase fires ONCE either way, with payment_id as the eventID.
+        var _fired = false;
+        var _fire = function (value) {
+          if (_fired) return;
+          _fired = true;
+          window.__outlierValue = value;
+          fbq('track', 'Purchase', {value: value, currency: 'USD'}, {eventID: _pid});
+          if (window.plausible) plausible('Purchase', { revenue: { currency: 'USD', amount: value } });
+        };
+        var _guess = _value;
+        var _timer = setTimeout(function () { _fire(_guess); }, 3000);
+        try {
+          fetch('https://kerr-affiliate-hub.kerrco.workers.dev/paid?payment_id=' + encodeURIComponent(_pid), { credentials: 'omit' })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (d) {
+              clearTimeout(_timer);
+              var ok = d && typeof d.amount === 'number' && isFinite(d.amount) && d.amount > 0 && d.amount < 10000
+                && d.currency === 'USD' && d.app === 'outlier';
+              _fire(ok ? d.amount : _guess);
+            })
+            .catch(function () { clearTimeout(_timer); _fire(_guess); });
+        } catch (e3) { clearTimeout(_timer); _fire(_guess); }
       }
     }
   } catch (e) { /* private mode blocks sessionStorage; never break the page */ }
@@ -187,12 +210,12 @@ plausible.init()
       <p class="keybox-label">Your licence key</p>
       <code class="keybox-key" id="licence-key"></code>
       <button class="btn btn-copy" id="licence-copy" type="button">Copy</button>
-      <p class="dim">Also emailed to you. Paste it into Outlier under <strong>Activate</strong>.</p>
+      <p class="dim">Also emailed to you. Paste it into Outlier under <strong>Settings (⌘,) → License</strong>.</p>
     </div>
 
     <ol class="steps">
       <li id="step-receipt">Check your email for the receipt from Dodo Payments. Your licence key is in it.</li>
-      <li>Open Outlier, go to <strong>Activate</strong>, and paste the key.</li>
+      <li>Open Outlier, go to <strong>Settings (⌘,) → License</strong>, and paste the key.</li>
       <li>That unlocks every tier and every Pro feature on this Mac.</li>
     </ol>
     <p class="dim">If the receipt has not arrived within a few minutes, check spam before emailing
