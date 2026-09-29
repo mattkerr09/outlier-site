@@ -88,6 +88,10 @@ fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').t
 """
 
 
+#: The refund promise in terms.html's own words. Every box and end block says the same thing.
+REFUND = "Refund window: 14 days, no questions asked."
+
+
 def current_version() -> str:
     s = (ROOT / "index.html").read_text(encoding="utf-8")
     m = re.search(r"releases/download/v(\d+\.\d+\.\d+)/Outlier-\1-arm64\.dmg", s)
@@ -119,7 +123,7 @@ def box(tag: str, spot: str, version: str) -> str:
         f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}">Download free</a> '
         f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}">Buy Pro</a></p>\n'
         f'<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. '
-        f'14-day refund on Pro, no questions asked.</p>\n'
+        f'{REFUND}</p>\n'
         f'</div>\n'
     )
 
@@ -137,7 +141,7 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
         f'<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25'
         f'<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}">Buy Pro</a></p>\n'
-        f'<p class="pbox-req">{req}14-day refund on Pro, no questions asked.</p>\n'
+        f'<p class="pbox-req">{req}{REFUND}</p>\n'
         f'</div>\n'
     )
 
@@ -200,7 +204,7 @@ STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp
 STD_PRICE_NEW = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25"
                  "<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;"
                  "&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four "
-                 "payments, two weeks apart. Refund window: 14 days, no questions asked.")
+                 "payments, two weeks apart. " + REFUND)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
                   'var(--border);margin:.5rem 0 0 .5rem"')
 STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_STYLE}>See Pro</a>'
