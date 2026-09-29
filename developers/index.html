@@ -105,7 +105,7 @@
     <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point Cursor, LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it — same code you already have, but the model runs locally and nothing leaves your machine.</p>
 
     <h2>1 · Turn it on</h2>
-    <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>) — nothing is exposed to your network.</p>
+    <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>) — nothing is exposed to your network. The API is part of Pro: on the free plan the toggle opens the upgrade card instead, and a request to <code>/v1</code> comes back <code>402</code> with <code>feature_locked</code>.</p>
 
     <h2>2 · OpenAI SDK — drop-in</h2>
     <pre><code>from openai import OpenAI
