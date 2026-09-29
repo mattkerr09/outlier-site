@@ -99,6 +99,19 @@ def _is_redirect_stub(raw):
     return bool(_REDIRECT_REFRESH.search(raw) and _REDIRECT_NOINDEX.search(raw))
 
 
+# 2026-09-29: the two URLs a reviewer types, /pricing/ and /download/ (scripts/typed_url_pages.py).
+# Porkbun answers any missing path with a bare 404, so these exist as SIGNPOSTS — a heading, the
+# product box, a link home — not as articles, and they carry noindex, so they are not in the
+# index this word floor protects. BOTH signals are required, as for redirect stubs: one of these
+# two paths (its last two components, so the invocation root does not change the verdict) AND
+# noindex. noindex alone still exempts nothing.
+TYPED_URL_SIGNPOSTS = {("pricing", "index.html"), ("download", "index.html")}
+
+
+def _is_typed_url_signpost(p: Path, raw: str) -> bool:
+    return tuple(p.parts[-2:]) in TYPED_URL_SIGNPOSTS and bool(_REDIRECT_NOINDEX.search(raw))
+
+
 def _is_section_hub(p: Path) -> bool:
     """True for an index.html whose directory holds further page directories.
 
@@ -122,6 +135,7 @@ def main(root: str) -> int:
     sh: dict[Path, set[str]] = {}
 
     skipped_stubs = []
+    skipped_signposts = []
     for p in pages:
         try:
             raw = p.read_text(encoding="utf-8", errors="ignore")
@@ -160,8 +174,11 @@ def main(root: str) -> int:
         stub = _is_redirect_stub(raw)
         if stub:
             skipped_stubs.append(p)
+        signpost = _is_typed_url_signpost(p, raw)
+        if signpost:
+            skipped_signposts.append(p)
         if body_words < MIN_WORDS and "legal" not in p.parts \
-                and not _is_section_hub(p) and not stub:
+                and not _is_section_hub(p) and not stub and not signpost:
             fails.append(f"THIN   {p}: {body_words}w body (min {MIN_WORDS})")
         # duplicate check ignores shared nav/footer chrome — see _CHROME above
         #
@@ -231,6 +248,9 @@ def main(root: str) -> int:
     print(f"checked {len(pages)} pages")
     # Say what was exempted. A skip nobody prints reads exactly like a page
     # that passed, and the point of the word floor is that silence means checked.
+    if skipped_signposts:
+        print(f"word floor not applied to {len(skipped_signposts)} noindex typed-URL signpost(s): "
+              f"{', '.join(str(x) for x in skipped_signposts)}")
     if skipped_stubs:
         print(f"word floor and duplicate check not applied to {len(skipped_stubs)} "
               f"noindex redirect stub(s): {', '.join(str(x) for x in skipped_stubs)}")
