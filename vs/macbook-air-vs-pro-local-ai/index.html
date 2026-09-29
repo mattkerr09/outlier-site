@@ -11,7 +11,7 @@
   <title>MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled | Outlier</title>
   <meta name="description" content="A neutral hardware comparison for running local AI models: unified memory ceilings, memory bandwidth, thermals under sustained load, price per usable gigabyte, and why there's no upgrade path.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-07-23">
+  <meta name="last-modified" content="2026-09-29">
   <link rel="canonical" href="https://outlier.host/vs/macbook-air-vs-pro-local-ai/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled">
@@ -108,7 +108,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled","description":"A neutral hardware comparison for running local AI models: unified memory ceilings, memory bandwidth, thermals under sustained load, price per usable gigabyte, and why there's no upgrade path.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled","description":"A neutral hardware comparison for running local AI models: unified memory ceilings, memory bandwidth, thermals under sustained load, price per usable gigabyte, and why there's no upgrade path.","datePublished":"2026-07-23","dateModified":"2026-09-29","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"MacBook Air vs MacBook Pro for local AI","item":"https://outlier.host/vs/macbook-air-vs-pro-local-ai/"}]}
@@ -136,8 +136,9 @@
     <h1>MacBook Air vs MacBook Pro for local AI: fanless vs actively cooled</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-09-29</span>
     </div>
+    <p><em>Corrected 2026-09-29: an earlier version gave Vision 3.8 as 19.0GB, the size of the Vision tier it replaced (it is 15.5GB), and said Quick fits on a 16GB Air (it loads there, and runs fully in memory from 24GB).</em></p>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
@@ -161,8 +162,8 @@
     <p>Gigabytes are hard to reason about abstractly, so here are the tiers I ship in Outlier, which publish RAM floors. Comparable apps have a similar ladder.</p>
 
     <ul>
-      <li><strong>16GB Air ($1,299):</strong> Nano 4B (2.37GB download, 6GB floor) and Lite 9B (5.04GB, 12GB floor) run comfortably. Quick, a 26B mixture-of-experts model at 15.61GB, has a 16GB floor — it fits, with little room for anything else.</li>
-      <li><strong>24GB Air, or a base M5 Pro:</strong> where 27B-class dense models get practical. Core 27B is 15.13GB downloads with a 24GB floor; Vision 3.8 27B is 19.0GB.</li>
+      <li><strong>16GB Air ($1,299):</strong> Nano 4B (2.37GB download, 6GB floor) and Lite 9B (5.04GB, 12GB floor) run comfortably. Quick, a 26B mixture-of-experts model at 15.61GB, has a 16GB floor: it loads, and runs fully in memory from 24GB.</li>
+      <li><strong>24GB Air, or a base M5 Pro:</strong> where 27B-class dense models get practical. Core 27B is 15.13GB downloads with a 24GB floor; Vision 3.8 27B is 15.5GB.</li>
       <li><strong>32GB Air (the ceiling):</strong> same models, with headroom for long contexts and a full desktop behind them.</li>
       <li><strong>64GB+, MacBook Pro only:</strong> Outlier's Plus tier is a 397B mixture-of-experts model: a 209GB download, 64GB floor, cleared by streaming experts from SSD at roughly 11GB peak resident memory. No Air will ever run it.</li>
     </ul>

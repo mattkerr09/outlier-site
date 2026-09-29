@@ -11,7 +11,7 @@
   <title>Outlier vs PrivateGPT: Mac app vs self-hosted API layer | Outlier</title>
   <meta name="description" content="Honest comparison of Outlier (native Mac local AI app) and PrivateGPT (Apache-2.0 self-hosted API layer). Both run privately — the real differences are interface, setup, model management, platforms and licensing.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-09-24">
+  <meta name="last-modified" content="2026-09-29">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-privategpt/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs PrivateGPT: Mac app vs self-hosted API layer">
@@ -108,7 +108,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs PrivateGPT: a Mac app vs a self-hosted API layer","description":"Honest comparison of Outlier (native Mac local AI app) and PrivateGPT (Apache-2.0 self-hosted API layer). Both run privately — the real differences are interface, setup, model management, platforms and licensing.","datePublished":"2026-07-23","dateModified":"2026-09-24","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-privategpt/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs PrivateGPT: a Mac app vs a self-hosted API layer","description":"Honest comparison of Outlier (native Mac local AI app) and PrivateGPT (Apache-2.0 self-hosted API layer). Both run privately — the real differences are interface, setup, model management, platforms and licensing.","datePublished":"2026-07-23","dateModified":"2026-09-29","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-privategpt/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs PrivateGPT","item":"https://outlier.host/vs/outlier-vs-privategpt/"}]}
@@ -136,8 +136,9 @@
     <h1>Outlier vs PrivateGPT: a Mac app vs a self-hosted API layer</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-09-24</span>
+      <span class="updated-pill">Updated 2026-09-29</span>
     </div>
+    <p><em>Corrected 2026-09-29: Vision 3.8 is a 15.5 GB download; an earlier version gave 19.0 GB, the size of the Vision tier it replaced.</em></p>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
@@ -156,9 +157,9 @@
     <p>One more trap: an unrelated commercial PrivateGPT is sold on AWS Marketplace by BigCheese with Abstracta, deployed into your own AWS account at custom pricing. No documented relationship to the Zylon project.</p>
 
     <h2>What Outlier is</h2>
-    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 26+). You download it, pick a tier, and the model runs on your machine. No account, no usage caps, no terminal. It ships six tiers: Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra), Lite 9B (5.04 GB, 12 GB), Quick 26B-a4b (15.61 GB, 16 GB), Core 27B (15.13 GB, 24 GB, 20.7 tok/s), Vision 3.8 27B (19.0 GB, 24 GB), and Plus 397B-a17b (209 GB, 64 GB, 1.59 tok/s, streaming experts from SSD at ~11 GB peak RSS).</p>
+    <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 26+). You download it, pick a tier, and the model runs on your machine. No account, no usage caps, no terminal. It ships six tiers: Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra), Lite 9B (5.04 GB, 12 GB), Quick 26B-a4b (15.61 GB, 16 GB), Core 27B (15.13 GB, 24 GB, 20.7 tok/s), Vision 3.8 27B (15.5 GB, 24 GB), and Plus 397B-a17b (209 GB, 64 GB, 1.59 tok/s, streaming experts from SSD at ~11 GB peak RSS).</p>
 
-    <p>Nano and Lite are free with no account. Pro covers all six tiers, with Founders Lifetime at $249. The base models are Qwen and Gemma derivatives — five tiers Apache 2.0, Quick under the Gemma Terms of Use — and the weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. The app itself is not open source. That's a real difference from PrivateGPT and I'll come back to it.</p>
+    <p>Nano and Lite are free with no account. Pro covers all six tiers for $249 once. The base models are Qwen and Gemma derivatives — five tiers Apache 2.0, Quick under the Gemma Terms of Use — and the weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. The app itself is not open source. That's a real difference from PrivateGPT and I'll come back to it.</p>
 
     <h2>What each one hands you out of the box</h2>
     <table>
