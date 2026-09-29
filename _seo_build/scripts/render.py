@@ -197,6 +197,7 @@ def write_page(category: str, slug: str, title: str, description: str,
             # scripts/wrap_counting_links.py derives from the page's path.
             page_tag=_page_tag,
             pbox_answer=product_box.box(_page_tag, "answer", APP_VERSION),
+            pbox_end=product_box.end_box(_page_tag, APP_VERSION, requirements=False),
             pbox_style=product_box.STYLE,
             pbox_script=product_box.SCRIPT,
             unique_claim=unique_claim,

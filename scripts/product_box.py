@@ -3,6 +3,7 @@
 
     python3 scripts/product_box.py [--check]          # the dead-end pages
     python3 scripts/product_box.py --seo [--check]    # /seo/: the box after the Quick answer
+    python3 scripts/product_box.py --bare [--check]   # the price + Buy under a bare Download
 
 WHY (CEO, 2026-09-28/29 — ops/search/WHAT-WORKS-2026-09-28.md, checklist item 1). A page
 that answers the question and then only offers the menu's Download button is a dead end.
@@ -25,6 +26,13 @@ that button was the first one, sitting after 60% of the page. --seo puts the box
 the Quick answer on every /seo/ article (not the withdrawn noindex page, not the hubs). The
 renderer's template (_seo_build/templates/_base.html) emits the SAME bytes through box(),
 STYLE and SCRIPT below, so a later render keeps the box instead of re-dating the pages.
+
+A bare Download (--bare): a page whose in-article button is a Download with no price and no
+Buy (the /seo/ articles' last button, the /seo/ hubs, /learn/can-you-run-claude-locally/) gets
+the price line, Buy and the refund promise directly under that Download, as a box of its own
+(end_box). It is its own <div class="pbox">, not a link inside the Download's paragraph,
+because the dateline gates strip that div as chrome, and a bare "Buy Pro" in the article text
+would read to them as new content.
 """
 from __future__ import annotations
 
@@ -111,6 +119,71 @@ def box(tag: str, spot: str, version: str) -> str:
     )
 
 
+def end_box(tag: str, version: str, requirements: bool = True) -> str:
+    """The price line, Buy and the refund promise, for under a Download that is already there.
+
+    `requirements=False` where the Download's own small print already says free / M1 or newer /
+    macOS 26+ (the /seo/ articles), so the box does not say it twice."""
+    suffix = "-box-end"
+    src = tag[:SRC_MAX - len(suffix)].rstrip("-") + suffix
+    req = ("Free to start (Nano and Lite). macOS 26+, Apple silicon. " if requirements else "")
+    return (
+        f'<div class="pbox" data-pbox="end">\n'
+        f'<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25'
+        f'<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>\n'
+        f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}">Buy Pro</a></p>\n'
+        f'<p class="pbox-req">{req}14-day refund on Pro, no questions asked.</p>\n'
+        f'</div>\n'
+    )
+
+
+#: The bare Downloads outside /seo/'s articles (measured 2026-09-29: an in-article Download
+#: with no price and no Buy or pricing link beside it). The /seo/ articles are found by bare_targets().
+BARE_OTHER = [
+    "seo/index.html", "seo/how-to/index.html", "seo/learn/index.html",
+    "seo/run/index.html", "seo/vs/index.html",
+    "learn/can-you-run-claude-locally/index.html",
+]
+_SMALL_PRINT = re.compile(r'\s*<p style="font-size:0\.8rem;[^"]*">.*?</p>', re.S)
+
+
+def insert_end(s: str, rel: str, version: str) -> str:
+    """The end box directly under the page's bare Download (and under its small print)."""
+    tag = page_tag(rel)
+    m = re.search(r'<a class="cta"[^>]*href="[^"]*/dl/outlier[^"]*"[^>]*>.*?</a>', s, re.S)
+    if m:
+        at, requirements = m.end(), True
+        sp = _SMALL_PRINT.match(s, at)
+        if sp:
+            at, requirements = sp.end(), False
+    else:
+        d = None
+        for c in re.finditer(r'<div class="cta">', s):
+            e = _div_end(s, c.start())
+            if e > 0 and "/dl/outlier" in s[c.start():e]:
+                d = e
+                break
+        if d is None:
+            raise ValueError(f"{rel}: no bare Download found")
+        at, requirements = d, True
+    out = s[:at] + "\n" + end_box(tag, version, requirements) + s[at:]
+    return _style_and_script(out)
+
+
+def bare_targets() -> list[str]:
+    """The /seo/ articles (their last button is the bare Download) plus BARE_OTHER, less any
+    page that already has an end box."""
+    out = []
+    for p in sorted((ROOT / "seo").glob("*/*/index.html")):
+        s = p.read_text(encoding="utf-8")
+        if 'data-pbox="answer"' in s and 'data-pbox="end"' not in s:
+            out.append(str(p.relative_to(ROOT)))
+    for rel in BARE_OTHER:
+        if 'data-pbox="end"' not in (ROOT / rel).read_text(encoding="utf-8"):
+            out.append(rel)
+    return out
+
+
 def _div_end(s: str, start: int) -> int:
     """Index just past the </div> that closes the <div ...> opening at `start`."""
     depth, i = 0, start
@@ -185,6 +258,18 @@ def main(argv: list[str]) -> int:
     check = "--check" in argv
     version = current_version()
     changed = 0
+    if "--bare" in argv:
+        for rel in bare_targets():
+            if any(a in rel for a in ARMS):
+                print(f"  SKIP (title-test arm) {rel}")
+                continue
+            p = ROOT / rel
+            new = insert_end(p.read_text(encoding="utf-8"), rel, version)
+            changed += 1
+            if not check:
+                p.write_text(new, encoding="utf-8")
+        print(f"  {changed} page(s) with a bare Download {'would change' if check else 'written'} (v{version})")
+        return 0
     if "--seo" in argv:
         for rel in seo_targets():
             if any(a in rel for a in ARMS):
