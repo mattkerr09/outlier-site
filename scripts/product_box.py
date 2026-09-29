@@ -59,6 +59,10 @@ TARGETS_BOTH = [
 ]
 #: A reference page: one box at the end, not in the middle of the docs.
 TARGETS_END_ONLY = ["developers/index.html"]
+#: Pages that already end in a priced Download block: the box after the answer only.
+#: /vs/mac-mini-vs-mac-studio-local-ai/ is where /run/local-ai-m1-m2-m3-m4-mac-studio/ (17
+#: visitors) redirects. The CEO, 09-29, said to keep that redirect and let the target carry the box.
+TARGETS_ANSWER_ONLY = ["vs/mac-mini-vs-mac-studio-local-ai/index.html"]
 #: Never before 2026-10-13 (title test).
 ARMS = ("vs/mlx-vs-llama-cpp/", "vs/mac-vs-nvidia-gpu-local-ai/",
         "vs/apple-intelligence-vs-local-ai/", "vs/local-ai-vs-claude-code/")
@@ -282,7 +286,9 @@ def main(argv: list[str]) -> int:
                 p.write_text(new, encoding="utf-8")
         print(f"  {changed} /seo/ page(s) {'would change' if check else 'written'} (v{version})")
         return 0
-    for rel, end_only in [(r, False) for r in TARGETS_BOTH] + [(r, True) for r in TARGETS_END_ONLY]:
+    jobs = ([(r, False, False) for r in TARGETS_BOTH] + [(r, True, False) for r in TARGETS_END_ONLY]
+            + [(r, False, True) for r in TARGETS_ANSWER_ONLY])
+    for rel, end_only, answer_only in jobs:
         if any(a in rel for a in ARMS):
             print(f"  SKIP (title-test arm) {rel}")
             continue
@@ -290,7 +296,7 @@ def main(argv: list[str]) -> int:
         s = p.read_text(encoding="utf-8")
         if "data-pbox=" in s:
             continue
-        new = insert(s, rel, version, end_only)
+        new = insert(s, rel, version, end_only, answer_only=answer_only)
         changed += 1
         print(f"  {rel}: {new.count('data-pbox=')} box(es)")
         if not check:
