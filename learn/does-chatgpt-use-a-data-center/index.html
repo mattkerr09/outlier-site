@@ -258,9 +258,12 @@
 })();
 </script>
 <script>
+/* Carry the visitor's source and any affiliate id into the link they send to their Mac (Product Hunt on a phone kept
+   arriving on the Mac as phone-share; Outlier's walk of Saturday's path, 2026-09-29). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
 document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
   b.addEventListener('click', function () {
-    var url = 'https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=chatgpt-data-center';
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=chatgpt-data-center');
     var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
     if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
     if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
