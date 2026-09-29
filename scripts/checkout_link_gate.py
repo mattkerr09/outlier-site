@@ -121,6 +121,14 @@ MIN_BYTES = 10_000
 CHECKOUT_PATH = re.compile(r"/(?:checkout|session)/")
 LINK = re.compile(r"https://checkout\.dodopayments\.com/buy/(pdt_[A-Za-z0-9_]+)")
 HREF = re.compile(r'href\s*=\s*["\']https://checkout\.dodopayments\.com/buy/(pdt_[A-Za-z0-9_]+)')
+# 2026-09-29 (CEO): the Buy buttons go through the affiliate worker, which opens a Dodo
+# checkout for this product with the founders code applied while seats remain (verified:
+# GET lands on checkout.dodopayments.com/session/cks_…, the page names Outlier, shows
+# $249 and $124.50, and FOUNDINGOUTLIER). A worker link IS the product's checkout link,
+# and it is fetched THROUGH the worker, so a broken worker fails here too.
+WORKER_PRODUCT = "pdt_0Nlgdu1f0s30YekSmpGwA"
+WORKER = re.compile(r"https://kerr-affiliate-hub\.kerrco\.workers\.dev/buy/outlier\?src=[a-z0-9-]+")
+WORKER_HREF = re.compile(r'href\s*=\s*["\'](https://kerr-affiliate-hub\.kerrco\.workers\.dev/buy/outlier\?src=[a-z0-9-]+)')
 
 
 def pages(root: Path):
@@ -136,12 +144,18 @@ def main() -> int:
 
     found: dict[str, list[str]] = {}
     as_href: set[str] = set()
+    fetch_url: dict[str, str] = {}
     for f in pages(root):
         text = f.read_text(encoding="utf-8", errors="replace")
         for m in LINK.finditer(text):
             found.setdefault(m.group(1), []).append(f.name)
         for m in HREF.finditer(text):
             as_href.add(m.group(1))
+        for m in WORKER.finditer(text):
+            found.setdefault(WORKER_PRODUCT, []).append(f.name)
+        for m in WORKER_HREF.finditer(text):
+            as_href.add(WORKER_PRODUCT)
+            fetch_url.setdefault(WORKER_PRODUCT, m.group(1))
 
     print(f"  {len(found)} distinct checkout link(s) across {len(list(pages(root)))} page(s)\n")
 
@@ -157,7 +171,8 @@ def main() -> int:
         # 2. GET to a real checkout
         try:
             r = urllib.request.urlopen(
-                urllib.request.Request(f"https://checkout.dodopayments.com/buy/{link_id}", headers=UA), timeout=30)
+                urllib.request.Request(fetch_url.get(link_id) or f"https://checkout.dodopayments.com/buy/{link_id}",
+                                       headers=UA), timeout=30)
             body = r.read()
             final, status, size = r.geturl(), r.status, len(body)
         except Exception as exc:

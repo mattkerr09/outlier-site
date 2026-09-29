@@ -186,6 +186,9 @@ def write_page(category: str, slug: str, title: str, description: str,
             faq_jsonld=faq_jsonld(faq) if faq else "",
             updated=modified,
             app_version=APP_VERSION,
+            # 2026-09-29: the Download button's counting-link tag — the SAME value
+            # scripts/wrap_counting_links.py derives from the page's path.
+            page_tag=re.sub(r"[^a-z0-9-]+", "-", f"seo/{category}/{slug}".lower()).strip("-")[:80],
             unique_claim=unique_claim,
         )
 
