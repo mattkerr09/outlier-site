@@ -59,7 +59,8 @@ _CHROME = re.compile(
     # exclusion already exists for. Counting them made 20 honest hardware pages look
     # like a duplicate farm, and the only way to "fix" that would be rewriting one
     # download button 20 ways -- writing for the linter instead of the reader.
-    r'|<div class="(cta|related|foot|crumbs)"[^>]*>.*?</div>',
+    # 2026-09-29: the product box ("pbox", scripts/product_box.py) is the same furniture.
+    r'|<div class="(cta|related|foot|crumbs|pbox)"[^>]*>.*?</div>',
     re.S | re.I,
 )
 _HTML = re.compile(r"<[^>]+>")

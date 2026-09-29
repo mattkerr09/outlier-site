@@ -123,7 +123,9 @@ def article_text_of(s: str) -> str:
 #: how the word floor came to count nav and footer as prose (fixed 2026-09-15,
 #: e0a5951f). One notion of body text, not three.
 _INARTICLE_CHROME_RE = re.compile(
-    r'<div class="(?:related|cta|crumb|crumbs|foot)"[^>]*>.*?</div>', re.S | re.I)
+    # 2026-09-29: "pbox" — the product box (scripts/product_box.py), a Download/Buy block like
+    # the cta: furniture repeated on every page, never content, so it never dates a page.
+    r'<div class="(?:related|cta|crumb|crumbs|foot|pbox)"[^>]*>.*?</div>', re.S | re.I)
 
 
 #: Version strings and datelines are CHURN, not content — and they live INSIDE the
