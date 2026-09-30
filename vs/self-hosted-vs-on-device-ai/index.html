@@ -108,7 +108,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Self-hosted LLM vs on-device AI: the real trade-offs","description":"Self-hosting an LLM on vLLM or llama.cpp versus running the same open weights on-device. Model size, concurrency, bandwidth, GPU cost, ops, and when each choice is correct.","datePublished":"2026-07-23","dateModified":"2026-07-23","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/self-hosted-vs-on-device-ai/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Self-hosted LLM vs on-device AI: the real trade-offs","description":"Self-hosting an LLM on vLLM or llama.cpp versus running the same open weights on-device. Model size, concurrency, bandwidth, GPU cost, ops, and when each choice is correct.","datePublished":"2026-07-23","dateModified":"2026-09-29","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/self-hosted-vs-on-device-ai/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Self-hosted LLM vs on-device AI","item":"https://outlier.host/vs/self-hosted-vs-on-device-ai/"}]}
@@ -136,7 +136,7 @@
     <h1>Self-hosted LLM vs on-device AI: the real trade-offs</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-07-23</span>
+      <span class="updated-pill">Updated 2026-09-29</span>
     </div>
 
     <div class="quick-answer">
@@ -212,7 +212,7 @@
     <h2>Who should pick which</h2>
     <p><strong>Self-host if</strong> you're serving more than one person, you need a model bigger than any single machine holds, you want one endpoint behind your CI and internal tools, you need central audit logs, or compliance says inference must run on hardware you own. Self-host for throughput work too — batch classification, evals, pipeline jobs — where continuous batching pays for the GPU many times over.</p>
 
-    <p><strong>Go on-device if</strong> you're one person doing one thing at a time, the recurring bill is the problem, the machine has to work without a connection, or the data is the kind you'd rather never transit a network. Outlier is one implementation: no account, no caps, nothing uploaded, free at the Nano and Lite tiers, and with no web search, image generation, mobile app or Windows build — that's what the architecture costs.</p>
+    <p><strong>Go on-device if</strong> you're one person doing one thing at a time, the recurring bill is the problem, the machine has to work without a connection, or the data is the kind you'd rather never transit a network. Outlier is one implementation: no account, no caps, nothing uploaded, free at the Nano and Lite tiers, and with no image generation, mobile app or Windows build, and web search only on Pro, opt-in — that's what the architecture costs.</p>
 
     <p><strong>Run both</strong> — something on-device for routine and confidential work, a server for jobs needing 671B parameters or dozens of concurrent requests. They're two places to put the same weights.</p>
 
