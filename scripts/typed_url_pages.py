@@ -27,7 +27,7 @@ import product_box  # noqa: E402
 
 PAGES = {
     "pricing": {"title": "Outlier pricing", "crumb": "pricing", "src": "pricing-page",
-                "description": "Outlier is free to start with Nano and Lite. Pro is $249 once, or 4 payments, with a 14-day refund."},
+                "description": "Outlier is free to start with Nano and Lite. Pro is $249 once, or 4 payments, with a 30-day refund."},
     "download": {"title": "Download Outlier", "crumb": "download", "src": "download-page",
                  "description": "Download Outlier for Mac: free to start, signed and notarized, for Apple silicon on macOS 26+."},
 }

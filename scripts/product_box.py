@@ -89,7 +89,7 @@ fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').t
 
 
 #: The refund promise in terms.html's own words. Every box and end block says the same thing.
-REFUND = "Refund window: 14 days, no questions asked."
+REFUND = "Refund window: 30 days, no questions asked."
 
 
 def current_version() -> str:
