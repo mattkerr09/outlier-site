@@ -170,6 +170,31 @@ def prices(text: str) -> list[str]:
 # hub being judged on what it actually cites as evidence (nothing).
 NOT_SOURCES = ("outlier.host", "builtbykerr.com", "docketseo.app", "crispvideo.app")
 
+#: OUR OWN HOSTS — never a rival's evidence, and fetching them is not free. 2026-10-01 (CEO, from a hub tail): this
+#: gate's curl was the source of ~450 robot Buy clicks and ~450 robot downloads a day on outlier.host. NOT_SOURCES was
+#: matched as substrings, and the product box's hub links (kerr-affiliate-hub.kerrco.workers.dev/buy/… and /dl/…)
+#: contain none of them, so every page's Buy and Download were "cited" and fetched: each /buy minted a real Dodo
+#: checkout session, each /dl followed to GitHub and pulled up to 25 s of the DMG (inflating the download count we
+#: report), all under the hub's per-address limiter. Matched by HOST now (a subdomain counts), plus our orgs' paths.
+OWN_HOSTS = NOT_SOURCES + ("adplaybook.app", "kerrandcompanyholdings.com", "kerrco.workers.dev", "dodopayments.com")
+OWN_PATHS = (("github.com", "/outlier-host"), ("huggingface.co", "/outlier-ai"))
+
+
+def _ours_url(u: str) -> bool:
+    """True for a link to one of our own hosts or orgs (read as the browser would: HTML entities decoded)."""
+    import html as _html
+    from urllib.parse import urlsplit
+    try:
+        p = urlsplit(_html.unescape(u))
+    except Exception:
+        return True                     # unreadable: never fetch it
+    host = (p.hostname or "").lower()
+    on = lambda h: host == h or host.endswith("." + h)   # noqa: E731
+    if any(on(h) for h in OWN_HOSTS):
+        return True
+    path = (p.path or "").lower()
+    return any(on(h) and (path == pre or path.startswith(pre + "/")) for h, pre in OWN_PATHS)
+
 
 def cited(html: str) -> list[str]:
     """External URLs a page offers as SOURCES — not every external href on it.
@@ -187,7 +212,7 @@ def cited(html: str) -> list[str]:
     EVIDENCE. The author's own site is furniture.
     """
     us = set(re.findall(r'href="(https?://[^"]+)"', html))
-    return sorted(u for u in us if not any(h in u for h in NOT_SOURCES))
+    return sorted(u for u in us if not _ours_url(u))
 
 def check(path: str, html: str | None = None) -> list[str]:
     h = html if html is not None else open(path, encoding="utf-8", errors="replace").read()
@@ -207,7 +232,15 @@ def check(path: str, html: str | None = None) -> list[str]:
         rivals = prices(visible(h))
         if not rivals:
             return ["SKIP " + path]
-        return [f"{path}: prices a rival ({', '.join(rivals)}) and cites no external source"]
+        # 2026-10-01: the same exemptions as a page that cites sources (baselined, derived). Two pages reached this
+        # branch only once our own links stopped counting as citations (see OWN_HOSTS): /vs/outlier-vs-jan ($375, a
+        # DDR5 market price) and /vs/outlier-vs-meta-ai ($7.99/$19.99, press-reported, disclosed) — both reviewed and
+        # baselined in rival_price_in_source_baseline.json, which this branch never consulted.
+        base, der = _baseline().get(_key(path), {}), derived(rivals)
+        left = [p for p in rivals if p not in base and p not in der]
+        if not left:
+            return ["SKIP " + path]
+        return [f"{path}: prices a rival ({', '.join(left)}) and cites no external source"]
     if not corpus.strip():
         # It DOES cite sources and every fetch came back empty. Unlike the case
         # above this is my problem: an empty corpus would pass every price
@@ -322,7 +355,23 @@ def self_check() -> int:
     ok_pass = not any("$12.00" in o for o in out)
     print("self-check: absent price flagged  ->", "PASS" if ok_fail else "FAIL")
     print("self-check: present price allowed ->", "PASS" if ok_pass else "FAIL")
-    return 0 if (ok_fail and ok_pass) else 1
+    # 2026-10-01: our own links are never fetched (the product box's hub Buy/Download, checkout, our orgs, siblings).
+    # cited() only — nothing here touches the network.
+    links = ('<a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-x-end">Buy Pro</a>'
+             '<a href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-x&amp;to=https://github.com/'
+             'Outlier-host/outlier-app-releases/releases/download/v1.11.868/Outlier-1.11.868-arm64.dmg">Download</a>'
+             '<a href="https://kerr-lead-agent.kerrco.workers.dev/lead">lead</a>'
+             '<a href="https://test.checkout.dodopayments.com/buy/pdt_x">pay</a>'
+             '<a href="https://github.com/Outlier-host/outlier-app-releases">ours</a>'
+             '<a href="https://huggingface.co/Outlier-Ai">ours</a>'
+             '<a href="https://adplaybook.app/">sibling</a>'
+             '<a href="https://www.kerrandcompanyholdings.com/">company</a>'
+             '<a href="https://lmstudio.ai/pricing">rival</a>'
+             '<a href="https://github.com/ggml-org/llama.cpp">rival on github</a>')
+    got = cited(links)
+    ok_own = got == ["https://github.com/ggml-org/llama.cpp", "https://lmstudio.ai/pricing"]
+    print("self-check: our own links not fetched ->", "PASS" if ok_own else f"FAIL (would fetch {got})")
+    return 0 if (ok_fail and ok_pass and ok_own) else 1
 
 def _expand(args: list[str]) -> list[str]:
     """Accept page paths OR a site root, so meta_gate can aim this at a tree.
