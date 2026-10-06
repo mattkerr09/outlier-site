@@ -49,6 +49,13 @@
 .sublist .note{font-size:12px;color:var(--mut,currentColor);opacity:.72;margin:10px 0 0;min-height:1em}
 .sublist .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .foot{margin-top:2.5rem;font-size:0.8rem;line-height:1.6;color:#86868b}.foot p{margin:0}
+  .cta { margin-top: 2.5rem; padding: 1.5rem; border: 1px solid var(--border); border-radius: 12px; text-align: center; }
+  .cta h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+  .cta p { color: var(--dim); font-size: .92rem; margin: 0 0 1rem; }
+  .cta .btn { display: inline-block; padding: .65rem 1.2rem; margin: .25rem; border-radius: 10px; background: var(--accent); color: #07060b; font-weight: 600; text-decoration: none; }
+  .cta .btn.ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--border); }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--dim);}
+  .phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
 </style>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -105,6 +112,12 @@
 
     <hr>
     <p class="dim">These terms are short on purpose. If your lawyer needs a longer EULA before deploying Outlier across a team, email and we'll provide one.</p>
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=terms&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.875/Outlier-1.11.875-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn ghost" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=terms-end" rel="nofollow">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
   </div>
 
 <div class="sublist">
@@ -140,5 +153,18 @@
 <div data-founding data-was="$249" data-now="$124.50" hidden></div>
 <script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
 <div class="foot"><p>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</p></div>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=terms');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
 </body>
 </html>
