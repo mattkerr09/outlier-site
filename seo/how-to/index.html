@@ -61,6 +61,8 @@ h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
 .sublist button:disabled{opacity:.55;cursor:default}
 .sublist .note{font-size:12px;color:var(--mut,currentColor);opacity:.72;margin:10px 0 0;min-height:1em}
 .sublist .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
 </style>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -95,6 +97,7 @@ h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
 <li><a href="/seo/how-to/write-unit-tests-with-local-ai/">How to write unit tests with a local AI model</a><span class="d">Use the Lite or Core tier for focused unit-test scaffolding without sending the function under test to a cloud API.</span></li>
 </ul>
 <a class="cta" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-how-to&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.875/Outlier-1.11.875-arm64.dmg" rel="nofollow" data-plausible="Download">Download Outlier for Mac</a>
+<p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
 <div class="pbox" data-pbox="end">
 <p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
 <p class="pbox-btns"><a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-how-to-box-end" rel="nofollow">Buy Pro</a></p>
@@ -140,6 +143,19 @@ h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
 .then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=seo-how-to');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
 </script>
 </body>
 </html>

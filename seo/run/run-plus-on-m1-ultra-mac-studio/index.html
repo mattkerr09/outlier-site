@@ -57,6 +57,8 @@ th{font-weight:600;background:#fafafa}
 .foot a{color:var(--mut)}
 code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflow-wrap:anywhere}
 .tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+.phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
 </style>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY when a visitor arrives
      through an affiliate link; an ordinary visitor gets none. Disclosed in
@@ -108,6 +110,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <p>For lighter-weight work on this Apple M1 Ultra, the Core tier is the next step down and runs visibly faster. The <a href="/seo/learn/what-is-unified-memory/">unified-memory explainer</a> works the bandwidth math out, and the bandwidth ratio for Mac Studio M1 Ultra is 1.00&times; M1 Ultra reference.</p>
 
 <a class="cta" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-run-run-plus-on-m1-ultra-mac-studio&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.875/Outlier-1.11.875-arm64.dmg" rel="nofollow" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
 <p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Free &middot; M1 or newer &middot; macOS 26+ (free update) &middot; 290 MB. Intel Macs are not supported.</p>
 <div class="pbox" data-pbox="end">
 <p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
@@ -179,6 +182,19 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
 .then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=seo-run-run-plus-on-m1-ultra-mac-studio');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
 </script>
 </body>
 </html>

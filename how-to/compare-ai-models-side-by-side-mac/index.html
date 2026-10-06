@@ -98,7 +98,9 @@
     .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
     .faq-item p { margin-bottom: 0; color: var(--text-mid); }
     @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
-  </style>
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do I know which local AI model is best for me?", "acceptedAnswer": {"@type": "Answer", "text": "Ask two or three the same real question and read the answers side by side. Benchmarks describe average tasks; compare mode describes yours."}}, {"@type": "Question", "name": "Does comparing models cost extra?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs locally, so a comparison costs time and battery, not tokens."}}, {"@type": "Question", "name": "Can I compare a big model and a small one?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, and it is the most useful comparison there is — it tells you whether the extra RAM is buying you anything on the work you actually do."}}, {"@type": "Question", "name": "Do I need all the models downloaded first?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, each tier you want to compare has to be on disk, since inference runs on your machine."}}]}
   </script>
@@ -224,6 +226,7 @@
       <h3>Try it on your own Mac</h3>
       <p>One signed, notarized download. No account, no token bill, and it keeps working with the Wi-Fi off.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-compare-ai-models-side-by-side-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.875/Outlier-1.11.875-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-compare-ai-models-side-by-side-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
     <div class="related">
@@ -281,6 +284,19 @@
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
 .then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=how-to-compare-ai-models-side-by-side-mac');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
 </script>
 </body>
 </html>
