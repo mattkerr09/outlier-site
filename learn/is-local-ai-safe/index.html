@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Is local AI safe? What to actually check (2026)", "description": "Local AI is safe when the app is signed and the weights come from a reputable source — and it's safer for your data than cloud AI, because nothing you type leaves your Mac.", "datePublished": "2026-06-16", "dateModified": "2026-09-24", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/is-local-ai-safe/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Is local AI safe? What to actually check (2026)", "description": "Local AI is safe when the app is signed and the weights come from a reputable source — and it's safer for your data than cloud AI, because nothing you type leaves your Mac.", "datePublished": "2026-06-16", "dateModified": "2026-10-06", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/is-local-ai-safe/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Is local AI safe?", "item": "https://outlier.host/learn/is-local-ai-safe/"}]}
@@ -146,27 +146,27 @@
     <h1>Is local AI safe?</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-06-16</span>
-      <span class="updated-pill">Last updated 2026-09-24</span>
+      <span class="updated-pill">Last updated 2026-10-06</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Local AI is safe when you get the app and model from a trusted source — and it's safer for your data than cloud AI, because nothing you type ever leaves your machine.</li>
+        <li>Local AI is safe when you get the app and the model from a trusted source. It's also safer for your data than cloud AI, because what you type is processed on your own machine.</li>
         <li>Two things to check: the app is signed and notarized, and the model weights come from a reputable host (e.g. HuggingFace).</li>
-        <li>The model file is data; the app running it is software like any other — so source matters for the app, not magic in the weights.</li>
+        <li>The model file is data. The app that runs it is software like any other, so where the app comes from is what matters.</li>
         <li>Honest risk: a sketchy third-party app or tampered weights. The fix is notarization plus open weights you can inspect.</li>
       </ul>
     </div>
 
-    <p class="lead">Local AI is safe when you get the app and the model from a trusted source — and for your data it's the safer choice, because the prompts never leave your Mac. That's the whole verdict. The longer answer is a three-part checklist: where the model comes from, whether the app that runs it can be trusted, and what actually happens to your data. Two of those are about software trust you already practice every time you install anything. The third is the part where local quietly wins.</p>
+    <p class="lead">Local AI is safe when you get the app and the model from a trusted source, and for your data it's the safer choice, because your prompts are processed on your Mac. The longer answer has three parts: where the model comes from, whether the app that runs it can be trusted, and what happens to your data. The first two are the same software trust you use whenever you install anything. The third is where local AI has the edge.</p>
 
     <h2>The big win: your data never leaves the machine</h2>
-    <p>Start with the part that's not a trade-off. When AI runs on your own chip, the text you type is processed in memory and stays there. No prompt is sent to a server. There's no cloud copy of your conversation to leak, no account tied to your name, and no provider whose retention policy can change next quarter. You can run it with Wi-Fi off and it works the same — which is the clearest proof there's nothing phoning home. Or check it yourself in Terminal, with web search off: <code>lsof -a -p $(pgrep -x outlier-cli) -i -n -P</code> lists every network connection Outlier holds, and each one should show 127.0.0.1, which is your own Mac.</p>
-    <p>That removes an entire category of risk that cloud tools carry by design. Every prompt you send to a hosted model is a request to someone else's data center, logged on someone else's infrastructure, governed by terms you didn't write. None of that is automatically dangerous. But "nothing left the building" is a stronger guarantee than any privacy policy, because there's no building to break into.</p>
+    <p>When AI runs on your own chip, the text you type is processed in memory on your Mac. No prompt goes to a server, so there's no cloud copy of your conversation to leak and no provider retention policy to worry about. It works the same with the Wi-Fi off. You can also check it yourself in Terminal, with web search off: <code>lsof -a -p $(pgrep -x outlier-cli) -i -n -P</code> lists every network connection Outlier holds, and each one should show 127.0.0.1, which is your own Mac.</p>
+    <p>That removes a whole category of risk that cloud tools carry by design. Every prompt you send to a hosted model goes to someone else's data center, is logged on their systems, and falls under terms you didn't write. That isn't automatically dangerous, but a prompt that never leaves your Mac can't leak from someone else's server.</p>
 
     <h2>Local AI vs cloud AI, by risk dimension</h2>
-    <p>Safety isn't one number. Here's how the two models compare on the dimensions that actually matter, with no spin:</p>
+    <p>Safety isn't one number. Here's how the two compare on each kind of risk:</p>
     <table>
       <thead>
         <tr><th>Risk dimension</th><th>Local AI</th><th>Cloud AI</th></tr>
@@ -174,26 +174,33 @@
       <tbody>
         <tr><td>Data exposure</td><td>Prompts stay on-device; nothing uploads</td><td>Every prompt sent to a provider's servers</td></tr>
         <tr><td>Breach surface</td><td>No server-side copy to breach</td><td>Stored logs and history can be breached</td></tr>
-        <tr><td>Account required</td><td>None — no sign-in, no identity attached</td><td>Account and login required</td></tr>
+        <tr><td>Account required</td><td>None: no sign-in, no identity attached</td><td>Account and login required</td></tr>
         <tr><td>Software-source risk</td><td>Real: trust the app + weights you install</td><td>Lower for you: provider runs vetted infra</td></tr>
-        <tr><td>Works offline</td><td>Yes — runs with Wi-Fi off</td><td>No — needs a connection every time</td></tr>
+        <tr><td>Works offline</td><td>Yes, with the Wi-Fi off</td><td>No, it needs a connection every time</td></tr>
       </tbody>
     </table>
     <p>The honest read: cloud takes the software-trust burden off you (you're not installing the model), and local removes the data and breach surface entirely. If your concern is what happens to the words you type, local is the safer place to put them.</p>
 
     <h2>Software trust: the model is data, the app is software</h2>
-    <p>Here's the distinction that clears up most of the fear. A model's weights are a file, a big grid of numbers. In the safetensors format, which Outlier uses, those numbers can't run anything: loading them is just reading data. (The older pickle format can run code when it loads, which is exactly why safetensors was created.) What runs is the application that loads those numbers and does math with them, and that app has the same powers as any program on your Mac. So the safety question for local AI is the ordinary one you ask of all software: do I trust where this came from?</p>
-    <p>On a Mac you have a built-in answer. <strong>Code signing and notarization</strong> mean Apple has verified the developer's identity and scanned the app for known malware before it's allowed to launch cleanly. An unsigned app from a random link is the thing to avoid — not because it's "AI," but because it's unvetted software. The same caution that keeps you off sketchy downloads is the entire local-AI safety practice.</p>
-    <p>For the weights, the rule is just as simple: <strong>get them from a reputable source.</strong> HuggingFace is the standard public registry where open-weight models are published, versioned, and downloaded by millions — a tampered file there gets noticed fast. Open weights have a second benefit cloud can't offer: they're inspectable. You can see exactly which model you're running, because it's sitting in a folder on your disk rather than behind an API you have to take on faith.</p>
+    <p>Here's the key distinction. A model's weights are a file, a big grid of numbers. In the safetensors format, which Outlier uses, those numbers can't run anything: loading them is just reading data. (The older pickle format can run code when it loads, which is exactly why safetensors was created.) What runs is the application that loads those numbers and does math with them, and that app has the same powers as any program on your Mac. So the safety question for local AI is the ordinary one you ask of all software: do I trust where this came from?</p>
+    <p>On a Mac you have a built-in answer. <strong>Code signing and notarization</strong> mean Apple has verified the developer's identity and scanned the app for known malware before it's allowed to launch cleanly. Avoid unsigned apps from random links, because they're unvetted software. The care you already take with downloads covers local AI too.</p>
+    <p>For the weights, the rule is just as simple: <strong>get them from a reputable source.</strong> HuggingFace is the standard public registry for open-weight models. Files there are versioned and public, so a change to one is visible. Open weights have a second benefit cloud can't offer: they're inspectable. You can see exactly which model you're running, because it's sitting in a folder on your disk rather than behind an API you have to take on faith.</p>
 
     <h2>The honest risks (and how they're handled)</h2>
-    <p>Local AI is not risk-free, and pretending otherwise would be the dishonest version of this page. Two things can genuinely go wrong:</p>
+    <p>Local AI is not risk-free. Two things can go wrong:</p>
     <ul>
-      <li><strong>A sketchy third-party app.</strong> A malicious "AI runner" could mishandle files or include unwanted code — same as any untrusted download. Mitigation: install only signed, notarized apps; skip anything that won't pass macOS's own checks.</li>
+      <li><strong>A sketchy third-party app.</strong> A malicious "AI runner" could mishandle files or include unwanted code, like any untrusted download. Mitigation: install only signed, notarized apps; skip anything that won't pass macOS's own checks.</li>
       <li><strong>Tampered weights.</strong> A model pulled from an unknown mirror could be altered. Mitigation: download from a reputable host like HuggingFace, where files are versioned and publicly visible, and prefer open weights you (or the community) can inspect.</li>
     </ul>
-    <p>Notice both fixes are about <em>source</em>, not about the technology being unsafe. Do the same checks you'd do for any Mac app and the residual risk is small — and you still keep the data win that cloud can't match.</p>
-    <div class="receipts"><strong>Receipts:</strong> Outlier ships as a single signed, notarized Mac app — macOS verifies its origin before it runs — and its open-weight models are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>. No account, no terminal, no cloud round-trip; it works with Wi-Fi off. The model file is data on your disk; the app is software you can verify.</div>
+    <p>Both fixes are about where the software comes from. Do the same checks you'd do for any Mac app and the remaining risk is small, and your data stays on your Mac.</p>
+    <div class="receipts"><strong>Receipts:</strong> Outlier ships as one signed, notarized Mac app (macOS verifies its origin before it runs), and its open-weight models are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>. There's no account to make and nothing to set up in Terminal, and it works with the Wi-Fi off. The model file is data on your disk, and the app is software you can verify.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-is-local-ai-safe&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.876/Outlier-1.11.876-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-is-local-ai-safe-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -209,12 +216,6 @@
         <h3>Is local AI safer than ChatGPT for privacy?</h3>
         <p>For your data, yes. With local AI nothing you type ever leaves your machine, so there's no cloud copy of your conversations, no account, and no provider that can be breached or change its retention policy. Cloud tools like ChatGPT send every prompt to a server by design. Cloud has its own strengths, but on data exposure local AI removes the entire surface.</p>
       </div>
-    </div>
-    <div class="cta">
-      <h3>Try Outlier free</h3>
-      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
-      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-is-local-ai-safe&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.876/Outlier-1.11.876-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-is-local-ai-safe-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
-      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
     <div class="related">More: <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your code private</a> · <a href="https://outlier.host/best/private-ai-no-cloud/">Private AI with no cloud</a> · <a href="https://outlier.host/learn/own-your-ai/">What owning your AI means</a> · <a href="https://outlier.host/learn/">All articles</a></div>
