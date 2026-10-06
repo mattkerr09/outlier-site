@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac", "description": "Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps plus a RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-09-29", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac", "description": "Yes — Qwen runs locally on Apple Silicon. Use a quantized GGUF in Ollama or LM Studio, sized to your RAM, or a Mac-native app like Outlier (whose own models are Qwen-based). Steps plus a RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-10-05", "author": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Qwen locally on a Mac", "item": "https://outlier.host/how-to/run-qwen-locally-mac/"}]}
@@ -146,20 +146,20 @@
     <h1>How to run Qwen locally on a Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-06-15</span>
-      <span class="updated-pill">Last updated 2026-09-29</span>
+      <span class="updated-pill">Last updated 2026-10-05</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Yes — Qwen runs locally on an Apple Silicon Mac. Use a quantized GGUF in Ollama or LM Studio, or a Mac-native app like Outlier (whose own models are Qwen-based).</li>
+        <li>Yes. Qwen runs locally on an Apple Silicon Mac. Use a quantized GGUF in Ollama or LM Studio, or a Mac app like Outlier, whose own models are Qwen-based.</li>
         <li>Pick a size that fits your RAM: a 7-8B model runs on 8 GB, a 32B wants ~32 GB, a 70B wants 64 GB+.</li>
         <li>Quantization (GGUF, usually Q4) shrinks the weights so a big model fits in your unified memory.</li>
         <li>Everything runs offline once downloaded: no account, no cloud, Wi-Fi can be off.</li>
       </ul>
     </div>
 
-    <p class="lead">Qwen, Alibaba's open-weight model family, is one of the better open options for coding and multilingual work — and it runs entirely on your Mac. No data center, no subscription. Download a quantized copy of the weights, point a local runner at it, and you have a private assistant that works with the Wi-Fi off. The only real decision is which size your RAM can hold.</p>
+    <p class="lead">Qwen, Alibaba's open-weight model family, is one of the better open options for coding and for languages other than English, and it runs entirely on your Mac. Download a quantized copy of the weights, point a local runner at it, and you have a private assistant that works with the Wi-Fi off. The main choice is which size your RAM can hold.</p>
 
     <h2>Why Qwen, and why local</h2>
     <p>Qwen ships as open weights, so anyone can download the files and run them. The family is known for solid coding and strong multilingual coverage, which makes it a popular base for a local code assistant. Running it on your own machine means prompts never leave the laptop, there's no monthly meter, and the model can't be retired out from under you, the way OpenAI pulled GPT-4 out of ChatGPT in April 2025. A file on your disk doesn't get deprecated on someone else's schedule.</p>
@@ -194,7 +194,14 @@
     <div class="receipts"><strong>Receipts:</strong> Qwen is published as open weights by Alibaba and runs locally as quantized GGUF through Ollama and LM Studio (both free; LM Studio also runs Apple's MLX format on Mac). Outlier's own models are built on the Qwen family, with a Plus tier that references a Qwen3.5-397B-class model, and the weights are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>.</div>
 
     <h2>The Mac-native shortcut: Outlier</h2>
-    <p>For the batteries-included version, Outlier is a Mac-native app whose own models are Qwen-based, so the same daily coding and writing work is covered without assembling a stack. One signed download, no account, no terminal, no Docker, and it works with Wi-Fi off. The difference from the runners above is the engine. GGUF tools are RAM-bound, meaning the model has to fit in memory; Outlier's patent-pending paged inference streams experts on demand, so it runs models bigger than your RAM. Its 397B-class Qwen-based Plus tier runs at about 11 GB peak RSS on a 64 GB Mac. Free Nano and Lite run with no account; Pro and lifetime seats add the larger tiers, the coding agent, and deep research, and you can import your own MLX model. The <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">397B-on-a-Mac breakdown</a> shows how the paging works.</p>
+    <p>If you'd rather not assemble a stack, Outlier is a Mac app whose own models are Qwen-based. It's one signed download with no account and no Terminal, and it works with the Wi-Fi off. The bigger difference is the engine. GGUF tools need the whole model to fit in memory. Outlier's patent-pending paged engine loads parts of a model from the SSD as they're needed, so it can run models bigger than your RAM: its 397B-class Plus tier peaks at about 11 GB of memory on a 64 GB Mac, at about 1.6 tokens a second. Nano and Lite are free. Pro ($249 once) adds the larger tiers, the coding agent and deep research, and you can import your own MLX model. The <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">397B-on-a-Mac breakdown</a> shows how the paging works.</p>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-run-qwen-locally-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.875/Outlier-1.11.875-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-run-qwen-locally-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -211,12 +218,6 @@
         <h3>What's the easiest way to run Qwen on a Mac?</h3>
         <p>For a no-terminal install, LM Studio gives you a model browser and chat window: search Qwen, pick a quant that fits your RAM, download, chat. Ollama is the developer favorite if you're comfortable with one command. Outlier is the batteries-included Mac-native route: one signed download, no terminal or Docker, and its own models are Qwen-based, including a 397B-class tier that runs on a 64 GB Mac.</p>
       </div>
-    </div>
-    <div class="cta">
-      <h3>Try Outlier free</h3>
-      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
-      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-run-qwen-locally-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.875/Outlier-1.11.875-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-run-qwen-locally-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
-      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
     <div class="related">More: <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">Run Qwen3.5-397B on a Mac without 512 GB of RAM</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/best/local-llm-for-coding/">Best local LLM for coding</a> · <a href="https://outlier.host/learn/">All articles</a></div>
