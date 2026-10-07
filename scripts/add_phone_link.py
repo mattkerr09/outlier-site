@@ -3,7 +3,7 @@
 
 Why: a phone visitor on /how-to/run-qwen-locally-mac/ got a Download button for a Mac app they can't use there (CEO
 quality check, 2026-10-06). The homepage and /learn/does-chatgpt-use-a-data-center/ already had the line. This adds the
-same markup, styling and script to every /how-to/, /learn/, /vs/, /run/ and /seo/ page, and to the /seo/ template so a
+same markup, styling and script to every /how-to/, /learn/, /vs/, /run/, /seo/ and /data/ page, and to the /seo/ template so a
 re-render keeps it. kcCarry (copied byte for byte from the page that has it) carries the visitor's source and any
 affiliate id into the shared link; utm_campaign is the page's own tag (the src= of its download link), so the shares
 from each page can be counted.
@@ -80,7 +80,7 @@ def add(s: str):
 
 def main() -> int:
     check = "--check" in sys.argv
-    pages = sorted({p for d in ("how-to", "learn", "vs", "run", "seo")
+    pages = sorted({p for d in ("how-to", "learn", "vs", "run", "seo", "data")
                     for p in glob.glob(str(ROOT / d / "**" / "index.html"), recursive=True)})
     changed = skipped = 0
     for p in pages:
