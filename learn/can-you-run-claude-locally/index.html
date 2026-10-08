@@ -34,7 +34,7 @@
         "@id": "https://outlier.host/learn/can-you-run-claude-locally/#article",
         "headline": "Can you run Claude AI locally on your Mac?",
         "datePublished": "2026-06-17",
-        "dateModified": "2026-09-29",
+        "dateModified": "2026-10-08",
         "author": {
           "@type": "Person",
           "name": "Matt Kerr"
@@ -195,42 +195,42 @@
       <h1>Can you run Claude AI locally on your Mac?</h1>
       <div class="byline-row">
         <span class="byline">Matt Kerr &mdash; June 17, 2026</span>
-        <span class="updated-pill">Updated September 29, 2026</span>
+        <span class="updated-pill">Updated October 8, 2026</span>
       </div>
 
       <div class="quick-answer">
         <span class="qa-label">Quick answer</span>
-        <p>No — Claude's weights are closed source. You cannot run the real Claude locally, full stop. What you can run is an open-weight model on your Mac. Claude is faster and stronger on the hardest work; a local model keeps your data on your Mac, offline and unmetered.</p>
+        <p>No. Claude's weights are closed source. You cannot run the real Claude locally, full stop. What you can run is an open-weight model on your Mac. Claude is faster and stronger on the hardest work; a local model keeps your data on your Mac, offline and unmetered.</p>
       </div>
 
-      <p class="lead">A lot of people search for "run Claude locally" hoping to get Claude's quality offline, privately, without a subscription. That's a completely reasonable thing to want. This article gives you the honest answer on what's actually possible, and what you'd be settling for — or gaining — if you go the local route.</p>
+      <p class="lead">A lot of people search for "run Claude locally" hoping to get Claude's quality offline, privately, without a subscription. That's a completely reasonable thing to want. This article gives you the honest answer on what's actually possible, and what you'd be settling for (or gaining) if you go the local route.</p>
 
       <h2>Why Claude can't run locally</h2>
 
-      <p>Claude is made by Anthropic. Unlike some AI companies, Anthropic has not open-sourced Claude's model weights. The weights are the actual neural network — hundreds of billions of parameter files that encode everything the model knows and how it reasons. Without the weights, you can't run the model.</p>
+      <p>Claude is made by Anthropic. Unlike some AI companies, Anthropic has not open-sourced Claude's model weights. The weights are the actual neural network: hundreds of billions of parameters that encode everything the model knows and how it reasons. Without the weights, you can't run the model.</p>
 
-      <p>Anthropic's decision to keep the weights closed is deliberate. Their view is that releasing a frontier model's weights creates risks they're not comfortable with — fine-tuning off safety guardrails, running it for purposes they can't monitor, and similar concerns. You can agree or disagree with that call, but it's their call to make. The weights aren't available, and there's no workaround.</p>
+      <p>Anthropic's decision to keep the weights closed is deliberate. Their view is that releasing a frontier model's weights creates risks they're not comfortable with: fine-tuning off safety guardrails, running it for purposes they can't monitor, and similar concerns. You can agree or disagree with that call, but it's their call to make. The weights aren't available, and there's no workaround.</p>
 
-      <p>This is different from Meta's Llama series, or Alibaba's Qwen models, which are <strong>open weights</strong> — meaning the actual parameter files are publicly downloadable. If Anthropic released Claude's weights the same way, you could run it. They haven't, and as of mid-2026, there's no signal they're planning to.</p>
+      <p>This is different from Meta's Llama series, or Alibaba's Qwen models, which are <strong>open weights</strong>: the actual parameter files are publicly downloadable. If Anthropic released Claude's weights the same way, you could run it. They haven't, and as of mid-2026, there's no signal they're planning to.</p>
 
       <h2>Are there "local Claude" tools online?</h2>
 
       <p>Yes, and they're misleading. If you search the App Store or GitHub, you'll find tools with names like "Claude Local," "Offline Claude," or apps that claim to run Claude on your Mac. None of them are Claude.</p>
 
-      <p>What these tools actually run is a different model entirely — usually Llama, Mistral, or some other open-weight model — packaged behind a UI that trades on Claude's name recognition. The underlying model has no connection to Anthropic. It was not trained by Anthropic. It is not Claude.</p>
+      <p>What these tools actually run is a different model entirely, usually Llama, Mistral, or some other open-weight model, packaged behind a UI that trades on Claude's name recognition. The underlying model has no connection to Anthropic. It was not trained by Anthropic. It is not Claude.</p>
 
-      <p>I'm not saying those tools are necessarily bad. Some are fine wrappers around decent open models. But calling them "Claude" is inaccurate, and if you install one expecting Claude's actual behavior and output quality, you're going to be disappointed — and you won't know why, because you don't know what model you're actually running.</p>
+      <p>I'm not saying those tools are necessarily bad. Some are fine wrappers around decent open models. But calling them "Claude" is inaccurate, and if you install one expecting Claude's actual behavior and output quality, you're going to be disappointed, and you won't know why, because you don't know what model you're actually running.</p>
 
       <p>The only way to use the real Claude is through Anthropic's own products: Claude.ai, the Claude API, Claude Code in your terminal, or the desktop app on a paid plan. All of those run in the cloud. None of them are local &mdash; Claude Code edits files on your machine, but the model answering still runs on Anthropic's servers, and your code goes there to be read.</p>
 
       <h2>What you can actually run locally on a Mac</h2>
 
-      <p>The honest alternative isn't "fake Claude" — it's open-weight models that are genuinely capable. The landscape here has moved a lot. A few options worth knowing:</p>
+      <p>The honest alternative isn't "fake Claude". It's open-weight models that are genuinely capable. The landscape here has moved a lot. A few options worth knowing:</p>
 
       <ul>
-        <li><strong>Llama 3 70B</strong> (Meta) — a large open model that runs on Apple Silicon with enough RAM. Solid general-purpose quality.</li>
-        <li><strong>Qwen2.5 72B</strong> (Alibaba) — particularly strong at coding and instruction-following. Runs well on M-series Macs.</li>
-        <li><strong>Outlier Core 27B</strong> — open weights on HuggingFace, runs locally via Outlier's Mac app. I'll say more about this one below, because it's what I've measured directly.</li>
+        <li><strong>Llama 3 70B</strong> (Meta): a large open model that runs on Apple Silicon with enough RAM. Solid general-purpose quality.</li>
+        <li><strong>Qwen2.5 72B</strong> (Alibaba): particularly strong at coding and instruction-following. Runs well on M-series Macs.</li>
+        <li><strong>Outlier Core 27B</strong>: open weights on HuggingFace, runs locally via Outlier's Mac app. I'll say more about this one below, because it's what I've measured directly.</li>
       </ul>
 
       <p>All three run fully on-device. Nothing you type is uploaded anywhere. No account required to use the model weights themselves. They run during a network outage. They don't have rate limits or usage caps.</p>
@@ -274,12 +274,12 @@
           <tr>
             <td>Runs offline</td>
             <td>No</td>
-            <td>Yes — fully on-device</td>
+            <td>Yes, fully on-device</td>
           </tr>
           <tr>
             <td>Data uploaded</td>
-            <td>Yes — to Anthropic's servers</td>
-            <td>No — stays on your Mac</td>
+            <td>Yes, to Anthropic's servers</td>
+            <td>No, it stays on your Mac</td>
           </tr>
           <tr>
             <td>Account required</td>
@@ -293,8 +293,8 @@
           </tr>
           <tr>
             <td>Weight access</td>
-            <td>Closed — Anthropic only</td>
-            <td>Open — downloadable from HuggingFace</td>
+            <td>Closed (Anthropic only)</td>
+            <td>Open, downloadable from HuggingFace</td>
           </tr>
           <tr>
             <td>Real-time web access</td>
@@ -307,16 +307,16 @@
       <p class="receipts"><strong>What the $20 buys, as of 2026-09-08:</strong> a Claude Pro seat is no longer just a chat window. Anthropic's pricing page lists Claude Code, Cowork, Design and Science as included in Pro, and says plainly that "Claude Code is included in all paid plans" (<a href="https://claude.com/pricing" rel="nofollow">claude.com/pricing</a>). That is worth saying on a page like this one, because it cuts against us: if you were weighing a one-time $249 against $20 a month, the monthly side now includes a coding agent it did not used to. The rows above still hold &mdash; none of them are about features, they are about where the model runs, who holds the weights, and whether your code leaves the machine.</p>
     <h2>What you gain and what you give up</h2>
 
-      <p>Going local is not just a cost decision — it's a different kind of relationship with the software. Here's how I actually think about the trade-off:</p>
+      <p>Going local is not just a cost decision. It's a different kind of relationship with the software. Here's how I actually think about the trade-off:</p>
 
-      <p><strong>What you gain:</strong> Privacy that's structural, not policy-based. When nothing is uploaded, there's no privacy policy to interpret, no data retention to worry about, and no server to breach. You also get unlimited throughput — no rate limits, no "you've reached your message limit" walls in the middle of a work session. The model runs whether or not you have internet. For code and documents you'd rather keep off cloud infrastructure, that matters.</p>
+      <p><strong>What you gain:</strong> Privacy that's structural, not policy-based. When nothing is uploaded, there's no privacy policy to interpret, no data retention to worry about, and no server to breach. You also get unlimited throughput: no rate limits, no "you've reached your message limit" walls in the middle of a work session. The model runs whether or not you have internet. For code and documents you'd rather keep off cloud infrastructure, that matters.</p>
 
-      <p><strong>What you give up:</strong> Claude is a coherent product with a lot of investment behind it — Claude.ai has artifacts, projects, real-time web access, and integrations that took years to build. A local model doesn't come with all that scaffolding by default. Outlier ships a native Mac app that covers the core use cases, but it's not a feature-for-feature replacement of Claude.ai's entire surface. If you rely heavily on Claude's web browsing or cross-device sync, those specific things won't transfer.</p>
+      <p><strong>What you give up:</strong> Claude is a coherent product with a lot of investment behind it. Claude.ai has artifacts, projects, real-time web access, and integrations that took years to build. A local model doesn't come with all that scaffolding by default. Outlier ships a native Mac app that covers the core use cases, but it's not a feature-for-feature replacement of Claude.ai's entire surface. If you rely heavily on Claude.ai's integrations or cross-device sync, those specific things won't transfer. For the web, Outlier has its own web search, which you choose to turn on.</p>
 
-      <p>For most people who mainly use AI as a thinking and coding tool — not as a web-browsing research assistant — the local path covers the actual use cases. For people whose Claude workflow is heavily tied to Claude.ai's specific integrations, the gap is real.</p>
+      <p>For most people who mainly use AI as a thinking and coding tool, rather than as a web-browsing research assistant, the local path covers the actual use cases. For people whose Claude workflow is heavily tied to Claude.ai's specific integrations, the gap is real.</p>
 
       <div class="cta">
-        <h3>Try Outlier — runs on your Mac, no cloud</h3>
+        <h3>Try Outlier: it runs on your Mac, no cloud needed</h3>
         <p>Open weights, no account required for local use, no message limits. Available for Apple Silicon Macs.</p>
         <a href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-can-you-run-claude-locally&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.886/Outlier-1.11.886-arm64.dmg" rel="nofollow" class="btn">Download Outlier</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
