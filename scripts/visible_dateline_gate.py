@@ -207,7 +207,12 @@ def last_body_change(path: str):
     #: version bumps — so after the 1.11.860 bump most pages had no visible change in their
     #: last 8 commits, dropped out of the survey (10 left), and the vacuity guard failed on
     #: every push. 40 commits surveys 165 pages again (94 s locally); each release costs one.
-    log = subprocess.run(["git", "log", "-40", "--format=%H %ad", "--date=short", "--", path],
+    #: 2026-10-08: and still each release cost one: ten version bumps in two days (879-888) pushed pages' last real
+    #: change past the 40, the survey fell to 48 and the vacuity guard failed 1.11.889's site bump. A release's
+    #: pointer commit ("site: point every Download button at …") moves only hrefs, never visible text, so it is
+    #: skipped here and no longer spends the look-back.
+    log = subprocess.run(["git", "log", "-40", "--invert-grep", "--grep=^site: point every Download button at",
+                          "--format=%H %ad", "--date=short", "--", path],
                          capture_output=True, text=True).stdout.split("\n")
     for line in log:
         if not line.strip():
