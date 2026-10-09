@@ -73,7 +73,9 @@
       --v0:#e4c7ff; --v1:#c77dff; --v2:#a855f7; --v3:#7b6cf6; --v4:#6366f1;
       --mag:#d946ef; --ind:#6366f1;
       --grad:linear-gradient(112deg,#d8a5ff 0%,#a855f7 46%,#7b6cf6 100%);
-      --grad-btn:linear-gradient(180deg,#b371ff 0%,#8b46ec 100%);
+      /* 10-09: deepened from #b371ff→#8b46ec, where white text measured 3.1:1 at the top; now ≥4.6:1 everywhere
+         (scripts/nav_cta_contrast_gate.py) */
+      --grad-btn:linear-gradient(180deg,#9941ff 0%,#8238eb 100%);
       --grad-line:linear-gradient(90deg,transparent,#c77dff,#a855f7,#6366f1,transparent);
 
       --green:#34d399; --green-light:#6ee7b7;
@@ -160,6 +162,10 @@
     .btn-primary{background:var(--grad-btn);color:#fff;
       box-shadow:0 10px 34px -10px rgba(168,85,247,.85),inset 0 1px 0 rgba(255,255,255,.2);}
     .btn-primary:hover{box-shadow:0 16px 46px -10px rgba(168,85,247,1),inset 0 1px 0 rgba(255,255,255,.26);}
+    /* The nav's Download is a .btn-primary inside .nav-links, and `.nav-links a{color:…}` / `:hover` outrank
+       .btn-primary's white: it shipped grey on purple (1.3:1). White at every state. */
+    .nav-links a.btn-primary,.nav-links a.btn-primary:hover,.nav-links a.btn-primary:focus-visible,
+    .nav-links a.btn-primary:active{color:#fff;}
     .btn-ghost{background:rgba(255,255,255,.045);border-color:var(--border-lit);color:var(--text);
       backdrop-filter:blur(8px);}
     .btn-ghost:hover{background:rgba(255,255,255,.09);border-color:var(--v2);}
