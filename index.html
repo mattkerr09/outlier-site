@@ -737,6 +737,62 @@
        2026-09-25). While the hero's buttons are on screen the button steps aside; it comes
        back once they scroll away. Only the button part hides, so an open chat is unaffected. */
     @media (max-width:640px){html.hero-cta-on #kc-agent-host::part(button){visibility:hidden;}}
+
+    /* ---------- 10-09 touches (BookBreaker's glow, dot field, card ring, 3D stage) ---------- */
+    /* Hero glow + drifting dot field. z-index:1 puts them above the fixed .mesh/.grid-ovl (0)
+       and below .wrap (2), so all content stays on top; neither takes a click. */
+    .hero::before{content:"";position:absolute;left:50%;top:-6rem;width:min(1400px,140vw);height:40rem;
+      transform:translateX(-50%);z-index:1;pointer-events:none;
+      background:radial-gradient(60% 55% at 50% 0%,rgba(168,85,247,.20),transparent 70%),
+                 radial-gradient(35% 40% at 85% 10%,rgba(217,70,239,.07),transparent 70%);}
+    .hero::after{content:"";position:absolute;left:50%;top:-5rem;width:min(1400px,140vw);height:38rem;
+      transform:translateX(-50%);z-index:1;pointer-events:none;
+      background-image:radial-gradient(rgba(255,255,255,.75) 1px,transparent 1.5px),
+                       radial-gradient(rgba(192,132,252,.7) 1px,transparent 1.5px),
+                       radial-gradient(rgba(129,140,248,.55) .8px,transparent 1.3px);
+      background-size:140px 140px,210px 210px,330px 330px;
+      background-position:0 0,70px 95px,160px 40px;
+      -webkit-mask:radial-gradient(55% 65% at 50% 35%,#000 0%,transparent 78%);
+      mask:radial-gradient(55% 65% at 50% 35%,#000 0%,transparent 78%);
+      opacity:.5;animation:ol-drift 90s linear infinite;}
+    /* each layer travels exactly one of its own tiles, so the loop has no seam */
+    @keyframes ol-drift{to{background-position:140px 140px,280px 305px,490px 370px;}}
+
+    /* Card glow ring on hover. Only box-shadow is set here; the lift and the border-color
+       change still come from the .card:hover rule above. */
+    .card:hover{box-shadow:0 0 0 1px rgba(168,85,247,.12),0 30px 80px -30px rgba(168,85,247,.45),inset 0 1px 0 rgba(255,255,255,.06);}
+    /* The lift itself never showed: every card is a .reveal, and .reveal.in{transform:none} (same
+       specificity, later) beats .card:hover's translateY. The lift rides on the separate `translate`
+       property, which the reveal never sets; the reveal's transition list (which replaced .card's) gets
+       translate/box-shadow/border-color back, with the d1/d2 stagger kept on the reveal only. */
+    .card.reveal{transition-property:opacity,transform,translate,box-shadow,border-color;
+      transition-duration:.8s,.8s,.28s,.28s,.28s;
+      transition-timing-function:cubic-bezier(.16,1,.3,1),cubic-bezier(.16,1,.3,1),ease,ease,ease;}
+    .card.reveal.d1{transition-delay:.08s,.08s,0s,0s,0s;}
+    .card.reveal.d2{transition-delay:.16s,.16s,0s,0s,0s;}
+    .card.reveal.d3{transition-delay:.24s,.24s,0s,0s,0s;}
+    .card.reveal.in:hover{translate:0 -2px;}
+
+    /* 3D stage for the hero app window: tilted while the figure is off screen, flattens as it
+       scrolls in, and plays once on first load. The load animation uses fill-mode `backwards`
+       so that once it ends the plain rules take over and the window always ENDS flat. */
+    .showcase{perspective:1600px;}
+    .showcase .macwin{transform-origin:50% 0;transition:transform .9s cubic-bezier(.2,.7,.2,1);
+      box-shadow:0 60px 130px -40px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.04) inset,0 2px 0 rgba(255,255,255,.06) inset,
+                 0 0 0 1px rgba(168,85,247,.18),0 40px 120px -30px rgba(168,85,247,.45);}
+    .showcase:not(.in) .macwin{transform:rotateX(14deg) scale(.98);}
+    .showcase.in .macwin{animation:ol-stage-in 1.1s cubic-bezier(.2,.7,.2,1) .25s backwards;}
+    @keyframes ol-stage-in{from{transform:rotateX(14deg) scale(.98);}to{transform:none;}}
+
+    /* Phones and reduced motion: flat window, still dots. */
+    @media (max-width:760px){
+      .showcase .macwin{transform:none !important;animation:none !important;transition:none;}
+      .hero::after{animation:none;}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .showcase .macwin{transform:none !important;animation:none !important;transition:none;}
+      .hero::after{animation:none;}
+    }
   </style>
   <!-- Privacy-friendly analytics by Plausible -->
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
@@ -1538,7 +1594,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
     </div>
   </div>
   <div class="wrap">
-    <span>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</span>
+    <span>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://bookbreaker.bet/">BookBreaker</a>: free arbitrage and +EV betting app for Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</span>
   </div>
 </footer>
 
