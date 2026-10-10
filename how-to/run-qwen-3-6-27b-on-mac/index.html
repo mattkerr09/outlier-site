@@ -8,23 +8,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>Run Gemma 4 on a Mac: RAM, speed and limits | Outlier</title>
-  <meta name="description" content="Gemma 4 26B on a Mac: a 15.61 GB file, 43.6 tokens a second on an M1 Ultra, 24 GB to be comfortable. Measured speed and quality, and where it fails.">
+  <title>Run Qwen3.6 27B on a Mac: RAM, speed and limits | Outlier</title>
+  <meta name="description" content="Qwen3.6 27B on a Mac: a 15.13 GB file, 20.7 tokens a second on an M1 Ultra, 24 GB to run it. Measured speed and quality, and where it falls short.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-10-10">
-  <link rel="canonical" href="https://outlier.host/how-to/run-gemma-4-on-mac/">
+  <link rel="canonical" href="https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="How to run Gemma 4 on a Mac: RAM, speed and limits">
-  <meta property="og:description" content="Gemma 4 26B on a Mac: a 15.61 GB file, 43.6 tokens a second on an M1 Ultra, 24 GB to be comfortable. Measured speed and quality, and where it fails.">
-  <meta property="og:url" content="https://outlier.host/how-to/run-gemma-4-on-mac/">
+  <meta property="og:title" content="How to run Qwen3.6 27B on a Mac: RAM, speed and limits">
+  <meta property="og:description" content="Qwen3.6 27B on a Mac: a 15.13 GB file, 20.7 tokens a second on an M1 Ultra, 24 GB to run it. Measured speed and quality, and where it falls short.">
+  <meta property="og:url" content="https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to run Gemma 4 on a Mac: RAM, speed and limits">
-  <meta name="twitter:description" content="Gemma 4 26B on a Mac: a 15.61 GB file, 43.6 tokens a second on an M1 Ultra, 24 GB to be comfortable. Measured speed and quality, and where it fails.">
+  <meta name="twitter:title" content="How to run Qwen3.6 27B on a Mac: RAM, speed and limits">
+  <meta name="twitter:description" content="Qwen3.6 27B on a Mac: a 15.13 GB file, 20.7 tokens a second on an M1 Ultra, 24 GB to run it. Measured speed and quality, and where it falls short.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
@@ -118,13 +118,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Gemma 4 on a Mac: RAM, speed and limits", "description": "Gemma 4 26B on a Mac: a 15.61 GB file, 43.6 tokens a second on an M1 Ultra, 24 GB to be comfortable. Measured speed and quality, and where it fails.", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-gemma-4-on-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen3.6 27B on a Mac: RAM, speed and limits", "description": "Qwen3.6 27B on a Mac: a 15.13 GB file, 20.7 tokens a second on an M1 Ultra, 24 GB to run it. Measured speed and quality, and where it falls short.", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to run Gemma 4 on a Mac: RAM, speed and limits", "item": "https://outlier.host/how-to/run-gemma-4-on-mac/"}]}
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to run Qwen3.6 27B on a Mac: RAM, speed and limits", "item": "https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I run Gemma 4 on a MacBook Air?", "acceptedAnswer": {"@type": "Answer", "text": "The 26B-A4B is a 15.61 GB file that peaks near 16 GB, so a 16 GB Air has no room to spare and I wouldn't plan around it. A 24 GB machine is the comfortable size. Google also makes smaller Gemma 4 sizes (E2B and E4B) for small devices. I haven't measured those."}}, {"@type": "Question", "name": "How much RAM does Gemma 4 26B need on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier lists 16 GB as the minimum for the 4-bit 26B-A4B. The tier catalog records a measured peak of about 16 GB while it answers, so 24 GB is where there is real headroom for macOS and your other apps."}}, {"@type": "Question", "name": "How fast is Gemma 4 on Apple Silicon?", "acceptedAnswer": {"@type": "Answer", "text": "43.6 tokens a second for the 26B-A4B on an M1 Ultra, the median of 20 runs on 2026-08-24. That is about twice the speed of a 27B dense model on the same Mac. Other chips will differ, and I only measured the M1 Ultra."}}, {"@type": "Question", "name": "Is Gemma 4 good for coding?", "acceptedAnswer": {"@type": "Answer", "text": "For short functions, yes: 21 of 23 in my set. For fixing a bug in a real repository, no: 0 of 30. Chat coding and agentic coding turned out to be different skills."}}, {"@type": "Question", "name": "Is Gemma 4 free to run locally?", "acceptedAnswer": {"@type": "Answer", "text": "The weights are free to download, and the mlx-community repo is tagged Apache 2.0. The MLX route above costs nothing. In Outlier, Quick is a Pro tier, while Nano and Lite are free."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I run Qwen3.6 27B on a 16 GB Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Not the 4-bit file I tested. It is 15.13 GB before macOS takes any memory, and it peaks near 16 GB while it answers. Outlier marks it Needs 24+ GB. Lite, a 5.04 GB 9B model, fits a 16 GB Mac and is free."}}, {"@type": "Question", "name": "How much RAM does Qwen3.6 27B need on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier lists 24 GB as the minimum for the 4-bit file. The tier catalog records a peak of about 16 GB while it answers, and a plain mlx-lm run in August showed 15.45 GB. 32 GB is where there is comfortable headroom."}}, {"@type": "Question", "name": "How fast is Qwen3.6 27B on Apple Silicon?", "acceptedAnswer": {"@type": "Answer", "text": "20.7 tokens a second on an M1 Ultra in my June 2026 batch. Two later runs with different harnesses gave 21.6 and 16.6. Slower chips will be slower, because a dense model's speed follows memory bandwidth. I only measured the M1 Ultra."}}, {"@type": "Question", "name": "Is Qwen3.6 27B good for coding?", "acceptedAnswer": {"@type": "Answer", "text": "For single functions, yes: 156 of 164 on HumanEval, though that test is old enough that a 2026 model has probably seen it. For fixing a bug in a real repository it got 23 of 50 right in my blind SWE-bench Verified run."}}, {"@type": "Question", "name": "Is Qwen3.6 27B free to run locally?", "acceptedAnswer": {"@type": "Answer", "text": "The weights are free to download, and the Hugging Face model card and the 4-bit repos are tagged Apache 2.0. The MLX route above costs nothing. In Outlier, Core is a Pro tier, while Nano and Lite are free."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -155,7 +155,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/how-to/">how-to</a></div>
-    <h1>How to run Gemma 4 on a Mac: RAM, speed and where it falls short</h1>
+    <h1>How to run Qwen3.6 27B on a Mac: RAM, speed and where it falls short</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-10-10</span>
       <span class="updated-pill">Last updated 2026-10-10</span>
@@ -164,143 +164,155 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Yes, Gemma 4 runs on an Apple Silicon Mac. The 26B-A4B build (26 billion parameters, about 4 billion used per word) is a 15.61 GB file at 4-bit and peaks near 16 GB of memory while it answers. A 24 GB Mac is the comfortable size. A 16 GB Mac has nothing to spare.</li>
-        <li>On my M1 Ultra it writes 43.6 tokens a second, a little over twice the 20.7 of the 27B Qwen model I ship as Core (measured on different days, see Table 2).</li>
-        <li>It is a good chat model and a poor agent. It got 21 of 23 short coding problems right and 0 of 30 real repository bugs.</li>
+        <li>Yes, Qwen3.6 27B runs on an Apple Silicon Mac with 24 GB or more. At 4-bit it is a 15.13 GB file and peaks near 16 GB of memory while it answers. A 16 GB Mac can't hold it.</li>
+        <li>On my M1 Ultra it writes about 20.7 tokens a second. Two later runs gave 21.6 and 16.6 (Table 3). That is roughly half the speed of Gemma 4 26B on the same Mac, because Qwen3.6 reads all 27 billion parameters for every word.</li>
+        <li>It scored the highest on general knowledge of any Outlier tier I measured, 89.5% on a 200-question sample. On real repository bugs it fixed 23 of 50.</li>
       </ul>
-      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Measured on a Mac Studio with an M1 Ultra and 64 GB. Speed is the median of 20 runs through the shipped app bundle. Quality is n=300 for knowledge questions, n=23 for short code and n=30 for repository bugs. Sources and dates are in the receipts at the bottom.</p>
+      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Measured on a Mac Studio with an M1 Ultra and 64 GB. Speed is from my own runs, one request at a time. Quality is n=200 for knowledge questions, n=164 for HumanEval and n=50 for repository bugs. Sources and dates are in the receipts at the bottom.</p>
     </div>
 
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
-<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-run-gemma-4-on-mac-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.911/Outlier-1.11.911-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-run-gemma-4-on-mac-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-run-qwen-3-6-27b-on-mac-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.911/Outlier-1.11.911-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-run-qwen-3-6-27b-on-mac-box-answer" rel="nofollow">Buy Pro</a></p>
 <p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
 </div>
 
+    <p class="lead">I ship Qwen3.6 27B inside Outlier as the Core tier, with the image weights stripped out so it is text only. I have timed it and tested it more than most people will. This page is what I measured on one Mac Studio, which Macs have room for it, three ways to run it, and where it falls short. If you only want the commands, jump to "Three ways to run it".</p>
 
-    <p class="lead">I ship Gemma 4 inside Outlier as the Quick tier, so I have timed it and tested it more than most people. This page is what I measured on one Mac Studio, which Macs have room for it, three ways to run it, and the two places it let me down. If you only want the commands, jump to "Three ways to run it".</p>
+    <h2>Which Mac has room for Qwen3.6 27B</h2>
+    <p>Qwen3.6 27B is a dense model from Alibaba's Qwen team, released in April 2026. The Hugging Face model card is tagged Apache 2.0 (I read the tag on 2026-10-10). Dense means all 27 billion parameters are used for every word it writes. The original upload on Hugging Face is about 55.6 GB. At 4-bit in MLX format the text-only file Outlier ships is 15.13 GB. The community conversion on Hugging Face is 16.07 GB because it keeps the image-reading weights. While it answers, the model peaks near 16 GB of memory.</p>
 
-    <h2>Which Mac has room for Gemma 4</h2>
-    <p>Gemma 4 comes in five sizes: E2B, E4B, 12B, 26B-A4B and 31B. The <a href="https://outlier.host/vs/gemma-vs-llama/">Gemma vs Llama page</a> has the launch details and the licence. I measured one of them, the 26B-A4B. It is a mixture-of-experts model. The file holds 26 billion parameters, but only about 4 billion of them are used for each word it writes. At 4-bit in MLX format the file is 15.61 GB. While it answers, it peaks near 16 GB of memory.</p>
-
-    <h3>Table 1: Gemma 4 26B-A4B at 4-bit, by Mac memory</h3>
+    <h3>Table 1: Qwen3.6 27B at 4-bit, by Mac memory</h3>
     <table>
       <thead>
         <tr><th>Mac memory</th><th>Left after the 16 GB peak</th><th>My read</th></tr>
       </thead>
       <tbody>
-        <tr><td>16 GB</td><td>about 0 GB</td><td>This is the listed minimum. There is no spare memory for macOS and your apps, so I would not plan around it.</td></tr>
-        <tr><td>24 GB</td><td>about 8 GB</td><td>Fits with a browser and an editor open.</td></tr>
-        <tr><td>32 GB</td><td>about 16 GB</td><td>Fits, with room for long chats.</td></tr>
-        <tr><td>64 GB</td><td>about 48 GB</td><td>Plenty of room.</td></tr>
+        <tr><td>16 GB</td><td>none</td><td>The file alone is 15.13 GB. Outlier shows "Needs 24+ GB" on the Core row. Use Lite instead.</td></tr>
+        <tr><td>24 GB</td><td>about 8 GB</td><td>The listed minimum. Enough for macOS and a few apps at the default 32K context. I did not run a 24 GB Mac for this page.</td></tr>
+        <tr><td>32 GB</td><td>about 16 GB</td><td>Comfortable, with room for a browser, an editor and long chats.</td></tr>
+        <tr><td>64 GB</td><td>about 48 GB</td><td>Plenty. This is the size of the Mac I measured on.</td></tr>
       </tbody>
     </table>
-    <p>The middle column is just the memory minus 16 GB. I did not time a 16 GB Mac for this page. For the general rule, see <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">how much RAM local AI needs</a>.</p>
-    <p>If you have 8 GB or 16 GB, the free tiers fit better. Outlier's Nano is a 2.37 GB file and Lite is 5.04 GB. They are Qwen models, not Gemma. If you want Gemma itself on a small Mac, E2B and E4B are the sizes Google makes for that. I have not measured them, so I can't give you a speed.</p>
+    <p>The middle column is just the memory minus 16 GB. For the general rule, see <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">how much RAM local AI needs</a>. If you have a 16 GB Mac, <a href="https://outlier.host/how-to/run-ai-on-16gb-mac/">running AI on a 16 GB Mac</a> covers what fits. Lite (Qwen3.5-9B) is a 5.04 GB file and free.</p>
 
     <h2>Three ways to run it</h2>
     <h3>1. With MLX, free, from the Terminal</h3>
-    <p>This is the same library Outlier uses to load Quick. It needs a Python environment.</p>
+    <p>This is the library Outlier uses to load Core. It needs a Python environment.</p>
 <pre><code>pip install -U mlx-lm
-mlx_lm.generate --model mlx-community/gemma-4-26b-a4b-it-4bit \
-  --prompt "Explain unified memory in two sentences."</code></pre>
-    <p>The first run downloads about 15.6 GB from Hugging Face. After that it loads from disk. For a back-and-forth chat, use <code>mlx_lm.chat</code> with the same <code>--model</code>. Outlier ships mlx-lm 0.31. If your copy is older and won't load the model, update it first. The Hugging Face repo is tagged Apache 2.0.</p>
+mlx_lm.generate --model Outlier-Ai/Outlier-Core-27B-MLX-4bit \
+  --prompt "Explain unified memory in two sentences." --max-tokens 200</code></pre>
+    <p>The first run downloads about 15.2 GB from Hugging Face. After that it loads from disk. For a back-and-forth chat, use <code>mlx_lm.chat</code> with the same <code>--model</code>. That repo is my text-only 4-bit file of Qwen3.6-27B, the same one the Outlier app downloads, and it is tagged Apache 2.0. Outlier ships mlx-lm 0.31. If your copy is older and won't load the model, update it first.</p>
+    <p>If you would rather use the community conversion, the repo is <code>mlx-community/Qwen3.6-27B-4bit</code>. It is bigger, 16.07 GB, because it also holds the weights that read images. The Qwen3.5/3.6 loader in mlx-lm 0.31 skips those weights when it loads a model (I read the code), so you should get text only.</p>
 
-    <h3>2. In Outlier, as the Quick tier</h3>
-    <p>Quick is Gemma 4 26B-A4B as a 4-bit MLX file. It is part of Pro. The free tiers are Nano and Lite.</p>
+    <h3>2. In Outlier, as the Core tier</h3>
+    <p>Core is Qwen3.6 27B as a 4-bit MLX file. It is part of Pro. The free tiers are Nano and Lite.</p>
     <ol>
       <li>Download and open Outlier.</li>
-      <li>Open the model menu at the top of the chat and pick Quick. If it isn't on your Mac yet, you download it from that same menu (15.61 GB).</li>
-      <li>If your Mac has less memory than Quick's 16 GB minimum, the menu warns you before it downloads anything.</li>
+      <li>Click the model button at the top of the window (its tooltip says "Switch model") and pick Core. If it isn't on your Mac yet, the row shows a download arrow and its size, 15.13 GB.</li>
+      <li>If your Mac has less memory than Core's 24 GB minimum, the row says "Needs 24+ GB". If you click it anyway, the app says Core is sized for 24+ GB Macs and, on Pro, asks before it downloads.</li>
     </ol>
     <p>Once it is downloaded it answers with the Wi-Fi off.</p>
 
     <h3>3. In Ollama or LM Studio</h3>
-    <p>Google's own docs list both as ways to run Gemma 4. I have not tested Gemma 4 in either, so I won't give you a command that I haven't run. The steps are the same as for any other model: search for Gemma 4 in LM Studio's model browser, or pull it by name in Ollama. <a href="https://outlier.host/how-to/run-llama-locally-mac/">How to run Llama on a Mac</a> walks through both apps, and <a href="https://outlier.host/vs/ollama-vs-lm-studio/">Ollama vs LM Studio</a> helps you pick.</p>
+    <p>I have not tested Qwen3.6 27B in either, so I won't give you a command I haven't run. Both run GGUF files, which are a different format from the MLX file above. Search the model name in LM Studio's model browser, or look for it in Ollama's library. <a href="https://outlier.host/how-to/run-qwen-locally-mac/">How to run Qwen on a Mac</a> walks through both apps, and <a href="https://outlier.host/vs/ollama-vs-lm-studio/">Ollama vs LM Studio</a> helps you pick.</p>
 
     <h2>How fast it is</h2>
     <h3>Table 2: decode speed on an M1 Ultra, 4-bit MLX, one request at a time</h3>
     <table>
       <thead>
-        <tr><th>Tier</th><th>Model</th><th>Used per word</th><th>File</th><th>Tokens a second</th><th>Measured</th></tr>
+        <tr><th>Tier</th><th>Model</th><th>Used per word</th><th>File</th><th>Tokens a second</th></tr>
       </thead>
       <tbody>
-        <tr><td>Nano</td><td>Qwen3.5-4B</td><td>4B</td><td>2.37 GB</td><td>71.7</td><td>June 2026 batch</td></tr>
-        <tr><td>Lite</td><td>Qwen3.5-9B</td><td>9B</td><td>5.04 GB</td><td>53.4</td><td>June 2026 batch</td></tr>
-        <tr><td><strong>Quick</strong></td><td><strong>Gemma 4 26B-A4B</strong></td><td><strong>4B</strong></td><td><strong>15.61 GB</strong></td><td><strong>43.6</strong></td><td><strong>2026-08-24, Outlier 1.11.804, median of 20</strong></td></tr>
-        <tr><td>Core</td><td>Qwen3.6-27B</td><td>27B</td><td>15.13 GB</td><td>20.7</td><td>June 2026 batch</td></tr>
+        <tr><td>Nano</td><td>Qwen3.5-4B</td><td>4B</td><td>2.37 GB</td><td>71.7</td></tr>
+        <tr><td>Lite</td><td>Qwen3.5-9B</td><td>9B</td><td>5.04 GB</td><td>53.4</td></tr>
+        <tr><td>Quick</td><td>Gemma 4 26B-A4B</td><td>4B</td><td>15.61 GB</td><td>43.6</td></tr>
+        <tr><td><strong>Core</strong></td><td><strong>Qwen3.6-27B</strong></td><td><strong>27B</strong></td><td><strong>15.13 GB</strong></td><td><strong>20.7</strong></td></tr>
       </tbody>
     </table>
-    <p>The rows were measured on different days and builds, so read the ratios, not the third digit. The full reference table, with the method, is on <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM to AI model size</a>.</p>
-    <p>Why is Quick about twice as fast as Core when the files are the same size? On a Mac, writing each word is mostly limited by how quickly the chip can read the model's weights from memory. Quick reads about 4 billion parameters' worth per word. Core reads all 27 billion. Quick is still a little slower than the 9B Lite, which I put down to the routing work a mixture-of-experts model does on every word. I haven't isolated that.</p>
-    <p>One more thing about speed. Quick reasons before it answers. In my knowledge test it wrote about 146 reasoning tokens before each answer letter. At 43.6 tokens a second that is roughly 3 seconds of thinking before the first line shows up. That is arithmetic from two measured numbers, not a timing of its own. I did not time first-word latency on Quick.</p>
+    <p>The rows were measured on different days and builds, so read the ratios, not the third digit. The full reference table, with the method, is on <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM to AI model size</a>. A token is a word or part of one, and 20 a second is faster than most people read.</p>
+    <p>Why is Core about half as fast as Quick when the files are nearly the same size? On a Mac, writing each word is mostly limited by how quickly the chip can read the model's weights from memory. Quick is a mixture-of-experts model and reads about 4 billion parameters' worth per word. Core is dense and reads all 27 billion. My <a href="https://outlier.host/how-to/run-gemma-4-on-mac/">Gemma 4 page</a> has the other side of that trade.</p>
 
-    <h2>How good it is</h2>
-    <h3>Table 3: Quick (Gemma 4 26B-A4B), my own tests</h3>
+    <h3>Table 3: three runs of Core on the same Mac</h3>
     <table>
       <thead>
-        <tr><th>Test</th><th>Sample</th><th>Quick</th><th>For comparison</th></tr>
+        <tr><th>When</th><th>How</th><th>Tokens a second</th></tr>
       </thead>
       <tbody>
-        <tr><td>MMLU, general knowledge</td><td>300 questions across 50 of 57 subjects</td><td>79.3% (238 of 300), 95% interval 74.4% to 83.5%</td><td>Lite 78.5%, same sprint</td></tr>
-        <tr><td>Short coding problems</td><td>23</td><td>21 right, 250 seconds in all</td><td>Core 20 right, 394 seconds</td></tr>
-        <tr><td>Fix a real bug in a real repository (SWE-bench Verified, blind)</td><td>30</td><td>0 right</td><td>Core 23 of 50 on the same harness</td></tr>
-        <tr><td>HumanEval</td><td>164</td><td>21 right (12.8%)</td><td>not run for this page</td></tr>
+        <tr><td>2026-06-09</td><td>Launch batch, one request at a time</td><td>20.7</td></tr>
+        <tr><td>Late July 2026</td><td>Bench script with a short and a long reply, so the fixed start-up cost drops out</td><td>21.6</td></tr>
+        <tr><td>August 2026</td><td>Plain mlx-lm loop, no app (Vision 3.8 did 15.5 in the same loop)</td><td>16.6</td></tr>
       </tbody>
     </table>
-    <p><strong>Knowledge.</strong> On the MMLU sample, Quick and the 9B Lite are tied inside the noise. If all you need is facts and explanations, the free 5 GB Lite is a fair alternative. Quick's score came from reading an answer letter out of a chat reply, which is noisier than the standard scoring and can miss right answers. Lite's number is from the same sprint's table, and the two may not be scored the same way.</p>
-    <p><strong>Short code.</strong> Asked for a single function with the problem already stated, Quick matched the 27B Core and finished in 37% less time. Between them they solved all 23, because their misses did not overlap. The sample is small, so one point either way is noise.</p>
-    <p><strong>Real repositories.</strong> This is where it falls down. Given a bug in a real project and left to find the fix itself, Quick produced no usable patch in 29 of 30 tries. It stalled while searching and never settled on an edit. I wrote that test up in <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">chat coding vs agentic coding</a>. Core stays the default for agent work for that reason.</p>
-    <p><strong>HumanEval.</strong> An older run in April scored Quick 21 of 164, with a harness that pulls the code out of a fenced block. That disagrees with the 21 of 23 above, and I haven't worked out why. Treat Quick's coding as short-function help, and use Core for anything larger.</p>
+    <p>These disagree by about a quarter and I have not reconciled them. My research log also holds earlier Core figures of 5.5, 7.8, 11.6 and 31 tokens a second from other harnesses, which I never reconciled either. The 20.7 is the figure on the rest of this site. If a friend asked, I would say "somewhere between 17 and 22 on an M1 Ultra", because three runs landed there.</p>
+    <p><strong>Your Mac.</strong> Speed follows memory bandwidth. Apple lists 800 GB/s for the M1 Ultra and 273 GB/s for the M4 Pro, so 20.7 &times; 273 / 800 gives about 7 tokens a second on an M4 Pro. That is arithmetic, not a measurement, and a real chip can land on either side of it. The <a href="https://outlier.host/seo/run/run-compact-on-m4-pro-mac-mini/">Core on an M4 Pro Mac mini page</a> does the same sum.</p>
+    <p><strong>The wait before the first word.</strong> Speed after the first word is one thing. On a new chat Core also reads Outlier's system prompt first. On 1.11.906 and again on 1.11.908, the first chat that had to build the saved part of that prompt waited 20.7 to 20.8 seconds for its first word on three of four test questions. Asking again started in 0.87 to 0.91 seconds on the same three. That is one machine and four questions. The full tables, and the part I could not explain, are on <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">time to first token on a Mac</a>.</p>
+
+    <h2>How good it is</h2>
+    <h3>Table 4: Core (Qwen3.6 27B), my own tests</h3>
+    <table>
+      <thead>
+        <tr><th>Test</th><th>Sample</th><th>Core</th><th>For comparison</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>MMLU, general knowledge</td><td>200 questions across all 57 subjects, thinking off</td><td>89.5% (179 of 200), 95% interval about 4 points either way</td><td>Vision 3.8 82.5%, Quick 81.0%, Lite 77.0%, same run</td></tr>
+        <tr><td>HumanEval, single functions</td><td>164</td><td>95.1% (156 of 164)</td><td>Vision 3.8 155 of 164</td></tr>
+        <tr><td>Fix a real bug in a real repository (SWE-bench Verified, blind)</td><td>50, fixed sample</td><td>23 right, 7 with no patch at all, plus or minus 14 points</td><td>Quick 0 of 30 on a separate set of 30</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Knowledge.</strong> 89.5% is the highest score of any tier I measured. I did not measure Plus. At n=200 the interval is about 4 points near 90%, so read it as "high 80s". The same run put Vision 3.8, which is also a 27B model, at 82.5%. The <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">tier benchmarks page</a> has the method and every tier.</p>
+    <p><strong>Short code.</strong> 156 of 164 sounds like a solved problem, and I don't think it is. HumanEval came out in 2021, so a 2026 model has very likely seen it. The number is useful for comparing tiers that faced the same set. Core and Vision 3.8 tied on a paired test (exact p = 1.000).</p>
+    <p><strong>Real repositories.</strong> Given a bug in a real project and left to find the fix itself, Core fixed 23 of 50. An older build scored 18 of 40 on 2026-06-25, which is statistically the same. That is about half. It is a real result for a model that runs on your desk, and it is not Claude. I wrote up why in <a href="https://outlier.host/data/can-a-local-27b-model-code-like-claude/">can a local 27B model code like Claude</a>, and the chat-versus-agent split is in <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">chat coding vs agentic coding</a>.</p>
 
     <h2>When I would pick it</h2>
-    <p>On a 24 GB or larger Mac, for quick answers, drafting and explaining things, Quick is a good fit, and it is the faster of the two big models. For code inside a project, use Core. On a 16 GB Mac, start with Lite, which is free. If you aren't sure local AI is for you, download the free app and try Nano and Lite first. They cost nothing.</p>
+    <p>On a 24 GB or larger Mac, if you want one model for writing, explaining things and code, I would start with Core. If speed matters more than the last few points of quality, Quick answers about twice as fast and scored 81.0% to Core's 89.5%. If you need to read an image, that is Vision 3.8, since Core is text only. On a 16 GB Mac, start with Lite, which is free. If you aren't sure local AI is for you, download the free app and try Nano and Lite first.</p>
 
     <h2>What I did not test</h2>
     <ul>
-      <li>A 16 GB Mac, or any chip other than an M1 Ultra. The speed on an M4 will differ.</li>
-      <li>The other four Gemma 4 sizes (E2B, E4B, 12B and 31B).</li>
-      <li>Gemma 4 in Ollama, LM Studio or llama.cpp.</li>
-      <li>Images, audio or video. I only tested text.</li>
-      <li>The two Terminal commands above. Outlier loads Quick through the same mlx-lm library, but I did not retype them for this page.</li>
-      <li>First-word latency on Quick.</li>
+      <li>A 16 GB or 24 GB Mac, or any chip other than an M1 Ultra. The speed on an M4 will differ.</li>
+      <li>Core with thinking turned on. The MMLU and HumanEval runs had it off.</li>
+      <li>Chats longer than the 32K default context.</li>
+      <li>Qwen3.6 27B in Ollama, LM Studio or llama.cpp.</li>
+      <li>The community 16.07 GB conversion, in mlx-lm or for images.</li>
+      <li>The two Terminal commands above. Outlier loads Core through the same mlx-lm library, but I did not retype them for this page.</li>
+      <li>Any quantization other than 4-bit.</li>
     </ul>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <div class="faq-item">
-        <h3>Can I run Gemma 4 on a MacBook Air?</h3>
-        <p>The 26B-A4B is a 15.61 GB file that peaks near 16 GB, so a 16 GB Air has no room to spare and I wouldn't plan around it. A 24 GB machine is the comfortable size. Google also makes smaller Gemma 4 sizes (E2B and E4B) for small devices. I haven't measured those.</p>
+        <h3>Can I run Qwen3.6 27B on a 16 GB Mac?</h3>
+        <p>Not the 4-bit file I tested. It is 15.13 GB before macOS takes any memory, and it peaks near 16 GB while it answers. Outlier marks it Needs 24+ GB. Lite, a 5.04 GB 9B model, fits a 16 GB Mac and is free.</p>
       </div>
       <div class="faq-item">
-        <h3>How much RAM does Gemma 4 26B need on a Mac?</h3>
-        <p>Outlier lists 16 GB as the minimum for the 4-bit 26B-A4B. The tier catalog records a measured peak of about 16 GB while it answers, so 24 GB is where there is real headroom for macOS and your other apps.</p>
+        <h3>How much RAM does Qwen3.6 27B need on a Mac?</h3>
+        <p>Outlier lists 24 GB as the minimum for the 4-bit file. The tier catalog records a peak of about 16 GB while it answers, and a plain mlx-lm run in August showed 15.45 GB. 32 GB is where there is comfortable headroom.</p>
       </div>
       <div class="faq-item">
-        <h3>How fast is Gemma 4 on Apple Silicon?</h3>
-        <p>43.6 tokens a second for the 26B-A4B on an M1 Ultra, the median of 20 runs on 2026-08-24. That is about twice the speed of a 27B dense model on the same Mac. Other chips will differ, and I only measured the M1 Ultra.</p>
+        <h3>How fast is Qwen3.6 27B on Apple Silicon?</h3>
+        <p>20.7 tokens a second on an M1 Ultra in my June 2026 batch. Two later runs with different harnesses gave 21.6 and 16.6. Slower chips will be slower, because a dense model's speed follows memory bandwidth. I only measured the M1 Ultra.</p>
       </div>
       <div class="faq-item">
-        <h3>Is Gemma 4 good for coding?</h3>
-        <p>For short functions, yes: 21 of 23 in my set. For fixing a bug in a real repository, no: 0 of 30. Chat coding and agentic coding turned out to be different skills.</p>
+        <h3>Is Qwen3.6 27B good for coding?</h3>
+        <p>For single functions, yes: 156 of 164 on HumanEval, though that test is old enough that a 2026 model has probably seen it. For fixing a bug in a real repository it got 23 of 50 right in my blind SWE-bench Verified run.</p>
       </div>
       <div class="faq-item">
-        <h3>Is Gemma 4 free to run locally?</h3>
-        <p>The weights are free to download, and the mlx-community repo is tagged Apache 2.0. The MLX route above costs nothing. In Outlier, Quick is a Pro tier, while Nano and Lite are free.</p>
+        <h3>Is Qwen3.6 27B free to run locally?</h3>
+        <p>The weights are free to download, and the Hugging Face model card and the 4-bit repos are tagged Apache 2.0. The MLX route above costs nothing. In Outlier, Core is a Pro tier, while Nano and Lite are free.</p>
       </div>
     </div>
 
-    <div class="receipts"><strong>Receipts:</strong> Speed for Quick: median of 20 runs on a Mac Studio with an M1 Ultra, through the shipped Outlier 1.11.804 bundle on 2026-08-24, routed by model id and confirmed in the engine log. Speed for Nano, Lite and Core: my runs from the 2026-06-09 batch on the same Mac, 4-bit MLX, one request at a time. File sizes are read from the shipping tier catalog (Outlier 1.11.909). The 16 GB peak is the measured generation footprint recorded in the tier catalog. MMLU: n=300, stratified across 50 of 57 subjects, April 2026, answers read from chat replies, 0 errors, Wilson 95% interval. Short code: n=23, my own problem set, M1 Ultra, shipping build, August 2026. Repository bugs: SWE-bench Verified, n=30, blind (no test patch), official Docker harness, August 2026. HumanEval: n=164, April 2026, fenced-code extraction. The roughly 3 seconds of thinking is 146 tokens divided by 43.6 tokens a second. The Hugging Face repo name and licence tag were read on 2026-10-10. Every figure comes from the same Mac Studio and one chip. None of it is a rate for your Mac.</div>
+    <div class="receipts"><strong>Receipts:</strong> Speed: my own runs on a Mac Studio with an M1 Ultra and 64 GB, 4-bit MLX, one request at a time. The 20.7 is the 2026-06-09 batch, as on the RAM page. The 21.6 and 16.6 come from my research log: a late-July bench script that times a short and a long reply and subtracts the fixed start-up cost, and an August plain mlx-lm loop that also showed Core loading in 6.7 s and using 15.45 GB. The other tiers' speeds are from the 2026-06-09 batch and an August 2026 median of 20 for Quick. Core's file size and 24 GB minimum are read from the tier catalog in Outlier 1.11.911; the other tiers' sizes are from the site's tier table, read from the same catalog. The 16 GB peak is the generation footprint recorded in that table. The 55.6 GB original size and the 16.07 GB and 15.15 GB repo sizes were read from the Hugging Face API on 2026-10-10; the Apache 2.0 tags were read the same day. MMLU: n=200, stratified across all 57 subjects, greedy, thinking off, through the shipped 1.11.804 app on 2026-08-24, scored by extracting the answer letter. HumanEval: all 164 problems, same build and day, official tests run in a subprocess. Repository bugs: SWE-bench Verified, blind (no test patch, no file hint), 50 tasks from a fixed sample (seed 42), official Docker harness, the 7 that produced no patch counted as failures. First-word times: 1.11.906 and 1.11.908, four questions, 2026-10-10. The M4 Pro figure is 20.7 &times; 273 / 800, not a measurement. Every figure comes from the same Mac Studio and one chip. None of it is a rate for your Mac.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
       <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
-      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-run-gemma-4-on-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.911/Outlier-1.11.911-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-run-gemma-4-on-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-run-qwen-3-6-27b-on-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.911/Outlier-1.11.911-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-run-qwen-3-6-27b-on-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
 
-    <div class="related">More: <a href="https://outlier.host/vs/gemma-vs-llama/">Gemma vs Llama</a> &middot; <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM to AI model size</a> &middot; <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">Chat coding vs agentic coding</a> &middot; <a href="https://outlier.host/how-to/run-qwen-locally-mac/">How to run Qwen on a Mac</a> &middot; <a href="https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/">How to run Qwen3.6 27B on a Mac</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/how-to/run-gemma-4-on-mac/">How to run Gemma 4 on a Mac</a> &middot; <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM to AI model size</a> &middot; <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac</a> &middot; <a href="https://outlier.host/how-to/run-qwen-locally-mac/">How to run Qwen on a Mac</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
 
     <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
@@ -359,7 +371,7 @@ fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').t
 function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
 document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
   b.addEventListener('click', function () {
-    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=how-to-run-gemma-4-on-mac');
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=how-to-run-qwen-3-6-27b-on-mac');
     var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
     if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
     if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
