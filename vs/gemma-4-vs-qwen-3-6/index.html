@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>Gemma 4 vs Qwen 3.6 on a Mac: speed and quality | Outlier</title>
+  <meta name="description" content="Gemma 4 26B vs Qwen 3.6 27B on an M1 Ultra, measured: same file size, Gemma faster on long answers, Qwen ahead on knowledge and on real code bugs.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-10-10">
+  <link rel="canonical" href="https://outlier.host/vs/gemma-4-vs-qwen-3-6/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Gemma 4 vs Qwen 3.6 on a Mac: which one to run">
+  <meta property="og:description" content="Gemma 4 26B vs Qwen 3.6 27B on an M1 Ultra, measured: same file size, Gemma faster on long answers, Qwen ahead on knowledge and on real code bugs.">
+  <meta property="og:url" content="https://outlier.host/vs/gemma-4-vs-qwen-3-6/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gemma 4 vs Qwen 3.6 on a Mac: which one to run">
+  <meta name="twitter:description" content="Gemma 4 26B vs Qwen 3.6 27B on an M1 Ultra, measured: same file size, Gemma faster on long answers, Qwen ahead on knowledge and on real code bugs.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.82rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    /* These pages carry no scroll wrapper, so a table wider than the column
+       pushed the whole page sideways on a phone. Measured at 375px:
+       /vs/outlier-vs-chatgpt/ overflowed by 88px and
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px - the page itself
+       slid, not just the table. display:block makes the table its own scroll
+       container; the content keeps its full width (measured 447px scrolling
+       inside a 343px box) instead of being squeezed. The two pinned layers
+       are an edge shadow and the two local ones scroll with the content, so
+       an edge shows only on a side that still has columns behind it. Alpha
+       zero is spelled with the background colour, not `transparent`, which
+       some engines interpolate through transparent-black as a grey smear. */
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Gemma 4 vs Qwen 3.6 on a Mac: which one to run", "description": "Gemma 4 26B vs Qwen 3.6 27B on an M1 Ultra, measured: same file size, Gemma faster on long answers, Qwen ahead on knowledge and on real code bugs.", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/vs/gemma-4-vs-qwen-3-6/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Compare", "item": "https://outlier.host/vs/"}, {"@type": "ListItem", "position": 3, "name": "Gemma 4 vs Qwen 3.6 on a Mac: which one to run", "item": "https://outlier.host/vs/gemma-4-vs-qwen-3-6/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Gemma 4 or Qwen 3.6 better?", "acceptedAnswer": {"@type": "Answer", "text": "Qwen 3.6 27B scored higher on general knowledge (89.5% against 81.0% on the same 200 questions) and fixed 23 of 50 real repository bugs where Gemma 4 fixed none. On short coding problems they were level, 20 and 21 of 23. Gemma 4 26B is the faster one on long answers. Which is better depends on whether you wait on long drafts or on code in a project."}}, {"@type": "Question", "name": "Which is faster on a Mac, Gemma 4 or Qwen 3.6?", "acceptedAnswer": {"@type": "Answer", "text": "Gemma 4 26B-A4B, for anything longer than about 85 tokens. In my two runs it wrote 43.6 and 69.0 tokens a second against 20.7 and 21.6 for Qwen 3.6 27B, on an M1 Ultra. For a one-line answer Qwen finished first in my July test, because Gemma takes about 3.7 seconds before its first counted token and Qwen about 1.0."}}, {"@type": "Question", "name": "Which one needs more RAM?", "acceptedAnswer": {"@type": "Answer", "text": "About the same. The 4-bit Gemma 4 26B-A4B file is 15.61 GB and the Qwen 3.6 27B file is 15.13 GB, and each peaks near 16 GB while it answers. Outlier lists 16 GB as Gemma's minimum and 24 GB as Qwen's. I would put either on a 24 GB Mac."}}, {"@type": "Question", "name": "Which is better for coding, Gemma 4 or Qwen 3.6?", "acceptedAnswer": {"@type": "Answer", "text": "For a single function, they are level in my tests. For fixing a bug in a real repository with an agent, Qwen 3.6 27B fixed 23 of 50 and Gemma 4 fixed 0 of 50 in Outlier's agent loop, which is a result about that pairing, not a ceiling for Gemma in every tool."}}, {"@type": "Question", "name": "Can I use Gemma 4 and Qwen 3.6 commercially?", "acceptedAnswer": {"@type": "Answer", "text": "The Hugging Face repos I read on 2026-10-10 are tagged Apache 2.0: Qwen/Qwen3.6-27B, mlx-community/gemma-4-26b-a4b-it-4bit and Outlier-Ai/Outlier-Quick-26B-MLX-4bit. Outlier's own catalog entry for Quick still says Gemma Terms of Use, which does not match, and I have not reconciled the two. Read the model card of the copy you download before you build a product on it."}}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>Gemma 4 vs Qwen 3.6 on a Mac: which one to run</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-10-10</span>
+      <span class="updated-pill">Last updated 2026-10-10</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>They fit the same Macs. Gemma 4 26B-A4B is a 15.61 GB file and Qwen 3.6 27B is 15.13 GB, both at 4-bit, and each peaks near 16 GB while it answers. Plan on a 24 GB Mac for either.</li>
+        <li>Gemma is faster on long answers, two to three times in my two runs (43.6 and 69.0 tokens a second against 20.7 and 21.6). On a short reply, under about 85 tokens, Qwen finished first in my July test, because Gemma spends about 3.7 seconds before it starts.</li>
+        <li>Qwen is the better model for knowledge and for code in a project: 89.5% against 81.0% on the same 200 questions, and 23 of 50 real repository bugs against 0 of 50. On short coding problems they were level, 20 and 21 of 23.</li>
+        <li>If you will run one, run Qwen 3.6 27B. Add Gemma 4 if you write long drafts and want them sooner.</li>
+      </ul>
+      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Measured on a Mac Studio with an M1 Ultra and 64 GB, in Outlier builds from April to August 2026 (dates in the tables). Where I have two measurements of the same thing, I show both. Sources are in the receipts at the bottom.</p>
+    </div>
+
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-gemma-4-vs-qwen-3-6-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.912/Outlier-1.11.912-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-gemma-4-vs-qwen-3-6-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+    <p class="lead">I ship both of these in Outlier. Gemma 4 26B-A4B is the Quick tier and Qwen 3.6 27B is the Core tier, so I have run the same tests on both, on one Mac Studio. I already wrote a page for each, <a href="https://outlier.host/how-to/run-gemma-4-on-mac/">how to run Gemma 4 on a Mac</a> and <a href="https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/">how to run Qwen3.6 27B on a Mac</a>. This one is for choosing between them.</p>
+
+    <p>One thing to know before the numbers. This is a mixture-of-experts model against a dense one. Gemma stores 26 billion parameters and uses about 4 billion for each word. Qwen uses all 27 billion for each word. A lot of what follows, the speed most of all, comes from that design, and you would see it in any pair built that way. It is not a ruling on Google against Alibaba. Gemma 4 also comes in a 31B, and the Qwen 3.6 family has a 35B-A3B. I have not measured either, and they would pair up differently.</p>
+
+    <h2>The two side by side</h2>
+    <table>
+      <thead><tr><th></th><th>Gemma 4 26B-A4B (Outlier Quick)</th><th>Qwen 3.6 27B (Outlier Core)</th></tr></thead>
+      <tbody>
+        <tr><td>Made by</td><td>Google</td><td>Alibaba's Qwen team</td></tr>
+        <tr><td>Design</td><td>Mixture of experts: 26 billion stored, about 4 billion used per word</td><td>Dense: all 27 billion used per word</td></tr>
+        <tr><td>4-bit MLX file</td><td>15.61 GB</td><td>15.13 GB (text only, image weights stripped)</td></tr>
+        <tr><td>Memory while it answers</td><td>Peaks near 16 GB</td><td>Peaks near 16 GB</td></tr>
+        <tr><td>Smallest Mac Outlier lists</td><td>16 GB</td><td>24 GB</td></tr>
+        <tr><td>Context window</td><td>256K native, 32K default in the app</td><td>256K native, 32K default in the app</td></tr>
+        <tr><td>Hugging Face licence tag</td><td>Apache 2.0</td><td>Apache 2.0</td></tr>
+        <tr><td>In Outlier</td><td>Quick, a Pro tier</td><td>Core, a Pro tier and the default for agent work</td></tr>
+        </tbody>
+    </table>
+    <p>Two notes on the memory rows. Outlier lists 16 GB as Quick's minimum, and the site's <a href="https://outlier.host/data/mac-ram-to-model-size/">RAM table</a> puts it in the 24 GB row. The file is 15.61 GB, so on a 16 GB Mac it loads with nothing to spare, and I would not plan around that. Second, a long chat costs memory on top of the file. The app's own readout for the 32K default estimates about 2.5 GB of context memory with Quick loaded and 2.0 GB with Core. Those come from a formula, not a measurement, and Quick's formula assumes 10 of its 30 layers keep a full-length cache, which is a cautious assumption I did not check.</p>
+
+    <h2>How fast each one is</h2>
+    <p>Table 2 is decode speed, how fast the words arrive once it has started. M1 Ultra, 4-bit MLX, one request at a time.</p>
+    <table>
+      <thead><tr><th>Run</th><th>Gemma 4 26B-A4B</th><th>Qwen 3.6 27B</th><th>Gap</th></tr></thead>
+      <tbody>
+        <tr><td>A. Gemma: median of 20 requests through the shipped app, 2026-08-24 (1.11.804). Qwen: the 2026-06-09 batch</td><td>43.6</td><td>20.7</td><td>2.1 times</td></tr>
+        <tr><td>B. Controlled test: one prompt at two token budgets, 2026-07-27 (build 1.11.669)</td><td>69.0</td><td>21.6</td><td>3.2 times</td></tr>
+        <tr><td>C. Qwen only: a plain mlx-lm loop in August, and older harnesses in my log</td><td>not run</td><td>16.6, and 5.5, 7.8, 11.6, 31</td><td>unreconciled</td></tr>
+        </tbody>
+    </table>
+    <p>So Gemma is 43.6 tokens a second in one run and 69.0 in another, and Qwen landed between 16.6 and 21.6 in the three runs I compare, with older figures I never reconciled. The builds and the methods differ, and I have not worked out which one accounts for the gap on Gemma, so I am not going to pick one for you. Both put Gemma at two to three times Qwen. That fits the design: on a Mac, each word is mostly limited by how fast the chip can read the model's weights from memory, and Gemma reads about 4 billion parameters' worth per word where Qwen reads all 27 billion.</p>
+
+    <h3>The catch on short replies</h3>
+    <p>Run B also measured the fixed wait before the first counted token: 3.72 seconds for Gemma and 1.03 seconds for Qwen. Gemma reasons before it answers, which may be part of that. I did not split it out. A reply takes the fixed wait plus its length divided by the speed, and Table 3 does that sum for both.</p>
+    <table>
+      <thead><tr><th>Reply length</th><th>Gemma 4 (3.72 s + length / 69.0)</th><th>Qwen 3.6 (1.03 s + length / 21.6)</th><th>Sooner</th></tr></thead>
+      <tbody>
+        <tr><td>20 tokens, one short sentence</td><td>4.0 s</td><td>2.0 s</td><td>Qwen</td></tr>
+        <tr><td>50 tokens</td><td>4.4 s</td><td>3.3 s</td><td>Qwen</td></tr>
+        <tr><td>85 tokens</td><td>5.0 s</td><td>5.0 s</td><td>tie</td></tr>
+        <tr><td>200 tokens, a paragraph or two</td><td>6.6 s</td><td>10.3 s</td><td>Gemma</td></tr>
+        <tr><td>500 tokens</td><td>11.0 s</td><td>24.2 s</td><td>Gemma</td></tr>
+        <tr><td>1,000 tokens, a long draft</td><td>18.2 s</td><td>47.3 s</td><td>Gemma</td></tr>
+        </tbody>
+    </table>
+    <p>The two cross at about 85 tokens. A one-line answer comes back sooner from Qwen. A long draft comes back much sooner from Gemma: 1,000 tokens in about 18 seconds against about 47.</p>
+    <p>Treat Table 3 as a sketch. I computed it from the two measured numbers for each model, I did not time each length. The fixed wait came from a short prompt sent straight to the engine on build 1.11.669, and I have not re-measured it on 1.11.912. A new chat in the app adds Outlier's own system prompt, and I did not time Gemma's first word there. <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac</a> has the Qwen side of that wait.</p>
+
+    <h2>How good each one is</h2>
+    <p>Same Mac, same app, the same questions where I could manage it. Where I could not, the sample column says so.</p>
+    <table>
+      <thead><tr><th>Test</th><th>Sample</th><th>Gemma 4 (Quick)</th><th>Qwen 3.6 (Core)</th></tr></thead>
+      <tbody>
+        <tr><td>MMLU, general knowledge. Same 200 questions, same run, thinking off (1.11.804, 2026-08-24)</td><td>200</td><td>81.0% (162), 95% interval 75.0 to 85.8</td><td>89.5% (179), 95% interval 84.5 to 93.0</td></tr>
+        <tr><td>MMLU, a different sample, scored by reading a letter from a chat reply</td><td>300</td><td>79.3% (238)</td><td>not run</td></tr>
+        <tr><td>Short coding problems asked in chat (August)</td><td>23</td><td>21 right, 250 s in all</td><td>20 right, 394 s in all</td></tr>
+        <tr><td>HumanEval functions, run for real (July)</td><td>20</td><td>19 right</td><td>20 right</td></tr>
+        <tr><td>Grade-school math, GSM8K (July)</td><td>30</td><td>26 right</td><td>27 right</td></tr>
+        <tr><td>HumanEval, the full set (Gemma in April, Qwen in August, different harnesses)</td><td>164</td><td>21 right (12.8%)</td><td>156 right (95.1%)</td></tr>
+        <tr><td>Real repository bugs, SWE-bench Verified, blind, fixed sample of 50</td><td>50</td><td>0 right, all 50 with no patch (1.11.788, 2026-08-17)</td><td>23 right, 7 with no patch (1.11.757, 2026-08-09)</td></tr>
+        <tr><td>Real repository bugs, an earlier and different set</td><td>30 and 40</td><td>0 of 30 (July)</td><td>18 of 40 (2026-06-25)</td></tr>
+        </tbody>
+    </table>
+    <h3>General knowledge</h3>
+    <p>On 200 identical questions, Qwen got 179 right and Gemma got 162. The 95% intervals, 84.5 to 93.0 and 75.0 to 85.8, touch, and a plain two-proportion test on the two counts gives p of about 0.02. I read that as Qwen ahead by several points, not by exactly 8.5. Gemma's separate 300-question run scored 79.3%, which lands in the same place, and the earlier build, 1.11.757, gave 81.5% for Gemma and 89.5% for Qwen. The <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">tier benchmarks</a> page has the method and every tier.</p>
+
+    <h3>Short code and math</h3>
+    <p>On 23 short coding problems asked in chat, Gemma got 21 and Qwen got 20, and Gemma finished in 250 seconds against 394. Their misses did not overlap, so between them they solved all 23. That is a small set. One problem either way is noise. July's smaller checks agree: functions run for real, 19 of 20 and 20 of 20, and 30 grade-school math problems, 26 and 27.</p>
+    <p>One number disagrees with all of that. An April run of the full 164-problem HumanEval scored Gemma at 21, or 12.8%, with a harness that pulls the code out of a fenced block, while Qwen scored 156 of 164 in August through the app. I do not believe a model that gets 19 of 20 and 21 of 23 is really at 13% on the full set, and I have not worked out which test is wrong. I am showing it because it is already on my Gemma page and you should see both. HumanEval is also from 2021, so a 2026 model has very likely seen it.</p>
+
+    <h3>Real repositories</h3>
+    <p>This is the big gap. Given a real bug in a real project and left to find the fix, Qwen fixed 23 of 50 in a blind SWE-bench Verified run. Gemma fixed none. Its patches were not wrong. In all 50 tries its agent never wrote one, so nothing was graded. An earlier run on a different set of 30 tasks gave 0 of 30, with 29 of those stalling without taking any action. I wrote up the pattern in <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">chat coding vs agentic coding</a>.</p>
+    <p>Read that as a result about Gemma inside Outlier's agent loop. It says the pairing does not work for agent coding in my harness. It does not say Gemma cannot do it in someone else's, and I have not tried another. The short-code scores above say the model can write code. That is why Core is the default for agent work. These runs were on builds 1.11.757 and 1.11.788, and I have not re-run them on 1.11.912.</p>
+
+    <h2>Which one I would run</h2>
+    <ul>
+      <li><strong>One model for everything, on a 24 GB or larger Mac:</strong> Qwen 3.6 27B.</li>
+      <li><strong>Code in a project folder, with the agent:</strong> Qwen 3.6 27B. Gemma got nothing in my harness.</li>
+      <li><strong>Long drafts, summaries and explanations, where the wait is what bothers you:</strong> Gemma 4. At 500 tokens my July sum has it at about 11 seconds against 24.</li>
+      <li><strong>Short questions and one-line answers:</strong> Qwen, for the shorter wait.</li>
+      <li><strong>A 16 GB Mac:</strong> neither, with room to spare. Start with Lite, which is free.</li>
+    </ul>
+    <p>Both are Pro tiers in Outlier. You switch between them from the model menu at the top of the window, and the free tiers are Nano and Lite. If you would rather run them without Outlier, the commands are on the <a href="https://outlier.host/how-to/run-gemma-4-on-mac/">Gemma 4</a> and <a href="https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/">Qwen3.6 27B</a> pages. For Gemma against Llama, see <a href="https://outlier.host/vs/gemma-vs-llama/">Gemma vs Llama</a>, and for Qwen against Llama, <a href="https://outlier.host/vs/qwen-vs-llama/">Qwen vs Llama</a>.</p>
+
+    <h2>What I did not test</h2>
+    <ul>
+      <li>Gemma 4 31B and Qwen 3.6 35B-A3B, which would pair up differently.</li>
+      <li>Any chip other than an M1 Ultra, and any Mac with 16 or 24 GB.</li>
+      <li>Either model in Ollama, LM Studio or llama.cpp.</li>
+      <li>A paired test of thinking on against thinking off for these two. The MMLU runs had it off.</li>
+      <li>Images, audio, and chats longer than the 32K default.</li>
+      <li>Gemma's first-word wait on a new chat in the app.</li>
+      <li>Gemma as an agent in any harness other than Outlier's.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is Gemma 4 or Qwen 3.6 better?</h3>
+        <p>Qwen 3.6 27B scored higher on general knowledge (89.5% against 81.0% on the same 200 questions) and fixed 23 of 50 real repository bugs where Gemma 4 fixed none. On short coding problems they were level, 20 and 21 of 23. Gemma 4 26B is the faster one on long answers. Which is better depends on whether you wait on long drafts or on code in a project.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which is faster on a Mac, Gemma 4 or Qwen 3.6?</h3>
+        <p>Gemma 4 26B-A4B, for anything longer than about 85 tokens. In my two runs it wrote 43.6 and 69.0 tokens a second against 20.7 and 21.6 for Qwen 3.6 27B, on an M1 Ultra. For a one-line answer Qwen finished first in my July test, because Gemma takes about 3.7 seconds before its first counted token and Qwen about 1.0.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which one needs more RAM?</h3>
+        <p>About the same. The 4-bit Gemma 4 26B-A4B file is 15.61 GB and the Qwen 3.6 27B file is 15.13 GB, and each peaks near 16 GB while it answers. Outlier lists 16 GB as Gemma's minimum and 24 GB as Qwen's. I would put either on a 24 GB Mac.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which is better for coding, Gemma 4 or Qwen 3.6?</h3>
+        <p>For a single function, they are level in my tests. For fixing a bug in a real repository with an agent, Qwen 3.6 27B fixed 23 of 50 and Gemma 4 fixed 0 of 50 in Outlier's agent loop, which is a result about that pairing, not a ceiling for Gemma in every tool.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use Gemma 4 and Qwen 3.6 commercially?</h3>
+        <p>The Hugging Face repos I read on 2026-10-10 are tagged Apache 2.0: Qwen/Qwen3.6-27B, mlx-community/gemma-4-26b-a4b-it-4bit and Outlier-Ai/Outlier-Quick-26B-MLX-4bit. Outlier's own catalog entry for Quick still says Gemma Terms of Use, which does not match, and I have not reconciled the two. Read the model card of the copy you download before you build a product on it.</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> Hardware: a Mac Studio with an M1 Ultra and 64 GB, 4-bit MLX, one request at a time. Speed run A: Qwen's 20.7 is the 2026-06-09 batch used across this site; Gemma's 43.6 is the median of 20 runs through the shipped 1.11.804 app on 2026-08-24. Speed run B (2026-07-27, build 1.11.669): the same prompt at two token budgets, 64 and 320, using the token counts the engine reported, with the slope giving decode speed and the intercept giving the fixed wait. A same-day split of that first pass gave Gemma 67.1. Qwen's 16.6 is a plain mlx-lm loop in August; the older Qwen figures of 5.5, 7.8, 11.6 and 31 come from other harnesses and I never reconciled them. Table 3 is arithmetic on run B, not a timing. File sizes, minimum memory and the 256K and 32K context figures are read from the tier catalog in Outlier 1.11.912; the 16 GB peaks are the generation footprint in the site's tier table; the 2.5 GB and 2.0 GB context estimates are the app's formula at 32K (8,192 bytes per token per full-length layer for 10 layers, and 4,096 for 16). MMLU: n=200, stratified across all 57 subjects, zero-shot, greedy, thinking off, through the shipped 1.11.804 app on 2026-08-24, scored by extracting the answer letter, the same 200 questions for both tiers; the 95% intervals are Wilson intervals computed from the counts. Gemma's 79.3% is n=300 across 50 of the 57 subjects, scored by reading a letter from a chat reply. Short coding: 23 chat prompts in August 2026. HumanEval n=20 and GSM8K n=30: greedy, July 2026, code run for real. Full HumanEval: Gemma in April, Qwen in the 1.11.804 run of 2026-08-24, different harnesses. Repository bugs: SWE-bench Verified, blind (no test patch, no file hint), 50 tasks from a fixed sample (seed 42), official Docker harness, no-patch tries counted as failures; Qwen on 1.11.757 and Gemma on 1.11.788, and the earlier sets were 40 and 30 tasks. Licence tags and the existence of the Gemma 4 31B and Qwen 3.6 35B-A3B models were read from the Hugging Face API on 2026-10-10. Every figure comes from one Mac Studio. None of it is a rate for your Mac.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-gemma-4-vs-qwen-3-6&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.912/Outlier-1.11.912-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-gemma-4-vs-qwen-3-6-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
+
+
+    <div class="related">More: <a href="https://outlier.host/how-to/run-gemma-4-on-mac/">How to run Gemma 4 on a Mac</a> &middot; <a href="https://outlier.host/how-to/run-qwen-3-6-27b-on-mac/">How to run Qwen3.6 27B on a Mac</a> &middot; <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM to AI model size</a> &middot; <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac</a> &middot; <a href="https://outlier.host/vs/">All comparisons</a></div>
+
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+  <div class="wrap">
+    <span>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://bookbreaker.bet/">BookBreaker</a>: free arbitrage and +EV betting app for Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$249" data-now="$124.50" hidden></div>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=how-to-run-qwen-3-6-27b-on-mac');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+</body>
+</html>
