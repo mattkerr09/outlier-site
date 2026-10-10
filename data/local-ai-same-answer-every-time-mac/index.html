@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>Why a local AI gives the same answer every time | Outlier</title>
+  <meta name="description" content="Outlier gave the same reply 3 times out of 3 on every test at temperature 0.7. The cause, the fix in 1.11.909, and a 2-minute test for your own app.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-10-10">
+  <link rel="canonical" href="https://outlier.host/data/local-ai-same-answer-every-time-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Why a local AI gives the same answer every time">
+  <meta property="og:description" content="Outlier gave the same reply 3 times out of 3 on every test at temperature 0.7. The cause, the fix in 1.11.909, and a 2-minute test for your own app.">
+  <meta property="og:url" content="https://outlier.host/data/local-ai-same-answer-every-time-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Why a local AI gives the same answer every time">
+  <meta name="twitter:description" content="Outlier gave the same reply 3 times out of 3 on every test at temperature 0.7. The cause, the fix in 1.11.909, and a 2-minute test for your own app.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.82rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    /* These pages carry no scroll wrapper, so a table wider than the column
+       pushed the whole page sideways on a phone. Measured at 375px:
+       /vs/outlier-vs-chatgpt/ overflowed by 88px and
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px - the page itself
+       slid, not just the table. display:block makes the table its own scroll
+       container; the content keeps its full width (measured 447px scrolling
+       inside a 343px box) instead of being squeezed. The two pinned layers
+       are an edge shadow and the two local ones scroll with the content, so
+       an edge shows only on a side that still has columns behind it. Alpha
+       zero is spelled with the background colour, not `transparent`, which
+       some engines interpolate through transparent-black as a grey smear. */
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+    <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Dataset", "name": "Local AI same answer every time on a Mac, Outlier 1.11.908 and 1.11.909", "description": "First-party measurements of Outlier Nano, Lite and Core asked the same open question three times at temperature 0.7: how many different replies came back, whether a seed repeats, and decode speed, before (1.11.908) and after (1.11.909) a sampling fix. Mac Studio M1 Ultra, 64 GB.", "url": "https://outlier.host/data/local-ai-same-answer-every-time-mac/", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "creator": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "license": "https://creativecommons.org/licenses/by/4.0/", "temporalCoverage": "2026-10-10", "measurementTechnique": "Three open prompts asked three times each per tier as separate requests with no history, to the installed signed app's local engine, incognito, web search off, default temperature 0.7. Replies compared as whole text. A seed check (seed 7 twice, seed 8 once) on one prompt. Decode speed is the median of three 300-word story requests per tier. Single machine: Mac Studio M1 Ultra, 64 GB unified memory.", "variableMeasured": [{"@type": "PropertyValue", "name": "Different replies out of 3 asks", "unitText": "count"}, {"@type": "PropertyValue", "name": "Decode speed", "unitText": "tokens per second"}], "keywords": ["local AI", "same answer every time", "temperature", "seed", "sampling", "MLX", "Mac", "Apple Silicon", "M1 Ultra", "Outlier"]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Why your local AI gives the same answer every time, and a 2-minute test", "description": "Outlier gave the same reply 3 times out of 3 on every test at temperature 0.7. The cause, the fix in 1.11.909, and a 2-minute test for your own app.", "datePublished": "2026-10-10", "dateModified": "2026-10-10", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/data/local-ai-same-answer-every-time-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Data", "item": "https://outlier.host/data/"}, {"@type": "ListItem", "position": 3, "name": "Why a local AI gives the same answer every time", "item": "https://outlier.host/data/local-ai-same-answer-every-time-mac/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why does my local AI give the same answer every time?", "acceptedAnswer": {"@type": "Answer", "text": "Three common reasons. The temperature is 0, which is meant to repeat. The settings squeeze the choice down to one word, like a top-k of 1. Or the random draw is stuck, which was ours: on Outlier 1.11.908 the same question gave the same reply 3 times out of 3 on all nine prompt-and-tier pairs at temperature 0.7. The test above tells the first two from the third."}}, {"@type": "Question", "name": "Why does temperature seem to do nothing on my local model?", "acceptedAnswer": {"@type": "Answer", "text": "In ours the temperature reached the sampler. The random key under it was stuck, so the same prompt always drew the same words. I did not run other temperatures, so I can't say what a different setting would have changed on 1.11.908."}}, {"@type": "Question", "name": "Does a seed make a local model give the same answer twice?", "acceptedAnswer": {"@type": "Answer", "text": "On Outlier 1.11.909, seed 7 twice gave the same poem on all three tiers and seed 8 gave a different one. That is one prompt and one pair per tier on one Mac. On 1.11.908, seeds 7 and 8 gave the same text because the seed never reached the sampler."}}, {"@type": "Question", "name": "Did this affect questions about images?", "acceptedAnswer": {"@type": "Answer", "text": "No. Image questions go through a separate path. I asked one image question three times on 1.11.908 and got three different replies."}}, {"@type": "Question", "name": "Which Outlier version fixes it, and did the fix slow anything down?", "acceptedAnswer": {"@type": "Answer", "text": "1.11.909. Decode speed held on all three tiers: Nano 88.7 to 95.3 tokens per second, Lite 67.9 to 67.7, Core 22.7 to 22.7 (Table 3)."}}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/data/">data</a></div>
+    <h1>Why your local AI gives the same answer every time, and a 2-minute test</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-10-10</span>
+      <span class="updated-pill">Last updated 2026-10-10</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>If a local model gives the same text every time at a temperature above 0 and no setting explains it, the model may be fine and the step that picks each word stuck on one random number. That was our bug, and a seed did not help because it never reached that step.</li>
+        <li>That was our bug. On Outlier 1.11.908, at the default temperature of 0.7, Nano, Lite and Core each gave the identical reply 3 times out of 3 on all three of my test prompts. Seed 7 and seed 8 gave the same text.</li>
+        <li>1.11.909 fixed it. Every prompt now gets at least two different replies in three asks, a seed repeats and a new seed differs, and decode speed held (Tables 2 and 3). To test your own app, ask one open question 3 times (steps below).</li>
+      </ul>
+      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Measured on 2026-10-10 on a Mac Studio with an M1 Ultra and 64 GB, through the installed app. One machine, 3 prompts asked 3 times each on each of 3 tiers, before and after (Tables 1 to 3).</p>
+    </div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=data-local-ai-same-answer-every-time-mac-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.909/Outlier-1.11.909-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=data-local-ai-same-answer-every-time-mac-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+
+    <p class="lead">I asked each of our three models for a coffee shop name, three times in a row. Nano said "Brew &amp; Bloom" three times. Lite said "The Daily Grind" three times. Core said "The Daily Grind" three times. The temperature was 0.7, the app's default, which is meant to give you something different each time. I tried a two-line poem and a fun fact about octopuses next. Same result on all nine combinations. Below is what was wrong, what I changed, and a test you can run on any app that lets you set a temperature. I have not tested any other app, so I can't tell you whether yours has this.</p>
+
+    <h2>What I ran</h2>
+    <p>Three open prompts, the kind with many good answers: <em>Write a two-line poem about the sea</em>, <em>Suggest a name for a coffee shop. Just the name</em>, and <em>Give me one fun fact about octopuses</em>. Each one went to each tier (Nano, Lite and Core) three times, as three separate requests with no earlier messages, incognito, web search off. I did not send a temperature, so the app used its own default, 0.7. I counted how many of the three replies were different from each other, comparing the whole text.</p>
+    <p>The requests went straight to the app's local engine, not through the chat window. I also asked the poem with seed 7, with seed 7 again, and with seed 8. And I timed decode speed with a 300-word story request, three runs per tier, using the speed the engine reports for each reply. The "before" run is Outlier 1.11.908. The "after" run is 1.11.909, the current download.</p>
+
+    <h2>Before: 9 of 9 identical</h2>
+    <h3>Table 1: Outlier 1.11.908, temperature 0.7. Different replies out of 3 asks</h3>
+    <table>
+      <thead>
+        <tr><th>Tier</th><th>Poem</th><th>Coffee shop name</th><th>Octopus fact</th><th>Seed 7, seed 7, seed 8</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Nano</td><td>1</td><td>1</td><td>1</td><td>all three the same text</td></tr>
+        <tr><td>Lite</td><td>1</td><td>1</td><td>1</td><td>all three the same text</td></tr>
+        <tr><td>Core</td><td>1</td><td>1</td><td>1</td><td>all three the same text</td></tr>
+      </tbody>
+    </table>
+    <p>A 1 means all three replies matched word for word. Every cell is a 1. The coffee shop names were "Brew &amp; Bloom" on Nano and "The Daily Grind" on Lite and Core, every time. Seed 8 should have given something different from seed 7. It gave the same text.</p>
+
+    <h2>Why it happened</h2>
+    <p>A model does not write a word directly. At each step it scores every possible next word, and the app then draws one at random, weighted by those scores. Temperature controls how flat the weights are. The draw needs a random key, and if the key is the same at every step, the draw stops being random. The same scores give the same word, so the same question gives the same reply.</p>
+    <p>That is what I found in ours. We run on MLX. The build in the app uses MLX 0.31.2 and its mlx_lm 0.31 library for sampling. MLX keeps its random-number state per thread. The library's sampling step is compiled so that it reads that state, and it reads the state of whichever thread loaded the sampling code first. Our chat runs on a different thread. So on that thread every draw used the same key, and the same noise was applied at every step of every reply. A seed went into a different thread's state, which is why seed 7 and seed 8 matched.</p>
+    <p>Nothing looks wrong in any single reply. Each one is fluent and on topic. You only see it by asking twice. It matters more than it sounds if you sample several answers on purpose: best-of-N, majority voting and self-consistency all become N copies of one answer. A separate R&amp;D run of mine had already seen 60 pairs of problems repeat token for token.</p>
+    <p>One limit on the cause. In the test suite's Python, which has MLX 0.32.1, the library's own draw was random from any thread, so the stuck key did not reproduce there. The seed problem did. I only know this cause for the versions named above.</p>
+
+    <h2>What I changed</h2>
+    <p>Each reply now makes its own random key before it starts. If the request carries a seed, the key starts from that seed. If not, it starts from 64 random bits from the operating system. The key is split once per token, so no two tokens in a reply share a draw, and no thread's hidden state is read. The top-p, min-p and top-k filters are the library's own, in the library's order. Temperature 0 still takes the single most likely word and is unchanged.</p>
+    <p>I wrote 10 thread tests for it. Under the MLX the app ships, the old code failed 8 of them and the new code passes all 10.</p>
+
+    <h3>Table 2: Outlier 1.11.909, temperature 0.7. Different replies out of 3 asks</h3>
+    <table>
+      <thead>
+        <tr><th>Tier</th><th>Poem</th><th>Coffee shop name</th><th>Octopus fact</th><th>Seed 7, seed 7, seed 8</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Nano</td><td>3</td><td>2</td><td>3</td><td>7 and 7 matched, 8 differed</td></tr>
+        <tr><td>Lite</td><td>3</td><td>3</td><td>3</td><td>7 and 7 matched, 8 differed</td></tr>
+        <tr><td>Core</td><td>3</td><td>2</td><td>3</td><td>7 and 7 matched, 8 differed</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>Seven of the nine cells gave three different replies. Two gave two. None gave one.</li>
+      <li>Both 2s are the coffee shop name, a short question with a few obvious answers. Nano said "Brew &amp; Bean" twice then "Roasted &amp; Co.". Core said "Percolate" then "The Daily Grind" twice. A working sampler repeats itself sometimes. What was wrong on 1.11.908 was that it never varied.</li>
+      <li>Lite's three names this time were "The Daily Grind", "Brew &amp; Bean" and "Grind &amp; Gaze".</li>
+      <li>The seed check is one prompt, the poem, one pair per tier. It shows the seed reaches the sampler. I did not test how well repeats hold up on other hardware or other settings.</li>
+    </ul>
+
+    <h3>Table 3: decode speed, median of 3 runs, tokens per second</h3>
+    <table>
+      <thead>
+        <tr><th>Tier</th><th>1.11.908</th><th>1.11.909</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Nano</td><td>88.7</td><td>95.3</td></tr>
+        <tr><td>Lite</td><td>67.9</td><td>67.7</td></tr>
+        <tr><td>Core</td><td>22.7</td><td>22.7</td></tr>
+      </tbody>
+    </table>
+    <p>The fix did not cost speed. Nano read faster on the second set of runs (88.4 to 89.5 before, 94.8 to 95.4 after). I did not look into why and I would not credit the fix for it.</p>
+    <p>Questions about an image go through a separate path in the app. I asked one image question three times on 1.11.908 and got three different replies, so that path was never stuck. I did not look into why.</p>
+
+    <h2>Test your own app in two minutes</h2>
+    <p>This works on any local app or server that lets you set a temperature.</p>
+    <ol>
+      <li><strong>Set a temperature above 0.</strong> Use 0.7 if the app lets you pick. At temperature 0 the same reply every time is correct. The model takes its single most likely word. My <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">first-word timing page</a> tests at temperature 0 for that reason.</li>
+      <li><strong>Pick open questions.</strong> A two-line poem, a name for a coffee shop, a fun fact. Not "what is the capital of France", which has one right answer.</li>
+      <li><strong>Ask each one 3 times, from scratch.</strong> A new chat or a fresh request with no earlier messages, so the input is identical each time.</li>
+      <li><strong>Count the different replies.</strong> Three prompts, nine replies. Identical on all three prompts is the bug. My healthy run had two prompts with only two different replies out of three, and that is normal.</li>
+      <li><strong>If the app takes a seed,</strong> send the poem with seed 7 twice and seed 8 once. Working looks like 7 and 7 matching and 8 differing. Ours on 1.11.908 had all three matching.</li>
+    </ol>
+    <p>If your app has an OpenAI-style local endpoint, this script does steps 1 to 5. It is a stripped-down version of what I ran, which used Outlier's own endpoint. I have not run this exact script against other apps. Fill in the address and model name. If your server wants a key, add the header.</p>
+<pre><code>import json, urllib.request
+
+URL = "http://localhost:PORT/v1/chat/completions"   # your server's address
+MODEL = "your-model-name"
+PROMPTS = ["Write a two-line poem about the sea.",
+           "Suggest a name for a coffee shop. Just the name.",
+           "Give me one fun fact about octopuses."]
+
+def ask(prompt, **extra):
+    body = {"model": MODEL, "temperature": 0.7, "max_tokens": 120,
+            "messages": [{"role": "user", "content": prompt}], **extra}
+    req = urllib.request.Request(URL, json.dumps(body).encode(),
+                                 {"Content-Type": "application/json"})
+    with urllib.request.urlopen(req) as r:
+        return json.load(r)["choices"][0]["message"]["content"].strip()
+
+for p in PROMPTS:
+    replies = [ask(p) for _ in range(3)]
+    print(len(set(replies)), "different out of 3:", p)
+
+a, b, c = (ask(PROMPTS[0], seed=s) for s in (7, 7, 8))
+print("seed 7 twice matched:", a == b, "| seed 8 differed:", a != c)</code></pre>
+    <p>Before you blame the sampler, rule out the dull causes. The temperature may really be 0 in the app, or a preset may override yours. A top-k of 1 is the same as temperature 0. A very small top-p does nearly the same. A cache in front of the model can hand back a stored reply. The test tells you the draw is stuck. It does not tell you why.</p>
+    <p>If you use Outlier, the current download has the fix (1.11.909 or newer). If you compare models, ask each question more than once. See <a href="https://outlier.host/how-to/compare-ai-models-side-by-side-mac/">how to compare models side by side</a>, and <a href="https://outlier.host/how-to/run-a-local-openai-api-on-mac/">how to run the local API</a> if you want to point a script at it.</p>
+
+    <h2>What I did not test</h2>
+    <ul>
+      <li>One Mac, one run per tier. Nine replies per tier before and nine after. The 1.11.908 result is stark, but the 1.11.909 counts are one day's sample, not a measured rate of variety.</li>
+      <li>I asked the same message fresh, three times. I did not click Regenerate in the chat window.</li>
+      <li>Other apps. The cause above is specific to MLX 0.31.2 and mlx_lm 0.31. I have no idea whether any other app has a version of it.</li>
+      <li>Other temperatures. Every figure is at the default, 0.7.</li>
+      <li>Whether the fresh replies are better. I only checked that they differ.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Why does my local AI give the same answer every time?</h3>
+        <p>Three common reasons. The temperature is 0, which is meant to repeat. The settings squeeze the choice down to one word, like a top-k of 1. Or the random draw is stuck, which was ours: on Outlier 1.11.908 the same question gave the same reply 3 times out of 3 on all nine prompt-and-tier pairs at temperature 0.7. The test above tells the first two from the third.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does temperature seem to do nothing on my local model?</h3>
+        <p>In ours the temperature reached the sampler. The random key under it was stuck, so the same prompt always drew the same words. I did not run other temperatures, so I can't say what a different setting would have changed on 1.11.908.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does a seed make a local model give the same answer twice?</h3>
+        <p>On Outlier 1.11.909, seed 7 twice gave the same poem on all three tiers and seed 8 gave a different one. That is one prompt and one pair per tier on one Mac. On 1.11.908, seeds 7 and 8 gave the same text because the seed never reached the sampler.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Did this affect questions about images?</h3>
+        <p>No. Image questions go through a separate path. I asked one image question three times on 1.11.908 and got three different replies.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which Outlier version fixes it, and did the fix slow anything down?</h3>
+        <p>1.11.909. Decode speed held on all three tiers: Nano 88.7 to 95.3 tokens per second, Lite 67.9 to 67.7, Core 22.7 to 22.7 (Table 3).</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> Every number here is a measurement I took myself on a Mac Studio with an M1 Ultra and 64 GB, running the installed signed Outlier app, on 2026-10-10. Before figures are from 1.11.908, after figures from 1.11.909. Same three prompts, same method, default temperature 0.7, three asks per prompt per tier, incognito, web search off. Decode speed is the median of three 300-word story requests per tier. The cause comes from reading the library's code and from the thread tests I wrote for the fix. The image-question check is a single run of three asks. None of it is a rate, and I have not tested other apps.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=data-local-ai-same-answer-every-time-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.909/Outlier-1.11.909-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=data-local-ai-same-answer-every-time-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">How long a new chat waits for its first word</a> &middot; <a href="https://outlier.host/data/local-ai-math-word-problems-mac/">Word problems on Lite, 12 of 20 to 20 of 20</a> &middot; <a href="https://outlier.host/learn/what-is-a-token-in-ai/">What is a token?</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+  <div class="wrap">
+    <span>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://bookbreaker.bet/">BookBreaker</a>: free arbitrage and +EV betting app for Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$249" data-now="$124.50" hidden></div>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=data-local-ai-same-answer-every-time-mac');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+</body>
+</html>
