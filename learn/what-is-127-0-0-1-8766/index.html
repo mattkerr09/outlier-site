@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>What is 127.0.0.1:8766? It's Outlier on your Mac | Outlier</title>
+  <meta name="description" content="127.0.0.1:8766 is the engine Outlier starts on your Mac. Only programs on this Mac can reach it. How to check it, what a browser shows, how to stop it.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-10-12">
+  <link rel="canonical" href="https://outlier.host/learn/what-is-127-0-0-1-8766/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is 127.0.0.1:8766? It&#x27;s Outlier on your Mac">
+  <meta property="og:description" content="127.0.0.1:8766 is the engine Outlier starts on your Mac. Only programs on this Mac can reach it. How to check it, what a browser shows, how to stop it.">
+  <meta property="og:url" content="https://outlier.host/learn/what-is-127-0-0-1-8766/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What is 127.0.0.1:8766? It&#x27;s Outlier on your Mac">
+  <meta name="twitter:description" content="The engine Outlier starts on your Mac, how to check it is really Outlier, and why nobody else can use it.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.82rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    /* These pages carry no scroll wrapper, so a table wider than the column
+       pushed the whole page sideways on a phone. Measured at 375px:
+       /vs/outlier-vs-chatgpt/ overflowed by 88px and
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px - the page itself
+       slid, not just the table. display:block makes the table its own scroll
+       container; the content keeps its full width (measured 447px scrolling
+       inside a 343px box) instead of being squeezed. The two pinned layers
+       are an edge shadow and the two local ones scroll with the content, so
+       an edge shows only on a side that still has columns behind it. Alpha
+       zero is spelled with the background colour, not `transparent`, which
+       some engines interpolate through transparent-black as a grey smear. */
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "What is 127.0.0.1:8766? It's Outlier on your Mac", "description": "127.0.0.1:8766 is the engine Outlier starts on your Mac. Only programs on this Mac can reach it. How to check it, what a browser shows, how to stop it.", "datePublished": "2026-10-12", "dateModified": "2026-10-12", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-127-0-0-1-8766/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is 127.0.0.1:8766? It's Outlier on your Mac", "item": "https://outlier.host/learn/what-is-127-0-0-1-8766/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is 127.0.0.1:8766?", "acceptedAnswer": {"@type": "Answer", "text": "It is the address of Outlier's engine on your own Mac. When you open Outlier, it starts a program called outlier-cli that listens on port 8766 of 127.0.0.1, the address a computer uses for itself. The Outlier window sends your messages to that program and shows what comes back."}}, {"@type": "Question", "name": "Is port 8766 open to the internet?", "acceptedAnswer": {"@type": "Answer", "text": "No. The engine listens on 127.0.0.1 only, so lsof shows 127.0.0.1:8766 (LISTEN) and not *:8766. On my Mac, connecting to the Mac's own network address on port 8766 was refused, while the same request to 127.0.0.1 got a reply."}}, {"@type": "Question", "name": "Why does outlier-cli listen on a port at all?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier is two programs: the window you type in and the engine that runs the model. They talk over a local web connection, and the port is the numbered door the engine listens on. The connection starts and ends on your Mac."}}, {"@type": "Question", "name": "Does 127.0.0.1:8766 send my chats anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "No. That address only connects programs on your Mac to each other. Outlier uses the internet for other things, such as downloading a model or running a web search when you ask for one, and those are separate connections."}}, {"@type": "Question", "name": "How do I turn it off?", "acceptedAnswer": {"@type": "Answer", "text": "Quit Outlier with Command-Q. The engine belongs to the app: if the app quits or crashes, the engine checks every 5 seconds whether the app is still there and exits when it is not."}}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>What is 127.0.0.1:8766? It's Outlier, running on your Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-10-12</span>
+      <span class="updated-pill">Last updated 2026-10-12</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>127.0.0.1:8766 is Outlier. When you open the app, it starts a small program called outlier-cli, and that program listens on port 8766. The app's window talks to it there.</li>
+        <li>127.0.0.1 means this Mac. Other computers, phones and the internet cannot connect to it. To check, run <code>lsof -nP -iTCP:8766 -sTCP:LISTEN</code> in Terminal. If it lists outlier-c on 127.0.0.1:8766, that is Outlier.</li>
+        <li>Paste the address into a browser and you get a short message saying the engine only answers the Outlier app. That is the engine working, not an error to fix.</li>
+        <li>Quit Outlier and the engine goes with it. If the app crashes, the engine checks every 5 seconds whether the app is still there and exits when it is not.</li>
+      </ul>
+      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Checked on 2026-10-12 on a Mac Studio with an M1 Ultra, macOS 26.3.1, running Outlier 1.11.916. Every command below is real output from that Mac. The details are in the receipts at the bottom.</p>
+    </div>
+
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-what-is-127-0-0-1-8766-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.916/Outlier-1.11.916-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-what-is-127-0-0-1-8766-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+    <p class="lead">I make Outlier, so this is my address. If you found 127.0.0.1:8766 in a firewall log, a browser history, a Terminal listing or an error message, and Outlier is installed on that Mac, it is almost certainly ours. This page shows you how to be sure instead of taking my word for it, and what stops anyone else from using it.</p>
+
+    <h2>What it is</h2>
+    <p>Outlier is two programs working together. One is the window you type in. The other is the engine, a program called outlier-cli. It loads the model, runs it on your Apple Silicon chip and writes the answer. The window hands your message to the engine over a local web connection, and the engine streams the answer back.</p>
+    <p>127.0.0.1 is the address a computer uses to talk to itself. 8766 is the port, a numbered door on that address, and the engine listens at that door. Because the address is 127.0.0.1, the connection starts and ends on your Mac. It never goes out over Wi-Fi or Ethernet.</p>
+
+    <h2>How to check that it is Outlier</h2>
+    <p>A port number does not belong to one program. Any app can take a free port, so ask the Mac who has this one. Open Terminal and run:</p>
+    <pre><code>$ lsof -nP -iTCP:8766 -sTCP:LISTEN
+COMMAND    PID        USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+outlier-c 9949 you           20u  IPv4 0xdae7a285267902b0      0t0  TCP 127.0.0.1:8766 (LISTEN)</code></pre>
+    <p>Read the first and last columns. <code>outlier-c</code> is outlier-cli, cut to nine characters by lsof. <code>127.0.0.1:8766 (LISTEN)</code> means it accepts connections only from this Mac. A program open to your whole network would show <code>*:8766</code> instead.</p>
+    <p>To see where that program lives, give ps its process number (the second column, 9949 here):</p>
+    <pre><code>$ ps -p 9949 -o comm=
+/Applications/Outlier.app/Contents/Resources/outlier-cli/outlier-cli</code></pre>
+    <p>That path is inside Outlier.app. If lsof names a different program, or the path points somewhere else, the port is not Outlier's on your Mac, and nothing on this page describes it.</p>
+    <p>If lsof prints nothing, nobody is listening, which usually means Outlier is not running right now. To check that an empty answer is not simply a broken command, ask about a port nothing uses:</p>
+    <pre><code>$ lsof -nP -iTCP:8999 -sTCP:LISTEN; echo $?
+1</code></pre>
+    <p>Nothing printed, and the exit status is 1. So an empty result means no listener.</p>
+
+    <h2>What you see if you open it in a browser</h2>
+    <p>Paste <code>http://127.0.0.1:8766/</code> into Safari and you get a line of text, not a website. Here is the same request from curl, with the date and server headers left out:</p>
+    <pre><code>$ curl -i http://127.0.0.1:8766/
+HTTP/1.1 401 Unauthorized
+content-type: application/json
+content-length: 174
+
+{"detail":"This Outlier engine only answers the Outlier app on this Mac. A program on this Mac can send the key in ~/.outlier/local_api_token as the X-Outlier-Token header."}</code></pre>
+    <p>401 means unauthorized. The engine is telling a stranger that it only talks to the Outlier app. The root address has no page to show.</p>
+    <p>One path answers without the key, <code>/health</code>, so the app (and anyone troubleshooting) can see that the engine is up. These are three fields from its reply:</p>
+    <pre><code>$ curl -s http://127.0.0.1:8766/health | python3 -c 'import json,sys; d=json.load(sys.stdin); print({k:d[k] for k in ("status","local_key","version")})'
+{'status': 'ok', 'local_key': 'required', 'version': '1.11.916'}</code></pre>
+    <p><code>local_key: required</code> means this engine refuses everything else unless the request carries the key. More on that below.</p>
+
+    <h2>What stops other people and other websites from using it</h2>
+    <p>Four things sit between the engine and everyone else. I tested each one against the running engine on my Mac.</p>
+    <ol>
+      <li><strong>It listens on this Mac only.</strong> The lsof line above says 127.0.0.1, and netstat agrees. When I connected to the Mac's own network address on that port, the connection was refused. The same request to 127.0.0.1 got a reply.</li>
+      <li><strong>It only answers requests addressed to this Mac.</strong> A web page can trick a browser into treating the page's own name as 127.0.0.1, a trick called DNS rebinding. Those requests still carry the page's name in the Host header. The engine answers only when the Host is 127.0.0.1, localhost, [::1] or the Outlier window's own local name, and sends back a 421 for anything else.</li>
+      <li><strong>Other websites get no CORS permission.</strong> A request that claimed to come from https://example.com came back with no Access-Control-Allow-Origin header, so a browser will not hand the reply to that page.</li>
+      <li><strong>Everything else needs a key.</strong> The app makes a random key each time it starts the engine, saves it in <code>~/.outlier/local_api_token</code> where only your account can read it, and sends it with each request. Without it you get the 401 above.</li>
+    </ol>
+    <p>Here is the evidence for the first three:</p>
+    <pre><code>$ netstat -an -p tcp | grep -E '\.8766 .*LISTEN'
+tcp4       0      0  127.0.0.1.8766         *.*                    LISTEN</code></pre>
+    <pre><code>$ curl -sS -o /dev/null http://&lt;mac-network-address&gt;:8766/health
+curl: (7) Failed to connect to &lt;mac-network-address&gt; port 8766 after 1 ms: Couldn't connect to server</code></pre>
+    <pre><code>$ curl -i -H 'Host: example.com' http://127.0.0.1:8766/health
+HTTP/1.1 421 Misdirected Request
+content-type: application/json
+content-length: 77
+
+{"detail":"This Outlier engine only answers requests addressed to this Mac."}</code></pre>
+    <pre><code>$ curl -s -D - -o /dev/null -H 'Origin: https://example.com' http://127.0.0.1:8766/health | grep -i -c access-control-allow-origin
+0</code></pre>
+    <p>The last command counts the lines with that header in the reply. Zero.</p>
+    <p>For the key file I only looked at its permissions and its timestamp. I never opened it. The engine started at 01:14:18 on 11 October, and the file was last written at 01:14:18 as well:</p>
+    <pre><code>$ ls -l ~/.outlier/local_api_token | awk '{print $1}'
+-rw-------
+$ stat -f '%Sm' -t '%Y-%m-%d %H:%M:%S' ~/.outlier/local_api_token
+2026-10-11 01:14:18
+$ ps -p 9949 -o lstart=
+Sun Oct 11 01:14:18 2026</code></pre>
+    <p>The key does not help against a program you run yourself, outside a sandbox. That program can read the file the way it can read the rest of your home folder. The key is there for the other cases: a web page, another user account on the Mac, a sandboxed app.</p>
+
+    <h2>If you use Outlier as an API</h2>
+    <p>The same port serves Outlier's OpenAI-compatible API at <code>http://127.0.0.1:8766/v1</code>. It is a Pro feature. You switch it on in Settings, under Advanced, and it has its own key, separate from the engine key above. On the free plan, requests to /v1 come back 402. Without a key, a request gets this:</p>
+    <pre><code>$ curl -i http://127.0.0.1:8766/v1/models
+HTTP/1.1 401 Unauthorized
+content-type: application/json
+content-length: 114
+
+{"error":{"message":"Missing Bearer API key","type":"authentication_error","code":"missing_api_key","param":null}}</code></pre>
+    <p>The steps and working code for the OpenAI SDK are on the <a href="https://outlier.host/developers/">developers page</a> and in <a href="https://outlier.host/how-to/run-a-local-openai-api-on-mac/">how to run a local OpenAI API on a Mac</a>.</p>
+    <p>If a tool of yours says <em>connection refused</em> on 127.0.0.1:8766, either Outlier is not running or you just opened it and the engine is still starting. Open Outlier, wait for the chat window to load, and try again.</p>
+
+    <h2>How to stop it</h2>
+    <p>Quit Outlier with Command-Q. The engine belongs to the app. If the app quits or crashes, the engine checks every 5 seconds whether the app is still there, and exits when it is gone. Run the lsof command again afterwards. It should print nothing.</p>
+    <p>If you want the longer version of why none of this puts your chats on the internet, <a href="https://outlier.host/learn/is-local-ai-safe/">is local AI safe</a> covers it, and <a href="https://outlier.host/learn/can-ai-run-without-internet/">can AI run without the internet</a> covers what still needs a connection.</p>
+
+    <h2>What I did not test</h2>
+    <ul>
+      <li>Quitting Outlier to watch the port close. This is the Mac I work on and the app was in use, so I read the code that does it and left the app alone.</li>
+      <li>A connection from a second device. I used the Mac's own network address instead, which asks the same question from the Mac.</li>
+      <li>Whether the key stops another user account or a sandboxed app. That is how it is written. I did not set up either one to try it.</li>
+      <li>Any Outlier version before 1.11.916. Everything here comes from this one build.</li>
+      <li>What the macOS firewall or a tool like Little Snitch says about outlier-cli. I have not looked, so I will not guess.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>What is 127.0.0.1:8766?</h3>
+        <p>It is the address of Outlier's engine on your own Mac. When you open Outlier, it starts a program called outlier-cli that listens on port 8766 of 127.0.0.1, the address a computer uses for itself. The Outlier window sends your messages to that program and shows what comes back.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is port 8766 open to the internet?</h3>
+        <p>No. The engine listens on 127.0.0.1 only, so lsof shows 127.0.0.1:8766 (LISTEN) and not *:8766. On my Mac, connecting to the Mac's own network address on port 8766 was refused, while the same request to 127.0.0.1 got a reply.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does outlier-cli listen on a port at all?</h3>
+        <p>Outlier is two programs: the window you type in and the engine that runs the model. They talk over a local web connection, and the port is the numbered door the engine listens on. The connection starts and ends on your Mac.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does 127.0.0.1:8766 send my chats anywhere?</h3>
+        <p>No. That address only connects programs on your Mac to each other. Outlier uses the internet for other things, such as downloading a model or running a web search when you ask for one, and those are separate connections.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How do I turn it off?</h3>
+        <p>Quit Outlier with Command-Q. The engine belongs to the app: if the app quits or crashes, the engine checks every 5 seconds whether the app is still there and exits when it is not.</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> Every command ran on 2026-10-12, around 16:10 UTC, on a Mac Studio with an M1 Ultra and 64 GB, macOS 26.3.1, against the installed Outlier 1.11.916. The engine's own /health reply says version 1.11.916. I only read: I sent no chat and changed no setting. In the lsof line the user name is replaced with "you", and in the curl output the date and server headers are left out. The network address in the connection test is replaced with a placeholder. The key file's contents were never read. How the key, the Host check, the CORS rule, the 5-second app check and the API routes are written comes from reading the engine's source for 1.11.916. The results above are what the running engine did when I asked.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-what-is-127-0-0-1-8766&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.916/Outlier-1.11.916-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-what-is-127-0-0-1-8766-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
+
+
+    <div class="related">More: <a href="https://outlier.host/developers/">Outlier for developers</a> &middot; <a href="https://outlier.host/learn/is-local-ai-safe/">Is local AI safe?</a> &middot; <a href="https://outlier.host/how-to/run-a-local-openai-api-on-mac/">Run a local OpenAI-compatible API on your Mac</a> &middot; <a href="https://outlier.host/learn/can-ai-run-without-internet/">Can AI run without the internet?</a> &middot; <a href="https://outlier.host/how-to/use-ai-offline-mac/">How to use AI offline on your Mac</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+  <div class="wrap">
+    <span>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://bookbreaker.bet/">BookBreaker</a>: free arbitrage and +EV betting app for Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$249" data-now="$124.50" hidden></div>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=learn-what-is-127-0-0-1-8766');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+</body>
+</html>
