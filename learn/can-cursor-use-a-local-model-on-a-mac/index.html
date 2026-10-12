@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>Can Cursor use a local model? Not directly | Outlier</title>
+  <meta name="description" content="Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-10-12">
+  <link rel="canonical" href="https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can Cursor use a local model on a Mac?">
+  <meta property="og:description" content="Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.">
+  <meta property="og:url" content="https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can Cursor use a local model on a Mac?">
+  <meta name="twitter:description" content="Why localhost fails as the base URL in Cursor, what the tunnel workaround costs you, and what to use on a Mac instead.">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.82rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    /* These pages carry no scroll wrapper, so a table wider than the column
+       pushed the whole page sideways on a phone. Measured at 375px:
+       /vs/outlier-vs-chatgpt/ overflowed by 88px and
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px - the page itself
+       slid, not just the table. display:block makes the table its own scroll
+       container; the content keeps its full width (measured 447px scrolling
+       inside a 343px box) instead of being squeezed. The two pinned layers
+       are an edge shadow and the two local ones scroll with the content, so
+       an edge shows only on a side that still has columns behind it. Alpha
+       zero is spelled with the background colour, not `transparent`, which
+       some engines interpolate through transparent-black as a grey smear. */
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Can Cursor use a local model on a Mac? Not directly, and here is why", "description": "Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.", "datePublished": "2026-10-12", "dateModified": "2026-10-12", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can Cursor use a local model on a Mac?", "item": "https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/"}]}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can Cursor use a local model?", "acceptedAnswer": {"@type": "Answer", "text": "Not directly. When you use a custom base URL, Cursor's servers make the request, so an address on your own Mac (localhost or 127.0.0.1) cannot be reached. The workaround is a public tunnel to your local server, which sends your prompts through the tunnel and Cursor's servers."}}, {"@type": "Question", "name": "Why does localhost not work as the OpenAI base URL in Cursor?", "acceptedAnswer": {"@type": "Answer", "text": "Because your Mac is not the computer that reads the address. Cursor's servers build the final prompt and call the URL, and to them 127.0.0.1 means their own computer. Cursor's help page says requests made with your own key are routed through its servers, and a reply on Cursor's forum says localhost and local-network addresses will not work."}}, {"@type": "Question", "name": "Does Cursor Tab work with a local model?", "acceptedAnswer": {"@type": "Answer", "text": "No. Cursor's help page says custom API keys only work with chat models and that Tab completion continues using Cursor's built-in models."}}, {"@type": "Question", "name": "Can I use Ollama or LM Studio with Cursor?", "acceptedAnswer": {"@type": "Answer", "text": "Only through a public tunnel, for the same reason: they listen on your Mac and Cursor's servers cannot reach it. A tunnel makes the server public, so check that it asks for a key. A plain Ollama server does not."}}, {"@type": "Question", "name": "What can I use instead of Cursor for a local model on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "A tool that runs on your Mac and calls the model itself, such as Cline in VS Code, Zed or Aider, pointed at a local server like Outlier's OpenAI-compatible API at http://127.0.0.1:8766/v1. Outlier's API is part of Pro."}}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
+    <h1>Can Cursor use a local model on a Mac? Not directly, and here is why</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr &middot; <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> &middot; published 2026-10-12</span>
+      <span class="updated-pill">Last updated 2026-10-12</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Not directly. When you give Cursor your own key and address, Cursor's servers make the request, not your Mac. An address like 127.0.0.1 or localhost then points at the wrong computer. Cursor's help page says it routes these requests through its servers, and a reply on Cursor's forum says localhost and local-network addresses will not work.</li>
+        <li>The usual workaround is a public https tunnel (ngrok or Cloudflare Tunnel) in front of your local server. Your prompts then travel through the tunnel and Cursor's servers, which gives up most of the reason to run a model locally. Tab completion stays on Cursor's own models either way.</li>
+        <li>To keep the model and the code on your Mac, use a tool that runs on your Mac and calls the model itself: Cline in VS Code, Zed, or Aider in the terminal. Outlier's local API, a Pro feature, is at <code>http://127.0.0.1:8766/v1</code> for exactly that.</li>
+      </ul>
+      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Checked on 2026-10-12. I did not run Cursor against a local model or a tunnel for this page. What it says about Cursor comes from Cursor's own help page and forum. What it says about Outlier I checked in the app's source for 1.11.918. There are no benchmark numbers here, and the receipts at the bottom name every source.</p>
+    </div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-can-cursor-use-a-local-model-on-a-mac-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.918/Outlier-1.11.918-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-can-cursor-use-a-local-model-on-a-mac-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+    <p class="lead">I make Outlier, a local AI app for Mac. Until today our developer page listed Cursor among the tools you could point at Outlier's local API. For Cursor that is wrong, and I have changed the page. This is what Cursor does with a model address of your own, what you can do about it, and what to use if the point is to keep the model and your code on your Mac.</p>
+
+    <h2>Why a localhost address fails in Cursor</h2>
+    <p>Most coding tools that take a model address run on your Mac and call that address themselves. Cursor does not. When you add your own API key, or change the base URL, the request goes to Cursor's servers first. Cursor's help page for API keys says "all requests are routed through Cursor's servers for final prompt building." The server then calls the address you gave it.</p>
+    <p>That is why 127.0.0.1 and localhost fail. Those names mean this computer, to whichever computer reads them. When Cursor's server reads one, this computer is Cursor's, and nothing of yours is listening there. A reply on Cursor's forum from February 2026 puts it the same way: localhost is not supported directly, and local-network addresses will not work because the server cannot reach them. A symptom that fits is a local server whose log stays empty, because nothing ever connects to it.</p>
+
+    <h2>What your own key covers in Cursor, and what it does not</h2>
+    <p>The same help page lists limits that apply even when the address does work. Custom API keys only work with chat models. Tab completion continues using Cursor's built-in models. Cursor's Zero Data Retention policy does not apply to requests that use your own key, so the data terms are the ones of whoever is behind the key. The page does not mention local models at all.</p>
+    <p>So even a perfect setup would give you your own model in Cursor's chat panel and nothing for Tab completion.</p>
+
+    <h2>The tunnel workaround, and why I would not use it for a private model</h2>
+    <p>The forum reply suggests exposing the local server as a public https address with ngrok or Cloudflare Tunnel, then pasting that address into Cursor under Settings, Models, Override OpenAI Base URL. I did not try it. I would not, if I were running a model locally to keep my code private.</p>
+    <p>The model would be local, but the path would not be. Your prompt goes from your editor to Cursor's servers, out to the tunnel's public address, and down to your Mac. The address is public too. A plain Ollama server has no password, so anyone who learns the address could use your Mac to run models.</p>
+    <p>Outlier would refuse a tunnel anyway. Its engine answers only requests addressed to this Mac: a Host header of 127.0.0.1, localhost or [::1]. Anything else gets a 421 reply. A tunnel normally passes its own public name as the Host, and rewriting it would switch off the check that stops a web page you visit from using your model. I did not try a tunnel with Outlier. I did test the check itself: a request with <code>Host: example.com</code> got the 421. The evidence is on <a href="https://outlier.host/learn/what-is-127-0-0-1-8766/">what 127.0.0.1:8766 is</a>.</p>
+
+    <h2>What to use instead on a Mac</h2>
+    <p>Pick a tool that runs on your Mac and makes the call itself. <a href="https://outlier.host/vs/outlier-vs-cline/">Cline</a> is an open-source coding agent for VS Code. Zed is an editor that lets you point its AI features at an LLM API address. <a href="https://outlier.host/vs/outlier-vs-aider/">Aider</a> runs in the terminal. Each takes an OpenAI-style base URL and a key. A request from your Mac to a model on your Mac never leaves it.</p>
+    <p>A local model will not match the cloud models Cursor uses by default, and predictive completion is the gap you will feel first. The <a href="https://outlier.host/vs/cursor-alternatives-local-mac/">Cursor alternatives page</a> goes through that gap and the options.</p>
+
+    <h2>Point those tools at Outlier</h2>
+    <ol>
+      <li>In Outlier, open Settings, go to the Advanced tab, find Developer, and switch on OpenAI-compatible API. The app asks you to confirm.</li>
+      <li>Copy the endpoint, <code>http://127.0.0.1:8766/v1</code>, and the API key. The key is hidden until you press Show, and Copy puts it on the clipboard.</li>
+      <li>In your tool, add an OpenAI-compatible provider with that base URL and key. For the model name use <code>outlier-compact</code> for the Core tier, or <code>outlier-nano</code> for the fastest one.</li>
+      <li>Leave Outlier open. The engine stops when the app quits.</li>
+    </ol>
+    <p>The API is part of Pro, $249 once. On the free plan the toggle opens an upgrade card instead, and a request to /v1 comes back 402. The endpoint answers from the model alone: no web search, no memory, no project files. The <a href="https://outlier.host/developers/">developers page</a> has working code and says which request fields are honoured, and <a href="https://outlier.host/how-to/run-a-local-openai-api-on-mac/">how to run a local OpenAI API on a Mac</a> has the longer version.</p>
+
+    <h2>What I did not test</h2>
+    <ul>
+      <li>Cursor itself. Nothing here came from running it. Cursor changes often and the forum reply is from February 2026. If Cursor has added a way to call local models, tell me at matt@outlier.host and I will fix this page.</li>
+      <li>A tunnel, with Outlier or with anything else.</li>
+      <li>Cline, Zed or Aider against Outlier's API. The endpoint uses the OpenAI request shape and the developers page has working OpenAI SDK code, but I did not set up these three for this page.</li>
+      <li>Any Outlier version before 1.11.918 for the Settings path.</li>
+    </ul>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Can Cursor use a local model?</h3>
+        <p>Not directly. When you use a custom base URL, Cursor's servers make the request, so an address on your own Mac (localhost or 127.0.0.1) cannot be reached. The workaround is a public tunnel to your local server, which sends your prompts through the tunnel and Cursor's servers.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does localhost not work as the OpenAI base URL in Cursor?</h3>
+        <p>Because your Mac is not the computer that reads the address. Cursor's servers build the final prompt and call the URL, and to them 127.0.0.1 means their own computer. Cursor's help page says requests made with your own key are routed through its servers, and a reply on Cursor's forum says localhost and local-network addresses will not work.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does Cursor Tab work with a local model?</h3>
+        <p>No. Cursor's help page says custom API keys only work with chat models and that Tab completion continues using Cursor's built-in models.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use Ollama or LM Studio with Cursor?</h3>
+        <p>Only through a public tunnel, for the same reason: they listen on your Mac and Cursor's servers cannot reach it. A tunnel makes the server public, so check that it asks for a key. A plain Ollama server does not.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What can I use instead of Cursor for a local model on a Mac?</h3>
+        <p>A tool that runs on your Mac and calls the model itself, such as Cline in VS Code, Zed or Aider, pointed at a local server like Outlier's OpenAI-compatible API at http://127.0.0.1:8766/v1. Outlier's API is part of Pro.</p>
+      </div>
+    </div>
+
+    <div class="receipts"><strong>Receipts:</strong> Cursor: the API keys page on <a href="https://cursor.com/help/models-and-usage/api-keys" rel="noopener" target="_blank">Cursor's help site</a>, read on 2026-10-12 (the page carries no date), and the thread <a href="https://forum.cursor.com/t/connecting-local-ai-server-to-cursor-does-not-work/152940" rel="noopener" target="_blank">Connecting local AI server to Cursor does not work</a> on Cursor's forum, where the reply is dated 25 February 2026. I read both pages and did not run Cursor. Outlier: the Settings panel and where it sits, the Pro gate, the model names and the Host check come from the app's source for 1.11.918, the build the Download button links to, read on 2026-10-12. The 421 test is my check of the installed 1.11.916 on a Mac Studio with an M1 Ultra earlier the same day. The page has no benchmark numbers.</div>
+
+    <div class="cta">
+      <h3>Try Outlier free</h3>
+      <p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-can-cursor-use-a-local-model-on-a-mac&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.918/Outlier-1.11.918-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-can-cursor-use-a-local-model-on-a-mac-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
+
+    <div class="related">More: <a href="https://outlier.host/developers/">Outlier for developers</a> &middot; <a href="https://outlier.host/learn/what-is-127-0-0-1-8766/">What is 127.0.0.1:8766?</a> &middot; <a href="https://outlier.host/how-to/run-a-local-openai-api-on-mac/">Run a local OpenAI-compatible API on your Mac</a> &middot; <a href="https://outlier.host/vs/cursor-alternatives-local-mac/">Cursor alternatives for local AI on a Mac</a> &middot; <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps code private</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
+
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+  <div class="wrap">
+    <span>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://bookbreaker.bet/">BookBreaker</a>: free arbitrage and +EV betting app for Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$249" data-now="$124.50" hidden></div>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=learn-can-cursor-use-a-local-model-on-a-mac');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+</body>
+</html>

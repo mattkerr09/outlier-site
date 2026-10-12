@@ -9,17 +9,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>Outlier for developers — a local, private OpenAI-compatible engine</title>
-  <meta name="description" content="Point Cursor, LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
+  <meta name="description" content="Point LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
   <link rel="canonical" href="https://outlier.host/developers/" />
   <link rel="icon" href="/favicon.ico" sizes="any" />
   <meta property="og:title" content="Outlier for developers — a local, private OpenAI-compatible engine" />
-  <meta property="og:description" content="Point Cursor, LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
+  <meta property="og:description" content="Point LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
   <meta property="og:image" content="https://outlier.host/og-card.png" />
   <meta property="og:url" content="https://outlier.host/developers/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Outlier for developers — a local, private OpenAI-compatible engine" />
-  <meta name="twitter:description" content="Point Cursor, LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
+  <meta name="twitter:description" content="Point LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at Outlier and run on a private model on your own Mac — with function calling." />
   <meta name="twitter:image" content="https://outlier.host/og-card.png" />
   <script type="application/ld+json">
   {
@@ -30,7 +30,7 @@
     "operatingSystem": "macOS 26+ (Apple Silicon)",
     "url": "https://outlier.host/developers/",
     "image": "https://outlier.host/og-card.png",
-    "description": "Outlier exposes a standard OpenAI-compatible /v1/chat/completions API on your own Mac. Point Cursor, LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at it — the model runs locally and nothing leaves your machine."
+    "description": "Outlier exposes a standard OpenAI-compatible /v1/chat/completions API on your own Mac. Point LangChain, LiteLLM, Codex, or any OpenAI-SDK tool at it — the model runs locally and nothing leaves your machine."
   }
   </script>
   <!-- Privacy-friendly analytics by Plausible -->
@@ -102,7 +102,7 @@
   <main>
     <span class="pill">OpenAI-compatible · function calling · 100% local</span>
     <h1>Use Outlier as the engine behind your tools</h1>
-    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point Cursor, LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it — same code you already have, but the model runs locally and nothing leaves your machine.</p>
+    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it — same code you already have, but the model runs locally and nothing leaves your machine.</p>
 
     <h2>1 · Turn it on</h2>
     <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>) — nothing is exposed to your network (<a href="https://outlier.host/learn/what-is-127-0-0-1-8766/">what that address is, and how to check it</a>). The API is part of Pro: on the free plan the toggle opens the upgrade card instead, and a request to <code>/v1</code> comes back <code>402</code> with <code>feature_locked</code>.</p>
@@ -173,8 +173,9 @@ llm = ChatOpenAI(
 msg = llm.invoke("What's the weather in Berlin?")
 print(msg.tool_calls)</code></pre>
 
-    <h2>5 · Cursor / Continue</h2>
+    <h2>5 · Continue</h2>
     <p>In the model settings, add a custom OpenAI-compatible model: base URL <code>http://127.0.0.1:8766/v1</code>, your Outlier key, model <code>outlier-compact</code> (the Core tier, the strongest one that fits most Macs) or <code>outlier-nano</code> for speed.</p>
+    <p>This does not work in Cursor. Cursor's own servers make the request, not your Mac, so a 127.0.0.1 address is out of their reach. <a href="https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/">Why, and what to use instead</a>.</p>
 
     <h2>6 · Codex CLI</h2>
     <pre><code># ~/.codex/config.toml
