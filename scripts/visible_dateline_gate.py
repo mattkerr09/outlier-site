@@ -198,7 +198,19 @@ def compare_visible(before: str | None, after: str | None) -> bool:
         return False
     if before is None:
         return bool(article_text_of(after))
-    return article_text_of(before) != article_text_of(after)
+    return _prose(article_text_of(before)) != _prose(article_text_of(after))
+
+
+#: 2026-10-13: a punctuation-only pass is not a content update. The em-dash sweep (2,888 dashes -> periods, commas,
+#: colons and brackets on 241 pages, every word and link unchanged) read as a body change on every page it touched and
+#: made both dateline gates fail the 1.11.922 site bump. Moving 241 datelines for it would be the false freshness claim
+#: this gate exists to prevent (see jsonld_dateline_gate's 2026-09-09 note), so dashes, commas, colons, semicolons,
+#: periods, brackets and letter case are set aside before comparing. Any changed WORD still counts.
+_PUNCT = re.compile(r"[\s\u2014\u2013,.:;()]+")
+
+
+def _prose(text: str | None) -> str:
+    return _PUNCT.sub(" ", text or "").lower().strip()
 
 
 def last_body_change(path: str):
