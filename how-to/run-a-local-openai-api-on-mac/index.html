@@ -141,7 +141,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Outlier runs an OpenAI-compatible HTTP server on your own machine, so anything that speaks the OpenAI API can talk to it.</li>
-        <li>You change one line — the base URL — and keep the rest of your code. Same <code>/v1/chat/completions</code> shape, same SDKs.</li>
+        <li>You change one line, the base URL, and keep the rest of your code. Same <code>/v1/chat/completions</code> shape, same SDKs.</li>
         <li>Requests never leave the Mac. There is no per-token bill, no rate limit, and no account.</li>
         <li>It is a Pro feature, and it works with every tier you have downloaded.</li>
       </ul>
@@ -151,19 +151,19 @@
 
     <h2>Why an OpenAI-compatible endpoint matters</h2>
     <p>The OpenAI request format became the de-facto standard: the SDKs, the frameworks, the tutorials and most internal tooling assume it. Anything that speaks it inherits an ecosystem for free.</p>
-    <p>So the fastest way to move a workload off a metered cloud API is not to rewrite it — it is to keep the code and move the endpoint. That is what a local OpenAI-compatible server is for.</p>
+    <p>So the fastest way to move a workload off a metered cloud API is not to rewrite it. It is to keep the code and move the endpoint. That is what a local OpenAI-compatible server is for.</p>
 
     <h2>Turn it on</h2>
     <ol>
-    <li><strong>Install Outlier</strong> — one signed, notarized <code>.dmg</code>. No terminal, no Docker.</li>
+    <li><strong>Install Outlier</strong>: one signed, notarized <code>.dmg</code>. No terminal, no Docker.</li>
     <li><strong>Download a model tier.</strong> Core 27B is the everyday choice; Nano 4B is the lightest.</li>
     <li><strong>Enable the API server</strong> in Settings. It binds to localhost only.</li>
     <li><strong>Point your client at it</strong> and keep the rest of your code as it is.</li>
     </ol>
-    <p>Because it is bound to localhost, nothing is exposed to your network by default — the server is reachable by programs on that Mac and nowhere else.</p>
+    <p>Because it is bound to localhost, nothing is exposed to your network by default, the server is reachable by programs on that Mac and nowhere else.</p>
 
     <h2>What you give up, and what you don't</h2>
-    <p>Honestly: you give up frontier-model quality. A 27B model on a laptop is not GPT-5. On MMLU our Core tier measures <strong>89.5% (n=200, greedy, 2026-08-09)</strong> — strong for its size, not state of the art.</p>
+    <p>Honestly: you give up frontier-model quality. A 27B model on a laptop is not GPT-5. On MMLU our Core tier measures <strong>89.5% (n=200, greedy, 2026-08-09)</strong>: strong for its size, not state of the art.</p>
     <p>What you gain is everything the metered model can't offer: no per-token cost, no rate limit, no outage, no retention question, and it keeps working on a plane. For batch jobs, evals, local tooling, and anything touching code you can't send to a third party, that trade is usually the right way round.</p>
 
     <h2>Things worth knowing</h2>
@@ -206,7 +206,7 @@
       Related: <a href="/how-to/install-local-ai-on-mac/">Install local AI on a Mac</a> · <a href="/learn/what-is-local-ai/">What is local AI?</a> · <a href="/how-to/import-your-own-model-into-a-mac-ai-app/">Import your own model</a> · <a href="/learn/what-is-127-0-0-1-8766/">What is 127.0.0.1:8766?</a>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

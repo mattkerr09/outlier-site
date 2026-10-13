@@ -152,26 +152,26 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Yes — Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio, sized to your RAM.</li>
+        <li>Yes: Llama runs locally on an Apple Silicon Mac via a quantized GGUF in Ollama or LM Studio, sized to your RAM.</li>
         <li>Meta publishes Llama as open-weight files, so you download once and run it offline, on your own chip.</li>
         <li>Match the model to memory: smaller Llama sizes run on a 16 GB Mac; larger sizes want 32–64 GB or more.</li>
-        <li>No terminal required — LM Studio is fully graphical; Ollama is the command-line route if you prefer it.</li>
+        <li>No terminal required. LM Studio is fully graphical; Ollama is the command-line route if you prefer it.</li>
       </ul>
     </div>
 
-    <p class="lead">Yes — Llama runs locally on an Apple Silicon Mac, no cloud account and no internet once it's downloaded. Meta releases its Llama models as open weights, which means the actual model file is yours to keep on disk. The catch is size: a Llama model has to fit in your Mac's memory, so the whole game is picking a quantized version that leaves room to breathe. Here's the honest path, terminal or not.</p>
+    <p class="lead">Yes: Llama runs locally on an Apple Silicon Mac, no cloud account and no internet once it's downloaded. Meta releases its Llama models as open weights, which means the actual model file is yours to keep on disk. The catch is size: a Llama model has to fit in your Mac's memory, so the whole game is picking a quantized version that leaves room to breathe. Here's the honest path, terminal or not.</p>
 
     <h2>Why a Mac is a good place to run Llama</h2>
-    <p>Apple Silicon has one trait that makes it punch above its price for local AI: unified memory. The CPU and GPU share the same pool, so a model loaded into RAM is already sitting where the GPU can use it — no copying across a separate video-card boundary. A 16 GB MacBook Air can run a small Llama model while you keep a browser and your editor open. The trade-off is that you're capped by total RAM, the same wall every local runner hits.</p>
+    <p>Apple Silicon has one trait that makes it punch above its price for local AI: unified memory. The CPU and GPU share the same pool, so a model loaded into RAM is already sitting where the GPU can use it: no copying across a separate video-card boundary. A 16 GB MacBook Air can run a small Llama model while you keep a browser and your editor open. The trade-off is that you're capped by total RAM, the same wall every local runner hits.</p>
     <p>Two things you do <em>not</em> need: a discrete GPU, or a new machine. The Mac you already own (M1 or newer) is the target. If memory is the question, the <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide</a> goes deeper.</p>
 
     <h2>Step by step: Llama via Ollama (command line)</h2>
-    <p>Ollama is the developer favorite — free, open-source, and built to pull and run open models in one command. It runs GGUF model files through llama.cpp under the hood.</p>
+    <p>Ollama is the developer favorite: free, open-source, and built to pull and run open models in one command. It runs GGUF model files through llama.cpp under the hood.</p>
     <ol>
       <li>Install Ollama from its official site (a normal Mac app, drag to Applications).</li>
       <li>Open Terminal and run <code>ollama run llama3.2</code> (swap in whichever Llama tag you want). Ollama downloads a quantized build automatically.</li>
       <li>Wait for the pull. The model lands on your disk; the prompt is now live and offline.</li>
-      <li>Type to chat. Use <code>/bye</code> to exit. Next time it loads from disk in seconds — no re-download.</li>
+      <li>Type to chat. Use <code>/bye</code> to exit. Next time it loads from disk in seconds: no re-download.</li>
     </ol>
     <p>That's the whole thing. The model is a file now; it works with Wi-Fi off and answers to nobody's quota.</p>
 
@@ -185,7 +185,7 @@
     </ol>
 
     <h2>Which Llama size fits your RAM?</h2>
-    <p>Llama ships in a range of sizes, from laptop-friendly to very large. On a Mac the number that matters is total unified memory — the model file plus its working memory has to fit, with headroom left for macOS and your apps. Most people run 4-bit quants, which roughly halve the file versus higher precision at a small quality cost. General sizing:</p>
+    <p>Llama ships in a range of sizes, from laptop-friendly to very large. On a Mac the number that matters is total unified memory: the model file plus its working memory has to fit, with headroom left for macOS and your apps. Most people run 4-bit quants, which roughly halve the file versus higher precision at a small quality cost. General sizing:</p>
     <table>
       <thead>
         <tr><th>Mac RAM</th><th>Llama size that's comfortable</th><th>What it's good for</th></tr>
@@ -197,12 +197,12 @@
         <tr><td>64 GB+</td><td>The largest open Llama models</td><td>Heavier coding and analysis at slower speeds</td></tr>
       </tbody>
     </table>
-    <p>Rule of thumb: choose a build whose quantized file leaves several gigabytes free under your total RAM. If a model won't load or your Mac starts swapping hard, you've picked one size too big — drop to a smaller build or a heavier quant. (Stuck on a load error? The <a href="https://outlier.host/how-to/fix-local-ai-wont-load-mac/">won't-load fix</a> walks through it.)</p>
-    <div class="receipts"><strong>Receipts:</strong> Llama is an open-weight family from Meta; Ollama and LM Studio both run it locally as quantized GGUF via llama.cpp, and both are free. The unified-memory ceiling is real — a model that exceeds available RAM either refuses to load or falls back to disk swap and crawls. None of these figures are model-specific promises; check the exact file size on the model's page before you download.</div>
+    <p>Rule of thumb: choose a build whose quantized file leaves several gigabytes free under your total RAM. If a model won't load or your Mac starts swapping hard, you've picked one size too big: drop to a smaller build or a heavier quant. (Stuck on a load error? The <a href="https://outlier.host/how-to/fix-local-ai-wont-load-mac/">won't-load fix</a> walks through it.)</p>
+    <div class="receipts"><strong>Receipts:</strong> Llama is an open-weight family from Meta; Ollama and LM Studio both run it locally as quantized GGUF via llama.cpp, and both are free. The unified-memory ceiling is real, a model that exceeds available RAM either refuses to load or falls back to disk swap and crawls. None of these figures are model-specific promises; check the exact file size on the model's page before you download.</div>
 
-    <h2>Where this gets annoying — and the batteries-included option</h2>
-    <p>Running Llama yourself means you become the sysadmin: you pick the quant, watch the RAM ceiling, swap files when one's too big, and update by hand. For developers that control is the point. For everyone else it's friction. And every GGUF runner shares the same hard limit — if the model doesn't fit in RAM, you can't run it.</p>
-    <p>Outlier is the Mac-native app for people who'd rather skip all that. One signed download, no account, no terminal, no Docker — it ships ready-to-run open-weight models (its own Qwen-family tiers, Nano through Plus) that cover the same daily work most people want Llama for: chat, writing, coding, research. It's also the one tool here that runs models <em>bigger</em> than your RAM — a patent-pending paged inference engine streams a 397B model at about 11 GB peak memory on a 64 GB Mac, where a GGUF runner would simply refuse. And if you specifically want your own model, Outlier supports importing a bring-your-own MLX model. To be clear: Outlier doesn't ship Meta's Llama by name — for that exact model, Ollama or LM Studio above is the route.</p>
+    <h2>Where this gets annoying: and the batteries-included option</h2>
+    <p>Running Llama yourself means you become the sysadmin: you pick the quant, watch the RAM ceiling, swap files when one's too big, and update by hand. For developers that control is the point. For everyone else it's friction. And every GGUF runner shares the same hard limit: if the model doesn't fit in RAM, you can't run it.</p>
+    <p>Outlier is the Mac-native app for people who'd rather skip all that. One signed download, no account, no terminal, no Docker: it ships ready-to-run open-weight models (its own Qwen-family tiers, Nano through Plus) that cover the same daily work most people want Llama for: chat, writing, coding, research. It's also the one tool here that runs models <em>bigger</em> than your RAM: a patent-pending paged inference engine streams a 397B model at about 11 GB peak memory on a 64 GB Mac, where a GGUF runner would simply refuse. And if you specifically want your own model, Outlier supports importing a bring-your-own MLX model. To be clear: Outlier doesn't ship Meta's Llama by name: for that exact model, Ollama or LM Studio above is the route.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -228,7 +228,7 @@
 
     <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/how-to/install-local-ai-on-mac/">Install local AI on Mac</a> · <a href="https://outlier.host/how-to/run-gemma-4-on-mac/">How to run Gemma 4 on a Mac</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

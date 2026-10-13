@@ -152,30 +152,30 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Yes — DeepSeek runs locally on an Apple Silicon Mac. The simplest path is a quantized GGUF through Ollama or LM Studio, sized to your RAM.</li>
+        <li>Yes: DeepSeek runs locally on an Apple Silicon Mac. The simplest path is a quantized GGUF through Ollama or LM Studio, sized to your RAM.</li>
         <li>DeepSeek's V3/R1 models are open-weight, so the weights are free to download and run entirely offline.</li>
         <li>The full models are huge; you run a quantized size that fits your Mac's unified memory. A quantized 7–8B distill fits comfortably on 16 GB.</li>
-        <li>For a no-terminal, batteries-included option you can also bring your own MLX model into Outlier — covered honestly at the end.</li>
+        <li>For a no-terminal, batteries-included option you can also bring your own MLX model into Outlier: covered honestly at the end.</li>
       </ul>
     </div>
 
-    <p class="lead">You typed "run DeepSeek locally Mac" because you want the model on your own machine, not behind someone's login page. Good news: it works, and it's free. DeepSeek's weights are open, so on an Apple Silicon Mac you download a quantized copy and run it offline. The one catch is size — the full models are enormous, so the move is to pick a quantized build that fits your RAM. Here's the honest version, including a table so you know which size your Mac can actually hold.</p>
+    <p class="lead">You typed "run DeepSeek locally Mac" because you want the model on your own machine, not behind someone's login page. Good news: it works, and it's free. DeepSeek's weights are open, so on an Apple Silicon Mac you download a quantized copy and run it offline. The one catch is size: the full models are enormous, so the move is to pick a quantized build that fits your RAM. Here's the honest version, including a table so you know which size your Mac can actually hold.</p>
 
     <h2>What "DeepSeek" actually is</h2>
-    <p>DeepSeek isn't one model. It's a family of open-weight LLMs (the V3 and R1 lines), known for strong reasoning and coding. The headline models are very large — hundreds of billions of parameters — which is why the popular way to run them on a laptop is a <em>distill</em> or a <em>quantized</em> build: a smaller version, or the same weights compressed to fewer bits so the file shrinks and fits in less memory. On a Mac the format you want is <strong>GGUF</strong>, the file type the local runners read. Everything below assumes Apple Silicon (M1 or newer); Intel Macs technically run these but slowly enough that it's not worth it.</p>
+    <p>DeepSeek isn't one model. It's a family of open-weight LLMs (the V3 and R1 lines), known for strong reasoning and coding. The headline models are very large, hundreds of billions of parameters, which is why the popular way to run them on a laptop is a <em>distill</em> or a <em>quantized</em> build: a smaller version, or the same weights compressed to fewer bits so the file shrinks and fits in less memory. On a Mac the format you want is <strong>GGUF</strong>, the file type the local runners read. Everything below assumes Apple Silicon (M1 or newer); Intel Macs technically run these but slowly enough that it's not worth it.</p>
 
     <h2>The two simplest paths</h2>
     <p>You have two good front doors, both free. Pick by whether you like a terminal.</p>
 
-    <h3>Path A — Ollama (one command)</h3>
+    <h3>Path A: Ollama (one command)</h3>
     <ol>
       <li>Download Ollama from its site and install it (it ships a tiny menu-bar app and a CLI).</li>
       <li>Open Terminal and run <code>ollama run deepseek-r1:8b</code>. Ollama pulls the quantized GGUF, loads it, and drops you into a chat prompt.</li>
-      <li>To try a different size, swap the tag — for example <code>deepseek-r1:14b</code> — as long as it fits your RAM (see the table below).</li>
+      <li>To try a different size, swap the tag, for example <code>deepseek-r1:14b</code>, as long as it fits your RAM (see the table below).</li>
       <li>That's it. It runs offline from here; turn off Wi-Fi and it still answers.</li>
     </ol>
 
-    <h3>Path B — LM Studio (a GUI, no terminal)</h3>
+    <h3>Path B: LM Studio (a GUI, no terminal)</h3>
     <ol>
       <li>Download LM Studio and open it.</li>
       <li>Use the built-in model browser to search "DeepSeek," then pick a quantized GGUF whose size fits your Mac. LM Studio shows an estimate of whether a build will fit before you download.</li>
@@ -194,18 +194,18 @@
         <tr><td>14B</td><td>32 GB</td><td>Stronger reasoning and code; tight but workable on 32 GB.</td></tr>
         <tr><td>32B</td><td>48–64 GB</td><td>Noticeably more capable; wants 48–64 GB to breathe.</td></tr>
         <tr><td>70B+ distill</td><td>64 GB+</td><td>Heavy local reasoning; needs a high-memory Mac.</td></tr>
-        <tr><td>Full V3 / R1</td><td>Server-class</td><td>Hundreds of GB even quantized — not a laptop job.</td></tr>
+        <tr><td>Full V3 / R1</td><td>Server-class</td><td>Hundreds of GB even quantized, not a laptop job.</td></tr>
       </tbody>
     </table>
-    <p>These are rough bands, not promises — exact file sizes vary by the specific build and quant level you pick. The pattern holds though: a quantized 7–8B fits comfortably on 16 GB, and bigger sizes want 32–64 GB or more. If you're not sure how much headroom you have, our <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide for local AI</a> walks through the math.</p>
-    <div class="receipts"><strong>Receipts:</strong> DeepSeek's V3 and R1 weights are published openly and downloadable as community GGUF quantizations; Ollama and LM Studio both run them on Apple Silicon. Memory pressure is real — <strong>32 GB of DDR5 was running about $375</strong> amid an AI-driven shortage (reported June 3, 2026), which is one more reason to size the model to the Mac you already have rather than buy more.</div>
+    <p>These are rough bands, not promises: exact file sizes vary by the specific build and quant level you pick. The pattern holds though: a quantized 7–8B fits comfortably on 16 GB, and bigger sizes want 32–64 GB or more. If you're not sure how much headroom you have, our <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide for local AI</a> walks through the math.</p>
+    <div class="receipts"><strong>Receipts:</strong> DeepSeek's V3 and R1 weights are published openly and downloadable as community GGUF quantizations; Ollama and LM Studio both run them on Apple Silicon. Memory pressure is real: <strong>32 GB of DDR5 was running about $375</strong> amid an AI-driven shortage (reported June 3, 2026), which is one more reason to size the model to the Mac you already have rather than buy more.</div>
 
     <h2>The honest trade-offs</h2>
-    <p>Running locally costs you two things. First, speed: a 14B or 32B on an M-series chip generates at a readable pace but won't match a cloud datacenter, and the bigger the model the slower the tokens. Second, ceiling: a quantized distill is smaller than the full DeepSeek, so on the hardest problems it gives up some quality. What you get in exchange is everything that matters about "local" — it's private, it runs with Wi-Fi off, there's no meter, and nobody can deprecate or reprice the file sitting on your disk.</p>
+    <p>Running locally costs you two things. First, speed: a 14B or 32B on an M-series chip generates at a readable pace but won't match a cloud datacenter, and the bigger the model the slower the tokens. Second, ceiling: a quantized distill is smaller than the full DeepSeek, so on the hardest problems it gives up some quality. What you get in exchange is everything that matters about "local": it's private, it runs with Wi-Fi off, there's no meter, and nobody can deprecate or reprice the file sitting on your disk.</p>
 
     <h2>Where Outlier fits</h2>
-    <p>If the terminal-and-GGUF route sounds like more setup than you want, that's the gap <a href="https://outlier.host/">Outlier</a> fills: one signed Mac download, no account, no Docker, no command line. Outlier doesn't ship DeepSeek by name. Its own models are built on the Qwen family — another strong open-weight line — and cover the same daily reasoning and coding work most people open DeepSeek for. We published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side of Core 27B and Claude Opus</a> so you can compare the answers yourself; cloud models like Claude and ChatGPT are still faster and stronger on the hardest work. And because of a patent-pending paged inference engine, Outlier can run a model bigger than the Mac's RAM — a 397B-parameter model at roughly 11 GB peak memory on a 64 GB Mac Studio — which the RAM-bound GGUF tools above can't do.</p>
-    <p>If you specifically want DeepSeek itself, Outlier supports bring-your-own-model: import an MLX build and run it inside the same app. So the choice isn't DeepSeek <em>or</em> Outlier — it's a free GGUF runner when you want that exact model, or a no-setup Mac app for the everyday work, with a path to load your own model either way. If you're choosing a runner first, our <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> breakdown lays it out plainly.</p>
+    <p>If the terminal-and-GGUF route sounds like more setup than you want, that's the gap <a href="https://outlier.host/">Outlier</a> fills: one signed Mac download, no account, no Docker, no command line. Outlier doesn't ship DeepSeek by name. Its own models are built on the Qwen family, another strong open-weight line, and cover the same daily reasoning and coding work most people open DeepSeek for. We published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side of Core 27B and Claude Opus</a> so you can compare the answers yourself; cloud models like Claude and ChatGPT are still faster and stronger on the hardest work. And because of a patent-pending paged inference engine, Outlier can run a model bigger than the Mac's RAM, a 397B-parameter model at roughly 11 GB peak memory on a 64 GB Mac Studio, which the RAM-bound GGUF tools above can't do.</p>
+    <p>If you specifically want DeepSeek itself, Outlier supports bring-your-own-model: import an MLX build and run it inside the same app. So the choice isn't DeepSeek <em>or</em> Outlier: it's a free GGUF runner when you want that exact model, or a no-setup Mac app for the everyday work, with a path to load your own model either way. If you're choosing a runner first, our <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> breakdown lays it out plainly.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -231,7 +231,7 @@
 
     <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM for local AI</a> · <a href="https://outlier.host/best/local-llm-for-coding/">Best local LLM for coding</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

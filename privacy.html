@@ -73,25 +73,25 @@
 
     <h2>What does leave your Mac (only when you opt in)</h2>
     <ul>
-      <li><strong>The mailing list, if you type an address into a form on outlier.host</strong> &mdash; most
+      <li><strong>The mailing list, if you type an address into a form on outlier.host</strong>: most
       pages here carry a &ldquo;new models worth running&rdquo; form. It sends nothing on page load; it posts once, when you
       press the button. What is stored is the address you typed and which of our sites you sent it from, on our own Cloudflare
-      Worker and D1 database at <code>kerr-subscribe.kerrco.workers.dev</code> &mdash; not a marketing SaaS, because
+      Worker and D1 database at <code>kerr-subscribe.kerrco.workers.dev</code>: not a marketing SaaS, because
       dropping one of those onto a site that sells &ldquo;nothing leaves your machine&rdquo; would make the claim false in
       order to collect an email address. <strong>No IP address, no user agent, no referer, no fingerprint.</strong> That
       is a statement about the code: the insert binds the address and the source and nothing else, and the worker reads no
-      client header beyond the ones a browser needs to make the request at all. Consent is per site, not per page &mdash; every form on outlier.host records the same source, so subscribing
+      client header beyond the ones a browser needs to make the request at all. Consent is per site, not per page: every form on outlier.host records the same source, so subscribing
       from two of our pages is one entry and one email, while the same
       address given on another of our products is a separate row, and leaving one does not leave the other.
       Every email carries a one-click unsubscribe. The desktop app never sends this; there is no mailing-list code in the
       app at all.</li>
-      <li><strong>Model downloads from HuggingFace</strong> — when you activate a tier for the first time, the weights download from <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer">huggingface.co/Outlier-Ai</a>. HuggingFace sees your IP and which repo you fetched. No prompts, no chats, no model output is sent. After the download, the model runs locally forever.</li>
-      <li><strong>Cloud API providers (OpenAI / Anthropic / OpenAI-compatible)</strong> — only when you explicitly switch to a cloud model in the picker AND provide your own API key. Your prompts and conversation history are sent to that provider per their terms. Your API key is stored locally; we never see it.</li>
-      <li><strong>Anything you connect yourself</strong> &mdash; an MCP server, a Google Custom Search key, a chat you import from a Gist link: each one receives the requests that feature makes. None of them is set up by default.</li>
-      <li><strong>Web search</strong> — only when you toggle 🌐 search on for a turn. Sends your search query (not your full prompt history) to DuckDuckGo, Mojeek, and Wikipedia (and, during Deep Research only, additionally Crossref, OpenAlex, StackExchange, and Hacker News / Algolia). Results are then fed back into the local model.</li>
-      <li><strong>App update check</strong> — Outlier periodically polls <a href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json" target="_blank" rel="noopener noreferrer">a public GitHub URL</a> for new release metadata. HTTP GET only. Update payloads are cryptographically signed (minisign) and verified before install.</li>
-      <li><strong>The price in an upgrade window</strong> &mdash; when you open a window that offers Pro, the app asks <code>kerr-lead-agent.kerrco.workers.dev</code> whether founding seats are left, so it can show the right price. The request names the site and nothing else: no license key, no device id, nothing you typed. It is never sent on a timer.</li>
-      <li><strong>Founders / Pro license activation</strong> &mdash; when you paste your license key into Settings &rarr; license, the key is sent to the vendor that issued it: <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026. The app decides from the key itself and sends it to one vendor only, along with a device name so the seat can be counted against your three activations. After that the app re-checks the key with the same vendor at startup and once a day; if the vendor can't be reached, Pro keeps working.</li>
+      <li><strong>Model downloads from HuggingFace</strong>: when you activate a tier for the first time, the weights download from <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer">huggingface.co/Outlier-Ai</a>. HuggingFace sees your IP and which repo you fetched. No prompts, no chats, no model output is sent. After the download, the model runs locally forever.</li>
+      <li><strong>Cloud API providers (OpenAI / Anthropic / OpenAI-compatible)</strong>: only when you explicitly switch to a cloud model in the picker AND provide your own API key. Your prompts and conversation history are sent to that provider per their terms. Your API key is stored locally; we never see it.</li>
+      <li><strong>Anything you connect yourself</strong>: an MCP server, a Google Custom Search key, a chat you import from a Gist link: each one receives the requests that feature makes. None of them is set up by default.</li>
+      <li><strong>Web search</strong>: only when you toggle 🌐 search on for a turn. Sends your search query (not your full prompt history) to DuckDuckGo, Mojeek, and Wikipedia (and, during Deep Research only, additionally Crossref, OpenAlex, StackExchange, and Hacker News / Algolia). Results are then fed back into the local model.</li>
+      <li><strong>App update check</strong>: Outlier periodically polls <a href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json" target="_blank" rel="noopener noreferrer">a public GitHub URL</a> for new release metadata. HTTP GET only. Update payloads are cryptographically signed (minisign) and verified before install.</li>
+      <li><strong>The price in an upgrade window</strong>: when you open a window that offers Pro, the app asks <code>kerr-lead-agent.kerrco.workers.dev</code> whether founding seats are left, so it can show the right price. The request names the site and nothing else: no license key, no device id, nothing you typed. It is never sent on a timer.</li>
+      <li><strong>Founders / Pro license activation</strong>: when you paste your license key into Settings &rarr; license, the key is sent to the vendor that issued it: <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026. The app decides from the key itself and sends it to one vendor only, along with a device name so the seat can be counted against your three activations. After that the app re-checks the key with the same vendor at startup and once a day; if the vendor can't be reached, Pro keeps working.</li>
     </ul>
     <p class="dim">The in-app Privacy Ledger (Settings → Privacy → Privacy ledger) lists the app&rsquo;s built-in destinations, the license check and the upgrade-window price check included (from version 1.11.866). It is kept by hand from the app&rsquo;s own network calls, and a test checks it against the hosts the app&rsquo;s code actually contacts.</p>
 
@@ -122,7 +122,7 @@
       affiliate is credited if you buy; it never records who you are. The Meta pixel sets its
       own <code>_fbp</code> cookie on every visit, however you arrived, and that identifier is
       what lets Meta connect this visit to your activity on their platforms. Neither is
-      requested by the desktop app — the shipping bundle contains no reference to either
+      requested by the desktop app, the shipping bundle contains no reference to either
       host.</li>
       <!-- Rewritten 2026-08-18, when the fonts became first-party. The previous
            version of this paragraph was accurate and that was the problem: it
@@ -145,7 +145,7 @@
       and Fontshare (<code>api.fontshare.com</code>), which meant simply opening this page
       exposed your IP address to three servers we do not control. It no longer does: the font
       files are in this site's own repository and are downloaded from the same host as the page.
-      The desktop app never requested them either — the shipping bundle contains no reference to
+      The desktop app never requested them either, the shipping bundle contains no reference to
       any of those hosts.</li>
       <li>No account required to use Free Nano + Lite or BYOK cloud.</li>
       <li>No automatic crash reporting. Crash logs are saved locally to <code>~/.outlier/crashes/</code>. You decide whether to email them via the Bug Report flow.</li>
@@ -153,7 +153,7 @@
     </ul>
 
     <h2>Payments</h2>
-      <p>Paid tiers (Pro, Founders Lifetime $249) are processed by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer">Dodo Payments</a>, which handles payment, licence issuance and the customer portal. Purchases made before 23 August 2026 were processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a> and those licences remain valid. We never see your card details. If Dodo offers an instalment option at checkout &mdash; Klarna or Afterpay, where they operate &mdash; that agreement is between you and the provider, who will run their own checks; Outlier is not party to it and receives only confirmation that the order was paid.</p>
+      <p>Paid tiers (Pro, Founders Lifetime $249) are processed by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer">Dodo Payments</a>, which handles payment, licence issuance and the customer portal. Purchases made before 23 August 2026 were processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a> and those licences remain valid. We never see your card details. If Dodo offers an instalment option at checkout (Klarna or Afterpay, where they operate) that agreement is between you and the provider, who will run their own checks; Outlier is not party to it and receives only confirmation that the order was paid.</p>
 
     <h2>Children</h2>
     <p>Outlier is not directed at children under 13.</p>

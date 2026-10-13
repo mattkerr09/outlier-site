@@ -148,15 +148,15 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>A token is a chunk of text &mdash; usually a common word, a piece of a longer word, or a punctuation mark. Models read and write in tokens rather than letters or words, which is why every AI price, context window and rate limit is counted in them. For ordinary English prose the working rule is <strong>about 0.75 words per token</strong>: 1,000 tokens is roughly 750 words. Code and unusual names use noticeably more tokens per word.</p>
+      <p>A token is a chunk of text, usually a common word, a piece of a longer word, or a punctuation mark. Models read and write in tokens rather than letters or words, which is why every AI price, context window and rate limit is counted in them. For ordinary English prose the working rule is <strong>about 0.75 words per token</strong>: 1,000 tokens is roughly 750 words. Code and unusual names use noticeably more tokens per word.</p>
     </div>
 
     <p class="lead">Tokens are one of those pieces of jargon you can ignore right up until the moment you can&rsquo;t. Every limit you&rsquo;ll ever hit is denominated in them: what an API charges, how much of your conversation the model can still see, where a rate limit cuts you off. So it&rsquo;s worth ten minutes to be able to convert &ldquo;my 40-page report&rdquo; into a number you can actually check against a limit.</p>
 
     <h2>Why not just count words?</h2>
-    <p>Because a model has to handle text it has never seen &mdash; a surname, a typo, a variable called <code>usr_cfg_2</code> &mdash; and a fixed word list can&rsquo;t. Tokenisation splits text into pieces from a fixed vocabulary, typically tens of thousands of entries, chosen so that common words survive as single pieces and rare ones break into fragments.</p>
+    <p>Because a model has to handle text it has never seen (a surname, a typo, a variable called <code>usr_cfg_2</code>) and a fixed word list can&rsquo;t. Tokenisation splits text into pieces from a fixed vocabulary, typically tens of thousands of entries, chosen so that common words survive as single pieces and rare ones break into fragments.</p>
     <p>So the model doesn&rsquo;t see letters, and it doesn&rsquo;t quite see words. It sees a sequence of IDs from that vocabulary. When it writes, it emits one of those IDs at a time and the app stitches them back into text on your screen.</p>
-    <p>This also quietly explains a classic party trick failure. Ask a model how many r&rsquo;s are in &ldquo;strawberry&rdquo; and it may get it wrong &mdash; not because it can&rsquo;t count, but because it never saw the individual letters. It saw two or three chunks.</p>
+    <p>This also quietly explains a classic party trick failure. Ask a model how many r&rsquo;s are in &ldquo;strawberry&rdquo; and it may get it wrong, not because it can&rsquo;t count, but because it never saw the individual letters. It saw two or three chunks.</p>
 
     <h2>Roughly how many tokens is your text?</h2>
     <p>Rules of thumb, for English:</p>
@@ -164,26 +164,26 @@
       <thead><tr><th>Content</th><th>Tokens, roughly</th><th>Why</th></tr></thead>
       <tbody>
         <tr><td>Ordinary prose</td><td>~1.33 per word</td><td>Most common words are one token</td></tr>
-        <tr><td>A one-page memo (~500 words)</td><td>~670</td><td>&mdash;</td></tr>
-        <tr><td>A 40-page report (~20,000 words)</td><td>~27,000</td><td>&mdash;</td></tr>
+        <tr><td>A one-page memo (~500 words)</td><td>~670</td><td>—</td></tr>
+        <tr><td>A 40-page report (~20,000 words)</td><td>~27,000</td><td>—</td></tr>
         <tr><td>Source code</td><td>Noticeably more per word</td><td>Punctuation, indentation and identifiers each cost tokens</td></tr>
         <tr><td>Names, IDs, other languages</td><td>More again</td><td>Rare strings fragment into several pieces</td></tr>
       </tbody>
     </table>
-    <p>Treat these as estimates for planning, not for billing. If a precise number matters, run the text through the tokeniser for the specific model &mdash; different model families split text differently, so the same paragraph genuinely has different token counts depending on who made the model.</p>
+    <p>Treat these as estimates for planning, not for billing. If a precise number matters, run the text through the tokeniser for the specific model: different model families split text differently, so the same paragraph genuinely has different token counts depending on who made the model.</p>
 
     <h2>The three limits tokens actually control</h2>
-    <p><strong>Context window.</strong> The maximum tokens the model can hold at once &mdash; your system instructions, the whole conversation so far, and the answer being written. When a conversation outgrows it, the oldest parts get dropped or summarised, which is <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets things you said earlier</a>.</p>
+    <p><strong>Context window.</strong> The maximum tokens the model can hold at once: your system instructions, the whole conversation so far, and the answer being written. When a conversation outgrows it, the oldest parts get dropped or summarised, which is <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets things you said earlier</a>.</p>
     <p><strong>Price, if you&rsquo;re using an API.</strong> Billed per token, usually with input and output priced differently. This is why a long document pasted into every message is expensive: you pay for all of it, every turn.</p>
-    <p><strong>Output length.</strong> A separate cap on the reply itself. It&rsquo;s the reason answers sometimes stop mid-sentence &mdash; the model didn&rsquo;t lose its train of thought, it ran out of allowance.</p>
+    <p><strong>Output length.</strong> A separate cap on the reply itself. It&rsquo;s the reason answers sometimes stop mid-sentence: the model didn&rsquo;t lose its train of thought, it ran out of allowance.</p>
 
     <h2>Tokens are also the speed unit</h2>
     <p>Generation speed is quoted as tokens per second, which is why the number feels abstract until you convert it. A comfortable adult reading pace is somewhere around 4&ndash;7 tokens per second, so anything above that arrives faster than you can read.</p>
-    <p>On my own M1 Ultra, our smallest tier runs at 71.7 tok/s and the 27B at 20.7 tok/s &mdash; both well past reading speed. The 397B tier manages 1.59 tok/s, which is genuinely slow enough to notice and is a deliberate trade for running a model that large on a desktop at all.</p>
+    <p>On my own M1 Ultra, our smallest tier runs at 71.7 tok/s and the 27B at 20.7 tok/s: both well past reading speed. The 397B tier manages 1.59 tok/s, which is genuinely slow enough to notice and is a deliberate trade for running a model that large on a desktop at all.</p>
 
     <h2>Does any of this change when the model runs locally?</h2>
     <p>Tokenisation, context windows and output caps work identically. What changes is the economics: there&rsquo;s no per-token bill, so a long document costs you time and memory rather than money.</p>
-    <p>Memory is the real constraint instead. Every token in context occupies space in a cache that grows as the conversation does, which is why a very long chat on a small machine eventually slows down or runs out of room. Not a meter &mdash; physics.</p>
+    <p>Memory is the real constraint instead. Every token in context occupies space in a cache that grows as the conversation does, which is why a very long chat on a small machine eventually slows down or runs out of room. Not a meter: physics.</p>
 
     <h2>Practical habits worth having</h2>
     <ul>
@@ -193,7 +193,7 @@
       <li><strong>Expect code to cost more.</strong> If you&rsquo;re near a limit with source files, you&rsquo;re nearer than the word count suggests.</li>
     </ul>
 
-    <div class="receipts"><strong>Receipts:</strong> the tokens-per-second figures are my own measurements on an M1 Ultra using the tiers we ship &mdash; Nano 4B at 71.7, Core 27B at 20.7, Plus 397B at 2.1. The words-per-token ratios are the widely used English rules of thumb and are approximations, not guarantees: exact counts vary by model family, and the only authoritative number comes from running your text through that model&rsquo;s own tokeniser.</div>
+    <div class="receipts"><strong>Receipts:</strong> the tokens-per-second figures are my own measurements on an M1 Ultra using the tiers we ship: Nano 4B at 71.7, Core 27B at 20.7, Plus 397B at 2.1. The words-per-token ratios are the widely used English rules of thumb and are approximations, not guarantees: exact counts vary by model family, and the only authoritative number comes from running your text through that model&rsquo;s own tokeniser.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
@@ -204,7 +204,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/why-ai-forgets-conversations/">Why AI forgets conversations</a> &middot; <a href="https://outlier.host/learn/what-is-a-large-language-model/">What a large language model is</a> &middot; <a href="https://outlier.host/learn/why-ai-has-usage-caps/">Why cloud AI has usage caps</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

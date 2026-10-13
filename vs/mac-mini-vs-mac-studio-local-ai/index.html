@@ -169,16 +169,16 @@
 
     <p>Running a model locally makes two demands. Capacity: weights, KV cache and OS have to fit in memory, or you wait on the SSD. Bandwidth: generation reads a large fraction of those weights <em>for every token</em>, so decoding is memory-bound and bandwidth predicts tokens per second far better than core count.</p>
 
-    <p>Apple silicon is good at the first: CPU and GPU share one pool, with no separate VRAM budget and no host-to-device copy, which is the assumption Apple's MLX framework is built on. Whatever RAM you bought is GPU memory. On the second, the spread is enormous — 120GB/s on M4, 273GB/s on M4 Pro, 410GB/s on M4 Max (546GB/s with the 16-core CPU / 40-core GPU chip), 819GB/s on M3 Ultra. Seven-to-one, across two lines that look alike on a spec sheet.</p>
+    <p>Apple silicon is good at the first: CPU and GPU share one pool, with no separate VRAM budget and no host-to-device copy, which is the assumption Apple's MLX framework is built on. Whatever RAM you bought is GPU memory. On the second, the spread is enormous: 120GB/s on M4, 273GB/s on M4 Pro, 410GB/s on M4 Max (546GB/s with the 16-core CPU / 40-core GPU chip), 819GB/s on M3 Ultra. Seven-to-one, across two lines that look alike on a spec sheet.</p>
 
     <h2>What each configuration actually fits</h2>
 
-    <p>Gigabytes are hard to reason about abstractly, so here are measured numbers from Outlier's tiers — the example I know best. Disclosure on the yardstick: Nano (4B) and Lite (9B) are free, while Quick, Core, Vision 3.8 and Plus require Outlier Pro, so most of the tiers below are behind a subscription. RAM figures are minimums, with headroom for context and the OS.</p>
+    <p>Gigabytes are hard to reason about abstractly, so here are measured numbers from Outlier's tiers, the example I know best. Disclosure on the yardstick: Nano (4B) and Lite (9B) are free, while Quick, Core, Vision 3.8 and Plus require Outlier Pro, so most of the tiers below are behind a subscription. RAM figures are minimums, with headroom for context and the OS.</p>
 
     <ul>
-      <li><strong>16GB (base M4 mini):</strong> a 4B model is a 2.37GB download needing 6GB of RAM; a 9B model is 5.04GB needing 12GB. A 26B MoE model at 15.61GB has a 16GB minimum — it runs, but that's the floor.</li>
-      <li><strong>24GB (M4 mini upgraded, M4 Pro mini base):</strong> dense 27B models become practical — 15.13GB on disk, about 20.7 tok/s on an M1 Ultra — and the 27B dense Vision 3.8 model at 15.5GB fits.</li>
-      <li><strong>64GB (M4 Max Studio, 16/40 chip only):</strong> the floor for very large paged-MoE models. Outlier's 397B-a17b tier is a 209GB download streaming experts from SSD at 1.59 tok/s — batch speed, not conversational. Outlier lists 64GB as the minimum and 128GB as recommended for that tier, and no Mac desktop currently sold reaches 128GB, so every desktop config on this page runs it below the recommended spec.</li>
+      <li><strong>16GB (base M4 mini):</strong> a 4B model is a 2.37GB download needing 6GB of RAM; a 9B model is 5.04GB needing 12GB. A 26B MoE model at 15.61GB has a 16GB minimum: it runs, but that's the floor.</li>
+      <li><strong>24GB (M4 mini upgraded, M4 Pro mini base):</strong> dense 27B models become practical (15.13GB on disk, about 20.7 tok/s on an M1 Ultra) and the 27B dense Vision 3.8 model at 15.5GB fits.</li>
+      <li><strong>64GB (M4 Max Studio, 16/40 chip only):</strong> the floor for very large paged-MoE models. Outlier's 397B-a17b tier is a 209GB download streaming experts from SSD at 1.59 tok/s: batch speed, not conversational. Outlier lists 64GB as the minimum and 128GB as recommended for that tier, and no Mac desktop currently sold reaches 128GB, so every desktop config on this page runs it below the recommended spec.</li>
       <li><strong>96GB (M3 Ultra Studio):</strong> the same models with headroom, at 819GB/s.</li>
     </ul>
 
@@ -211,23 +211,23 @@
 
     <h2>Thermals, noise, and sustained load</h2>
 
-    <p>Inference is a sustained load, not a burst. Chat produces spikes; an agent loop or an overnight index pins the GPU for hours — the pattern a thermal envelope governs.</p>
+    <p>Inference is a sustained load, not a burst. Chat produces spikes; an agent loop or an overnight index pins the GPU for hours, the pattern a thermal envelope governs.</p>
 
-    <p>Apple rates maximum continuous power at 155W for the mini and 480W for the Studio, and lists the mini at 5 dBA idle. Loaded, you hear it. The mini will run models all day, but it's a small box with a small fan — I'd steer sustained work to a Studio even when the mini's memory fits.</p>
+    <p>Apple rates maximum continuous power at 155W for the mini and 480W for the Studio, and lists the mini at 5 dBA idle. Loaded, you hear it. The mini will run models all day, but it's a small box with a small fan: I'd steer sustained work to a Studio even when the mini's memory fits.</p>
 
-    <h2>Price per usable gigabyte — and the June price rise</h2>
+    <h2>Price per usable gigabyte: and the June price rise</h2>
 
     <p>Starting price divided by base memory isn't linear: roughly $50/GB for the $799 M4 mini, $67 for the $1,599 M4 Pro mini, $69 for the $2,499 M4 Max Studio, and about $55/GB for the $5,299 M3 Ultra, which also has the bandwidth to use them. The middle is the expensive part.</p>
 
-    <p>These numbers got worse this year. Apple's education price list carries a pricing date of 25 June 2026, dating a change: the mini started at $599 in October 2024, the Studio at $1,999 in March 2025. Ceilings fell at the same time. Apple's March 2025 announcement described configuring M3 Ultra up to 512GB for models over 600 billion parameters; the 128GB, 256GB and 512GB options are gone, as is the 64GB M4 Pro mini. Third-party reporting (MacRumors, May 2026) blames the DRAM shortage — not something I could confirm from Apple directly.</p>
+    <p>These numbers got worse this year. Apple's education price list carries a pricing date of 25 June 2026, dating a change: the mini started at $599 in October 2024, the Studio at $1,999 in March 2025. Ceilings fell at the same time. Apple's March 2025 announcement described configuring M3 Ultra up to 512GB for models over 600 billion parameters; the 128GB, 256GB and 512GB options are gone, as is the 64GB M4 Pro mini. Third-party reporting (MacRumors, May 2026) blames the DRAM shortage, not something I could confirm from Apple directly.</p>
 
     <h2>Upgrade paths: there aren't any</h2>
 
-    <p>Unified memory is configure-to-order with no user-serviceable path, so the ceiling is fixed at checkout and "I'll add RAM later" isn't a plan. What you <em>can</em> add is storage over Thunderbolt 5 at up to 120Gb/s — four ports on the Studio, three on the M4 Pro mini, Thunderbolt 4 on the base mini. No substitute for memory. Networking is the same story as memory: 10Gb Ethernet is standard on the Studio and a configure-to-order option on the mini, so it has to be chosen at checkout too.</p>
+    <p>Unified memory is configure-to-order with no user-serviceable path, so the ceiling is fixed at checkout and "I'll add RAM later" isn't a plan. What you <em>can</em> add is storage over Thunderbolt 5 at up to 120Gb/s: four ports on the Studio, three on the M4 Pro mini, Thunderbolt 4 on the base mini. No substitute for memory. Networking is the same story as memory: 10Gb Ethernet is standard on the Studio and a configure-to-order option on the mini, so it has to be chosen at checkout too.</p>
 
-    <p>Both desktops are also a silicon generation behind. M5 Pro (up to 307GB/s, 64GB) and M5 Max (up to 614GB/s, 128GB) shipped in the MacBook Pro in March 2026, claiming over 4× the peak GPU compute for AI versus the previous generation. Neither is in a desktop — you can order a laptop with 128GB today and no Studio above 96GB.</p>
+    <p>Both desktops are also a silicon generation behind. M5 Pro (up to 307GB/s, 64GB) and M5 Max (up to 614GB/s, 128GB) shipped in the MacBook Pro in March 2026, claiming over 4× the peak GPU compute for AI versus the previous generation. Neither is in a desktop. You can order a laptop with 128GB today and no Studio above 96GB.</p>
 
-    <h2>Where these machines genuinely win — and where they don't</h2>
+    <h2>Where these machines genuinely win: and where they don't</h2>
 
     <p>The bad news first, because it's the part vendors skip. <strong>On raw throughput, a PC with a discrete GPU is usually faster.</strong> Dedicated graphics memory runs at bandwidths these desktops don't reach, and the CUDA stack is deeper for training and batch serving. For any model that fits inside a card's VRAM, expect more tokens per second there.</p>
 
@@ -236,11 +236,11 @@
     <ul>
       <li><strong>Unified memory removes the VRAM cliff.</strong> Getting 96GB of GPU-addressable memory out of discrete cards means stacking them, with the power supply, chassis and noise that implies.</li>
       <li><strong>819GB/s inside a 480W envelope</strong> has no direct consumer-PC equivalent at this size or noise level.</li>
-      <li><strong>Everything is capital cost</strong> — no per-token billing, no rate limits, no egress, and it works with the network off, on a machine that still has AppleCare and resale value.</li>
-      <li><strong>The $799 M4 mini is a real entry point</strong> — 16GB standard, a first-party ML stack in MLX, Metal and Core ML, and good third-party support in llama.cpp, Ollama and LM Studio.</li>
+      <li><strong>Everything is capital cost</strong>: no per-token billing, no rate limits, no egress, and it works with the network off, on a machine that still has AppleCare and resale value.</li>
+      <li><strong>The $799 M4 mini is a real entry point</strong>: 16GB standard, a first-party ML stack in MLX, Metal and Core ML, and good third-party support in llama.cpp, Ollama and LM Studio.</li>
     </ul>
 
-    <p>One caveat for both: the hardware supplies no model, no license and no privacy guarantee — the software you install decides that. Apple Intelligence is itself hybrid, mixing on-device processing with Private Cloud Compute, so "it's a Mac" isn't an on-device claim.</p>
+    <p>One caveat for both: the hardware supplies no model, no license and no privacy guarantee, the software you install decides that. Apple Intelligence is itself hybrid, mixing on-device processing with Private Cloud Compute, so "it's a Mac" isn't an on-device claim.</p>
 
     <h2>Who should pick which</h2>
 
@@ -248,19 +248,19 @@
 
     <p><strong>The M4 Pro Mac mini (24–48GB)</strong> if you want a 27B-class daily driver, quietly and cheaply. 273GB/s is a real step up from 120, at less than half a Studio's entry price.</p>
 
-    <p><strong>The M4 Max Mac Studio</strong> if the machine will be under sustained load — agent loops, batch jobs, video work alongside model work — or if you need 64GB, which requires the 16/40 chip from $3,499.</p>
+    <p><strong>The M4 Max Mac Studio</strong> if the machine will be under sustained load (agent loops, batch jobs, video work alongside model work) or if you need 64GB, which requires the 16/40 chip from $3,499.</p>
 
     <p><strong>The M3 Ultra Mac Studio</strong> only if 96GB at 819GB/s is the actual requirement; you're buying bandwidth on a chip announced in March 2025. If your models fit in 48GB, this isn't your machine.</p>
 
     <p><strong>A PC with a discrete GPU</strong> if your model fits in VRAM, throughput is the goal, and you'll take on the power, noise and assembly.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Specs from <a href="https://www.apple.com/mac-mini/specs/">mac-mini/specs</a>, <a href="https://www.apple.com/mac-studio/specs/">mac-studio/specs</a> and <a href="https://www.apple.com/macbook-pro/specs/">macbook-pro/specs</a>; prices from Apple's US buy flows for <a href="https://www.apple.com/shop/buy-mac/mac-mini">Mac mini</a> and <a href="https://www.apple.com/shop/buy-mac/mac-studio">Mac Studio</a>, read 2026-07-23 and cross-checked against Apple's US Education Institution Price List (pricing date 25 June 2026). Launch pricing and the M3 Ultra and M5 claims are from Apple Newsroom; unified memory from <a href="https://github.com/ml-explore/mlx">MLX</a>. The DRAM-shortage explanation is third-party reporting (MacRumors, May 2026), not primary-confirmed. Outlier tier sizes and tok/s measured on an M1 Ultra and an M4 MacBook Air. Apple changes prices and configurations without notice — re-check before ordering.
+      <strong>Sources and receipts:</strong> Specs from <a href="https://www.apple.com/mac-mini/specs/">mac-mini/specs</a>, <a href="https://www.apple.com/mac-studio/specs/">mac-studio/specs</a> and <a href="https://www.apple.com/macbook-pro/specs/">macbook-pro/specs</a>; prices from Apple's US buy flows for <a href="https://www.apple.com/shop/buy-mac/mac-mini">Mac mini</a> and <a href="https://www.apple.com/shop/buy-mac/mac-studio">Mac Studio</a>, read 2026-07-23 and cross-checked against Apple's US Education Institution Price List (pricing date 25 June 2026). Launch pricing and the M3 Ultra and M5 claims are from Apple Newsroom; unified memory from <a href="https://github.com/ml-explore/mlx">MLX</a>. The DRAM-shortage explanation is third-party reporting (MacRumors, May 2026), not primary-confirmed. Outlier tier sizes and tok/s measured on an M1 Ultra and an M4 MacBook Air. Apple changes prices and configurations without notice: re-check before ordering.
     </div>
 
     <div class="cta">
       <h3>Want to see what your Mac can actually run?</h3>
-      <p>Outlier runs models fully on-device — no account, no caps, nothing uploaded. The free Nano and Lite tiers need 6GB and 12GB of RAM, so you can test before buying hardware.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <p>Outlier runs models fully on-device: no account, no caps, nothing uploaded. The free Nano and Lite tiers need 6GB and 12GB of RAM, so you can test before buying hardware.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-mac-mini-vs-mac-studio-local-ai&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-mac-mini-vs-mac-studio-local-ai-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
@@ -269,7 +269,7 @@
       <p>Related: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 

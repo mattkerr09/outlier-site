@@ -142,7 +142,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">data</a></div>
-    <h1>Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon</h1>
+    <h1>Streaming engine benchmarks: Plus + Vision tok/s on Apple Silicon</h1>
     <div class="byline-row">
       <span class="byline">Outlier · <a href="https://builtbykerr.com/">solo-built in Grand Rapids</a> · published 2026-05-09</span>
       <span class="updated-pill">Last updated 2026-09-29</span>
@@ -160,7 +160,7 @@
     </div>
 
     <div class="notice">
-      <strong>Engine version note:</strong> Both streaming engines have been retired — V11 in v1.11.71 and V10 in v1.11.73 — after M1 Ultra sweeps found their per-token expert streaming committed 57–58 GB of Metal-wired memory. The current shipping engine for Plus (and the Vision default) is V9 paged inference. The retired engines' numbers are kept here for transparency; new installs use V9.
+      <strong>Engine version note:</strong> Both streaming engines have been retired, V11 in v1.11.71 and V10 in v1.11.73, after M1 Ultra sweeps found their per-token expert streaming committed 57–58 GB of Metal-wired memory. The current shipping engine for Plus (and the Vision default) is V9 paged inference. The retired engines' numbers are kept here for transparency; new installs use V9.
     </div>
 
     <p class="lead">All three of Outlier's MoE engines run on the same trick. Keep the active experts in unified memory, pull cold ones off disk. V9 paged, V10 streaming, V11 hybrid. Where they split is how they cache, and that split is what decided which one shipped. The streaming variants lost to V9 paged because their per-token streaming pattern committed far more Metal-wired memory. The raw comparison is below.</p>
@@ -178,18 +178,18 @@
       </tbody>
     </table>
 
-    <h2>Plus 397B-A17B — engine comparison</h2>
+    <h2>Plus 397B-A17B: engine comparison</h2>
     <table>
       <thead><tr><th>Engine</th><th>tok/s</th><th>RSS peak</th><th>Wired Memory peak</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>V9 paged K=20</td><td>2.1</td><td>11 GB</td><td>3.6 GB</td><td><strong>current — shipping default</strong></td></tr>
+        <tr><td>V9 paged K=20</td><td>2.1</td><td>11 GB</td><td>3.6 GB</td><td><strong>current: shipping default</strong></td></tr>
         <tr><td>V10 streaming K=4</td><td>2.9</td><td>13 GB</td><td>57 GB</td><td>retired v1.11.73</td></tr>
         <tr><td>V11 hybrid LRU</td><td>3.0</td><td>13 GB</td><td>58 GB</td><td>retired v1.11.71</td></tr>
       </tbody>
     </table>
     <p>Look at the Wired Memory column. That's the one that mattered. V10 and V11 streamed experts per token, which committed 57–58 GB of Metal command-buffer memory during prefill, enough to take down a 32 GB Mac on the very first generation. The payoff was a ~30–40% tok/s bump over V9. V9 paged holds 3.6 GB Wired at 2.1 tok/s, 15× less. This tier exists to fit a 209 GB model on a small Mac, so footprint beats speed and V9 ships. <strong>On the 2.1 figure:</strong> that is this benchmark's own per-token RSS protocol. The pre-ship K-override sweep, run at the shipped K=20 setting over 5 prompts of 80 tokens with model load timed separately, measures 1.59 tok/s (per-prompt 1.35&ndash;1.65) and 14.04 GB peak. Where the two disagree the rest of this site publishes the lower, shipping-config number; the comparison below is kept on one protocol so the engines stay comparable to each other.</p>
 
-    <h2>Vision 35B-A3B — engine comparison</h2>
+    <h2>Vision 35B-A3B: engine comparison</h2>
     <table>
       <thead><tr><th>Engine</th><th>tok/s</th><th>RSS peak</th><th>Status</th></tr></thead>
       <tbody>
@@ -200,7 +200,7 @@
     </table>
     <p>Vision is a little different. There's still a V10 opt-in for people on tight RAM, lower footprint at the cost of speed (~6.6 tok/s), but the default is V9 at 16.31 tok/s on 24 GB+ Macs. That old 16 GB MacBook Air result leaned on V11's LRU specifically. With V11 gone, the practical floor for Vision is 24 GB.</p>
 
-    <h2>Soak verdict — what passed and what didn't</h2>
+    <h2>Soak verdict: what passed and what didn't</h2>
     <p>Here's what the 2026-05-09 soak verdict on V11 turned up over 9 cycles. The quality numbers were fine. The memory number wasn't.</p>
     <ul>
       <li><strong>135/135 turns coherent.</strong> No output collapse, no repetition loops.</li>
@@ -227,7 +227,7 @@
       </div>
       <div class="faq-item">
         <h3>Why were the streaming engines retired?</h3>
-        <p>V10 and V11 per-token expert streaming committed 57–58 GB of Metal-wired memory during prefill — enough to crash a 32 GB Mac — for only a 30–40% tok/s gain. V9 paged uses 3.6 GB Wired (15× less), so on a footprint-first tier it wins.</p>
+        <p>V10 and V11 per-token expert streaming committed 57–58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30–40% tok/s gain. V9 paged uses 3.6 GB Wired (15× less), so on a footprint-first tier it wins.</p>
       </div>
       <div class="faq-item">
         <h3>How were the numbers measured?</h3>
@@ -244,7 +244,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/what-is-paged-moe-inference/">What is a paged MoE inference engine</a> · <a href="https://outlier.host/run/run-397b-on-64gb-mac-studio/">Run Plus 397B on a 64 GB Mac</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

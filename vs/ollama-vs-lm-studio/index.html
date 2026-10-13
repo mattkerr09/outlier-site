@@ -163,11 +163,11 @@
       </ul>
     </div>
 
-    <p class="lead">Short version: if you live in a terminal and want to wire a local model into your own scripts, use Ollama. If you'd rather open an app, search a model list, hit download, and start typing, use LM Studio. They overlap more than the rivalry suggests — both are free, both run the same GGUF models through llama.cpp, both keep your data on your own machine. The split is interface and intent, not capability. Here's the honest breakdown.</p>
+    <p class="lead">Short version: if you live in a terminal and want to wire a local model into your own scripts, use Ollama. If you'd rather open an app, search a model list, hit download, and start typing, use LM Studio. They overlap more than the rivalry suggests: both are free, both run the same GGUF models through llama.cpp, both keep your data on your own machine. The split is interface and intent, not capability. Here's the honest breakdown.</p>
 
     <h2>What each one is</h2>
     <p><strong>Ollama</strong> is a command-line runner and local server for open-weight models. You install it, run <code>ollama pull llama3</code>, then <code>ollama run llama3</code>, and you're talking to a model in your terminal. It ships an OpenAI-compatible HTTP API, so anything that can call a URL can call your local model. It's open source under the MIT license, runs on macOS, Linux, and Windows, and has one of the larger model libraries around. Developers like it because it's small, scriptable, and gets out of the way.</p>
-    <p><strong>LM Studio</strong> is a desktop app built around a graphical interface. You get a chat window, an in-app model browser that searches and downloads models for you, knobs for context length and other settings, and a one-click local server when you want one. It's free to use but proprietary — the source isn't open the way Ollama's is. It runs on macOS, Windows, and Linux, and on Apple Silicon it can run the MLX format in addition to GGUF. It's the tool to hand someone who wants local AI but never wants to see a command line.</p>
+    <p><strong>LM Studio</strong> is a desktop app built around a graphical interface. You get a chat window, an in-app model browser that searches and downloads models for you, knobs for context length and other settings, and a one-click local server when you want one. It's free to use but proprietary, the source isn't open the way Ollama's is. It runs on macOS, Windows, and Linux, and on Apple Silicon it can run the MLX format in addition to GGUF. It's the tool to hand someone who wants local AI but never wants to see a command line.</p>
 
     <h2>Where Ollama fits</h2>
     <ul>
@@ -201,33 +201,33 @@
         <tr><td>Price</td><td>$0 local; cloud from $20/mo</td><td>$0 local; cloud pay-as-you-go</td></tr>
       </tbody>
     </table>
-    <p class="receipts"><strong>Prices checked 2026-09-08.</strong> Both are free to run locally and both now sell cloud inference on top. Ollama lists Free $0, <strong>Pro $20/month or $200/year</strong>, Team $500/month and Enterprise custom, with per-million-token model pricing (<a href="https://ollama.com/pricing" rel="nofollow">ollama.com/pricing</a>). LM Studio lists Free $0 for local models and voice, plus <strong>pay-as-you-go cloud credits</strong>, with named plans &ldquo;coming soon&rdquo; (<a href="https://lmstudio.ai/pricing" rel="nofollow">lmstudio.ai/pricing</a>). Ollama&rsquo;s FAQ is explicit that the metering is cloud-only &mdash; &ldquo;running models on your own hardware is always unlimited&rdquo; &mdash; so the free local path is genuinely free on both, and the paid tiers buy hosted inference, not the local app. Ollama&rsquo;s cloud is US-hosted with peak pricing between 12:00 and 18:00 UTC on weekdays and concurrency of 1 request on Free against 3 on Pro. LM Studio&rsquo;s cloud credit rates are not published on either its pricing page or its model catalogue, so this page does not quote one. Read in a browser; both pages render prices in JavaScript, so a plain fetch returns no figures.</p>
+    <p class="receipts"><strong>Prices checked 2026-09-08.</strong> Both are free to run locally and both now sell cloud inference on top. Ollama lists Free $0, <strong>Pro $20/month or $200/year</strong>, Team $500/month and Enterprise custom, with per-million-token model pricing (<a href="https://ollama.com/pricing" rel="nofollow">ollama.com/pricing</a>). LM Studio lists Free $0 for local models and voice, plus <strong>pay-as-you-go cloud credits</strong>, with named plans &ldquo;coming soon&rdquo; (<a href="https://lmstudio.ai/pricing" rel="nofollow">lmstudio.ai/pricing</a>). Ollama&rsquo;s FAQ is explicit that the metering is cloud-only, &ldquo;running models on your own hardware is always unlimited&rdquo;, so the free local path is genuinely free on both, and the paid tiers buy hosted inference, not the local app. Ollama&rsquo;s cloud is US-hosted with peak pricing between 12:00 and 18:00 UTC on weekdays and concurrency of 1 request on Free against 3 on Pro. LM Studio&rsquo;s cloud credit rates are not published on either its pricing page or its model catalogue, so this page does not quote one. Read in a browser; both pages render prices in JavaScript, so a plain fetch returns no figures.</p>
 
     <div class="receipts">
       <span class="r-label">The one real shared limit</span>
-      <p>Both tools are bound by your RAM. They load the full model into memory, so the model you want has to fit alongside your OS. On a 64 GB Mac you're realistically looking at models up to roughly 50 GB once you account for overhead — a 70B model at 4-bit fits; the very large open-weight models (a full DeepSeek or a 100B-plus mixture-of-experts) do not.</p>
+      <p>Both tools are bound by your RAM. They load the full model into memory, so the model you want has to fit alongside your OS. On a 64 GB Mac you're realistically looking at models up to roughly 50 GB once you account for overhead, a 70B model at 4-bit fits; the very large open-weight models (a full DeepSeek or a 100B-plus mixture-of-experts) do not.</p>
       <p>That ceiling matters more in 2026 than it used to. With <strong>32 GB of DDR5 now costing around $375</strong> amid an AI-driven memory shortage (reported June 3, 2026), "just add RAM" stopped being the cheap answer. The model you can run is capped by the memory you already own.</p>
     </div>
 
     <h2>So which one should you pick?</h2>
-    <p>Comfortable in a terminal and planning to script against a local model, or run it as a backend for other tools? Ollama. Want to open an app, browse a model list, download with a click, and chat — no commands, ever? LM Studio. Plenty of people keep both: Ollama humming as a headless server, LM Studio open when they just want to poke at a new model in a real window. Neither is the "right" answer in the abstract; the right answer is the one that matches how you like to work.</p>
+    <p>Comfortable in a terminal and planning to script against a local model, or run it as a backend for other tools? Ollama. Want to open an app, browse a model list, download with a click, and chat: no commands, ever? LM Studio. Plenty of people keep both: Ollama humming as a headless server, LM Studio open when they just want to poke at a new model in a real window. Neither is the "right" answer in the abstract; the right answer is the one that matches how you like to work.</p>
 
     <h2>A third option, if you're on a Mac</h2>
-    <p>One honest caveat to both: GGUF runners are bound by RAM, and that wall is exactly where some models you might want to run live. Outlier is a Mac-native app (Apple Silicon only) that takes a different route — a patent-pending paged inference engine streams expert tensors off the SSD so it can run models <em>bigger</em> than the Mac's RAM. A 397B-parameter model runs at roughly 11 GB peak memory on a 64 GB Mac, where a GGUF tool would simply refuse to load it. It's a batteries-included app (chat, a coding agent, deep research, vision) rather than a pure runner or GUI, the free tier covers Nano and Lite with no account, and you can import your own MLX model. It's not for everyone — it's Mac-only, and if you need cross-platform or open source, Ollama and LM Studio are the answer. But if you're on Apple Silicon and the RAM ceiling is the thing blocking you, it's worth a look. See the side-by-sides: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> and <a href="https://outlier.host/vs/outlier-vs-lm-studio/">Outlier vs LM Studio</a>.</p>
+    <p>One honest caveat to both: GGUF runners are bound by RAM, and that wall is exactly where some models you might want to run live. Outlier is a Mac-native app (Apple Silicon only) that takes a different route, a patent-pending paged inference engine streams expert tensors off the SSD so it can run models <em>bigger</em> than the Mac's RAM. A 397B-parameter model runs at roughly 11 GB peak memory on a 64 GB Mac, where a GGUF tool would simply refuse to load it. It's a batteries-included app (chat, a coding agent, deep research, vision) rather than a pure runner or GUI, the free tier covers Nano and Lite with no account, and you can import your own MLX model. It's not for everyone: it's Mac-only, and if you need cross-platform or open source, Ollama and LM Studio are the answer. But if you're on Apple Silicon and the RAM ceiling is the thing blocking you, it's worth a look. See the side-by-sides: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> and <a href="https://outlier.host/vs/outlier-vs-lm-studio/">Outlier vs LM Studio</a>.</p>
 
     <h2>Questions about Ollama vs LM Studio</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>Is Ollama or LM Studio better?</h3>
-        <p>It depends on how you work. Ollama is better if you want a CLI and a local API to script against. LM Studio is better if you want a polished chat window and a built-in model browser without touching a terminal. Both are free, both run the same GGUF models, and both keep your data local — so "better" comes down to whether you'd rather type a command or click a button.</p>
+        <p>It depends on how you work. Ollama is better if you want a CLI and a local API to script against. LM Studio is better if you want a polished chat window and a built-in model browser without touching a terminal. Both are free, both run the same GGUF models, and both keep your data local, so "better" comes down to whether you'd rather type a command or click a button.</p>
       </div>
       <div class="faq-item">
         <h3>Is LM Studio free?</h3>
-        <p>Yes, LM Studio is free to download and use. It's a proprietary, closed-source desktop app, which is the main licensing difference from Ollama — Ollama is open source under the MIT license.</p>
+        <p>Yes, LM Studio is free to download and use. It's a proprietary, closed-source desktop app, which is the main licensing difference from Ollama: Ollama is open source under the MIT license.</p>
       </div>
       <div class="faq-item">
         <h3>Can Ollama and LM Studio run the same models?</h3>
-        <p>Largely yes. Both run GGUF models built on llama.cpp, so most open-weight families — Llama, Qwen, Mistral, Gemma, DeepSeek — work in either one. LM Studio on Apple Silicon also supports the MLX format. In both tools, the model has to fit in your machine's RAM.</p>
+        <p>Largely yes. Both run GGUF models built on llama.cpp, so most open-weight families (Llama, Qwen, Mistral, Gemma, DeepSeek) work in either one. LM Studio on Apple Silicon also supports the MLX format. In both tools, the model has to fit in your machine's RAM.</p>
       </div>
     </div>
 
@@ -238,9 +238,9 @@
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/vs/outlier-vs-lm-studio/">Outlier vs LM Studio</a> · <a href="https://outlier.host/vs/mac-native-ai-comparison/">Mac-native AI — Outlier vs Jan vs Ollama vs LM Studio</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/vs/outlier-vs-lm-studio/">Outlier vs LM Studio</a> · <a href="https://outlier.host/vs/mac-native-ai-comparison/">Mac-native AI: Outlier vs Jan vs Ollama vs LM Studio</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

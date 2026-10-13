@@ -149,44 +149,44 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>Not across the board, and I can tell you exactly where.</strong> A local on-device 27B coding agent (the "compact" tier, running in MLX on an M1 Ultra) scored a <strong>measured ~45% on SWE-bench Verified — 18 of 40 blind</strong>.</li>
+        <li><strong>Not across the board, and I can tell you exactly where.</strong> A local on-device 27B coding agent (the "compact" tier, running in MLX on an M1 Ultra) scored a <strong>measured ~45% on SWE-bench Verified: 18 of 40 blind</strong>.</li>
         <li><strong>Local engineering, no new training, gets it to mid-50s / low-60s:</strong> execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission.</li>
         <li><strong>Training (LoRA + distillation) reaches ~70–80% in-distribution.</strong> The last ~15–20 points to Claude's 65–72% is a genuine ceiling, not a tuning knob.</li>
-        <li><strong>It solved the bounded, testable tasks we set it</strong> (a bank account class passed 13/13 tests) — and it is truthful: it reports failure honestly instead of claiming a false pass.</li>
+        <li><strong>It solved the bounded, testable tasks we set it</strong> (a bank account class passed 13/13 tests), and it is truthful: it reports failure honestly instead of claiming a false pass.</li>
         <li><strong>The single biggest lever is an execution oracle:</strong> select on running the tests, not on "it compiles" and not on the model approving its own work.</li>
       </ul>
     </div>
 
-    <p class="lead">"Can a small local model really code like Claude?" is the question I get most, and the honest answer is neither the hype ("small models are as good as frontier now") nor the dismissal ("a 4-bit 27B is a toy"). It's a specific, measurable gap that I've reverse-engineered into a roadmap. This is that roadmap: the measured starting point, how far pure local engineering carries it, how far training carries it, and the three walls that a local 27B does not cross — with the numbers behind each claim. No vibes.</p>
+    <p class="lead">"Can a small local model really code like Claude?" is the question I get most, and the honest answer is neither the hype ("small models are as good as frontier now") nor the dismissal ("a 4-bit 27B is a toy"). It's a specific, measurable gap that I've reverse-engineered into a roadmap. This is that roadmap: the measured starting point, how far pure local engineering carries it, how far training carries it, and the three walls that a local 27B does not cross, with the numbers behind each claim. No vibes.</p>
 
     <h2>The measured starting point: ~45% on SWE-bench Verified</h2>
-    <p>SWE-bench Verified is the benchmark that actually matters for coding agents — real GitHub issues with hidden tests that either pass or don't. Run blind against a slice of it, the local 27B agent resolved <strong>18 of 40 tasks — about 45%</strong>. That number is measured, not projected, and it comes with the honesty this whole strategy is built on:</p>
+    <p>SWE-bench Verified is the benchmark that actually matters for coding agents. Real GitHub issues with hidden tests that either pass or don't. Run blind against a slice of it, the local 27B agent resolved <strong>18 of 40 tasks: about 45%</strong>. That number is measured, not projected, and it comes with the honesty this whole strategy is built on:</p>
     <ul>
-      <li>It's a <strong>blind</strong> result — the agent didn't see the hidden tests.</li>
+      <li>It's a <strong>blind</strong> result, the agent didn't see the hidden tests.</li>
       <li>It's <strong>not a leaderboard number.</strong> 40 tasks is a real, honest slice, not the full 500-task Verified set. Treat it as a measured signal, not a headline rank.</li>
-      <li>The single-shot baseline (one attempt, no scaffold) sits far below this. Most of the ~45% is the <em>agent loop</em> — localization, tool calls, running tests, iterating — not the raw model.</li>
+      <li>The single-shot baseline (one attempt, no scaffold) sits far below this. Most of the ~45% is the <em>agent loop</em>: localization, tool calls, running tests, iterating) not the raw model.</li>
     </ul>
 
     <h2>The roadmap: what closes the gap, and what doesn't</h2>
-    <p>Here's the honest ladder, from the measured 45% up to the wall. Each rung is a real, distinct source of gain — and the last rung is a ceiling, not another rung.</p>
+    <p>Here's the honest ladder, from the measured 45% up to the wall. Each rung is a real, distinct source of gain, and the last rung is a ceiling, not another rung.</p>
     <table>
       <thead><tr><th>Stage</th><th>What it adds</th><th>Measured / target band</th></tr></thead>
       <tbody>
         <tr><td>Blind baseline</td><td>The agent loop as it stands today</td><td><strong>~45%</strong> (18/40, measured)</td></tr>
-        <tr><td>Local engineering</td><td>Execution-oracle selection, self-verification, verbatim memory, whole-file edits, grammar-constrained tool emission — <em>no new training</em></td><td>mid-50s to low-60s</td></tr>
+        <tr><td>Local engineering</td><td>Execution-oracle selection, self-verification, verbatim memory, whole-file edits, grammar-constrained tool emission: <em>no new training</em></td><td>mid-50s to low-60s</td></tr>
         <tr><td>Training</td><td>LoRA + distillation on the target distribution</td><td>~70–80% in-distribution</td></tr>
-        <tr><td>The wall (Claude's band)</td><td>The last ~15–20 points — a genuine ceiling for a 4-bit 27B, not a tuning knob</td><td>Claude 65–72%</td></tr>
+        <tr><td>The wall (Claude's band)</td><td>The last ~15–20 points: a genuine ceiling for a 4-bit 27B, not a tuning knob</td><td>Claude 65–72%</td></tr>
       </tbody>
     </table>
-    <p>Read that carefully. Local engineering — the part Outlier owns and ships — is worth roughly <strong>ten points</strong> on its own, with no model change at all. Training buys another big jump, but only <em>in-distribution</em>: it makes the agent great at the kind of work it was trained on, not universally smarter. And then there's a wall.</p>
+    <p>Read that carefully. Local engineering, the part Outlier owns and ships, is worth roughly <strong>ten points</strong> on its own, with no model change at all. Training buys another big jump, but only <em>in-distribution</em>: it makes the agent great at the kind of work it was trained on, not universally smarter. And then there's a wall.</p>
 
     <h2>The three hard walls</h2>
     <p>This is the part most "local AI" writeups skip, because it's the part that doesn't flatter the local model. There are three failures a local 27B does not engineer its way out of. They are structural.</p>
     <table>
       <thead><tr><th>Wall</th><th>What it is</th><th>Why it's structural</th></tr></thead>
       <tbody>
-        <tr><td><strong>1. Per-token slip floor</strong></td><td>Exact enumeration, counting, arithmetic — the "get every one of these 40 items exactly right" tasks</td><td>A structural property of a 4-bit 27B. Quantization noise sets a floor on per-token precision that no scaffold removes.</td></tr>
-        <tr><td><strong>2. Breadth of world &amp; library knowledge</strong></td><td>The long tail of "I just need to know this obscure API / edge case / library quirk"</td><td>A parameter-count wall. Distillation transfers <em>style</em>, not the fact long-tail — you can't distill knowledge the student has no room to store.</td></tr>
+        <tr><td><strong>1. Per-token slip floor</strong></td><td>Exact enumeration, counting, arithmetic, the "get every one of these 40 items exactly right" tasks</td><td>A structural property of a 4-bit 27B. Quantization noise sets a floor on per-token precision that no scaffold removes.</td></tr>
+        <tr><td><strong>2. Breadth of world &amp; library knowledge</strong></td><td>The long tail of "I just need to know this obscure API / edge case / library quirk"</td><td>A parameter-count wall. Distillation transfers <em>style</em>, not the fact long-tail. You can't distill knowledge the student has no room to store.</td></tr>
         <tr><td><strong>3. Exact recall of a far-back byte-span</strong></td><td>Reproducing a specific span verbatim from deep in a long context</td><td>Attention over a long window is lossy at small scale; the exact bytes from far back get approximated, not recalled.</td></tr>
       </tbody>
     </table>
@@ -209,9 +209,9 @@
 
     <h3>Where it falls short of Claude</h3>
     <ul>
-      <li><strong>Breadth-bound tasks</strong> — the ones that hinge on knowing an obscure fact or library quirk (wall #2).</li>
-      <li><strong>Flawless multi-step novel reasoning with no test to check against</strong> — no execution oracle can save you when there's nothing to run.</li>
-      <li><strong>40-plus-step autonomous runs</strong> — error compounds over a long horizon; small models drift where Claude holds the thread.</li>
+      <li><strong>Breadth-bound tasks</strong>: the ones that hinge on knowing an obscure fact or library quirk (wall #2).</li>
+      <li><strong>Flawless multi-step novel reasoning with no test to check against</strong>: no execution oracle can save you when there's nothing to run.</li>
+      <li><strong>40-plus-step autonomous runs</strong>: error compounds over a long horizon; small models drift where Claude holds the thread.</li>
     </ul>
 
     <h2>The biggest lever: an execution oracle</h2>
@@ -219,18 +219,18 @@
     <table>
       <thead><tr><th>Selection method</th><th>What it actually checks</th><th>Trustworthy?</th></tr></thead>
       <tbody>
-        <tr><td>The model approves itself</td><td>Whether the model <em>thinks</em> it's right</td><td>No — a confident wrong answer looks identical to a right one</td></tr>
-        <tr><td>"It compiles"</td><td>Syntax, not behavior</td><td>Weak — compiling code is routinely wrong</td></tr>
-        <tr><td><strong>Execution oracle (run the tests)</strong></td><td>Whether the behavior is actually correct</td><td><strong>Yes — the ground truth</strong></td></tr>
+        <tr><td>The model approves itself</td><td>Whether the model <em>thinks</em> it's right</td><td>No, a confident wrong answer looks identical to a right one</td></tr>
+        <tr><td>"It compiles"</td><td>Syntax, not behavior</td><td>Weak: compiling code is routinely wrong</td></tr>
+        <tr><td><strong>Execution oracle (run the tests)</strong></td><td>Whether the behavior is actually correct</td><td><strong>Yes, the ground truth</strong></td></tr>
       </tbody>
     </table>
-    <p>Selecting on <em>run-the-tests</em> is what turns a small model's noisy best-of-N attempts into a reliable pass. The model doesn't have to be right on the first try — it has to be right on <em>one</em> try, and the oracle finds it. This is the lever behind most of the local-engineering jump in the roadmap above, and it's the one Outlier leans on hardest.</p>
+    <p>Selecting on <em>run-the-tests</em> is what turns a small model's noisy best-of-N attempts into a reliable pass. The model doesn't have to be right on the first try: it has to be right on <em>one</em> try, and the oracle finds it. This is the lever behind most of the local-engineering jump in the roadmap above, and it's the one Outlier leans on hardest.</p>
 
     <h3>Self-verification: the agent checks its own work</h3>
-    <p>The newest piece extends the oracle inward. When a test fails, the agent now <strong>computes the true answer itself</strong> and fixes whichever side is actually wrong — the code, <em>or</em> a test that asserts a wrong value. Crucially, there's a guard that <strong>blocks weakening a good test to cheat</strong> the check. That guard is the whole game: an agent allowed to edit tests will, if you let it, "fix" a failure by deleting the assertion. Blocking that is what keeps self-verification honest instead of a loophole.</p>
+    <p>The newest piece extends the oracle inward. When a test fails, the agent now <strong>computes the true answer itself</strong> and fixes whichever side is actually wrong: the code, <em>or</em> a test that asserts a wrong value. Crucially, there's a guard that <strong>blocks weakening a good test to cheat</strong> the check. That guard is the whole game: an agent allowed to edit tests will, if you let it, "fix" a failure by deleting the assertion. Blocking that is what keeps self-verification honest instead of a loophole.</p>
 
     <h2>The honest takeaway</h2>
-    <p>Can a local 27B model code like Claude? Not across the board. On bounded, in-distribution, testable work, it passed our tests — measurably, today. Beyond that, there's a real ~15–20-point wall with three structural causes I won't hand-wave away. The interesting truth is how much of the gap is <em>engineering</em> rather than raw capability: roughly ten points sit in selection, memory, and edit strategy that don't touch the model at all. That's the seam a local coding agent lives in — private, offline, free of usage caps, and honest about where it stands. When the task hits a wall, the right move isn't to pretend; it's to escalate. Everywhere else, the local model earns its keep.</p>
+    <p>Can a local 27B model code like Claude? Not across the board. On bounded, in-distribution, testable work, it passed our tests: measurably, today. Beyond that, there's a real ~15–20-point wall with three structural causes I won't hand-wave away. The interesting truth is how much of the gap is <em>engineering</em> rather than raw capability: roughly ten points sit in selection, memory, and edit strategy that don't touch the model at all. That's the seam a local coding agent lives in: private, offline, free of usage caps, and honest about where it stands. When the task hits a wall, the right move isn't to pretend; it's to escalate. Everywhere else, the local model earns its keep.</p>
 
     <h2>Questions about the 27B coding measurements</h2>
     <div class="faq">
@@ -240,7 +240,7 @@
       </div>
       <div class="faq-item">
         <h3>What did the local 27B score on SWE-bench Verified?</h3>
-        <p>Measured blind, the local 27B agent scored about 45% — 18 of 40 tasks resolved. That is a measured number on real tasks, not a leaderboard entry, and not the full 500-task Verified set.</p>
+        <p>Measured blind, the local 27B agent scored about 45%: 18 of 40 tasks resolved. That is a measured number on real tasks, not a leaderboard entry, and not the full 500-task Verified set.</p>
       </div>
       <div class="faq-item">
         <h3>What is the single biggest lever to close the gap?</h3>
@@ -255,9 +255,9 @@
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude — 54-prompt benchmark</a> · <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code (full breakdown)</a> · <a href="https://outlier.host/vs/local-ai-vs-claude-code/">Local AI vs Claude Code by task</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> · <a href="https://outlier.host/vs/outlier-vs-claude-code/">Outlier vs Claude Code (full breakdown)</a> · <a href="https://outlier.host/vs/local-ai-vs-claude-code/">Local AI vs Claude Code by task</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

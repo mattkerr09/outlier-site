@@ -151,8 +151,8 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>The best local LLM in 2026 depends on your task and your RAM</strong> — there's no single champion, but Qwen is the strongest all-round open-weight family, with DeepSeek for heavy reasoning and Llama as the safe default.</li>
-        <li><strong>Best small model for a modest machine:</strong> Gemma or Phi — both run a useful model on 8–16 GB.</li>
+        <li><strong>The best local LLM in 2026 depends on your task and your RAM</strong>: there's no single champion, but Qwen is the strongest all-round open-weight family, with DeepSeek for heavy reasoning and Llama as the safe default.</li>
+        <li><strong>Best small model for a modest machine:</strong> Gemma or Phi, both run a useful model on 8–16 GB.</li>
         <li><strong>Best on a Mac:</strong> the same families run in MLX/GGUF; unified memory lets a 32–64 GB Mac hold models a same-price PC can't.</li>
         <li><strong>No terminal?</strong> LM Studio, Jan, and GPT4All are free desktop apps; on a Mac, Outlier is a one-download app whose Qwen-family tiers cover daily work.</li>
       </ul>
@@ -161,47 +161,47 @@
     <p class="lead">There is no single "best local LLM" in 2026, and anyone who tells you otherwise is selling something. The right model is the largest one from the right family that your RAM can hold. Qwen is the all-round leader for coding and multilingual work, DeepSeek pulls ahead on hard reasoning, and Llama is the dependable general default. Here's how the main open-weight families actually stack up, what hardware each one needs, and the honest tradeoffs.</p>
 
     <h2>How to read this</h2>
-    <p>Three things decide which local model is "best" for you. <strong>The family</strong> sets the ceiling — different labs are strong at different things. <strong>The size</strong> you pick inside that family is capped by your memory: a model has to fit in RAM (or unified memory on a Mac) to run at a usable speed. And <strong>the license</strong> decides whether you can ship what it makes. Pick the family for the job, then take the biggest size your machine holds.</p>
+    <p>Three things decide which local model is "best" for you. <strong>The family</strong> sets the ceiling: different labs are strong at different things. <strong>The size</strong> you pick inside that family is capped by your memory: a model has to fit in RAM (or unified memory on a Mac) to run at a usable speed. And <strong>the license</strong> decides whether you can ship what it makes. Pick the family for the job, then take the biggest size your machine holds.</p>
 
     <h2>The open-weight families, compared</h2>
-    <p>These are the model families people actually download and run at home in 2026. Sizes are the published parameter counts; the practical floor assumes a quantized build. No invented benchmark numbers here — just what each family is known for.</p>
+    <p>These are the model families people actually download and run at home in 2026. Sizes are the published parameter counts; the practical floor assumes a quantized build. No invented benchmark numbers here, just what each family is known for.</p>
     <table><thead><tr><th>Family</th><th>Maker</th><th>Strong at</th><th>Typical sizes</th><th>License (general)</th></tr></thead><tbody>
       <tr><td>Qwen</td><td>Alibaba</td><td>Coding, multilingual, all-round</td><td>~0.5B → very large</td><td>Mostly permissive (Apache-2.0 on many releases)</td></tr>
       <tr><td>Llama</td><td>Meta</td><td>General-purpose, broad ecosystem</td><td>~1B → very large</td><td>Meta community license (some restrictions)</td></tr>
       <tr><td>DeepSeek</td><td>DeepSeek</td><td>Reasoning, math, coding</td><td>Distilled small → very large (V3/R1)</td><td>Open weights (largely permissive)</td></tr>
-      <tr><td>Mistral</td><td>Mistral AI</td><td>Balanced quality-per-size</td><td>~7B → mid/large (incl. MoE)</td><td>Mix — Apache-2.0 plus some non-commercial</td></tr>
+      <tr><td>Mistral</td><td>Mistral AI</td><td>Balanced quality-per-size</td><td>~7B → mid/large (incl. MoE)</td><td>Mix: Apache-2.0 plus some non-commercial</td></tr>
       <tr><td>Gemma</td><td>Google</td><td>Small, efficient, polished</td><td>~1B → ~27B</td><td>Gemma terms (use restrictions)</td></tr>
       <tr><td>Phi</td><td>Microsoft</td><td>Tiny but capable, on-device</td><td>~1B → mid</td><td>Mostly MIT</td></tr>
     </tbody></table>
-    <p class="disclaim">Licenses change between releases — check the exact model card before you ship anything commercial. "General" here means the family's usual posture, not a guarantee for a specific checkpoint.</p>
+    <p class="disclaim">Licenses change between releases: check the exact model card before you ship anything commercial. "General" here means the family's usual posture, not a guarantee for a specific checkpoint.</p>
 
     <h2>Which one should you pick?</h2>
-    <p><strong>For coding and mixed daily work:</strong> Qwen. The coder-tuned builds write code that holds up, and the family covers many languages. <strong>For the hardest reasoning</strong> — math, multi-step logic, proofs — DeepSeek's V3/R1 line is the one to reach for, though the full sizes are big. <strong>If you want a known quantity</strong> with the widest tooling and tutorials, Llama is the dependable middle. <strong>If your machine is modest</strong>, Gemma and Phi punch above their parameter count and run on 8–16 GB. And <strong>Mistral</strong> sits in the sweet spot when you want strong output without a huge download.</p>
+    <p><strong>For coding and mixed daily work:</strong> Qwen. The coder-tuned builds write code that holds up, and the family covers many languages. <strong>For the hardest reasoning</strong>: math, multi-step logic, proofs) DeepSeek's V3/R1 line is the one to reach for, though the full sizes are big. <strong>If you want a known quantity</strong> with the widest tooling and tutorials, Llama is the dependable middle. <strong>If your machine is modest</strong>, Gemma and Phi punch above their parameter count and run on 8–16 GB. And <strong>Mistral</strong> sits in the sweet spot when you want strong output without a huge download.</p>
 
     <h2>What hardware runs them</h2>
-    <p>The rule almost nobody tells you up front: a local model has to fit in memory. A 7–8B model quantized wants roughly 8 GB free; a ~27–34B model wants around 24–32 GB; the full DeepSeek and large Llama/Qwen builds want serious workstation memory or multiple GPUs. On a Mac, unified memory is the model's memory, so a 32 GB or 64 GB Apple Silicon machine can hold models that a same-price PC with a small graphics card can't. The catch is the other direction — RAM got expensive: <strong>32 GB of DDR5 climbed to around $375 in June 2026</strong> as an AI-driven shortage squeezed PC builders, so "just add memory" isn't the cheap fix it used to be. For Apple Silicon specifics, see <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">the best local AI on Apple Silicon</a> and the <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM → model size table</a>.</p>
+    <p>The rule almost nobody tells you up front: a local model has to fit in memory. A 7–8B model quantized wants roughly 8 GB free; a ~27–34B model wants around 24–32 GB; the full DeepSeek and large Llama/Qwen builds want serious workstation memory or multiple GPUs. On a Mac, unified memory is the model's memory, so a 32 GB or 64 GB Apple Silicon machine can hold models that a same-price PC with a small graphics card can't. The catch is the other direction: RAM got expensive: <strong>32 GB of DDR5 climbed to around $375 in June 2026</strong> as an AI-driven shortage squeezed PC builders, so "just add memory" isn't the cheap fix it used to be. For Apple Silicon specifics, see <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">the best local AI on Apple Silicon</a> and the <a href="https://outlier.host/data/mac-ram-to-model-size/">Mac RAM → model size table</a>.</p>
 
     <h2>How do you actually run one?</h2>
-    <p>You need a runner. The free, cross-platform ones are well worn: <strong>Ollama</strong> is the CLI-first developer favorite (GGUF via llama.cpp, big model library, simple API). <strong>LM Studio</strong> wraps the same models in a polished desktop GUI with a model browser and a local server, and runs MLX on Macs. <strong>Jan</strong> (MIT-licensed) and <strong>GPT4All</strong> are clean, privacy-focused desktop apps if you want a chat window and no command line. All of them are RAM-bound — the model still has to fit.</p>
-    <p>On a Mac there's one more route worth knowing, because it breaks the "must fit in RAM" rule. <strong>Outlier</strong> is a Mac-native, signed, one-download app whose own tiers are built on the Qwen family, so its everyday models cover the same coding-and-chat work as a self-hosted Qwen — no terminal, no Docker, no account for the free tiers. Its patent-pending paged inference engine streams a model's experts from disk, so it runs a <strong>397B-class model at about 11 GB peak RSS on a 64 GB Mac</strong> instead of needing hundreds of gigs of memory. If you want a specific open-weight model the app doesn't ship, you can import your own MLX build (bring-your-own-model). It's one way to run a strong local model without assembling the stack yourself — not the only way, and on Linux or Windows the Ollama route is the smarter call.</p>
+    <p>You need a runner. The free, cross-platform ones are well worn: <strong>Ollama</strong> is the CLI-first developer favorite (GGUF via llama.cpp, big model library, simple API). <strong>LM Studio</strong> wraps the same models in a polished desktop GUI with a model browser and a local server, and runs MLX on Macs. <strong>Jan</strong> (MIT-licensed) and <strong>GPT4All</strong> are clean, privacy-focused desktop apps if you want a chat window and no command line. All of them are RAM-bound, the model still has to fit.</p>
+    <p>On a Mac there's one more route worth knowing, because it breaks the "must fit in RAM" rule. <strong>Outlier</strong> is a Mac-native, signed, one-download app whose own tiers are built on the Qwen family, so its everyday models cover the same coding-and-chat work as a self-hosted Qwen: no terminal, no Docker, no account for the free tiers. Its patent-pending paged inference engine streams a model's experts from disk, so it runs a <strong>397B-class model at about 11 GB peak RSS on a 64 GB Mac</strong> instead of needing hundreds of gigs of memory. If you want a specific open-weight model the app doesn't ship, you can import your own MLX build (bring-your-own-model). It's one way to run a strong local model without assembling the stack yourself, not the only way, and on Linux or Windows the Ollama route is the smarter call.</p>
 
     <div class="receipts">
-      <strong>Why local at all in 2026?</strong> The bills came due. Axios called it "AI sticker shock" (May 28, 2026); the headline "Corporate America Is Starting to Ration AI as Cost Skyrockets" ran on May 30, 2026; and a real, popular Hacker News thread is literally titled "Optimizing my sleep around Claude usage limits." Running an open-weight model on a machine you own has no monthly meter and no usage cap — the model is a file, and <strong>files don't have terms of service</strong>. The tradeoff is honest: local runs slower than a cloud flagship, and you manage your own setup.
+      <strong>Why local at all in 2026?</strong> The bills came due. Axios called it "AI sticker shock" (May 28, 2026); the headline "Corporate America Is Starting to Ration AI as Cost Skyrockets" ran on May 30, 2026; and a real, popular Hacker News thread is literally titled "Optimizing my sleep around Claude usage limits." Running an open-weight model on a machine you own has no monthly meter and no usage cap: the model is a file, and <strong>files don't have terms of service</strong>. The tradeoff is honest: local runs slower than a cloud flagship, and you manage your own setup.
     </div>
 
     <h2>Questions about local LLMs you can run in 2026</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>What's the best local LLM in 2026?</h3>
-        <p>There's no single winner — it depends on your task and your RAM. Qwen is the strongest all-rounder for coding and multilingual work, DeepSeek leads on heavy reasoning, Llama is the safe general default, Gemma and Phi are the best small models for modest machines, and Mistral is a balanced mid-size pick. Match the family to the job, then pick the largest size your machine can hold.</p>
+        <p>There's no single winner: it depends on your task and your RAM. Qwen is the strongest all-rounder for coding and multilingual work, DeepSeek leads on heavy reasoning, Llama is the safe general default, Gemma and Phi are the best small models for modest machines, and Mistral is a balanced mid-size pick. Match the family to the job, then pick the largest size your machine can hold.</p>
       </div>
       <div class="faq-item">
         <h3>Which local LLM is best for a Mac?</h3>
-        <p>On Apple Silicon, the same open-weight families run well in MLX or GGUF form, and unified memory means a 32 GB or 64 GB Mac can hold models a similarly priced PC can't. Outlier is a Mac-native app whose own Qwen-family tiers cover everyday work, and its paged inference engine runs a 397B-class model at about 11 GB peak RSS on a 64 GB Mac — bigger than the RAM would normally allow.</p>
+        <p>On Apple Silicon, the same open-weight families run well in MLX or GGUF form, and unified memory means a 32 GB or 64 GB Mac can hold models a similarly priced PC can't. Outlier is a Mac-native app whose own Qwen-family tiers cover everyday work, and its paged inference engine runs a 397B-class model at about 11 GB peak RSS on a 64 GB Mac: bigger than the RAM would normally allow.</p>
       </div>
       <div class="faq-item">
         <h3>Can I run these without a terminal?</h3>
-        <p>Yes. LM Studio, Jan, and GPT4All are free desktop apps with a chat window and no command line. On a Mac, Outlier is a one-download signed app — no terminal, no Docker, no account for the free tiers — and it can import your own MLX model if you want a specific open-weight model the app doesn't ship.</p>
+        <p>Yes. LM Studio, Jan, and GPT4All are free desktop apps with a chat window and no command line. On a Mac, Outlier is a one-download signed app (no terminal, no Docker, no account for the free tiers) and it can import your own MLX model if you want a specific open-weight model the app doesn't ship.</p>
       </div>
     </div>
     <div class="cta">
@@ -212,7 +212,7 @@
 
     <div class="related">More: <a href="https://outlier.host/best/local-llm-for-coding/">Best local LLM for coding</a> · <a href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">Local AI benchmarks on Mac (2026)</a> · <a href="https://outlier.host/learn/apple-silicon-best-local-ai-2026/">Best local AI on Apple Silicon</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

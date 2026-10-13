@@ -102,12 +102,12 @@
   <main>
     <span class="pill">OpenAI-compatible · function calling · 100% local</span>
     <h1>Use Outlier as the engine behind your tools</h1>
-    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it — same code you already have, but the model runs locally and nothing leaves your machine.</p>
+    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it: same code you already have, but the model runs locally and nothing leaves your machine.</p>
 
     <h2>1 · Turn it on</h2>
-    <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>) — nothing is exposed to your network (<a href="https://outlier.host/learn/what-is-127-0-0-1-8766/">what that address is, and how to check it</a>). The API is part of Pro: on the free plan the toggle opens the upgrade card instead, and a request to <code>/v1</code> comes back <code>402</code> with <code>feature_locked</code>.</p>
+    <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>): nothing is exposed to your network (<a href="https://outlier.host/learn/what-is-127-0-0-1-8766/">what that address is, and how to check it</a>). The API is part of Pro: on the free plan the toggle opens the upgrade card instead, and a request to <code>/v1</code> comes back <code>402</code> with <code>feature_locked</code>.</p>
 
-    <h2>2 · OpenAI SDK — drop-in</h2>
+    <h2>2 · OpenAI SDK: drop-in</h2>
     <pre><code>from openai import OpenAI
 
 client = OpenAI(
@@ -126,8 +126,8 @@ print(r.choices[0].message.content)</code></pre>
     <p>Streaming, <code>max_tokens</code>, <code>temperature</code>, and <code>finish_reason</code> behave like the reference API.</p>
 
     <p><strong>Images do not go through this endpoint.</strong> Sending
-    OpenAI's multimodal form — a <code>content</code> array of
-    <code>{"type": "image_url", ...}</code> parts — returns
+    OpenAI's multimodal form (a <code>content</code> array of
+    <code>{"type": "image_url", ...}</code> parts) returns
     <code>400 messages.0.content: Input should be a valid string</code>, because
     <code>/v1/chat/completions</code> takes text only. Vision 3.8 will answer a
     text prompt here like any other tier; it just cannot see anything you send
@@ -159,7 +159,7 @@ Authorization: Bearer YOUR-OUTLIER-KEY</code></pre>
 tc = r.choices[0].message.tool_calls[0]
 print(tc.function.name, tc.function.arguments)
 # → get_weather {"city": "Paris"}</code></pre>
-    <p>Run your function, then send the result back as a <code>role:"tool"</code> message — multi-turn tool loops work the way the OpenAI docs describe, including streaming (<code>delta.tool_calls</code>, <code>finish_reason:"tool_calls"</code>).</p>
+    <p>Run your function, then send the result back as a <code>role:"tool"</code> message: multi-turn tool loops work the way the OpenAI docs describe, including streaming (<code>delta.tool_calls</code>, <code>finish_reason:"tool_calls"</code>).</p>
 
     <h2>4 · LangChain</h2>
     <pre><code>from langchain_openai import ChatOpenAI
@@ -215,7 +215,7 @@ r = litellm.completion(
           whole input.</li>
       <li><strong>No history trimming.</strong> The app shortens a long
           conversation to fit the context window. This endpoint sends what you
-          sent — dropping messages a client deliberately included would be the
+          sent: dropping messages a client deliberately included would be the
           wrong default for an API, so a long conversation stays intact and
           simply takes longer.</li>
     </ul>
@@ -230,13 +230,13 @@ r = litellm.completion(
     and the reply read back on 1 September 2026, so this is what was observed
     rather than what the schema permits.</p>
 
-    <p><strong>Honoured — the effect was measured, not assumed.</strong></p>
+    <p><strong>Honoured: the effect was measured, not assumed.</strong></p>
     <ul>
       <li><code>temperature</code>, <code>max_tokens</code>,
           <code>max_completion_tokens</code></li>
-      <li><code>stop</code> — truncates the reply and comes back with
+      <li><code>stop</code>. Truncates the reply and comes back with
           <code>finish_reason: "stop"</code></li>
-      <li><code>stream</code> — <code>text/event-stream</code>, a stable id
+      <li><code>stream</code>: <code>text/event-stream</code>, a stable id
           across chunks, <code>role</code> in the first delta,
           <code>finish_reason</code> on the last, terminated by
           <code>[DONE]</code></li>

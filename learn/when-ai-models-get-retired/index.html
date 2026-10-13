@@ -162,7 +162,7 @@
     <h2>We have retired models too. Twice. Here is what it cost.</h2>
     <p>It would be easy to write this page as though retirement is something
        other companies do. It is not. This app has retired two tiers, and the
-       interesting part is not that it happened — it is what the code has to do
+       interesting part is not that it happened. It is what the code has to do
        so that it does not strand the person who was using the retired thing.</p>
 
     <table>
@@ -172,12 +172,12 @@
       </thead>
       <tbody>
         <tr>
-          <td>v1.11.796</td><td><code>vision</code></td><td><code>vision38</code> — Outlier Vision 3.8</td>
+          <td>v1.11.796</td><td><code>vision</code></td><td><code>vision38</code>: Outlier Vision 3.8</td>
           <td>3.5&nbsp;GB smaller, slightly faster, newer base, Apache&nbsp;2.0, and it matched the
               old tier on every image in a like-for-like check.</td>
         </tr>
         <tr>
-          <td>v1.11.798</td><td><code>code</code></td><td><code>compact</code> — Outlier Core</td>
+          <td>v1.11.798</td><td><code>code</code></td><td><code>compact</code>: Outlier Core</td>
           <td>Never two models. The same <code>.safetensors</code> from the same directory, so the
               same tokenizer and the same chat template. Two real differences: a temperature
               default of 0.2, and a context length of 65,536 against 32,768.</td>
@@ -189,7 +189,7 @@
     <p>Dropping the catalog entry is the obvious half. The other half is a line in
        a table the user never sees, mapping the old id onto the new one. Skip it
        and a stored selection carrying the retired id reaches the model loader and
-       gets <code>400 unknown model</code> — a hard error, not a fallback.</p>
+       gets <code>400 unknown model</code>: a hard error, not a fallback.</p>
     <p>Which means the people it breaks are precisely the people who were using
        the thing you retired. Everyone who had moved on already is fine. That is
        the shape of most migration bugs: the blast radius is exactly the users
@@ -203,13 +203,13 @@
        property of running models on your own machine rather than someone else's.
        The context default is raised from its base toward 262,144 depending on how
        much RAM is actually free, so above roughly 16&nbsp;GB of headroom both
-       tiers already resolved to the same window. Below it they diverged — and the
+       tiers already resolved to the same window. Below it they diverged, and the
        retired tier took <em>more</em>, 4&nbsp;GB of key-value cache against 2&nbsp;GB,
        only because the gate never returns below a tier's declared base. Both tiers
        ask for 24&nbsp;GB of RAM, and free memory after a 15.13&nbsp;GB model sits
        well under that crossover.</p>
     <p>So the retired tier's larger number was a bypass of the memory gate on the
-       smallest machines that could run it at all — the hardware least able to
+       smallest machines that could run it at all, the hardware least able to
        spare 4&nbsp;GB for a cache. Removing it removed a way to over-commit, not a
        capability.</p>
     <p></p>
@@ -246,7 +246,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/own-your-ai/">What owning your AI actually means</a> · <a href="https://outlier.host/learn/ai-subscription-stacking/">The $90/month AI subscription stack</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

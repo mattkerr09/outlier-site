@@ -89,7 +89,7 @@ a{color:var(--acc)}
 <p class="byline">Measured on Outlier's on-device SWE-bench harness · July 2026</p>
 
 <div class="qa"><strong>The short version</strong>
-In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns produced <em>no action</em> — it wrote things like "Let me search for <code>allow_migrate</code> in the autodetector:" and then simply stopped, burning a full inference round-trip for nothing. The fix isn't a better prompt. It's making narration structurally impossible: <code>tool_choice: "required"</code>, which Outlier's OpenAI-compatible API now supports. Measured action rate went from 27% to 89%.</div>
+In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns produced <em>no action</em>: it wrote things like "Let me search for <code>allow_migrate</code> in the autodetector:" and then simply stopped, burning a full inference round-trip for nothing. The fix isn't a better prompt. It's making narration structurally impossible: <code>tool_choice: "required"</code>, which Outlier's OpenAI-compatible API now supports. Measured action rate went from 27% to 89%.</div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
 <p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-learn-why-ai-agents-narrate-instead-of-acting-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-learn-why-ai-agents-narrate-instead-of-acting-box-answer" rel="nofollow">Buy Pro</a></p>
@@ -98,7 +98,7 @@ In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns 
 
 
 <h2>The measurement</h2>
-<p>A coding agent works in a loop: the model reads the state of a repository, calls a tool (search, read a file, edit a file, run a test), sees the result, and repeats. Every turn that doesn't call a tool is a wasted round-trip — on local hardware, roughly 12 seconds of compute that moves nothing forward.</p>
+<p>A coding agent works in a loop: the model reads the state of a repository, calls a tool (search, read a file, edit a file, run a test), sees the result, and repeats. Every turn that doesn't call a tool is a wasted round-trip: on local hardware, roughly 12 seconds of compute that moves nothing forward.</p>
 <p>We instrumented 63 real agent sessions (SWE-bench Verified tasks, blind, greedy decoding) and counted what each of 8,569 model turns actually did:</p>
 <table>
 <tr><th>What the turn produced</th><th>Share</th></tr>
@@ -108,25 +108,25 @@ In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns 
 <tr><td>A tool call written in shorthand our parser dropped</td><td>~5%</td></tr>
 <tr><td>Other fragments</td><td>~2%</td></tr>
 </table>
-<p>The system prompt already ordered the model — in capitals — to emit tool calls only. It narrated anyway. At 27B scale, instruction-following alone does not survive a long agent context.</p>
+<p>The system prompt already ordered the model, in capitals, to emit tool calls only. It narrated anyway. At 27B scale, instruction-following alone does not survive a long agent context.</p>
 
 <h2>Three different bugs were hiding in that 73%</h2>
 <h3>1. The single-token stutter (a harness bug)</h3>
-<p>The strangest slice: 1,741 turns where the model generated exactly one visible token and stopped. Timing gave the cause away — those turns took 1.2 seconds against 18 for real ones, so the model wasn't being cut off; it was <em>choosing</em> to stop instantly. The trigger: when a turn produced prose and no tool call, our loop appended the text and re-prompted <em>without a user message</em>. The model, asked to speak again immediately after ending its own turn, ends the new turn after one token — and the loop repeats, forever, at 1.2s a spin. The fix is to always respond to a no-action turn with an explicit user message demanding a tool call, and to stop honestly after a few strikes.</p>
+<p>The strangest slice: 1,741 turns where the model generated exactly one visible token and stopped. Timing gave the cause away: those turns took 1.2 seconds against 18 for real ones, so the model wasn't being cut off; it was <em>choosing</em> to stop instantly. The trigger: when a turn produced prose and no tool call, our loop appended the text and re-prompted <em>without a user message</em>. The model, asked to speak again immediately after ending its own turn, ends the new turn after one token, and the loop repeats, forever, at 1.2s a spin. The fix is to always respond to a no-action turn with an explicit user message demanding a tool call, and to stop honestly after a few strikes.</p>
 <h3>2. Dropped shorthand tool calls (a parser bug)</h3>
-<p>458 "no-action" turns were actually the model calling a tool — in a shorthand format (<code>&lt;grep_repo&gt;…</code> instead of the canonical <code>&lt;tool_call&gt;&lt;function=grep_repo&gt;…</code>) that our parser threw away. Recovery is now automatic, and safe: shorthand is only recognized for names the request actually declared as tools, so real XML in a code answer can never be misread as a tool call.</p>
-<h3>3. Genuine narration (a model behavior — fixed structurally)</h3>
+<p>458 "no-action" turns were actually the model calling a tool: in a shorthand format (<code>&lt;grep_repo&gt;…</code> instead of the canonical <code>&lt;tool_call&gt;&lt;function=grep_repo&gt;…</code>) that our parser threw away. Recovery is now automatic, and safe: shorthand is only recognized for names the request actually declared as tools, so real XML in a code answer can never be misread as a tool call.</p>
+<h3>3. Genuine narration (a model behavior: fixed structurally)</h3>
 <p>The rest is the model doing what chat models do: thinking out loud. No prompt fixes this reliably. What fixes it is removing the option.</p>
 
 <h2>What <code>tool_choice: "required"</code> does</h2>
-<p>OpenAI's API has a field for exactly this, and Outlier's OpenAI-compatible endpoint now implements it. The mechanism is structural: when a request sets <code>tool_choice: "required"</code>, Outlier ends the prompt with the exact opening syntax of a tool call — so the only thing the model <em>can</em> generate is the rest of one.</p>
+<p>OpenAI's API has a field for exactly this, and Outlier's OpenAI-compatible endpoint now implements it. The mechanism is structural: when a request sets <code>tool_choice: "required"</code>, Outlier ends the prompt with the exact opening syntax of a tool call, so the only thing the model <em>can</em> generate is the rest of one.</p>
 <pre>{
   "model": "outlier-compact",
   "messages": [...],
   "tools": [...],
   "tool_choice": "required"
 }</pre>
-<p>The forced-function form (<code>{"type": "function", "function": {"name": "grep_repo"}}</code>) is supported too, and giving up stays possible — finishing is itself a tool, so the model can always choose <code>finish</code> explicitly instead of trailing off.</p>
+<p>The forced-function form (<code>{"type": "function", "function": {"name": "grep_repo"}}</code>) is supported too, and giving up stays possible: finishing is itself a tool, so the model can always choose <code>finish</code> explicitly instead of trailing off.</p>
 
 <h2>The result</h2>
 <table>
@@ -136,13 +136,13 @@ In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns 
 </table>
 <p>Same model, same weights, same tasks. The difference is that the harness stopped losing actions and the API stopped letting the model narrate.</p>
 
-<h2>The honest caveats — including the one that bit us</h2>
-<p>Action rate is not task success. We promised to publish the resolution measurement with the misses included, and here is the miss: when we made <code>required</code> the <em>default</em> for our own coding agent, the first four benchmark tasks all ended with <strong>empty patches</strong> — including three that the unforced baseline had patched or solved. Forced to act on every turn, the model stopped deliberating and browsed the repository until time ran out.</p>
-<p>The lesson: some of that prose narration was <em>load-bearing thinking</em> — the model's natural pattern is to reason in text, <em>then</em> edit. Deleting the option to think made it act more and accomplish less. So our agent's default is back to <code>auto</code>, with the stutter-loop and dropped-shorthand fixes (which ban waste, not thinking) doing the real work. <code>tool_choice: "required"</code> remains available and correct as an API feature — many agent designs genuinely need it, especially routing and extraction loops where every turn <em>should</em> be a call. Just don't assume a forced action is a useful one.</p>
+<h2>The honest caveats: including the one that bit us</h2>
+<p>Action rate is not task success. We promised to publish the resolution measurement with the misses included, and here is the miss: when we made <code>required</code> the <em>default</em> for our own coding agent, the first four benchmark tasks all ended with <strong>empty patches</strong>: including three that the unforced baseline had patched or solved. Forced to act on every turn, the model stopped deliberating and browsed the repository until time ran out.</p>
+<p>The lesson: some of that prose narration was <em>load-bearing thinking</em>: the model's natural pattern is to reason in text, <em>then</em> edit. Deleting the option to think made it act more and accomplish less. So our agent's default is back to <code>auto</code>, with the stutter-loop and dropped-shorthand fixes (which ban waste, not thinking) doing the real work. <code>tool_choice: "required"</code> remains available and correct as an API feature: many agent designs genuinely need it, especially routing and extraction loops where every turn <em>should</em> be a call. Just don't assume a forced action is a useful one.</p>
 <p>And the methodological note we keep re-learning: <em>most of what looked like model weakness in this investigation was our own code</em>. Before concluding a local model can't do something, verify the harness that measured it.</p>
 
 <div class="foot">
-<p>Outlier runs local AI on your own Mac — private, offline, no subscription. The OpenAI-compatible API (including <code>tool_choice: "required"</code>) ships in v1.11.787.</p>
+<p>Outlier runs local AI on your own Mac: private, offline, no subscription. The OpenAI-compatible API (including <code>tool_choice: "required"</code>) ships in v1.11.787.</p>
 <p><a href="/">Download Outlier</a> · <a href="/seo/learn/">More concepts</a></p>
 
 <p>More from Kerr &amp; Company: <a href="https://crispvideo.app/">Crisp Video</a>: restore and upscale video offline on your Mac &middot; <a href="https://docketseo.app/">Docket SEO</a>: website audits that rank what to fix first &middot; <a href="https://adplaybook.app/">AdPlaybook</a>: turns a product page into a full ad campaign on your Mac &middot; <a href="https://bookbreaker.bet/">BookBreaker</a>: free arbitrage and +EV betting app for Mac &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: websites and local SEO for Grand Rapids businesses &middot; <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company LLC</a>: the company behind these apps</p>

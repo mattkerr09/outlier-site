@@ -97,7 +97,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 <h1>The #1 way local AI models break code: indentation drift</h1>
 <p class="byline">Last updated 2026-09-24</p>
 
-<div class="qa"><strong>Quick answer</strong><p>When a small on-device model writes code and the build fails, the cause is usually not flawed logic &mdash; it is a few lines of <em>wrong indentation</em> that stop the file compiling. Across Outlier&rsquo;s on-device build tests, indentation drift is the single most common mechanical failure of the local Core tier. It matters because you cannot safely &ldquo;just fix the whitespace&rdquo;: in Python, indentation <em>is</em> the structure, so re-guessing it can silently change what the code means. Outlier detects the failure objectively, regenerates the file from intent, and &mdash; when that can&rsquo;t earn a real test pass &mdash; reports the build honestly rather than faking a green check.</p></div>
+<div class="qa"><strong>Quick answer</strong><p>When a small on-device model writes code and the build fails, the cause is usually not flawed logic. It is a few lines of <em>wrong indentation</em> that stop the file compiling. Across Outlier&rsquo;s on-device build tests, indentation drift is the single most common mechanical failure of the local Core tier. It matters because you cannot safely &ldquo;just fix the whitespace&rdquo;: in Python, indentation <em>is</em> the structure, so re-guessing it can silently change what the code means. Outlier detects the failure objectively, regenerates the file from intent, and, when that can&rsquo;t earn a real test pass, reports the build honestly rather than faking a green check.</p></div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
 <p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-learn-why-local-models-mis-indent-code-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-learn-why-local-models-mis-indent-code-box-answer" rel="nofollow">Buy Pro</a></p>
@@ -106,17 +106,17 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 
 
 <h2>What indentation drift looks like</h2>
-<p>The model gets the logic right and then misplaces the leading spaces on one or two lines. A real example from a build of an arithmetic-expression evaluator &mdash; the tokenizer was correct except for a single over-indented line:</p>
+<p>The model gets the logic right and then misplaces the leading spaces on one or two lines. A real example from a build of an arithmetic-expression evaluator, the tokenizer was correct except for a single over-indented line:</p>
 <pre>        num_str = s[i:j]
             if has_dot:            # &larr; 12 spaces where 8 belong
                 tokens.append(Token('FLOAT', float(num_str)))</pre>
 <p>Python rejects the whole file with an <code>IndentationError: unexpected indent</code>. The algorithm the model wrote was fine; four stray spaces made it un-runnable. The same class shows up as a statement dedented one space too far, a <code>try:</code> that lost its indentation, or a function body that drifts a level. One slip anywhere in a file breaks the entire file.</p>
 
 <h2>Why it hits local models specifically</h2>
-<p>A frontier cloud model has enough raw capacity to keep indentation perfectly consistent across a long file. A compact, quantized model running on your laptop generates leading whitespace as ordinary tokens, one at a time, and occasionally emits one space too many or too few &mdash; the coding equivalent of a typo. It is not a reasoning failure; it is a precision failure at the token level, and it is the most frequent single reason a first-attempt local build doesn&rsquo;t compile.</p>
+<p>A frontier cloud model has enough raw capacity to keep indentation perfectly consistent across a long file. A compact, quantized model running on your laptop generates leading whitespace as ordinary tokens, one at a time, and occasionally emits one space too many or too few, the coding equivalent of a typo. It is not a reasoning failure; it is a precision failure at the token level, and it is the most frequent single reason a first-attempt local build doesn&rsquo;t compile.</p>
 
 <h2>Why you can&rsquo;t just &ldquo;re-indent it&rdquo;</h2>
-<p>This is the subtle part, and it is where a naive assistant quietly goes wrong. Indentation in Python is not cosmetic &mdash; it decides which block a statement belongs to. A misplaced line can frequently be moved to more than one indentation level that <em>all compile</em> but mean different things:</p>
+<p>This is the subtle part, and it is where a naive assistant quietly goes wrong. Indentation in Python is not cosmetic: it decides which block a statement belongs to. A misplaced line can frequently be moved to more than one indentation level that <em>all compile</em> but mean different things:</p>
 <pre>for x in items:
     total += x
     return total     # returns on the first item
@@ -124,20 +124,20 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px}
 for x in items:
     total += x
 return total          # returns after the whole loop</pre>
-<p>Both versions compile. Only one is what the author meant. An automatic tool that re-chooses the whitespace has to guess &mdash; and a wrong guess produces a file that <em>compiles but behaves incorrectly</em>. That is worse than an honest error, because it can slip past a weak test and be reported as success. So Outlier deliberately does <strong>not</strong> blindly re-indent broken code. We tested that shortcut, proved it could manufacture a false &ldquo;green,&rdquo; and removed it.</p>
+<p>Both versions compile. Only one is what the author meant. An automatic tool that re-chooses the whitespace has to guess, and a wrong guess produces a file that <em>compiles but behaves incorrectly</em>. That is worse than an honest error, because it can slip past a weak test and be reported as success. So Outlier deliberately does <strong>not</strong> blindly re-indent broken code. We tested that shortcut, proved it could manufacture a false &ldquo;green,&rdquo; and removed it.</p>
 
-<h2>How Outlier handles it &mdash; honestly</h2>
+<h2>How Outlier handles it: honestly</h2>
 <table>
 <tr><th>Step</th><th>What happens</th></tr>
-<tr><td>Detect</td><td>Every file written during a build is compile-checked. A file that doesn&rsquo;t compile fails the verdict &mdash; even if no test imports it.</td></tr>
+<tr><td>Detect</td><td>Every file written during a build is compile-checked. A file that doesn&rsquo;t compile fails the verdict, even if no test imports it.</td></tr>
 <tr><td>Repair from intent</td><td>Rather than re-shuffle whitespace, Outlier regenerates the whole file from its purpose and the surrounding code, then keeps the result only if it compiles.</td></tr>
 <tr><td>Verify</td><td>The full test suite is re-run through the same sandbox. The verdict flips to green only on a real pass.</td></tr>
-<tr><td>Or fail honestly</td><td>If the file still won&rsquo;t compile, the build reports <strong>failed</strong> &mdash; never a success it can&rsquo;t prove. You always know the true state.</td></tr>
+<tr><td>Or fail honestly</td><td>If the file still won&rsquo;t compile, the build reports <strong>failed</strong>: never a success it can&rsquo;t prove. You always know the true state.</td></tr>
 </table>
 <p>And because a stubborn file can send the repair loop into a long grind, every repair and verification step is interruptible: pressing Stop halts the build in a fraction of a second, and no timer ever aborts a build that is genuinely making progress.</p>
 
 <h2>Where this is heading</h2>
-<p>The most durable fix is to make an invalid indent impossible to produce in the first place. Because Outlier controls its own on-device decoder, it can constrain generation so that at the start of every line the model may only choose an indentation level that is structurally valid &mdash; the model still decides which block a statement belongs to (its intent), but a level that would not compile is simply never emitted. In offline validation this constraint rejects exactly the real drift bugs above while allowing every correct choice. It is an engineering answer to a small-model precision problem &mdash; the kind of system-level work that lets an on-device assistant close the gap with a cloud model it can&rsquo;t out-muscle.</p>
+<p>The most durable fix is to make an invalid indent impossible to produce in the first place. Because Outlier controls its own on-device decoder, it can constrain generation so that at the start of every line the model may only choose an indentation level that is structurally valid: the model still decides which block a statement belongs to (its intent), but a level that would not compile is simply never emitted. In offline validation this constraint rejects exactly the real drift bugs above while allowing every correct choice. It is an engineering answer to a small-model precision problem, the kind of system-level work that lets an on-device assistant close the gap with a cloud model it can&rsquo;t out-muscle.</p>
 
 <a class="cta" id="dl-cta" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-learn-why-local-models-mis-indent-code&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow" data-plausible="dl-indent">Download Outlier for macOS</a>
 <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>

@@ -224,36 +224,36 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>A large language model is a neural network trained on a large body of text. It learns to predict the next token — a word fragment — given everything that came before it. Do that one token at a time and you get a response. The "large" part refers to the number of parameters (weights) inside the network, which can range from a few billion to hundreds of billions.</p>
+      <p>A large language model is a neural network trained on a large body of text. It learns to predict the next token, a word fragment, given everything that came before it. Do that one token at a time and you get a response. The "large" part refers to the number of parameters (weights) inside the network, which can range from a few billion to hundreds of billions.</p>
     </div>
 
-    <p class="lead">Every AI assistant you've used in the last few years — whether it's a chatbot in a browser or a model running on your Mac — is built on this same idea. The terminology around LLMs gets complicated fast, so this article unpacks the pieces that actually matter: parameters, training, context windows, and what it takes to run one locally.</p>
+    <p class="lead">Every AI assistant you've used in the last few years, whether it's a chatbot in a browser or a model running on your Mac, is built on this same idea. The terminology around LLMs gets complicated fast, so this article unpacks the pieces that actually matter: parameters, training, context windows, and what it takes to run one locally.</p>
 
     <h2>What does "large" mean?</h2>
 
     <p>There's no fixed threshold where a language model becomes "large." The term stuck because models in the 2020s were orders of magnitude bigger than what came before. Today "large" is a relative label, not a precise spec.</p>
 
-    <p>In practice, models are described by their parameter count: <strong>1.5B, 7B, 70B, 671B</strong>. The number tells you roughly how much the model learned from training and how much RAM it needs to run. A 7B-parameter model is genuinely capable for everyday work. A 671B model like DeepSeek-R1 (a mixture-of-experts architecture) is far larger — but also requires hardware most people don't own.</p>
+    <p>In practice, models are described by their parameter count: <strong>1.5B, 7B, 70B, 671B</strong>. The number tells you roughly how much the model learned from training and how much RAM it needs to run. A 7B-parameter model is genuinely capable for everyday work. A 671B model like DeepSeek-R1 (a mixture-of-experts architecture) is far larger, but also requires hardware most people don't own.</p>
 
     <p>The more useful question isn't "how large?" but "large enough for what?" A 1.5B model handles quick Q&A and summarization. An 8B model handles most coding and writing tasks. You need 70B+ for highly specialized or research-grade work where errors carry real cost.</p>
 
     <h2>How LLMs actually work</h2>
 
-    <p>Training an LLM is a prediction exercise run at enormous scale. You feed the model a huge corpus of text — web pages, books, code repositories, scientific papers — and teach it one thing: given the tokens so far, what token comes next?</p>
+    <p>Training an LLM is a prediction exercise run at enormous scale. You feed the model a huge corpus of text (web pages, books, code repositories, scientific papers) and teach it one thing: given the tokens so far, what token comes next?</p>
 
     <p>The model makes a prediction, the prediction is compared to the actual next token in the training data, and the weights (parameters) are adjusted slightly to reduce the error. Repeat this billions of times across trillions of tokens and the network internalizes statistical patterns about language: grammar, facts, reasoning chains, code syntax.</p>
 
-    <p>At inference time — when you type a message — the model runs forward through the network once per token it generates. It looks at your input plus everything it has already written, then produces a probability distribution over possible next tokens and samples from it. That's the whole mechanism. There's no database lookup, no retrieval from a knowledge store by default, and no "understanding" in the philosophical sense — just learned pattern completion, applied very quickly.</p>
+    <p>At inference time, when you type a message, the model runs forward through the network once per token it generates. It looks at your input plus everything it has already written, then produces a probability distribution over possible next tokens and samples from it. That's the whole mechanism. There's no database lookup, no retrieval from a knowledge store by default, and no "understanding" in the philosophical sense, just learned pattern completion, applied very quickly.</p>
 
     <h2>What are parameters?</h2>
 
-    <p>Parameters are the numbers inside the network — the weights on billions of connections between artificial neurons. After training, these weights are fixed. They encode, in a distributed way, everything the model learned: facts, grammar, code patterns, reasoning heuristics.</p>
+    <p>Parameters are the numbers inside the network, the weights on billions of connections between artificial neurons. After training, these weights are fixed. They encode, in a distributed way, everything the model learned: facts, grammar, code patterns, reasoning heuristics.</p>
 
-    <p>When you load a model, you're loading those weights into RAM. A 7B-parameter model at full 32-bit float precision needs roughly 28 GB of RAM — too much for most consumer hardware. This is where quantization comes in.</p>
+    <p>When you load a model, you're loading those weights into RAM. A 7B-parameter model at full 32-bit float precision needs roughly 28 GB of RAM: too much for most consumer hardware. This is where quantization comes in.</p>
 
     <p><strong>Quantization</strong> compresses weights from 32-bit floats down to 4-bit integers, cutting memory by roughly 8x at modest quality cost. At 4-bit quantization, 7B parameters fit in about 4.5 GB on disk. That's why you can run a capable model on a MacBook Air with 16 GB of RAM.</p>
 
-    <p>Quantization isn't free — you lose some precision in the weights — but for most tasks the quality difference versus full-precision is small enough that you won't notice it in practice.</p>
+    <p>Quantization isn't free, you lose some precision in the weights, but for most tasks the quality difference versus full-precision is small enough that you won't notice it in practice.</p>
 
     <h2>Open vs. closed models</h2>
 
@@ -312,7 +312,7 @@
 
     <h2>Context window explained</h2>
 
-    <p>A context window is how many tokens the model can see at once. Everything inside the window — your system prompt, the conversation so far, any documents you've pasted in — is available to the model when it generates the next token. Everything outside the window is invisible.</p>
+    <p>A context window is how many tokens the model can see at once. Everything inside the window (your system prompt, the conversation so far, any documents you've pasted in) is available to the model when it generates the next token. Everything outside the window is invisible.</p>
 
     <p>Token counts aren't word counts. English text runs roughly 750 words per 1,000 tokens. A 128k-token context window can hold a short novel.</p>
 
@@ -324,20 +324,20 @@
       <li><strong>Most local open models:</strong> 8k – 128k tokens depending on the model and how much RAM you have</li>
     </ul>
 
-    <p>A larger context window isn't always better in practice. Models can lose track of information in very long contexts, and a bigger context window uses more RAM and slows down inference. For most tasks — writing, coding, Q&A — 8k to 32k tokens is plenty.</p>
+    <p>A larger context window isn't always better in practice. Models can lose track of information in very long contexts, and a bigger context window uses more RAM and slows down inference. For most tasks (writing, coding, Q&A) 8k to 32k tokens is plenty.</p>
 
     <h2>Running an LLM on your own Mac</h2>
 
     <p>Running a model locally means three things: the weight files live on your disk, computation happens on your chip, and nothing leaves the device. No API call. No server. No usage cap.</p>
 
-    <p>Apple Silicon makes this practical for most people. The M-series chips have a unified memory architecture — the CPU, GPU, and neural engine all share the same RAM pool — which means a model that needs 8 GB of memory doesn't require a discrete GPU. A MacBook Air with 16 GB handles 7B and 8B models comfortably. A Mac with 32 GB or 64 GB can run models in the 27B–32B range.</p>
+    <p>Apple Silicon makes this practical for most people. The M-series chips have a unified memory architecture (the CPU, GPU, and neural engine all share the same RAM pool) which means a model that needs 8 GB of memory doesn't require a discrete GPU. A MacBook Air with 16 GB handles 7B and 8B models comfortably. A Mac with 32 GB or 64 GB can run models in the 27B–32B range.</p>
 
     <p>The Outlier app ships three models for Mac:</p>
 
     <ul>
-      <li><strong>Outlier Nano (4B)</strong> — runs at 32 tokens per second on an M4 MacBook Air; free tier</li>
-      <li><strong>Outlier Lite (9B)</strong> — more capable, still fast on any M-series Mac; free tier</li>
-      <li><strong>Outlier Core (27B)</strong> — serious coding and writing work; requires more RAM</li>
+      <li><strong>Outlier Nano (4B)</strong>: runs at 32 tokens per second on an M4 MacBook Air; free tier</li>
+      <li><strong>Outlier Lite (9B)</strong>: more capable, still fast on any M-series Mac; free tier</li>
+      <li><strong>Outlier Core (27B)</strong>: serious coding and writing work; requires more RAM</li>
     </ul>
 
     <p>The size-to-memory math: at 4-bit quantization, a 7B model is about 4.5 GB on disk and in RAM. A 27B model is roughly 17 GB. That's the number you need to compare against your Mac's unified memory spec.</p>
@@ -358,7 +358,7 @@
     <p>Yes. Apple Silicon (M1 and later) has a unified memory architecture where the CPU and GPU share the same RAM pool. A model like Outlier Core (27B parameters) runs on a MacBook Pro without any discrete GPU. The neural engine and GPU cores built into the M-series chip handle the matrix math.</p>
 
     <div class="cta">
-      <h3>Try a local LLM on your Mac — free</h3>
+      <h3>Try a local LLM on your Mac: free</h3>
       <p>Outlier Nano and Lite are free tiers. Download the app, get the weights, and run your first query in under two minutes. Nothing leaves your Mac.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-what-is-a-large-language-model&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-what-is-a-large-language-model-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
@@ -373,7 +373,7 @@
       </ul>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
 
   </article>
 </div>

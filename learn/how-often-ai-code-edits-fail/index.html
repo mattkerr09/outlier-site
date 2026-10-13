@@ -140,7 +140,7 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>On 2026-07-28 we counted every edit our agent made across 129 preserved traces: <strong>434 str_replace calls, 25 failures</strong> &mdash; a <strong>94.2% apply rate</strong>.</li>
+        <li>On 2026-07-28 we counted every edit our agent made across 129 preserved traces: <strong>434 str_replace calls, 25 failures</strong>: a <strong>94.2% apply rate</strong>.</li>
         <li>Nearly all are anchor problems: 11 quoted text appearing more than once in the file, 11 quoted text not in the file as written, 3 bad arguments or a missing file.</li>
         <li>The rate is that high because the loop forgives whitespace, nudges the agent to re-read when an anchor misses, and tells it to quote the line above and below its target.</li>
         <li>This is our agent on our own traces. It is not a measurement of any other coding tool.</li>
@@ -151,7 +151,7 @@
 
     <h2>What the number measures</h2>
     <p>A str_replace edit is the surgical option: instead of rewriting a file, the agent quotes the exact text it wants replaced along with its replacement, and the tool swaps them. If that anchor cannot be found, or turns up in more than one place, the tool refuses, writing nothing and returning an error saying which. That refusal is the failure we counted, so it costs a retry rather than a corrupted file.</p>
-    <p>Two things it is not. Not correctness: an edit can apply cleanly and still be the wrong change. And not a benchmark of the field &mdash; one agent, one harness, one set of traces.</p>
+    <p>Two things it is not. Not correctness: an edit can apply cleanly and still be the wrong change. And not a benchmark of the field: one agent, one harness, one set of traces.</p>
 
     <h2>The 25 failures, by cause</h2>
     <p>Sorted by the error returned, the whole tail fits in three rows:</p>
@@ -160,40 +160,40 @@
         <tr><th>Cause</th><th>Count</th><th>What it means</th></tr>
       </thead>
       <tbody>
-        <tr><td>&ldquo;Found N matches for old_str&rdquo;</td><td>11</td><td>The anchor was real but not unique &mdash; a repeated import, a boilerplate line, a block appearing twice. The tool refuses rather than pick one.</td></tr>
-        <tr><td>&ldquo;No match for old_str (even ignoring whitespace)&rdquo;</td><td>11</td><td>The anchor did not exist as written &mdash; the agent quoting from memory, or from a version an earlier edit had changed.</td></tr>
+        <tr><td>&ldquo;Found N matches for old_str&rdquo;</td><td>11</td><td>The anchor was real but not unique: a repeated import, a boilerplate line, a block appearing twice. The tool refuses rather than pick one.</td></tr>
+        <tr><td>&ldquo;No match for old_str (even ignoring whitespace)&rdquo;</td><td>11</td><td>The anchor did not exist as written: the agent quoting from memory, or from a version an earlier edit had changed.</td></tr>
         <tr><td>Bad arguments or file not found</td><td>3</td><td>A malformed call, or a path that was not there. The smallest slice.</td></tr>
         <tr><td><strong>Total</strong></td><td><strong>25</strong></td><td><strong>5.8% of 434 calls</strong></td></tr>
       </tbody>
     </table>
-    <p>The split is the useful part. The anchor causes are dead even at 11 apiece &mdash; all but three of the 25 between them &mdash; and both are failures of <em>quoting</em> rather than of reasoning: the agent knew the change it wanted and described the target badly, once too vaguely to be unique and once simply wrongly. Almost nothing here is the model misunderstanding the task, which is what people picture when they imagine an edit failing.</p>
+    <p>The split is the useful part. The anchor causes are dead even at 11 apiece, all but three of the 25 between them, and both are failures of <em>quoting</em> rather than of reasoning: the agent knew the change it wanted and described the target badly, once too vaguely to be unique and once simply wrongly. Almost nothing here is the model misunderstanding the task, which is what people picture when they imagine an edit failing.</p>
 
     <h2>Why the rate is as high as it is</h2>
     <p>This is the part worth taking away, because none of it is exotic. Three cheap mechanisms sit in the loop already, each aimed at a cause in that table.</p>
     <ul>
-      <li><strong>A whitespace-tolerant match.</strong> If the anchor differs from the file only in indentation or trailing spaces, the edit still applies, removing a whole category of near-miss. The surviving error reads &ldquo;even ignoring whitespace&rdquo; &mdash; the tolerance announcing it was already tried.</li>
+      <li><strong>A whitespace-tolerant match.</strong> If the anchor differs from the file only in indentation or trailing spaces, the edit still applies, removing a whole category of near-miss. The surviving error reads &ldquo;even ignoring whitespace&rdquo;, the tolerance announcing it was already tried.</li>
       <li><strong>A re-read nudge when an anchor misses.</strong> A failed match comes back with a prompt to go and look at the file again, turning the commonest self-inflicted failure into one wasted turn rather than a loop.</li>
-      <li><strong>Explicit guidance to disambiguate.</strong> The agent is told to include the line above and below its target. A three-line anchor is far likelier to be unique than a one-line one &mdash; the direct remedy for the &ldquo;found N matches&rdquo; row.</li>
+      <li><strong>Explicit guidance to disambiguate.</strong> The agent is told to include the line above and below its target. A three-line anchor is far likelier to be unique than a one-line one, the direct remedy for the &ldquo;found N matches&rdquo; row.</li>
     </ul>
     <p>None of that needed a bigger model or a second agent. It is error-message design and prompt guidance, applied to the path an edit takes when it goes wrong.</p>
 
     <h2>The decision this number drove</h2>
-    <p>Here is the part that makes measuring worth the effort, and it is not a boast. Our 2026-07-28 technique scan put Microsoft's SWE-Edit top of the shortlist. Microsoft's report describes lifting edit success on open reasoning models from a 75.6&ndash;82.0% band to 93.9&ndash;95.9%, using a viewer/editor subagent split plus a whole-file-rewrite fallback. A large, well-evidenced gain &mdash; and we did not adopt it.</p>
+    <p>Here is the part that makes measuring worth the effort, and it is not a boast. Our 2026-07-28 technique scan put Microsoft's SWE-Edit top of the shortlist. Microsoft's report describes lifting edit success on open reasoning models from a 75.6&ndash;82.0% band to 93.9&ndash;95.9%, using a viewer/editor subagent split plus a whole-file-rewrite fallback. A large, well-evidenced gain, and we did not adopt it.</p>
     <table>
       <thead>
         <tr><th>Measurement</th><th>Edit success</th><th>Verdict</th></tr>
       </thead>
       <tbody>
-        <tr><td>Our agent &mdash; 129 traces, 434 calls, 2026-07-28</td><td>94.2%</td><td>Our measured baseline</td></tr>
+        <tr><td>Our agent: 129 traces, 434 calls, 2026-07-28</td><td>94.2%</td><td>Our measured baseline</td></tr>
         <tr><td>Open reasoning models before SWE-Edit (Microsoft's report)</td><td>75.6&ndash;82.0%</td><td>A floor we are not standing on</td></tr>
         <tr><td>The same models after SWE-Edit (Microsoft's report)</td><td>93.9&ndash;95.9%</td><td>A band we are already inside</td></tr>
-        <tr><td>SWE-Edit, adoption decision</td><td>&mdash;</td><td><strong>Dropped &mdash; no headroom for us</strong></td></tr>
+        <tr><td>SWE-Edit, adoption decision</td><td>—</td><td><strong>Dropped: no headroom for us</strong></td></tr>
       </tbody>
     </table>
     <p>Read the rows together and the logic is plain. SWE-Edit's gain is almost entirely the distance from the low band to the high one, and we start inside the high one. Its benefit comes from lifting models off a floor we are not standing on, while the costs stay real: more model calls per edit, and a fallback that rewrites a file wholesale where three lines would have done.</p>
     <p>None of that was knowable without the baseline. With no number the shortlist item reads as a straightforward upgrade, you adopt it, and you pay for a gain you cannot collect. The most useful result of measuring your own system is finding out which improvements cannot help you.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Our own measurement, taken on <strong>2026-07-28</strong> across <strong>129 preserved agent traces</strong>: <strong>434 str_replace calls</strong>, <strong>25 failures</strong>, 94.2% applied &mdash; 11 non-unique anchors, 11 anchors with no match, 3 bad arguments or missing files. This describes our agent on our traces only, not any other tool. The 75.6&ndash;82.0% and 93.9&ndash;95.9% edit-success bands are Microsoft's published figures for SWE-Edit, from Microsoft's own report, quoted here as published.</div>
+    <div class="receipts"><strong>Receipts:</strong> Our own measurement, taken on <strong>2026-07-28</strong> across <strong>129 preserved agent traces</strong>: <strong>434 str_replace calls</strong>, <strong>25 failures</strong>, 94.2% applied: 11 non-unique anchors, 11 anchors with no match, 3 bad arguments or missing files. This describes our agent on our traces only, not any other tool. The 75.6&ndash;82.0% and 93.9&ndash;95.9% edit-success bands are Microsoft's published figures for SWE-Edit, from Microsoft's own report, quoted here as published.</div>
 
     <h2>How to decide</h2>
     <p>Weighing a technique like this, three questions do most of the work:</p>
@@ -207,7 +207,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>What counts as a failed edit?</h3>
-        <p>A refusal by the edit tool, recorded in the trace: the agent quotes the text it wants replaced, and if that anchor is missing or appears more than once, the tool writes nothing and returns an error. That is the event we counted, 25 of 434 calls. It measures mechanics, not correctness &mdash; an edit can apply perfectly and still be the wrong change.</p>
+        <p>A refusal by the edit tool, recorded in the trace: the agent quotes the text it wants replaced, and if that anchor is missing or appears more than once, the tool writes nothing and returns an error. That is the event we counted, 25 of 434 calls. It measures mechanics, not correctness, an edit can apply perfectly and still be the wrong change.</p>
       </div>
       <div class="faq-item">
         <h3>Is 94.2% a good apply rate?</h3>
@@ -224,7 +224,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> &middot; <a href="https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/">What a local AI coding agent can actually build</a> &middot; <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">Chat coding vs agentic coding</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

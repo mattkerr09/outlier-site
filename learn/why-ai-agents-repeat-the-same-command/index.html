@@ -143,7 +143,7 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>We measured our own agent on 2026-07-23, across 50 traces and 2,281 tool calls on SWE-bench tasks: <strong>37.4% of non-edit tool calls were byte-identical repeats</strong> of an earlier call in the same task &mdash; 785 of 2,097.</li>
+        <li>We measured our own agent on 2026-07-23, across 50 traces and 2,281 tool calls on SWE-bench tasks: <strong>37.4% of non-edit tool calls were byte-identical repeats</strong> of an earlier call in the same task: 785 of 2,097.</li>
         <li>The loop already has a dedup guard. It misses these because it signs the <strong>raw model arguments</strong>, which the dispatcher then mutates before the call runs.</li>
         <li><code>read_symbol</code> has the worst rate at 60%. <code>grep_repo</code> is the biggest absolute source: 368 repeats out of 1,026 calls.</li>
         <li>Only 41 calls in the whole run had trace-redacted arguments, so redaction cannot account for the effect.</li>
@@ -153,7 +153,7 @@
     <p class="lead">Nearly everything written on this subject theorises about why coding agents loop: context windows, attention decay, reward shaping, the model being stubborn. We had no theory worth publishing, so we counted. On 2026-07-23 we walked 50 of our own traces covering 2,281 tool calls on SWE-bench tasks, asking one question of each dispatched call: had this exact call already been dispatched in this task? For the non-edit tools the answer was yes 785 times out of 2,097, or 37.4%. This is our agent's number, not the industry's.</p>
 
     <h2>What counts as a repeat</h2>
-    <p>The definition is deliberately strict, because a loose one would have flattered us. An exact repeat is a <em>dispatched</em> call whose <code>(name, args)</code> pair is byte-identical to an earlier dispatched call in the same task &mdash; not similar, not the same file at a different line range. Anything the guard caught and cancelled never reached the dispatcher, so the figure counts escapes, not attempts.</p>
+    <p>The definition is deliberately strict, because a loose one would have flattered us. An exact repeat is a <em>dispatched</em> call whose <code>(name, args)</code> pair is byte-identical to an earlier dispatched call in the same task, not similar, not the same file at a different line range. Anything the guard caught and cancelled never reached the dispatcher, so the figure counts escapes, not attempts.</p>
 
     <h2>The per-tool breakdown</h2>
     <table>
@@ -164,7 +164,7 @@
         <tr><td><code>read_symbol</code></td><td>402</td><td>243</td><td>60%</td><td>Worst rate on the board: the agent re-reads a definition it has already been handed.</td></tr>
         <tr><td><code>run_pytest</code></td><td>121</td><td>47</td><td>39%</td><td>The same invocation with no edit in between. Cheapest to count, most expensive to suffer: repeats here burn the most wall-clock.</td></tr>
         <tr><td><code>grep_repo</code></td><td>1026</td><td>368</td><td>36%</td><td>Biggest absolute source of waste: 368 of the 785 repeats. Search is cheap per call, which is why nobody notices it doubling.</td></tr>
-        <tr><td><code>str_replace</code></td><td>182</td><td>61</td><td>34%</td><td><strong>Edit tool &mdash; exempt from the guard by design.</strong> Re-applying an identical patch is sometimes correct, so this row is context, not defect, and sits outside the headline.</td></tr>
+        <tr><td><code>str_replace</code></td><td>182</td><td>61</td><td>34%</td><td><strong>Edit tool: exempt from the guard by design.</strong> Re-applying an identical patch is sometimes correct, so this row is context, not defect, and sits outside the headline.</td></tr>
         <tr><td><code>read_range</code></td><td>547</td><td>127</td><td>23%</td><td>Lowest rate, because line windows vary between calls. What repeats here is usually the same window fetched twice after a failed edit.</td></tr>
         <tr><td><strong>Non-edit total</strong></td><td><strong>2097</strong></td><td><strong>785</strong></td><td><strong>37.4%</strong></td><td>Better than one non-edit call in three did no work the agent did not already have.</td></tr>
       </tbody>
@@ -174,8 +174,8 @@
 
     <h2>The control that matters</h2>
     <p>Before believing a number this large, the first job is to try to kill it. The obvious inflator is redaction: if the trace writer masks arguments, two genuinely different calls collapse into the same string and the counter fires on a collision rather than a repeat. So we counted. Across all 2,281 calls, 41 had trace-redacted arguments. Even if every one were a false match it moves the headline by well under a point. The effect is not an artefact of how we record traces, and that is the part of this page we would defend hardest.</p>
-    <p>The distribution backs it up. Repeats are not smeared evenly, which is what a measurement bug looks like; they pile up on particular tasks. django__django-14672 dispatched 76 calls, 60 of them repeats, a 79% rate. pydata__xarray-6938 managed 87 repeats across 135 calls &mdash; runs where the agent spent most of its budget re-asking questions it had already answered.</p>
-    <p>Counting by <em>target</em> rather than exact arguments &mdash; the same tool pointed at the same path or pattern, however spelled &mdash; 72.3% of all calls revisit ground an earlier call already covered. Not all of that is waste, but it is the ceiling the exact-repeat figure sits inside.</p>
+    <p>The distribution backs it up. Repeats are not smeared evenly, which is what a measurement bug looks like; they pile up on particular tasks. django__django-14672 dispatched 76 calls, 60 of them repeats, a 79% rate. pydata__xarray-6938 managed 87 repeats across 135 calls. Runs where the agent spent most of its budget re-asking questions it had already answered.</p>
+    <p>Counting by <em>target</em> rather than exact arguments (the same tool pointed at the same path or pattern, however spelled) 72.3% of all calls revisit ground an earlier call already covered. Not all of that is waste, but it is the ceiling the exact-repeat figure sits inside.</p>
 
     <h2>The cause: two different values, one of them hashed</h2>
     <p>Here is the part we did not expect: the loop is not missing a dedup guard. It has one, and it was running for every call in this measurement.</p>
@@ -188,7 +188,7 @@
     <ul>
       <li><strong>Does your guard hash what the model produced, or what the dispatcher actually sends?</strong> Log both payloads for one task and diff them call by call. If they ever differ, every mutation between the two is a hole.</li>
       <li><strong>Which of your tools mutate their arguments in transit?</strong> Path resolution, injected working directories, node-id rewriting, default-filling of omitted fields. Enumerate them rather than assume you would have noticed; each is a way for two identical calls to carry different signatures.</li>
-      <li><strong>Are your edit tools exempt, and did you decide that on purpose?</strong> Exempting them is defensible as a decision, not as an accident &mdash; and only if you report the rate over the non-exempt tools, so the exemption cannot flatter the headline.</li>
+      <li><strong>Are your edit tools exempt, and did you decide that on purpose?</strong> Exempting them is defensible as a decision, not as an accident, and only if you report the rate over the non-exempt tools, so the exemption cannot flatter the headline.</li>
     </ul>
 
     <h2>Frequently asked questions</h2>
@@ -211,7 +211,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/">What a local AI coding agent can actually build</a> &middot; <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> &middot; <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">Chat coding vs agentic coding</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

@@ -148,14 +148,14 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Fine-tuning adjusts a model with your own examples so it answers the way you want without being told every time. The catch with cloud fine-tuning is that you hand your training data to someone else's servers to do it. Local fine-tuning trains a small add-on called a LoRA adapter on your Mac from a file of your own examples &mdash; the data never leaves the machine. It's built into Outlier Pro: point it at a JSONL file, set a few numbers, run the job, and switch the adapter on.</p>
+      <p>Fine-tuning adjusts a model with your own examples so it answers the way you want without being told every time. The catch with cloud fine-tuning is that you hand your training data to someone else's servers to do it. Local fine-tuning trains a small add-on called a LoRA adapter on your Mac from a file of your own examples, the data never leaves the machine. It's built into Outlier Pro: point it at a JSONL file, set a few numbers, run the job, and switch the adapter on.</p>
     </div>
 
-    <p class="lead">Most people never need to fine-tune anything &mdash; a good prompt gets you most of the way. But there's a real gap between "the model can do this if I explain it every time" and "the model just does this," and fine-tuning is how you close it. What changed recently is that you can now do it without uploading a single row of your data anywhere.</p>
+    <p class="lead">Most people never need to fine-tune anything, a good prompt gets you most of the way. But there's a real gap between "the model can do this if I explain it every time" and "the model just does this," and fine-tuning is how you close it. What changed recently is that you can now do it without uploading a single row of your data anywhere.</p>
 
     <h2>What fine-tuning actually is</h2>
     <p>A base model is trained on the general internet. Fine-tuning continues that training a little further on examples you supply, nudging the model toward your format, your terminology, your house style. You're not teaching it new facts so much as new <em>habits</em>.</p>
-    <p>Modern fine-tuning almost never rewrites the whole model &mdash; that's expensive and risks breaking what already works. Instead it trains a <strong>LoRA adapter</strong>: a small set of extra weights that ride on top of the frozen base model. The adapter is a few megabytes, you can keep several around, and you switch them on and off. Turn it off and you're back to the stock model exactly.</p>
+    <p>Modern fine-tuning almost never rewrites the whole model, that's expensive and risks breaking what already works. Instead it trains a <strong>LoRA adapter</strong>: a small set of extra weights that ride on top of the frozen base model. The adapter is a few megabytes, you can keep several around, and you switch them on and off. Turn it off and you're back to the stock model exactly.</p>
 
     <h2>Fine-tuning vs just writing a better prompt</h2>
     <p>Reach for a prompt first. Fine-tuning earns its keep only in specific cases:</p>
@@ -171,27 +171,27 @@
     <p>A useful rule: if you find yourself pasting the same three example outputs into every conversation to get the format right, that's a fine-tune waiting to happen. Bake the examples in once instead of paying for them in every prompt.</p>
 
     <h2>Why doing it locally matters</h2>
-    <p>The training data is the whole point of fine-tuning, and it's usually your most sensitive material &mdash; past client deliverables, internal documentation, support transcripts, your own writing. Cloud fine-tuning requires you to upload exactly that. For a lot of people and most regulated work, that upload is a non-starter.</p>
+    <p>The training data is the whole point of fine-tuning, and it's usually your most sensitive material: past client deliverables, internal documentation, support transcripts, your own writing. Cloud fine-tuning requires you to upload exactly that. For a lot of people and most regulated work, that upload is a non-starter.</p>
     <p>Local fine-tuning removes the question. The examples sit in a file on your disk, the training runs on your Mac's own GPU cores, and the resulting adapter is a local file. Nothing is transmitted, so there's no data-processing agreement to sign and no server to trust. If you can't send the data out, this is the only version of fine-tuning available to you.</p>
 
     <h2>What your training data looks like</h2>
-    <p>Fine-tuning data is a JSONL file &mdash; one example per line, each a prompt paired with the completion you wish the model had produced. You're showing it the target, not describing it:</p>
+    <p>Fine-tuning data is a JSONL file: one example per line, each a prompt paired with the completion you wish the model had produced. You're showing it the target, not describing it:</p>
     <p><code>{"prompt": "Summarize this ticket for the weekly report: ...", "completion": "..."}</code></p>
     <p>The examples are the entire lesson, so quality beats quantity. A few dozen clean, consistent pairs that all demonstrate the same behaviour will teach more than thousands of noisy ones. If your examples disagree with each other about format, the model learns to be inconsistent.</p>
 
     <h2>Doing it in Outlier, step by step</h2>
     <ol>
       <li><strong>Point it at your data.</strong> Choose a <code>.jsonl</code> file, or drop one under <code>~/.outlier/datasets/</code> and give the path.</li>
-      <li><strong>Set the knobs.</strong> Three matter: rank (how much capacity the adapter gets &mdash; 8 is a sensible default), epochs (how many passes over your data &mdash; 3 is a fine start), and batch size. The defaults are reasonable; raise epochs if the model isn't picking up the pattern, lower them if it starts parroting your examples too literally.</li>
+      <li><strong>Set the knobs.</strong> Three matter: rank (how much capacity the adapter gets (8 is a sensible default), epochs (how many passes over your data) 3 is a fine start), and batch size. The defaults are reasonable; raise epochs if the model isn't picking up the pattern, lower them if it starts parroting your examples too literally.</li>
       <li><strong>Run the job.</strong> Training happens on-device with a progress bar. Time depends on data size and the tier you're training.</li>
       <li><strong>Switch the adapter on.</strong> When the job completes it joins your adapter list; click "Use this adapter" and your chats now run with it. Toggle it off any time to return to the stock model.</li>
     </ol>
 
     <h2>Honest limits</h2>
-    <p>Fine-tuning is not a memory system &mdash; if you need the model to know a specific document, retrieval (feeding it the document at question time) is usually the better tool. It also won't make a small model as smart as a big one; it shapes behaviour, it doesn't raise the ceiling on reasoning. And a badly built dataset produces a confidently wrong model, so the honest failure mode is "garbage in, garbage out, but fluent." Start small, test the adapter against held-back examples, and keep the base model one toggle away.</p>
+    <p>Fine-tuning is not a memory system: if you need the model to know a specific document, retrieval (feeding it the document at question time) is usually the better tool. It also won't make a small model as smart as a big one; it shapes behaviour, it doesn't raise the ceiling on reasoning. And a badly built dataset produces a confidently wrong model, so the honest failure mode is "garbage in, garbage out, but fluent." Start small, test the adapter against held-back examples, and keep the base model one toggle away.</p>
     <p>Fine-tuning is part of Outlier Pro. It's the same on-device principle as the rest of the app: your data is the input, and the input stays on your Mac.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> the workflow described here is the fine-tune feature in the shipping app &mdash; LoRA adapters trained from a JSONL dataset, with rank, epochs and batch-size controls, a completed-adapter list, and an activate/deactivate toggle that overlays the adapter on the local model. It runs on your Mac using Apple's MLX; no training data is uploaded. Training time and quality depend on your dataset and hardware, so treat the defaults as a starting point, not a guarantee.</div>
+    <div class="receipts"><strong>Receipts:</strong> the workflow described here is the fine-tune feature in the shipping app: LoRA adapters trained from a JSONL dataset, with rank, epochs and batch-size controls, a completed-adapter list, and an activate/deactivate toggle that overlays the adapter on the local model. It runs on your Mac using Apple's MLX; no training data is uploaded. Training time and quality depend on your dataset and hardware, so treat the defaults as a starting point, not a guarantee.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
@@ -202,7 +202,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/ai-tools-that-train-on-your-data/">Who trains on your data</a> &middot; <a href="https://outlier.host/learn/what-is-a-large-language-model/">What a large language model is</a> &middot; <a href="https://outlier.host/learn/why-local-ai-keeps-code-private/">Why local AI keeps your data private</a> &middot; <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

@@ -142,12 +142,12 @@
       <ul>
         <li>Some work is too long to babysit: a large refactor, a sweep across many files, a research task with dozens of steps.</li>
         <li>Outlier can keep working on one after you walk away, carrying context forward between iterations.</li>
-        <li>It self-limits — a cycle budget and a time budget — so "unattended" never means "unbounded".</li>
+        <li>It self-limits, a cycle budget and a time budget, so "unattended" never means "unbounded".</li>
         <li>A kill switch is checked every iteration, so stopping it is always one action.</li>
       </ul>
     </div>
 
-    <p class="lead">The reason people babysit AI is not enthusiasm — it is that a metered assistant with no memory of the last step will happily burn money going in circles. Remove the meter and add carry-forward, and leaving it running becomes reasonable.</p>
+    <p class="lead">The reason people babysit AI is not enthusiasm. It is that a metered assistant with no memory of the last step will happily burn money going in circles. Remove the meter and add carry-forward, and leaving it running becomes reasonable.</p>
 
     <h2>The three rails, and their actual values</h2>
     <p>&ldquo;It self-limits&rdquo; is the sort of claim worth distrusting, so here are the limits
@@ -158,13 +158,13 @@
       <tbody>
         <tr><td>Cycle budget</td><td><strong>200 iterations</strong></td><td>Before each iteration</td><td>Stops, reporting that it reached the cycle budget</td></tr>
         <tr><td>Time budget</td><td><strong>24 hours</strong> from the start</td><td>Before each iteration</td><td>Stops, reporting that it reached the hour budget</td></tr>
-        <tr><td>Kill switch</td><td>&mdash;</td><td><strong>Every iteration</strong>, not only at start</td><td>Stops immediately and records the reason as the kill switch</td></tr>
+        <tr><td>Kill switch</td><td>—</td><td><strong>Every iteration</strong>, not only at start</td><td>Stops immediately and records the reason as the kill switch</td></tr>
       </tbody>
     </table>
     <p>The third row is the one that matters most and the easiest to get wrong. A kill switch read
     only at launch is decoration: by the time you want it, the job is already inside a loop that
     never looks at it again. Checking it before every iteration is what makes stopping a job one
-    action rather than a negotiation &mdash; and it is why the other two rails can be generous
+    action rather than a negotiation, and it is why the other two rails can be generous
     without being reckless.</p>
     <p>Two budgets rather than one, because they fail differently. A job that is fast and wrong
     burns through 200 iterations in minutes; a job that is slow and stuck may use ten and sit for
@@ -180,14 +180,14 @@
 
     <h2>Why unattended is different from a long prompt</h2>
     <p>A long prompt is one turn. An unattended job is many, where each iteration has to know what the previous one learned, decide what is left, and stop when it is done or out of budget.</p>
-    <p>That last part is the one people skip. Without a budget, an agent that misunderstands the goal doesn't fail — it loops. Cost is what usually caps that in the cloud; locally there is no cost signal, so the limit has to be explicit.</p>
+    <p>That last part is the one people skip. Without a budget, an agent that misunderstands the goal doesn't fail: it loops. Cost is what usually caps that in the cloud; locally there is no cost signal, so the limit has to be explicit.</p>
 
     <h2>Setting one running</h2>
     <ol>
     <li><strong>Describe the job</strong> as an outcome, not a single instruction.</li>
     <li><strong>Let it self-pace.</strong> It decides when to run the next iteration rather than hammering continuously.</li>
     <li><strong>Leave it.</strong> Progress carries forward between cycles.</li>
-    <li><strong>Stop it whenever</strong> — the kill switch is checked every iteration.</li>
+    <li><strong>Stop it whenever</strong>: the kill switch is checked every iteration.</li>
     </ol>
     <p>The budgets are real limits, not suggestions: a cap on cycles and a cap on wall-clock hours, both enforced by the loop itself.</p>
 
@@ -208,7 +208,7 @@
       </div>
       <div class="faq-item">
         <h3>What stops it running forever?</h3>
-        <p>Two explicit budgets — a maximum number of cycles and a maximum elapsed time — plus a kill switch the loop checks every iteration.</p>
+        <p>Two explicit budgets, a maximum number of cycles and a maximum elapsed time, plus a kill switch the loop checks every iteration.</p>
       </div>
       <div class="faq-item">
         <h3>Does a long job cost more?</h3>
@@ -231,7 +231,7 @@
       Related: <a href="/how-to/make-ai-run-your-tests-mac/">Make AI run your tests</a> · <a href="/learn/ai-without-usage-limits/">AI without usage limits</a> · <a href="/learn/how-an-ai-agent-checks-its-own-work/">How an agent checks its own work</a>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

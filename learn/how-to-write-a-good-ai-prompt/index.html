@@ -158,10 +158,10 @@
       </ul>
     </div>
 
-    <p class="lead">Most prompt advice is written like folklore — magic words, secret roles, incantations you're supposed to paste at the top. It isn't that. A prompt is text, the model continues text, and everything that works follows from that one fact. Here's what actually moves the output, in rough order of payoff, plus a bug I shipped that taught me a habit worth more than any of them.</p>
+    <p class="lead">Most prompt advice is written like folklore: magic words, secret roles, incantations you're supposed to paste at the top. It isn't that. A prompt is text, the model continues text, and everything that works follows from that one fact. Here's what actually moves the output, in rough order of payoff, plus a bug I shipped that taught me a habit worth more than any of them.</p>
 
     <h2>What a prompt actually is</h2>
-    <p>A prompt is the text you send the model. The model predicts a continuation of it. That's the whole mechanism — there's a good explainer in <a href="https://outlier.host/learn/what-is-a-large-language-model/">what a large language model is</a> if you want the longer version.</p>
+    <p>A prompt is the text you send the model. The model predicts a continuation of it. That's the whole mechanism. There's a good explainer in <a href="https://outlier.host/learn/what-is-a-large-language-model/">what a large language model is</a> if you want the longer version.</p>
     <p>The part people underestimate: the model has no memory of you beyond what's in the current context window. It doesn't know what you asked yesterday, what project you're in the middle of, or what "the usual format" means to you. Every request starts from the text in front of it. That's not a bug in the product, it's how the thing works, and it's covered in <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets conversations</a>. Once that clicks, prompting stops feeling mystical and starts feeling like writing a decent ticket for a competent stranger.</p>
 
     <h2>The five things that actually help</h2>
@@ -169,7 +169,7 @@
     <ol>
       <li><strong>State the task and the desired output format explicitly.</strong> Not "help me with this function" but "return one fenced Python block". The format instruction is doing at least as much work as the task instruction, and it's the one people leave out.</li>
       <li><strong>Give one example of the shape you want.</strong> One-shot beats zero-shot for formatting. You don't need five examples; you need one that looks exactly like what you want back.</li>
-      <li><strong>Put stable, reusable context first and the varying question last.</strong> This makes the prompt easier to read, and on a local runtime it also lets the engine reuse its cached prefix between turns — which makes follow-ups faster.</li>
+      <li><strong>Put stable, reusable context first and the varying question last.</strong> This makes the prompt easier to read, and on a local runtime it also lets the engine reuse its cached prefix between turns, which makes follow-ups faster.</li>
       <li><strong>Ask for the constraint, not the vibe.</strong> "Under 200 words" beats "keep it brief". "Three bullets, no preamble" beats "be concise". Adjectives are guesses; numbers are checkable.</li>
       <li><strong>Split a multi-part ask into numbered sub-tasks.</strong> One prompt asking for four things scattered across a paragraph tends to lose one of them. The same four things as 1/2/3/4 tend to all come back.</li>
     </ol>
@@ -191,29 +191,29 @@
     </table>
 
     <h2>The bug that taught me to suspect the instruction first</h2>
-    <p>On 2026-07-21 I was testing multi-file code requests in Outlier — ask for a small project, get back several files. They kept coming back as one unlabeled blob. No filenames, no separation, just a wall of code you'd have to split by hand. My first instinct was the obvious one: the local model isn't big enough to hold a multi-file structure together.</p>
-    <p>It wasn't the model. It was our own instruction. Somewhere upstream, the app was telling the model to emit "one fenced code block with nothing around it" — a rule that applied to every code answer. The model was following it perfectly. I swapped in an explicit "label each file" instruction and the <em>same</em> model formatted every file correctly.</p>
-    <p>The lesson generalizes past our codebase: <strong>when the output looks wrong, suspect the instruction before the model.</strong> Read the actual prompt that got sent — all of it, including the parts your tool added — before you conclude anything about capability. A format failure is far more often an instruction failure wearing a costume.</p>
+    <p>On 2026-07-21 I was testing multi-file code requests in Outlier: ask for a small project, get back several files. They kept coming back as one unlabeled blob. No filenames, no separation, just a wall of code you'd have to split by hand. My first instinct was the obvious one: the local model isn't big enough to hold a multi-file structure together.</p>
+    <p>It wasn't the model. It was our own instruction. Somewhere upstream, the app was telling the model to emit "one fenced code block with nothing around it", a rule that applied to every code answer. The model was following it perfectly. I swapped in an explicit "label each file" instruction and the <em>same</em> model formatted every file correctly.</p>
+    <p>The lesson generalizes past our codebase: <strong>when the output looks wrong, suspect the instruction before the model.</strong> Read the actual prompt that got sent (all of it, including the parts your tool added) before you conclude anything about capability. A format failure is far more often an instruction failure wearing a costume.</p>
 
     <h2>Small models need you to be more literal</h2>
     <p>Here's the difference that matters if you're running locally. Smaller models in the 1.5B–3B range are more format-sensitive than large ones. They follow an explicit format instruction well. They infer an implied one poorly.</p>
-    <p>So the failure mode isn't that a small model can't do the task — often it can. It's that you assumed something you never wrote down. A large model will frequently guess your intent from context; a small one takes you at your word. Anything you were leaving to inference — the labels, the section order, how many items, whether to explain or just answer — should be written into the prompt.</p>
+    <p>So the failure mode isn't that a small model can't do the task, often it can. It's that you assumed something you never wrote down. A large model will frequently guess your intent from context; a small one takes you at your word. Anything you were leaving to inference (the labels, the section order, how many items, whether to explain or just answer) should be written into the prompt.</p>
     <p>There's a side effect worth having: a prompt explicit enough for a small model leaves a large one nothing to guess at. Small models are an honest instruction editor.</p>
 
     <h2>Padding is not free</h2>
     <p>The instinct to dump everything in "just in case" is the one habit worth breaking. Context windows are finite. Irrelevant text actively costs you twice: it pushes the useful part further from the answer, and it burns window you may need later in the conversation.</p>
-    <p>The test is whether the model could do the task without it. The whole file when the function would do, three pages of background for a one-line question — cut it. Length is only worth spending on the task, the format, one example, and context the model genuinely can't guess.</p>
+    <p>The test is whether the model could do the task without it. The whole file when the function would do, three pages of background for a one-line question: cut it. Length is only worth spending on the task, the format, one example, and context the model genuinely can't guess.</p>
 
     <h2>A skeleton you can reuse</h2>
-    <p>Nothing clever, just the five things in an order that works — and because the stable parts sit at the top, the runtime can reuse most of it turn to turn:</p>
+    <p>Nothing clever, just the five things in an order that works, and because the stable parts sit at the top, the runtime can reuse most of it turn to turn:</p>
     <ol>
-      <li><strong>Context</strong> — the code, the document, the background. Stable across turns, so it goes first.</li>
-      <li><strong>Task</strong> — one sentence on what you want done.</li>
-      <li><strong>Format</strong> — exactly what the reply should look like. Be specific enough to be checkable.</li>
-      <li><strong>Example</strong> — one short sample of that format, if the shape matters at all.</li>
-      <li><strong>The question</strong> — the varying part, last.</li>
+      <li><strong>Context</strong>: the code, the document, the background. Stable across turns, so it goes first.</li>
+      <li><strong>Task</strong>: one sentence on what you want done.</li>
+      <li><strong>Format</strong>: exactly what the reply should look like. Be specific enough to be checkable.</li>
+      <li><strong>Example</strong>: one short sample of that format, if the shape matters at all.</li>
+      <li><strong>The question</strong>: the varying part, last.</li>
     </ol>
-    <p>If a reply comes back wrong, don't rewrite from scratch. Change one line — usually the format line — and send it again. You'll learn which line was carrying the weight, which is worth more than any prompt you copy off the internet.</p>
+    <p>If a reply comes back wrong, don't rewrite from scratch. Change one line, usually the format line, and send it again. You'll learn which line was carrying the weight, which is worth more than any prompt you copy off the internet.</p>
 
     <div class="receipts"><strong>Receipts:</strong> The multi-file formatting failure above is my own first-hand measurement, run against Outlier on 2026-07-21: the same local model, same request, produced one unlabeled blob under our "one fenced code block" instruction and correctly labeled files under an explicit "label each file" instruction. The prefix-reuse point describes how a local runtime's prompt cache works, not a measured speedup. Everything else here is general model behavior, not a benchmark claim.</div>
 
@@ -221,7 +221,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Do I need to write prompts differently for a local model?</h3>
-        <p>The same techniques work, but small models need you to apply them harder. A 1.5B or 3B model follows an explicit format instruction well and infers an implied one poorly, so anything you were leaving to inference — labels, section order, how many items — should be written down. A prompt explicit enough for a small model leaves a large one nothing to guess at.</p>
+        <p>The same techniques work, but small models need you to apply them harder. A 1.5B or 3B model follows an explicit format instruction well and infers an implied one poorly, so anything you were leaving to inference (labels, section order, how many items) should be written down. A prompt explicit enough for a small model leaves a large one nothing to guess at.</p>
       </div>
       <div class="faq-item">
         <h3>Does the order of a prompt really affect speed?</h3>
@@ -246,7 +246,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/why-ai-forgets-conversations/">Why AI forgets conversations</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

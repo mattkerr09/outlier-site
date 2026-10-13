@@ -143,27 +143,27 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>KoboldCpp and Outlier both run models entirely on your own hardware, so privacy is not what separates them. KoboldCpp is a free, AGPL-3.0 single-file server you launch from a terminal and use through a browser UI — it runs any GGUF model you supply, on Windows, Linux, macOS ARM64, or Android. Outlier is a paid native Mac app with curated models built in, and it only runs on Apple Silicon.</p>
+      <p>KoboldCpp and Outlier both run models entirely on your own hardware, so privacy is not what separates them. KoboldCpp is a free, AGPL-3.0 single-file server you launch from a terminal and use through a browser UI: it runs any GGUF model you supply, on Windows, Linux, macOS ARM64, or Android. Outlier is a paid native Mac app with curated models built in, and it only runs on Apple Silicon.</p>
     </div>
 
-    <p class="lead">I'm Matt Kerr. I build Outlier, so treat this as a comparison written by an interested party — read the KoboldCpp repo and judge for yourself. I've tried to be accurate about both, including the places where KoboldCpp is simply the better tool. Every claim about KoboldCpp below comes from its own README, wiki FAQ, and GitHub release data, checked on 2026-07-23.</p>
+    <p class="lead">I'm Matt Kerr. I build Outlier, so treat this as a comparison written by an interested party: read the KoboldCpp repo and judge for yourself. I've tried to be accurate about both, including the places where KoboldCpp is simply the better tool. Every claim about KoboldCpp below comes from its own README, wiki FAQ, and GitHub release data, checked on 2026-07-23.</p>
 
     <h2>What KoboldCpp actually is</h2>
-    <p>KoboldCpp is a local inference server maintained by LostRuins, first published in March 2023 and still pushed almost daily. It builds on llama.cpp and wraps it in a distribution model the project sums up as "One File. Zero Install." You download one executable, run it, and it starts a server that hosts KoboldAI Lite — a browser interface aimed heavily at writing, storytelling, and roleplay — plus an OpenAI-compatible <code>/v1</code> API. As of v1.117.1 it also serves Ollama-compatible embeddings and streaming endpoints with tool calling, which means existing tooling can point at it without code changes.</p>
+    <p>KoboldCpp is a local inference server maintained by LostRuins, first published in March 2023 and still pushed almost daily. It builds on llama.cpp and wraps it in a distribution model the project sums up as "One File. Zero Install." You download one executable, run it, and it starts a server that hosts KoboldAI Lite (a browser interface aimed heavily at writing, storytelling, and roleplay) plus an OpenAI-compatible <code>/v1</code> API. As of v1.117.1 it also serves Ollama-compatible embeddings and streaming endpoints with tool calling, which means existing tooling can point at it without code changes.</p>
 
-    <p>It is not text-only. The same binary handles image generation and editing (Stable Diffusion, SDXL, Flux), video generation, Whisper speech-to-text, several text-to-speech engines, music generation, and multimodal vision — a wider surface than almost any consumer local AI app on the Mac, mine included.</p>
+    <p>It is not text-only. The same binary handles image generation and editing (Stable Diffusion, SDXL, Flux), video generation, Whisper speech-to-text, several text-to-speech engines, music generation, and multimodal vision: a wider surface than almost any consumer local AI app on the Mac, mine included.</p>
 
-    <p>On macOS, the release ships exactly one artifact: <code>koboldcpp-mac-arm64</code>. You <code>chmod +x</code> it and run it from Terminal, and it serves a UI at <code>localhost:5001</code>. There's a launcher dialog, but it's a Python customtkinter window, not a Cocoa app. There is no <code>.app</code> bundle, no menu bar presence, and the binary is unsigned — the README notes that on newer macOS you may need to whitelist it in security settings.</p>
+    <p>On macOS, the release ships exactly one artifact: <code>koboldcpp-mac-arm64</code>. You <code>chmod +x</code> it and run it from Terminal, and it serves a UI at <code>localhost:5001</code>. There's a launcher dialog, but it's a Python customtkinter window, not a Cocoa app. There is no <code>.app</code> bundle, no menu bar presence, and the binary is unsigned, the README notes that on newer macOS you may need to whitelist it in security settings.</p>
 
     <h2>What Outlier is</h2>
     <p>Outlier is a native macOS app for Apple Silicon (M1 or later, macOS 26+). Models run on-device. No account, no usage caps, nothing uploaded, and it works with Wi-Fi off. Six tiers ship inside the app: Nano 4B (2.37 GB, 6 GB RAM), Lite 9B, Quick 26B-a4b, Core 27B, Vision 3.8 27B, and Plus 397B-a17b, which streams experts from SSD and peaks around 11 GB of RSS on a 64 GB machine. Nano and Lite are free with no account. Pro is a one-time purchase for all seven; Founders Lifetime is $249.</p>
 
-    <p>Outlier isn't open source. No image generation, no video, no music, no mobile app, no Windows or Linux build. Web research, voice-to-text, and an OpenAI- and Anthropic-compatible local API server do exist, but all three are Pro features that stay off until you ask for them — research is a per-turn toggle, the API server is a settings switch. The chat window is the product; the server is secondary to it. If any of that is a dealbreaker, this comparison ends early.</p>
+    <p>Outlier isn't open source. No image generation, no video, no music, no mobile app, no Windows or Linux build. Web research, voice-to-text, and an OpenAI- and Anthropic-compatible local API server do exist, but all three are Pro features that stay off until you ask for them: research is a per-turn toggle, the API server is a settings switch. The chat window is the product; the server is secondary to it. If any of that is a dealbreaker, this comparison ends early.</p>
 
     <h2>Setup effort: assembled versus bundled</h2>
-    <p>KoboldCpp's install is genuinely trivial — download, mark executable, run. The work comes after that. It ships no model. You go find a GGUF file yourself, usually on Hugging Face, and to choose well you need to already understand quantization levels, context length, and how many layers to offload to the GPU. The FAQ gives rough guidance (a 7B model wants at least 8 GB of RAM, 13B at least 16 GB), and Metal acceleration works on Apple Silicon, but the tuning is on you. Then there's Gatekeeper: an unsigned binary means walking through a security override before the first run.</p>
+    <p>KoboldCpp's install is genuinely trivial: download, mark executable, run. The work comes after that. It ships no model. You go find a GGUF file yourself, usually on Hugging Face, and to choose well you need to already understand quantization levels, context length, and how many layers to offload to the GPU. The FAQ gives rough guidance (a 7B model wants at least 8 GB of RAM, 13B at least 16 GB), and Metal acceleration works on Apple Silicon, but the tuning is on you. Then there's Gatekeeper: an unsigned binary means walking through a security override before the first run.</p>
 
-    <p>Outlier's tradeoff is the mirror image. The app is signed and notarized, you double-click it, pick a tier, and it downloads the weights and picks the settings. You don't choose a quantization because you never see one — a real loss of control, traded deliberately for someone's mother being able to use it.</p>
+    <p>Outlier's tradeoff is the mirror image. The app is signed and notarized, you double-click it, pick a tier, and it downloads the weights and picks the settings. You don't choose a quantization because you never see one: a real loss of control, traded deliberately for someone's mother being able to use it.</p>
 
     <h2>Side-by-side</h2>
     <table>
@@ -197,7 +197,7 @@
         </tr>
         <tr>
           <td><strong>Bundled models</strong></td>
-          <td>None — not included with the download</td>
+          <td>None, not included with the download</td>
           <td>All seven, in-app</td>
         </tr>
         <tr>
@@ -238,8 +238,8 @@
     <ul>
       <li><strong>Platform reach.</strong> Outlier is Mac-only, Apple Silicon only. That's a straightforward disadvantage. KoboldCpp runs on Windows, Linux, macOS ARM64, and Android through Termux, and it still ships "oldpc" builds for hardware that modern apps have dropped. If your machines aren't all recent Macs, this comparison has one answer.</li>
       <li><strong>It's free, with no tiers at all.</strong> No account, no license key, no upsell. Every feature is available to everyone on day one. Outlier gates five of six tiers behind a one-time $249.</li>
-      <li><strong>It's open source.</strong> AGPL-3.0, with the llama.cpp and GGML pieces under MIT. Its privacy claims are auditable rather than promised — you can read the code or compile it. Outlier's app is closed source; only the weights are published. If verifiability matters to you, that's a real point against me.</li>
-      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you six tiers plus a fixed 25-model MLX catalog — no arbitrary model loading, and nothing outside what I've packaged.</li>
+      <li><strong>It's open source.</strong> AGPL-3.0, with the llama.cpp and GGML pieces under MIT. Its privacy claims are auditable rather than promised: you can read the code or compile it. Outlier's app is closed source; only the weights are published. If verifiability matters to you, that's a real point against me.</li>
+      <li><strong>Model freedom.</strong> Any GGUF works, including architectures released last week, with claimed backwards compatibility across old GGML and GGUF files. Outlier gives you six tiers plus a fixed 25-model MLX catalog: no arbitrary model loading, and nothing outside what I've packaged.</li>
       <li><strong>Feature breadth.</strong> Image generation and editing, video, speech-to-text, multiple TTS engines, music, and vision, all in the same binary. Outlier does text and vision, and that's it.</li>
       <li><strong>It's a server first.</strong> KoboldCpp is designed as a backend: OpenAI- and Ollama-compatible routes drop it into existing pipelines on any of its platforms, for free, with no tier to buy. Outlier ships an OpenAI- and Anthropic-compatible local API server too, but it's Pro-only, off until you enable it in settings, and built to serve the chat app rather than the other way around.</li>
       <li><strong>Release velocity.</strong> Ten releases between February and July 2026, tracking upstream llama.cpp closely, so new architectures land fast.</li>
@@ -253,7 +253,7 @@
       <li><strong>Signed and notarized.</strong> No Gatekeeper override, which matters on managed or shared Macs.</li>
       <li><strong>A Mac window, not a browser tab.</strong> No terminal, no localhost port, no launcher dialog.</li>
       <li><strong>A large local tier.</strong> Plus 397B-a17b runs on a 64 GB Mac via paged MoE at about 1.59 tok/s. Assembling a model that size by hand is a project.</li>
-      <li><strong>Published receipts.</strong> Core 27B hit ~45% on a blind slice of SWE-bench Verified, and a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus 4.7</a> is published so you can compare the answers yourself. Claude is still faster and stronger on the hardest work. KoboldCpp's quality is whatever model you loaded — flexible, but unpredictable.</li>
+      <li><strong>Published receipts.</strong> Core 27B hit ~45% on a blind slice of SWE-bench Verified, and a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus 4.7</a> is published so you can compare the answers yourself. Claude is still faster and stronger on the hardest work. KoboldCpp's quality is whatever model you loaded: flexible, but unpredictable.</li>
     </ul>
 
     <h2>Who should pick which</h2>
@@ -264,11 +264,11 @@
     <p><strong>Both is reasonable.</strong> KoboldCpp can serve an API in the background while a Mac app handles daily chat.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> KoboldCpp details from its <a href="https://github.com/LostRuins/koboldcpp">GitHub repository</a>, its <a href="https://github.com/LostRuins/koboldcpp/wiki/The-KoboldCpp-FAQ-and-Knowledgebase">wiki FAQ</a>, the <a href="https://github.com/LostRuins/koboldcpp/blob/concedo/LICENSE.md">AGPL-3.0 LICENSE.md</a>, and GitHub release metadata for v1.117.1 (published 2026-07-09), all checked 2026-07-23; star, fork, and release-cadence figures are from the GitHub API on that date. Note that KoboldCpp publishes no formal privacy policy — its privacy statements live in the community wiki FAQ, and the optional AI Horde and remote-tunnel features are off by default and send data off-machine when enabled, which the FAQ says plainly. Outlier tier sizes, RAM floors, and throughput measured on an M1 Ultra Mac Studio; pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Open-source projects and pricing both change fast — verify at the source before deciding.
+      <strong>Sources and receipts:</strong> KoboldCpp details from its <a href="https://github.com/LostRuins/koboldcpp">GitHub repository</a>, its <a href="https://github.com/LostRuins/koboldcpp/wiki/The-KoboldCpp-FAQ-and-Knowledgebase">wiki FAQ</a>, the <a href="https://github.com/LostRuins/koboldcpp/blob/concedo/LICENSE.md">AGPL-3.0 LICENSE.md</a>, and GitHub release metadata for v1.117.1 (published 2026-07-09), all checked 2026-07-23; star, fork, and release-cadence figures are from the GitHub API on that date. Note that KoboldCpp publishes no formal privacy policy: its privacy statements live in the community wiki FAQ, and the optional AI Horde and remote-tunnel features are off by default and send data off-machine when enabled, which the FAQ says plainly. Outlier tier sizes, RAM floors, and throughput measured on an M1 Ultra Mac Studio; pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Open-source projects and pricing both change fast: verify at the source before deciding.
     </div>
 
     <div class="cta">
-      <h3>Try Outlier free — no account needed</h3>
+      <h3>Try Outlier free: no account needed</h3>
       <p>Nano and Lite run on-device for free, forever. Apple Silicon Macs, macOS 26 or later.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-outlier-vs-koboldcpp&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-outlier-vs-koboldcpp-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
@@ -278,7 +278,7 @@
       <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 

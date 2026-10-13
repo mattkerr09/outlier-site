@@ -156,20 +156,20 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Jan gives you a clean desktop chat app with a built-in GUI; Ollama is a CLI-first engine that other apps build on — pick Jan to click-and-chat, Ollama to script and integrate.</li>
+        <li>Jan gives you a clean desktop chat app with a built-in GUI; Ollama is a CLI-first engine that other apps build on: pick Jan to click-and-chat, Ollama to script and integrate.</li>
         <li>Both are <strong>free, open-source, and run models locally</strong>. Jan is MIT licensed; Ollama is open source with a large model library.</li>
         <li>Under the hood they overlap: both run GGUF models through a llama.cpp-style engine, and both expose an OpenAI-compatible local API.</li>
-        <li>Both are RAM-bound — the model has to fit in memory. Pick based on workflow, not on which one is "better."</li>
+        <li>Both are RAM-bound, the model has to fit in memory. Pick based on workflow, not on which one is "better."</li>
       </ul>
     </div>
 
-    <p class="lead">Want to run an AI model on your own machine without paying per token? Jan and Ollama are two of the most popular ways to do it — and they answer different questions. Jan is a desktop app you download, open, and chat in, like a local ChatGPT. Ollama is a command-line engine you pull a model into and run, and that other tools wire into. Both are free, both keep the model on your hardware, and both are good at what they aim for. Here's the honest breakdown.</p>
+    <p class="lead">Want to run an AI model on your own machine without paying per token? Jan and Ollama are two of the most popular ways to do it, and they answer different questions. Jan is a desktop app you download, open, and chat in, like a local ChatGPT. Ollama is a command-line engine you pull a model into and run, and that other tools wire into. Both are free, both keep the model on your hardware, and both are good at what they aim for. Here's the honest breakdown.</p>
 
     <h2>What is Jan?</h2>
-    <p>Jan is an open-source desktop app, MIT licensed, that runs on macOS, Windows, and Linux. You install it, browse a model list, download one, and start chatting in a clean GUI — no terminal involved. It runs GGUF models through a llama.cpp-style backend, and it ships an OpenAI-compatible local server, so any app expecting the OpenAI API format can point at Jan instead. Privacy is a stated design goal: by default the model runs on your machine and conversations stay there. For people who want a local chat window that just opens and works, that's the appeal.</p>
+    <p>Jan is an open-source desktop app, MIT licensed, that runs on macOS, Windows, and Linux. You install it, browse a model list, download one, and start chatting in a clean GUI: no terminal involved. It runs GGUF models through a llama.cpp-style backend, and it ships an OpenAI-compatible local server, so any app expecting the OpenAI API format can point at Jan instead. Privacy is a stated design goal: by default the model runs on your machine and conversations stay there. For people who want a local chat window that just opens and works, that's the appeal.</p>
 
     <h2>What is Ollama?</h2>
-    <p>Ollama is a CLI-first local runner, also open source. You install it, then <code>ollama pull</code> a model and <code>ollama run</code> it from the terminal. It's cross-platform — macOS, Linux, Windows — and runs GGUF models via a llama.cpp backend. Two things make it a developer favorite: the model library is large and easy to pull from, and it exposes a clean HTTP API (with an OpenAI-compatible mode) that countless other tools build on top of. Want a GUI on Ollama? You bolt one on — Open WebUI and similar projects exist precisely because Ollama is meant to be the engine, not the face.</p>
+    <p>Ollama is a CLI-first local runner, also open source. You install it, then <code>ollama pull</code> a model and <code>ollama run</code> it from the terminal. It's cross-platform (macOS, Linux, Windows) and runs GGUF models via a llama.cpp backend. Two things make it a developer favorite: the model library is large and easy to pull from, and it exposes a clean HTTP API (with an OpenAI-compatible mode) that countless other tools build on top of. Want a GUI on Ollama? You bolt one on: Open WebUI and similar projects exist precisely because Ollama is meant to be the engine, not the face.</p>
 
     <h2>Jan vs Ollama: the comparison</h2>
     <table>
@@ -189,25 +189,25 @@
     </table>
 
     <h2>Where they actually differ</h2>
-    <p>The headline split is interface, not capability. They share an engine family — GGUF through llama.cpp — so on the same model and same machine, raw output quality is going to be similar. What differs is the shape of the work.</p>
+    <p>The headline split is interface, not capability. They share an engine family, GGUF through llama.cpp, so on the same model and same machine, raw output quality is going to be similar. What differs is the shape of the work.</p>
     <p>Reach for <strong>Jan</strong> when you want a finished app: open it, pick a model, type. There's a window, a chat history, a settings panel. No commands to remember. If "local AI" to you means "a private ChatGPT I can double-click," Jan is built for that.</p>
-    <p>Reach for <strong>Ollama</strong> when the model is a component in something larger. You're writing a script, building an app, running an agent, or you just live in the terminal. Its bigger pull-able library and its role as a standard backend mean a lot of tooling already speaks Ollama out of the box. The trade-off is that out of the box it has no graphical chat — you bring your own.</p>
+    <p>Reach for <strong>Ollama</strong> when the model is a component in something larger. You're writing a script, building an app, running an agent, or you just live in the terminal. Its bigger pull-able library and its role as a standard backend mean a lot of tooling already speaks Ollama out of the box. The trade-off is that out of the box it has no graphical chat: you bring your own.</p>
 
     <div class="receipts">
       <span class="r-label">The shared reality</span>
-      <p>Both Jan and Ollama keep inference on your machine, which matters more than usual right now. Local models don't draw on the cloud's water and power footprint: MIT Technology Review reported in 2025 that inference is roughly 80–90% of AI compute, and the IEA's "Energy and AI" report projects data-center electricity to more than double by 2030. A model running on your own laptop has none of that marginal draw — its energy is just your wall socket.</p>
+      <p>Both Jan and Ollama keep inference on your machine, which matters more than usual right now. Local models don't draw on the cloud's water and power footprint: MIT Technology Review reported in 2025 that inference is roughly 80–90% of AI compute, and the IEA's "Energy and AI" report projects data-center electricity to more than double by 2030. A model running on your own laptop has none of that marginal draw, its energy is just your wall socket.</p>
       <p>Both are also RAM-bound. The model has to fit in memory, so on a 16 GB or 32 GB machine you're picking from quantized small-to-mid models, not the big ones.</p>
     </div>
 
     <h2>Which should you pick?</h2>
-    <p>If you want to download one thing and start chatting in a real window, pick <strong>Jan</strong>. If you want to script against a model, integrate it into other software, or run it headless as a backend, pick <strong>Ollama</strong> — and put a GUI like Open WebUI on top if you later want one. Plenty of people run both: Ollama humming as the engine, a separate app as the face. Neither is a wrong answer; they're answers to different questions.</p>
-    <p>One shared limit is worth naming: both cap out at what fits in your RAM. If you specifically want to run a model <em>bigger</em> than your Mac's memory, that's a different architecture. <a href="https://outlier.host/">Outlier</a> is one Mac-native option there — a single signed app whose patent-pending paged inference engine streams expert tensors off the SSD, so a 397B-parameter model runs at roughly 11 GB peak RSS on a 64 GB Mac instead of needing 209 GB of RAM. It's Apple-Silicon-only and not open source, so it's a different trade than Jan or Ollama — but if "won't fit in RAM" is your blocker, it's worth knowing it exists.</p>
+    <p>If you want to download one thing and start chatting in a real window, pick <strong>Jan</strong>. If you want to script against a model, integrate it into other software, or run it headless as a backend, pick <strong>Ollama</strong>: and put a GUI like Open WebUI on top if you later want one. Plenty of people run both: Ollama humming as the engine, a separate app as the face. Neither is a wrong answer; they're answers to different questions.</p>
+    <p>One shared limit is worth naming: both cap out at what fits in your RAM. If you specifically want to run a model <em>bigger</em> than your Mac's memory, that's a different architecture. <a href="https://outlier.host/">Outlier</a> is one Mac-native option there: a single signed app whose patent-pending paged inference engine streams expert tensors off the SSD, so a 397B-parameter model runs at roughly 11 GB peak RSS on a 64 GB Mac instead of needing 209 GB of RAM. It's Apple-Silicon-only and not open source, so it's a different trade than Jan or Ollama, but if "won't fit in RAM" is your blocker, it's worth knowing it exists.</p>
 
     <h2>Questions about Jan vs Ollama</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>Is Jan built on Ollama?</h3>
-        <p>No. Jan is its own desktop app and isn't a front-end for Ollama. They're separate projects that happen to share the same underlying engine family — both run GGUF models through a llama.cpp-style backend. You can run Jan without Ollama installed, and run Ollama without Jan.</p>
+        <p>No. Jan is its own desktop app and isn't a front-end for Ollama. They're separate projects that happen to share the same underlying engine family, both run GGUF models through a llama.cpp-style backend. You can run Jan without Ollama installed, and run Ollama without Jan.</p>
       </div>
       <div class="faq-item">
         <h3>Are Jan and Ollama free?</h3>
@@ -215,7 +215,7 @@
       </div>
       <div class="faq-item">
         <h3>Which is more private, Jan or Ollama?</h3>
-        <p>Both keep inference on your machine, so for the chat itself there's no meaningful privacy gap — prompts don't leave the device unless you deliberately wire in a remote provider. Either tool can run fully offline. The practical difference is interface, not privacy.</p>
+        <p>Both keep inference on your machine, so for the chat itself there's no meaningful privacy gap. Prompts don't leave the device unless you deliberately wire in a remote provider. Either tool can run fully offline. The practical difference is interface, not privacy.</p>
       </div>
     </div>
 
@@ -228,7 +228,7 @@
 
     <div class="related">More: <a href="https://outlier.host/vs/outlier-vs-jan/">Outlier vs Jan</a> · <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> · <a href="https://outlier.host/vs/mac-native-ai-comparison/">Mac-native AI compared</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

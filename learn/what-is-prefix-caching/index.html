@@ -153,7 +153,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Prefix caching, also called KV cache reuse, is the trick of keeping the key/value tensors a transformer already computed for a prompt and reusing them when a later prompt starts with the same tokens. Only the differing suffix gets prefilled.</li>
-        <li>It requires an exact token-level prefix match — identical token ids, in order, from position zero. One changed token at position 5 invalidates everything from position 5 onward.</li>
+        <li>It requires an exact token-level prefix match: identical token ids, in order, from position zero. One changed token at position 5 invalidates everything from position 5 onward.</li>
         <li>Done right it is the difference between re-reading the whole conversation on every turn and reading only what's new. In our runtime, fixing it took steady-state time-to-first-token from 18.5s down to 1.39–4.71s.</li>
       </ul>
     </div>
@@ -162,7 +162,7 @@
 
     <h2>The KV cache, in one section</h2>
     <p>When a transformer processes a prompt, it computes a key tensor and a value tensor for every token at every layer. That collection is the KV cache. There are two phases and they have completely different cost profiles.</p>
-    <p><strong>Prefill</strong> is computing those tensors for the prompt you were handed. It's compute-bound and it scales with prompt length — longer prompt, more prefill work, and the attention term grows faster than linearly, so it gets worse as the context gets long. <strong>Decode</strong> is generating new tokens one at a time, appending each one's keys and values to the cache as it goes. Decode is memory-bandwidth-bound and is dominated by how many tokens you generate rather than by how long the prompt was, though a longer cache does cost bandwidth on every step.</p>
+    <p><strong>Prefill</strong> is computing those tensors for the prompt you were handed. It's compute-bound and it scales with prompt length: longer prompt, more prefill work, and the attention term grows faster than linearly, so it gets worse as the context gets long. <strong>Decode</strong> is generating new tokens one at a time, appending each one's keys and values to the cache as it goes. Decode is memory-bandwidth-bound and is dominated by how many tokens you generate rather than by how long the prompt was, though a longer cache does cost bandwidth on every step.</p>
 
     <table>
       <thead>
@@ -173,7 +173,7 @@
         <tr><td><strong>Bottleneck</strong></td><td>Compute</td><td>Memory bandwidth</td></tr>
         <tr><td><strong>Scales with</strong></td><td>Prompt length</td><td>Tokens generated</td></tr>
         <tr><td><strong>What the user feels</strong></td><td>Time to first token</td><td>Tokens per second</td></tr>
-        <tr><td><strong>Can prefix caching help?</strong></td><td>Yes — this is the entire point</td><td>No</td></tr>
+        <tr><td><strong>Can prefix caching help?</strong></td><td>Yes, this is the entire point</td><td>No</td></tr>
       </tbody>
     </table>
 
@@ -181,26 +181,26 @@
 
     <h2>The rule: exact token match, from position zero</h2>
     <p>If a new prompt begins with the same tokens as one you already processed, the KV entries for that shared span are still valid. Nothing about those positions changed, so their keys and values didn't either. You keep them and prefill only the suffix.</p>
-    <p>The requirement is strict and it's the whole story: identical token ids, in order, starting at position zero. Not similar. Not semantically equivalent. Not "the same system prompt with today's date swapped in." A single differing token at position 5 poisons every position after it, because each of those positions attended to the token you changed. That's why prefix caching is fragile — it needs token-level stability from template code nobody thinks of as performance-critical.</p>
+    <p>The requirement is strict and it's the whole story: identical token ids, in order, starting at position zero. Not similar. Not semantically equivalent. Not "the same system prompt with today's date swapped in." A single differing token at position 5 poisons every position after it, because each of those positions attended to the token you changed. That's why prefix caching is fragile. It needs token-level stability from template code nobody thinks of as performance-critical.</p>
 
     <h2>Failure mode 1: ranking, not matching</h2>
-    <p>Our <code>lookup()</code> returned the longest stored match, gated on <code>n &lt;= len(prompt_ids)</code>. Looks fine. It isn't. An entry covering the <em>entire</em> prompt satisfies that gate and wins for being longest — and leaves an empty suffix. The caller had a reasonable-looking branch for "can't generate with an empty suffix," so it threw the cache away and paid a full prefill. Meanwhile the genuinely useful entry, a 2,328-token system prefix that would have left a cheap ~104-token suffix, lost the ranking for being shorter.</p>
+    <p>Our <code>lookup()</code> returned the longest stored match, gated on <code>n &lt;= len(prompt_ids)</code>. Looks fine. It isn't. An entry covering the <em>entire</em> prompt satisfies that gate and wins for being longest, and leaves an empty suffix. The caller had a reasonable-looking branch for "can't generate with an empty suffix," so it threw the cache away and paid a full prefill. Meanwhile the genuinely useful entry, a 2,328-token system prefix that would have left a cheap ~104-token suffix, lost the ranking for being shorter.</p>
     <p>The fix was one character of intent: require <code>n &lt; len(prompt_ids)</code> so the suffix is never empty. Steady-state time-to-first-token went from 18.5s to 1.39–4.71s, roughly 4–14x.</p>
-    <p>The debugging lesson matters more than the bug. Every direct check passed. Key equality: True. Common prefix: 2,328. Types: correct. A hash check or a key comparison cannot reveal a ranking bug, because nothing about the keys is wrong — the wrong correct answer is being chosen. Dumping every candidate entry's gate decision and hit decision found it in a single run.</p>
+    <p>The debugging lesson matters more than the bug. Every direct check passed. Key equality: True. Common prefix: 2,328. Types: correct. A hash check or a key comparison cannot reveal a ranking bug, because nothing about the keys is wrong, the wrong correct answer is being chosen. Dumping every candidate entry's gate decision and hit decision found it in a single run.</p>
 
     <h2>Failure mode 2: template drift</h2>
-    <p>With thinking disabled, the chat template appended an empty <code>&lt;think&gt;&lt;/think&gt;</code> block to the generation prompt, but rendered historical assistant turns without it. Read that twice: the prompt for turn N was therefore never a prefix of the prompt for turn N+1. They diverged four tokens before the end of the stored prompt — stored length 5,923, live length 7,380, common prefix 5,919.</p>
+    <p>With thinking disabled, the chat template appended an empty <code>&lt;think&gt;&lt;/think&gt;</code> block to the generation prompt, but rendered historical assistant turns without it. Read that twice: the prompt for turn N was therefore never a prefix of the prompt for turn N+1. They diverged four tokens before the end of the stored prompt: stored length 5,923, live length 7,380, common prefix 5,919.</p>
     <p>Reuse: zero. Cost: about +11.6s per step, growing linearly with conversation length, which is exactly the shape of "the assistant gets slower the longer you talk to it."</p>
-    <p>There's a second lesson buried in this one. There were <em>two</em> prompt-building call sites. I patched one, re-ran, and the divergence dump came back byte-identical — which is how I found out about the other. If a fix produces literally no change in the diagnostic output, you patched something that isn't on the path.</p>
+    <p>There's a second lesson buried in this one. There were <em>two</em> prompt-building call sites. I patched one, re-ran, and the divergence dump came back byte-identical, which is how I found out about the other. If a fix produces literally no change in the diagnostic output, you patched something that isn't on the path.</p>
 
     <h2>Failure mode 3: a mutating system block</h2>
-    <p>A memory feature spliced recalled facts into the system message — the very top of the prompt — using the most recent user message as the recall query. In a chat that's harmless. In an agent loop, every tool result becomes the new most-recent message, so the recalled text changed on every step and everything after it diverged. Measured divergence: token 314 of a 4,748-token prompt — so roughly 93% of the prompt was recomputed every step, because a block near the top kept moving.</p>
+    <p>A memory feature spliced recalled facts into the system message, the very top of the prompt, using the most recent user message as the recall query. In a chat that's harmless. In an agent loop, every tool result becomes the new most-recent message, so the recalled text changed on every step and everything after it diverged. Measured divergence: token 314 of a 4,748-token prompt, so roughly 93% of the prompt was recomputed every step, because a block near the top kept moving.</p>
     <p>The fix was to recall against the <em>first</em> user message instead. That made the block stable, and it's a better query anyway: a tool result full of code is mostly noise for a semantic lookup.</p>
 
     <h2>The design rules that transfer</h2>
     <p>These were bugs in one runtime, and I won't pretend they're universal. The rules that came out of them are the transferable part.</p>
     <ol>
-      <li><strong>Order the prompt by mutation rate.</strong> Most stable first — system prompt, tool definitions — and most volatile last. This is the single decision that determines how much of your prompt is cacheable at all.</li>
+      <li><strong>Order the prompt by mutation rate.</strong> Most stable first (system prompt, tool definitions) and most volatile last. This is the single decision that determines how much of your prompt is cacheable at all.</li>
       <li><strong>Never inject anything per-request above something you want cached.</strong> Timestamps are the classic offender. A current-time string in the system prompt makes literally every request a cold prefill, and it will never show up as an error.</li>
       <li><strong>Make cache-miss paths loud.</strong> A silent <code>except</code> around cache reuse converts a correctness-preserving regression into an invisible performance cliff. Nothing breaks. It just gets slower, forever.</li>
       <li><strong>Instrument the near-miss, not just hit/miss.</strong> Log the longest common prefix and what came next on each side. <code>common=5919 of 5923</code> localizes a bug that <code>hit=False</code> never will.</li>
@@ -212,7 +212,7 @@
         <tr><th>Failure mode</th><th>Where it diverged</th><th>Effect</th></tr>
       </thead>
       <tbody>
-        <tr><td>Ranking (longest match wins, suffix empty)</td><td>Nowhere — the match was correct, the choice wasn't</td><td>Full prefill every request; 18.5s TTFT</td></tr>
+        <tr><td>Ranking (longest match wins, suffix empty)</td><td>Nowhere: the match was correct, the choice wasn't</td><td>Full prefill every request; 18.5s TTFT</td></tr>
         <tr><td>Template drift (empty think block)</td><td>Last 4 tokens; common 5,919 of 5,923</td><td>Zero reuse; ~+11.6s per agent step, growing</td></tr>
         <tr><td>Mutating system block (memory recall)</td><td>Token 314 of 4,748</td><td>Everything after token 314 recomputed every step (~93% of the prompt)</td></tr>
       </tbody>
@@ -220,13 +220,13 @@
 
     <p>The through-line: in all three cases the model was fine, the weights were fine, the math was fine. What looked like "the local model is slow on long conversations" was prompt assembly quietly breaking a token-identity guarantee three different ways. If you're building an inference stack, the cache is probably not where your bug is. The code that builds the string you hand the cache is.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement from Outlier's inference runtime in July 2026. The token counts (2,328-token system prefix, 5,919 of 5,923 common, token 314 of 4,748) come from the divergence dumps that found each bug; the 18.5s → 1.39–4.71s time-to-first-token range is measured steady-state before and after the ranking fix. Fuller latency data is at <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">the prefix-cache benchmark page</a>. These were bugs in one runtime — I'm not claiming your stack has them, only that the four design rules survive the move.</div>
+    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement from Outlier's inference runtime in July 2026. The token counts (2,328-token system prefix, 5,919 of 5,923 common, token 314 of 4,748) come from the divergence dumps that found each bug; the 18.5s → 1.39–4.71s time-to-first-token range is measured steady-state before and after the ranking fix. Fuller latency data is at <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">the prefix-cache benchmark page</a>. These were bugs in one runtime: I'm not claiming your stack has them, only that the four design rules survive the move.</div>
 
     <h2>Questions about prefix caching (KV cache reuse)</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>Does prefix caching change the model's output?</h3>
-        <p>No. The requirement is an exact token-level match, and for an identical run of tokens the key and value tensors are still valid — reusing them gives the same numbers recomputing them would. Prefix caching skips work, it doesn't approximate it.</p>
+        <p>No. The requirement is an exact token-level match, and for an identical run of tokens the key and value tensors are still valid. Reusing them gives the same numbers recomputing them would. Prefix caching skips work, it doesn't approximate it.</p>
       </div>
       <div class="faq-item">
         <h3>Why doesn't a similar prompt hit the cache?</h3>
@@ -234,7 +234,7 @@
       </div>
       <div class="faq-item">
         <h3>Where should the volatile parts of a prompt go?</h3>
-        <p>At the end. Order the prompt by mutation rate: the system prompt and tool definitions first because they rarely change, then the conversation, then whatever changes on every single request. Anything that varies per request — a timestamp, a retrieved snippet, a tool result — invalidates every token that follows it.</p>
+        <p>At the end. Order the prompt by mutation rate: the system prompt and tool definitions first because they rarely change, then the conversation, then whatever changes on every single request. Anything that varies per request (a timestamp, a retrieved snippet, a tool result) invalidates every token that follows it.</p>
       </div>
       <div class="faq-item">
         <h3>How do I tell a cache miss from a near miss?</h3>
@@ -251,7 +251,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/why-ai-gets-slower-in-long-conversations/">Why AI gets slower in long conversations</a> · <a href="https://outlier.host/learn/what-is-a-system-prompt/">What is a system prompt?</a> · <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">Prefix cache latency benchmarks</a> · <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac, measured</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

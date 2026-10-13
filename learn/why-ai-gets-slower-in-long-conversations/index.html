@@ -161,13 +161,13 @@
     <p class="lead">You open a chat in the morning and it's quick. Forty messages later every reply takes a beat too long, then two beats, and you wonder whether the model got worse or your Mac is tired. Neither. It's doing more work per answer than it was this morning, for a reason that's easy to explain and hard to fix.</p>
 
     <h2>The model re-reads the whole conversation, every single time</h2>
-    <p>Here's the part that surprises people: a chat model doesn't remember your conversation. Nothing persists between turns. When you send message twenty, the software hands it everything — your first message, its first answer, all eighteen turns in between — as one block of text, and it reads that block from the top.</p>
+    <p>Here's the part that surprises people: a chat model doesn't remember your conversation. Nothing persists between turns. When you send message twenty, the software hands it everything (your first message, its first answer, all eighteen turns in between) as one block of text, and it reads that block from the top.</p>
     <p>That reading pass is called <strong>prefill</strong>, and it's why nothing appears on screen for a moment after you hit enter. The model has to ingest the whole prompt before it can produce the first token.</p>
     <p>The arithmetic is unforgiving. Turn 2 means re-reading two turns; turn 20 means re-reading twenty. The prefill grows with the conversation, and the pause before the first word gets longer. That's not degradation. That's the design.</p>
 
     <h2>The fix is a prefix cache, and it's all-or-nothing</h2>
-    <p>Nobody accepts that cost, so every serious runtime has a mitigation: the <strong>prefix cache</strong>, sometimes called KV cache reuse. Turn 20's prompt starts with exactly the same text as turn 19's — same conversation, more stuck on the end. If the runtime kept the work it did for turn 19, it can reuse that and only process the new part. When it works, latency stops depending on conversation length.</p>
-    <p>The catch is the word <em>exactly</em>. Reuse requires the earlier prompt to be a byte-identical prefix of the later one. Not similar. Identical. And the top of a prompt is where software likes to inject things — a timestamp, a memory block, a system instruction rebuilt slightly differently. Any drift up there throws away the entire cache. <a href="https://outlier.host/learn/what-is-prefix-caching/">Prefix caching has its own explainer</a> if you want more depth.</p>
+    <p>Nobody accepts that cost, so every serious runtime has a mitigation: the <strong>prefix cache</strong>, sometimes called KV cache reuse. Turn 20's prompt starts with exactly the same text as turn 19's: same conversation, more stuck on the end. If the runtime kept the work it did for turn 19, it can reuse that and only process the new part. When it works, latency stops depending on conversation length.</p>
+    <p>The catch is the word <em>exactly</em>. Reuse requires the earlier prompt to be a byte-identical prefix of the later one. Not similar. Identical. And the top of a prompt is where software likes to inject things: a timestamp, a memory block, a system instruction rebuilt slightly differently. Any drift up there throws away the entire cache. <a href="https://outlier.host/learn/what-is-prefix-caching/">Prefix caching has its own explainer</a> if you want more depth.</p>
     <p>Which is why the symptom is confusing from outside. A working cache and a broken one look identical until you time them. You just notice it was snappy this morning and it's crawling.</p>
 
     <h2>Three bugs, one symptom: what I found in July 2026</h2>
@@ -190,7 +190,7 @@
         </tr>
         <tr>
           <td><strong>v662</strong></td>
-          <td>A memory feature chose what to recall from the most recent user message. In an agent loop every tool result becomes the most recent message, so the recalled facts — and the top of the prompt — changed every step.</td>
+          <td>A memory feature chose what to recall from the most recent user message. In an agent loop every tool result becomes the most recent message, so the recalled facts, and the top of the prompt, changed every step.</td>
           <td>Recalling against the first message fixed it. Steps 3–5 held flat at 24.3 / 25.9 / 25.5 seconds while the prompt grew from about 7,000 to 9,200 tokens.</td>
         </tr>
       </tbody>
@@ -199,23 +199,23 @@
     <p>That last row is the whole article in one line: the prompt got roughly 30% longer and the time barely moved. A flat line instead of a ramp.</p>
 
     <h2>99.9% matching is worth exactly the same as 0% matching</h2>
-    <p>The v660 bug is the one I'd print on a poster. 5,919 tokens out of 5,923 matched — 99.9% — and reuse was zero. Not reduced — zero.</p>
-    <p>Prefix reuse doesn't degrade gracefully — there's no partial credit for being close. The runtime walks forward from token one, and the instant it finds a mismatch everything after it is unusable, because every later token's state depends on the ones before it. Four bad tokens at the tail of a 6,000-token prompt cost the same as a completely different prompt.</p>
-    <p>That's also why these bugs survive normal debugging. Every check I had was passing — keys matched, hashes matched, the cache had entries. It was perfectly healthy and simply never used.</p>
+    <p>The v660 bug is the one I'd print on a poster. 5,919 tokens out of 5,923 matched, 99.9%, and reuse was zero. Not reduced: zero.</p>
+    <p>Prefix reuse doesn't degrade gracefully: there's no partial credit for being close. The runtime walks forward from token one, and the instant it finds a mismatch everything after it is unusable, because every later token's state depends on the ones before it. Four bad tokens at the tail of a 6,000-token prompt cost the same as a completely different prompt.</p>
+    <p>That's also why these bugs survive normal debugging. Every check I had was passing: keys matched, hashes matched, the cache had entries. It was perfectly healthy and simply never used.</p>
 
     <h2>What you can do about it, on any AI you use</h2>
     <p>You can't patch someone else's cache, but you can shorten the prompt. That works everywhere:</p>
     <ul>
       <li><strong>Start a fresh conversation for a new task.</strong> The most effective move by far. A new thread is a short prompt, and a short prompt is a short prefill.</li>
       <li><strong>Don't edit early messages mid-thread.</strong> Rewriting message three changes the top of the prompt and invalidates every cached token after it. You've paid for the whole conversation again.</li>
-      <li><strong>Don't paste bulk text you don't need.</strong> That 4,000-line log you dropped in at turn two isn't a one-time cost — it's in the prompt for every remaining turn.</li>
+      <li><strong>Don't paste bulk text you don't need.</strong> That 4,000-line log you dropped in at turn two isn't a one-time cost: it's in the prompt for every remaining turn.</li>
       <li><strong>Notice the shape of the slowdown.</strong> If the wait grows with thread length and resets when you start over, it's prompt length. If it's random, something else is wrong.</li>
     </ul>
 
-    <h2>Cloud services have the same problem — you just can't see it</h2>
+    <h2>Cloud services have the same problem: you just can't see it</h2>
     <p>None of this is specific to running models on your own machine. The structural fact is the same everywhere, and a hosted service has the same fragility at the top of the prompt.</p>
-    <p>The difference is what you can do about it. Their cache runs on their servers: you can't see whether it's hitting, and you can't fix it when it isn't. I could dump every cache entry and every hit-or-miss decision until the ranking bug fell out. That's a narrow advantage of local software — it doesn't make the model smarter, it just puts the person who can fix the plumbing in the same room as the problem.</p>
-    <p>So my claim is deliberately narrow, because it's the one I measured: after v659 through v662, latency in Outlier no longer grows with conversation length. Closely related: <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets your conversations</a> — same root fact, different consequence.</p>
+    <p>The difference is what you can do about it. Their cache runs on their servers: you can't see whether it's hitting, and you can't fix it when it isn't. I could dump every cache entry and every hit-or-miss decision until the ranking bug fell out. That's a narrow advantage of local software: it doesn't make the model smarter, it just puts the person who can fix the plumbing in the same room as the problem.</p>
+    <p>So my claim is deliberately narrow, because it's the one I measured: after v659 through v662, latency in Outlier no longer grows with conversation length. Closely related: <a href="https://outlier.host/learn/why-ai-forgets-conversations/">why AI forgets your conversations</a>: same root fact, different consequence.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -237,7 +237,7 @@
       </div>
     </div>
 
-    <div class="receipts"><strong>Receipts:</strong> Every timing number in this article is a first-hand measurement I took while debugging Outlier v659 through v662 in July 2026, on my own machine. One machine, one workload — illustrations of the mechanism, not a benchmark you should expect to reproduce exactly. Fuller timing data: <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">the prefix cache latency page</a>.</div>
+    <div class="receipts"><strong>Receipts:</strong> Every timing number in this article is a first-hand measurement I took while debugging Outlier v659 through v662 in July 2026, on my own machine. One machine, one workload: illustrations of the mechanism, not a benchmark you should expect to reproduce exactly. Fuller timing data: <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">the prefix cache latency page</a>.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
@@ -248,7 +248,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/what-is-prefix-caching/">What is prefix caching?</a> · <a href="https://outlier.host/learn/why-ai-forgets-conversations/">Why AI forgets your conversations</a> · <a href="https://outlier.host/data/prefix-cache-latency-benchmarks/">Prefix cache latency benchmarks</a> · <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac, measured</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

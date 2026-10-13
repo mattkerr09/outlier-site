@@ -152,9 +152,9 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Yes. A Mac with Apple Silicon can generate images entirely offline — but it takes a different kind of model from the chat AI you're probably picturing.</li>
+        <li>Yes. A Mac with Apple Silicon can generate images entirely offline, but it takes a different kind of model from the chat AI you're probably picturing.</li>
         <li>Text generation uses a language model. Image generation uses a diffusion model. They are separate downloads with separate architectures, and one cannot do the other's job.</li>
-        <li>Outlier does not generate images. Outlier reads images (vision) but doesn't create them. For generation, install a diffusion tool like Draw Things or DiffusionBee — the two can live side by side on the same Mac.</li>
+        <li>Outlier does not generate images. Outlier reads images (vision) but doesn't create them. For generation, install a diffusion tool like Draw Things or DiffusionBee, the two can live side by side on the same Mac.</li>
       </ul>
     </div>
 
@@ -162,7 +162,7 @@
 
     <h2>Vision and generation are not the same feature</h2>
     <p>These two get mixed up constantly, so let's be precise about the direction of travel.</p>
-    <p><strong>Vision</strong> means reading. You hand the model a screenshot, a photo, a scanned receipt, a chart, and it hands you back words — a description, a transcription, an answer about what's in the frame. Image in, text out.</p>
+    <p><strong>Vision</strong> means reading. You hand the model a screenshot, a photo, a scanned receipt, a chart, and it hands you back words: a description, a transcription, an answer about what's in the frame. Image in, text out.</p>
     <p><strong>Generation</strong> means creating. You type "a lighthouse in fog, oil painting" and the model hands you back pixels that didn't exist before. Text in, image out.</p>
     <p>Opposite directions, different machinery. A chat model with vision can look at your design mockup and tell you the button contrast is bad. It cannot draw you a better button. That's not a missing feature someone forgot to add; it's a different model class. If vision is the part you care about, I wrote a separate piece on <a href="https://outlier.host/learn/local-ai-vision-mac/">local AI vision on a Mac</a>.</p>
 
@@ -183,16 +183,16 @@
     <p>Two open families run on Apple Silicon: <strong>Stable Diffusion</strong> from Stability AI, including its SDXL variants, and <strong>FLUX</strong> from Black Forest Labs.</p>
     <p>You don't run those raw. You run them through a front-end:</p>
     <ul>
-      <li><strong>Draw Things</strong> — a Mac app, and a common front-end for someone who wants to type a prompt and get a picture without configuring anything.</li>
-      <li><strong>DiffusionBee</strong> — the other well-known one-download Mac option, built on the same idea of hiding the plumbing.</li>
-      <li><strong>ComfyUI</strong> — the power-user route. Node-graph workflows, control over every stage, and a genuinely steep first hour. Worth it if you're doing this seriously; overkill if you want one image.</li>
+      <li><strong>Draw Things</strong>: a Mac app, and a common front-end for someone who wants to type a prompt and get a picture without configuring anything.</li>
+      <li><strong>DiffusionBee</strong>: the other well-known one-download Mac option, built on the same idea of hiding the plumbing.</li>
+      <li><strong>ComfyUI</strong>: the power-user route. Node-graph workflows, control over every stage, and a genuinely steep first hour. Worth it if you're doing this seriously; overkill if you want one image.</li>
     </ul>
     <p>All of them do the same fundamental thing: keep the weights on your disk, do the math on your chip, and never send your prompt anywhere.</p>
 
     <h2>What it costs you in memory and time</h2>
     <p>Two numbers matter, and they're not the numbers you're used to from chat.</p>
     <p><strong>Memory:</strong> as a rough shape, SDXL-class models want roughly 8-12 GB of free memory. Emphasis on <em>free</em>. On Apple Silicon the chip and the memory share one pool, which is good for AI generally, but it also means everything competes. If a big chat model is resident and you fire up a diffusion run, you can find there isn't room for both. Plan for one heavy model at a time unless you have headroom to spare.</p>
-    <p><strong>Time:</strong> image generation is measured in seconds per image, not tokens per second. With chat, words stream out and you read along, so the wait feels productive. With diffusion, nothing useful appears until the image resolves — a run either feels instant or feels like a wait. Higher resolutions and more sampling steps cost more seconds. That's the dial you'll spend the most time turning.</p>
+    <p><strong>Time:</strong> image generation is measured in seconds per image, not tokens per second. With chat, words stream out and you read along, so the wait feels productive. With diffusion, nothing useful appears until the image resolves, a run either feels instant or feels like a wait. Higher resolutions and more sampling steps cost more seconds. That's the dial you'll spend the most time turning.</p>
 
     <h2>Local generation vs. the cloud services</h2>
     <p>I'm not going to pretend local wins on every axis here. It doesn't. Here's the honest split:</p>
@@ -207,7 +207,7 @@
         <tr><td><strong>Cost shape</strong></td><td>Your hardware and electricity</td><td>Subscription (DALL-E 3 via ChatGPT Plus, Midjourney)</td></tr>
         <tr><td><strong>Setup</strong></td><td>Download an app, download a model, wait</td><td>Type in a box you already pay for</td></tr>
         <tr><td><strong>Offline</strong></td><td>Yes</td><td>No</td></tr>
-        <tr><td><strong>Control</strong></td><td>Full — swap models, tune every setting</td><td>Whatever the service exposes</td></tr>
+        <tr><td><strong>Control</strong></td><td>Full: swap models, tune every setting</td><td>Whatever the service exposes</td></tr>
       </tbody>
     </table>
 
@@ -216,7 +216,7 @@
     <h2>Outlier doesn't do this, and I want to be clear about it</h2>
     <p>Outlier is a text-and-vision app. It runs language models locally on Apple Silicon for chat, coding, research, and reading images you hand it. It does not generate images, and there is no hidden setting that turns that on.</p>
     <p>I'd rather say that flatly than have someone download it, hunt for an image button, and feel misled. Diffusion is a different architecture with a different runtime and its own set of safety questions, and shipping it badly would be worse than not shipping it.</p>
-    <p>The good news is this isn't an either/or. Draw Things or DiffusionBee installs alongside Outlier without either one caring the other exists. A perfectly normal local setup is a chat-and-vision app for words and a diffusion app for pictures — two tools, one Mac, nothing leaving the building. Just remember the memory point above: don't expect a large chat model and an SDXL run to be comfortable at the same instant.</p>
+    <p>The good news is this isn't an either/or. Draw Things or DiffusionBee installs alongside Outlier without either one caring the other exists. A perfectly normal local setup is a chat-and-vision app for words and a diffusion app for pictures: two tools, one Mac, nothing leaving the building. Just remember the memory point above: don't expect a large chat model and an SDXL run to be comfortable at the same instant.</p>
 
     <h2>How to actually get started</h2>
     <p>If you're new to generating images locally, the shortest honest path is:</p>
@@ -226,9 +226,9 @@
       <li>Generate at a modest resolution first and watch your memory. Push resolution and step count up until it stops feeling good, then back off a notch.</li>
       <li>Try the other family (FLUX or Stable Diffusion/SDXL) if the first one isn't giving you what you want, and move to ComfyUI only when the simple apps hit a wall.</li>
     </ol>
-    <p>And if what you actually wanted was for AI to <em>understand</em> images you already have — screenshots, diagrams, a photo of a whiteboard — that's the vision path, and Outlier does handle that locally. Background on the general idea is in <a href="https://outlier.host/learn/what-is-local-ai/">what local AI is</a>.</p>
+    <p>And if what you actually wanted was for AI to <em>understand</em> images you already have (screenshots, diagrams, a photo of a whiteboard) that's the vision path, and Outlier does handle that locally. Background on the general idea is in <a href="https://outlier.host/learn/what-is-local-ai/">what local AI is</a>.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> The memory figure (roughly 8-12 GB free for SDXL-class models) is a rough planning range, not a vendor spec — real usage moves with the model file, resolution, and step count. That Outlier does not generate images is first-hand: I build it. The families and front-ends named here (Stable Diffusion and SDXL from Stability AI, FLUX from Black Forest Labs, Draw Things, DiffusionBee, ComfyUI) are listed as what exists, with no performance claims attached. Outlier's open-weight text models are published at <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">huggingface.co/Outlier-Ai</a>.</div>
+    <div class="receipts"><strong>Receipts:</strong> The memory figure (roughly 8-12 GB free for SDXL-class models) is a rough planning range, not a vendor spec: real usage moves with the model file, resolution, and step count. That Outlier does not generate images is first-hand: I build it. The families and front-ends named here (Stable Diffusion and SDXL from Stability AI, FLUX from Black Forest Labs, Draw Things, DiffusionBee, ComfyUI) are listed as what exists, with no performance claims attached. Outlier's open-weight text models are published at <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">huggingface.co/Outlier-Ai</a>.</div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -242,11 +242,11 @@
       </div>
       <div class="faq-item">
         <h3>How much memory do I need to generate images locally on a Mac?</h3>
-        <p>As a rough shape, SDXL-class models want roughly 8-12 GB of free memory. That's free memory, not total — if a large chat model is already loaded, you may not have room for both at once. Actual usage moves with the model file, resolution, and step count.</p>
+        <p>As a rough shape, SDXL-class models want roughly 8-12 GB of free memory. That's free memory, not total: if a large chat model is already loaded, you may not have room for both at once. Actual usage moves with the model file, resolution, and step count.</p>
       </div>
       <div class="faq-item">
         <h3>Should I use local diffusion or a cloud service like Midjourney or DALL-E 3?</h3>
-        <p>Cloud services are the easier path if you just want a good picture with no setup — DALL-E 3 is built into ChatGPT Plus, Midjourney is a subscription, and Google has Imagen. All of them send your prompt, and any input image, to their servers. Local diffusion trades that convenience for privacy, no ongoing subscription once the model is on your disk, offline use, and full control over models and settings.</p>
+        <p>Cloud services are the easier path if you just want a good picture with no setup: DALL-E 3 is built into ChatGPT Plus, Midjourney is a subscription, and Google has Imagen. All of them send your prompt, and any input image, to their servers. Local diffusion trades that convenience for privacy, no ongoing subscription once the model is on your disk, offline use, and full control over models and settings.</p>
       </div>
     </div>
 
@@ -259,7 +259,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/local-ai-vision-mac/">Local AI vision on a Mac</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

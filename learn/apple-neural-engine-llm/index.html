@@ -142,22 +142,22 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Not in any way that helps you. The Neural Engine can run transformer layers — Core ML's own per-op device map confirms it — but only while the graph stays shallow. At 8 layers everything is still on the ANE. At 16 layers Core ML silently moves <em>every operation</em> to the CPU, and a 32-layer graph runs at roughly 4–7 tokens per second, entirely on CPU. The GPU-to-ANE handoff that usually gets blamed for this measures 0.84 ms, which is nothing. Residency is the wall, not the handoff.</p>
+      <p>Not in any way that helps you. The Neural Engine can run transformer layers, Core ML's own per-op device map confirms it, but only while the graph stays shallow. At 8 layers everything is still on the ANE. At 16 layers Core ML silently moves <em>every operation</em> to the CPU, and a 32-layer graph runs at roughly 4–7 tokens per second, entirely on CPU. The GPU-to-ANE handoff that usually gets blamed for this measures 0.84 ms, which is nothing. Residency is the wall, not the handoff.</p>
     </div>
 
-    <p class="lead">Every Mac spec sheet advertises a Neural Engine. Mine has sixteen cores. So when I started building local AI on Apple silicon, the obvious question was why that hardware sits essentially unused while the GPU does all the work generating text — and whether I could put it to work. I spent a session finding out, and the answer surprised me in a specific way: the thing everyone assumes is the problem turned out to be fine, and the real blocker is somewhere nobody points at.</p>
+    <p class="lead">Every Mac spec sheet advertises a Neural Engine. Mine has sixteen cores. So when I started building local AI on Apple silicon, the obvious question was why that hardware sits essentially unused while the GPU does all the work generating text, and whether I could put it to work. I spent a session finding out, and the answer surprised me in a specific way: the thing everyone assumes is the problem turned out to be fine, and the real blocker is somewhere nobody points at.</p>
 
     <h2>What I was actually trying to build</h2>
     <p>The idea was speculative decoding. You run a small, fast "draft" model to guess several tokens ahead, then have the big model verify the guesses in one pass. When it works you get a real speedup. On a Mac it tends not to work as well as advertised, because the draft and the verify both want the GPU and end up fighting each other for it.</p>
-    <p>Hence the appeal of the Neural Engine. If the draft model could live on the ANE — idle silicon, sitting right there — the GPU would be left alone to verify, and the draft would be close to free. That was the hypothesis. It is a good hypothesis. It is also wrong, and it is worth explaining exactly how.</p>
+    <p>Hence the appeal of the Neural Engine. If the draft model could live on the ANE (idle silicon, sitting right there) the GPU would be left alone to verify, and the draft would be close to free. That was the hypothesis. It is a good hypothesis. It is also wrong, and it is worth explaining exactly how.</p>
 
     <h2>How to tell where an operation actually runs</h2>
     <p>This is the part I'd want if I were reading someone else's writeup, so I'll put it before the results.</p>
     <p>Most claims about ANE usage are inferred from power draw, which is a proxy and a weak one. There's something better. Core ML exposes <code>MLComputePlan</code>, and specifically <code>get_compute_device_usage_for_mlprogram_operation</code>, which reports the device assignment for <em>every individual operation</em> in a compiled model. Not an estimate. Apple's own planner telling you where each op landed.</p>
-    <p>That distinction matters enormously here, because the failure mode I found is silent. Nothing errors. Nothing warns. Your model loads, runs, produces correct output, and reports success — while executing entirely on the wrong processor. Without a per-op device map you would simply conclude that the ANE is slow, and you'd be wrong: it isn't running at all.</p>
+    <p>That distinction matters enormously here, because the failure mode I found is silent. Nothing errors. Nothing warns. Your model loads, runs, produces correct output, and reports success, while executing entirely on the wrong processor. Without a per-op device map you would simply conclude that the ANE is slow, and you'd be wrong: it isn't running at all.</p>
 
     <h2>The cliff at 16 layers</h2>
-    <p>I built a representative decode step — attention output projection plus a SwiGLU MLP, hidden size 2560, intermediate 6912, fp16 — and stacked it to increasing depths, checking the device map at each one.</p>
+    <p>I built a representative decode step (attention output projection plus a SwiGLU MLP, hidden size 2560, intermediate 6912, fp16) and stacked it to increasing depths, checking the device map at each one.</p>
     <table>
       <thead><tr><th>Depth</th><th>Where Core ML put the ops</th><th>Median latency</th></tr></thead>
       <tbody>
@@ -165,37 +165,37 @@
         <tr><td>2 layers</td><td>Neural Engine (all 20 ops)</td><td>6.1 ms</td></tr>
         <tr><td>4 layers</td><td>Neural Engine (all 40 ops)</td><td>11.7 ms</td></tr>
         <tr><td>8 layers</td><td>Neural Engine (all 80 ops)</td><td>22.9 ms</td></tr>
-        <tr><td><strong>16 layers</strong></td><td><strong>CPU — all 160 ops</strong></td><td><strong>90.7 ms</strong></td></tr>
-        <tr><td><strong>32 layers</strong></td><td><strong>CPU — all 321 ops</strong></td><td><strong>139–242 ms</strong></td></tr>
+        <tr><td><strong>16 layers</strong></td><td><strong>CPU: all 160 ops</strong></td><td><strong>90.7 ms</strong></td></tr>
+        <tr><td><strong>32 layers</strong></td><td><strong>CPU: all 321 ops</strong></td><td><strong>139–242 ms</strong></td></tr>
       </tbody>
     </table>
-    <p>Up to 8 layers the scaling is clean and linear, about 2.9 ms per layer, every operation on the Neural Engine. Then it falls off a cliff. Not a partial split, not a graceful degradation — at 16 layers the planner gives up and assigns the entire graph to the CPU.</p>
+    <p>Up to 8 layers the scaling is clean and linear, about 2.9 ms per layer, every operation on the Neural Engine. Then it falls off a cliff. Not a partial split, not a graceful degradation: at 16 layers the planner gives up and assigns the entire graph to the CPU.</p>
     <p>A 32-layer model is the shallow end of what counts as a real language model. At that depth we're looking at 139 to 242 milliseconds per token, which is somewhere around 4 to 7 tokens per second, on a processor that was never the point. For comparison, the smallest tier I ship runs at 71.7 tokens per second on the same machine using the GPU.</p>
 
     <h2>The handoff was never the problem</h2>
     <p>Here's the part I got wrong going in, and I think most people have it wrong too.</p>
-    <p>The standard explanation for why nobody runs LLMs on the ANE is the cost of moving data — you have to marshal tensors out of your GPU framework, hand them to Core ML, and get them back, once per token. That sounds expensive. I measured it in isolation with a trivial identity model, so the number is pure overhead with no compute in it: <strong>0.84 ms median</strong>, with a 10th percentile of 0.50 ms and a 90th of 1.70 ms.</p>
-    <p>Under a millisecond. And in any real speculative-decoding loop you'd draft a chunk of several tokens per call, so that cost amortises down to a fraction of a millisecond per token. The handoff is a rounding error. It is not why this doesn't work, and if you've been repeating that explanation — I was — it's worth dropping.</p>
+    <p>The standard explanation for why nobody runs LLMs on the ANE is the cost of moving data: you have to marshal tensors out of your GPU framework, hand them to Core ML, and get them back, once per token. That sounds expensive. I measured it in isolation with a trivial identity model, so the number is pure overhead with no compute in it: <strong>0.84 ms median</strong>, with a 10th percentile of 0.50 ms and a 90th of 1.70 ms.</p>
+    <p>Under a millisecond. And in any real speculative-decoding loop you'd draft a chunk of several tokens per call, so that cost amortises down to a fraction of a millisecond per token. The handoff is a rounding error. It is not why this doesn't work, and if you've been repeating that explanation, I was, it's worth dropping.</p>
 
     <h2>Why the ANE loses even when it wins</h2>
     <p>There's a second, more fundamental problem, and it survives even if you solve the residency one.</p>
     <p>Take the clean linear scaling from the shallow runs and extrapolate it. At 2.9 ms per layer, a 32-layer draft that <em>stayed</em> on the Neural Engine would land around 90 ms per token. The GPU does the same work at roughly 0.3 ms per layer, so about 10 ms per token. Even in the fantasy where Core ML keeps the whole graph resident, the ANE is around nine times slower per token than the GPU it was supposed to relieve.</p>
-    <p>That isn't a defect. It's what the hardware is for. The Neural Engine is built for high throughput on big batched convolution-shaped work — the vision and audio models that run constantly on your phone at very low power. Generating text one token at a time is the opposite workload: tiny, sequential, latency-bound. The ANE is extremely good at a job that language model decoding simply is not.</p>
+    <p>That isn't a defect. It's what the hardware is for. The Neural Engine is built for high throughput on big batched convolution-shaped work, the vision and audio models that run constantly on your phone at very low power. Generating text one token at a time is the opposite workload: tiny, sequential, latency-bound. The ANE is extremely good at a job that language model decoding simply is not.</p>
 
     <h2>What this means if you just want to run AI on your Mac</h2>
     <p>Practically: ignore the Neural Engine core count when you're deciding whether a Mac will run local AI well. It's not the number doing the work.</p>
     <p>The specs that actually matter are memory capacity, which decides what size model fits at all, and memory bandwidth, which largely sets how fast tokens come out. A 16-core ANE next to 8 GB of RAM will run local models worse than a machine with fewer neural cores and 32 GB. If you're sizing a machine, our <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">RAM guide</a> is the more useful read, and <a href="https://outlier.host/learn/run-ai-without-gpu/">why Apple silicon works without a discrete GPU</a> covers what the unified memory design actually buys you.</p>
-    <p>None of this makes the Neural Engine useless. It's working hard on your Mac right now — Face ID, dictation, photo analysis, live text, background audio. It's just not the part generating your chat replies, and no amount of marketing about neural cores changes what Core ML's planner does with a deep decode graph.</p>
+    <p>None of this makes the Neural Engine useless. It's working hard on your Mac right now: Face ID, dictation, photo analysis, live text, background audio. It's just not the part generating your chat replies, and no amount of marketing about neural cores changes what Core ML's planner does with a deep decode graph.</p>
 
     <h2>What would change my answer</h2>
     <p>Two things, either of which I'd genuinely like to see:</p>
     <ul>
-      <li>Core ML starts hosting deep autoregressive decode graphs on the ANE with single-token latency under about 5 ms — meaning both the residency cliff and the per-token gap close.</li>
+      <li>Core ML starts hosting deep autoregressive decode graphs on the ANE with single-token latency under about 5 ms: meaning both the residency cliff and the per-token gap close.</li>
       <li>A stateful-KV ANE decode path arrives where a 24-layer-plus graph stays assigned to <code>MLNeuralEngineComputeDevice</code> <em>and</em> beats the GPU per token.</li>
     </ul>
     <p>Neither is true today on the hardware and software I tested. If either becomes true, the arithmetic changes and I'll re-run this.</p>
 
-    <div class="receipts"><strong>Receipts and limits:</strong> measured 2026-06-22 on an Apple M1 Ultra, 64 GB, 20 cores (16 performance, 4 efficiency), 16-core ANE, macOS 26.3.1, coremltools 9.0, torch 2.11.0. Latencies are medians of 40–200 runs after warmup. Device assignment comes from Core ML's <code>MLComputePlan</code> per-op map, not from power measurement — I couldn't get <code>powermetrics</code> wattage in this environment, though the op-device map is the stronger signal anyway. <strong>Important caveats:</strong> this used a representative dense-matmul workload, not a fully converted production model with KV cache, RoPE, GQA and a vocabulary head. Those additions are ANE-hostile and would push <em>more</em> to the CPU, so a real model's picture is at least this bad rather than better. The 8-to-16-layer threshold is specific to this graph shape, precision, OS version and coremltools version; a different partitioning strategy might keep more resident, and the numbers may well differ on M3 and M4-family chips — I've only measured M1 Ultra, and re-running on newer silicon would make this stronger.</div>
+    <div class="receipts"><strong>Receipts and limits:</strong> measured 2026-06-22 on an Apple M1 Ultra, 64 GB, 20 cores (16 performance, 4 efficiency), 16-core ANE, macOS 26.3.1, coremltools 9.0, torch 2.11.0. Latencies are medians of 40–200 runs after warmup. Device assignment comes from Core ML's <code>MLComputePlan</code> per-op map, not from power measurement: I couldn't get <code>powermetrics</code> wattage in this environment, though the op-device map is the stronger signal anyway. <strong>Important caveats:</strong> this used a representative dense-matmul workload, not a fully converted production model with KV cache, RoPE, GQA and a vocabulary head. Those additions are ANE-hostile and would push <em>more</em> to the CPU, so a real model's picture is at least this bad rather than better. The 8-to-16-layer threshold is specific to this graph shape, precision, OS version and coremltools version; a different partitioning strategy might keep more resident, and the numbers may well differ on M3 and M4-family chips: I've only measured M1 Ultra, and re-running on newer silicon would make this stronger.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
@@ -206,7 +206,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/run-ai-without-gpu/">Running AI without a discrete GPU</a> · <a href="https://outlier.host/seo/learn/what-is-unified-memory/">What unified memory actually is</a> · <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM you need</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

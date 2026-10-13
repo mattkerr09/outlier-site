@@ -153,24 +153,24 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Offline, on a Mac, a 27B agent builds <strong>bounded, testable programs</strong> and verifies them by running the tests — not by "the code looks right."</li>
+        <li>Offline, on a Mac, a 27B agent builds <strong>bounded, testable programs</strong> and verifies them by running the tests, not by "the code looks right."</li>
         <li>In one measured session it shipped a bank account class (<strong>13/13 tests passing</strong>), a 5-file library system, a sqlite contacts app, a precedence-correct math evaluator, and a <strong>33-file build with every file compiling</strong>.</li>
-        <li>On a blind slice of SWE-bench Verified it measured <strong>~45% (18/40)</strong> — real, honest, and not a leaderboard number.</li>
+        <li>On a blind slice of SWE-bench Verified it measured <strong>~45% (18/40)</strong>: real, honest, and not a leaderboard number.</li>
         <li>Where it doesn't match a cloud flagship: breadth-bound tasks, flawless novel reasoning with no test, and 40+-step autonomous runs. That gap is real and this page doesn't hide it.</li>
-        <li>It is <strong>truthful about failure</strong> — a build with failing tests reports failure rather than claiming a false success.</li>
+        <li>It is <strong>truthful about failure</strong>: a build with failing tests reports failure rather than claiming a false success.</li>
       </ul>
     </div>
 
-    <p class="lead">"What can offline AI actually do for coding?" is usually answered with a demo or a vibe. This page answers it with receipts. Everything below was built by a local 27B coding agent — the "compact" tier running on-device via MLX on an M1 Ultra, no cloud call — during one real engineering session, and every capability claim is verified by the agent running the tests, not by anyone eyeballing the output.</p>
+    <p class="lead">"What can offline AI actually do for coding?" is usually answered with a demo or a vibe. This page answers it with receipts. Everything below was built by a local 27B coding agent (the "compact" tier running on-device via MLX on an M1 Ultra, no cloud call) during one real engineering session, and every capability claim is verified by the agent running the tests, not by anyone eyeballing the output.</p>
 
     <h2>The apps it built and tested on its own</h2>
-    <p>These are not prompts I hand-fixed afterward. Each was produced end-to-end by the agent — write the files, run the tests, fix what failed, re-run — offline. What makes them count is the last step: a passing test suite the agent generated and executed itself.</p>
+    <p>These are not prompts I hand-fixed afterward. Each was produced end-to-end by the agent (write the files, run the tests, fix what failed, re-run) offline. What makes them count is the last step: a passing test suite the agent generated and executed itself.</p>
 
     <table>
       <thead><tr><th>What it built</th><th>Scope</th><th>Verified how</th></tr></thead>
       <tbody>
         <tr><td>Bank <code>Account</code> class</td><td>Deposit / withdraw with overdraft protection</td><td><strong>13/13 tests passing</strong></td></tr>
-        <tr><td>Library management system</td><td>5 files — borrow / return with edge cases</td><td>Correct behavior across edge cases, tests green</td></tr>
+        <tr><td>Library management system</td><td>5 files: borrow / return with edge cases</td><td>Correct behavior across edge cases, tests green</td></tr>
         <tr><td>Contacts app</td><td>sqlite-backed CRUD</td><td>Runs against a real sqlite database</td></tr>
         <tr><td>Arithmetic expression evaluator</td><td>Operator precedence + parentheses</td><td><code>2+3*4 = 14</code>, <code>(2+3)*4 = 20</code></td></tr>
         <tr><td>Multi-file build</td><td>33 files</td><td>Every file compiles</td></tr>
@@ -181,12 +181,12 @@
     <p>Two of these deserve a closer look, because they're the kind of thing people assume a small local model can't do reliably.</p>
 
     <h3>The precedence evaluator</h3>
-    <p>An arithmetic expression evaluator is a classic tripwire. Get the parser wrong and <code>2+3*4</code> comes out <code>20</code> instead of <code>14</code> because you evaluated left-to-right and ignored precedence. The agent got precedence right and got parentheses right — <code>(2+3)*4</code> correctly returns <code>20</code>. That is a small program, but it's exactly the kind of bounded, checkable logic where a local model can hit the correct answer every time, because a test can tell it when it's wrong.</p>
+    <p>An arithmetic expression evaluator is a classic tripwire. Get the parser wrong and <code>2+3*4</code> comes out <code>20</code> instead of <code>14</code> because you evaluated left-to-right and ignored precedence. The agent got precedence right and got parentheses right: <code>(2+3)*4</code> correctly returns <code>20</code>. That is a small program, but it's exactly the kind of bounded, checkable logic where a local model can hit the correct answer every time, because a test can tell it when it's wrong.</p>
 
     <h3>The 33-file build</h3>
-    <p>Thirty-three files that all compile is a different kind of achievement than one clever function. It's about coherence across a project — imports resolving, names matching, indentation surviving from file to file. This is the frontier where local agents historically fell apart (an earlier ceiling in Outlier's own testing was around 18 files before indentation drift crept in). Getting to 33 compiling files is the payoff of whole-file edits and self-checking rather than blind diff-patching.</p>
+    <p>Thirty-three files that all compile is a different kind of achievement than one clever function. It's about coherence across a project: imports resolving, names matching, indentation surviving from file to file. This is the frontier where local agents historically fell apart (an earlier ceiling in Outlier's own testing was around 18 files before indentation drift crept in). Getting to 33 compiling files is the payoff of whole-file edits and self-checking rather than blind diff-patching.</p>
 
-    <h2>It checks its own work — and won't cheat to pass</h2>
+    <h2>It checks its own work: and won't cheat to pass</h2>
     <p>The reason these builds land isn't a smarter model. It's that the agent verifies itself. When a test fails, it doesn't just re-roll the code and hope. It computes the true expected answer itself, then decides which side is actually wrong:</p>
     <ul>
       <li>If the <strong>code</strong> is wrong, it fixes the code.</li>
@@ -196,7 +196,7 @@
     <p>Which points at the single biggest lever in local coding: <strong>the execution oracle.</strong> Select the agent's work on <em>run-the-tests</em>, not on "it compiles" and not on "the model approved itself." Compiling is necessary and nowhere near sufficient; a model grading its own homework is worth even less. Running the tests is the only signal that survives contact with reality, and it's why the local agent can be trusted on the tasks above.</p>
 
     <h2>The honest number: ~45% on a blind SWE-bench slice</h2>
-    <p>Bounded toy programs are one thing; real repository bugs are another. On a blind subset of SWE-bench Verified — the standard "fix this real GitHub issue in a real codebase" benchmark — the local 27B measured <strong>about 45% (18 of 40)</strong>.</p>
+    <p>Bounded toy programs are one thing; real repository bugs are another. On a blind subset of SWE-bench Verified, the standard "fix this real GitHub issue in a real codebase" benchmark, the local 27B measured <strong>about 45% (18 of 40)</strong>.</p>
     <p>Read that honestly. Forty tasks is a slice, not the full 500-task Verified set, so <strong>45% is not a leaderboard number</strong> and I won't present it as one. It's a measured, blind, offline data point: a local 27B, no cloud, resolves close to half of a real-bug sample. That's a genuinely useful floor, and it's the number the marketing usually won't give you.</p>
 
     <h2>Where a local 27B already matches a cloud flagship</h2>
@@ -209,12 +209,12 @@
     </ul>
     <p>When there's a test to check against and the problem lives in familiar territory, the local agent's self-verification loop closes the gap that raw model quality would otherwise leave open.</p>
 
-    <h2>Where it doesn't match — the honest ceiling</h2>
+    <h2>Where it doesn't match: the honest ceiling</h2>
     <p>I'm not going to pretend the gap closes everywhere. There are tasks where a local 27B does not match a cloud flagship locally, and they cluster into three hard walls:</p>
     <table>
       <thead><tr><th>Wall</th><th>Why it's hard for a local 27B</th></tr></thead>
       <tbody>
-        <tr><td>Per-token slip floor</td><td>Exact enumeration, counting, and arithmetic have a residual error rate that's a structural property of a 4-bit 27B — small, but nonzero, and it shows up on tasks with no test to catch it.</td></tr>
+        <tr><td>Per-token slip floor</td><td>Exact enumeration, counting, and arithmetic have a residual error rate that's a structural property of a 4-bit 27B: small, but nonzero, and it shows up on tasks with no test to catch it.</td></tr>
         <tr><td>Breadth / world &amp; library knowledge</td><td>The long tail of API and library facts is a parameter-count wall. Distillation transfers <em>style</em>, not the full fact long-tail, so obscure-library tasks favor the bigger model.</td></tr>
         <tr><td>Exact recall from far-back context</td><td>Pulling an exact byte-span out of deep context is where a cloud model with a huge context window and stronger recall pulls ahead.</td></tr>
       </tbody>
@@ -224,11 +224,11 @@
     <h2>How far the local ceiling can move</h2>
     <p>Today's blind ~45% is a floor, not a wall, and the path up is engineering rather than a bigger model:</p>
     <ul>
-      <li><strong>Local engineering</strong> — execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission — can push the same 27B into the <strong>mid-50s to low-60s</strong>.</li>
-      <li><strong>Training</strong> — LoRA and distillation on-distribution can reach roughly <strong>70–80% in-distribution</strong>.</li>
-      <li>The <strong>last ~15–20 points</strong> to a cloud flagship's ~65–72% is a genuine ceiling, gated by the three walls above. That final stretch doesn't close by trying harder locally — it closes by routing the hard call up.</li>
+      <li><strong>Local engineering</strong>: execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission) can push the same 27B into the <strong>mid-50s to low-60s</strong>.</li>
+      <li><strong>Training</strong>: LoRA and distillation on-distribution can reach roughly <strong>70–80% in-distribution</strong>.</li>
+      <li>The <strong>last ~15–20 points</strong> to a cloud flagship's ~65–72% is a genuine ceiling, gated by the three walls above. That final stretch doesn't close by trying harder locally: it closes by routing the hard call up.</li>
     </ul>
-    <p>The honest framing: a local coding agent isn't a smaller Claude. It's a tool that <em>owns</em> the bounded, testable, private, offline half of the work outright — and knows when to hand off the rest.</p>
+    <p>The honest framing: a local coding agent isn't a smaller Claude. It's a tool that <em>owns</em> the bounded, testable, private, offline half of the work outright, and knows when to hand off the rest.</p>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -238,11 +238,11 @@
       </div>
       <div class="faq-item">
         <h3>How good is a local 27B at coding compared to Claude?</h3>
-        <p>On a blind slice of SWE-bench Verified it measured ~45% (18/40). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test, and 40+-step autonomous runs, it doesn't match locally — those are the cases to escalate.</p>
+        <p>On a blind slice of SWE-bench Verified it measured ~45% (18/40). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test, and 40+-step autonomous runs, it doesn't match locally, those are the cases to escalate.</p>
       </div>
       <div class="faq-item">
         <h3>Does the local agent verify its own work?</h3>
-        <p>Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong — the code, or a test asserting a wrong value — with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not on "compiles" or self-approval, is the single biggest quality lever.</p>
+        <p>Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong (the code, or a test asserting a wrong value) with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not on "compiles" or self-approval, is the single biggest quality lever.</p>
       </div>
     </div>
 
@@ -253,9 +253,9 @@
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude — 54-prompt benchmark</a> · <a href="https://outlier.host/learn/can-you-run-claude-locally/">Can you run Claude locally?</a> · <a href="https://outlier.host/run/local-coding-agent-no-api-keys/">A local coding agent with no API keys</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> · <a href="https://outlier.host/learn/can-you-run-claude-locally/">Can you run Claude locally?</a> · <a href="https://outlier.host/run/local-coding-agent-no-api-keys/">A local coding agent with no API keys</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

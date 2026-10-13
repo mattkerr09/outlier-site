@@ -134,7 +134,7 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">Learn</a> &nbsp;›&nbsp; Why AI makes things up</div>
-    <h1>Why AI makes things up — a hallucination caught in the act</h1>
+    <h1>Why AI makes things up: a hallucination caught in the act</h1>
     <div class="byline-row">
       <span class="byline">By Matt Kerr · from an execution-verified code evaluation · 2026-07-23</span>
       <span class="updated-pill">First-party measurement</span>
@@ -142,13 +142,13 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>An AI doesn't look anything up. It produces the most probable next piece of text, and "probable" is not the same as "true". The clearest evidence I have: a model that names the Python function <code>heappushpop</code> correctly when you ask it directly will still write <code>heappoppop</code> — a function that doesn't exist — while generating code. The knowledge was present. It slipped anyway. Hallucination is usually a failure of precision under load, not a gap in what the model knows.</p>
+      <p>An AI doesn't look anything up. It produces the most probable next piece of text, and "probable" is not the same as "true". The clearest evidence I have: a model that names the Python function <code>heappushpop</code> correctly when you ask it directly will still write <code>heappoppop</code>, a function that doesn't exist, while generating code. The knowledge was present. It slipped anyway. Hallucination is usually a failure of precision under load, not a gap in what the model knows.</p>
     </div>
 
-    <p class="lead">"Hallucination" is explained badly almost everywhere, usually with some version of "it just predicts the next token" — true, and completely unsatisfying. What I had instead was an unusually clean specimen: a single wrong token in an otherwise perfect answer, in a test where I could check whether the model actually knew better. It did. That gap between knowing and writing is the whole story.</p>
+    <p class="lead">"Hallucination" is explained badly almost everywhere, usually with some version of "it just predicts the next token", true, and completely unsatisfying. What I had instead was an unusually clean specimen: a single wrong token in an otherwise perfect answer, in a test where I could check whether the model actually knew better. It did. That gap between knowing and writing is the whole story.</p>
 
     <h2>The setup</h2>
-    <p>I was benchmarking our local coding model by executing its output against hidden tests it had never seen — not reading the code and nodding, actually running it. The hard set was six problems built to resist memorisation: multi-unit duration parsing, greedy weight-packing with an oversized-item edge case, a three-way dictionary diff, Roman numerals with subtractive pairs, an incremental running median, and a bracket validator that also has to respect quoted strings.</p>
+    <p>I was benchmarking our local coding model by executing its output against hidden tests it had never seen, not reading the code and nodding, actually running it. The hard set was six problems built to resist memorisation: multi-unit duration parsing, greedy weight-packing with an oversized-item edge case, a three-way dictionary diff, Roman numerals with subtractive pairs, an incremental running median, and a bracket validator that also has to respect quoted strings.</p>
     <p>Twelve runs, two temperatures each. Every single one compiled. Ten of twelve produced correct output. The two failures were the same problem, and the same mistake, at both temperatures.</p>
 
     <h2>The mistake</h2>
@@ -156,24 +156,24 @@
     <p>Then the import line said:</p>
     <p><code>from heapq import heappush, heappoppop</code></p>
     <p>There is no <code>heappoppop</code> in Python. The function is <code>heappushpop</code>. The program died at import with <code>ImportError: cannot import name 'heappoppop'</code>, having never executed a single line of the correct algorithm sitting underneath it.</p>
-    <p>Look at the shape of that error. It isn't a wild invention. It's a real function name with its two halves scrambled — <em>push</em> and <em>pop</em> are both genuinely in there, in the wrong arrangement. That's what most hallucinations look like up close: something adjacent to the truth, assembled from the right parts.</p>
+    <p>Look at the shape of that error. It isn't a wild invention. It's a real function name with its two halves scrambled: <em>push</em> and <em>pop</em> are both genuinely in there, in the wrong arrangement. That's what most hallucinations look like up close: something adjacent to the truth, assembled from the right parts.</p>
 
     <h2>The part that makes it interesting</h2>
-    <p>Failing identically at both temperatures is suspicious. When a model produces the same error regardless of sampling randomness, my first instinct is that my own harness is broken — I've been burned by that enough times to check reflexively.</p>
+    <p>Failing identically at both temperatures is suspicious. When a model produces the same error regardless of sampling randomness, my first instinct is that my own harness is broken: I've been burned by that enough times to check reflexively.</p>
     <p>So I asked the model directly, in plain conversation: what does <code>heapq</code> export? It listed <code>heappushpop</code>, correctly, with an accurate description of what it does. It never produced <code>heappoppop</code>. Asked again a different way, same result.</p>
     <p>That answer travelled through the same rendering path as the broken code, so the app wasn't corrupting anything. The model knew. Ask it as a question and the knowledge is right there. Ask it to write forty lines of correct heap logic and somewhere in the middle of that, generating the import line almost as an afterthought, it fumbled the token.</p>
-    <p>I find this genuinely clarifying. The model isn't missing a fact. It's failing to retrieve a fact precisely while doing something else demanding. If you want a human analogy — and analogies here are always a bit loose — it's closer to a typo than to ignorance.</p>
+    <p>I find this genuinely clarifying. The model isn't missing a fact. It's failing to retrieve a fact precisely while doing something else demanding. If you want a human analogy, and analogies here are always a bit loose, it's closer to a typo than to ignorance.</p>
 
     <h2>Why "it looked right" is not a check</h2>
     <p>Here's the practical sting. That file <strong>compiled perfectly.</strong></p>
-    <p>Python's compiler checks syntax. It does not check that the names you're importing exist — that happens later, at import time. So any workflow that gates AI-generated code on "does it compile" would have waved this straight through. In my evaluation, compile-checking would have caught exactly zero of the one real failure in the entire suite.</p>
+    <p>Python's compiler checks syntax. It does not check that the names you're importing exist: that happens later, at import time. So any workflow that gates AI-generated code on "does it compile" would have waved this straight through. In my evaluation, compile-checking would have caught exactly zero of the one real failure in the entire suite.</p>
     <p>This generalises well beyond code. A hallucinated citation is formatted like a citation. A hallucinated statistic has the right number of digits. A hallucinated API is plausibly named. The output passes every surface check precisely because surface plausibility is what the model optimises. <strong>Fluency is not evidence.</strong> The only checks that catch this class are ones that touch reality: run the code, open the source, verify the symbol exists.</p>
 
     <h2>Where this shows up for you</h2>
     <table>
       <thead><tr><th>You ask for</th><th>The failure looks like</th><th>Check that actually works</th></tr></thead>
       <tbody>
-        <tr><td>Code</td><td>A function or argument that doesn't exist, in otherwise sound logic</td><td>Run it. Not read it — run it.</td></tr>
+        <tr><td>Code</td><td>A function or argument that doesn't exist, in otherwise sound logic</td><td>Run it. Not read it: run it.</td></tr>
         <tr><td>A citation or source</td><td>Real-sounding author, journal and year that don't combine into a real paper</td><td>Search for the title directly</td></tr>
         <tr><td>A statistic</td><td>A plausible number with no traceable origin</td><td>Ask for the source, then open the source</td></tr>
         <tr><td>A quote</td><td>Something the person plausibly might have said</td><td>Search the exact phrase in quotes</td></tr>
@@ -184,12 +184,12 @@
 
     <h2>Does running it locally change any of this?</h2>
     <p>No, and I'd rather say so plainly than imply otherwise. Hallucination is a property of how language models work, not of where they run. A model on your Mac invents things for exactly the same reasons a cloud model does.</p>
-    <p>What local execution changes is elsewhere — privacy, cost, whether your work stops when your connection does. On factual reliability, treat every model the same way and verify anything load-bearing. Bigger models slip less often, but "less often" is not "never", and the failure looks identical when it happens.</p>
+    <p>What local execution changes is elsewhere: privacy, cost, whether your work stops when your connection does. On factual reliability, treat every model the same way and verify anything load-bearing. Bigger models slip less often, but "less often" is not "never", and the failure looks identical when it happens.</p>
 
     <h2>What we're doing about this specific class</h2>
-    <p>For the API-name case there's a cheap, targeted fix: resolve symbols against the standard library before handing code back. Ask whether <code>heapq</code> genuinely exports <code>heappoppop</code>, and you catch this instantly — the standard library is identical on every Python installation, so the check is safe and fast.</p>
+    <p>For the API-name case there's a cheap, targeted fix: resolve symbols against the standard library before handing code back. Ask whether <code>heapq</code> genuinely exports <code>heappoppop</code>, and you catch this instantly: the standard library is identical on every Python installation, so the check is safe and fast.</p>
     <p>What we deliberately don't do is check a user's own project imports the same way. Judging whether some package exists by inspecting the app's own environment produces confident, wrong answers about someone else's setup, which is just a different hallucination with our name on it.</p>
-    <p>And it's worth keeping the failure in proportion: across that hard novel set, 12 of 12 compiled and 10 of 12 ran correctly — 83% on problems built specifically to defeat memorisation, with the only genuine failure being this one name. On everyday tasks the same evaluation ran at effectively 100%. The gap is precision-of-recall, not reasoning.</p>
+    <p>And it's worth keeping the failure in proportion: across that hard novel set, 12 of 12 compiled and 10 of 12 ran correctly: 83% on problems built specifically to defeat memorisation, with the only genuine failure being this one name. On everyday tasks the same evaluation ran at effectively 100%. The gap is precision-of-recall, not reasoning.</p>
 
     <div class="receipts"><strong>Receipts:</strong> measured 2026-07-19 on the installed build, scored by executing generated code against hidden tests. Hard novel-compositional suite: 12/12 compiled, 10/12 correct by execution. The <code>heappoppop</code> failure reproduced at both sampling temperatures, and the model's direct-question answer (correctly naming <code>heappushpop</code>) was verified through the same rendering path, which is how I ruled out our own app as the cause. Two caveats worth stating: this is a single model on a single suite of six hard problems, so treat the 83% as a directional figure rather than a benchmark score; and multi-file and long-running agent work was not measured here at all.</div>
 
@@ -202,7 +202,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/ai-vs-google-search/">When to use AI and when to use search</a> · <a href="https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/">What a local coding agent can actually build</a> · <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an agent checks its own work</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

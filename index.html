@@ -1060,12 +1060,12 @@
       </div>
       <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Nothing you type leaves your Mac unless you switch on web search</strong> (then the search query does). On its own the app goes online only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. The open-weight models are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>.</p>
       <div class="proof reveal d2">
-        <div class="proof-head"><b></b>Verified while the model was answering &mdash; 2026-08-18, Outlier Core</div>
+        <div class="proof-head"><b></b>Verified while the model was answering: 2026-08-18, Outlier Core</div>
 <pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
 outlier-c 62303  22u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<span class="p-lo">127.0.0.1</span>:56293 (ESTABLISHED)
 outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTEN)
 <span class="p-dim"># sampled 21&times; across the 33s answer shown above — sockets leaving this Mac: 0</span></pre>
-        <div class="proof-foot">Every socket Outlier holds is <strong>127.0.0.1</strong> &mdash; your own machine. We sampled it twenty-one times while that answer was being generated and found <strong>zero</strong> connections to anywhere else. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns every socket on the machine instead &mdash; 328 when this was captured, and a different number each time you run it, because it counts every other process too. That is how a check like this can quietly prove nothing.</div>
+        <div class="proof-foot">Every socket Outlier holds is <strong>127.0.0.1</strong>: your own machine. We sampled it twenty-one times while that answer was being generated and found <strong>zero</strong> connections to anywhere else. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns every socket on the machine instead: 328 when this was captured, and a different number each time you run it, because it counts every other process too. That is how a check like this can quietly prove nothing.</div>
       </div>
     </div>
     <div class="flowcard reveal d1">
@@ -1168,7 +1168,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       <div class="card reveal">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
         <h3>Chat &amp; sessions</h3>
-        <p>Streaming token output, persistent local history, rename / delete / pin, Markdown export — and a running cost display that stays at <strong>$0.00</strong>.</p>
+        <p>Streaming token output, persistent local history, rename / delete / pin, Markdown export, and a running cost display that stays at <strong>$0.00</strong>.</p>
       </div>
       <div class="card reveal d1">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-6 6 6 6M16 6l6 6-6 6"/></svg></div>
@@ -1178,17 +1178,17 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       <div class="card reveal d2">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
         <h3>Deep research &amp; citations</h3>
-        <p>Several engines queried in parallel &mdash; DuckDuckGo, Mojeek and Wikipedia for the general web, plus OpenAlex, Crossref, Stack&nbsp;Exchange and Hacker&nbsp;News &mdash; each best-effort, so one of them blocking does not fail the search. Sources are classified (encyclopedia, official, docs, community) and every claim carries an inline citation with the excerpt it came from.</p>
+        <p>Several engines queried in parallel (DuckDuckGo, Mojeek and Wikipedia for the general web, plus OpenAlex, Crossref, Stack&nbsp;Exchange and Hacker&nbsp;News) each best-effort, so one of them blocking does not fail the search. Sources are classified (encyclopedia, official, docs, community) and every claim carries an inline citation with the excerpt it came from.</p>
       </div>
       <div class="card reveal">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v12a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M9 9H6a3 3 0 0 0 0 6h3"/></svg></div>
         <h3>Local memory</h3>
-        <p>Persistent memory in SQLite &mdash; facts carry a category, a confidence score, a confirmed flag and the chat they came from, so you can see why Outlier believes something. Exportable and importable as JSON.</p>
+        <p>Persistent memory in SQLite: facts carry a category, a confidence score, a confirmed flag and the chat they came from, so you can see why Outlier believes something. Exportable and importable as JSON.</p>
       </div>
       <div class="card reveal d1">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg></div>
         <h3>Vision &amp; screenshots</h3>
-        <p>Upload an image or a screenshot and query it directly through Outlier Vision — reading text, diagrams and charts in the picture, all on your Mac. Text-layer PDFs are extracted too; <strong>scanned</strong> PDFs are not, because that needs a separate OCR pass the app does not ship yet.</p>
+        <p>Upload an image or a screenshot and query it directly through Outlier Vision: reading text, diagrams and charts in the picture, all on your Mac. Text-layer PDFs are extracted too; <strong>scanned</strong> PDFs are not, because that needs a separate OCR pass the app does not ship yet.</p>
       </div>
       <div class="card reveal d2">
         <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5z"/><path d="m9 12 2 2 4-4"/></svg></div>
@@ -1220,9 +1220,9 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           </div>
           <div class="dbody">
             <div class="dq"><b>Search</b><span>Apple M4 Max unified memory bandwidth</span></div>
-            <div class="drow"><span class="dbadge ok">source</span><span>en.wikipedia.org/wiki/Apple_M4 &mdash; &ldquo;M4 Max &hellip; over half a terabyte per second (546GB/sec)&rdquo;</span><span class="dcite">[1]</span></div>
-            <div class="drow"><span class="dbadge ok">source</span><span>apple.com/newsroom &mdash; &ldquo;unified memory bandwidth is greatly increased &mdash; up to 75 percent&rdquo;</span><span class="dcite">[2]</span></div>
-            <div class="drow"><span class="dbadge ok">source</span><span>support.apple.com/en-us/121553 &mdash; MacBook Pro (M4 Pro / M4 Max) tech specs</span><span class="dcite">[3]</span></div>
+            <div class="drow"><span class="dbadge ok">source</span><span>en.wikipedia.org/wiki/Apple_M4: &ldquo;M4 Max &hellip; over half a terabyte per second (546GB/sec)&rdquo;</span><span class="dcite">[1]</span></div>
+            <div class="drow"><span class="dbadge ok">source</span><span>apple.com/newsroom, &ldquo;unified memory bandwidth is greatly increased, up to 75 percent&rdquo;</span><span class="dcite">[2]</span></div>
+            <div class="drow"><span class="dbadge ok">source</span><span>support.apple.com/en-us/121553: MacBook Pro (M4 Pro / M4 Max) tech specs</span><span class="dcite">[3]</span></div>
             <div class="dnote">10 results returned &middot; every source carries its URL and the excerpt the claim came from</div>
           </div>
         </div>
@@ -1242,19 +1242,19 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           <div class="dbody">
             <div class="dq"><b>Task</b><span>Add a retry with backoff to the upload client, then run the tests.</span></div>
             <div class="dperm">
-              <div class="dperm-h">Plan review &mdash; 4 steps, before anything runs</div>
-              <div class="drow"><span class="dbadge">1</span><span><code>search_files</code> &mdash; find the upload client</span></div>
-              <div class="drow"><span class="dbadge">2</span><span><code>read_file</code> &mdash; src/upload/client.ts</span></div>
-              <div class="drow"><span class="dbadge">3</span><span><code>edit_file</code> &mdash; add retry with backoff</span></div>
-              <div class="drow"><span class="dbadge">4</span><span><code>run_bash</code> &mdash; npm test</span></div>
+              <div class="dperm-h">Plan review: 4 steps, before anything runs</div>
+              <div class="drow"><span class="dbadge">1</span><span><code>search_files</code>: find the upload client</span></div>
+              <div class="drow"><span class="dbadge">2</span><span><code>read_file</code>: src/upload/client.ts</span></div>
+              <div class="drow"><span class="dbadge">3</span><span><code>edit_file</code>: add retry with backoff</span></div>
+              <div class="drow"><span class="dbadge">4</span><span><code>run_bash</code>: npm test</span></div>
               <div class="dbtns"><span class="dbtn pri">Approve</span><span class="dbtn">Approve edited</span><span class="dbtn">Deny</span></div>
             </div>
-            <div class="dnote">22 tools &mdash; read_file, edit_file, run_bash, git_diff, git_commit, search_files, web_search, spawn_subagent, mac_screenshot &hellip; &middot; every plan is reviewable and editable before it runs &middot; running cost $0.00</div>
+            <div class="dnote">22 tools: read_file, edit_file, run_bash, git_diff, git_commit, search_files, web_search, spawn_subagent, mac_screenshot &hellip; &middot; every plan is reviewable and editable before it runs &middot; running cost $0.00</div>
           </div>
         </div>
         <figcaption><strong>Read from the shipped agent.</strong> The three responses
-        are the app&rsquo;s own &mdash; <code>approve</code>, <code>approve_edited</code>,
-        <code>deny</code> &mdash; so a plan can be edited before it runs, and the
+        are the app&rsquo;s own (<code>approve</code>, <code>approve_edited</code>,
+        <code>deny</code>) so a plan can be edited before it runs, and the
         tool names are the real registry of 22. The example task is illustrative;
         the mechanism is not.</figcaption>
       </figure>
@@ -1263,12 +1263,12 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
         <div class="macwin cmpwin">
           <div class="cmpbar">
             <span class="blip"></span><span>watching</span>
-            <span style="margin-left:auto">&#9889; &#43; &mdash; &#10005;</span>
+            <span style="margin-left:auto">&#9889; &#43;: &#10005;</span>
           </div>
           <div class="dbody" style="min-height:0">
             <div class="dq"><b>Ask</b><span>What&rsquo;s this error in the window behind me?</span></div>
             <div class="drow"><span class="dbadge">&#128065;</span><span>Toggle the eye to let it <strong>read your screen</strong></span></div>
-            <div class="drow"><span class="dbadge">&#9889;</span><span>Toggle the bolt to let it <strong>act on it</strong> &mdash; with per-action approval</span></div>
+            <div class="drow"><span class="dbadge">&#9889;</span><span>Toggle the bolt to let it <strong>act on it</strong>: with per-action approval</span></div>
             <div class="drow"><span class="dbadge">keys</span><span><code>&#8984;N</code> new &middot; <code>Esc</code> stop &middot; <code>&#8984;&#8679;M</code> hide</span></div>
             <div class="dnote">Always on top &middot; runs on your hardware &middot; screen reading needs macOS Screen Recording permission &middot; Companion is a v0</div>
           </div>
@@ -1276,7 +1276,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
         <figcaption><strong>Read from the shipped overlay.</strong> The two toggles,
         the shortcuts and &ldquo;always on top &middot; runs on your hardware&rdquo; are
         its own strings. Screen reading needs macOS Screen Recording permission,
-        acting on the screen asks per action, and Companion ships as a v0 &mdash;
+        acting on the screen asks per action, and Companion ships as a v0. 
         all three are in the app and all three belong in the demo.</figcaption>
       </figure>
 
@@ -1290,7 +1290,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
     <div class="sec-head reveal">
       <span class="kicker">Six-tier lineup</span>
       <h2>Free starts small.<br><span class="accent">Pro unlocks the rest.</span></h2>
-      <p>Free is useful immediately with Nano + Lite. Pro adds the other four tiers — Quick, Core, Vision, and the 397B Plus tier. There is one model per memory bracket — 6, 12, 16, 24 and 64&nbsp;GB — so the tier you want is simply the largest your Mac can hold. (Not sure what yours has? Apple menu &rarr; About This Mac &mdash; the &ldquo;Memory&rdquo; line is the number to match.) The single exception is Vision 3.8, which shares Core’s 24&nbsp;GB bracket because it is the only tier that reads images; on text and code the two are level, so Core stays the default and you switch only when you have a screenshot or a diagram to hand it.</p>
+      <p>Free is useful immediately with Nano + Lite. Pro adds the other four tiers: Quick, Core, Vision, and the 397B Plus tier. There is one model per memory bracket (6, 12, 16, 24 and 64&nbsp;GB) so the tier you want is simply the largest your Mac can hold. (Not sure what yours has? Apple menu &rarr; About This Mac: the &ldquo;Memory&rdquo; line is the number to match.) The single exception is Vision 3.8, which shares Core’s 24&nbsp;GB bracket because it is the only tier that reads images; on text and code the two are level, so Core stays the default and you switch only when you have a screenshot or a diagram to hand it.</p>
     </div>
     <div class="tbl-wrap models reveal d1">
       <table>
@@ -1336,7 +1336,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           <tr>
             <td><div class="tname">Outlier Vision 3.8</div><div class="tbase">Qwen3.8-27B &middot; images + text</div></td>
               <td data-label="Plan"><span class="plan pro">Pro</span></td>
-              <td class="meta" data-label="Best for">Images, screenshots, diagrams &mdash; and plain text questions too</td>
+              <td class="meta" data-label="Best for">Images, screenshots, diagrams, and plain text questions too</td>
               <td class="meta" data-label="Disk / RAM">15.5 GB &middot; 24 GB min RAM</td>
               <td class="meta" data-label="Speed / note">17.2 tok/s</td>
           </tr>
@@ -1356,7 +1356,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       <p>Benchmarks for the shipping tiers, measured on this hardware against the shipping build. Where a tier has not been measured, the cell says so rather than carrying an estimate.</p>
     </div>
     <svg viewBox="0 0 640 314" class="bchart" role="img" aria-label="MMLU against required unified memory for the four measured tiers: Nano 52% at 6 GB, Lite 77% at 12 GB, Quick 81% at 16 GB, Core 89.5% at 24 GB."><line x1="52" y1="234.5" x2="622" y2="234.5" class="cg"/><text x="44" y="238.5" class="cl ca">50</text><line x1="52" y1="183.4" x2="622" y2="183.4" class="cg"/><text x="44" y="187.4" class="cl ca">60</text><line x1="52" y1="132.3" x2="622" y2="132.3" class="cg"/><text x="44" y="136.3" class="cl ca">70</text><line x1="52" y1="81.3" x2="622" y2="81.3" class="cg"/><text x="44" y="85.3" class="cl ca">80</text><line x1="52" y1="30.2" x2="622" y2="30.2" class="cg"/><text x="44" y="34.2" class="cl ca">90</text><text x="99.5" y="282" class="cl cc">6 GB</text><text x="242.0" y="282" class="cl cc">12 GB</text><text x="337.0" y="282" class="cl cc">16 GB</text><text x="527.0" y="282" class="cl cc">24 GB</text><path d="M99.5 224.3 L242.0 96.6 L337.0 76.2 L527.0 32.8" class="cpath"/><circle cx="99.5" cy="224.3" r="7.5" class="cdot"/><text x="99.5" y="209.8" class="cl cc cn">Nano 52.0%</text><circle cx="242.0" cy="96.6" r="8.2" class="cdot"/><text x="242.0" y="81.4" class="cl cc cn">Lite 77.0%</text><circle cx="337.0" cy="76.2" r="10.0" class="cdot"/><text x="337.0" y="59.3" class="cl cc cn">Quick 81.0%</text><circle cx="527.0" cy="32.8" r="9.9" class="cdot"/><text x="527.0" y="15.9" class="cl cc cn">Core 89.5%</text><text x="12" y="14" class="cl">MMLU</text><text x="622" y="296" class="cl ce">RAM your Mac needs &rarr;</text></svg>
-    <p class="chart-note">Dot size follows disk footprint. Plus is absent because it has no MMLU run <em>on the shipping 4-bit build</em> &mdash; the figure this chart plots. Vision 3.8 has one, and it is in the table: it shares Core’s 24&nbsp;GB bracket, so on an axis of required memory it would sit on top of Core rather than tell you anything new.</p>
+    <p class="chart-note">Dot size follows disk footprint. Plus is absent because it has no MMLU run <em>on the shipping 4-bit build</em>: the figure this chart plots. Vision 3.8 has one, and it is in the table: it shares Core’s 24&nbsp;GB bracket, so on an axis of required memory it would sit on top of Core rather than tell you anything new.</p>
     <div class="tbl-wrap models reveal d1">
       <table>
         <thead>
@@ -1393,7 +1393,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           </tr>
           <tr>
             <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged</div></td>
-            <td class="meta" data-label="MMLU">Not measured &mdash; the 209&nbsp;GB weights are not on the test machine. Plus itself runs here at 1.59&nbsp;tok/s, 14.04&nbsp;GB peak during generation, streaming experts from SSD; MMLU awaits a re-download, not a hardware limit.</td><td class="meta" data-label="HumanEval">Not measured</td>
+            <td class="meta" data-label="MMLU">Not measured, the 209&nbsp;GB weights are not on the test machine. Plus itself runs here at 1.59&nbsp;tok/s, 14.04&nbsp;GB peak during generation, streaming experts from SSD; MMLU awaits a re-download, not a hardware limit.</td><td class="meta" data-label="HumanEval">Not measured</td>
             <td class="meta" data-label="SWE-bench (agentic)">Not measured</td>
             <td class="meta" data-label="Decode">1.59 tok/s</td>
             <td class="meta" data-label="Disk">209 GB</td>
@@ -1409,9 +1409,9 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       </table>
     </div>
     <svg viewBox="0 0 640 244" class="bchart dchart" role="img" aria-label="Decode speed in tokens per second on an M1 Ultra, log scale: Nano 71.7, Lite 53.4, Quick 43.6, Core 20.7, Vision 3.8 17.2, Plus 1.59."><defs><linearGradient id="barfill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7b6cf6"/><stop offset="1" stop-color="#e4c7ff"/></linearGradient></defs><line x1="92.0" y1="30" x2="92.0" y2="247" class="cg"/><text x="92.0" y="263" class="cl cc">1</text><line x1="340.0" y1="30" x2="340.0" y2="247" class="cg"/><text x="340.0" y="263" class="cl cc">10</text><line x1="588.0" y1="30" x2="588.0" y2="247" class="cg"/><text x="588.0" y="263" class="cl cc">100</text><text x="82" y="48" class="cl" text-anchor="end">Nano</text><rect x="92" y="37" width="460.2" height="14" rx="3" class="cbar"/><text x="559.2" y="48" class="cl cn">71.7 <tspan class="cnote">4B dense</tspan></text><text x="82" y="79" class="cl" text-anchor="end">Lite</text><rect x="92" y="68" width="428.5" height="14" rx="3" class="cbar"/><text x="527.5" y="79" class="cl cn">53.4 <tspan class="cnote">9B dense</tspan></text><text x="82" y="110" class="cl" text-anchor="end">Quick</text><rect x="92" y="99" width="406.6" height="14" rx="3" class="cbar"/><text x="505.6" y="110" class="cl cn">43.6 <tspan class="cnote">26B MoE</tspan></text><text x="82" y="141" class="cl" text-anchor="end">Core</text><rect x="92" y="130" width="326.4" height="14" rx="3" class="cbar"/><text x="425.4" y="141" class="cl cn">20.7 <tspan class="cnote">27B dense</tspan></text><text x="82" y="172" class="cl" text-anchor="end">Vision</text><rect x="92" y="161" width="306.4" height="14" rx="3" class="cbar"/><text x="405.4" y="172" class="cl cn">17.2 <tspan class="cnote">27B dense</tspan></text><text x="82" y="203" class="cl" text-anchor="end">Plus</text><rect x="92" y="192" width="49.9" height="14" rx="3" class="cbar"/><text x="148.9" y="203" class="cl cn">1.59 <tspan class="cnote">397B MoE</tspan></text><text x="12" y="16" class="cl">tok/s &#183; log scale</text></svg>
-    <p class="chart-note">Decode speed on this M1 Ultra, log scale &mdash; the tiers span 45&times;, so a linear axis would flatten Plus to nothing. These figures come from an <strong>earlier measurement round (2026-05-20)</strong> than the MMLU and SWE-bench numbers above, which were taken 2026-08-09; the dataset file says so too. Quick is blank for the same reason Plus is absent from the chart above: no run on the shipping build. Vision 3.8 is measured but shares Core’s memory bracket, so it appears in the table rather than the chart. Speed varies by Mac.</p>
-    <p class="provenance reveal"><a href="/data/outlier-tier-benchmarks-2026-08/">How these were run</a> &mdash; sample sizes, grading and hardware for every figure above. The download is a later build than the one measured; these figures have not been re-run on it.</p>
-    <p class="provenance reveal"><strong>Why this table is unusual</strong> &mdash; checked on their live pages 2026-08-13, <a href="https://ollama.com" rel="nofollow">Ollama</a>, <a href="https://lmstudio.ai" rel="nofollow">LM&nbsp;Studio</a>, <a href="https://jan.ai" rel="nofollow">Jan</a> and <a href="https://www.nomic.ai/gpt4all" rel="nofollow">GPT4All</a> publish no MMLU, HumanEval or SWE-bench figure at all. That is not a criticism &mdash; the scores belong to the upstream models &mdash; but it means nobody in this category tells you what a local model will actually get right. These are ours to be held to.</p>
+    <p class="chart-note">Decode speed on this M1 Ultra, log scale: the tiers span 45&times;, so a linear axis would flatten Plus to nothing. These figures come from an <strong>earlier measurement round (2026-05-20)</strong> than the MMLU and SWE-bench numbers above, which were taken 2026-08-09; the dataset file says so too. Quick is blank for the same reason Plus is absent from the chart above: no run on the shipping build. Vision 3.8 is measured but shares Core’s memory bracket, so it appears in the table rather than the chart. Speed varies by Mac.</p>
+    <p class="provenance reveal"><a href="/data/outlier-tier-benchmarks-2026-08/">How these were run</a>: sample sizes, grading and hardware for every figure above. The download is a later build than the one measured; these figures have not been re-run on it.</p>
+    <p class="provenance reveal"><strong>Why this table is unusual</strong>: checked on their live pages 2026-08-13, <a href="https://ollama.com" rel="nofollow">Ollama</a>, <a href="https://lmstudio.ai" rel="nofollow">LM&nbsp;Studio</a>, <a href="https://jan.ai" rel="nofollow">Jan</a> and <a href="https://www.nomic.ai/gpt4all" rel="nofollow">GPT4All</a> publish no MMLU, HumanEval or SWE-bench figure at all. That is not a criticism, the scores belong to the upstream models, but it means nobody in this category tells you what a local model will actually get right. These are ours to be held to.</p>
   </div>
 </section>
 
@@ -1422,7 +1422,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
     <div class="sec-head reveal">
       <span class="kicker">The comparison that matters</span>
       <h2>Outlier vs. <span class="accent">the monthly bill.</span></h2>
-      <p>The cloud tools proved the workflow: coding agents, long-context research, always-on help. The problem is the meter. Outlier is building the local version — Mac-native, private by default, and not capped by an Outlier token allowance.</p>
+      <p>The cloud tools proved the workflow: coding agents, long-context research, always-on help. The problem is the meter. Outlier is building the local version: Mac-native, private by default, and not capped by an Outlier token allowance.</p>
     </div>
     <div class="tbl-wrap cmp reveal d1">
       <table>
@@ -1450,16 +1450,16 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
     <div class="sec-head reveal">
       <span class="kicker">Why local matters</span>
       <h2>Powerful AI, <span class="accent">lighter on the planet.</span></h2>
-      <p>Cloud inference needs data centers, networking, cooling, and ever-growing GPU clusters. Local inference uses the Apple Silicon chip you already own — no round-trip, no per-token meter. <a href="/learn/does-chatgpt-use-a-data-center/">What a cloud prompt actually travels to</a>.</p>
+      <p>Cloud inference needs data centers, networking, cooling, and ever-growing GPU clusters. Local inference uses the Apple Silicon chip you already own: no round-trip, no per-token meter. <a href="/learn/does-chatgpt-use-a-data-center/">What a cloud prompt actually travels to</a>.</p>
     </div>
     <div class="impact">
       <div class="impact-stats reveal">
-        <div class="istat"><div class="big">80–90%</div><p>of AI compute is <em>inference</em> &mdash; the calls made every time someone uses a cloud model, now drawing more grid electricity than training did (<a href="https://www.technologyreview.com/2025/05/20/1116327/ai-energy-usage-climate-footprint-big-tech/" target="_blank" rel="noopener noreferrer">MIT Tech Review, 2025</a>).</p></div>
+        <div class="istat"><div class="big">80–90%</div><p>of AI compute is <em>inference</em>: the calls made every time someone uses a cloud model, now drawing more grid electricity than training did (<a href="https://www.technologyreview.com/2025/05/20/1116327/ai-energy-usage-climate-footprint-big-tech/" target="_blank" rel="noopener noreferrer">MIT Tech Review, 2025</a>).</p></div>
         <div class="istat"><div class="big">0<small> cloud tokens</small></div><p>Local models create no Outlier cloud-inference bill and no cloud token meter.</p></div>
         <div class="istat"><div class="big">Mac</div><p>Apple Silicon unified memory is efficient for local inference versus shipping every prompt to a server.</p></div>
       </div>
       <div class="impact-body reveal d1">
-        <p>Not every local query is automatically cleaner &mdash; hardware, model size and electricity source all matter. The point is directional: move everyday inference onto devices people already own, and the load on cloud infrastructure drops.</p>
+        <p>Not every local query is automatically cleaner: hardware, model size and electricity source all matter. The point is directional: move everyday inference onto devices people already own, and the load on cloud infrastructure drops.</p>
         <p><strong>The best environmental feature isn&rsquo;t a green badge.</strong> It&rsquo;s a model good enough, small enough and fast enough that people actually choose to run it locally.</p>
       </div>
     </div>
@@ -1477,12 +1477,12 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       <details>
         <summary>How many Macs does one license cover?</summary>
         <p>Up to 3 Macs at a time; deactivate one to move it. Deactivate from Settings &gt; License on the Mac you are
-        leaving, then activate on the new one — you do not need to contact us, and there is no
+        leaving, then activate on the new one: you do not need to contact us, and there is no
         limit on how many times you move it.</p>
       </details>
       <details open>
         <summary>Is Outlier as good as the best cloud coding agents?</summary>
-        <div class="body">No &mdash; that's the goal, not the claim. It's a real local Mac app with shipped models and agent features, and it has not closed that gap yet. Founders and Pro revenue fund the work.</div>
+        <div class="body">No: that's the goal, not the claim. It's a real local Mac app with shipped models and agent features, and it has not closed that gap yet. Founders and Pro revenue fund the work.</div>
       </details>
       <details>
         <summary>What's free?</summary>
@@ -1490,17 +1490,17 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       </details>
       <details>
         <summary>What does Pro include?</summary>
-        <div class="body">A one-time $249. Everything &mdash; all six tiers and every feature itemised in the pricing cards above, <a href="/learn/fine-tune-ai-locally/">on-device fine-tuning</a> included. Local generation is never metered or charged per token. <strong>Core 27B is the daily driver.</strong> There is no middle tier. Lifetime is <strong>Founders Lifetime</strong> &mdash; pay once, keep everything Pro has including future model releases; &ldquo;Founders&rdquo; means you bought early: there are 25 founding seats for Outlier, and when they are gone the price goes back up. The offer bar at the top of every page reads the store live, and says so the moment the founding seats are gone.</div>
+        <div class="body">A one-time $249. Everything: all six tiers and every feature itemised in the pricing cards above, <a href="/learn/fine-tune-ai-locally/">on-device fine-tuning</a> included. Local generation is never metered or charged per token. <strong>Core 27B is the daily driver.</strong> There is no middle tier. Lifetime is <strong>Founders Lifetime</strong>: pay once, keep everything Pro has including future model releases; &ldquo;Founders&rdquo; means you bought early: there are 25 founding seats for Outlier, and when they are gone the price goes back up. The offer bar at the top of every page reads the store live, and says so the moment the founding seats are gone.</div>
       </details>
       <details>
         <summary>Does my data stay private?</summary>
-        <div class="body">Inference runs on your Mac; chat history and memory stay on your disk. Web search and external API keys are opt-in &mdash; switch one on and that request leaves your device by design.</div>
+        <div class="body">Inference runs on your Mac; chat history and memory stay on your disk. Web search and external API keys are opt-in: switch one on and that request leaves your device by design.</div>
       </details>
       <details>
         <summary>Do I need an internet connection?</summary>
-        <div class="body">Not to use it. The model runs on your Mac and answers with the network off &mdash; that is the whole point of the product, not a fallback mode.
+        <div class="body">Not to use it. The model runs on your Mac and answers with the network off: that is the whole point of the product, not a fallback mode.
         You need a connection three times: to download a tier the first time (once per tier, then it is yours on disk), to activate your license, and if you ask the app to search the web, which is a thing you choose to do rather than something it does on its own. On its own it checks for updates, and when you open an upgrade window it fetches the price to show you; neither carries anything you wrote.
-        The license check runs at startup and once a day after that. If it cannot reach us it <strong>keeps your Pro features working</strong> rather than locking you out &mdash; an unreachable server is treated as no answer, not as a refusal. Only an explicit revocation from the payment provider ever changes anything.</div>
+        The license check runs at startup and once a day after that. If it cannot reach us it <strong>keeps your Pro features working</strong> rather than locking you out: an unreachable server is treated as no answer, not as a refusal. Only an explicit revocation from the payment provider ever changes anything.</div>
       </details>
       <details>
         <summary>What Mac do I need?</summary>
@@ -1541,7 +1541,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
     <div class="subscribe">
       <h2>New models worth running</h2>
       <p class="subscribe-why">Open weights ship constantly and most of them are not worth your disk.
-      When one is &mdash; a model that beats a tier Outlier already has, on hardware you already own &mdash;
+      When one is (a model that beats a tier Outlier already has, on hardware you already own) 
       we say so, and what it replaces. That is the only reason we will email you.</p>
       <form class="subscribe-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
         <input type="hidden" name="source" value="outlier-host">
@@ -1556,7 +1556,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       </form>
       <p class="subscribe-note" role="status" aria-live="polite">
         Your address and which of our sites you sent it from. No IP, no user agent, no referer, and no tracking pixel on this
-        form &mdash; it sends nothing until you press the button. One click to leave, on every email.
+        form: it sends nothing until you press the button. One click to leave, on every email.
         <a href="https://outlier.host/privacy.html">Privacy</a>.
       </p>
     </div>

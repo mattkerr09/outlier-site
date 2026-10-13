@@ -164,7 +164,8 @@ def check_plus_decode_sitewide(root):
     # headings. A heading that goes missing is a failure, not a quiet wider exemption.
     PROTOCOL_SECTIONS = {
         "data/v11-streaming-engine-benchmarks/index.html":
-            ("<h2>Plus 397B-A17B — engine comparison</h2>", "<h2>Vision 35B-A3B — engine comparison</h2>"),
+            # 2026-10-13: the headings lost their em-dashes in the body-copy pass; same section, same exemption
+            ("<h2>Plus 397B-A17B: engine comparison</h2>", "<h2>Vision 35B-A3B: engine comparison</h2>"),
     }
     TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Vision|Plus|397B)\b", re.I)
     # models.csv's column is m1_ultra_toks. A figure explicitly about other silicon

@@ -143,22 +143,22 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Aider is a free, Apache-2.0 command-line tool that connects your git repository to an LLM you choose — cloud API or local model — and lets it read, edit, and auto-commit files in your working tree. Outlier is a paid native Mac app that ships its own models and runs them entirely on your device, with no account, no API key, and no per-token bill. Pick Aider if you want an agent living inside your repo and you're willing to bring your own model; pick Outlier if you want a fixed on-device model in an app that needs no setup.</p>
+      <p>Aider is a free, Apache-2.0 command-line tool that connects your git repository to an LLM you choose, cloud API or local model, and lets it read, edit, and auto-commit files in your working tree. Outlier is a paid native Mac app that ships its own models and runs them entirely on your device, with no account, no API key, and no per-token bill. Pick Aider if you want an agent living inside your repo and you're willing to bring your own model; pick Outlier if you want a fixed on-device model in an app that needs no setup.</p>
     </div>
 
-    <p class="lead">I build Outlier, so read this as a comparison written by an interested party. I've tried to be accurate about Aider anyway — it's genuinely good software, and pretending otherwise would make this page useless. The two barely overlap: one is a repo-native agent with no model, the other a model-native app with no repo integration.</p>
+    <p class="lead">I build Outlier, so read this as a comparison written by an interested party. I've tried to be accurate about Aider anyway: it's genuinely good software, and pretending otherwise would make this page useless. The two barely overlap: one is a repo-native agent with no model, the other a model-native app with no repo integration.</p>
 
     <h2>What Aider actually is</h2>
     <p>Aider is a terminal pair programmer from Aider AI LLC, open source under Apache 2.0. You install it as a Python package (<code>aider-chat</code> on PyPI), run it inside a git repo, add a few files to the chat, and say what you want. It edits real files on disk and commits each change with a generated message, so review and rollback happen with ordinary <code>git diff</code>, <code>git blame</code>, and <code>git revert</code> instead of a proprietary review panel.</p>
 
-    <p>It ships no model of its own — that's the whole design. Aider connects to OpenAI, Anthropic, Gemini, GROQ, DeepSeek, Azure, Cohere, OpenRouter, and "almost any" OpenAI-compatible API, and the docs explicitly cover fully local models via Ollama or a local OpenAI-compatible server. Orchestration, repo mapping, file editing, linting, testing, and git commits all run on your machine; only inference goes wherever your chosen model lives.</p>
+    <p>It ships no model of its own, that's the whole design. Aider connects to OpenAI, Anthropic, Gemini, GROQ, DeepSeek, Azure, Cohere, OpenRouter, and "almost any" OpenAI-compatible API, and the docs explicitly cover fully local models via Ollama or a local OpenAI-compatible server. Orchestration, repo mapping, file editing, linting, testing, and git commits all run on your machine; only inference goes wherever your chosen model lives.</p>
 
     <p>It installs on macOS, Linux, and Windows through a helper installer, one-liner scripts, uv, pipx, pip, Docker, Codespaces, or Replit. The interfaces are the CLI, an "experimental browser UI" (<code>aider --browser</code>), and watch-mode, where a comment in your editor becomes the request. There's no native Mac app and no mobile app.</p>
 
     <h2>What Outlier actually is</h2>
-    <p>Outlier is a Mac app for Apple Silicon (M1 or later, macOS 26+). It downloads weights once and runs them on your machine — no account, no usage caps, works with Wi-Fi off. Six tiers: Nano 4B (2.37 GB), Lite 9B, Quick 26B-a4b, Core 27B, Vision 3.8 27B, and Plus 397B-a17b (209 GB on disk, 64 GB Mac required, streamed from SSD by a paged MoE loader at roughly 11 GB peak RSS). Nano and Lite are free; Pro is a one-time purchase and enables all seven.</p>
+    <p>Outlier is a Mac app for Apple Silicon (M1 or later, macOS 26+). It downloads weights once and runs them on your machine: no account, no usage caps, works with Wi-Fi off. Six tiers: Nano 4B (2.37 GB), Lite 9B, Quick 26B-a4b, Core 27B, Vision 3.8 27B, and Plus 397B-a17b (209 GB on disk, 64 GB Mac required, streamed from SSD by a paged MoE loader at roughly 11 GB peak RSS). Nano and Lite are free; Pro is a one-time purchase and enables all seven.</p>
 
-    <p>It's a chat app, not a repo agent. It doesn't touch your working tree, run your test suite, or commit anything. It also has no image generation, no mobile app, no voice mode, no Windows or Linux build, and no cloud sync. Those aren't roadmap coyness — they're absent.</p>
+    <p>It's a chat app, not a repo agent. It doesn't touch your working tree, run your test suite, or commit anything. It also has no image generation, no mobile app, no voice mode, no Windows or Linux build, and no cloud sync. Those aren't roadmap coyness: they're absent.</p>
 
     <h2>Side by side</h2>
     <table>
@@ -177,7 +177,7 @@
         </tr>
         <tr>
           <td><strong>Which model powers it</strong></td>
-          <td>Whichever you configure — OpenAI, Anthropic, Gemini, DeepSeek, OpenRouter, Azure, or a local Ollama / OpenAI-compatible endpoint</td>
+          <td>Whichever you configure: OpenAI, Anthropic, Gemini, DeepSeek, OpenRouter, Azure, or a local Ollama / OpenAI-compatible endpoint</td>
           <td>Its own six tiers, from Nano 4B to Plus 397B-a17b. No model choice beyond the tier picker</td>
         </tr>
         <tr>
@@ -193,7 +193,7 @@
         <tr>
           <td><strong>Agentic ability</strong></td>
           <td>Edits files in place, runs lint and tests in a loop, auto-commits, <code>/undo</code></td>
-          <td>Chat only — you copy code in and out. No git integration</td>
+          <td>Chat only: you copy code in and out. No git integration</td>
         </tr>
         <tr>
           <td><strong>Repo-scale context</strong></td>
@@ -203,7 +203,7 @@
         <tr>
           <td><strong>Telemetry</strong></td>
           <td>Opt-in analytics; never collects code, chat, or keys. Absent a flag, enabled for a random subset who are then prompted. Permanent opt-out: <code>aider --analytics-disable</code></td>
-          <td>None to opt out of — the model runs locally</td>
+          <td>None to opt out of, the model runs locally</td>
         </tr>
       </tbody>
     </table>
@@ -213,15 +213,15 @@
 
     <p>With Aider pointed at a cloud model, three things go over the wire: the generated repo map, the full contents of any file you add to the chat, and the chat messages. Aider's privacy policy (Aider AI LLC, last updated April 12, 2025) covers device, usage, and analytics info; it says nothing about training on your inputs, and it wouldn't, because Aider doesn't operate a model. Whether your code trains someone's next release is governed by the provider you configured. Aider's own services are US-hosted and intended for US visitors.</p>
 
-    <p>Point Aider at Ollama or a local OpenAI-compatible server and nothing needs to leave at all. That path is real, documented, and has documented sharp edges. Ollama defaults to a 2k context window, which the docs call "very small for working with aider," and silently discards anything beyond it — the docs themselves call that especially dangerous, since users don't realize most of their data is being thrown away. Aider's edit formats also want a capable model. Its own <a href="https://aider.chat/docs/troubleshooting/edit-errors.html">file-editing troubleshooting page</a> says "Weaker models are more prone to disobeying the system prompt instructions," and is blunter still about the local path: "Most local models are just barely capable of working with aider, so editing errors are probably unavoidable." Quantized local models get a specific warning of their own. The cheapest, most private path is the most fragile one.</p>
+    <p>Point Aider at Ollama or a local OpenAI-compatible server and nothing needs to leave at all. That path is real, documented, and has documented sharp edges. Ollama defaults to a 2k context window, which the docs call "very small for working with aider," and silently discards anything beyond it: the docs themselves call that especially dangerous, since users don't realize most of their data is being thrown away. Aider's edit formats also want a capable model. Its own <a href="https://aider.chat/docs/troubleshooting/edit-errors.html">file-editing troubleshooting page</a> says "Weaker models are more prone to disobeying the system prompt instructions," and is blunter still about the local path: "Most local models are just barely capable of working with aider, so editing errors are probably unavoidable." Quantized local models get a specific warning of their own. The cheapest, most private path is the most fragile one.</p>
 
-    <p>Outlier has no configuration axis here. The model is on your Mac and the app works with the network off. There's no endpoint to choose — a limitation and a guarantee at once.</p>
+    <p>Outlier has no configuration axis here. The model is on your Mac and the app works with the network off. There's no endpoint to choose, a limitation and a guarantee at once.</p>
 
     <h2>What the coding numbers actually say</h2>
     <p><em>Corrected 2026-09-29: an earlier version said 9 of 9; a stricter recount of the same test found 7 of the 9 apps still running at the end.</em></p>
     <p>Our real measurements, not a leaderboard boast: on a blind slice of SWE-bench Verified, Core 27B measured <strong>about 45% (18 of 40)</strong>, and Core 27B scores <strong>0.951 on HumanEval</strong>. Those are internal runs on our own harness, and they sit below what the strongest cloud coding agents do. In our own test Outlier's agent built a working app 7 of 9 times, using the default model for 8, 16 and 24 GB+ Macs, and we published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself.</p>
 
-    <p>For the ceiling: Aider publishes its own polyglot benchmark — 225 Exercism exercises across C++, Go, Java, JavaScript, Python, and Rust — with gpt-5 (high) topping the board at 88.0%. Different benchmark, different tasks, so don't read 45% against 88% as a head-to-head. Read the direction instead: a frontier cloud model driving Aider will out-code a 27B on your Mac, and it isn't close on the hardest multi-file work. If your bar is the strongest possible result and cost isn't the constraint, that combination wins.</p>
+    <p>For the ceiling: Aider publishes its own polyglot benchmark (225 Exercism exercises across C++, Go, Java, JavaScript, Python, and Rust) with gpt-5 (high) topping the board at 88.0%. Different benchmark, different tasks, so don't read 45% against 88% as a head-to-head. Read the direction instead: a frontier cloud model driving Aider will out-code a 27B on your Mac, and it isn't close on the hardest multi-file work. If your bar is the strongest possible result and cost isn't the constraint, that combination wins.</p>
 
     <p>Aider's board publishes dollar cost per run too, which is the counterweight: $29.08 for that 225-exercise benchmark on gpt-5 (high), $146.32 on o3-pro (high). Free software, metered usage.</p>
 
@@ -230,28 +230,28 @@
     <ul>
       <li><strong>It's an agent; Outlier isn't.</strong> Aider edits real files, loops on lint and tests, and commits. Outlier gives you text in a window. On "fix this failing test across four files," Aider does the work and Outlier watches.</li>
       <li><strong>Model freedom.</strong> One tool drives GPT, Claude, Gemini, DeepSeek, OpenRouter, or your own local server, with identical muscle memory either way. Outlier gives you our six tiers and that's the menu.</li>
-      <li><strong>Free and open source.</strong> Apache 2.0, with the agent loop and prompts readable in the repo — forkable, auditable, and you can see exactly what gets sent. Outlier Pro costs money and isn't open source.</li>
-      <li><strong>Git-native review.</strong> Every change is a commit with a message. Diff, blame, revert — no proprietary UI to learn.</li>
+      <li><strong>Free and open source.</strong> Apache 2.0, with the agent loop and prompts readable in the repo: forkable, auditable, and you can see exactly what gets sent. Outlier Pro costs money and isn't open source.</li>
+      <li><strong>Git-native review.</strong> Every change is a commit with a message. Diff, blame, revert: no proprietary UI to learn.</li>
       <li><strong>The repo map is a real idea.</strong> A tree-sitter map of files and key symbols, graph-ranked and budgeted, gives a model architectural awareness of a big codebase without ingesting it. Outlier has no equivalent.</li>
       <li><strong>It runs everywhere.</strong> Linux, Windows, Docker, Codespaces, over SSH. Outlier runs on Apple Silicon Macs and nowhere else.</li>
-      <li><strong>Real scale.</strong> 47.6k GitHub stars, roughly 6.8M PyPI installs, ~15B tokens/week, a top-20 spot on OpenRouter, and enough dogfooding that it writes much of itself — Aider wrote 88% of the code in v0.86.0 and 62% of the code in the newest release, per its own <a href="https://aider.chat/HISTORY.html">HISTORY.md</a>.</li>
+      <li><strong>Real scale.</strong> 47.6k GitHub stars, roughly 6.8M PyPI installs, ~15B tokens/week, a top-20 spot on OpenRouter, and enough dogfooding that it writes much of itself: Aider wrote 88% of the code in v0.86.0 and 62% of the code in the newest release, per its own <a href="https://aider.chat/HISTORY.html">HISTORY.md</a>.</li>
     </ul>
 
-    <p>One caveat, as due diligence rather than a knock: the cadence has slowed. The last published GitHub Release is v0.86.0 (2025-08-09), the newest PyPI upload 0.86.2 (2026-02-12), the most recent commit to main 2026-05-22, against 1,320 open issues. (GitHub's repo badge shows about 1,760, but that number folds in 438 open pull requests — it isn't an issue count.) Commits continue and the repo isn't archived, but the polyglot leaderboard's newest dated entry is 2025-10-03, the README still recommends an early-2025 model set (Claude 3.7 Sonnet, o1, o3-mini, GPT-4o), and there's no documented Model Context Protocol support.</p>
+    <p>One caveat, as due diligence rather than a knock: the cadence has slowed. The last published GitHub Release is v0.86.0 (2025-08-09), the newest PyPI upload 0.86.2 (2026-02-12), the most recent commit to main 2026-05-22, against 1,320 open issues. (GitHub's repo badge shows about 1,760, but that number folds in 438 open pull requests: it isn't an issue count.) Commits continue and the repo isn't archived, but the polyglot leaderboard's newest dated entry is 2025-10-03, the README still recommends an early-2025 model set (Claude 3.7 Sonnet, o1, o3-mini, GPT-4o), and there's no documented Model Context Protocol support.</p>
 
     <h2>Who should pick which</h2>
     <p><strong>Pick Aider if</strong> you live in a terminal, already pay for API access, want the agent touching your files and commits directly, work on Linux or Windows or over SSH, or want to audit and fork the tool you're trusting with your source. If you want the strongest coding output available today, Aider plus a frontier model is the better answer than any 27B running locally, mine included.</p>
 
     <p><strong>Pick Outlier if</strong> you're on an Apple Silicon Mac, want a structural guarantee that code never leaves the machine rather than one that depends on configuring an endpoint correctly, don't want a metered bill, or want an app instead of a version-pinned Python install. It also fits work that isn't repo-shaped: explaining an unfamiliar file, drafting an algorithm, reviewing a snippet you can't upload anywhere.</p>
 
-    <p><strong>Or both.</strong> They stack. Our weights are on <a href="https://huggingface.co/Outlier-Ai">Hugging Face</a>, so you can serve them behind your own OpenAI-compatible endpoint and drive them with Aider — exactly the local path Aider documents. Keep sensitive repos local, route the hardest refactors to a cloud model, and use the Mac app for the thinking-out-loud half.</p>
+    <p><strong>Or both.</strong> They stack. Our weights are on <a href="https://huggingface.co/Outlier-Ai">Hugging Face</a>, so you can serve them behind your own OpenAI-compatible endpoint and drive them with Aider: exactly the local path Aider documents. Keep sensitive repos local, route the hardest refactors to a cloud model, and use the Mac app for the thinking-out-loud half.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Aider details from <a href="https://aider.chat/docs/">aider.chat/docs</a> — install, LLM support, repo map, Ollama notes, browser UI, analytics, and privacy policy (Aider AI LLC, last updated 2025-04-12) — plus the <a href="https://aider.chat/docs/troubleshooting/edit-errors.html">file-editing troubleshooting page</a> for the weak/local-model quotations, <a href="https://aider.chat/HISTORY.html">HISTORY.md</a> for the per-release self-authored percentages, the <a href="https://aider.chat/docs/leaderboards/">polyglot leaderboard</a>, the <a href="https://github.com/Aider-AI/aider">GitHub repo</a> and API metadata, and PyPI package metadata for <code>aider-chat</code>, all checked 2026-07-23. The open-issue figure is from GitHub's issue search restricted to <code>type:issue</code>, not the repo's <code>open_issues_count</code> field, which counts pull requests as issues. Outlier tier sizes, throughput, and the ~11 GB Plus peak RSS measured on an M1 Ultra Mac Studio; SWE-bench Verified slice (18/40) and HumanEval 0.951 are our own internal runs, not third-party leaderboard results. Outlier pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Third-party pricing, policies, model recommendations, and benchmark boards change without notice — verify anything load-bearing at the source before you rely on it.
+      <strong>Sources and receipts:</strong> Aider details from <a href="https://aider.chat/docs/">aider.chat/docs</a>: install, LLM support, repo map, Ollama notes, browser UI, analytics, and privacy policy (Aider AI LLC, last updated 2025-04-12)) plus the <a href="https://aider.chat/docs/troubleshooting/edit-errors.html">file-editing troubleshooting page</a> for the weak/local-model quotations, <a href="https://aider.chat/HISTORY.html">HISTORY.md</a> for the per-release self-authored percentages, the <a href="https://aider.chat/docs/leaderboards/">polyglot leaderboard</a>, the <a href="https://github.com/Aider-AI/aider">GitHub repo</a> and API metadata, and PyPI package metadata for <code>aider-chat</code>, all checked 2026-07-23. The open-issue figure is from GitHub's issue search restricted to <code>type:issue</code>, not the repo's <code>open_issues_count</code> field, which counts pull requests as issues. Outlier tier sizes, throughput, and the ~11 GB Plus peak RSS measured on an M1 Ultra Mac Studio; SWE-bench Verified slice (18/40) and HumanEval 0.951 are our own internal runs, not third-party leaderboard results. Outlier pricing as of 2026-07-23 at <a href="https://outlier.host/#pricing">outlier.host/#pricing</a>. Third-party pricing, policies, model recommendations, and benchmark boards change without notice: verify anything load-bearing at the source before you rely on it.
     </div>
 
     <div class="cta">
-      <h3>Try Outlier free — no account needed</h3>
+      <h3>Try Outlier free: no account needed</h3>
       <p>Nano and Lite run on your Mac for free, forever, with nothing uploaded. Pro adds Core 27B and the rest of the six tiers.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-outlier-vs-aider&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-outlier-vs-aider-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
@@ -261,7 +261,7 @@
       <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a></p>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 

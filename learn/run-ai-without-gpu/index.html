@@ -136,40 +136,40 @@
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
     <h1>How to run AI on Mac without a discrete GPU</h1>
     <div class="byline-row">
-      <span class="byline">Outlier &mdash; Jun 18, 2026</span>
+      <span class="byline">Outlier: Jun 18, 2026</span>
       <span class="updated-pill">Updated September 23, 2026</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Yes &mdash; Apple Silicon Macs have GPU cores built directly into the chip, sharing unified memory with the CPU. You don't need a separate graphics card. Even an M4 MacBook Air can run a 7B model at 20+ tokens per second.</p>
+      <p>Yes: Apple Silicon Macs have GPU cores built directly into the chip, sharing unified memory with the CPU. You don't need a separate graphics card. Even an M4 MacBook Air can run a 7B model at 20+ tokens per second.</p>
     </div>
 
     <p class="lead">If you've looked into running AI locally on a PC, you've probably run into the GPU wall: most guides assume you have an NVIDIA card with dedicated VRAM. The Mac story is different, and it comes down to how Apple Silicon is physically built.</p>
 
     <h2>Why AI usually needs a GPU</h2>
 
-    <p>On a typical Windows or Linux desktop, the CPU and GPU are separate chips connected by a PCIe bus. The GPU has its own pool of dedicated video RAM (VRAM) &mdash; 8 GB, 16 GB, 24 GB depending on the card. LLM inference is essentially a huge sequence of matrix multiplications, and GPUs are built to execute those in parallel across thousands of cores.</p>
+    <p>On a typical Windows or Linux desktop, the CPU and GPU are separate chips connected by a PCIe bus. The GPU has its own pool of dedicated video RAM (VRAM): 8 GB, 16 GB, 24 GB depending on the card. LLM inference is essentially a huge sequence of matrix multiplications, and GPUs are built to execute those in parallel across thousands of cores.</p>
 
     <p>The catch: a model has to fit inside that dedicated VRAM. An RTX 4090 has 24 GB. A 70B-parameter model in 4-bit quantization needs roughly 35 GB. It won't load. You're either paying for multiple high-end cards or you're stuck with smaller models.</p>
 
-    <p>The other catch is the software stack. GPU-accelerated inference on PC relies almost entirely on NVIDIA's <code>CUDA</code> platform. AMD GPUs have <code>ROCm</code>, but driver and library coverage is narrower. Intel integrated graphics on Windows &mdash; the kind most laptops ship with &mdash; offer very limited acceleration for LLM workloads. Running a 7B+ model on integrated Intel or AMD graphics on a Windows laptop is possible but slow enough to be frustrating in practice.</p>
+    <p>The other catch is the software stack. GPU-accelerated inference on PC relies almost entirely on NVIDIA's <code>CUDA</code> platform. AMD GPUs have <code>ROCm</code>, but driver and library coverage is narrower. Intel integrated graphics on Windows, the kind most laptops ship with, offer very limited acceleration for LLM workloads. Running a 7B+ model on integrated Intel or AMD graphics on a Windows laptop is possible but slow enough to be frustrating in practice.</p>
 
     <h2>Why Mac is different</h2>
 
     <p>Apple Silicon uses a <strong>unified memory architecture</strong>: the CPU, GPU, Neural Engine, and all the other processors share a single pool of fast on-package memory. There is no separate VRAM, no PCIe bus, no memory copy from system RAM to GPU RAM. Everything is the same memory.</p>
 
-    <p>This changes the math for local AI entirely. When a model loads on Apple Silicon, it lands in unified memory where both the CPU and GPU can read it directly. The GPU cores in the chip perform the matrix multiplications that drive inference &mdash; the same work a discrete GPU does on a PC &mdash; but they're operating on memory that's already shared. No transfer overhead, no 24 GB ceiling imposed by a separate card.</p>
+    <p>This changes the math for local AI entirely. When a model loads on Apple Silicon, it lands in unified memory where both the CPU and GPU can read it directly. The GPU cores in the chip perform the matrix multiplications that drive inference, the same work a discrete GPU does on a PC, but they're operating on memory that's already shared. No transfer overhead, no 24 GB ceiling imposed by a separate card.</p>
 
     <h2>What the M-series chip actually contains</h2>
 
     <p>Apple Silicon isn't just a CPU with a small integrated GPU bolted on. Every M-series chip packs several compute engines onto one die:</p>
 
     <ul>
-      <li><strong>CPU cores</strong> (performance + efficiency clusters) &mdash; handles the OS, scheduling, non-matrix work</li>
-      <li><strong>GPU cores</strong> &mdash; M4 MacBook Air has 10; M4 Max has 40; M1 Ultra has 64. These do the heavy matrix math for inference.</li>
-      <li><strong>Neural Engine</strong> &mdash; a dedicated ML accelerator. The M4's Neural Engine runs at 38 TOPS. Used for certain model operations and on-device CoreML tasks.</li>
-      <li><strong>Unified memory</strong> &mdash; shared by all of the above, with high-bandwidth access across the whole chip</li>
+      <li><strong>CPU cores</strong> (performance + efficiency clusters): handles the OS, scheduling, non-matrix work</li>
+      <li><strong>GPU cores</strong>: M4 MacBook Air has 10; M4 Max has 40; M1 Ultra has 64. These do the heavy matrix math for inference.</li>
+      <li><strong>Neural Engine</strong>: a dedicated ML accelerator. The M4's Neural Engine runs at 38 TOPS. Used for certain model operations and on-device CoreML tasks.</li>
+      <li><strong>Unified memory</strong>: shared by all of the above, with high-bandwidth access across the whole chip</li>
     </ul>
 
     <p>The GPU cores are real GPU cores. They're not a watered-down integrated graphics chip; they're the same tile-based deferred renderer Apple uses for gaming and creative workloads. For LLM inference, frameworks like MLX and llama.cpp's Metal backend route matrix operations directly to these cores.</p>
@@ -186,7 +186,7 @@
       <li><strong>Outlier Plus (397B)</strong> on M1 Ultra via paged MoE inference: ~1.59 tokens/second</li>
     </ul>
 
-    <p>Memory bandwidth is the real limiting factor for LLM inference &mdash; more so than raw GPU core count. The GPU has to read model weights on every forward pass, and how fast it can do that determines throughput. The M2 Ultra delivers 800 GB/s of memory bandwidth. The M4 Max delivers 546 GB/s. An RTX 4090 hits 1,008 GB/s, but only across 24 GB of VRAM. Once your model exceeds that 24 GB, the entire setup breaks down; on Apple Silicon, larger models just use more of the shared pool.</p>
+    <p>Memory bandwidth is the real limiting factor for LLM inference: more so than raw GPU core count. The GPU has to read model weights on every forward pass, and how fast it can do that determines throughput. The M2 Ultra delivers 800 GB/s of memory bandwidth. The M4 Max delivers 546 GB/s. An RTX 4090 hits 1,008 GB/s, but only across 24 GB of VRAM. Once your model exceeds that 24 GB, the entire setup breaks down; on Apple Silicon, larger models just use more of the shared pool.</p>
 
     <table>
       <thead>
@@ -230,31 +230,31 @@
       </tbody>
     </table>
 
-    <p class="receipts"><strong>On that price:</strong> $1,099 was the M4 MacBook Air’s own price, and Apple no longer sells that machine — the Air line is M5, starting at <strong>$1,299</strong> for the 13-inch and $1,499 for the 15-inch (<a href="https://www.apple.com/shop/buy-mac/macbook-air">apple.com/shop/buy-mac/macbook-air</a>, read 2026-09-08). The comparison above is kept on the M4 Air because its bandwidth and GPU-core figures are the ones measured; a reader buying today pays $1,299 and gets a faster chip, which makes the against-the-GPU case stronger, not weaker.</p>
+    <p class="receipts"><strong>On that price:</strong> $1,099 was the M4 MacBook Air’s own price, and Apple no longer sells that machine: the Air line is M5, starting at <strong>$1,299</strong> for the 13-inch and $1,499 for the 15-inch (<a href="https://www.apple.com/shop/buy-mac/macbook-air">apple.com/shop/buy-mac/macbook-air</a>, read 2026-09-08). The comparison above is kept on the M4 Air because its bandwidth and GPU-core figures are the ones measured; a reader buying today pays $1,299 and gets a faster chip, which makes the against-the-GPU case stronger, not weaker.</p>
 
     <h2>The catch: you still need enough RAM</h2>
 
     <p>Unified memory solves the VRAM ceiling problem, but it doesn't eliminate the memory requirement. A model has to fit in your Mac's RAM. Here's a rough guide by RAM tier:</p>
 
     <ul>
-      <li><strong>8 GB</strong> &mdash; Small models only (1B–3B). Usable for quick tasks; macOS needs ~4 GB, leaving little headroom for a 7B model.</li>
-      <li><strong>16 GB</strong> &mdash; Comfortable for 7B models in 4-bit quantization (~4.5 GB), with room for the OS and other apps. A practical everyday setup.</li>
-      <li><strong>32 GB</strong> &mdash; Opens up 13B–27B models. Good for serious local AI work without compromise.</li>
-      <li><strong>64 GB+</strong> &mdash; Runs 70B models, or with paged MoE inference, models far larger than the chip's RAM through streaming from disk.</li>
+      <li><strong>8 GB</strong>: Small models only (1B–3B). Usable for quick tasks; macOS needs ~4 GB, leaving little headroom for a 7B model.</li>
+      <li><strong>16 GB</strong>: Comfortable for 7B models in 4-bit quantization (~4.5 GB), with room for the OS and other apps. A practical everyday setup.</li>
+      <li><strong>32 GB</strong>: Opens up 13B–27B models. Good for serious local AI work without compromise.</li>
+      <li><strong>64 GB+</strong> — Runs 70B models, or with paged MoE inference, models far larger than the chip's RAM through streaming from disk.</li>
     </ul>
 
     <p>If you're buying a Mac for local AI, 16 GB is the practical floor for everyday use. If budget allows, 32 GB gives you substantially more model range without needing any special software tricks.</p>
 
     <h2>Getting started on Mac without a GPU</h2>
 
-    <p>The hardware minimum is any M1 or newer Mac with enough RAM to hold your model's weights &mdash; no discrete GPU, no CUDA, no NVIDIA driver setup. The macOS version depends on which app you run, so check each one's own requirement below.</p>
+    <p>The hardware minimum is any M1 or newer Mac with enough RAM to hold your model's weights: no discrete GPU, no CUDA, no NVIDIA driver setup. The macOS version depends on which app you run, so check each one's own requirement below.</p>
 
     <p>From there, you have a few paths:</p>
 
     <ul>
-      <li><strong>Outlier</strong> &mdash; native Mac app that manages models, runs inference via MLX and Metal, and supports models from 1.5B up to 397B with paged inference. Nano tier is free. Requires macOS 26 or newer.</li>
-      <li><strong>Ollama</strong> &mdash; command-line tool with a local HTTP API. Pulls models from a registry, uses llama.cpp with Metal acceleration under the hood.</li>
-      <li><strong>LM Studio</strong> &mdash; GUI application, good for browsing and testing models without writing any code. Requires macOS 14 or newer.</li>
+      <li><strong>Outlier</strong>: native Mac app that manages models, runs inference via MLX and Metal, and supports models from 1.5B up to 397B with paged inference. Nano tier is free. Requires macOS 26 or newer.</li>
+      <li><strong>Ollama</strong>: command-line tool with a local HTTP API. Pulls models from a registry, uses llama.cpp with Metal acceleration under the hood.</li>
+      <li><strong>LM Studio</strong>: GUI application, good for browsing and testing models without writing any code. Requires macOS 14 or newer.</li>
     </ul>
 
     <p>All three use the Metal GPU backend on Apple Silicon, meaning they route matrix operations to your chip's GPU cores automatically. You don't configure anything; the Mac just works.</p>
@@ -265,7 +265,7 @@
 
     <div class="cta">
       <h3>Try local AI on your Mac</h3>
-      <p>Outlier runs on any M1 or newer Mac with macOS 26 or newer. Download the app, pick a model, and start running inference on your own hardware &mdash; no GPU, no cloud account required.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <p>Outlier runs on any M1 or newer Mac with macOS 26 or newer. Download the app, pick a model, and start running inference on your own hardware: no GPU, no cloud account required.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-run-ai-without-gpu&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-run-ai-without-gpu-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
@@ -278,7 +278,7 @@
       </p>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

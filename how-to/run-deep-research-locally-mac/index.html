@@ -143,21 +143,21 @@
         <li>Deep research is a multi-step job: plan the question, read several sources, then write up what they actually said.</li>
         <li>The reasoning runs on your Mac; only the page fetches touch the network.</li>
         <li>Answers carry citations, because research you can't check is just confident prose.</li>
-        <li>It takes minutes, not seconds — that is what separates it from a single search.</li>
+        <li>It takes minutes, not seconds, that is what separates it from a single search.</li>
       </ul>
     </div>
 
     <p class="lead">A one-shot answer to a research question is a guess with good grammar. Real research means deciding what to look up, reading more than one source, noticing where they disagree, and showing your work.</p>
 
     <h2>What bounds each step, in seconds and tokens</h2>
-    <p>A research loop with no bounds does not fail, it runs all night &mdash; and the honest
+    <p>A research loop with no bounds does not fail, it runs all night, and the honest
     version of &ldquo;it takes minutes&rdquo; is a list of the limits that make minutes the worst
     case rather than the hope. These are the values the shipping code enforces.</p>
     <table>
       <thead><tr><th>Step</th><th>Time limit</th><th>Output limit</th><th>What it is for</th></tr></thead>
       <tbody>
         <tr><td>Plan the question</td><td>30&nbsp;s</td><td>300 tokens</td><td>Decide what to look up; a plan that rambles is a plan that has stopped planning</td></tr>
-        <tr><td>Search</td><td>30&nbsp;s</td><td>&mdash;</td><td>Fetching is the only step that touches the network</td></tr>
+        <tr><td>Search</td><td>30&nbsp;s</td><td>—</td><td>Fetching is the only step that touches the network</td></tr>
         <tr><td>Summarise a source</td><td>60&nbsp;s</td><td>250 tokens</td><td>Per source, so one slow page cannot hold up the rest</td></tr>
         <tr><td>Write up</td><td>180&nbsp;s</td><td>1,200 tokens</td><td>The long step, and the one worth waiting for</td></tr>
         <tr><td>Synthesis pass</td><td>80&nbsp;s whole, <strong>30&nbsp;s to first token</strong></td><td>420 tokens</td><td>The first-token fuse abandons a pass that has stalled instead of waiting out the budget</td></tr>
@@ -168,7 +168,7 @@
     from the overall budget because the two failures look nothing alike: a pass that is slow still
     finishes, while a pass that never starts will sit there consuming the entire allowance and
     produce nothing. And the <strong>iterate step is capped at two extra queries and five new
-    sources</strong> &mdash; the step that makes research deep is exactly the step that, unbounded,
+    sources</strong>: the step that makes research deep is exactly the step that, unbounded,
     makes it interminable.</p>
     <p>There is also a floor, not just ceilings: a synthesis shorter than <strong>350
     characters</strong> is rejected rather than returned. A two-line answer to a research question
@@ -183,12 +183,12 @@
     values, not a description of intent.</div>
 
     <h2>What makes it "deep"</h2>
-    <p>A normal answer is one pass: your question in, a paragraph out. Deep research is a loop — decompose the question, retrieve, read, notice what's missing, retrieve again, then synthesise.</p>
+    <p>A normal answer is one pass: your question in, a paragraph out. Deep research is a loop: decompose the question, retrieve, read, notice what's missing, retrieve again, then synthesise.</p>
     <p>The synthesis is where value is added or destroyed. A summary that drops the citation is worse than no summary, because it launders a claim into something that looks settled. Keeping sources attached is the whole discipline.</p>
 
     <h2>Running one</h2>
     <ol>
-    <li><strong>Ask a real question</strong> — one that genuinely needs several sources.</li>
+    <li><strong>Ask a real question</strong>: one that genuinely needs several sources.</li>
     <li><strong>Let it work.</strong> You'll see it progress through the steps.</li>
     <li><strong>Read the write-up with its sources</strong> and follow the ones that matter.</li>
     </ol>
@@ -198,7 +198,7 @@
     <ul>
     <li><strong>It reads the web, so the web's errors are available to it.</strong> Citations exist so you can catch that.</li>
     <li><strong>Page fetching needs a connection.</strong> The thinking is local; the reading isn't.</li>
-    <li><strong>A local model is not a frontier model.</strong> On a genuinely hard synthesis you should read the sources yourself — the citations make that possible rather than theoretical.</li>
+    <li><strong>A local model is not a frontier model.</strong> On a genuinely hard synthesis you should read the sources yourself, the citations make that possible rather than theoretical.</li>
     <li><strong>It takes minutes.</strong> If it returned instantly it didn't do the work.</li>
     </ul>
 
@@ -207,7 +207,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Can a local AI do deep research?</h3>
-        <p>Yes — planning, retrieval across multiple sources, and a written synthesis with citations. The reasoning happens on your Mac; the page fetches use the network.</p>
+        <p>Yes: planning, retrieval across multiple sources, and a written synthesis with citations. The reasoning happens on your Mac; the page fetches use the network.</p>
       </div>
       <div class="faq-item">
         <h3>Does deep research work offline?</h3>
@@ -219,7 +219,7 @@
       </div>
       <div class="faq-item">
         <h3>How long does it take?</h3>
-        <p>Minutes rather than seconds — it is doing several rounds of retrieval and reading, not one.</p>
+        <p>Minutes rather than seconds: it is doing several rounds of retrieval and reading, not one.</p>
       </div>
     </div>
 
@@ -234,7 +234,7 @@
       Related: <a href="/learn/ai-vs-google-search/">AI vs Google search</a> · <a href="/learn/why-ai-makes-things-up/">Why AI makes things up</a> · <a href="/how-to/run-long-ai-jobs-unattended-mac/">Run long jobs unattended</a>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

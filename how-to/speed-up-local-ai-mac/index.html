@@ -153,7 +153,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Local AI slowness is two problems with two different fixes: time to first token (how long before the answer starts) and tokens per second (how fast it streams once it has started).</li>
-        <li>Fix time to first token first — it's what makes an app feel slow. It's dominated by prefill, so keep the top of your prompt stable so the cached prefix gets reused, start a fresh conversation for a new task, and paste less.</li>
+        <li>Fix time to first token first: it's what makes an app feel slow. It's dominated by prefill, so keep the top of your prompt stable so the cached prefix gets reused, start a fresh conversation for a new task, and paste less.</li>
         <li>Then fix tokens per second by picking a model that fits in free RAM and closing memory hogs. A model that spills to SSD swap collapses to roughly 1-3 tokens per second.</li>
       </ul>
     </div>
@@ -161,21 +161,21 @@
     <p class="lead">Almost every "local AI is too slow" complaint I get is one of two very different problems wearing the same coat. People describe both as slow, but the causes don't overlap and neither do the fixes. Before you buy RAM or download a smaller model, work out which one you actually have.</p>
 
     <h2>The two numbers that matter, and why they're different</h2>
-    <p><strong>TTFT</strong> — time to first token — is how long you stare at nothing after hitting enter. <strong>tok/s</strong> — decode speed — is how fast words appear once the answer has started. A setup can be terrible at one and fine at the other. A model streaming at a comfortable 20 tokens per second still feels broken if you waited 18 seconds to see the first word.</p>
+    <p><strong>TTFT</strong>: time to first token, is how long you stare at nothing after hitting enter. <strong>tok/s</strong>: decode speed, is how fast words appear once the answer has started. A setup can be terrible at one and fine at the other. A model streaming at a comfortable 20 tokens per second still feels broken if you waited 18 seconds to see the first word.</p>
     <p>Watch your own app for one turn and note which half hurt. Long pause, then normal text? Next section. Text crawling out once it starts? Skip to the RAM section.</p>
 
     <h2>Fix time to first token first</h2>
-    <p>TTFT is dominated by <strong>prefill</strong>: the model has to read your whole prompt before it can write anything. And in a chat app, "your prompt" isn't the sentence you just typed — it's the entire conversation, re-fed every turn. That's why turn 20 feels slower than turn 2 even though you typed the same amount. Three levers actually move it:</p>
+    <p>TTFT is dominated by <strong>prefill</strong>: the model has to read your whole prompt before it can write anything. And in a chat app, "your prompt" isn't the sentence you just typed: it's the entire conversation, re-fed every turn. That's why turn 20 feels slower than turn 2 even though you typed the same amount. Three levers actually move it:</p>
     <ul>
-      <li><strong>Keep the stable part of your prompt at the top and unchanged.</strong> Runtimes cache the work already done on a prefix and reuse it. Edit an early message and you invalidate that cache, so the whole thing gets re-read. Put what doesn't change — instructions, the file you're working from — first, and add new material at the bottom.</li>
+      <li><strong>Keep the stable part of your prompt at the top and unchanged.</strong> Runtimes cache the work already done on a prefix and reuse it. Edit an early message and you invalidate that cache, so the whole thing gets re-read. Put what doesn't change (instructions, the file you're working from) first, and add new material at the bottom.</li>
       <li><strong>Start a new conversation for a new task.</strong> Continuing a 60-message thread to ask an unrelated question means re-reading 60 messages of irrelevant context every turn.</li>
       <li><strong>Don't paste 10,000 words you don't need.</strong> Every token in the prompt is prefill work. Paste the function, not the repo.</li>
     </ul>
-    <p>How much is on the table? On Outlier's own engine, fixing prefix reuse took steady-state TTFT from about 18.5 seconds to the 1.4-4.7 second range. On a 6-step agent loop, step 6 went from 66.4 seconds to 16.0 — and stopped climbing with every step. Latency became flat instead of a function of how long you'd been talking. Mechanics here: <a href="https://outlier.host/learn/what-is-prefix-caching/">what prefix caching is</a>.</p>
+    <p>How much is on the table? On Outlier's own engine, fixing prefix reuse took steady-state TTFT from about 18.5 seconds to the 1.4-4.7 second range. On a 6-step agent loop, step 6 went from 66.4 seconds to 16.0, and stopped climbing with every step. Latency became flat instead of a function of how long you'd been talking. Mechanics here: <a href="https://outlier.host/learn/what-is-prefix-caching/">what prefix caching is</a>.</p>
 
     <h2>Then fix tokens per second: make the model fit</h2>
     <p>Decode speed has one dominant cause on a Mac, and it isn't the chip. <strong>If the model exceeds free RAM, macOS swaps to SSD and decode collapses to roughly 1-3 tokens per second</strong>, with the fans coming up to tell you about it. That's not a slope. It's a cliff.</p>
-    <p>So: pick a model that fits, then keep it fitting. Closing the memory hogs is the cheapest win there is — a browser with many tabs, Docker, a VM, a video editor in the background. Any of those can be the difference between fitting and not. If you're not sure what size you can hold, <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">how much RAM you need for local AI</a> goes through it, and <a href="https://outlier.host/how-to/run-ai-on-8gb-mac/">running AI on an 8 GB Mac</a> covers the tight end.</p>
+    <p>So: pick a model that fits, then keep it fitting. Closing the memory hogs is the cheapest win there is: a browser with many tabs, Docker, a VM, a video editor in the background. Any of those can be the difference between fitting and not. If you're not sure what size you can hold, <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">how much RAM you need for local AI</a> goes through it, and <a href="https://outlier.host/how-to/run-ai-on-8gb-mac/">running AI on an 8 GB Mac</a> covers the tight end.</p>
     <p>Then pick the size on purpose: a smaller tier for interactive back-and-forth, the large one for the hard question you're willing to wait on. Here's that trade on my own machines:</p>
 
     <table>
@@ -189,7 +189,7 @@
       </tbody>
     </table>
 
-    <p>Plus at 1.59 tok/s is slow, and I won't pretend otherwise — it's a 397-billion-parameter model streaming experts from disk at around 11 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
+    <p>Plus at 1.59 tok/s is slow, and I won't pretend otherwise: it's a 397-billion-parameter model streaming experts from disk at around 11 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
 
     <h2>Symptom → cause → fix</h2>
     <table>
@@ -213,7 +213,7 @@
     <p>A fanless MacBook Air will throttle on a long sustained generation. There's no fan to move the heat out, so the chip slows itself down. That's physics, not a bug in your setup, and no setting reverses it. Plugged in and on a hard surface instead of a couch cushion helps at the margin; shorter generations help more, because the machine never gets hot enough to care.</p>
     <p>Likewise, a big model on a small machine is still a big model on a small machine. Paged streaming makes it run at all, which is useful, but it doesn't make it quick. Quality and responsiveness at once is a hardware conversation, not a settings one.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates — Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~1.59 tok/s (at ~11 GB peak RSS) on an M1 Ultra — were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
+    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates (Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~1.59 tok/s (at ~11 GB peak RSS) on an M1 Ultra) were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -240,7 +240,7 @@
 
     <div class="related">More: <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM you need for local AI</a> · <a href="https://outlier.host/how-to/run-ai-on-8gb-mac/">Run AI on an 8 GB Mac</a> · <a href="https://outlier.host/learn/what-is-prefix-caching/">What is prefix caching?</a> · <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac, measured</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

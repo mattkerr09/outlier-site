@@ -163,7 +163,7 @@
         <li><strong>If you only want to chat with a local model, use Ollama.</strong> It is free, it is excellent, and you will not miss anything I sell.</li>
         <li>Ollama is a model runner. It pulls weights, serves them, and gets out of the way.</li>
         <li>The line it does not cross is a model that works through your repository on its own, and jobs that finish while you are not watching.</li>
-        <li>That is the only reason to consider paying for Outlier instead. Not privacy &mdash; Ollama already has that.</li>
+        <li>That is the only reason to consider paying for Outlier instead. Not privacy: Ollama already has that.</li>
       </ul>
     </div>
 <div class="pbox" data-pbox="answer">
@@ -173,16 +173,16 @@
 </div>
 
 
-    <p class="lead">I build Outlier, which costs money, and this page argues that a free tool is the right choice for a lot of people. That is not modesty; it is that the alternative &mdash; pretending Ollama has a weakness it does not have &mdash; would make everything else here unbelievable.</p>
+    <p class="lead">I build Outlier, which costs money, and this page argues that a free tool is the right choice for a lot of people. That is not modesty; it is that the alternative, pretending Ollama has a weakness it does not have, would make everything else here unbelievable.</p>
 
     <h2>What Ollama is genuinely great at</h2>
-    <p>Ollama holds 5.0 from 43 reviews on Product Hunt, and the reviews are specific about why (<a href="https://www.producthunt.com/products/ollama/reviews">producthunt.com/products/ollama/reviews</a>, read 2026-09-16). Nitin Hayaran: &ldquo;Ollama is the least-friction way for a user to run a local model on their Mac &mdash; no account, no API key, nothing leaves the machine.&rdquo; Dipankar Sarkar: &ldquo;Ollama is what I reach for when I want a model running locally in under a minute&hellip;The one-line pulls and the OpenAI-compatible endpoint mean I can drop it under existing code with almost no changes.&rdquo; Jacob Swiss: &ldquo;It&rsquo;s the fastest way to generate real LLM traffic on a laptop, and it kept our dev loop tight.&rdquo;</p>
+    <p>Ollama holds 5.0 from 43 reviews on Product Hunt, and the reviews are specific about why (<a href="https://www.producthunt.com/products/ollama/reviews">producthunt.com/products/ollama/reviews</a>, read 2026-09-16). Nitin Hayaran: &ldquo;Ollama is the least-friction way for a user to run a local model on their Mac: no account, no API key, nothing leaves the machine.&rdquo; Dipankar Sarkar: &ldquo;Ollama is what I reach for when I want a model running locally in under a minute&hellip;The one-line pulls and the OpenAI-compatible endpoint mean I can drop it under existing code with almost no changes.&rdquo; Jacob Swiss: &ldquo;It&rsquo;s the fastest way to generate real LLM traffic on a laptop, and it kept our dev loop tight.&rdquo;</p>
     <p>Those describe a tool that has done its job properly. A one-line pull, a local endpoint that speaks a format everything already understands, and nothing to sign up for. There is no version of this page where I tell you that is bad.</p>
     <p>Two arguments I am therefore not going to make. I am not going to argue privacy: Ollama runs on your machine and nothing leaves it, which is the same claim I make, so it is not a difference. And I am not going to argue about the API: a local OpenAI-compatible endpoint is exactly what Ollama gives you for free, and reviewers name it as a reason they stay.</p>
 
     <h2>Where a runner stops and an agent starts</h2>
     <p>A model runner answers a question you ask. An agent decides what to look at next.</p>
-    <p>That sounds like a small difference and it is not. Ask a runner &ldquo;why does this test fail&rdquo; and you have to bring it the test, the code under test, the stack trace and whatever config matters &mdash; you are the retrieval system. Ask an agent the same thing and it reads the failing test off disk, follows the import, opens the module, runs the test again after a change, and comes back when it has an answer or when it needs your permission for something. The work you were doing &mdash; deciding what to paste next &mdash; is the work that moved.</p>
+    <p>That sounds like a small difference and it is not. Ask a runner &ldquo;why does this test fail&rdquo; and you have to bring it the test, the code under test, the stack trace and whatever config matters: you are the retrieval system. Ask an agent the same thing and it reads the failing test off disk, follows the import, opens the module, runs the test again after a change, and comes back when it has an answer or when it needs your permission for something. The work you were doing, deciding what to paste next, is the work that moved.</p>
     <p>The second difference is time. A runner is a request-response loop, so you are present for every step. An agent can be handed a task that takes twenty minutes and left alone, which is only useful if it can run commands, read results, and stop safely when it is unsure. That is an app-shaped problem rather than a model-shaped one, and it is where the effort in Outlier has gone.</p>
 
     <h2>An honest decision list</h2>
@@ -196,7 +196,7 @@
     <p>Put plainly, because it is the whole point of this page: if you only want to chat with a local model, use Ollama. You can also do both, and many people should: Ollama for quick questions and for anything you are wiring into your own code, an agent for the long jobs. They are not competing for the same hour of your day.</p>
 
     <h2>What using Ollama for agentic work actually costs you</h2>
-    <p>It is possible to assemble an agent on top of Ollama &mdash; an editor extension, a tool layer, an approval flow, a model tuned for tool calls. People do it and it works. What it costs is the assembly: choosing a model that reliably emits tool calls, keeping the extension and the runner in step, and owning the failure when a long run stops halfway with no clean way to resume. If you enjoy that, it is a genuinely capable stack and it is free.</p>
+    <p>It is possible to assemble an agent on top of Ollama: an editor extension, a tool layer, an approval flow, a model tuned for tool calls. People do it and it works. What it costs is the assembly: choosing a model that reliably emits tool calls, keeping the extension and the runner in step, and owning the failure when a long run stops halfway with no clean way to resume. If you enjoy that, it is a genuinely capable stack and it is free.</p>
     <p>Outlier&rsquo;s trade is the opposite one: the models are chosen and shipped, the agent loop is the product rather than an add-on, and it costs <a href="https://outlier.host/#pricing">$249 once</a>. Mac-only, Apple Silicon, which rules it out for a lot of people entirely. If it rules you out, Ollama is still there and still free.</p>
 
     <h2>Questions</h2>

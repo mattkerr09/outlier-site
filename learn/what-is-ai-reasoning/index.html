@@ -152,20 +152,20 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>AI reasoning means the model generates an intermediate chain of thought — working — before it commits to a final answer. Models that do this are called reasoning models or thinking models.</li>
+        <li>AI reasoning means the model generates an intermediate chain of thought, working, before it commits to a final answer. Models that do this are called reasoning models or thinking models.</li>
         <li>Mechanically it's still next-token prediction. The model has been trained or prompted to spend tokens working the problem first, which gives it more compute per question.</li>
         <li>Those thinking tokens are real tokens: they cost time and cloud money, or wall-clock and battery on your own machine. Thinking helps on multi-step problems and wastes tokens on simple ones.</li>
       </ul>
     </div>
 
-    <p class="lead">"Reasoning" is the word the industry landed on for a fairly specific behavior: the model writes out its working before it answers. Sometimes you see that working, sometimes it's hidden behind a spinner. Either way it's the same trick, and it's a genuinely useful one — as long as you know what it costs and when it doesn't pay.</p>
+    <p class="lead">"Reasoning" is the word the industry landed on for a fairly specific behavior: the model writes out its working before it answers. Sometimes you see that working, sometimes it's hidden behind a spinner. Either way it's the same trick, and it's a genuinely useful one. As long as you know what it costs and when it doesn't pay.</p>
 
     <h2>What a reasoning model actually does</h2>
-    <p>A reasoning model — you'll also see "thinking model," they mean the same thing — produces a chain of thought before the final answer. Ask it a word problem and instead of emitting an answer immediately, it emits a stretch of text where it restates the problem, tries an approach, notices a mistake, backs up, and only then writes the answer you asked for.</p>
+    <p>A reasoning model (you'll also see "thinking model," they mean the same thing) produces a chain of thought before the final answer. Ask it a word problem and instead of emitting an answer immediately, it emits a stretch of text where it restates the problem, tries an approach, notices a mistake, backs up, and only then writes the answer you asked for.</p>
     <p>The examples you've probably met: OpenAI's o-series; DeepSeek-R1, a 671-billion-parameter mixture-of-experts model released with open weights; and the Qwen models, which ship a thinking mode you can switch on and off. That last one matters, because a toggle turns "is thinking better?" from an opinion into something you can measure.</p>
 
     <h2>Under the hood, it's still next-token prediction</h2>
-    <p>Here's the part the marketing tends to skip. There is no separate reasoning module bolted onto these models. It's the same architecture doing the same thing it always did — predicting the next token, one at a time — described in <a href="https://outlier.host/learn/what-is-a-large-language-model/">the large language model explainer</a>.</p>
+    <p>Here's the part the marketing tends to skip. There is no separate reasoning module bolted onto these models. It's the same architecture doing the same thing it always did (predicting the next token, one at a time) described in <a href="https://outlier.host/learn/what-is-a-large-language-model/">the large language model explainer</a>.</p>
     <p>What changed is training and prompting. The model has been taught to spend tokens working the problem before it commits to an answer. And because every token it generates is another forward pass through the network, a long stretch of working means substantially more computation spent on that one question.</p>
     <p>That's the whole mechanism: <strong>more tokens equals more compute per question.</strong> It isn't a new kind of cognition. Which is also why it isn't free, and why it isn't automatically better.</p>
 
@@ -195,7 +195,7 @@
     <p>What it is: a measured counterexample to "thinking is always better." That claim gets repeated as though it were settled, and on my hardware, on a task purpose-built for chain of thought, it was false. If you're choosing a mode for real work, measure your model on your task. Nobody's benchmark is a substitute for that.</p>
 
     <h2>Where thinking earns its tokens</h2>
-    <p>The pattern I keep seeing is that chain of thought pays when the problem has dependent steps — where getting step four right requires having written down step three. It wastes tokens when the answer was already in the model and just needed to come out.</p>
+    <p>The pattern I keep seeing is that chain of thought pays when the problem has dependent steps, where getting step four right requires having written down step three. It wastes tokens when the answer was already in the model and just needed to come out.</p>
 
     <table>
       <thead>
@@ -206,7 +206,7 @@
         <tr><td>Code with interacting constraints</td><td>Usually helps</td><td>The model can check one requirement against another before writing</td></tr>
         <tr><td>Planning</td><td>Usually helps</td><td>Ordering and dependencies are the actual work</td></tr>
         <tr><td>Recall / factual lookup</td><td>Wastes tokens</td><td>The answer is either in the weights or it isn't; deliberation adds nothing</td></tr>
-        <tr><td>Summarization</td><td>Wastes tokens</td><td>The source text is right there — no derivation needed</td></tr>
+        <tr><td>Summarization</td><td>Wastes tokens</td><td>The source text is right there: no derivation needed</td></tr>
         <tr><td>Formatting and rewriting</td><td>Wastes tokens</td><td>A transformation, not a problem</td></tr>
         <tr><td>Short factual answers</td><td>Wastes tokens</td><td>You wait longer for the same sentence</td></tr>
       </tbody>
@@ -215,17 +215,17 @@
     <p>"Usually" is doing real work in that table. My Nano measurement was a multi-step math task in the first row, and thinking still lost. The category tells you where to look; it doesn't tell you the answer.</p>
 
     <h2>The practical rule: match the mode to the task</h2>
-    <p>Leaving thinking on by default is the mistake I see most. It feels safe — more deliberation, surely — but it means you pay latency and battery on every message, including the dozens of trivial ones, and on at least one real pairing it also cost accuracy.</p>
-    <p>So: switch it on when you hand the model something with several dependent steps, and leave it off for everything else. If your tool exposes a toggle, that toggle is worth learning. And if you can run the same 20 or 30 prompts both ways on the work you actually do, do that once. It takes an afternoon and it settles the question for your setup permanently. A related idea — having the model verify its own output instead of just deliberating longer — is covered in <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">how an AI agent checks its own work</a>.</p>
+    <p>Leaving thinking on by default is the mistake I see most. It feels safe (more deliberation, surely) but it means you pay latency and battery on every message, including the dozens of trivial ones, and on at least one real pairing it also cost accuracy.</p>
+    <p>So: switch it on when you hand the model something with several dependent steps, and leave it off for everything else. If your tool exposes a toggle, that toggle is worth learning. And if you can run the same 20 or 30 prompts both ways on the work you actually do, do that once. It takes an afternoon and it settles the question for your setup permanently. A related idea, having the model verify its own output instead of just deliberating longer, is covered in <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">how an AI agent checks its own work</a>.</p>
     <p>Running locally makes this easier, mostly because the feedback is immediate and nothing is metered. You can run a benchmark thirty times over without watching a bill climb. That's the argument in <a href="https://outlier.host/learn/what-is-local-ai/">what local AI is</a>, and testing your own model is a good example of why it matters.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> The thinking ON/OFF numbers are my own measurement, not a citation: Outlier's Nano tier, 30 GSM8K math problems, greedy decoding, thinking mode toggled and everything else held constant. Thinking OFF scored 80%, thinking ON scored 63.3%, and OFF was 32% faster. One model, one benchmark, one decoding setting — reported because it's a counterexample, not because it generalizes. The model descriptions (o-series, DeepSeek-R1 at 671B MoE with open weights, Qwen thinking mode) are public facts about those releases.</div>
+    <div class="receipts"><strong>Receipts:</strong> The thinking ON/OFF numbers are my own measurement, not a citation: Outlier's Nano tier, 30 GSM8K math problems, greedy decoding, thinking mode toggled and everything else held constant. Thinking OFF scored 80%, thinking ON scored 63.3%, and OFF was 32% faster. One model, one benchmark, one decoding setting: reported because it's a counterexample, not because it generalizes. The model descriptions (o-series, DeepSeek-R1 at 671B MoE with open weights, Qwen thinking mode) are public facts about those releases.</div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>Is a reasoning model always better than a normal one?</h3>
-        <p>No. On my own measurement — Outlier Nano, 30 GSM8K math problems, greedy decoding — thinking mode scored 63.3% against 80% with thinking off, and thinking off was 32% faster. That is one model on one benchmark, so don't read it as a law. Read it as proof that the question has to be measured rather than assumed.</p>
+        <p>No. On my own measurement (Outlier Nano, 30 GSM8K math problems, greedy decoding) thinking mode scored 63.3% against 80% with thinking off, and thinking off was 32% faster. That is one model on one benchmark, so don't read it as a law. Read it as proof that the question has to be measured rather than assumed.</p>
       </div>
       <div class="faq-item">
         <h3>Do thinking tokens cost me anything?</h3>
@@ -246,7 +246,7 @@
 
     <div class="related">More: <a href="https://outlier.host/learn/what-is-a-large-language-model/">What is a large language model?</a> · <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/data/local-ai-math-word-problems-mac/">Local AI math word problems, measured</a> · <a href="https://outlier.host/learn/">All articles</a></div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 <section class="subscribe-strip">

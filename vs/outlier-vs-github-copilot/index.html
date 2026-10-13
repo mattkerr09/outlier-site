@@ -143,40 +143,40 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>GitHub Copilot lives in six IDEs, a terminal CLI, a desktop app and GitHub.com, and every suggestion is computed on remote infrastructure run by GitHub, OpenAI, Anthropic, Google or AWS — your source code leaves the machine. Outlier is a standalone Mac app whose 27B coding model runs entirely on your own Apple Silicon: no caps, works with Wi-Fi off. The free tiers, Nano and Lite, need no account; Core 27B is part of Pro. Copilot has the higher ceiling and deeper repository integration; Outlier uploads nothing.</p>
+      <p>GitHub Copilot lives in six IDEs, a terminal CLI, a desktop app and GitHub.com, and every suggestion is computed on remote infrastructure run by GitHub, OpenAI, Anthropic, Google or AWS, your source code leaves the machine. Outlier is a standalone Mac app whose 27B coding model runs entirely on your own Apple Silicon: no caps, works with Wi-Fi off. The free tiers, Nano and Lite, need no account; Core 27B is part of Pro. Copilot has the higher ceiling and deeper repository integration; Outlier uploads nothing.</p>
     </div>
 
     <p class="lead">I built Outlier, so treat this as a comparison written by an interested party. Every claim about Copilot comes from GitHub’s own docs, cited at the bottom, and I’ve been blunt about where Copilot is the better tool. Copilot is a cloud service that reaches into your editor; Outlier is a local app that reaches into nothing.</p>
 
     <h2>Copilot is everywhere; Outlier is one window</h2>
-    <p>Copilot’s surface area is the part no local Mac app matches. GitHub’s feature matrix lists six editors — VS Code, Visual Studio, JetBrains, Eclipse, Xcode, NeoVim — with uneven coverage: VS Code and Visual Studio get completions, chat, agent mode and next edit suggestions, while NeoVim gets code completion only, no chat and no agent mode. Beyond editors there’s a terminal CLI, a native desktop app for macOS, Linux and Windows, plus GitHub.com, GitHub Mobile and Windows Terminal — one subscription.</p>
+    <p>Copilot’s surface area is the part no local Mac app matches. GitHub’s feature matrix lists six editors (VS Code, Visual Studio, JetBrains, Eclipse, Xcode, NeoVim) with uneven coverage: VS Code and Visual Studio get completions, chat, agent mode and next edit suggestions, while NeoVim gets code completion only, no chat and no agent mode. Beyond editors there’s a terminal CLI, a native desktop app for macOS, Linux and Windows, plus GitHub.com, GitHub Mobile and Windows Terminal, one subscription.</p>
 
-    <p>Outlier is one app: native macOS, Apple Silicon, macOS 26 or later. No Windows, no Linux, no mobile, no editor extension. You don’t get ghost text as you type, and you move code between the app and your editor yourself — a real ergonomic cost. What you get back is one process, no network.</p>
+    <p>Outlier is one app: native macOS, Apple Silicon, macOS 26 or later. No Windows, no Linux, no mobile, no editor extension. You don’t get ghost text as you type, and you move code between the app and your editor yourself, a real ergonomic cost. What you get back is one process, no network.</p>
 
     <h2>Which model is doing the work</h2>
-    <p>Copilot routes to other companies’ models: OpenAI’s GPT-5 family, Anthropic’s Claude Haiku 4.5 through Opus 4.8, Google’s Gemini 3.x, GitHub’s Raptor mini, Microsoft’s MAI-Code-1-Flash, Moonshot’s Kimi K2.7 Code — a lot of frontier capability behind one login. You can’t download those weights, pin a version, or archive one, and the free tier offers no model choice at all: auto selection only.</p>
+    <p>Copilot routes to other companies’ models: OpenAI’s GPT-5 family, Anthropic’s Claude Haiku 4.5 through Opus 4.8, Google’s Gemini 3.x, GitHub’s Raptor mini, Microsoft’s MAI-Code-1-Flash, Moonshot’s Kimi K2.7 Code, a lot of frontier capability behind one login. You can’t download those weights, pin a version, or archive one, and the free tier offers no model choice at all: auto selection only.</p>
 
-    <p>Outlier ships six tiers you download once, from Nano 4B up to Plus 397B-a17b, including <strong>Core 27B</strong> (15.13 GB, 24 GB RAM). All six are Apache 2.0, and the weights are published openly — what you’ve downloaded can’t be deprecated out from under you.</p>
+    <p>Outlier ships six tiers you download once, from Nano 4B up to Plus 397B-a17b, including <strong>Core 27B</strong> (15.13 GB, 24 GB RAM). All six are Apache 2.0, and the weights are published openly. What you’ve downloaded can’t be deprecated out from under you.</p>
 
     <h2>What Copilot sends to GitHub, and what it trains on</h2>
-    <p>With Copilot, yes, and GitHub documents where: OpenAI models on OpenAI’s and GitHub’s Azure infrastructure, Anthropic models on AWS, Anthropic and Google Cloud, Google’s on Google Cloud. GitHub holds zero-data-retention agreements with OpenAI and Anthropic, and says Google commits not to train on GitHub data — better than a default API relationship.</p>
+    <p>With Copilot, yes, and GitHub documents where: OpenAI models on OpenAI’s and GitHub’s Azure infrastructure, Anthropic models on AWS, Anthropic and Google Cloud, Google’s on Google Cloud. GitHub holds zero-data-retention agreements with OpenAI and Anthropic, and says Google commits not to train on GitHub data: better than a default API relationship.</p>
 
-    <p>The training policy needs a careful read. Since April 24, 2026, on Free, Pro, Pro+ and Max, GitHub may use your inputs, outputs, code snippets and surrounding context — code around the cursor, file names, repository structure — to train its models, on by default. The opt-out is real but manual. Business and Enterprise data is excluded by contract, so the strongest protection goes to buyers with procurement, not the individual on a $100 Max plan.</p>
+    <p>The training policy needs a careful read. Since April 24, 2026, on Free, Pro, Pro+ and Max, GitHub may use your inputs, outputs, code snippets and surrounding context (code around the cursor, file names, repository structure) to train its models, on by default. The opt-out is real but manual. Business and Enterprise data is excluded by contract, so the strongest protection goes to buyers with procurement, not the individual on a $100 Max plan.</p>
 
     <p>VS Code does support local models through Ollama or LM Studio for chat, which its docs say need no account, no plan and no internet. But those same docs state you can’t use a local model for inline suggestions, and semantic search still needs the cloud. With Outlier the question doesn’t arise.</p>
 
     <h2>Cost, and how predictable it is</h2>
-    <p>Copilot Free is $0 for up to 2,000 completions and 50 chat requests a month. Pro is $10/user/month with $15 in credits, Pro+ $39 with $70, Max $100 with $200. One credit is $0.01, billing is per model, and published input prices run $0.20 to $10.00 per million tokens. Paid plans include unlimited completions, which don’t consume credits. The $10 tier also lists <strong>&ldquo;Access to 3rd party agents (Claude Code and Codex)&rdquo;</strong> &mdash; so the cheapest paid Copilot seat brokers the two agents it is most often compared against, which is worth knowing before treating a cloud coding agent as a premium purchase (<a href="https://github.com/features/copilot/plans" rel="nofollow">github.com/features/copilot/plans</a>, read 2026-09-08).</p>
+    <p>Copilot Free is $0 for up to 2,000 completions and 50 chat requests a month. Pro is $10/user/month with $15 in credits, Pro+ $39 with $70, Max $100 with $200. One credit is $0.01, billing is per model, and published input prices run $0.20 to $10.00 per million tokens. Paid plans include unlimited completions, which don’t consume credits. The $10 tier also lists <strong>&ldquo;Access to 3rd party agents (Claude Code and Codex)&rdquo;</strong>: so the cheapest paid Copilot seat brokers the two agents it is most often compared against, which is worth knowing before treating a cloud coding agent as a premium purchase (<a href="https://github.com/features/copilot/plans" rel="nofollow">github.com/features/copilot/plans</a>, read 2026-09-08).</p>
 
-    <p>Copilot Pro is $10 a month and Outlier Pro is a one-time $249, so a little over two years of Copilot costs what Outlier costs once — which is not a reason to choose either one. What changed is predictability: on June 1, 2026 GitHub replaced request-based billing with usage-based billing, so spend now tracks which model you pick. Annual billing is winding down too — GitHub’s docs say an account is automatically downgraded to Copilot Free when its annual plan ends. Business is $19 and Enterprise $39 per granted seat per month — GitHub’s marketing page routes you to a sales contact, but <a href="https://docs.github.com/en/copilot/get-started/plans">the docs list both</a>.</p>
+    <p>Copilot Pro is $10 a month and Outlier Pro is a one-time $249, so a little over two years of Copilot costs what Outlier costs once, which is not a reason to choose either one. What changed is predictability: on June 1, 2026 GitHub replaced request-based billing with usage-based billing, so spend now tracks which model you pick. Annual billing is winding down too. GitHub’s docs say an account is automatically downgraded to Copilot Free when its annual plan ends. Business is $19 and Enterprise $39 per granted seat per month: GitHub’s marketing page routes you to a sales contact, but <a href="https://docs.github.com/en/copilot/get-started/plans">the docs list both</a>.</p>
 
-    <p>Outlier’s free tier is Nano and Lite, no account, no caps. Pro covers all six tiers, Founders Lifetime at $249. That number doesn’t move with usage — heavy days cost electricity, not credits.</p>
+    <p>Outlier’s free tier is Nano and Lite, no account, no caps. Pro covers all six tiers, Founders Lifetime at $249. That number doesn’t move with usage: heavy days cost electricity, not credits.</p>
 
     <h2>Agentic ability and repo-scale context</h2>
     <p>This is Copilot’s strongest ground. Agent mode runs in the major editors, cloud agents run on GitHub’s infrastructure and open pull requests, and the desktop app runs several isolated sessions at once, each with its own git worktree and branch, so parallel agents don’t collide. Cloud sandboxes, in public preview, keep long runs off your battery.</p>
 
     <p><em>Corrected 2026-09-29: an earlier version said 9 of 9; a stricter recount of the same test found 7 of the 9 apps still running at the end.</em></p>
-    <p>Now my numbers, unflattering part first. Core 27B scores <strong>0.951 on HumanEval</strong>. On a blind slice of SWE-bench Verified, the local 27B resolved <strong>18 of 40 issues, about 45%</strong> — measured in my own harness, not a leaderboard submission, and below what the strongest cloud coding agents report. In my own test Outlier’s agent built a working app 7 of 9 times, using the default model for 8, 16 and 24 GB+ Macs, and I published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself. Strong on well-specified work, behind on long autonomous repo work, and there’s no GitHub integration at all.</p>
+    <p>Now my numbers, unflattering part first. Core 27B scores <strong>0.951 on HumanEval</strong>. On a blind slice of SWE-bench Verified, the local 27B resolved <strong>18 of 40 issues, about 45%</strong>: measured in my own harness, not a leaderboard submission, and below what the strongest cloud coding agents report. In my own test Outlier’s agent built a working app 7 of 9 times, using the default model for 8, 16 and 24 GB+ Macs, and I published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself. Strong on well-specified work, behind on long autonomous repo work, and there’s no GitHub integration at all.</p>
 
     <h2>Copilot and Outlier, line by line</h2>
     <table>
@@ -196,8 +196,8 @@
         </tr>
         <tr>
           <td><strong>Code leaves machine</strong></td>
-          <td>Yes — Azure, AWS, Google Cloud, OpenAI</td>
-          <td>No — on-device, works offline</td>
+          <td>Yes: Azure, AWS, Google Cloud, OpenAI</td>
+          <td>No: on-device, works offline</td>
         </tr>
         <tr>
           <td><strong>Trained on by default</strong></td>
@@ -232,26 +232,26 @@
       <li><strong>Raw capability ceiling.</strong> The largest models Copilot serves are far beyond anything that fits in 64 GB of unified memory. On hard reasoning that’s a durable advantage.</li>
       <li><strong>It’s in your editor.</strong> Inline completions while you type are a different workflow from switching to an app. If that’s how you work, nothing local replaces it today.</li>
       <li><strong>Multi-vendor access on one bill.</strong> Five vendors’ models, no separate accounts or API keys.</li>
-      <li><strong>The GitHub side.</strong> Pull requests, issues, automated review, agents that open PRs for you. A local app has no equivalent — I’m not going to build a code host.</li>
+      <li><strong>The GitHub side.</strong> Pull requests, issues, automated review, agents that open PRs for you. A local app has no equivalent: I’m not going to build a code host.</li>
       <li><strong>Cloud runs don’t cost you hardware.</strong> A long agent session in a GitHub-hosted sandbox doesn’t heat your laptop or eat your RAM. On a MacBook Air, that matters.</li>
       <li><strong>Governance, and a free tier that isn’t a demo.</strong> Content exclusion, org policy, audit logs, a Data Protection Agreement, a duplication filter for public-code matches of 65 lexemes or more, and 2,000 completions a month at $0.</li>
       <li><strong>Auditable in part.</strong> Copilot for Xcode is published under MIT.</li>
     </ul>
-    <p>GitHub documents the limits too: Copilot Chat may produce code that looks valid but isn’t, and quality drops on obscure languages. The headline 55%-faster figure and the claim that 60–75% of developers felt more fulfilled and less frustrated are GitHub’s own research, not independent studies — and the second is a share of survey respondents, not a size of improvement.</p>
+    <p>GitHub documents the limits too: Copilot Chat may produce code that looks valid but isn’t, and quality drops on obscure languages. The headline 55%-faster figure and the claim that 60–75% of developers felt more fulfilled and less frustrated are GitHub’s own research, not independent studies, and the second is a share of survey respondents, not a size of improvement.</p>
 
     <h2>Which one fits your workflow</h2>
     <p><strong>Pick GitHub Copilot if</strong> you want completions in your editor, you live inside GitHub, you need a frontier model on hard problems, you’re on Windows or Linux, or you want agents opening pull requests while you do something else. Business and Enterprise also get the training exclusion in writing.</p>
 
-    <p><strong>Pick Outlier if</strong> your code can’t leave the machine — client work under NDA, regulated codebases, security research. Also if you want a flat bill instead of metered credits, or you work offline.</p>
+    <p><strong>Pick Outlier if</strong> your code can’t leave the machine: client work under NDA, regulated codebases, security research. Also if you want a flat bill instead of metered credits, or you work offline.</p>
 
-    <p><strong>Use both</strong>, which is what I do: Outlier for the sensitive and the routine, Copilot for what you’re stuck on. There’s no integration between them — one is an app, the other is an editor extension, and you move the code across yourself.</p>
+    <p><strong>Use both</strong>, which is what I do: Outlier for the sensitive and the routine, Copilot for what you’re stuck on. There’s no integration between them: one is an app, the other is an editor extension, and you move the code across yourself.</p>
 
     <div class="receipts">
-      <strong>Sources:</strong> plans and credits from <a href="https://github.com/features/copilot/plans">github.com/features/copilot/plans</a> and <a href="https://docs.github.com/en/copilot/get-started/plans">GitHub Docs’ plan comparison</a>, which is where the $19 Business and $39 Enterprise seat prices are published; the 2026-06-01 billing change from “What changed with Copilot billing”; surfaces from the Copilot feature matrix; hosting, retention terms and the 2026-04-24 training policy from the model-hosting and Copilot-policy docs; local-model limits from <a href="https://code.visualstudio.com/docs/copilot/customization/language-models">code.visualstudio.com</a>. <strong>Competitor pricing and data policies change often — verify at GitHub before deciding.</strong> Outlier figures measured on M1 Ultra; HumanEval 0.951 and the 18/40 SWE-bench Verified slice ran in my own harness, not a leaderboard. Pricing as of 2026-07-23.
+      <strong>Sources:</strong> plans and credits from <a href="https://github.com/features/copilot/plans">github.com/features/copilot/plans</a> and <a href="https://docs.github.com/en/copilot/get-started/plans">GitHub Docs’ plan comparison</a>, which is where the $19 Business and $39 Enterprise seat prices are published; the 2026-06-01 billing change from “What changed with Copilot billing”; surfaces from the Copilot feature matrix; hosting, retention terms and the 2026-04-24 training policy from the model-hosting and Copilot-policy docs; local-model limits from <a href="https://code.visualstudio.com/docs/copilot/customization/language-models">code.visualstudio.com</a>. <strong>Competitor pricing and data policies change often: verify at GitHub before deciding.</strong> Outlier figures measured on M1 Ultra; HumanEval 0.951 and the 18/40 SWE-bench Verified slice ran in my own harness, not a leaderboard. Pricing as of 2026-07-23.
     </div>
 
     <div class="cta">
-      <h3>Try Outlier free — no account needed</h3>
+      <h3>Try Outlier free: no account needed</h3>
       <p>Nano and Lite are free forever, no login, no caps. Pro adds Core 27B and three more tiers.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-outlier-vs-github-copilot&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.921/Outlier-1.11.921-arm64.dmg" rel="nofollow">Download free (290 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-outlier-vs-github-copilot-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
@@ -261,7 +261,7 @@
       <p>Related: <a href="https://outlier.host/vs/">All Outlier comparisons</a> &nbsp;·&nbsp; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">Outlier vs Claude: 54-prompt benchmark</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/ai-privacy-policies-explained/">AI privacy policies, explained</a></p>
     </div>
 
-    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a> &mdash; video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a> &mdash; site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a> &mdash; the studio behind all three.</div>
+    <div class="related">From the same builder: <a href="https://crispvideo.app/">Crisp</a>: video restore and edit, offline, $129 &middot; <a href="https://docketseo.app/">Docket</a>: site audit that runs on your Mac, $349 &middot; <a href="https://builtbykerr.com/">Built by Kerr</a>: the studio behind all three.</div>
   </div>
 </article>
 
