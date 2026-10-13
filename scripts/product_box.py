@@ -64,9 +64,9 @@ TARGETS_END_ONLY = ["developers/index.html"]
 #: /vs/mac-mini-vs-mac-studio-local-ai/ is where /run/local-ai-m1-m2-m3-m4-mac-studio/ (17
 #: visitors) redirects. The CEO, 09-29, said to keep that redirect and let the target carry the box.
 TARGETS_ANSWER_ONLY = ["vs/mac-mini-vs-mac-studio-local-ai/index.html"]
-#: Never before 2026-10-13 (title test).
-ARMS = ("vs/mlx-vs-llama-cpp/", "vs/mac-vs-nvidia-gpu-local-ai/",
-        "vs/apple-intelligence-vs-local-ai/", "vs/local-ai-vs-claude-code/")
+#: The four title-test arms were skipped until the test's read; it was read 2026-10-13 (not falsified, titles kept) and
+#: the pages got the standard box (11d6648ea). They are ordinary pages now. Put a NEW registered arm here.
+ARMS = ()
 
 STYLE = """<style data-pbox-style>
 .pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
