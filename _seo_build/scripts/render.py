@@ -34,6 +34,18 @@ import product_box  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
+
+# 2026-10-13 (Bing): pages that stay live but are not indexed. Each near-duplicate group of the /seo/run and /seo/vs
+# matrix keeps ONE indexable page (5-word-shingle Jaccard >= 0.5; scripts/near_dup_gate.py). The list and the reason
+# are in seo/_data/noindex.json; a listed page gets <meta name="robots" content="noindex, follow"> and no sitemap entry.
+def _load_noindex() -> dict:
+    try:
+        return json.loads((DATA / "noindex.json").read_text()).get("pages", {})
+    except FileNotFoundError:
+        return {}
+
+
+NOINDEX = _load_noindex()
 TPL_DIR = ROOT / "_seo_build" / "templates"
 SITE_URL = "https://outlier.host"
 # v1.11.798: was a hardcoded "1.11.790" while the site shipped 1.11.798, so a
@@ -184,6 +196,7 @@ def write_page(category: str, slug: str, title: str, description: str,
             title=title,
             description=description,
             canonical=canonical,
+            noindex=f"seo/{category}/{slug}/" in NOINDEX,
             category=category,
             category_label=CATEGORY_LABEL[category],
             crumb_leaf=h1,
@@ -1663,6 +1676,8 @@ def write_sitemap(pages: list[dict]) -> Path:
 
     parts.append("  <!-- renderer-managed /seo/ leaf pages + /developers/ -->")
     for u in managed_urls:
+        if u.replace(SITE_URL + "/", "", 1) in NOINDEX:
+            continue                     # noindexed: live, but not announced (seo/_data/noindex.json)
         parts.append(
             "  <url>\n"
             f"    <loc>{u}</loc>\n"

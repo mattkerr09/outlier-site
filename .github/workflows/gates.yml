@@ -44,6 +44,9 @@ jobs:
           # 10-13 (Bing): no page outside about/ links to our other domains. Sitewide blocks between
           # commonly owned sites took outlier.host's Bing impressions from 45-89 a day to 0 on 09-15.
           python3 scripts/sister_link_gate.py .
+          # 10-13 (Bing): no two indexable pages share half their 5-word shingles (39 pairs in the /seo/
+          # matrix that day; one indexable page per group now, the rest noindex via seo/_data/noindex.json).
+          python3 scripts/near_dup_gate.py .
           python3 scripts/no_release_narration_gate.py --self-check
           python3 scripts/no_release_narration_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
