@@ -258,7 +258,7 @@
       .then(function(r){return r.json().catch(function(){return {};})
         .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
       .then(function(res){
-        if(res.ok){ n.textContent="You're on the list. We'll write when a model is worth your disk."; f.style.display='none'; }
+        if(res.ok){ n.textContent="You're on the list. I'll write when a model is worth your disk."; f.style.display='none'; }
         else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
       })
       .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
