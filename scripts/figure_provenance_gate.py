@@ -252,6 +252,101 @@ def check_plus_decode_sitewide(root):
     return bad
 
 
+#: A figure a later measurement replaced. Any page still stating it next to a speed unit is stale, whichever tier
+#: the prose names (a lineup table can put it far from the name). Filled when models.csv takes a new measurement.
+RETIRED_TOKS: dict[str, list[str]] = {}
+
+_SITE_TIER = {"nano": "nano", "lite": "lite", "quick": "quick", "core": "compact", "code": "compact",
+              "compact": "compact", "vision": "vision38"}
+_RIVAL = re.compile(r"Ollama|LM Studio|llama\.cpp|Claude|ChatGPT|GPT-|Gemini|DeepSeek|Llama \d|Qwen ?2\.5|Mistral|"
+                    r"Flash-MoE|Jan\b|Msty|cloud", re.I)
+
+
+def _page_text(raw):
+    import html as _h
+    metas = " ".join(mm.group(1) for mm in re.finditer(r'<meta[^>]+content="([^"]*)"', raw, re.I))
+    raw = re.sub(r"(?s)<script.*?</script>|<style.*?</style>", " ", raw)
+    return _h.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw) + " " + metas))
+
+
+def check_tier_decode_sitewide(root):
+    """Every page stating Nano/Lite/Quick/Core/Vision 3.8 decode on an M1 Ultra must state models.csv's figure.
+
+    Why (2026-10-14): the home-page table matched models.csv, so this gate was green, while 130-odd sentences on
+    80-plus other pages restated those figures by hand. When a release re-measures a tier, a check of one table
+    leaves every hand-copied sentence behind. Same rules as the Plus check: attribution by the NEAREST tier name,
+    another Mac or a rival named between the name and the number is a different claim, "estimated"/"scaled" is
+    derived, "~"/"about" allows 10%.
+    """
+    root = Path(root)
+    mp = root / "seo" / "_data" / "models.csv"
+    want = {r["tier_id"]: float(r["m1_ultra_toks"]) for r in csv.DictReader(mp.open())
+            if (r.get("m1_ultra_toks") or "").strip()}
+    TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Compact|Vision|Plus|397B)\b", re.I)
+    OTHER_SILICON = re.compile(r"\bM[234]\b|\bM1 (Pro|Max)\b|\bA1[0-9]\b|iPhone|iPad", re.I)
+    UNIT = r"(?<![\d.])(\d+\.\d+)\s*(?:tok/s|tokens?[ /](?:per[ ])?sec(?:ond)?s?\b|tok/sec\b)"
+    bad, scanned, checked = [], 0, 0
+    for f in sorted(root.rglob("*.html")):
+        rel = f.relative_to(root).as_posix()
+        if "_seo_build" in rel or ".pre" in f.name:
+            continue
+        scanned += 1
+        txt = _page_text(f.read_text(errors="replace"))
+        for m in re.finditer(UNIT, txt):
+            fig = m.group(1)
+            dated = re.search(r"Corrected \d{4}-\d{2}-\d{2}\b[^.]*\bsaid\b[^.]*$", txt[max(0, m.start() - 160): m.start()])
+            for tier, olds in RETIRED_TOKS.items():
+                if fig in olds and not dated:
+                    bad.append(f"{rel}: {fig} tok/s is the retired {tier} figure (models.csv now {want.get(tier)})")
+            before = txt[max(0, m.start() - 260): m.start()]
+            after = txt[m.end(): m.end() + 48]
+            names = list(TIER.finditer(before))
+            # the tier named right AFTER the figure ("~20.7 tok/s (Core)", "71.7 tok/s for a 4B model") is its owner
+            # (a "Lite 9B: 53.4" that follows in a list is the NEXT item, so only a parenthesis or "for" binds)
+            post = (re.match(r"\s*\((Nano|Lite|Quick|Core|Code|Compact|Vision|Plus)\b", after, re.I) or
+                    re.match(r"[^.;]{0,6}?\bfor (?:the )?(Nano|Lite|Quick|Core|Code|Compact|Vision|Plus)\b", after, re.I) or
+                    re.match(r"\s*(Nano|Lite|Quick|Core|Code|Compact|Vision|Plus)\b(?:\s+\d+B)?\s*[,;)]", after, re.I))
+            size = re.match(r"[^.;]{0,16}?\bfor (?:a|the) (4B|9B|26B|27B)\b", after)
+            if post:
+                name, pre = post.group(1).lower(), before[-60:]
+            elif size:
+                name, pre = {"4B": "nano", "9B": "lite", "26B": "quick", "27B": "core"}[size.group(1)], before[-60:]
+            elif names:
+                last = names[-1]
+                name, pre = last.group(1).lower(), before[last.end():]
+            else:
+                continue                                  # unattributed: only RETIRED_TOKS speaks for it
+            if name in ("plus", "397b"):
+                continue                                  # check_plus_decode_sitewide owns Plus
+            if name == "vision" and re.search(r"35B|3\.6", pre + after[:20]):
+                continue                                  # the retired Vision 35B-A3B, a different model
+            direct = re.match(r"[^.;]{0,6}?\bon (?:an |the |my |our )?(?:own )?M1 Ultra", after)
+            if not direct and "M1 Ultra" not in txt[max(0, m.start() - 300): m.end() + 120]:
+                continue                                  # not an M1 Ultra claim
+            if not direct and OTHER_SILICON.search(pre + after[:24]):
+                continue                                  # another machine between the name and the number
+            if _RIVAL.search(pre):
+                continue                                  # another product named between the name and the number
+            if not direct and re.search(r"estimate|scaled|projected", txt[max(0, m.start() - 60): m.start()] + after[:40], re.I):
+                continue                                  # a derived per-Mac figure, labelled as one
+            if dated:
+                continue
+            tid = _SITE_TIER[name]
+            if tid not in want:
+                continue
+            checked += 1
+            approx = re.search(r"(~|about|roughly|around|≈)\s*$", txt[max(0, m.start() - 12): m.start()], re.I)
+            tol = want[tid] * 0.10 if approx else 0.005
+            if abs(float(fig) - want[tid]) > tol:
+                bad.append(f"{rel}: {name.title()} stated at {fig} tok/s on an M1 Ultra, models.csv says {want[tid]}")
+    if scanned < 120:
+        return [f"VACUITY: only {scanned} pages scanned; expected 120+"]
+    if checked < 50:
+        return [f"VACUITY: only {checked} tier decode claims matched; the scan is likelier broken than the site"]
+    print(f"tier decode sitewide: {checked} M1 Ultra claims checked on {scanned} pages")
+    return bad
+
+
 def main(root_arg: str = ".") -> int:
     root = Path(root_arg)
     csv_path = root / "seo" / "_data" / "models.csv"
@@ -308,8 +403,16 @@ def main(root_arg: str = ".") -> int:
             print(f"  ... and {len(sitewide) - 25} more")
         return 1
 
+    tiers = check_tier_decode_sitewide(root)
+    if tiers:
+        print(f"\nFAIL ({len(tiers)}) — a tier's M1 Ultra decode disagrees with models.csv off the home page:")
+        for f in tiers[:40]:
+            print(f"  {f}")
+        if len(tiers) > 40:
+            print(f"  ... and {len(tiers) - 40} more")
+        return 1
     print("\nPASS — home-page figures match models.csv (or are declared conflicts), "
-          "and every other page agrees on Plus decode.")
+          "and every other page agrees on every tier's M1 Ultra decode.")
     return 0
 
 
