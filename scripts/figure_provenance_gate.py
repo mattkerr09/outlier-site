@@ -257,7 +257,10 @@ def check_plus_decode_sitewide(root):
 RETIRED_TOKS: dict[str, list[str]] = {}
 
 _SITE_TIER = {"nano": "nano", "lite": "lite", "quick": "quick", "core": "compact", "code": "compact",
-              "compact": "compact", "vision": "vision38"}
+              "compact": "compact", "vision": "vision38",
+              # the model pages name the base model, not the tier
+              "gemma 4": "quick", "qwen3.6": "compact", "qwen 3.6": "compact", "qwen3.5-4b": "nano",
+              "qwen3.5-9b": "lite", "qwen3.8": "vision38", "qwen 3.8": "vision38", "26b-a4b": "quick"}
 _RIVAL = re.compile(r"Ollama|LM Studio|llama\.cpp|Claude|ChatGPT|GPT-|Gemini|DeepSeek|Llama \d|Qwen ?2\.5|Mistral|"
                     r"Flash-MoE|Jan\b|Msty|cloud", re.I)
 
@@ -265,7 +268,8 @@ _RIVAL = re.compile(r"Ollama|LM Studio|llama\.cpp|Claude|ChatGPT|GPT-|Gemini|Dee
 def _page_text(raw):
     import html as _h
     metas = " ".join(mm.group(1) for mm in re.finditer(r'<meta[^>]+content="([^"]*)"', raw, re.I))
-    raw = re.sub(r"(?s)<script.*?</script>|<style.*?</style>", " ", raw)
+    # JSON-LD stays: its FAQ answers are the text search engines and AI answers quote. Other scripts are code.
+    raw = re.sub(r"(?si)<script(?![^>]*ld\+json)[^>]*>.*?</script>|<style.*?</style>", " ", raw)
     return _h.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", raw) + " " + metas))
 
 
@@ -282,9 +286,11 @@ def check_tier_decode_sitewide(root):
     mp = root / "seo" / "_data" / "models.csv"
     want = {r["tier_id"]: float(r["m1_ultra_toks"]) for r in csv.DictReader(mp.open())
             if (r.get("m1_ultra_toks") or "").strip()}
-    TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Compact|Vision|Plus|397B)\b", re.I)
+    TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Compact|Vision|Plus|397B|Gemma 4|Qwen ?3\.6|Qwen3\.5-4B|"
+                      r"Qwen3\.5-9B|Qwen ?3\.8|26B-A4B)\b")         # case-sensitive: "fenced-code" is not the Code tier
     OTHER_SILICON = re.compile(r"\bM[234]\b|\bM1 (Pro|Max)\b|\bA1[0-9]\b|iPhone|iPad", re.I)
-    UNIT = r"(?<![\d.])(\d+\.\d+)\s*(?:tok/s|tokens?[ /](?:per[ ])?sec(?:ond)?s?\b|tok/sec\b)"
+    # "tokens a second" is the site's fourth spelling (the how-to model pages); a scan that misses it misses them
+    UNIT = r"(?<![\d.])(\d+\.\d+)\s*(?:tok/s|tokens?[ /](?:per[ ])?sec(?:ond)?s?\b|tok/sec\b|tokens a second\b)"
     bad, scanned, checked = [], 0, 0
     for f in sorted(root.rglob("*.html")):
         rel = f.relative_to(root).as_posix()
@@ -313,7 +319,7 @@ def check_tier_decode_sitewide(root):
                 name, pre = {"4B": "nano", "9B": "lite", "26B": "quick", "27B": "core"}[size.group(1)], before[-60:]
             elif names:
                 last = names[-1]
-                name, pre = last.group(1).lower(), before[last.end():]
+                name, pre = re.sub(r"\\s+", " ", last.group(1).lower()), before[last.end():]
             else:
                 continue                                  # unattributed: only RETIRED_TOKS speaks for it
             if name in ("plus", "397b"):
@@ -331,7 +337,11 @@ def check_tier_decode_sitewide(root):
                 continue                                  # a derived per-Mac figure, labelled as one
             if dated:
                 continue
-            tid = _SITE_TIER[name]
+            if re.search(r"\b(two|later|other|both|several|three) (?:\w+ )?runs\b", txt[max(0, m.start() - 200): m.start()], re.I):
+                continue                                  # a sentence reporting several runs; RETIRED_TOKS still reads it
+            tid = _SITE_TIER.get(name)
+            if not tid:
+                continue
             if tid not in want:
                 continue
             checked += 1
