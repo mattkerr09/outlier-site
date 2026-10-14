@@ -105,6 +105,15 @@ def load_csv(name: str) -> list[dict[str, str]]:
         return list(csv.DictReader(f))
 
 
+def toks(tier: str) -> str:
+    """A tier's M1 Ultra decode figure, from models.csv. Prose that quotes a speed reads it here, so a re-measured
+    tier is one data change: hand-typed copies in this file were left behind when the table was refreshed."""
+    for r in load_csv("models"):
+        if r["tier_id"] == tier and (r.get("m1_ultra_toks") or "").strip():
+            return r["m1_ultra_toks"].strip()
+    raise KeyError(f"models.csv has no m1_ultra_toks for {tier}")
+
+
 def slugify(s: str) -> str:
     s = s.lower().strip()
     s = re.sub(r"[^a-z0-9]+", "-", s)
@@ -1038,7 +1047,7 @@ def build_howto_pages() -> list[dict]:
                "<p>Large diffs are the limiting factor, not the review itself. Split anything past a few hundred lines by file and review each in its own turn; a diff that overruns the context window gets silently truncated, and a review of half a change reads exactly like a review of all of it. Asking for one axis per pass &mdash; correctness, then style, then performance &mdash; also keeps each answer short enough to check.</p>",
              "Asking along a single axis at a time (correctness, then style, then perf) holds quality better than a single &lsquo;review this&rsquo; ask."),
         "draft-shell-scripts-with-the-nano-tier":
-            ("<p>The Nano tier is 2.37 GB on disk and runs at 71.7 tok/s on the M1 Ultra reference, "
+            (f"<p>The Nano tier is 2.37 GB on disk and runs at {toks('nano')} tok/s on the M1 Ultra reference, "
              "with an operator-reported ~32 tok/s on a 16 GB M4 Air (single-prompt observation, not "
              "yet &sigma;-qualified).</p>",
              "Nano is not a code-tier; for shell scripts and small zsh utilities its fluency is enough, but for full programs the Lite or Core tier is the right choice."),
@@ -1092,7 +1101,7 @@ def build_howto_pages() -> list[dict]:
             "engine improvements only reduce the working RAM requirement, not the disk requirement.</p>",
         "write-unit-tests-with-local-ai":
             "<h2>What is the right tier for test writing?</h2>"
-            "<p>Lite at 5 GB, 12 GB RAM minimum, 53.4 tok/s on M1 Ultra reference. That is the "
+            f"<p>Lite at 5 GB, 12 GB RAM minimum, {toks('lite')} tok/s on M1 Ultra reference. That is the "
             "baseline. If the function under test is short and the "
             "test framework is well-known (pytest, vitest, jest), Lite handles it. For tricky "
             "fixtures or property-based testing, Core (24 GB RAM) is the upgrade.</p>",
@@ -1108,7 +1117,7 @@ def build_howto_pages() -> list[dict]:
             "<p>Operator-reported observation: roughly 32 tok/s on a 16 GB M4 Air, 2026-05-04, "
             "single-prompt single-turn. This is not yet a &sigma;-qualified number and does not "
             "appear in <code>FINAL_LAUNCH_NUMBERS.md</code>; treat it as indicative, not as a "
-            "promise. The M1 Ultra reference is 71.7 tok/s on the same model.</p>",
+            f"promise. The M1 Ultra reference is {toks('nano')} tok/s on the same model.</p>",
         "set-up-the-companion-window":
             "<h2>What does the companion read about the active app?</h2>"
             "<p>The companion calls <code>osascript</code> against System Events to walk the "
@@ -1304,9 +1313,9 @@ def build_learn_pages() -> list[dict]:
         "what-is-unified-memory":
             "<h2>What does this mean for the heaviest tiers?</h2>"
             "<p>For dense tiers up to Vision (about 20 GB on disk), the bottleneck is unified-memory "
-            "bandwidth and tok/s scales accordingly. Nano at 2.4 GB on disk runs at 71.7 tok/s on "
-            "the M1 Ultra (800 GB/s); Core at 15 GB runs at 20.7 tok/s on the same machine. The "
-            "ratio of those numbers (3.46) is close to the ratio of the model sizes (15 / 2.4 = 6.25), "
+            f"bandwidth and tok/s scales accordingly. Nano at 2.4 GB on disk runs at {toks('nano')} tok/s on "
+            f"the M1 Ultra (800 GB/s); Core at 15 GB runs at {toks('compact')} tok/s on the same machine. The "
+            f"ratio of those numbers ({float(toks('nano')) / float(toks('compact')):.2f}) is close to the ratio of the model sizes (15 / 2.4 = 6.25), "
             "with the gap closed partly by the differences in compute density and quantization layout.</p>"
             "<p>For the Plus tier (209 GB on disk), the bottleneck shifts. Even a 192 GB Mac Studio "
             "cannot hold the whole model in unified memory, so reads spill to NVMe. That is why "
