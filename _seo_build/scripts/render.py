@@ -114,6 +114,13 @@ def toks(tier: str) -> str:
     raise KeyError(f"models.csv has no m1_ultra_toks for {tier}")
 
 
+def _cut_text(s: str, n: int) -> str:
+    """The first n characters of an HTML string, never ending inside an entity: fact[:80] cut "&mdash;" to "&md" and the
+    unified-memory explainer showed a literal "&md…" (live until 2026-10-14)."""
+    out = s[:n]
+    return re.sub(r"&[A-Za-z0-9#]*$", "", out)
+
+
 def slugify(s: str) -> str:
     s = s.lower().strip()
     s = re.sub(r"[^a-z0-9]+", "-", s)
@@ -418,7 +425,7 @@ def build_run_pages(models, macs) -> list[dict]:
                 f"<strong>{estimate_toks(m1u_toks, mac_bw)}</strong>; "
                 f"derivation: {m1u_toks} tok/s on M1 Ultra &times; "
                 f"({mac['memory_bandwidth_gbs']}&nbsp;/&nbsp;800) bus ratio for the {mac['chip']}. "
-                f"Treat as a first-order projection &mdash; the {m['display_name']} number on "
+                f"Treat as a first-order projection, the {m['display_name']} number on "
                 f"this {mac['year']} machine has not been formally measured."
             )
         # M4 Air 16 GB Nano special case (operator-reported ~32 tok/s)
@@ -426,7 +433,7 @@ def build_run_pages(models, macs) -> list[dict]:
         if m4_air_nano_special:
             est_line = (
                 "Operator-reported throughput: <strong>~32 tok/s</strong> on a 16 GB M4 Air "
-                "(2026-05-04, single-prompt observation, not yet σ-qualified — treat as indicative)."
+                "(2026-05-04, single-prompt observation, not yet σ-qualified: treat as indicative)."
             )
         # 2026-09-29: "fits" means what the app's recommender means: the weights plus a
         # working set fit in memory (server.py _tier_fits_resident, WORKING_SET_GB). The
@@ -494,7 +501,7 @@ def build_run_pages(models, macs) -> list[dict]:
                 f"only heatsink, and the SoC down-clocks once it saturates. Expect the "
                 f"first minutes to look like the number above and a long job to settle "
                 f"below it. On battery it settles lower again. "
-                f"<em>Direction verified, magnitude not measured on this machine</em> — "
+                f"<em>Direction verified, magnitude not measured on this machine</em>: "
                 f"we publish the mechanism rather than a throttle figure we have not "
                 f"reproduced.</p>"
             )
@@ -510,7 +517,7 @@ def build_run_pages(models, macs) -> list[dict]:
             )
         else:
             body.append(
-                f"<p>The {mac['name']} is a <strong>laptop with active cooling</strong> — "
+                f"<p>The {mac['name']} is a <strong>laptop with active cooling</strong>: "
                 f"it holds clocks through {decode_load} far longer than a fanless Air, "
                 f"and it will be audible while it does. Its thermal envelope is still "
                 f"smaller than a desktop of the same chip, so a {m['disk_gb']} GB model "
@@ -669,7 +676,7 @@ TIER_DISK_GB = {"nano": 2.37, "lite": 5.04, "quick": 15.61, "compact": 15.13,
                 "code": 15.13, "vision": 19.0, "plus": 209.0}
 TIER_QUALITY_NOTE = {
     "nano": "Nano is the smallest tier, tuned over a 4B base; the one formally measured Outlier accuracy number is Nano HumanEval 81.1% (pass@1, full 164-set). Strong fluency for its size.",
-    "lite": "Lite sits on a 9B base &mdash; a step up in reasoning and code over Nano while still fitting a 16 GB Mac.",
+    "lite": "Lite sits on a 9B base, a step up in reasoning and code over Nano while still fitting a 16 GB Mac.",
     "quick": "Quick is a reasoning-strong MoE tier but comparatively weak on code-shaped tasks; pick it for exploration, not for code.",
     "compact": "Core is the best general-purpose tier in the lineup for code and reasoning quality.",
     "code": "Core is the coding tier. It was briefly split into a separate \u201cCode\u201d entry that shared the identical weights; that split is gone and Core carries the code-first defaults.",
@@ -697,13 +704,13 @@ def by_tier_disk(tier_id: str) -> str:
 #: know the metric is unusually well aligned with their task; a reader doing
 #: documentation needs to know it is close to irrelevant to theirs.
 HUMANEVAL_RELEVANCE = {
-    "code-review": "that figure measures writing a function from scratch, which is not what a review pass does — treat it as a floor for language competence here, not as a review-quality score.",
+    "code-review": "that figure measures writing a function from scratch, which is not what a review pass does: treat it as a floor for language competence here, not as a review-quality score.",
     "refactoring": "that figure measures writing a function from a description, which is adjacent to but not the same as rewriting one that already exists and must keep its behaviour.",
     "test-writing": "that figure is itself a pass-rate on generated code, so of the tasks here it is the one the metric speaks to most directly.",
-    "documentation": "that figure says nothing about prose, so it is close to irrelevant for documentation — judge this tier on tokens per second and on tone instead.",
+    "documentation": "that figure says nothing about prose, so it is close to irrelevant for documentation: judge this tier on tokens per second and on tone instead.",
     "summarization": "that figure is a code benchmark and does not speak to summarisation quality; for this workload the context ceiling matters far more than pass@1.",
     "data-cleaning": "that figure covers self-contained functions, which is a fair proxy for the small transforms this work is made of.",
-    "brainstorming": "that figure rewards a single correct answer, which is the opposite of what brainstorming wants — breadth of candidates matters more than pass@1 here.",
+    "brainstorming": "that figure rewards a single correct answer, which is the opposite of what brainstorming wants: breadth of candidates matters more than pass@1 here.",
     "shell-scripts": "that figure is measured on the same Nano tier this workload runs on, so it is directly applicable rather than extrapolated.",
     "regex": "that figure is a reasonable proxy here: regex generation is fluency-bound, and a pattern is either correct or it is not.",
 }
@@ -874,7 +881,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         body.append(f"<h2>Which Outlier tier handles {u['name']} best as an alternative to {c['short_name']}?</h2>")
         body.append(
             f"<p>If you are coming from {c['short_name']} for {u['name']}, the right starting "
-            f"point on Outlier is the <strong>{rec_tier}</strong> tier &mdash; "
+            f"point on Outlier is the <strong>{rec_tier}</strong> tier: "
             f"{by_tier_disk(rec_tier)} GB on disk, sitting at the quality-vs-speed inflection point "
             f"for {u['name']}-shaped prompts. {c['short_name']} users typically want what they had "
             f"plus privacy; the {rec_tier} tier is the closest match for that without giving up "
@@ -905,14 +912,14 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         body.append(
             f"<p>This page positions Outlier as an <em>alternative</em> to {c['short_name']} for "
             f"{u['name']} workflows, not as a drop-in replacement. Specific product surfaces in the "
-            f"{c['short_name']} category &mdash; IDE-integrated suggestions, web-based shared sessions, "
-            f"team-managed prompt libraries &mdash; are out of scope for the local app loop and we "
+            f"{c['short_name']} category (IDE-integrated suggestions, web-based shared sessions, "
+            f"team-managed prompt libraries) are out of scope for the local app loop and we "
             f"do not claim equivalence for those when {u['name']} is part of a larger team workflow.</p>"
         )
         body.append("<h2>One-line summary</h2>")
         unique_claim = (
             f"For {u['name']}: one network round-trip per prompt with {c['short_name']} versus "
-            f"zero round-trips with Outlier on the {rec_tier} tier &mdash; the difference is "
+            f"zero round-trips with Outlier on the {rec_tier} tier: the difference is "
             f"unbounded latency variance against bandwidth-bound, repeatable local throughput."
         )
         body.append(f"<p>{unique_claim}</p>")
@@ -1002,7 +1009,7 @@ def build_howto_pages() -> list[dict]:
          "Pro unlocks the Quick, Core, Vision 3.8, and Plus tiers.",
          [("Open Settings &gt; Pro", "The Pro section appears on the General tab in v1.11.469."),
           ("Buy through Dodo Payments", "Pro is a one-time purchase: Founders Lifetime at $249."),
-          ("Paste your license key", "Settings &gt; license &gt; Activate. The key is verified against whichever issuer sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the key."),
+          ("Paste your license key", "Settings &gt; license &gt; Activate. The key is verified against whichever issuer sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the key."),
           ("Restart the app", "The Pro-gated tiers appear in the model picker after restart.")]),
     ]
     # Per-page extras keep prose visibly different between guides.
@@ -1011,7 +1018,7 @@ def build_howto_pages() -> list[dict]:
             ("<p>The DMG is signed by Developer ID <code>9N3Z6J63T4</code> and notarized via Apple&rsquo;s "
              "notarytool service. <code>spctl --assess</code> reports <em>accepted, source=Notarized "
              "Developer ID</em> on a clean machine.</p>"
-               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated &mdash; re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
+               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated: re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
              "The complete install touches three locations: <code>/Applications/Outlier.app</code>, "
              "<code>~/Library/Application Support/Outlier/</code>, and <code>~/.outlier/</code>."),
         "download-a-model-tier":
@@ -1027,24 +1034,24 @@ def build_howto_pages() -> list[dict]:
                "<p>Core sizes its context window to the memory your Mac has free rather than to a fixed number, so a whole file plus its imports fits without truncation on a machine with room for it. It needs 24 GB of unified memory. Below that, drop to Quick and scope each question to a single function rather than a whole file.</p>",
              "Core is one model; the separate Code entry that shared its safetensors has been folded back in."),
         "keep-prompts-private-on-mac":
-            ("<p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code> &mdash; the "
+            ("<p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code>: the "
              "FastAPI sidecar bound to localhost. The Tauri Content Security Policy in "
              "<code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>",
              "Disabling search drops outbound traffic to zero on the chat path; the only remaining network is the model-download check, which can be paused."),
         "free-up-disk-space-for-large-models":
             ("<p>The Plus tier alone is 209 GB on disk. A typical Mac with 512 GB total storage will "
              "feel pressure once the OS, Xcode, Photos, and Plus weights are all present.</p>"
-               "<p>Reclaim in that order, because it runs cheapest-first. The Hugging Face cache is the usual surprise: it keeps a full snapshot per revision, so trying two versions of one tier leaves two complete copies on disk with nothing warning you. Xcode derived data is the next-largest easy win and is safe to delete outright, since it rebuilds on demand. Deleting a tier from Settings &gt; Models is instant and reversible &mdash; the only cost of getting it wrong is downloading it again, which is why it belongs last rather than first.</p>",
+               "<p>Reclaim in that order, because it runs cheapest-first. The Hugging Face cache is the usual surprise: it keeps a full snapshot per revision, so trying two versions of one tier leaves two complete copies on disk with nothing warning you. Xcode derived data is the next-largest easy win and is safe to delete outright, since it rebuilds on demand. Deleting a tier from Settings &gt; Models is instant and reversible: the only cost of getting it wrong is downloading it again, which is why it belongs last rather than first.</p>",
              "Hugging Face cache duplicates can hide tens of GB; <code>du -sh ~/.cache/huggingface/hub/</code> usually reveals the surprise."),
         "write-unit-tests-with-local-ai":
             ("<p>For test scaffolding the Lite tier is usually the right speed-quality balance on a "
              "16 GB Mac, with Core reserved for trickier or long-context work.</p>"
-               "<p>Ask for one test at a time and the local tiers hold up well; ask for a whole suite in one turn and quality falls off sharply as the response lengthens. The practical loop is narrow: name the function, name the single behaviour you want covered, run what comes back, and paste the failure in unedited. Failures are the most useful thing you can give a smaller model, because they replace guesswork about your codebase with the actual error text. Keep the function under test in view &mdash; a test written against a signature the model inferred rather than read is the common way this goes wrong.</p>",
+               "<p>Ask for one test at a time and the local tiers hold up well; ask for a whole suite in one turn and quality falls off sharply as the response lengthens. The practical loop is narrow: name the function, name the single behaviour you want covered, run what comes back, and paste the failure in unedited. Failures are the most useful thing you can give a smaller model, because they replace guesswork about your codebase with the actual error text. Keep the function under test in view, a test written against a signature the model inferred rather than read is the common way this goes wrong.</p>",
              "Recommended pattern: one test per turn, paste the failure into the next turn, iterate until green."),
         "review-a-pull-request-locally":
             ("<p>For PR review, Core sizes its context window to the memory your Mac has free, rather than to a fixed "
              "32K, which matters for long diffs. Both share the same weights, so answer quality is identical.</p>"
-               "<p>Large diffs are the limiting factor, not the review itself. Split anything past a few hundred lines by file and review each in its own turn; a diff that overruns the context window gets silently truncated, and a review of half a change reads exactly like a review of all of it. Asking for one axis per pass &mdash; correctness, then style, then performance &mdash; also keeps each answer short enough to check.</p>",
+               "<p>Large diffs are the limiting factor, not the review itself. Split anything past a few hundred lines by file and review each in its own turn; a diff that overruns the context window gets silently truncated, and a review of half a change reads exactly like a review of all of it. Asking for one axis per pass (correctness, then style, then performance) also keeps each answer short enough to check.</p>",
              "Asking along a single axis at a time (correctness, then style, then perf) holds quality better than a single &lsquo;review this&rsquo; ask."),
         "draft-shell-scripts-with-the-nano-tier":
             (f"<p>The Nano tier is 2.37 GB on disk and runs at {toks('nano')} tok/s on the M1 Ultra reference, "
@@ -1060,8 +1067,8 @@ def build_howto_pages() -> list[dict]:
         "upgrade-to-the-pro-tier":
             ("<p>Pro tier gating uses a license key: paste it into "
              "Settings &gt; license &gt; Activate and the app verifies it against the issuer that sold it "
-             "&mdash; <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> "
-             "for keys bought before 23 August 2026 &mdash; then derives your tier from the key. "
+             "(<code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> "
+             "for keys bought before 23 August 2026) then derives your tier from the key. "
              "Checkout issues the key straight after payment.</p>",
              "Free tiers (Nano, Lite) work without a Pro license; Quick, Core, Vision 3.8, and Plus are gated by the license key."),
     }
@@ -1129,9 +1136,9 @@ def build_howto_pages() -> list[dict]:
         "upgrade-to-the-pro-tier":
             "<h2>How does the v1.11.469 Pro gate work?</h2>"
             "<p>Pro gating uses a license key. You paste it into "
-            "Settings &gt; license &gt; Activate; the app sends it to the issuer that sold it &mdash; "
+            "Settings &gt; license &gt; Activate; the app sends it to the issuer that sold it ("
             "<code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for "
-            "keys bought before 23 August 2026 &mdash; and derives your tier from the verified reply. "
+            "keys bought before 23 August 2026) and derives your tier from the verified reply. "
             "Checkout issues the key, and that verified tier is what unlocks "
             "the Quick, Core, Vision 3.8, and Plus tiers.</p>",
     }
@@ -1155,13 +1162,13 @@ def build_howto_pages() -> list[dict]:
             "install-outlier-on-mac": "<li>Gatekeeper prompts on first launch surprise users; the DMG is Developer-ID-signed (cert <code>9N3Z6J63T4</code>), so right-click + Open clears it permanently.</li><li>Some macOS versions move the app to a quarantine folder; <code>xattr -d com.apple.quarantine /Applications/Outlier.app</code> bypasses this.</li>",
             "download-a-model-tier": "<li>Hugging Face download interrupted partway leaves a half-checkpoint; the picker UI detects this on next launch and offers to resume.</li><li>Slow networks make the Plus tier&rsquo;s 209 GB pull effectively a multi-hour task.</li>",
             "run-a-local-coding-assistant-on-mac": "<li>Without a Pro unlock the agent falls back to the free tiers (Nano/Lite), which are weaker on code; for top code quality you need Pro, which includes Core.</li><li>Project chip context can blow the window if the folder is large.</li>",
-            "keep-prompts-private-on-mac": "<li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs three third-party scripts &mdash; Plausible (no cookies, no IP storage), Sled for affiliate attribution, and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites &mdash; and the Tauri auto-updater makes external calls. None of the three scripts are in the desktop app; turn the auto-updater off if you want strict no-network. The full list is on the <a href='/privacy.html'>privacy page</a>.</li>",
+            "keep-prompts-private-on-mac": "<li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs three third-party scripts (Plausible (no cookies, no IP storage), Sled for affiliate attribution, and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites) and the Tauri auto-updater makes external calls. None of the three scripts are in the desktop app; turn the auto-updater off if you want strict no-network. The full list is on the <a href='/privacy.html'>privacy page</a>.</li>",
             "free-up-disk-space-for-large-models": "<li>Hugging Face cache may hold prior tier snapshots after an update.</li><li>The model picker&rsquo;s Delete button removes weights but leaves their config metadata; safe to ignore.</li>",
             "write-unit-tests-with-local-ai": "<li>Lite&rsquo;s code quality is good, not great; tricky tests sometimes need a manual second pass.</li><li>Long batches of tests in one prompt drop quality; break them up.</li>",
             "review-a-pull-request-locally": "<li>Very large diffs can still exceed Core&rsquo;s context window if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li>",
             "draft-shell-scripts-with-the-nano-tier": "<li>Nano is a 4B model; it occasionally hallucinates flag names. Always read the script before running it.</li><li>The 32 tok/s on M4 Air is single-prompt; back-to-back prompts may slow under thermal load.</li>",
             "set-up-the-companion-window": "<li>If Accessibility permission is denied, the companion has no app context to read.</li><li>Screen Recording permission is per-app and prompts on first capture only; deny once and it stays denied until reset in System Settings.</li>",
-            "upgrade-to-the-pro-tier": "<li>Save your license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by the payment processor &mdash; Dodo Payments for new purchases &mdash; not by Outlier directly.</li>",
+            "upgrade-to-the-pro-tier": "<li>Save your license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by the payment processor, Dodo Payments for new purchases, not by Outlier directly.</li>",
         }
         body.append("<ul>" + slug_pitfalls.get(slug, "") + "</ul>")
         # Per-slug-specific cloud-equivalent comparison; varies enough to avoid 50-word collisions.
@@ -1175,7 +1182,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "<p>Cloud PR review tools transmit the diff. Outlier&rsquo;s Code mode keeps it on the Mac, which matters when the diff has untested mitigations or unreleased features.</p>",
             "draft-shell-scripts-with-the-nano-tier": "<p>Hosted shell-script tools are usually overkill for a 4B-class job. Nano on a 16 GB Mac handles this turn-by-turn at roughly 32 tok/s.</p>",
             "set-up-the-companion-window": "<p>Cloud-side context-aware assistants typically read whatever the user pastes. The Outlier companion reads the active app via the macOS Accessibility tree, locally.</p>",
-            "upgrade-to-the-pro-tier": "<p>Cloud Pro tiers gate behind a server-side license check tied to your account. Outlier Pro gates behind a license key you paste into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026, and your tier is derived from the key.</p>",
+            "upgrade-to-the-pro-tier": "<p>Cloud Pro tiers gate behind a server-side license check tied to your account. Outlier Pro gates behind a license key you paste into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it: <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026, and your tier is derived from the key.</p>",
         }
         body.append(f"<h2>How does this guide differ from the cloud equivalent?</h2>")
         body.append(cloud_compare.get(slug, "<p>The cloud equivalent of this guide adds a network round-trip per turn.</p>"))
@@ -1217,7 +1224,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s context (8K on Free, 32K on Pro) is enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
-            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it &mdash; live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026 &mdash; and your tier is derived from the verified reply regardless of which product you bought.",
+            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the verified reply regardless of which product you bought.",
         }
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
@@ -1266,7 +1273,7 @@ def build_learn_pages() -> list[dict]:
         ("what-is-unified-memory",
          "What is unified memory on Apple Silicon?",
          "Unified memory is a shared address space for the CPU and GPU on Apple Silicon. There is no separate VRAM and no PCIe round-trip; the GPU reads model weights directly from main memory at the chip&rsquo;s memory bandwidth.",
-         "On the M1 Ultra, that bandwidth is 800 GB/s; on a base M4 Air it is 120 GB/s &mdash; a 6.7&times; gap that mostly explains the gap in local-model decode speed."),
+         "On the M1 Ultra, that bandwidth is 800 GB/s; on a base M4 Air it is 120 GB/s: a 6.7&times; gap that mostly explains the gap in local-model decode speed."),
     ]
     extra_long = {
         "paged-moe-explained":
@@ -1340,7 +1347,7 @@ def build_learn_pages() -> list[dict]:
             ("<p>Ternary quantization replaces each floating-point weight with one of three values "
              "(commonly &minus;1, 0, +1) plus a per-channel or per-group scale factor. The storage "
              "footprint drops to roughly 1.6 bits per weight, and the multiply-accumulate kernel "
-             "becomes a sign-and-add &mdash; friendly to commodity CPUs without dedicated matmul "
+             "becomes a sign-and-add: friendly to commodity CPUs without dedicated matmul "
              "hardware.</p>"
              "<p>The distillation pipeline that recovers quality after the round-down to ternary is "
              "the research direction Outlier&rsquo;s 3 provisional patents (April 2026) cover.</p>",
@@ -1373,7 +1380,7 @@ def build_learn_pages() -> list[dict]:
         "what-is-unified-memory":
             ("<p>Apple Silicon places the CPU, GPU, Neural Engine, and memory controller on the "
              "same package and exposes a single address space to all of them. There is no separate "
-             "VRAM, no PCIe bus between &lsquo;system memory&rsquo; and &lsquo;graphics memory&rsquo; &mdash; "
+             "VRAM, no PCIe bus between &lsquo;system memory&rsquo; and &lsquo;graphics memory&rsquo;: "
              "the GPU reads from the same RAM the CPU writes to, at the chip&rsquo;s native memory bandwidth.</p>"
              "<p>For a 4-bit dense language model, decode is bandwidth-bound: every generated "
              "token requires reading the weights of the model out of memory once. The throughput "
@@ -1401,7 +1408,7 @@ def build_learn_pages() -> list[dict]:
             c_extra,
             f"<h2>What does &ldquo;{h1.lower().replace('?', '')}&rdquo; <em>not</em> mean?</h2>",
             f"<p>This concept is sometimes invoked as a marketing word for &ldquo;{h1.lower().replace('?', '').strip()}&rdquo;. "
-            f"The number cited above &mdash; {fact[:80]}&hellip; &mdash; is the empirically measured "
+            f"The number cited above ({_cut_text(fact, 80)}&hellip;) is the empirically measured "
             f"one. If a cleaner number appears in someone&rsquo;s pitch deck, ask for the provenance "
             f"file that produced it; if there is no provenance file, treat the number as marketing.</p>",
             f"<h2>Where can I read more about {h1.lower().replace('?', '')}?</h2>",
