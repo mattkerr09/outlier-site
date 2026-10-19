@@ -8,8 +8,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>Outlier vs Continue.dev: local Mac AI vs an open-source coding agent | Outlier</title>
-  <meta name="description" content="Honest comparison of Outlier (native Mac app, on-device models) and Continue.dev (Apache-2.0, model-agnostic coding agent, acquired by Cursor in June 2026). Where each lives, what powers it, whether code leaves your machine, and real coding numbers.">
+  <title>Continue.dev vs Outlier: local Mac AI or coding agent?</title>
+  <meta name="description" content="Continue.dev joined Cursor in June 2026 and its repo is now read-only. How it compares with Outlier: on-device Mac AI, no account, honest coding numbers.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-continue-dev/">
@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Continue.dev: local Mac AI vs an open-source coding agent","description":"Honest comparison of Outlier (native Mac app, on-device models) and Continue.dev (Apache-2.0, model-agnostic coding agent, acquired by Cursor in June 2026). Where each lives, what powers it, whether code leaves your machine, and real coding numbers.","datePublished":"2026-07-23","dateModified":"2026-09-29","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-continue-dev/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Continue.dev: local Mac AI vs an open-source coding agent","description":"Continue.dev joined Cursor in June 2026 and its repo is now read-only. How it compares with Outlier: on-device Mac AI, no account, honest coding numbers.","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-continue-dev/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs Continue.dev","item":"https://outlier.host/vs/outlier-vs-continue-dev/"}]}
@@ -119,6 +119,16 @@
      arrival; an ordinary visitor gets none. See /privacy.html. -->
 <script async src="https://usesled.com/kerr-and-company/t.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
 </head>
 <body>
 <nav>
@@ -138,13 +148,20 @@
     <h1>Outlier vs Continue.dev: local Mac AI vs an open-source coding agent</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-09-29</span>
+      <span class="updated-pill">Updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <p>Continue is an Apache-2.0, model-agnostic coding agent for VS Code, JetBrains and the terminal. It ships no model, so whether your code leaves the machine depends on the backend you configure, and after Cursor acquired Continue Dev, Inc. in June 2026, the hosted hub is off and the repository calls itself read-only and no longer maintained. Outlier is a native macOS app with six on-device tiers, no account and nothing uploaded, but it's a standalone app rather than an editor extension, and its local 27B measured ~45% on a blind SWE-bench Verified slice.</p>
+      <p><strong>Short version:</strong> pick Continue if you want a client you can read and fork, you work in VS Code or JetBrains, or you are on Windows, Linux or an Intel Mac, and you accept that its repository now calls itself no longer maintained. Pick Outlier if you are on an Apple Silicon Mac and want local models in one app, with nothing leaving the machine.</p>
     </div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-outlier-vs-continue-dev-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.943/Outlier-1.11.943-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-outlier-vs-continue-dev-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
 
     <p class="lead">I'm Matt Kerr and I build Outlier, so read this as a comparison written by an interested party. These two solve overlapping problems from opposite ends: Continue is a client you bring a model to; Outlier is a model you bring nothing to.</p>
 
