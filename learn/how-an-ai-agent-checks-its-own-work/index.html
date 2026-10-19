@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"How an AI agent checks its own work","description":"Test-vs-source arbitration and the anti-gaming guard: how a small local model catches its own miscounts.","datePublished":"2026-07-01","dateModified":"2026-07-01","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"How an AI agent checks its own work","description":"Test-vs-source arbitration and the anti-gaming guard: how a small local model catches its own miscounts.","datePublished":"2026-07-01","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How an AI agent checks its own work", "item": "https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/"}]}
@@ -146,7 +146,7 @@
     <h1>How an AI agent checks its own work: self-verification without cheating</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-07-01</span>
-      <span class="updated-pill">Last updated 2026-07-01</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -155,7 +155,7 @@
         <li>When a test fails, the agent doesn't just trust the test <em>or</em> the code. It computes the true answer itself, then fixes whichever side is actually wrong, the source or a test that asserts a wrong value.</li>
         <li>An anti-gaming guard blocks the classic cheat: weakening a good test so a buggy function turns the bar green. You can't "pass" by rewriting a correct assertion to match broken output.</li>
         <li>The decision is made by <strong>running the tests</strong>: an execution oracle, not by the model grading itself. On a 4-bit local model, self-approval is not trustworthy; execution is.</li>
-        <li>Measured on Outlier's local 27B "compact" agent (MLX, on an M1 Ultra): ~45% blind on SWE-bench Verified (18/40), and autonomous builds it verified by running tests: a bank Account class (13/13 tests passing), a 5-file library system, a precedence-correct expression evaluator.</li>
+        <li>Measured on Outlier's local 27B "compact" agent (MLX, on an M1 Ultra): ~45% blind on SWE-bench Verified (18/40, older build, 2026-06-25), and autonomous builds it verified by running tests: a bank Account class (13/13 tests passing), a 5-file library system, a precedence-correct expression evaluator.</li>
         <li>The honest limit: a 4-bit small model has a per-token slip floor on exact counting and arithmetic. Self-verification is precisely the mechanism that catches those slips instead of shipping them.</li>
       </ul>
     </div>
@@ -220,7 +220,7 @@ assert count_vowels("aeiou") == 4   # WRONG — the answer is 5</code></pre>
       <li>A precedence-correct arithmetic expression evaluator: <code>2+3*4</code> → <strong>14</strong>, <code>(2+3)*4</code> → <strong>20</strong>.</li>
       <li>A 33-file build in which every file compiled.</li>
     </ul>
-    <p>On the number people actually care about, the same agent measured <strong>~45% blind on SWE-bench Verified (18/40)</strong>. That is a measured, blind figure on a hand-picked subset, not a leaderboard claim, and we won't dress it up as one. What matters here is the mechanism: on the bounded, testable tasks where a local model competes, self-verification is what turns "usually right" into "right, and it knew when it wasn't."</p>
+    <p>On the number people actually care about, the same agent measured <strong>~45% blind on SWE-bench Verified (18/40, older build, 2026-06-25)</strong>. That is a measured, blind figure on a hand-picked subset, not a leaderboard claim, and we won't dress it up as one. What matters here is the mechanism: on the bounded, testable tasks where a local model competes, self-verification is what turns "usually right" into "right, and it knew when it wasn't."</p>
 
     <h2>The honest limit</h2>
     <p>I'm not going to pretend self-verification erases the gap to a frontier cloud model. It doesn't, and it can't, for a specific reason: a 4-bit 27B has a per-token slip floor on exact enumeration, counting, and arithmetic. That floor is a structural property of the quantized model. Self-verification doesn't lower it.</p>
