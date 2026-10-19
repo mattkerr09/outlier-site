@@ -123,7 +123,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What a local AI coding agent can actually build", "item": "https://outlier.host/learn/what-a-local-ai-coding-agent-can-actually-build/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can a local AI coding agent actually build?", "acceptedAnswer": {"@type": "Answer", "text": "Bounded, testable programs. In a real measured session an offline 27B agent built and self-tested a bank account class (13/13 tests passing), a 5-file library management system, a sqlite-backed contacts app, a precedence-correct arithmetic expression evaluator, and a 33-file build where every file compiled."}}, {"@type": "Question", "name": "How good is a local 27B model at coding compared to Claude?", "acceptedAnswer": {"@type": "Answer", "text": "On a blind subset of SWE-bench Verified the offline 27B measured about 45% (18/40). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs it does not match locally."}}, {"@type": "Question", "name": "Does the local agent verify its own work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong — the code or a test asserting a wrong value — with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not compiles or the model approving itself, is the single biggest quality lever."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can a local AI coding agent actually build?", "acceptedAnswer": {"@type": "Answer", "text": "Bounded, testable programs. In a real measured session an offline 27B agent built and self-tested a bank account class (13/13 tests passing), a 5-file library management system, a sqlite-backed contacts app, a precedence-correct arithmetic expression evaluator, and a 33-file build where every file compiled."}}, {"@type": "Question", "name": "How good is a local 27B model at coding compared to Claude?", "acceptedAnswer": {"@type": "Answer", "text": "On a blind subset of SWE-bench Verified the offline 27B measured about 45% (18/40, older build, 2026-06-25). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs it does not match locally."}}, {"@type": "Question", "name": "Does the local agent verify its own work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong — the code or a test asserting a wrong value — with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not compiles or the model approving itself, is the single biggest quality lever."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -155,7 +155,7 @@
       <ul>
         <li>Offline, on a Mac, a 27B agent builds <strong>bounded, testable programs</strong> and verifies them by running the tests, not by "the code looks right."</li>
         <li>In one measured session it shipped a bank account class (<strong>13/13 tests passing</strong>), a 5-file library system, a sqlite contacts app, a precedence-correct math evaluator, and a <strong>33-file build with every file compiling</strong>.</li>
-        <li>On a blind slice of SWE-bench Verified it measured <strong>~45% (18/40)</strong>: real, honest, and not a leaderboard number.</li>
+        <li>On a blind slice of SWE-bench Verified it measured <strong>~45% (18/40, older build, 2026-06-25)</strong>: real, honest, and not a leaderboard number.</li>
         <li>Where it doesn't match a cloud flagship: breadth-bound tasks, flawless novel reasoning with no test, and 40+-step autonomous runs. That gap is real and this page doesn't hide it.</li>
         <li>It is <strong>truthful about failure</strong>: a build with failing tests reports failure rather than claiming a false success.</li>
       </ul>
@@ -196,7 +196,7 @@
     <p>Which points at the single biggest lever in local coding: <strong>the execution oracle.</strong> Select the agent's work on <em>run-the-tests</em>, not on "it compiles" and not on "the model approved itself." Compiling is necessary and nowhere near sufficient; a model grading its own homework is worth even less. Running the tests is the only signal that survives contact with reality, and it's why the local agent can be trusted on the tasks above.</p>
 
     <h2>The honest number: ~45% on a blind SWE-bench slice</h2>
-    <p>Bounded toy programs are one thing; real repository bugs are another. On a blind subset of SWE-bench Verified, the standard "fix this real GitHub issue in a real codebase" benchmark, the local 27B measured <strong>about 45% (18 of 40)</strong>.</p>
+    <p>Bounded toy programs are one thing; real repository bugs are another. On a blind subset of SWE-bench Verified, the standard "fix this real GitHub issue in a real codebase" benchmark, the local 27B measured <strong>about 45% (18 of 40, older build, 2026-06-25)</strong>.</p>
     <p>Read that honestly. Forty tasks is a slice, not the full 500-task Verified set, so <strong>45% is not a leaderboard number</strong> and I won't present it as one. It's a measured, blind, offline data point: a local 27B, no cloud, resolves close to half of a real-bug sample. That's a genuinely useful floor, and it's the number the marketing usually won't give you.</p>
 
     <h2>Where a local 27B already matches a cloud flagship</h2>
@@ -238,7 +238,7 @@
       </div>
       <div class="faq-item">
         <h3>How good is a local 27B at coding compared to Claude?</h3>
-        <p>On a blind slice of SWE-bench Verified it measured ~45% (18/40). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test, and 40+-step autonomous runs, it doesn't match locally, those are the cases to escalate.</p>
+        <p>On a blind slice of SWE-bench Verified it measured ~45% (18/40, older build, 2026-06-25). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test, and 40+-step autonomous runs, it doesn't match locally, those are the cases to escalate.</p>
       </div>
       <div class="faq-item">
         <h3>Does the local agent verify its own work?</h3>
