@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to speed up local AI on your Mac", "description": "Local AI slowness is two separate problems: time to first token (prefill) and tokens per second (decode). Fix the wait before the answer starts first, then keep the model inside your RAM. Measured numbers from my own Macs.", "datePublished": "2026-07-11", "dateModified": "2026-07-11", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/speed-up-local-ai-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to speed up local AI on your Mac", "description": "Local AI slowness is two separate problems: time to first token (prefill) and tokens per second (decode). Fix the wait before the answer starts first, then keep the model inside your RAM. Measured numbers from my own Macs.", "datePublished": "2026-07-11", "dateModified": "2026-10-19", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/speed-up-local-ai-mac/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to speed up local AI on your Mac", "item": "https://outlier.host/how-to/speed-up-local-ai-mac/"}]}
@@ -146,7 +146,7 @@
     <h1>How to speed up local AI on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · solo-built in Grand Rapids · published 2026-07-11</span>
-      <span class="updated-pill">Last updated 2026-07-11</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -185,11 +185,11 @@
       <tbody>
         <tr><td><strong>Nano 4B</strong></td><td>M4 Air</td><td>about 32 tok/s</td></tr>
         <tr><td><strong>Core 27B</strong></td><td>M1 Ultra</td><td>about 20.7 tok/s</td></tr>
-        <tr><td><strong>Plus 397B</strong></td><td>M1 Ultra (paged expert streaming, ~11 GB peak RSS)</td><td>about 1.59 tok/s</td></tr>
+        <tr><td><strong>Plus 397B</strong></td><td>M1 Ultra (paged expert streaming, ~14 GB peak RSS)</td><td>about 1.59 tok/s</td></tr>
       </tbody>
     </table>
 
-    <p>Plus at 1.59 tok/s is slow, and I won't pretend otherwise: it's a 397-billion-parameter model streaming experts from disk at around 11 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
+    <p>Plus at 1.59 tok/s is slow, and I won't pretend otherwise: it's a 397-billion-parameter model streaming experts from disk at around 14 GB of peak memory, a thing that shouldn't run on this machine at all, running. That's a "go make coffee, come back to a real answer" tool. Nano at 32 tok/s is the chat partner. Which one you reached for explains most of your speed experience.</p>
 
     <h2>Symptom → cause → fix</h2>
     <table>
@@ -213,7 +213,7 @@
     <p>A fanless MacBook Air will throttle on a long sustained generation. There's no fan to move the heat out, so the chip slows itself down. That's physics, not a bug in your setup, and no setting reverses it. Plugged in and on a hard surface instead of a couch cushion helps at the margin; shorter generations help more, because the machine never gets hot enough to care.</p>
     <p>Likewise, a big model on a small machine is still a big model on a small machine. Paged streaming makes it run at all, which is useful, but it doesn't make it quick. Quality and responsiveness at once is a hardware conversation, not a settings one.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates (Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~1.59 tok/s (at ~11 GB peak RSS) on an M1 Ultra) were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
+    <div class="receipts"><strong>Receipts:</strong> Every number here is first-hand measurement on my own hardware, not a spec sheet. The 18.5s → 1.4-4.7s steady-state TTFT figure and the 6-step agent result (step 6: 66.4s → 16.0s) come from before/after instrumentation of Outlier's own prefix-reuse fix. Decode rates (Nano 4B ~32 tok/s on an M4 Air, Core 27B ~20.7 tok/s and Plus 397B ~1.59 tok/s (at ~14 GB peak RSS) on an M1 Ultra) were measured on those machines. The thinking-mode result (80% vs 63.3%, 32% faster) is a 30-question GSM8K run on the shipping Nano model. Small n, stated plainly.</div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
