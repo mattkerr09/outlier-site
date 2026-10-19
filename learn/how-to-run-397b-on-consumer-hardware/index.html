@@ -167,7 +167,7 @@
 
     <h2>Choice 2: 4-bit quantization</h2>
     <p>Qwen ships its weights as 16-bit floats. At that precision, 397B parameters lands at roughly 800 GB on disk, and you'd need about that much RAM just to load it. Drop the weights to 4-bit integers (with a small floating-point scaling factor per group) and the same model shrinks to around 209 GB.</p>
-    <p>People worry about quality here, and in 2026 they mostly shouldn't. Done well, 4-bit barely moves the needle. The MLX-format quantization Outlier ships keeps the model's reasoning intact to within rounding noise, and you walk away 4× smaller on disk and 4× smaller in memory.</p>
+    <p>People worry about quality here, and in 2026 they mostly shouldn't. Done well, 4-bit usually costs little. We have not run a 16-bit comparison of the models Outlier ships, so I cannot give you the cost as a number; what you get is a file about 4× smaller on disk and in memory.</p>
 
     <h2>Choice 3: paged expert streaming</h2>
     <p>209 GB still doesn't fit in 64 GB of RAM. So you don't load all of it. Paged expert streaming keeps the shared backbone resident, holds a bounded cache of the experts you've used recently, and pulls the rest off the SSD only when a token actually calls for them. The router picks the experts for each token, and the runtime fires off a queue of concurrent SSD reads so the latency hides behind the compute.</p>
