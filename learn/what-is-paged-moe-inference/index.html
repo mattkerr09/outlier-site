@@ -172,7 +172,7 @@
       <li>Compute the expert MLPs, combine, produce next-token logits.</li>
       <li>Sample the next token, repeat.</li>
     </ol>
-    <p>Where does the time go? Cache hits are basically free, just a memory access. Misses are bound by SSD bandwidth. A modern Apple Silicon SSD sustains 5–15 GB/s, which puts a single expert read at a few tens of milliseconds. Run enough tokens and the hot experts settle into cache, so the average read cost keeps dropping.</p>
+    <p>Where does the time go? Cache hits are basically free, just a memory access. Misses are bound by SSD bandwidth. Misses cost far more than hits because they wait on the SSD. Run enough tokens and the hot experts settle into cache, so the average read cost keeps dropping.</p>
 
     <h2>The numbers, in practice</h2>
     <p>Numbers from Outlier's V9 paged engine running Qwen3.5-397B-A17B on a 64 GB Mac Studio M1 Ultra:</p>
