@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>What is ternary quantization (and what it isn't) | Outlier</title>
-  <meta name="description" content="Ternary quantization stores weights as -1, 0, or +1. The promise is 16x smaller models; the reality is a research idea that hasn't replaced 4-bit.">
+  <meta name="description" content="Ternary quantization stores weights as -1, 0, or +1. The promise is roughly 10x smaller models; the reality is a research idea that hasn't replaced 4-bit.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-05-19">
   <link rel="canonical" href="https://outlier.host/learn/what-is-ternary-quantization/">
@@ -104,7 +104,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"What is ternary quantization (and what it isn't)","description":"Ternary quantization stores weights as {-1, 0, +1}. Where it stands vs 4-bit in 2026.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/what-is-ternary-quantization/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"What is ternary quantization (and what it isn't)","description":"Ternary quantization stores weights as {-1, 0, +1}. Where it stands vs 4-bit in 2026.","datePublished":"2026-05-19","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/what-is-ternary-quantization/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is ternary quantization (and what it isn't)", "item": "https://outlier.host/learn/what-is-ternary-quantization/"}]}
@@ -134,20 +134,20 @@
     <h1>What is ternary quantization (and what it isn't)</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-05-20</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Ternary stores each weight as -1, 0, or +1. That's about <strong>1.58 bits per weight</strong>.</li>
-        <li>The pitch is ~16× smaller than 16-bit. The catch is you have to train for it (quantization-aware training).</li>
+        <li>The pitch is roughly 10× smaller than 16-bit (16 ÷ 1.58). The catch is you have to train for it (quantization-aware training).</li>
         <li>In 2026 the tooling and hardware support is still research-grade. Not production-ready.</li>
         <li>4-bit MLX is what you actually want for local AI on a Mac right now.</li>
       </ul>
     </div>
 
-    <p class="lead">Ternary quantization squeezes every model weight down to one of three values: -1, 0, or +1. On paper the payoff is huge, about 16× smaller than 16-bit floats. Compare that to the 4× you get from the 4-bit quantization most local-AI tools ship. So why isn't everyone using it? Because in 2026 it only really works on models that were trained for it, and it still hasn't pushed 4-bit off the throne as the production default.</p>
+    <p class="lead">Ternary quantization squeezes every model weight down to one of three values: -1, 0, or +1. On paper the payoff is huge, about 10× smaller than 16-bit floats (16 ÷ 1.58). Compare that to the 4× you get from the 4-bit quantization most local-AI tools ship. So why isn't everyone using it? Because in 2026 it only really works on models that were trained for it, and it still hasn't pushed 4-bit off the throne as the production default.</p>
 
     <h2>How quantization works in one paragraph</h2>
     <p>Out of the box, model weights live as 16-bit floating point numbers (bf16 or fp16). Quantization swaps those for lower-precision integers plus a small scaling factor per group. 8-bit halves the memory. 4-bit quarters it. 2-bit cuts it 8×. Ternary needs three states, so it lands at 1.58 bits per weight, which works out to roughly 10× smaller than 16-bit. Lower precision buys you two things that matter a lot for local AI: smaller files on disk, and less memory bandwidth chewed up during inference.</p>
@@ -170,7 +170,7 @@
       <li>Vision 3.8 27B → ~20 GB</li>
       <li>Plus 397B-A17B → ~209 GB</li>
     </ul>
-    <p>The quality holds up. At 4-bit, Core 27B's coding accuracy stays within rounding noise of the 16-bit base model. You paid basically nothing in quality and got the file 4× smaller.</p>
+    <p>At 4-bit the file is 4× smaller than 16-bit. We have not run a 16-bit comparison of Core 27B, so I cannot give you the quality cost as a number.</p>
 
     <h2>When ternary might matter</h2>
     <p>There are two places ternary actually gets interesting:</p>
