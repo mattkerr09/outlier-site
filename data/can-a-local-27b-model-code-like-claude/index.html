@@ -15,7 +15,7 @@
   <link rel="canonical" href="https://outlier.host/data/can-a-local-27b-model-code-like-claude/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Can a local 27B model code like Claude? The measured answer">
-  <meta property="og:description" content="~45% on SWE-bench Verified blind, mid-50s to low-60s with local engineering, and a genuine 15–20-point wall below Claude. Where it passed tests, the 3 hard walls, and the biggest lever.">
+  <meta property="og:description" content="~45% on SWE-bench Verified blind, and the places a local 27B still falls short of Claude. Where it passed tests, the 3 hard walls, and the biggest lever.">
   <meta property="og:url" content="https://outlier.host/data/can-a-local-27b-model-code-like-claude/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -113,13 +113,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Can a local 27B model code like Claude? The measured answer","description":"The honest, measured reverse-engineering of how close a local on-device 27B coding agent gets to Claude: ~45% on SWE-bench Verified blind, mid-50s to low-60s with local engineering, and a genuine 15–20-point wall. Where it passed tests, the 3 hard walls, and the biggest lever.","datePublished":"2026-07-01","dateModified":"2026-09-24","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/data/can-a-local-27b-model-code-like-claude/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Can a local 27B model code like Claude? The measured answer","description":"The honest, measured reverse-engineering of how close a local on-device 27B coding agent gets to Claude: ~45% on SWE-bench Verified blind, and the places a local 27B still falls short of Claude. Where it passed tests, the 3 hard walls, and the biggest lever.","datePublished":"2026-07-01","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/data/can-a-local-27b-model-code-like-claude/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can a local 27B model code like Claude? The measured answer", "item": "https://outlier.host/data/can-a-local-27b-model-code-like-claude/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a local 27B model code like Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Not across the board. On bounded, in-distribution, testable coding tasks, a local 27B model built and passed the tests for a bank account class (13/13), a 5-file library system, a sqlite contacts app, and a precedence-correct arithmetic evaluator this session. But a genuine 15–20-point gap remains on breadth-bound work, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs."}}, {"@type": "Question", "name": "What did the local 27B score on SWE-bench Verified?", "acceptedAnswer": {"@type": "Answer", "text": "Measured blind, the local 27B agent scored about 45% — 18 of 40 tasks resolved. That is a measured number on real tasks, not a leaderboard entry, and not the full 500-task Verified set."}}, {"@type": "Question", "name": "What is the single biggest lever to close the gap?", "acceptedAnswer": {"@type": "Answer", "text": "An execution oracle: selecting the candidate patch by running the tests, not by whether it compiles and not by letting the model approve its own work. Running the tests turns a small model's noisy best-of-N attempts into a reliable pass, and it is the lever that moves the score most."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a local 27B model code like Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Not across the board. On bounded, in-distribution, testable coding tasks, a local 27B model built and passed the tests for a bank account class (13/13), a 5-file library system, a sqlite contacts app, and a precedence-correct arithmetic evaluator this session. But a genuine gap remains on breadth-bound work, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs."}}, {"@type": "Question", "name": "What did the local 27B score on SWE-bench Verified?", "acceptedAnswer": {"@type": "Answer", "text": "Measured blind, the local 27B agent scored about 45% — 18 of 40 tasks resolved. That is a measured number on real tasks, not a leaderboard entry, and not the full 500-task Verified set."}}, {"@type": "Question", "name": "What is the single biggest lever to close the gap?", "acceptedAnswer": {"@type": "Answer", "text": "An execution oracle: selecting the candidate patch by running the tests, not by whether it compiles and not by letting the model approve its own work. Running the tests turns a small model's noisy best-of-N attempts into a reliable pass, and it is the lever that moves the score most."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -143,15 +143,15 @@
     <h1>Can a local 27B model code like Claude? The measured answer</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-07-01</span>
-      <span class="updated-pill">Last updated 2026-09-24</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
         <li><strong>Not across the board, and I can tell you exactly where.</strong> A local on-device 27B coding agent (the "compact" tier, running in MLX on an M1 Ultra) scored a <strong>measured ~45% on SWE-bench Verified: 18 of 40 blind</strong>.</li>
-        <li><strong>Local engineering, no new training, gets it to mid-50s / low-60s:</strong> execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission.</li>
-        <li><strong>Training (LoRA + distillation) reaches ~70–80% in-distribution.</strong> The last ~15–20 points to Claude's 65–72% is a genuine ceiling, not a tuning knob.</li>
+        <li><strong>Local engineering with no new training is the lever we are working on (a target, not a measured result; the full stack measured 46% on 100 tasks):</strong> execution-oracle selection, self-verification, verbatim memory, whole-file edits, and grammar-constrained tool emission.</li>
+        <li><strong>Training (LoRA + distillation) is a further lever.</strong> Its in-distribution gain is a target, not a measured result. Claude Code is still faster and stronger on the hardest work.</li>
         <li><strong>It solved the bounded, testable tasks we set it</strong> (a bank account class passed 13/13 tests), and it is truthful: it reports failure honestly instead of claiming a false pass.</li>
         <li><strong>The single biggest lever is an execution oracle:</strong> select on running the tests, not on "it compiles" and not on the model approving its own work.</li>
       </ul>
@@ -170,15 +170,15 @@
     <h2>The roadmap: what closes the gap, and what doesn't</h2>
     <p>Here's the honest ladder, from the measured 45% up to the wall. Each rung is a real, distinct source of gain, and the last rung is a ceiling, not another rung.</p>
     <table>
-      <thead><tr><th>Stage</th><th>What it adds</th><th>Measured / target band</th></tr></thead>
+      <thead><tr><th>Stage</th><th>What it adds</th><th>Status</th></tr></thead>
       <tbody>
         <tr><td>Blind baseline</td><td>The agent loop as it stands today</td><td><strong>~45%</strong> (18/40, measured)</td></tr>
-        <tr><td>Local engineering</td><td>Execution-oracle selection, self-verification, verbatim memory, whole-file edits, grammar-constrained tool emission: <em>no new training</em></td><td>mid-50s to low-60s</td></tr>
-        <tr><td>Training</td><td>LoRA + distillation on the target distribution</td><td>~70–80% in-distribution</td></tr>
-        <tr><td>The wall (Claude's band)</td><td>The last ~15–20 points: a genuine ceiling for a 4-bit 27B, not a tuning knob</td><td>Claude 65–72%</td></tr>
+        <tr><td>Local engineering</td><td>Execution-oracle selection, self-verification, verbatim memory, whole-file edits, grammar-constrained tool emission: <em>no new training</em></td><td>Target, not measured (the full stack measured 46% on 100 tasks)</td></tr>
+        <tr><td>Training</td><td>LoRA + distillation on the target distribution</td><td>Target, not measured</td></tr>
+        <tr><td>The wall (Claude's band)</td><td>The remaining gap: a ceiling for a 4-bit 27B, not a tuning knob</td><td>No measured figure on this page</td></tr>
       </tbody>
     </table>
-    <p>Read that carefully. Local engineering, the part Outlier owns and ships, is worth roughly <strong>ten points</strong> on its own, with no model change at all. Training buys another big jump, but only <em>in-distribution</em>: it makes the agent great at the kind of work it was trained on, not universally smarter. And then there's a wall.</p>
+    <p>Read that carefully. Local engineering, the part Outlier owns and ships, is the lever we are working on, with no model change at all (the full stack measured <strong>46% on 100 tasks</strong>, so I have not shown a ten-point gain). Training buys another big jump, but only <em>in-distribution</em>: it makes the agent great at the kind of work it was trained on, not universally smarter. And then there's a wall.</p>
 
     <h2>The three hard walls</h2>
     <p>This is the part most "local AI" writeups skip, because it's the part that doesn't flatter the local model. There are three failures a local 27B does not engineer its way out of. They are structural.</p>
@@ -230,13 +230,13 @@
     <p>The newest piece extends the oracle inward. When a test fails, the agent now <strong>computes the true answer itself</strong> and fixes whichever side is actually wrong: the code, <em>or</em> a test that asserts a wrong value. Crucially, there's a guard that <strong>blocks weakening a good test to cheat</strong> the check. That guard is the whole game: an agent allowed to edit tests will, if you let it, "fix" a failure by deleting the assertion. Blocking that is what keeps self-verification honest instead of a loophole.</p>
 
     <h2>The honest takeaway</h2>
-    <p>Can a local 27B model code like Claude? Not across the board. On bounded, in-distribution, testable work, it passed our tests: measurably, today. Beyond that, there's a real ~15–20-point wall with three structural causes I won't hand-wave away. The interesting truth is how much of the gap is <em>engineering</em> rather than raw capability: roughly ten points sit in selection, memory, and edit strategy that don't touch the model at all. That's the seam a local coding agent lives in: private, offline, free of usage caps, and honest about where it stands. When the task hits a wall, the right move isn't to pretend; it's to escalate. Everywhere else, the local model earns its keep.</p>
+    <p>Can a local 27B model code like Claude? Not across the board. On bounded, in-distribution, testable work, it passed our tests: measurably, today. Beyond that, there's a real gap with three structural causes I won't hand-wave away. The interesting truth is how much of the gap may be <em>engineering</em> rather than raw capability: selection, memory, and edit strategy don't touch the model at all, though I have not yet measured how many points they are worth. That's the seam a local coding agent lives in: private, offline, free of usage caps, and honest about where it stands. When the task hits a wall, the right move isn't to pretend; it's to escalate. Everywhere else, the local model earns its keep.</p>
 
     <h2>Questions about the 27B coding measurements</h2>
     <div class="faq">
       <div class="faq-item">
         <h3>Can a local 27B model code like Claude?</h3>
-        <p>Not across the board. On bounded, in-distribution, testable coding tasks, a local 27B model built and passed the tests for a bank account class (13/13), a 5-file library system, a sqlite contacts app, and a precedence-correct arithmetic evaluator this session. But a genuine 15–20-point gap remains on breadth-bound work, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs.</p>
+        <p>Not across the board. On bounded, in-distribution, testable coding tasks, a local 27B model built and passed the tests for a bank account class (13/13), a 5-file library system, a sqlite contacts app, and a precedence-correct arithmetic evaluator this session. But a genuine gap remains on breadth-bound work, flawless multi-step novel reasoning with no test to check against, and 40-plus-step autonomous runs.</p>
       </div>
       <div class="faq-item">
         <h3>What did the local 27B score on SWE-bench Verified?</h3>
