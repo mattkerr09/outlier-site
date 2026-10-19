@@ -8,14 +8,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>How to run AI on Mac without a discrete GPU (2026) | Outlier</title>
-  <meta name="description" content="Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.">
+  <title>Run AI on a Mac without a discrete GPU: real speeds</title>
+  <meta name="description" content="No graphics card needed: Apple Silicon's GPU cores share unified memory with the CPU. Measured speeds for 4B, 27B and 397B models, and the RAM you need.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-06-18">
   <link rel="canonical" href="https://outlier.host/learn/run-ai-without-gpu/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="How to run AI on Mac without a discrete GPU (2026)">
-  <meta property="og:description" content="Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.">
+  <meta property="og:description" content="No graphics card needed: Apple Silicon's GPU cores share unified memory with the CPU. Measured speeds for 4B, 27B and 397B models, and the RAM you need.">
   <meta property="og:url" content="https://outlier.host/learn/run-ai-without-gpu/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI on Mac without a discrete GPU (2026)","description":"Apple Silicon Macs have GPU cores built into the chip sharing unified memory. You don't need a separate graphics card to run local AI — here's how it works and what performance to expect.","datePublished":"2026-06-18","dateModified":"2026-09-23","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI on Mac without a discrete GPU (2026)","description":"No graphics card needed: Apple Silicon's GPU cores share unified memory with the CPU. Measured speeds for 4B, 27B and 397B models, and the RAM you need.","datePublished":"2026-06-18","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Run AI without a GPU","item":"https://outlier.host/learn/run-ai-without-gpu/"}]}
@@ -137,7 +137,7 @@
     <h1>How to run AI on Mac without a discrete GPU</h1>
     <div class="byline-row">
       <span class="byline">Outlier: Jun 18, 2026</span>
-      <span class="updated-pill">Updated September 23, 2026</span>
+      <span class="updated-pill">Updated October 19, 2026</span>
     </div>
 
     <div class="quick-answer">
@@ -237,7 +237,7 @@
     <p>Unified memory solves the VRAM ceiling problem, but it doesn't eliminate the memory requirement. A model has to fit in your Mac's RAM. Here's a rough guide by RAM tier:</p>
 
     <ul>
-      <li><strong>8 GB</strong>: Small models only (1B–3B). Usable for quick tasks; macOS needs ~4 GB, leaving little headroom for a 7B model.</li>
+      <li><strong>8 GB</strong>: Small models. Outlier's 4B Nano fits with room to spare, and a generic 7B is a tight fit that works only if you close other apps. The <a href="https://outlier.host/how-to/run-ai-on-8gb-mac/">8GB guide</a> has the numbers.</li>
       <li><strong>16 GB</strong>: Comfortable for 7B models in 4-bit quantization (~4.5 GB), with room for the OS and other apps. A practical everyday setup.</li>
       <li><strong>32 GB</strong>: Opens up 13B–27B models. Good for serious local AI work without compromise.</li>
       <li><strong>64 GB+</strong> — Runs 70B models, or with paged MoE inference, models far larger than the chip's RAM through streaming from disk.</li>
@@ -252,7 +252,7 @@
     <p>From there, you have a few paths:</p>
 
     <ul>
-      <li><strong>Outlier</strong>: native Mac app that manages models, runs inference via MLX and Metal, and supports models from 1.5B up to 397B with paged inference. Nano tier is free. Requires macOS 26 or newer.</li>
+      <li><strong>Outlier</strong>: native Mac app that manages models, runs inference via MLX and Metal, and supports models from 4B up to 397B with paged inference. Nano tier is free. Requires macOS 26 or newer.</li>
       <li><strong>Ollama</strong>: command-line tool with a local HTTP API. Pulls models from a registry, uses llama.cpp with Metal acceleration under the hood.</li>
       <li><strong>LM Studio</strong>: GUI application, good for browsing and testing models without writing any code. Requires macOS 14 or newer.</li>
     </ul>
@@ -260,7 +260,7 @@
     <p>All three use the Metal GPU backend on Apple Silicon, meaning they route matrix operations to your chip's GPU cores automatically. You don't configure anything; the Mac just works.</p>
 
     <div class="receipts">
-      <strong>On the numbers:</strong> Speed figures in this article (32 tok/s on M4 Air, ~20 tok/s on M1 Ultra for Core 27B, 1.59 tok/s for Plus 397B) come from my own measured runs using Outlier on those machines. Your results may vary by model quantization and system load.
+      <strong>On the numbers:</strong> Speed figures in this article (32 tok/s on M4 Air, ~20 tok/s on M1 Ultra for Core 27B, 1.59 tok/s for Plus 397B) come from my own measured runs using Outlier on those machines. Your results may vary by model quantization and system load. Corrected 2026-10-19: an earlier version of this page said Outlier starts at a 1.5B model and that an 8 GB Mac runs only 1B to 3B models. Its smallest tier is the 4B Nano, which fits on 8 GB.
     </div>
 
     <div class="cta">
