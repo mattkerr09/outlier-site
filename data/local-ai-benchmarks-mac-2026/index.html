@@ -115,13 +115,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Dataset","name":"Local AI benchmarks on Mac, 2026 — Outlier, Ollama, LM Studio","description":"Decode tok/s and memory footprint data for the major local-AI options on Apple Silicon in 2026.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-04-30","dateModified":"2026-09-29","measurementTechnique":"Outlier numbers measured on M1 Ultra; Ollama and LM Studio referenced from public benchmark posts","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/local-ai-benchmarks-mac-2026/dataset.json"}}
+  {"@context":"https://schema.org","@type":"Dataset","name":"Local AI benchmarks on Mac, 2026 — Outlier, Ollama, LM Studio","description":"Decode tok/s and memory footprint data for the major local-AI options on Apple Silicon in 2026.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-04-30","dateModified":"2026-10-19","measurementTechnique":"Outlier numbers measured on M1 Ultra; Ollama and LM Studio referenced from public benchmark posts","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/local-ai-benchmarks-mac-2026/dataset.json"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio", "item": "https://outlier.host/data/local-ai-benchmarks-mac-2026/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 1.59 on the V9 paged engine. Nano hits about 32 tok/s on an M4 Air."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "Similar tok/s on shared 7B to 27B model classes; Outlier uniquely runs MoE models bigger than RAM via its V9 paged engine."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Nano's only fully-published, verified figure is HumanEval 81.1% pass@1 on the full 164-set."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 1.59 on the V9 paged engine. Nano hits about 32 tok/s on an M4 Air."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "Similar tok/s on shared 7B to 27B model classes; Outlier uniquely runs MoE models bigger than RAM via its V9 paged engine."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Measured accuracy figures are on the tier benchmarks page: MMLU for every tier (Nano 52.0%, Core 27B 89.5%, n=200, build 1.11.804) and HumanEval for Core 27B (95.1%) and Vision 3.8 (94.5%)."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -145,16 +145,16 @@
     <h1>Local AI benchmarks for Mac (2026): Outlier vs Ollama vs LM Studio</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-04-30</span>
-      <span class="updated-pill">Last updated 2026-09-29</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>7B-class chat runs <strong>~70 tok/s</strong> on an M1 Ultra with Outlier Nano 4B. Ollama and LM Studio land in the 60–110 tok/s range, depending which model you load.</li>
+        <li>A small chat model, Outlier Nano 4B, runs at <strong>~70 tok/s</strong> on an M1 Ultra. We have not run Ollama or LM Studio on the same Mac, so this page makes no like-for-like comparison.</li>
         <li>For 27B coding, <strong>Outlier Core 27B does 20.7 tok/s</strong> and is the strongest coding tier in the lineup.</li>
-        <li>397B-class MoE? <strong>Only Outlier runs it on a 64 GB Mac</strong> (V9 paged engine, ~1.59 tok/s, ~11 GB RSS). Ollama and LM Studio just can't fit the thing.</li>
-        <li>The only fully-published, verified accuracy figure is <strong>Nano's HumanEval 81.1% pass@1</strong> (full 164-set). Other accuracy figures are still being finalized, so this page sticks to measured tok/s and memory.</li>
+        <li>397B-class MoE? <strong>Outlier's paged engine runs it on a 64 GB Mac</strong> (V9 paged engine, ~1.59 tok/s). We have not tested other apps on this model.</li>
+        <li>Accuracy is on the <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">tier benchmarks page</a>: MMLU for every tier (Nano <strong>52.0%</strong>, n=200, build 1.11.804) and HumanEval for Core 27B and Vision 3.8. This page sticks to tok/s and memory.</li>
       </ul>
     </div>
 
@@ -172,24 +172,19 @@
         <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~11 GB (V9 paged)</td><td><strong>1.59 (V9)</strong>: this page's dataset.json reports 2.1 for the same tier. Both are real: 1.59 is the pre-ship K-override sweep at the shipped K=20 (5 prompts &times; 80 tokens, model load excluded; per-prompt 1.35/1.52/1.62/1.65/1.64), while 2.1 comes from the engine-comparison run under its own per-token RSS protocol. Where they disagree we publish the lower, shipping-config figure.</td></tr>
       </tbody>
     </table>
-    <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code>. The M1 Ultra Mac tok/s bench ran 2026-04-29. Accuracy figures are still being finalized; the only fully-published, verified number is Nano HumanEval 81.1% pass@1 (full 164-set).</p>
+    <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code>. The M1 Ultra Mac tok/s bench ran 2026-04-29. Accuracy figures are on the tier benchmarks page (MMLU n=200, build 1.11.804, 2026-08-24).</p>
 
-    <h2>Cross-tool comparison (Mac, comparable 7B/13B/27B models)</h2>
+    <h2>Outlier decode speed by tier (measured)</h2>
     <table>
       <thead><tr><th>Tool</th><th>Model</th><th>Format</th><th>Mac</th><th>Decode tok/s</th></tr></thead>
       <tbody>
         <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>71.7</td></tr>
         <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M4 Air 16 GB</td><td>~32</td></tr>
-        <tr><td>Ollama</td><td>Llama 3.1 8B Q4_K_M</td><td>GGUF</td><td>M1 Ultra 64 GB</td><td>~60–80 (public posts)</td></tr>
-        <tr><td>LM Studio</td><td>Qwen 2.5 7B Q4</td><td>GGUF/MLX</td><td>M2 Max 64 GB</td><td>~70–100 (public posts)</td></tr>
         <tr><td>Outlier</td><td>Core 27B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>20.7</td></tr>
-        <tr><td>Ollama</td><td>Qwen 2.5 Coder 32B Q4</td><td>GGUF</td><td>M1 Ultra 64 GB</td><td>~15–22 (public posts)</td></tr>
         <tr><td>Outlier</td><td>Plus 397B-A17B</td><td>MLX 4-bit, V9 paged</td><td>M1 Ultra 64 GB</td><td>1.59</td></tr>
-        <tr><td>Ollama</td><td>any 397B model</td><td>—</td><td>64 GB Mac</td><td><strong>won't load (RAM)</strong></td></tr>
-        <tr><td>LM Studio</td><td>any 397B model</td><td>—</td><td>64 GB Mac</td><td><strong>won't load (RAM)</strong></td></tr>
       </tbody>
     </table>
-    <p class="source">Source: Outlier numbers measured locally. The Ollama and LM Studio ranges come from publicly-shared benchmark posts as of 2026-05. Exact apples-to-apples is genuinely hard here. Prompts differ, prefill sizes differ, batch settings differ. The ranges shown are what's typical.</p>
+    <p class="source">Source: Outlier numbers measured locally on an M1 Ultra (the M4 Air figure is a single-prompt observation, 2026-05-04, indicative). We have not run Ollama or LM Studio on the same Macs, so this page makes no like-for-like comparison.</p>
 
     <h2>Cost comparison (24 months, single Mac developer)</h2>
     <table>
@@ -234,7 +229,7 @@
       </div>
       <div class="faq-item">
         <h3>What are Outlier's accuracy numbers?</h3>
-        <p>Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Nano's only fully-published, verified figure is HumanEval 81.1% pass@1 on the full 164-set. The rest are still being finalized.</p>
+        <p>Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. For accuracy, see the <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">tier benchmarks page</a>: Nano scored 52.0% on a 200-question MMLU sample and Core 27B 89.5% (build 1.11.804, M1 Ultra).</p>
       </div>
     </div>
 
