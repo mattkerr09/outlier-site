@@ -153,7 +153,7 @@
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Four design choices stacked: MoE routing, 4-bit quantization, paged streaming, Apple unified memory.</li>
-        <li>Each one buys roughly 10×. Stack them and 800 GB naive collapses to <strong>14 GB peak RAM</strong>.</li>
+        <li>Stacked, they take the naive ~800 GB (16-bit) down to about 209 GB on disk and <strong>about 14 GB peak RAM</strong> (the arithmetic and the K=20 sweep are below).</li>
         <li>Apple unified memory kills the PCIe copy step a PC build is stuck with.</li>
         <li>End result: a 397B-parameter MoE model running on a 64 GB Mac at ~1.59 tok/s.</li>
       </ul>
@@ -176,8 +176,8 @@
     <h2>Choice 4: Apple unified memory + fast SSD</h2>
     <p>The Mac happens to be built for exactly this pattern. Two reasons stand out.</p>
     <ul>
-      <li><strong>Unified memory.</strong> The GPU and CPU share one pool of RAM. When the streaming runtime reads an expert off the SSD into a buffer, the GPU can use that buffer for the matmul right away. No PCIe copy step. No shuffling memory back and forth between CPU and GPU. A PC build with a discrete GPU pays a multi-hundred-millisecond copy cost per expert, which drags the whole thing down by roughly 10×.</li>
-      <li><strong>Fast on-package SSD.</strong> A modern Apple Silicon Mac sustains 5–15 GB/s sequential read off its internal NVMe. That's fast enough to hand over a few hundred MB of expert weights inside the time budget you need for ~3 tok/s generation.</li>
+      <li><strong>Unified memory.</strong> The GPU and CPU share one pool of RAM. When the streaming runtime reads an expert off the SSD into a buffer, the GPU can use that buffer for the matmul right away. No PCIe copy step. No shuffling memory back and forth between CPU and GPU. A PC build with a discrete GPU pays a multi-hundred-millisecond copy cost per expert, which slows it down.</li>
+      <li><strong>Fast on-package SSD.</strong> A modern Apple Silicon Mac has a fast internal NVMe SSD, which is what lets paged streaming work at all; Plus 397B measured 1.59 tok/s on an M1 Ultra.</li>
     </ul>
     <p>Same logic explains the rest. External Thunderbolt SSDs lag (usually 2–3 GB/s sustained), and Intel Macs aren't supported at all because they don't have the unified memory that makes the SSD→GPU path direct.</p>
 
@@ -189,7 +189,7 @@
         <tr><td>Need 800 GB RAM</td><td>Still need all 397B somewhere</td><td>Total ~209 GB on disk</td><td>Total ~209 GB on disk, ~14 GB peak in RAM</td></tr>
       </tbody>
     </table>
-    <p>Every step knocks off an order of magnitude. No single trick gets you there. Stacked together, they put the model on hardware a working developer can actually buy.</p>
+    <p>Each step shrinks what has to sit in memory at once: about 800 GB at 16-bit, about 8.5 GB for the active experts at 4-bit, and a measured peak of about 14 GB with streaming. No single trick gets you there. Stacked together, they put the model on hardware a working developer can actually buy.</p>
 
     <h2>The honest tradeoff</h2>
     <p>None of this beats the cloud on raw speed. Run the same model on a server with 8 H100 GPUs and it's far quicker. Plus 397B does about 1.59 tok/s on your Mac and a dedicated server is far faster, and that's a real gap, not a rounding error. So what do you get back? No API key. No rate limit. Your code never leaves the machine. No bill once the weights are on disk. For long-form coding, architecture review, anything where waiting a bit is fine, that trade tends to pay off.</p>
