@@ -1433,7 +1433,7 @@ def build_learn_pages() -> list[dict]:
                 "ternary-quantization-explained": "<p>Today this concept does not ship in any Outlier tier. The shipping tiers are MLX 4-bit. The ternary direction is research and is what the three April-2026 patent filings cover.</p>",
                 "mlx-explained": "<p>Every Outlier tier uses MLX 4-bit at the leaf level: Nano, Lite, Quick, Core, and Vision 3.8 via standard mlx_lm; Plus via the V9 paged loader sitting next to mlx_lm in the same FastAPI sidecar.</p>",
                 "k-override-explained": "<p>K_override is Plus-tier-only. The other six tiers either load entirely into unified memory or need not page experts; their inference path does not even consult the K_override knob.</p>",
-                "what-is-unified-memory": "<p>This concept is foundational to every Outlier tier. The smallest Mac that exercises it is a 6 GB M1 base running Nano; the largest is a 64 GB or larger Mac running Plus.</p>",
+                "what-is-unified-memory": "<p>This concept is foundational to every Outlier tier. The smallest Mac that exercises it is an 8 GB Mac running Nano (Nano needs 6 GB of memory; no Mac ships with less than 8); the largest is a 64 GB or larger Mac running Plus.</p>",
             }.get(slug, "<p>This concept is general across the Outlier lineup.</p>"),
             f"<h2>What is the smallest configuration that exercises this concept?</h2>",
             {
