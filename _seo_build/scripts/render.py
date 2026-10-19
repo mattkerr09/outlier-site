@@ -32,6 +32,30 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 import product_box  # noqa: E402
 
+
+def _ram_opts(mac) -> str:
+    """macs.csv keeps memory options as "8|16|24"; a page says "8, 16 or 24". (10-19: the raw field printed as
+    "8|16 GB unified memory" on 20 /seo/run/ pages.)"""
+    r = [x.strip() for x in str(mac["unified_ram_gb"]).split("|") if x.strip()]
+    return r[0] if len(r) == 1 else ", ".join(r[:-1]) + " or " + r[-1]
+
+
+def _ram_base(mac) -> int:
+    return int(str(mac["unified_ram_gb"]).split("|")[0])
+
+
+def _a_gb(n) -> str:
+    """"an 8 GB", "an 18 GB", "a 16 GB" — the article follows the sound of the number."""
+    return ("an " if str(n).startswith("8") or str(n) in ("11", "18") or str(n).startswith("18") else "a ") + f"{n} GB"
+
+
+def _ram_first_fit(mac, need_gb) -> int | None:
+    """The smallest memory option of this Mac that meets a tier's minimum, or None."""
+    for x in str(mac["unified_ram_gb"]).split("|"):
+        if x.strip().isdigit() and int(x) >= int(need_gb):
+            return int(x)
+    return None
+
 ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
 
@@ -400,8 +424,8 @@ def build_run_pages(models, macs) -> list[dict]:
         title = f"{h1} | Outlier"
         description = (
             f"How {m['display_name']} ({m['params']}, {m['disk_gb']} GB) runs on "
-            f"{mac['name']} ({mac['unified_ram_gb']} GB unified memory, "
-            f"{mac['memory_bandwidth_gbs']} GB/s bandwidth). @@THROUGHPUT@@, "
+            f"{mac['name']} ({_ram_opts(mac)} GB memory, "
+            f"{mac['memory_bandwidth_gbs']} GB/s). @@THROUGHPUT@@, "
             f"RAM headroom, install steps."
         )
         # Bandwidth-ratio estimate for non-M1-Ultra Macs
@@ -465,7 +489,7 @@ def build_run_pages(models, macs) -> list[dict]:
             f"{ctx_default_inline(m)}, "
             f"{m['min_ram_gb']} GB unified memory minimum) on a <strong>{mac['name']}</strong> "
             f"({mac['chip']}, {mac['cpu_cores']} CPU cores, {mac['gpu_cores']} GPU cores, "
-            f"{mac['unified_ram_gb']} GB unified memory, {mac['memory_bandwidth_gbs']} GB/s, "
+            f"{_ram_opts(mac)} GB unified memory, {mac['memory_bandwidth_gbs']} GB/s, "
             f"{mac['year']}). Outlier loads this tier as one mlx_lm process inside the bundled "
             f"FastAPI sidecar. Apple Silicon decode on dense 4-bit weights is bandwidth-bound, "
             f"so the ceiling on this exact {mac['name']} scales as the ratio "
@@ -557,9 +581,12 @@ def build_run_pages(models, macs) -> list[dict]:
         # Mac-flavored opener (year + chip + RAM) keeps the install paragraph distinct
         # from sibling pages on the same tier.
         body.append(
-            f"<p>The {mac['year']} {mac['name']} ships with {mac['unified_ram_gb']} GB of unified "
-            f"memory, so headroom for the {m['min_ram_gb']} GB {m['display_name']} requirement is "
-            f"{(int(mac['unified_ram_gb'].split('|')[0]) - int(m['min_ram_gb']))} GB on the base SKU. "
+            f"<p>The {mac['year']} {mac['name']} ships with {_ram_opts(mac)} GB of unified memory. "
+            + (f"Headroom over the {m['min_ram_gb']} GB {m['display_name']} minimum is "
+               f"{_ram_base(mac) - int(m['min_ram_gb'])} GB on the {_ram_base(mac)} GB base model. "
+               if _ram_base(mac) >= int(m['min_ram_gb']) else
+               f"The {_ram_base(mac)} GB base model is below the {m['min_ram_gb']} GB {m['display_name']} minimum, "
+               f"so you need the {_ram_first_fit(mac, m['min_ram_gb'])} GB configuration or larger. ") +
             f"Step-by-step install instructions live on the "
             f"<a href=\"/seo/how-to/install-outlier-on-mac/\">install guide</a>; the part that "
             f"varies for this {mac['chip']} machine is that the {m['disk_gb']} GB pull from "
@@ -567,7 +594,7 @@ def build_run_pages(models, macs) -> list[dict]:
             f"Support/Outlier/models/{m['tier_id']}/</code> and download time is bandwidth-limited "
             f"by the network, not by the {mac['cpu_cores']}-core {mac['chip']} CPU.</p>"
         )
-        body.append(f"<h2>What context window can I use on a {int(mac['unified_ram_gb'].split('|')[0])} GB Mac?</h2>")
+        body.append(f"<h2>What context window can I use on {_a_gb(_ram_first_fit(mac, m['min_ram_gb']) or _ram_base(mac))} Mac?</h2>")
         body.append(
             (f"<p>The {m['display_name']} tier runs at {FREE_CONTEXT_K}K context on Free; on Pro it defaults to "
              f"{int(m['context_default']) // 1024}K and caps at {min(int(m['context_max']) // 1024, PRO_CONTEXT_CAP_K)}K. "
@@ -575,8 +602,8 @@ def build_run_pages(models, macs) -> list[dict]:
              f"<p>The {m['display_name']} tier defaults to {int(m['context_default']) // 1024}K context and "
              f"caps at {min(int(m['context_max']) // 1024, PRO_CONTEXT_CAP_K)}K on Pro. ") +
             f"KV cache scales linearly with context length on dense "
-            f"models, so longer contexts trade headroom for capacity. On a {mac['unified_ram_gb']} GB "
-            f"{mac['name']}, the default context is the safe starting point.</p>"
+            f"models, so longer contexts trade headroom for capacity. On "
+            f"{_a_gb(_ram_first_fit(mac, m['min_ram_gb']) or _ram_base(mac))} {mac['name']}, the default context is the safe starting point.</p>"
         )
         body.append("<h2>What works well on this pairing, and what is still rough?</h2>")
         rough_notes = []
@@ -589,12 +616,24 @@ def build_run_pages(models, macs) -> list[dict]:
             f"on dense 4-bit decode; the throughput ceiling for {m['display_name']} on this exact "
             f"machine is approximately {mac['memory_bandwidth_gbs']} divided by {m['disk_gb']} GB tokens per second.</li>"
         )
-        if ram_min <= 16:
+        # 10-19: this said "The 16 GB base SKU … swaps aggressively" on every Mac with a base of 16 GB or less (8 GB
+        # Macs included) and for every tier (Nano peaks at 3 GB) — unmeasured. Now: the tier's measured peak against the
+        # smallest configuration that meets its minimum, said only when little is left over.
+        _fit = _ram_first_fit(mac, m["min_ram_gb"])
+        try:
+            _peak = float(m.get("ram_peak_gb") or m["disk_gb"])
+        except ValueError:
+            _peak = float(m["disk_gb"])
+        if _fit is not None and _fit - _peak < 8:
+            _left = _fit - _peak
             rough_notes.append(
-                f"<li>The 16 GB base SKU of the {mac['name']} swaps aggressively under "
-                f"the {m['display_name']} tier; close Chrome and other RAM-heavy applications before generation.</li>"
+                f"<li>On {_a_gb(_fit)} {mac['name']}, {m['display_name']}&rsquo;s measured {_peak:g} GB peak "
+                + (f"leaves about {_left:g} GB for macOS and your other apps; close memory-heavy apps, such as a "
+                   f"browser with many tabs, before a long generation.</li>" if _left > 0 else
+                   f"does not leave room for macOS as well, so expect it to page to disk; a larger memory "
+                   f"configuration runs it fully in memory.</li>")
             )
-        if "ultra" in mac_slug:
+        if mac_slug == "m1-ultra-mac-studio":     # the soak ran on our M1 Ultra; no other Ultra was tested
             rough_notes.append(
                 f"<li>The {mac['name']} chassis dissipates heat well; sustained decode at the {m['display_name']} tier did not show thermal throttling in our 2026-05 internal soak.</li>"
             )
@@ -613,11 +652,14 @@ def build_run_pages(models, macs) -> list[dict]:
         )
         body.append("<ul>" + "".join(rough_notes) + "</ul>")
         body.append(f"<h2>What is the unique number for {m['display_name']} on {mac['name']}?</h2>")
-        ratio_pct = round(float(m["disk_gb"]) / ram_min * 100)
+        _fit_gb = _ram_first_fit(mac, m["min_ram_gb"]) or ram_min       # the smallest configuration that runs this tier
+        ratio_pct = round(float(m["disk_gb"]) / _fit_gb * 100)
         unique_claim = (
-            f"{m['disk_gb']} GB on disk against {mac['unified_ram_gb']} GB unified memory means "
-            f"the weights alone consume about <strong>{ratio_pct}%</strong> of the base SKU&rsquo;s RAM "
-            f"on the {mac['name']}."
+            f"{m['disk_gb']} GB on disk against the {_fit_gb} GB {mac['name']} "
+            f"(the smallest configuration that meets the {m['min_ram_gb']} GB minimum) means "
+            + (f"the weights alone take about <strong>{ratio_pct}%</strong> of its memory." if ratio_pct <= 100 else
+             f"the weights are about <strong>{float(m['disk_gb']) / _fit_gb:.1f}&times;</strong> its memory, which is why "
+             f"{m['display_name']} streams from the SSD instead of holding everything in memory.")
         )
         body.append(f"<p>{unique_claim}</p>")
         body.append("<h2>Should I pick a different tier?</h2>")
@@ -638,7 +680,7 @@ def build_run_pages(models, macs) -> list[dict]:
         if bigger:
             guidance.append(
                 f"For heavier work, the {bigger} tier is the next step up; check that the "
-                f"{mac['unified_ram_gb']} GB SKU you have can fit its weights before installing."
+                f"memory configuration you have ({_ram_opts(mac)} GB on this Mac) can fit its weights before installing."
             )
         guidance.append(
             f"The <a href=\"/seo/learn/what-is-unified-memory/\">unified-memory explainer</a> works "
@@ -649,7 +691,7 @@ def build_run_pages(models, macs) -> list[dict]:
         body_html = "\n".join(body)
         faq = [
             (f"Will {m['display_name']} actually fit on a {mac['name']}?",
-             f"It needs at least {m['min_ram_gb']} GB of unified memory. The base {mac['name']} ships with {mac['unified_ram_gb']} GB."),
+             f"It needs at least {m['min_ram_gb']} GB of unified memory. The {mac['name']} came with {_ram_opts(mac)} GB; the base model has {_ram_base(mac)} GB." if "|" in str(mac['unified_ram_gb']) else f"It needs at least {m['min_ram_gb']} GB of unified memory. The {mac['name']} has {_ram_base(mac)} GB."),
             (f"How fast is {m['display_name']} on {mac['name']}?",
              f"M1 Ultra reference is {m1u_toks} tok/s. Bandwidth-scaled estimate for {mac['name']}: {estimate_toks(m1u_toks, mac_bw)}."),
             (f"Does Outlier send any data off the Mac?",
@@ -844,10 +886,12 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         # Tier-friendly Mac suggestions for related links (avoid 16 GB on 24 GB-min tiers)
         if rec_tier in ("compact", "code", "vision"):
             rec_run_mac = "m4-pro-macbook-pro"
-            rec_run_label = f"Run the {rec_tier} tier on a M4 Pro MacBook Pro"
+            # 10-19: the label printed the internal id ("Run the compact tier"); people know it as Core
+            rec_run_label = f"Run the {({'compact': 'Core', 'code': 'Core', 'vision': 'Vision 3.8'})[rec_tier]} tier on an M4 Pro MacBook Pro"
         elif rec_tier == "plus":
             rec_run_mac = "m4-ultra-mac-studio"
-            rec_run_label = f"Run the Plus tier on a M4 Ultra Mac Studio"
+            # 10-19: there is no M4 Ultra (the 2025 Mac Studio is M4 Max or M3 Ultra); the slug stays, the row is the M3 Ultra
+            rec_run_label = f"Run the Plus tier on an M3 Ultra Mac Studio"
         elif rec_tier == "quick":
             rec_run_mac = "m4-air-15"
             rec_run_label = f"Run the Quick tier on a 16 GB M4 Air"
