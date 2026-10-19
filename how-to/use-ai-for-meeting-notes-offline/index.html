@@ -116,7 +116,7 @@
         "headline": "How to take AI meeting notes without the cloud",
         "description": "Record locally, transcribe with Whisper offline, paste into Outlier. Zero audio or text uploaded. The complete workflow for private AI meeting notes on Mac.",
         "datePublished": "2026-06-19",
-        "dateModified": "2026-06-19",
+        "dateModified": "2026-10-19",
         "url": "https://outlier.host/how-to/use-ai-for-meeting-notes-offline/",
         "publisher": {
           "@type": "Organization",
@@ -185,12 +185,12 @@
     <h1>How to take AI meeting notes without the cloud</h1>
     <div class="byline-row">
       <span class="byline">Outlier · published 2026-06-19</span>
-      <span class="updated-pill">Last updated 2026-06-19</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Record locally → transcribe with Whisper (offline, open-source) → paste into Outlier → ask for summary + action items. Zero audio or text uploaded. Takes about 5 minutes per hour of meeting.</p>
+      <p>Record locally → transcribe with Whisper (offline, open-source) → paste into Outlier → ask for summary + action items. Zero audio or text uploaded. Time depends on your Mac and the length of the meeting.</p>
     </div>
 
     <p class="lead">Most AI meeting note tools upload your audio: straight to a server, in the background, before you've finished the call. If you've ever used Otter.ai, Fireflies, or Zoom's AI Companion, that's the deal you implicitly agreed to. Here's how to get the same output without it.</p>
@@ -236,7 +236,7 @@
     <p>Whisper is available as a command-line tool and as several GUI wrappers. The easiest path on macOS uses Homebrew to install <code>whisper-cpp</code>, a C++ port that runs efficiently on Apple Silicon.</p>
     <ol>
       <li><strong>Install via Homebrew:</strong> <code>brew install whisper-cpp</code></li>
-      <li><strong>Download a model.</strong> Whisper Large v3 gives near-human accuracy on English and fits in 4–6 GB of RAM. For shorter, simpler calls, the <code>medium</code> model is faster and lighter: <code>whisper-download-ggml-model large-v3</code></li>
+      <li><strong>Download a model.</strong> Whisper Large v3 is a strong open-source speech-to-text model for English; check its model card for its memory needs. For shorter, simpler calls, the <code>medium</code> model is faster and lighter: <code>whisper-download-ggml-model large-v3</code></li>
       <li><strong>Point it at your audio file:</strong> <code>whisper-cli -m /path/to/model.bin -f meeting.mp3 -otxt</code></li>
       <li><strong>Wait.</strong> On an M-series chip, a 60-minute meeting typically transcribes in a few minutes. The output is a <code>.txt</code> file alongside your audio.</li>
     </ol>
@@ -248,7 +248,7 @@
 
     <h3>Summary + action items (the workhorse)</h3>
     <p><code>Summarize this meeting transcript in bullet points, then list all action items with owners and deadlines.</code></p>
-    <p>Outlier Core 27B handles long context well: you can paste 10,000+ word transcripts and it stays coherent. If you're on Nano or Lite, very long transcripts may get cut off; break them into sections if needed.</p>
+    <p>Outlier Core 27B handles long context well: you can paste long transcripts; split very long ones into sections. If you're on Nano or Lite, very long transcripts may get cut off; break them into sections if needed.</p>
 
     <h3>Decisions only</h3>
     <p><code>From this transcript, list only the decisions that were made. Don't include discussion or action items — just decisions and who made them.</code></p>
