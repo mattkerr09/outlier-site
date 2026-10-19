@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Mac vs PC for local AI: unified memory vs a discrete GPU","description":"An engineering comparison of Apple Silicon and a Windows/Linux PC with a discrete GPU for running AI models locally: capacity vs bandwidth, what actually fits, thermals, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-10-09","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-vs-pc-for-local-ai/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Mac vs PC for local AI: unified memory vs a discrete GPU","description":"An engineering comparison of Apple Silicon and a Windows/Linux PC with a discrete GPU for running AI models locally: capacity vs bandwidth, what actually fits, thermals, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-vs-pc-for-local-ai/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Mac vs PC for local AI","item":"https://outlier.host/vs/mac-vs-pc-for-local-ai/"}]}
@@ -138,7 +138,7 @@
     <h1>Mac vs PC for local AI: a PC is usually faster, a Mac usually holds the bigger model</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-10-09</span>
+      <span class="updated-pill">Updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -154,7 +154,7 @@
     <h2>What actually fits</h2>
     <p>Weights are the floor, not the total. You also need the KV cache, which grows with context, plus the runtime and the OS. Apple's ML research team measured footprints on a 24 GB MacBook Pro: Qwen 8B is 17.46 GB at BF16 and 5.61 GB at 4-bit, Qwen 14B 4-bit is 9.16 GB, GPT-OSS 20B at MXFP4 is 12.08 GB, and a Qwen 30B MoE 4-bit is 17.31 GB.</p>
 
-    <p>Here are Outlier's own tiers. Nano (4B) is 2.37 GB and wants 6 GB of RAM. Lite (9B) is 5.04 GB and wants 12 GB. Quick (26B-a4b) is 15.61 GB and wants 16 GB. Core (27B) is 15.13 GB and wants 24 GB. Vision 3.8 (27B) is 15.5 GB and wants 24 GB. Plus (397B-a17b) is 209 GB, and it runs on a 64 GB machine by paging MoE experts off the SSD at ~11 GB resident. Against a 32 GB card, a 4-bit model up to about 30B is comfortable and quick. A 70B isn't. That's the capacity argument.</p>
+    <p>Here are Outlier's own tiers. Nano (4B) is 2.37 GB and wants 6 GB of RAM. Lite (9B) is 5.04 GB and wants 12 GB. Quick (26B-a4b) is 15.61 GB and wants 16 GB. Core (27B) is 15.13 GB and wants 24 GB. Vision 3.8 (27B) is 15.5 GB and wants 24 GB. Plus (397B-a17b) is 209 GB, and it runs on a 64 GB machine by paging MoE experts off the SSD at ~14 GB resident. Against a 32 GB card, a 4-bit model up to about 30B is comfortable and quick. A 70B isn't. That's the capacity argument.</p>
 
     <h2>Speed: bandwidth is the ceiling, and the PC has more of it</h2>
     <p>Token generation is bound by memory bandwidth, not compute. Apple's research group says so, and its measurements show it. M4 to M5 lifted bandwidth from 120 GB/s to 153 GB/s. Time-to-first-token sped up 3.33×–4.06×. Generation sped up only 1.19×–1.27×.</p>
