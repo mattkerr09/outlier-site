@@ -8,14 +8,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>Outlier Plus runs a 397B model in about 10 GB | Outlier</title>
-  <meta name="description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 10 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
+  <title>Outlier Plus runs a 397B model in about 14 GB | Outlier</title>
+  <meta name="description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 14 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-08-12">
   <link rel="canonical" href="https://outlier.host/learn/397b-model-on-64gb-mac/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Outlier Plus runs a 397B model in about 10 GB">
-  <meta property="og:description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 10 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
+  <meta property="og:title" content="Outlier Plus runs a 397B model in about 14 GB">
+  <meta property="og:description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 14 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
   <meta property="og:url" content="https://outlier.host/learn/397b-model-on-64gb-mac/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -23,8 +23,8 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Outlier Plus runs a 397B model in about 10 GB">
-  <meta name="twitter:description" content="397B active on a desktop. 10 GB resident, 1.59 tok/s.">
+  <meta name="twitter:title" content="Outlier Plus runs a 397B model in about 14 GB">
+  <meta name="twitter:description" content="397B active on a desktop. 14 GB resident, 1.59 tok/s.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
@@ -130,7 +130,7 @@
 <article>
     <div class="wrap">
       <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&#8250;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
-      <h1>Outlier Plus runs a 397B model in about 10 GB of memory</h1>
+      <h1>Outlier Plus runs a 397B model in about 14 GB of memory</h1>
       <div class="byline-row">
         <span class="byline">Outlier &middot; solo-built in Grand Rapids &middot; published 2026-08-12</span>
       </div>
@@ -139,7 +139,7 @@
         <span class="qa-label">Quick answer</span>
         <ul>
           <li>Outlier Plus is a 397B-parameter mixture-of-experts, 17B active per token. The weights are a <strong>209 GB</strong> download.</li>
-          <li>It runs on a 64 GB Mac at roughly <strong>10 GB peak resident memory</strong>, because only the experts a token needs are ever in memory.</li>
+          <li>It runs on a 64 GB Mac at roughly <strong>14 GB peak memory</strong>, because only the experts a token needs are ever in memory.</li>
           <li>Measured speed: <strong>1.59 tokens per second</strong> on an M1 Ultra. That is slow enough to matter and fast enough to use for hard questions.</li>
           <li>The constraint is disk, not memory. You need room for 209 GB of weights.</li>
         </ul>
@@ -157,7 +157,7 @@
 
       <p>In a mixture-of-experts model most parameters are idle for any given token. Plus routes each token to 10 of 512 experts, so about 17B parameters do the work while the other 380B sit unused. Those unused experts do not need to be in memory. They need to be reachable.</p>
 
-      <p>Our V9 paged engine keeps the always-active parts resident and streams the rest from SSD as routing demands them. Peak resident memory measured 10 GB. The 209 GB lives on disk and is read in the pieces that matter, which is what modern SSD bandwidth is good at.</p>
+      <p>Our V9 paged engine keeps the always-active parts resident and streams the rest from SSD as routing demands them. Peak memory measured about 14 GB (14.04 GB in the K=20 sweep). The 209 GB lives on disk and is read in the pieces that matter, which is what modern SSD bandwidth is good at.</p>
 
       <h2>What it costs</h2>
 
@@ -174,7 +174,7 @@
       <h2>Method</h2>
 
       <ul>
-        <li>Peak resident memory measured 2026-06-12 on an M1 Ultra Mac Studio, 64 GB, running the shipping V9 paged engine: 10 GB.</li>
+        <li>Peak memory 14.04 GB, from the 2026-05-01 K=20 sweep on an M1 Ultra Mac Studio, 64 GB, running the V9 paged engine (the same run that measured 1.59 tok/s).</li>
         <li>Decode speed 1.59 tokens per second, same machine and engine. Speed varies by Mac; SSD bandwidth matters more here than for tiers that fit in memory.</li>
         <li>Model: Qwen3.5-397B-A17B, top-10 routing of 512 experts, MLX 4-bit. 209 GB on disk.</li>
         <li>Minimum memory in our catalog is 64 GB, set from the kernel wired-memory limit rather than from the model size.</li>
