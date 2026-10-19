@@ -44,6 +44,16 @@ def _ram_base(mac) -> int:
     return int(str(mac["unified_ram_gb"]).split("|")[0])
 
 
+#: tier ids (use_cases.csv, models.csv) -> the names people see. 10-19: pages printed "the code tier" (retired in
+#: 1.11.798, folded into Core) and "the compact tier" (Core's internal id) — 54 times on 9 /seo/vs/ pages.
+TIER_NAME = {"nano": "Nano", "lite": "Lite", "quick": "Quick", "compact": "Core", "code": "Core",
+             "vision": "Vision 3.8", "vision38": "Vision 3.8", "plus": "Plus"}
+
+
+def _tier_name(tier_id: str) -> str:
+    return TIER_NAME.get(tier_id, tier_id)
+
+
 def _a_gb(n) -> str:
     """"an 8 GB", "an 18 GB", "a 16 GB" — the article follows the sound of the number."""
     return ("an " if str(n).startswith("8") or str(n) in ("11", "18") or str(n).startswith("18") else "a ") + f"{n} GB"
@@ -786,7 +796,7 @@ def quality_block(tier_id: str, u: dict, c: dict, u_slug: str = "") -> str:
     # 50-word window, roughly 55 words of identical {note} plus two fixed
     # sentences collide on their own no matter what is bolted onto either end.
     return (
-        f"<p>For a {u['name']} workload moving off {c['short_name']} onto the {tier_id} tier: "
+        f"<p>For a {u['name']} workload moving off {c['short_name']} onto the {_tier_name(tier_id)} tier: "
         f"{note} The <a href=\"/seo/learn/mlx-explained/\">MLX explainer</a> has the per-tier "
         f"breakdown if you want to see how it compares with {c['short_name']}. "
         f"The measured accuracy figures are on the <a href=\"/data/outlier-tier-benchmarks-2026-08/\">tier benchmarks page</a> "
@@ -907,7 +917,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             f"<p>For {u['name']}, the deciding axis between Outlier and {c['short_name']} is the "
             f"data path. {c['description']}. Outlier holds the prompt and response for "
             f"{u['name']} on the Mac and delivers tokens at the local memory bandwidth of the "
-            f"chip; on the {rec_tier}-recommended tier, that means working out of the on-disk "
+            f"chip; on the recommended {_tier_name(rec_tier)} tier, that means working out of the on-disk "
             f"checkpoint without a network round-trip per turn.</p>"
         )
         body.append(f"<h2>How does the data path differ for {u['name']} on {c['short_name']}?</h2>")
@@ -916,7 +926,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
                 f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the practical "
                 f"consequences are tail-latency variance (the network adds unbounded variance per turn) "
                 f"and exposure to provider-side logging of the {u['name']} prompts. Outlier&rsquo;s chat "
-                f"path on the {rec_tier} tier issues no outbound HTTPS once the model is on disk; the "
+                f"path on the {_tier_name(rec_tier)} tier issues no outbound HTTPS once the model is on disk; the "
                 f"only network request in the lifecycle is the one-time {by_tier_disk(rec_tier)} GB tier "
                 f"download from Hugging Face.</p>"
             )
@@ -927,29 +937,29 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             body.append(
                 f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the prompt "
                 f"stays on the machine on both sides, so neither tail latency nor provider-side "
-                f"logging separates them. Outlier&rsquo;s chat path on the {rec_tier} tier issues no "
+                f"logging separates them. Outlier&rsquo;s chat path on the {_tier_name(rec_tier)} tier issues no "
                 f"outbound HTTPS once the model is on disk; the only network request in the lifecycle "
                 f"is the one-time {by_tier_disk(rec_tier)} GB tier download from Hugging Face.</p>"
             )
         body.append(f"<h2>Which Outlier tier handles {u['name']} best as an alternative to {c['short_name']}?</h2>")
         body.append(
             f"<p>If you are coming from {c['short_name']} for {u['name']}, the right starting "
-            f"point on Outlier is the <strong>{rec_tier}</strong> tier: "
+            f"point on Outlier is the <strong>{_tier_name(rec_tier)}</strong> tier: "
             f"{by_tier_disk(rec_tier)} GB on disk, sitting at the quality-vs-speed inflection point "
             f"for {u['name']}-shaped prompts. {c['short_name']} users typically want what they had "
-            f"plus privacy; the {rec_tier} tier is the closest match for that without giving up "
+            f"plus privacy; the {_tier_name(rec_tier)} tier is the closest match for that without giving up "
             f"answer quality. Heavier work moves up to the higher tiers in the same app; "
             f"the Quick tier&rsquo;s weak code performance rules it out for code-shaped {u['name']}.</p>"
         )
         body.append(f"<h2>What is the switching friction from {c['short_name']}?</h2>")
         body.append(
             f"<p>Moving a {u['name']} workflow from {c['short_name']} to Outlier is a one-time "
-            f"DMG install plus a {by_tier_disk(rec_tier)} GB pull for the {rec_tier} tier. The "
+            f"DMG install plus a {by_tier_disk(rec_tier)} GB pull for the {_tier_name(rec_tier)} tier. The "
             f"sign-in step that {c['short_name']} typically requires has no equivalent on the "
             f"Outlier side: there is no account, no per-token meter, and no rate-limit page to "
             f"redirect through. The {u['name']} loop after install is open-prompt to local-decode.</p>"
         )
-        body.append(f"<h2>What about quality at the {rec_tier} tier for {u['name']}?</h2>")
+        body.append(f"<h2>What about quality at the {_tier_name(rec_tier)} tier for {u['name']}?</h2>")
         body.append(quality_block(rec_tier, u, c, u_slug))
         body.append(f"<h2>What is the shape of {u['name']} as a workload?</h2>")
         body.append(f"<p>{VS_FLAVOR.get(u_slug, 'This workload is a chat-shaped sequence of prompts; local decode is the differentiator on tail latency.')}</p>")
@@ -959,7 +969,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             f"shape: a sign-in, an auth token bound to that sign-in, some kind of metered usage, "
             f"and a content policy that applies to the {u['name']} prompts you submit. Outlier&rsquo;s "
             f"local-only chat path does not surface any of those: the {u['name']} workflow runs "
-            f"against the on-disk {rec_tier} tier, no token leaves the device.</p>"
+            f"against the on-disk {_tier_name(rec_tier)} tier, no token leaves the device.</p>"
         )
         body.append(f"<h2>What does Outlier <em>not</em> claim about {u['name']} versus {c['short_name']}?</h2>")
         body.append(
@@ -972,7 +982,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         body.append("<h2>One-line summary</h2>")
         unique_claim = (
             f"For {u['name']}: one network round-trip per prompt with {c['short_name']} versus "
-            f"zero round-trips with Outlier on the {rec_tier} tier: the difference is "
+            f"zero round-trips with Outlier on the {_tier_name(rec_tier)} tier: the difference is "
             f"unbounded latency variance against bandwidth-bound, repeatable local throughput."
         )
         body.append(f"<p>{unique_claim}</p>")
