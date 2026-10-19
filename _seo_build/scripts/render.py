@@ -401,7 +401,7 @@ def build_run_pages(models, macs) -> list[dict]:
         description = (
             f"How {m['display_name']} ({m['params']}, {m['disk_gb']} GB) runs on "
             f"{mac['name']} ({mac['unified_ram_gb']} GB unified memory, "
-            f"{mac['memory_bandwidth_gbs']} GB/s bandwidth). Verified throughput, "
+            f"{mac['memory_bandwidth_gbs']} GB/s bandwidth). @@THROUGHPUT@@, "
             f"RAM headroom, install steps."
         )
         # Bandwidth-ratio estimate for non-M1-Ultra Macs
@@ -411,11 +411,11 @@ def build_run_pages(models, macs) -> list[dict]:
             mac_bw = 100.0
         m1u_toks = m.get("m1_ultra_toks") or "—"
         is_m1u = "ultra" in mac_slug and mac_slug.startswith("m1")
+        description = description.replace("@@THROUGHPUT@@", "Measured speed" if (is_m1u and m1u_toks != "—") else "Estimated speed")
         if is_m1u and m1u_toks != "—":
             est_line = (
                 f"Measured throughput on this exact machine: <strong>{m1u_toks} tok/s</strong> "
-                f"(M1 Ultra 64 GB, 5-rep median, 4096 prefill + 256 generate, "
-                f"mlx_lm 0.31.3, MLX 4-bit). Source: <code>FINAL_LAUNCH_NUMBERS.md</code>."
+                f"({MEASURE_NOTE.get(tier_id, 'M1 Ultra 64 GB, MLX 4-bit')})."
             )
         else:
             # Inject the (tier, mac) pair into the estimate line so two same-tier pages on
@@ -605,13 +605,11 @@ def build_run_pages(models, macs) -> list[dict]:
         if mac_slug.startswith("m4"):
             rough_notes.append(
                 f"<li>The {mac['chip']} ({mac['memory_bandwidth_gbs']} GB/s, "
-                f"{mac['gpu_cores']} GPU cores) is current Apple Store silicon as of 2025; "
-                f"new-purchase tok-per-second-per-dollar is best in the lineup at the {m['display_name']} tier.</li>"
+                f"{mac['gpu_cores']} GPU cores) was current Apple Store silicon in 2025.</li>"
             )
         rough_notes.append(
-            f"<li>Cold boot of Outlier on a {mac['cpu_cores']}-core {mac['chip']} is roughly "
-            f"50 seconds while the bundled Python.framework warms; this is documented on the v1.9 "
-            f"backlog under the boot-time investigation thread.</li>"
+            f"<li>The first launch of Outlier on a {mac['cpu_cores']}-core {mac['chip']} takes longer while the bundled "
+            f"Python.framework warms; later launches skip that step. I have not timed it.</li>"
         )
         body.append("<ul>" + "".join(rough_notes) + "</ul>")
         body.append(f"<h2>What is the unique number for {m['display_name']} on {mac['name']}?</h2>")
@@ -672,10 +670,21 @@ def build_run_pages(models, macs) -> list[dict]:
     return pages
 
 
+#: How each tier's M1 Ultra decode figure was measured (seo/_data/models.csv, "source" column).
+MEASURE_NOTE = {
+    "nano": "M1 Ultra 64 GB, MLX 4-bit, the 2026-04-29 benchmark, n=5",
+    "lite": "M1 Ultra 64 GB, MLX 4-bit, the 2026-04-29 benchmark, n=5",
+    "compact": "M1 Ultra 64 GB, MLX 4-bit, the 2026-04-29 benchmark, n=5",
+    "code": "M1 Ultra 64 GB, MLX 4-bit, the 2026-04-29 benchmark, n=5",
+    "quick": "M1 Ultra 64 GB, median of 20 runs through the shipped 1.11.804 app, 2026-08-24",
+    "vision38": "M1 Ultra 64 GB, measured 2026-08-19 on the shipped 1.11.792 build",
+    "vision": "M1 Ultra 64 GB, measured 2026-08-19 on the shipped 1.11.792 build",
+    "plus": "M1 Ultra 64 GB, MLX 4-bit, the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process",
+}
 TIER_DISK_GB = {"nano": 2.37, "lite": 5.04, "quick": 15.61, "compact": 15.13,
                 "code": 15.13, "vision": 19.0, "plus": 209.0}
 TIER_QUALITY_NOTE = {
-    "nano": "Nano is the smallest tier, tuned over a 4B base; the one formally measured Outlier accuracy number is Nano HumanEval 81.1% (pass@1, full 164-set). Strong fluency for its size.",
+    "nano": "Nano is the smallest tier, tuned over a 4B base; it scored 52.0% on a 200-question MMLU sample (build 1.11.804), a modest score that suits quick, light tasks. Strong fluency for its size.",
     "lite": "Lite sits on a 9B base, a step up in reasoning and code over Nano while still fitting a 16 GB Mac.",
     "quick": "Quick is a reasoning-strong MoE tier but comparatively weak on code-shaped tasks; pick it for exploration, not for code.",
     "compact": "Core is the best general-purpose tier in the lineup for code and reasoning quality.",
@@ -704,15 +713,15 @@ def by_tier_disk(tier_id: str) -> str:
 #: know the metric is unusually well aligned with their task; a reader doing
 #: documentation needs to know it is close to irrelevant to theirs.
 HUMANEVAL_RELEVANCE = {
-    "code-review": "that figure measures writing a function from scratch, which is not what a review pass does: treat it as a floor for language competence here, not as a review-quality score.",
-    "refactoring": "that figure measures writing a function from a description, which is adjacent to but not the same as rewriting one that already exists and must keep its behaviour.",
-    "test-writing": "that figure is itself a pass-rate on generated code, so of the tasks here it is the one the metric speaks to most directly.",
-    "documentation": "that figure says nothing about prose, so it is close to irrelevant for documentation: judge this tier on tokens per second and on tone instead.",
-    "summarization": "that figure is a code benchmark and does not speak to summarisation quality; for this workload the context ceiling matters far more than pass@1.",
-    "data-cleaning": "that figure covers self-contained functions, which is a fair proxy for the small transforms this work is made of.",
-    "brainstorming": "that figure rewards a single correct answer, which is the opposite of what brainstorming wants: breadth of candidates matters more than pass@1 here.",
-    "shell-scripts": "that figure is measured on the same Nano tier this workload runs on, so it is directly applicable rather than extrapolated.",
-    "regex": "that figure is a reasonable proxy here: regex generation is fluency-bound, and a pattern is either correct or it is not.",
+    "code-review": "HumanEval measures writing a function from scratch, which is not what a review pass does: treat it as a floor for language competence here, not as a review-quality score.",
+    "refactoring": "HumanEval measures writing a function from a description, which is adjacent to but not the same as rewriting one that already exists and must keep its behaviour.",
+    "test-writing": "HumanEval is itself a pass-rate on generated code, so of the tasks here it is the one the metric speaks to most directly (it was run on Core and Vision 3.8, not on Nano).",
+    "documentation": "HumanEval says nothing about prose, so it is close to irrelevant for documentation: judge this tier on tokens per second and on tone instead.",
+    "summarization": "HumanEval is a code benchmark and does not speak to summarisation quality; for this workload the context ceiling matters far more than pass@1.",
+    "data-cleaning": "HumanEval covers self-contained functions, which is a fair proxy for the small transforms this work is made of (it was run on Core and Vision 3.8, not on Nano).",
+    "brainstorming": "HumanEval rewards a single correct answer, which is the opposite of what brainstorming wants: breadth of candidates matters more than pass@1 here.",
+    "shell-scripts": "HumanEval was not run on Nano, so there is no coding-benchmark figure for the tier this workload runs on; judge it on your own scripts and on the MMLU figure above.",
+    "regex": "HumanEval would be a reasonable proxy here (regex generation is fluency-bound, and a pattern is either correct or it is not), but it was not run on Nano.",
 }
 
 
@@ -723,7 +732,7 @@ def quality_block(tier_id: str, u: dict, c: dict, u_slug: str = "") -> str:
     # generic default on every page and reintroduce the identical span.
     relevance = HUMANEVAL_RELEVANCE.get(
         u_slug or u.get("slug", ""),
-        "That figure is a code benchmark, so weigh it against how code-shaped this "
+        "HumanEval is a code benchmark, so weigh it against how code-shaped this "
         "particular workload actually is.")
     # The competitor and the use case are woven THROUGH this paragraph rather
     # than sitting at the front of it, and that placement is the entire point.
@@ -738,8 +747,8 @@ def quality_block(tier_id: str, u: dict, c: dict, u_slug: str = "") -> str:
         f"<p>For a {u['name']} workload moving off {c['short_name']} onto the {tier_id} tier: "
         f"{note} The <a href=\"/seo/learn/mlx-explained/\">MLX explainer</a> has the per-tier "
         f"breakdown if you want to see how it compares with {c['short_name']}. "
-        f"The one formally measured Outlier accuracy figure is Nano HumanEval 81.1% "
-        f"(pass@1, full 164-set), and for {u['name']} specifically: {relevance}</p>"
+        f"The measured accuracy figures are on the <a href=\"/data/outlier-tier-benchmarks-2026-08/\">tier benchmarks page</a> "
+        f"(MMLU for every tier; HumanEval for Core and Vision 3.8, not for Nano), and for {u['name']} specifically: {relevance}</p>"
     )
 
 
@@ -955,7 +964,7 @@ def build_howto_pages() -> list[dict]:
          [("Download the signed DMG", "Pull the latest DMG from GitHub Releases. The download is signed by Developer ID and notarized by Apple."),
           ("Open the DMG", "Double-click. macOS verifies the notarization ticket; the first-open prompt is normal for Developer ID apps."),
           ("Drag Outlier.app to Applications", "The app is self-contained; no separate Python install is required."),
-          ("Launch Outlier", "First boot takes about 50 seconds while the bundled Python framework warms up."),
+          ("Launch Outlier", "The first launch takes longer while the bundled Python framework warms up; later launches skip that step."),
           ("Pick a tier", "The model picker downloads from Hugging Face on first run; tiers range from 2.4 GB (Nano) to 209 GB (Plus).")]),
         ("download-a-model-tier", "How to download an Outlier model tier",
          "Trigger the Hugging Face pull for any tier from inside the app.",
@@ -987,7 +996,7 @@ def build_howto_pages() -> list[dict]:
           ("Ask for one focused test at a time", "Local tier quality holds well for one test; quality on long batches drops."),
           ("Iterate inline", "Run the suggested test in your terminal; paste failures back."),
           ("Pin the tier to Lite or Core", "Quick is faster but its HumanEval pass@1 is much lower; not the right choice for code-shaped tasks.")]),
-        ("review-a-pull-request-locally", "How to review a pull request without sending code to the cloud",
+        ("review-a-pull-request-locally", "Review a pull request without sending code out",
          "Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API.",
          [("Copy the diff", "<code>git show HEAD</code> or fetch the PR locally."),
           ("Paste into Outlier in Code mode", "The system prompt is tuned for code-first review."),
@@ -1018,7 +1027,7 @@ def build_howto_pages() -> list[dict]:
             ("<p>The DMG is signed by Developer ID <code>9N3Z6J63T4</code> and notarized via Apple&rsquo;s "
              "notarytool service. <code>spctl --assess</code> reports <em>accepted, source=Notarized "
              "Developer ID</em> on a clean machine.</p>"
-               "<p>First launch takes roughly 50 seconds while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated: re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
+               "<p>The first launch takes longer while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated: re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
              "The complete install touches three locations: <code>/Applications/Outlier.app</code>, "
              "<code>~/Library/Application Support/Outlier/</code>, and <code>~/.outlier/</code>."),
         "download-a-model-tier":
@@ -1102,9 +1111,8 @@ def build_howto_pages() -> list[dict]:
             "FastAPI sidecar; that is the entire chat path.</p>",
         "free-up-disk-space-for-large-models":
             "<h2>How big is each Outlier tier on disk?</h2>"
-            "<p>Nano 2.37 GB, Lite 5.04 GB, Quick 15.61 GB, Core 15.13 GB, Code 15.13 GB (shares "
-            "Core weights), Vision 3.8 15.5 GB, Plus 209 GB. Plus alone is more than half a typical "
-            "512 GB SSD&rsquo;s usable capacity once the OS is accounted for; the v1.9 streaming "
+            "<p>Nano 2.37 GB, Lite 5.04 GB, Quick 15.61 GB, Core 15.13 GB, Vision 3.8 15.5 GB, "
+            "Plus 209 GB. Plus alone is about 40% of a 512 GB drive (209 \u00f7 512) before the OS is accounted for; the v1.9 streaming "
             "engine improvements only reduce the working RAM requirement, not the disk requirement.</p>",
         "write-unit-tests-with-local-ai":
             "<h2>What is the right tier for test writing?</h2>"
@@ -1113,10 +1121,8 @@ def build_howto_pages() -> list[dict]:
             "test framework is well-known (pytest, vitest, jest), Lite handles it. For tricky "
             "fixtures or property-based testing, Core (24 GB RAM) is the upgrade.</p>",
         "review-a-pull-request-locally":
-            "<h2>How does Code-tier context width compare to Core?</h2>"
-            "<p>Code defaults to 64K context against Core&rsquo;s 32K, with both capped at 128K on Pro. The "
-            "two share the same safetensors and produce identical answer quality; the difference is "
-            "the chat template and decoding configuration. For PR review on diffs over 500 lines, "
+            "<h2>How wide is Core&rsquo;s context for PR review?</h2>"
+            "<p>Core defaults to a 32K context window. For PR review on diffs over 500 lines, "
             "Core&rsquo;s memory-sized window keeps the whole diff plus the relevant surrounding code "
             "addressable in a single turn.</p>",
         "draft-shell-scripts-with-the-nano-tier":
@@ -1149,7 +1155,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                "<p>Apple Silicon Mac, macOS 26 or later, the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). Those are the minimums to load a tier; a long agent session needs more. Internet is required only for the one-time model download.</p>",
+                f"<p>Apple Silicon Mac, macOS 26 or later, and for {h1.lower()} the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). For {slug.replace('-', ' ')}, those are the minimums to load a tier; a long agent session needs more. Internet is required only for the one-time model download.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
@@ -1324,9 +1330,9 @@ def build_learn_pages() -> list[dict]:
             f"the M1 Ultra (800 GB/s); Core at 15 GB runs at {toks('compact')} tok/s on the same machine. The "
             f"ratio of those numbers ({float(toks('nano')) / float(toks('compact')):.2f}) is close to the ratio of the model sizes (15 / 2.4 = 6.25), "
             "with the gap closed partly by the differences in compute density and quantization layout.</p>"
-            "<p>For the Plus tier (209 GB on disk), the bottleneck shifts. Even a 192 GB Mac Studio "
+            "<p>For the Plus tier (209 GB on disk), the bottleneck shifts. Even a 128 GB Mac "
             "cannot hold the whole model in unified memory, so reads spill to NVMe. That is why "
-            "the Flash-MoE technique of fan-out <code>pread()</code> is the Plus-tier optimization "
+            "fan-out <code>pread()</code> is the Plus-tier optimization "
             "to chase: it parallelises the disk-read step that bandwidth alone cannot fix.</p>",
     }
     deep = {
@@ -1341,8 +1347,8 @@ def build_learn_pages() -> list[dict]:
              "and serves the routed selection out of that mix.</p>",
              "<p>Outlier&rsquo;s Plus tier sets <code>K_override=20</code>, <code>cache_gb=8.0</code>, "
              "<code>OUTLIER_MMAP_EXPERTS=0</code>, and lazy-loads the full state dict.</p>",
-             "<p>Page-aligned <code>pread()</code> fanout with libdispatch groups is the Flash-MoE technique that closes "
-             "the gap from 1.59 tok/s (Outlier today) to 4.36 tok/s (Flash-MoE on M3 Max). It is on the v1.9 backlog.</p>"),
+             "<p>Page-aligned <code>pread()</code> fanout with libdispatch groups targets the disk-read step that limits Plus "
+             "today (1.59 tok/s). It is on the v1.9 backlog.</p>"),
         "ternary-quantization-explained":
             ("<p>Ternary quantization replaces each floating-point weight with one of three values "
              "(commonly &minus;1, 0, +1) plus a per-channel or per-group scale factor. The storage "
@@ -1376,7 +1382,7 @@ def build_learn_pages() -> list[dict]:
              "noise) at 33.78 GB peak. K=20 gives 1.59 tok/s with 14.04 GB peak gen and is locked.</p>",
              "<p>K=4 is a hard model constraint, not a tunable: routing top-10 cannot fit in a "
              "resident pool of 4 without first-token control-token escapes.</p>",
-             "<p>Source: <code>sprints/v18_plus_ship/artifacts/K_SWEEP_RESULTS.md</code> (2026-05-01, 5-prompt agg, isolated subprocess per K, mx.metal.get_peak_memory).</p>"),
+             "<p>Source: the 2026-05-01 K sweep (5 prompts, isolated subprocess per K, mx.metal.get_peak_memory); see the <a href=\"/data/v11-streaming-engine-benchmarks/\">streaming engine benchmarks</a>.</p>"),
         "what-is-unified-memory":
             ("<p>Apple Silicon places the CPU, GPU, Neural Engine, and memory controller on the "
              "same package and exposes a single address space to all of them. There is no separate "
@@ -1386,7 +1392,7 @@ def build_learn_pages() -> list[dict]:
              "token requires reading the weights of the model out of memory once. The throughput "
              "ceiling for a tier is therefore (unified memory bandwidth) divided by (weight bytes per token).</p>",
              "<p>That is why decode tok/s scales with chip generation more than core count: M1 Ultra "
-             "is 800 GB/s, M2 Ultra and M3 Ultra are 800 GB/s, M4 Ultra is 1092 GB/s, and base-tier "
+             "is 800 GB/s, M2 Ultra and M3 Ultra are 800 GB/s, and base-tier "
              "M1/M4 Air are 68&ndash;120 GB/s.</p>",
              "<p>For the Plus tier, the bottleneck shifts from RAM bandwidth to NVMe read bandwidth because the model spills onto disk; that is the regime the v1.9 page-aligned <code>pread()</code> fanout targets.</p>"),
     }
@@ -1413,10 +1419,10 @@ def build_learn_pages() -> list[dict]:
             f"file that produced it; if there is no provenance file, treat the number as marketing.</p>",
             f"<h2>Where can I read more about {h1.lower().replace('?', '')}?</h2>",
             {
-                "paged-moe-explained": "<p>The Plus-tier paging logic and the K_override sweep that produced the locked configuration live in <code>sprints/v18_plus_ship/artifacts/K_SWEEP_RESULTS.md</code> and <code>K_SWEEP_RESULTS</code> JSON files; the engine code is in <code>desktop_app/backend/engine_v9_loader.py</code>.</p>",
+                "paged-moe-explained": "<p>The K_override sweep that produced the locked Plus-tier configuration is summarised on the <a href=\"/data/v11-streaming-engine-benchmarks/\">streaming engine benchmarks</a> page.</p>",
                 "ternary-quantization-explained": "<p>The provisional patent texts (USPTO #64/026,886, #64/030,368, #64/034,028) are the canonical reference for the ternary direction. The shipping app source does not implement ternary today.</p>",
                 "mlx-explained": "<p>Apple&rsquo;s open-source MLX project on GitHub is the upstream; mlx_lm 0.31.3 is the specific version Outlier bundles. The integration points live in <code>desktop_app/backend/server.py</code> in the standard tier load path.</p>",
-                "k-override-explained": "<p>The K-sweep raw artifacts (k_sweep_K4.json, K20.json, K32.json, K48.json plus matching .log files) live under <code>sprints/v18_plus_ship/artifacts/</code>; the harness is <code>k_sweep.py</code> in the same directory.</p>",
+                "k-override-explained": "<p>The K sweep (K=4, 20, 32 and 48) is summarised on the <a href=\"/data/v11-streaming-engine-benchmarks/\">streaming engine benchmarks</a> page.</p>",
                 "what-is-unified-memory": "<p>Apple&rsquo;s developer documentation on the unified memory architecture is the upstream reference. The per-Mac bandwidth numbers in this article come from Apple&rsquo;s spec sheets for each chip generation.</p>",
             }.get(slug, "<p>See <code>FINAL_LAUNCH_NUMBERS.md</code> in the public repo for shipping numbers.</p>"),
             extra_long.get(slug, ""),
@@ -1427,14 +1433,14 @@ def build_learn_pages() -> list[dict]:
                 "ternary-quantization-explained": "<p>Today this concept does not ship in any Outlier tier. The shipping tiers are MLX 4-bit. The ternary direction is research and is what the three April-2026 patent filings cover.</p>",
                 "mlx-explained": "<p>Every Outlier tier uses MLX 4-bit at the leaf level: Nano, Lite, Quick, Core, and Vision 3.8 via standard mlx_lm; Plus via the V9 paged loader sitting next to mlx_lm in the same FastAPI sidecar.</p>",
                 "k-override-explained": "<p>K_override is Plus-tier-only. The other six tiers either load entirely into unified memory or need not page experts; their inference path does not even consult the K_override knob.</p>",
-                "what-is-unified-memory": "<p>This concept is foundational to every Outlier tier. The smallest Mac that exercises it is a 6 GB M1 base running Nano; the largest is a 192 GB M4 Ultra running Plus.</p>",
+                "what-is-unified-memory": "<p>This concept is foundational to every Outlier tier. The smallest Mac that exercises it is a 6 GB M1 base running Nano; the largest is a 64 GB or larger Mac running Plus.</p>",
             }.get(slug, "<p>This concept is general across the Outlier lineup.</p>"),
             f"<h2>What is the smallest configuration that exercises this concept?</h2>",
             {
-                "paged-moe-explained": "<p>You need a 32 GB or larger Mac plus 209 GB of free disk to load the Plus tier and reproduce the paging behavior. There is no smaller-tier proxy for the routed-expert page-fault path.</p>",
+                "paged-moe-explained": "<p>You need a 64 GB Mac plus 209 GB of free disk to load the Plus tier and reproduce the paging behavior. There is no smaller-tier proxy for the routed-expert page-fault path.</p>",
                 "ternary-quantization-explained": "<p>None of the shipping Outlier tiers run ternary. To exercise the concept today you would run a separate ternary-quantized checkpoint outside Outlier; the shipping app does not surface this.</p>",
                 "mlx-explained": "<p>A 6 GB M1 Mac running the Nano tier is sufficient to exercise everything MLX provides for Outlier&rsquo;s standard tiers. The Plus-tier additions ride on top.</p>",
-                "k-override-explained": "<p>You need at least 32 GB unified memory to load Plus with K_override=20. K_override=4 is testable at lower RAM but fails coherence; the locked production knob is K=20 and that is what the bench machine runs.</p>",
+                "k-override-explained": "<p>Plus needs a 64 GB Mac (its minimum RAM) to load with K_override=20. K_override=4 is testable at lower RAM but fails coherence; the locked production knob is K=20 and that is what the bench machine runs.</p>",
                 "what-is-unified-memory": "<p>A 6 GB M1 Air running Nano demonstrates the unified-memory concept end-to-end. Heavier tiers exercise more of the unified address space but the underlying mechanism is the same.</p>",
             }.get(slug, "<p>The concept is exercised across the lineup; pick a tier that suits the question.</p>"),
             "<h2>One unique number</h2>",
@@ -1490,11 +1496,17 @@ def validate(pages: list[dict], all_paths: dict[str, Path]) -> dict:
     for p in pages:
         full = (p["quick_answer"] + p["body"])
         wc = word_count_html(full)
+        # A noindexed page is kept live but withdrawn from search BECAUSE it is a near-duplicate of its group's one
+        # indexable page (seo/_data/noindex.json, scripts/near_dup_gate.py). Counting its shared 50-word spans as a
+        # build error made every run exit 1 on pages that are already handled by policy.
+        _noindexed = f"seo/{p['category']}/{p['slug']}/" in NOINDEX
         word_counts.append((p["slug"], wc))
         if wc < 600:
             report["errors"].append(f"{p['category']}/{p['slug']}: {wc} words (<600)")
         elif wc > 1500:
             report["warnings"].append(f"{p['category']}/{p['slug']}: {wc} words (>1500)")
+        if _noindexed:
+            continue
         for sh in shingles(full):
             all_shingles[sh].append(f"{p['category']}/{p['slug']}")
     dup_count = 0
