@@ -104,7 +104,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"A local AI agent with computer use, fully offline on a Mac","description":"Computer use lets an AI see your screen and operate your Mac. Here's how to run that workflow locally.","datePublished":"2026-05-19","dateModified":"2026-05-20","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/local-ai-agent-computer-use-offline/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"A local AI agent with computer use, fully offline on a Mac","description":"Computer use lets an AI see your screen and operate your Mac. Here's how to run that workflow locally.","datePublished":"2026-05-19","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/local-ai-agent-computer-use-offline/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "A local AI agent with computer use, fully offline on a Mac", "item": "https://outlier.host/run/local-ai-agent-computer-use-offline/"}]}
@@ -134,14 +134,14 @@
     <h1>A local AI agent with computer use, fully offline on a Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-05-20</span>
+      <span class="updated-pill">Last updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>Computer use means the AI reads screenshots and then clicks or types through macOS Accessibility.</li>
-        <li><strong>Vision 3.8 27B</strong> does the screen-reading locally on a 24 GB+ Mac (~16 tok/s on the V9 engine).</li>
+        <li><strong>Vision 3.8 27B</strong> does the screen-reading locally on a 24 GB+ Mac (17.2 tok/s on an M1 Ultra, measured 2026-08-19; see the <a href="https://outlier.host/#benchmarks">benchmarks table</a>).</li>
         <li>By default it asks before every action. You can scope-grant a whole workflow so it stops asking.</li>
         <li>You give up some visual-reasoning quality versus cloud. You get nothing on your screen ever leaving the machine.</li>
       </ul>
@@ -159,7 +159,7 @@
     <p>Not one of those steps touches the network. The screenshot is captured on your machine, the model runs on your machine, the clicks happen on your machine.</p>
 
     <h2>What Vision 3.8 27B sees and decides</h2>
-    <p>Vision 3.8 27B is a 35-billion-parameter Mixture-of-Experts model with an image encoder, and only 3.6B of those parameters fire per token. You need a 24 GB+ Mac. It runs on the V9 paged engine at roughly 16 tok/s. On a 64 GB Mac Studio you've got plenty of room left over for long image-heavy sessions.</p>
+    <p>Vision 3.8 27B is a dense 27B model with an image encoder (a 15.5 GB download). You need a 24 GB+ Mac. It decodes at 17.2 tok/s on an M1 Ultra (measured 2026-08-19; see the <a href="https://outlier.host/#benchmarks">benchmarks table</a>). On a 64 GB Mac Studio you've got plenty of room left over for long image-heavy sessions.</p>
     <p>The prompt for a computer-use task looks about like this. "Here's a screenshot of my desktop. The user wants the export-to-PDF button in this app. Where do I click?" The model hands back rough coordinates or a description of the element it found. Then the Outlier agent does one of three things: clicks it, asks you first, or gives control back.</p>
 
     <h2>Where the local version trails</h2>
