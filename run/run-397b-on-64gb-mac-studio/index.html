@@ -150,7 +150,7 @@
     <p class="lead">A 397-billion-parameter model has no business running on a 64 GB Mac. The full Qwen3.5-397B-A17B weights eat about 209 GB on disk, and every rule of thumb says you want a server with hundreds of GB of RAM and a fat GPU to touch it. Then you actually try it on the Mac, and it runs anyway.</p>
 
     <h2>The naive math</h2>
-    <p>Start with the obvious approach. Qwen3.5-397B-A17B at MLX 4-bit quantization. The HuggingFace repo (<code>mlx-community/Qwen3.5-397B-A17B-4bit</code>) weighs in at ~209 GB. Loading every parameter into unified memory at once means a Mac with at least that much RAM, plus a real margin on top for the KV cache and the activation tensors. The OS needs to breathe too. In practice you're looking at a 192 GB or 256 GB Mac Studio Ultra. That's a $7,000–$10,000 machine.</p>
+    <p>Start with the obvious approach. Qwen3.5-397B-A17B at MLX 4-bit quantization. The HuggingFace repo (<code>mlx-community/Qwen3.5-397B-A17B-4bit</code>) weighs in at ~209 GB. Loading every parameter into unified memory at once means a Mac with at least that much RAM, plus a real margin on top for the KV cache and the activation tensors. The OS needs to breathe too. In practice you're looking at a Mac Studio Ultra with 192 GB of memory or more, far beyond a 64 GB machine.</p>
     <p>A 64 GB Mac Studio can't hold the whole thing resident. No chance. The capacity engine, which is the blunt load-everything-into-RAM path, just refuses to start. So you've got two options. Don't run the model, or change the rules.</p>
 
     <h2>Why MoE makes this tractable</h2>
