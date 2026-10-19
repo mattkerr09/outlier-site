@@ -8,8 +8,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>Apple M1 vs M4 for local AI: 68 vs 120 GB/s | Outlier</title>
-  <meta name="description" content="The base M1 tops out at 16GB and about 68GB/s; the M4 reaches 128GB on Max and about 120GB/s. Capacity decides what runs, bandwidth how fast.">
+  <title>M1 vs M4 memory bandwidth for local AI (Pro and Max too)</title>
+  <meta name="description" content="M1 is about 68GB/s, M1 Pro 200GB/s, M1 Max 400GB/s and M4 120GB/s. How bandwidth sets local AI speed, how much memory each chip allows, and what fits.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/vs/m1-vs-m4-for-local-ai/">
@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits","description":"An engineering comparison of Apple M1 and M4 for running local AI models: unified memory ceilings, memory bandwidth, measured tokens per second, sustained load, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-10-07","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/m1-vs-m4-for-local-ai/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits","description":"An engineering comparison of Apple M1 and M4 for running local AI models: unified memory ceilings, memory bandwidth, measured tokens per second, sustained load, price per usable gigabyte, and upgrade paths.","datePublished":"2026-07-23","dateModified":"2026-10-19","mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/m1-vs-m4-for-local-ai/"},"author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Apple M1 vs M4 for local AI","item":"https://outlier.host/vs/m1-vs-m4-for-local-ai/"}]}
@@ -138,12 +138,12 @@
     <h1>Apple M1 vs M4 for local AI: memory, bandwidth, and what actually fits</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-10-07</span>
+      <span class="updated-pill">Updated 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>For local AI, the M1 and M4 differ in two things that matter: memory ceiling (16GB on base M1 versus 32GB on M4, 64GB on M4 Pro, 128GB on M4 Max) and memory bandwidth (roughly 68GB/s versus 120GB/s). Capacity decides which models run at all; bandwidth decides how fast they generate, and the measured M1-to-M4 speedup on LLaMA 7B is 1.70x against a bandwidth ratio of 1.76x. The 11-to-38 TOPS Neural Engine gap is the wrong number to shop on: local models run on the GPU, not the Neural Engine.</p>
+      <p>For local AI, the M1 and M4 differ in two things that matter: memory ceiling (16GB on base M1 versus 32GB on M4, 64GB on M4 Pro, 128GB on M4 Max) and memory bandwidth (roughly 68GB/s versus 120GB/s). Capacity decides which models run at all; bandwidth decides how fast they generate, and the measured M1-to-M4 speedup on LLaMA 7B is 1.70x against a bandwidth ratio of 1.76x. The 11-to-38 TOPS Neural Engine gap is the wrong number to shop on: local models run on the GPU, not the Neural Engine. The M1 family is not one number: Apple's 2021 release gives the M1 Pro up to 200GB/s and the M1 Max up to 400GB/s, both above a base M4's 120GB/s.</p>
     </div>
 
     <p class="lead">I'm Matt Kerr, and I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs language models on your own hardware, so I'm an interested party. Worth saying up front. This is the hardware note I wish I'd had, and it includes where a PC with a discrete GPU wins.</p>
@@ -156,6 +156,29 @@
     <p><strong>Capacity is a wall:</strong> the weights fit in RAM or the machine falls back to disk and the experience collapses. <strong>Bandwidth is a slope:</strong> each token means reading the weights out of memory, so tokens per second scales with read speed.</p>
     <p>Apple never published a bandwidth figure for the base M1, but it called M1 Max's 400GB/s nearly six times M1's, and later put M5's 153GB/s at more than double M1's. Both imply about 68GB/s. M4 is a documented 120GB/s, a 1.76x ratio. In llama.cpp's community table (LLaMA 7B, Q4_0), M1 generates 14.15 tok/s and base M4 manages 24.11, a 1.70x gap. Decode is a bandwidth story.</p>
     <p>Prefill is compute-bound, so GPU cores show up there instead: 117.96 tok/s on M1 against 885.68 on M4 Max. That's the wait before the first word appears.</p>
+
+    <h2>M1 Pro and M1 Max: more bandwidth than a base M4</h2>
+    <p>The base M1 is the bottom of its family. Apple's release for the M1 Pro and M1 Max states <strong>up to 200GB/s with up to 32GB of unified memory</strong> for the M1 Pro, and <strong>up to 400GB/s with up to 64GB</strong> for the M1 Max. Set against the M4 figures on this page, an M1 Pro (200GB/s) sits above a base M4 (120GB/s) and below an M4 Pro (273GB/s), and an M1 Max (400GB/s) sits above an M4 Pro, with only the M4 Max (up to 546GB/s) ahead of it.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Chip</th>
+          <th>Memory bandwidth</th>
+          <th>Max unified memory</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>M1</td><td>~68GB/s (implied)</td><td>16GB</td></tr>
+        <tr><td>M1 Pro</td><td>up to 200GB/s</td><td>32GB</td></tr>
+        <tr><td>M1 Max</td><td>up to 400GB/s</td><td>64GB</td></tr>
+        <tr><td>M4</td><td>120GB/s</td><td>32GB</td></tr>
+        <tr><td>M4 Pro</td><td>273GB/s</td><td>64GB</td></tr>
+        <tr><td>M4 Max</td><td>up to 546GB/s</td><td>128GB</td></tr>
+      </tbody>
+    </table>
+
+    <p>Because generation speed follows bandwidth, those numbers predict that an M1 Pro or M1 Max generates faster than a base M4. I have not measured either, and this page has no benchmark row for them, so read that as what the specs imply, not as a result. Capacity is the other limit: an M1 Pro tops out at 32GB, the same ceiling as a base M4, and prefill depends on GPU cores, where the newer chips pull ahead.</p>
 
     <h2>What each configuration actually fits</h2>
     <p>The "what fits" row uses Outlier's tiers because those RAM minimums are measured rather than guessed.</p>
@@ -250,7 +273,7 @@
     <p><strong>Throughput above all, on a model that fits a card:</strong> buy the PC. I'd rather you got the right machine than the one I write software for.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Chip ceilings and bandwidth for M4, M4 Pro and M4 Max all come from one page: Apple Newsroom's <a href="https://www.apple.com/newsroom/2024/10/apple-introduces-m4-pro-and-m4-max/">M4 Pro and M4 Max release</a>, which states 32GB and 120GB/s for M4, "up to 64GB … and 273GB/s" for M4 Pro, and "up to 128GB … and up to 546GB/s" for M4 Max. Shipping machine configurations are read off Apple's tech specs: <a href="https://www.apple.com/mac-mini/specs/">Mac mini</a> (16GB configurable to 24GB; M4 Pro configurable to 48GB; 120GB/s), <a href="https://www.apple.com/mac-studio/specs/">Mac Studio</a> (M4 Max 36GB configurable to 64GB), and <a href="https://www.apple.com/macbook-pro/specs/">MacBook Pro</a>, which now lists M5 parts only. The ~68GB/s M1 figure is implied by two Apple comparisons rather than published: the <a href="https://www.apple.com/newsroom/2021/10/introducing-m1-pro-and-m1-max-the-most-powerful-chips-apple-has-ever-built/">M1 Pro and M1 Max release</a> calls M1 Max's 400GB/s "nearly 6x the memory bandwidth of M1," and the <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5 release</a> puts 153GB/s at "more than 2x over M1". That release is also the source for the 4x/6x GPU-compute claim. Neural Engine TOPS from the <a href="https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/">M1 launch release</a> (11 trillion ops/s) and the <a href="https://www.apple.com/newsroom/2024/05/apple-introduces-m4-chip/">M4 introduction</a> (38 trillion ops/s); neither states a memory ceiling or a bandwidth figure, so neither is cited for one. M1 configuration language from <a href="https://support.apple.com/en-us/111883">Apple's M1 MacBook Air tech specs</a>. Prices read from apple.com/shop on 2026-07-23. Throughput from <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp's Apple silicon benchmark thread</a> (community-submitted). Neural Engine position from the <a href="https://github.com/ml-explore/mlx/issues/18">MLX issue tracker</a>; 8GB guidance from <a href="https://lmstudio.ai/docs/app/system-requirements">LM Studio</a>. Outlier tier sizes and tok/s measured on an M1 Ultra (64GB), July 2026. Hardware prices, configurations and vendor policies change, so verify at apple.com before buying.
+      <strong>Sources and receipts:</strong> Chip ceilings and bandwidth for M4, M4 Pro and M4 Max all come from one page: Apple Newsroom's <a href="https://www.apple.com/newsroom/2024/10/apple-introduces-m4-pro-and-m4-max/">M4 Pro and M4 Max release</a>, which states 32GB and 120GB/s for M4, "up to 64GB … and 273GB/s" for M4 Pro, and "up to 128GB … and up to 546GB/s" for M4 Max. Shipping machine configurations are read off Apple's tech specs: <a href="https://www.apple.com/mac-mini/specs/">Mac mini</a> (16GB configurable to 24GB; M4 Pro configurable to 48GB; 120GB/s), <a href="https://www.apple.com/mac-studio/specs/">Mac Studio</a> (M4 Max 36GB configurable to 64GB), and <a href="https://www.apple.com/macbook-pro/specs/">MacBook Pro</a>, which now lists M5 parts only. The ~68GB/s M1 figure is implied by two Apple comparisons rather than published: the <a href="https://www.apple.com/newsroom/2021/10/introducing-m1-pro-and-m1-max-the-most-powerful-chips-apple-has-ever-built/">M1 Pro and M1 Max release</a> calls M1 Max's 400GB/s "nearly 6x the memory bandwidth of M1," and the <a href="https://www.apple.com/newsroom/2025/10/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon/">M5 release</a> puts 153GB/s at "more than 2x over M1". That release is also the source for the 4x/6x GPU-compute claim. The M1 Pro (up to 200GB/s, up to 32GB) and M1 Max (up to 400GB/s, up to 64GB) figures are from the M1 Pro and M1 Max release linked above. Neural Engine TOPS from the <a href="https://www.apple.com/newsroom/2020/11/apple-unleashes-m1/">M1 launch release</a> (11 trillion ops/s) and the <a href="https://www.apple.com/newsroom/2024/05/apple-introduces-m4-chip/">M4 introduction</a> (38 trillion ops/s); neither states a memory ceiling or a bandwidth figure, so neither is cited for one. M1 configuration language from <a href="https://support.apple.com/en-us/111883">Apple's M1 MacBook Air tech specs</a>. Prices read from apple.com/shop on 2026-07-23. Throughput from <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">llama.cpp's Apple silicon benchmark thread</a> (community-submitted). Neural Engine position from the <a href="https://github.com/ml-explore/mlx/issues/18">MLX issue tracker</a>; 8GB guidance from <a href="https://lmstudio.ai/docs/app/system-requirements">LM Studio</a>. Outlier tier sizes and tok/s measured on an M1 Ultra (64GB), July 2026. Hardware prices, configurations and vendor policies change, so verify at apple.com before buying.
     </div>
 
     <div class="cta">
