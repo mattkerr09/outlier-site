@@ -139,6 +139,7 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="DeepSeek">DeepSeek prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -149,11 +150,11 @@
     <p class="lead">Disclosure first: I build Outlier, so I have an obvious stake in one of these two products. Every DeepSeek claim below is tied to DeepSeek's own documentation, or marked when it comes from press reporting.</p>
 
     <h2>What DeepSeek actually is</h2>
-    <p>DeepSeek is a cloud AI assistant from Hangzhou DeepSeek Artificial Intelligence Co., Ltd. Its site lists exactly three surfaces: Web, App, and API: chat.deepseek.com, the iOS and Android apps, and the developer API.</p>
+    <p>DeepSeek is a cloud AI assistant from Hangzhou DeepSeek Artificial Intelligence Co., Ltd. Its site lists DeepSeek Web (chat.deepseek.com), the iOS and Android app, the DeepSeek Harness desktop app, and the API Platform.</p>
 
-    <p>The iOS listing, "DeepSeek - AI Assistant," is <strong>listed as Free, with no In-App Purchases block</strong>, needs iOS 15.0 or later, and supports iPhone, iPad and iPod touch only. DeepSeek's own downloads URL returns HTTP 404, its site names only Web, App and API without naming an operating system, and the <code>deepseek-ai</code> GitHub organization holds 36 repositories of infrastructure and model code and not one chat client, so I could not confirm an official macOS, Windows or CLI client from any primary source. That is weaker than saying none exists, and deliberately so: a closed-source client would leave no public repo either, so the desktop apps you find are of unknown provenance rather than provably unofficial.</p>
+    <p>The iOS listing, "DeepSeek - AI Assistant," is <strong>listed as Free, with no In-App Purchases block</strong>, needs iOS 15.0 or later, and supports iPhone, iPad and iPod touch only. DeepSeek's downloads page also offers DeepSeek Harness for desktop, for macOS (Apple silicon, macOS 13 or later) and Windows. Harness is DeepSeek's open-source agent app ("work in the background, edit local files"). I haven't tested it, and the pages I read don't say whether its model runs locally or in DeepSeek's cloud, so this page compares the chat app and the API.</p>
 
-    <p>Underneath is DeepSeek-V4, announced April 24, 2026 as live and open-sourced: <strong>V4-Pro</strong> at 1.6T total / 49B active parameters, <strong>V4-Flash</strong> at 284B / 13B. DeepSeek says 1M context is the default across all official services, with 384K max output. Both weight sets are on Hugging Face, MIT-licensed.</p>
+    <p>Underneath is DeepSeek-V4, announced April 24, 2026 as live and open-sourced: <strong>V4-Pro</strong> at 1.6T total / 49B active parameters, <strong>V4-Flash</strong> at 284B / 13B. On September 10, 2026 it announced V4.1-Flash, a 552B-parameter MoE that replaced V4-Flash; the API now serves it as <code>deepseek-flash</code>. DeepSeek says 1M context is the default across all official services, with 384K max output. The weights are on Hugging Face, MIT-licensed.</p>
 
     <h2>Where DeepSeek genuinely wins</h2>
     <p>Several of these gaps are structural, and I can't close them.</p>
@@ -162,7 +163,7 @@
       <li><strong>It runs models no Mac can.</strong> 1.6T total parameters won't fit in 64 GB of unified memory at any quantization I'd ship, and a million tokens of context is the default on every official surface. No Mac holds that much KV cache.</li>
       <li><strong>The weights are genuinely open.</strong> MIT-licensed and downloadable in FP8-Mixed and FP4+FP8-Mixed, with commercial use, modification and fine-tuning uncapped. Distrust the hosted service and you can self-host the same family. No closed vendor offers that.</li>
       <li><strong>Independently measured, not self-claimed.</strong> NIST's Center for AI Standards and Innovation put V4-Pro at an IRT-estimated Elo of 800 against GPT-5.4 mini's 749 across nine benchmarks, and more cost efficient on 5 of 7.</li>
-      <li><strong>The API is cheap and drop-in.</strong> V4-Flash costs $0.14 per million input tokens on a cache miss and $0.28 output; V4-Pro, $0.435 and $0.87. Both are OpenAI-compatible, with an Anthropic-compatible endpoint too.</li>
+      <li><strong>The API is cheap and drop-in.</strong> deepseek-flash costs $0.15 per million input tokens on a cache miss and $0.60 output off-peak; V4-Pro, $0.66 and $1.98. Peak rates are double. Both are OpenAI-compatible, with an Anthropic-compatible endpoint too.</li>
       <li><strong>Generous downstream rights.</strong> Outputs are assigned to you, and the Open Platform Terms explicitly permit applying inputs and outputs to "derivative product development, training other models (such as model distillation)." Most vendors forbid precisely that.</li>
       <li><strong>No hardware floor, and it's in your pocket.</strong> Nothing to download or manage, history syncs across devices, same behavior on an 8 GB laptop or a borrowed browser.</li>
     </ul>
@@ -187,8 +188,8 @@
       <tbody>
         <tr>
           <td><strong>Model / context</strong></td>
-          <td>V4-Pro 1.6T-a49B, 1M context</td>
-          <td>V4-Pro 1.6T-a49B and V4-Flash 284B-a13B, 1M context</td>
+          <td>Not named on DeepSeek's download page; 1M context is the default across official services</td>
+          <td>deepseek-flash (V4.1-Flash, 552B MoE) and deepseek-v4-pro (1.6T-a49B), 1M context</td>
           <td>Nano 4B / Lite 9B</td>
           <td>Up to Plus 397B-a17b</td>
         </tr>
@@ -202,7 +203,7 @@
         <tr>
           <td><strong>Price</strong></td>
           <td>Free (no IAP block listed)</td>
-          <td>Flash $0.14 / $0.28; Pro $0.435 / $0.87 per M tokens</td>
+          <td>Flash $0.15 / $0.60; Pro $0.66 / $1.98 per M tokens (off-peak cache-miss input / output; double at peak)</td>
           <td>Free</td>
           <td>$249 once</td>
         </tr>
@@ -236,7 +237,7 @@
         </tr>
         <tr>
           <td><strong>Platform</strong></td>
-          <td>Web, iOS, Android</td>
+          <td>Web, iOS, Android (the Harness desktop app for macOS and Windows is separate)</td>
           <td>HTTP API</td>
           <td>macOS, Apple Silicon</td>
           <td>macOS, Apple Silicon</td>
@@ -247,7 +248,7 @@
     <h2>What each one costs over a year</h2>
     <p>The consumer chat is the easy column: as far as any primary source shows, <strong>$0</strong>. The App Store listing is Free, with no In-App Purchases block on it, and DeepSeek publishes no consumer subscription page. Third-party trackers describe web search, DeepThink mode, file upload and history sync as included free (reported, not documented).</p>
 
-    <p>The API is metered. A million input plus a million output tokens comes to about $0.42 on V4-Flash and $1.31 on V4-Pro, with cache hits dropping input to $0.0028 and $0.003625 per million. Limits are per-account concurrency: 2500 connections for Flash, 500 for Pro. The legacy names <code>deepseek-chat</code> and <code>deepseek-reasoner</code> stop working July 24, 2026; the model surface moves on a short clock.</p>
+    <p>The API is metered. A million input plus a million output tokens at cache-miss rates comes to about $0.75 on deepseek-flash and $2.64 on V4-Pro at off-peak prices, double that at peak, with cache hits dropping input to $0.003 and $0.022 per million off-peak. Peak hours are 01:00 to 04:00 and 06:00 to 10:00 UTC on weekdays, excluding Chinese public holidays. Limits are per-account concurrency: 2500 connections for Flash, 500 for Pro. The model surface moves on a short clock: the pricing page now lists <code>deepseek-flash</code> (DeepSeek-V4.1-Flash-1017) and <code>deepseek-v4-pro</code> (DeepSeek-V4-Pro-0813), and the legacy names <code>deepseek-v4-flash</code> and <code>deepseek-v4-flash-vision-exp</code> are still accepted but route to the Flash model.</p>
 
     <p>Outlier: Nano and Lite are free forever, no account. Pro covers all six tiers; Founders Lifetime is $249. Against a free product, that's a price you pay for locality, not capability per dollar, which DeepSeek wins outright.</p>
 
@@ -270,7 +271,7 @@
     <p><strong>Run both</strong> and you get the honest best of it: Outlier as the local default for sensitive, offline, high-volume work, DeepSeek for million-token questions that need the live web. Just remember that anything you send there is training data until you go turn that toggle off, and that turning it off doesn't reach backwards.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Surfaces from <a href="https://www.deepseek.com/">deepseek.com</a>; iOS details from the <a href="https://apps.apple.com/us/app/deepseek-ai-assistant/id6737597349">App Store</a> (v2.2.2, July 11, 2026); pricing, concurrency and the July 24, 2026 deprecation from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 parameters and MIT licensing from Hugging Face; absent client repos from the <a href="https://github.com/deepseek-ai">deepseek-ai org</a>; data handling from DeepSeek's privacy policy (2026-02-10), Terms of Use (2026-03-27) and Open Platform Terms (2026-04-29); benchmarks from <a href="https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro">NIST CAISI</a>. The Settings › Data controls training toggle is documented in third-party write-ups (Kaspersky among others), not in DeepSeek's own policy. Incidents, restrictions and the censorship figure are press-reported and attributed in the text with their model and date: the 85% figure is PromptFoo's January 2025 test of DeepSeek-R1, not a V4 measurement. No primary source publishes a consumer message cap, so I name none. Outlier specs measured on an M1 Ultra, 2026-07-23. <strong>Competitor pricing and policies change often, so check the primary sources first.</strong>
+      <strong>Sources and receipts:</strong> Surfaces from <a href="https://www.deepseek.com/">deepseek.com</a>, its <a href="https://www.deepseek.com/en/download/">downloads page</a> and <a href="https://www.deepseek.com/en/harness/">Harness page</a>; iOS details from the <a href="https://apps.apple.com/us/app/deepseek-ai-assistant/id6737597349">App Store</a> (v2.6.3, as listed on 2026-10-19); pricing and concurrency from <a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>; V4 and V4.1-Flash parameters from DeepSeek's <a href="https://www.deepseek.com/en/news/v4-preview/">April 24</a> and <a href="https://www.deepseek.com/en/news/deepseek-v4-1-flash/">September 10</a> announcements; MIT licensing from Hugging Face; data handling from DeepSeek's privacy policy (2026-02-10), Terms of Use (2026-03-27) and Open Platform Terms (2026-04-29); benchmarks from <a href="https://www.nist.gov/news-events/news/2026/05/caisi-evaluation-deepseek-v4-pro">NIST CAISI</a>. The Settings › Data controls training toggle is documented in third-party write-ups (Kaspersky among others), not in DeepSeek's own policy. Incidents, restrictions and the censorship figure are press-reported and attributed in the text with their model and date: the 85% figure is PromptFoo's January 2025 test of DeepSeek-R1, not a V4 measurement. No primary source publishes a consumer message cap, so I name none. Outlier specs measured on an M1 Ultra, 2026-07-23. <strong>Competitor pricing and policies change often, so check the primary sources first.</strong>
     </div>
 
     <div class="cta">
