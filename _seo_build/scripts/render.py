@@ -859,6 +859,28 @@ def _lower_first(text: str) -> str:
     return text[:1].lower() + text[1:] if text else text
 
 
+def claims_line(c: dict) -> str:
+    """The checked-on date for what a generated /seo/vs/ page says about a rival category.
+
+    competitors.csv carries it per category (claims_checked, claims_source): the date someone read the page of a
+    product in that category and found the description matching, and which page. scripts/claim_freshness_gate.py
+    reads `data-claims-checked`; the sentence says the same date to the reader. An unreadable row stops the
+    build rather than rendering a page nobody checked."""
+    import html as _h
+    d, src = (c.get("claims_checked") or "").strip(), (c.get("claims_source") or "").strip()
+    if not d or not src:
+        raise SystemExit(f"competitors.csv: {c['slug']} has no claims_checked / claims_source, "
+                         f"so its generated pages would state a rival claim nobody dated")
+    date.fromisoformat(d)
+    links = []
+    for part in src.split(";"):
+        label, _, url = part.partition("|")
+        links.append(f'<a href="{_h.escape(url.strip(), quote=True)}">{_h.escape(label.strip())}</a>')
+    return (f'<p class="byline"><span data-claims-checked="{d}" data-claims-set="{_h.escape(c["short_name"])}">'
+            f'What this page says about {_h.escape(c["short_name"])} was checked {d} against '
+            f'{" and ".join(links)}, a product in that category.</span></p>')
+
+
 def build_vs_pages(competitors, use_cases) -> list[dict]:
     """15 'Outlier vs [safe category] for [use case]' pages."""
     pairs = [
@@ -911,8 +933,8 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         is_cloud = c["category"] == "cloud"
         if is_cloud:
             quick = (
-                f"<p>{u['one_liner']}. The {c['short_name']} category answers this with a remote model "
-                f"and an account; Outlier answers it with the on-device {u['recommended_tier']} tier. "
+                f"<p>{u['one_liner']}. The {c['short_name']} category answers this with a remote model; "
+                f"Outlier answers it with the on-device {u['recommended_tier']} tier. "
                 f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
             )
         else:
@@ -943,6 +965,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             rec_run_mac = "m4-air-13"
             rec_run_label = f"Run the Nano tier on a 16 GB M4 Air"
         body = []
+        body.append(claims_line(c))
         body.append(f"<h2>What is the core difference for {u['name']}?</h2>")
         body.append(
             f"<p>For {u['name']}, the deciding axis between Outlier and {c['short_name']} is the "
@@ -956,7 +979,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             body.append(
                 f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the practical "
                 f"consequences are tail-latency variance (the network adds unbounded variance per turn) "
-                f"and exposure to provider-side logging of the {u['name']} prompts. Outlier&rsquo;s chat "
+                f"and the {u['name']} prompts leaving your Mac on every request. Outlier&rsquo;s chat "
                 f"path on the {_tier_name(rec_tier)} tier issues no outbound HTTPS once the model is on disk; the "
                 f"only network request in the lifecycle is the one-time {by_tier_disk(rec_tier)} GB tier "
                 f"download from Hugging Face.</p>"
@@ -985,22 +1008,24 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         body.append(f"<h2>What is the switching friction from {c['short_name']}?</h2>")
         body.append(
             f"<p>Moving a {u['name']} workflow from {c['short_name']} to Outlier is a one-time "
-            f"DMG install plus a {by_tier_disk(rec_tier)} GB pull for the {_tier_name(rec_tier)} tier. The "
-            f"sign-in step that {c['short_name']} typically requires has no equivalent on the "
-            f"Outlier side: there is no account, no per-token meter, and no rate-limit page to "
+            f"DMG install plus a {by_tier_disk(rec_tier)} GB pull for the {_tier_name(rec_tier)} tier. "
+            f"Outlier has no sign-in step, no per-token meter, and no rate-limit page to "
             f"redirect through. The {u['name']} loop after install is open-prompt to local-decode.</p>"
         )
         body.append(f"<h2>What about quality at the {_tier_name(rec_tier)} tier for {u['name']}?</h2>")
         body.append(quality_block(rec_tier, u, c, u_slug))
         body.append(f"<h2>What is the shape of {u['name']} as a workload?</h2>")
         body.append(f"<p>{VS_FLAVOR.get(u_slug, 'This workload is a chat-shaped sequence of prompts; local decode is the differentiator on tail latency.')}</p>")
-        body.append(f"<h2>How does the {c['short_name']} category look operationally for {u['name']}?</h2>")
+        # 2026-10-19: this paragraph said every rival category "share[s] a common operational shape: a sign-in, an
+        # auth token bound to that sign-in, some kind of metered usage, and a content policy". That was printed on the
+        # local categories too (local runtimes, GGUF runners, container runners, chat-only apps), where it is not
+        # true, and no rival's page was ever read for it on the cloud ones. A claim about someone else's product
+        # that nothing was read for is removed; the paragraph now says only what Outlier does.
+        body.append(f"<h2>How does the Outlier path look operationally for {u['name']}?</h2>")
         body.append(
-            f"<p>For {u['name']} specifically, {c['short_name']} tools share a common operational "
-            f"shape: a sign-in, an auth token bound to that sign-in, some kind of metered usage, "
-            f"and a content policy that applies to the {u['name']} prompts you submit. Outlier&rsquo;s "
-            f"local-only chat path does not surface any of those: the {u['name']} workflow runs "
-            f"against the on-disk {_tier_name(rec_tier)} tier, no token leaves the device.</p>"
+            f"<p>Outlier&rsquo;s local-only chat path has no sign-in, no auth token and no metered usage: "
+            f"the {u['name']} workflow runs against the on-disk {_tier_name(rec_tier)} tier, no token leaves "
+            f"the device.</p>"
         )
         body.append(f"<h2>What does Outlier <em>not</em> claim about {u['name']} versus {c['short_name']}?</h2>")
         body.append(
@@ -1011,11 +1036,20 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             f"do not claim equivalence for those when {u['name']} is part of a larger team workflow.</p>"
         )
         body.append("<h2>One-line summary</h2>")
-        unique_claim = (
-            f"For {u['name']}: one network round-trip per prompt with {c['short_name']} versus "
-            f"zero round-trips with Outlier on the {_tier_name(rec_tier)} tier: the difference is "
-            f"unbounded latency variance against bandwidth-bound, repeatable local throughput."
-        )
+        if is_cloud:
+            unique_claim = (
+                f"For {u['name']}: one network round-trip per prompt with {c['short_name']} versus "
+                f"zero round-trips with Outlier on the {_tier_name(rec_tier)} tier: the difference is "
+                f"unbounded latency variance against bandwidth-bound, repeatable local throughput."
+            )
+        else:
+            # 2026-10-19: this line said "one network round-trip per prompt with local AI runtimes", on the
+            # pages for the local categories, two paragraphs after the page itself said neither side has one.
+            unique_claim = (
+                f"For {u['name']}: {c['short_name']} also run on your own hardware, so there is no "
+                f"network round-trip to separate them from Outlier on the {_tier_name(rec_tier)} tier; "
+                f"the difference is the surface around the model."
+            )
         body.append(f"<p>{unique_claim}</p>")
         body_html = "\n".join(body)
         faq = [
