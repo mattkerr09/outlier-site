@@ -126,7 +126,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Ollama vs LM Studio (2026) — which local AI tool to use", "item": "https://outlier.host/vs/ollama-vs-lm-studio/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Ollama or LM Studio better?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on how you work. Ollama is better if you want a CLI and a local API to script against. LM Studio is better if you want a polished chat window and a built-in model browser without touching a terminal. Both are free and run the same GGUF models."}}, {"@type": "Question", "name": "Is LM Studio free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, LM Studio is free to download and use. It is a proprietary (closed-source) desktop app, unlike Ollama, which is open source under the MIT license."}}, {"@type": "Question", "name": "Can Ollama and LM Studio run the same models?", "acceptedAnswer": {"@type": "Answer", "text": "Largely yes. Both run GGUF models built on llama.cpp, so most open-weight models — Llama, Qwen, Mistral, Gemma, DeepSeek — work in either. LM Studio on Apple Silicon also supports the MLX format. In both, the model has to fit in your machine's RAM."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Ollama or LM Studio better?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on how you work. Ollama is better if you want a CLI and a local API to script against. LM Studio is better if you want a polished chat window and a built-in model browser without touching a terminal. Both are free to run locally and run the same GGUF models."}}, {"@type": "Question", "name": "Is LM Studio free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, the LM Studio app is free to download and use, and local models cost nothing to run; its hosted models (Bionic+ and Pro) are a separate paid product. It is a proprietary (closed-source) desktop app, unlike Ollama, which is open source under the MIT license."}}, {"@type": "Question", "name": "Can Ollama and LM Studio run the same models?", "acceptedAnswer": {"@type": "Answer", "text": "Largely yes. Both run GGUF models built on llama.cpp, so most open-weight models — Llama, Qwen, Mistral, Gemma, DeepSeek — work in either. LM Studio on Apple Silicon also supports the MLX format. In both, the model has to fit in your machine's RAM."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -151,19 +151,20 @@
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-06-13</span>
       <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Ollama and LM Studio">Ollama and LM Studio prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
         <li><strong>Ollama is the CLI-first, scriptable, developer's choice; LM Studio is the polished GUI for people who want a chat window and model browser without the terminal.</strong></li>
-        <li>Both are free, both run GGUF models on llama.cpp, both work on Mac, Windows, and Linux, and both keep everything on your machine.</li>
+        <li>Both are free to run locally, both run GGUF models on llama.cpp, both work on Mac, Windows, and Linux, and both keep everything on your machine.</li>
         <li>Ollama is open source (MIT); LM Studio is a free but closed-source app.</li>
         <li>Pick Ollama to script and serve models. Pick LM Studio to browse, download, and chat with a click.</li>
       </ul>
     </div>
 
-    <p class="lead">Short version: if you live in a terminal and want to wire a local model into your own scripts, use Ollama. If you'd rather open an app, search a model list, hit download, and start typing, use LM Studio. They overlap more than the rivalry suggests: both are free, both run the same GGUF models through llama.cpp, both keep your data on your own machine. The split is interface and intent, not capability. Here's the honest breakdown.</p>
+    <p class="lead">Short version: if you live in a terminal and want to wire a local model into your own scripts, use Ollama. If you'd rather open an app, search a model list, hit download, and start typing, use LM Studio. They overlap more than the rivalry suggests: both are free to run locally, both run the same GGUF models through llama.cpp, both keep your data on your own machine. The split is interface and intent, not capability. Here's the honest breakdown.</p>
 
     <h2>What each one is</h2>
     <p><strong>Ollama</strong> is a command-line runner and local server for open-weight models. You install it, run <code>ollama pull llama3</code>, then <code>ollama run llama3</code>, and you're talking to a model in your terminal. It ships an OpenAI-compatible HTTP API, so anything that can call a URL can call your local model. It's open source under the MIT license, runs on macOS, Linux, and Windows, and has one of the larger model libraries around. Developers like it because it's small, scriptable, and gets out of the way.</p>
@@ -198,10 +199,10 @@
         <tr><td>Local API / server</td><td>Yes (OpenAI-compatible)</td><td>Yes (local server)</td></tr>
         <tr><td>Models &gt; available RAM</td><td>Won't load</td><td>Won't load</td></tr>
         <tr><td>Who it's for</td><td>Developers, scripters, tinkerers</td><td>Non-CLI users, model browsers</td></tr>
-        <tr><td>Price</td><td>$0 local; cloud from $20/mo</td><td>$0 local; cloud pay-as-you-go</td></tr>
+        <tr><td>Price</td><td>$0 local; cloud from $20/mo</td><td>$0 local; hosted models from $20/mo</td></tr>
       </tbody>
     </table>
-    <p class="receipts"><strong>Prices checked 2026-09-08.</strong> Both are free to run locally and both now sell cloud inference on top. Ollama lists Free $0, <strong>Pro $20/month or $200/year</strong>, Team $500/month and Enterprise custom, with per-million-token model pricing (<a href="https://ollama.com/pricing" rel="nofollow">ollama.com/pricing</a>). LM Studio lists Free $0 for local models and voice, plus <strong>pay-as-you-go cloud credits</strong>, with named plans &ldquo;coming soon&rdquo; (<a href="https://lmstudio.ai/pricing" rel="nofollow">lmstudio.ai/pricing</a>). Ollama&rsquo;s FAQ is explicit that the metering is cloud-only, &ldquo;running models on your own hardware is always unlimited&rdquo;, so the free local path is genuinely free on both, and the paid tiers buy hosted inference, not the local app. Ollama&rsquo;s cloud is US-hosted with peak pricing between 12:00 and 18:00 UTC on weekdays and concurrency of 1 request on Free against 3 on Pro. LM Studio&rsquo;s cloud credit rates are not published on either its pricing page or its model catalogue, so this page does not quote one. Read in a browser; both pages render prices in JavaScript, so a plain fetch returns no figures.</p>
+    <p class="receipts"><strong>Prices checked 2026-10-19.</strong> Both are free to run locally and both now sell cloud inference on top. Ollama lists Free $0, <strong>Pro $20/month or $200/year</strong>, Max $100/month, Team $500/month and Enterprise custom, with per-million-token model pricing (<a href="https://ollama.com/pricing" rel="nofollow">ollama.com/pricing</a>). LM Studio lists Free $0 for local models, <strong>Bionic+ at $20 USD / month</strong> and <strong>Pro at $100 USD / month</strong> for US-hosted open models, with cloud credits for usage beyond a plan&rsquo;s allowance and team subscription plans &ldquo;coming soon&rdquo; (<a href="https://lmstudio.ai/pricing" rel="nofollow">lmstudio.ai/pricing</a>). Ollama&rsquo;s FAQ is explicit that the metering is cloud-only, &ldquo;running models on your own hardware is always unlimited&rdquo;, so the free local path is genuinely free on both, and the paid tiers buy hosted inference, not the local app. Ollama&rsquo;s cloud is hosted primarily in the United States, with peak pricing between 12:00 and 18:00 UTC on weekdays and concurrency of 1 request on Free against 3 on Pro. LM Studio&rsquo;s pricing page does not publish a credit rate, so this page does not quote one.</p>
 
     <div class="receipts">
       <span class="r-label">The one real shared limit</span>
@@ -219,11 +220,11 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Is Ollama or LM Studio better?</h3>
-        <p>It depends on how you work. Ollama is better if you want a CLI and a local API to script against. LM Studio is better if you want a polished chat window and a built-in model browser without touching a terminal. Both are free, both run the same GGUF models, and both keep your data local, so "better" comes down to whether you'd rather type a command or click a button.</p>
+        <p>It depends on how you work. Ollama is better if you want a CLI and a local API to script against. LM Studio is better if you want a polished chat window and a built-in model browser without touching a terminal. Both are free to run locally, both run the same GGUF models, and both keep your data local, so "better" comes down to whether you'd rather type a command or click a button.</p>
       </div>
       <div class="faq-item">
         <h3>Is LM Studio free?</h3>
-        <p>Yes, LM Studio is free to download and use. It's a proprietary, closed-source desktop app, which is the main licensing difference from Ollama: Ollama is open source under the MIT license.</p>
+        <p>Yes, the LM Studio app is free to download and use, and local models cost nothing to run; its hosted models (Bionic+ and Pro) are a separate paid product. It's a proprietary, closed-source desktop app, which is the main licensing difference from Ollama: Ollama is open source under the MIT license.</p>
       </div>
       <div class="faq-item">
         <h3>Can Ollama and LM Studio run the same models?</h3>
