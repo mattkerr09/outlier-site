@@ -91,6 +91,13 @@ jobs:
           # quote someone else's money.
           python3 scripts/rival_price_source_gate.py .
           python3 scripts/rival_price_source_gate.py --assert-baseline-not-grown
+          # 10-20 (CEO): no claim about a rival's price, plan or feature may sit unread. Every /vs/, /best/ and generated
+          # /seo/vs/ page that quotes one carries a data-claims-checked date for each set of claims; a set more than 45
+          # days old FAILS this step (and so the deploy), 30 days warns, a page with no date fails. The scheduled run
+          # keeps counting while nobody pushes, so the step goes red on day 46 on its own: re-read the rival's page,
+          # correct the claim, move the date, or take the claim off. --self-check proves it fails on its own fixtures.
+          python3 scripts/claim_freshness_gate.py --self-check
+          python3 scripts/claim_freshness_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
           python3 scripts/meta_gate.py .
