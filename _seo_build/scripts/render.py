@@ -1329,7 +1329,7 @@ def build_learn_pages() -> list[dict]:
         ("k-override-explained",
          "What is K_override on the Plus tier?",
          "K_override sets how many experts the paged engine keeps resident in RAM at any moment. Higher K reduces cache misses but inflates RAM and can regress decode speed if the model is compute-bound rather than I/O-bound.",
-         "On Outlier&rsquo;s Plus tier, K=20 produces 1.59 tok/s with a 14.04 GB peak generation footprint, locked in by a 4-point sweep on 2026-05-01."),
+         "On Outlier&rsquo;s Plus tier, K=20 produced 1.59 tok/s on an M1 Ultra with 64 GB (5 prompts of 80 tokens, fresh process) with a 14.04 GB peak generation footprint, locked in by a 4-point sweep on 2026-05-01."),
         ("what-is-unified-memory",
          "What is unified memory on Apple Silicon?",
          "Unified memory is a shared address space for the CPU and GPU on Apple Silicon. There is no separate VRAM and no PCIe round-trip; the GPU reads model weights directly from main memory at the chip&rsquo;s memory bandwidth.",
@@ -1402,7 +1402,7 @@ def build_learn_pages() -> list[dict]:
              "<p>Outlier&rsquo;s Plus tier sets <code>K_override=20</code>, <code>cache_gb=8.0</code>, "
              "<code>OUTLIER_MMAP_EXPERTS=0</code>, and lazy-loads the full state dict.</p>",
              "<p>Page-aligned <code>pread()</code> fanout with libdispatch groups targets the disk-read step that limits Plus "
-             "today (1.59 tok/s). It is on the v1.9 backlog.</p>"),
+             "today (1.59 tok/s on an M1 Ultra with 64 GB). It is on the v1.9 backlog.</p>"),
         "ternary-quantization-explained":
             ("<p>Ternary quantization replaces each floating-point weight with one of three values "
              "(commonly &minus;1, 0, +1) plus a per-channel or per-group scale factor. The storage "
@@ -1433,7 +1433,7 @@ def build_learn_pages() -> list[dict]:
              "compute-bound at this size.</p>"
              "<p>The 2026-05-01 sweep tested K=4, K=20, K=32, K=48 with a 5-prompt aggregate. K=4 "
              "fails coherence (3/5), K=32 regresses 2.5% with 60% more RAM, K=48 adds 1.3% (within "
-             "noise) at 33.78 GB peak. K=20 gives 1.59 tok/s with 14.04 GB peak gen and is locked.</p>",
+             "noise) at 33.78 GB peak. K=20 gave 1.59 tok/s on an M1 Ultra with 64 GB (5 prompts of 80 tokens, fresh process) with 14.04 GB peak gen and is locked.</p>",
              "<p>K=4 is a hard model constraint, not a tunable: routing top-10 cannot fit in a "
              "resident pool of 4 without first-token control-token escapes.</p>",
              "<p>Source: the 2026-05-01 K sweep (5 prompts, isolated subprocess per K, mx.metal.get_peak_memory); see the <a href=\"/data/v11-streaming-engine-benchmarks/\">streaming engine benchmarks</a>.</p>"),
