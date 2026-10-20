@@ -122,7 +122,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs LM Studio for agentic workflows", "item": "https://outlier.host/vs/outlier-vs-lm-studio/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What's the main difference between Outlier and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "LM Studio is a polished chat GUI; Outlier adds a built-in agent loop, MCP tools, and persistent project memory."}}, {"@type": "Question", "name": "Which is better for chat, Outlier or LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "LM Studio, with a wider model catalog and an OpenAI-compatible API. Outlier is better for agentic coding work."}}, {"@type": "Question", "name": "Can Outlier run larger models than LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, via paged MoE streaming: Plus 397B on a 64 GB Mac. We have not tested LM Studio on that model."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What's the main difference between Outlier and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "LM Studio is a polished chat GUI that now includes its own agent, Bionic; Outlier is built around a Mac-native agent loop with MCP tools and persistent project memory."}}, {"@type": "Question", "name": "Which is better for chat, Outlier or LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "LM Studio, with a wider model catalog and an OpenAI-compatible API. Outlier is better for agentic coding work."}}, {"@type": "Question", "name": "Can Outlier run larger models than LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, via paged MoE streaming: Plus 397B on a 64 GB Mac. We have not tested LM Studio on that model."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -147,6 +147,7 @@
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-05-19</span>
       <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="LM Studio">LM Studio prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -159,11 +160,11 @@
       </ul>
     </div>
 
-    <p class="lead">LM Studio is free, and it's a genuinely lovely local-LLM GUI. Model downloads, chat, an OpenAI-compatible API: all of it just works. When this page was written you would not have found an agent loop in it. That changed in 2026: LM Studio now ships Bionic, its own agent for work and code, and its docs describe connecting MCP servers and integrating with Codex and Claude Code. The distinction that remains is narrower and cleaner: LM Studio also sells cloud inference now, and Outlier runs no cloud at all. Outlier made a different bet. It's less general-purpose and a lot more opinionated, with the agent front and center. So which one do you actually want? Depends what you're building.</p>
+    <p class="lead">LM Studio is free, and it's a genuinely lovely local-LLM GUI. Model downloads, chat, an OpenAI-compatible API: all of it just works. When this page was written you would not have found an agent loop in it. That changed in 2026: LM Studio now ships <a href="https://lmstudio.ai/">Bionic</a>, its own agent for work and code, and its docs describe connecting MCP servers and integrating with Codex and Claude Code. The distinction that remains is narrower and cleaner: LM Studio also sells <a href="https://lmstudio.ai/pricing">cloud inference</a> now, and Outlier runs no cloud at all. Outlier made a different bet. It's less general-purpose and a lot more opinionated, with the agent front and center. So which one do you actually want? Depends what you're building.</p>
 
     <h2>LM Studio's design center</h2>
     <p>At its core, LM Studio is a chat client and a model manager. Browse the catalog (GGUF and MLX), grab what you want, start chatting. The clever bit is the OpenAI-compatible HTTP server. Point external tools at it (Continue.dev, Open Interpreter, a script you wrote yourself; Cursor cannot, because <a href="https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/">its servers make the call</a>) and they talk to your local model exactly like they'd talk to GPT-4. That's the property that makes LM Studio such a good backend inside a bigger toolchain.</p>
-    <p>So what's missing? A project-aware agent loop. Filesystem tools. MCP integration. Persistent project memory. A coding-focused UI. None of that ships in the box. You bolt it on with a separate tool.</p>
+    <p>So what's missing? Less than when this page was written: LM Studio's free tier now includes Bionic Agent, which it describes as an agent for work and code. Outlier's agent is built around per-project memory on disk and an approval gate on every tool; I haven't tested Bionic against either.</p>
 
     <h2>Outlier's design center</h2>
     <p>Outlier is a Mac-native AI app, and the agent loop is the whole point. Chat is one mode. Agent is the other, and it's where the real work happens. Agent mode ships with built-in tools: read file, write file (with approval), run shell, search project, web search, plus a growing list of MCP-based connectors. Every tool sits behind an approval gate. Every project keeps its own memory on disk.</p>
@@ -174,10 +175,10 @@
       <thead><tr><th>Dimension</th><th>LM Studio</th><th>Outlier</th></tr></thead>
       <tbody>
         <tr><td>Platforms</td><td>Mac, Linux, Windows</td><td>Mac (Apple Silicon)</td></tr>
-        <tr><td>Pricing</td><td>Free for personal use</td><td>Free + Founders Lifetime at $249</td></tr>
+        <tr><td>Pricing</td><td><a href="https://lmstudio.ai/pricing">Free for local models; hosted models from $20 USD / month</a></td><td>Free + Founders Lifetime at $249</td></tr>
         <tr><td>Model catalog</td><td>Wide (HF browser, GGUF + MLX)</td><td>Curated 6-tier lineup</td></tr>
         <tr><td>Chat UI</td><td>Excellent</td><td>Mac-native, includes Agent mode</td></tr>
-        <tr><td>Agent loop</td><td>None built-in</td><td>Yes, MCP-based</td></tr>
+        <tr><td>Agent loop</td><td>Bionic Agent, included in the free tier</td><td>Yes, MCP-based</td></tr>
         <tr><td>Project memory</td><td>None</td><td>Persistent, per-project</td></tr>
         <tr><td>OpenAI-compatible API</td><td>Yes</td><td>Yes: off by default; localhost + API key</td></tr>
         <tr><td>Models &gt; available RAM</td><td>Won't load</td><td>Plus 397B via the V9 paged engine</td></tr>
@@ -199,7 +200,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>What's the main difference between Outlier and LM Studio?</h3>
-        <p>LM Studio is a polished chat GUI; Outlier adds a built-in agent loop, MCP tools, and persistent project memory.</p>
+        <p>LM Studio is a polished chat GUI that now includes its own agent, Bionic; Outlier is built around a Mac-native agent loop with MCP tools and persistent project memory.</p>
       </div>
       <div class="faq-item">
         <h3>Which is better for chat, Outlier or LM Studio?</h3>
