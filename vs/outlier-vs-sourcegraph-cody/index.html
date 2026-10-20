@@ -139,11 +139,12 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Sourcegraph Cody">Sourcegraph Cody prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Sourcegraph Cody is a cloud coding assistant inside VS Code, JetBrains and Visual Studio that pulls context from your company's Sourcegraph index and sends code snippets to frontier models like Claude Opus 4.8 and GPT-5.4. Cody Free and Pro were discontinued on July 23, 2025, so it now ships only with Sourcegraph Enterprise, an individual developer can't buy it. Outlier is a standalone Mac app running 27B coding models entirely on your own Apple Silicon: no account, nothing uploaded, but it only ever sees the code on your laptop.</p>
+      <p>Sourcegraph Cody is a cloud coding assistant inside VS Code, JetBrains and Visual Studio that pulls context from your company's Sourcegraph index and sends code snippets to frontier cloud models. Cody Free and Pro were discontinued on July 23, 2025, so it now ships only with Sourcegraph Enterprise, an individual developer can't buy it. Outlier is a standalone Mac app running 27B coding models entirely on your own Apple Silicon: no account, nothing uploaded, but it only ever sees the code on your laptop.</p>
     </div>
 
     <p class="lead">Disclosure first: I'm Matt Kerr, and I build Outlier, so read this as a comparison written by an interested party. Every Cody claim comes from Sourcegraph's own docs, linked at the bottom; every Outlier number is one I measured.</p>
@@ -153,17 +154,17 @@
 
     <p>On June 25, 2025, Sourcegraph announced that Cody Free and Cody Pro would shut down on July 23, 2025, and that Enterprise Starter would stop including Cody. Departing users were pointed at Amp with $10 and $40 in credits; Enterprise customers were unaffected, and Sourcegraph said it remains fully committed to that offering. Both install guides now list the same gating prerequisite: a Sourcegraph Enterprise account with Cody enabled.</p>
 
-    <p>The clients still ship: VS Code v1.155.0 landed 2026-06-17 with ~868,000 installs and a 3.98/5 average. Weigh that against the quiet: Cody is absent from Sourcegraph's homepage, its pricing page and the entire 2026 changelog, and goes unmentioned in the December 2, 2025 post announcing that Sourcegraph and Amp are splitting into separate companies.</p>
+    <p>The clients are still documented, but weigh that against the quiet: Cody is absent from Sourcegraph's pricing page, and goes unmentioned in the December 2, 2025 post announcing that Sourcegraph and Amp are splitting into separate companies.</p>
 
     <h2>Where each one lives</h2>
-    <p>Cody is an editor extension first. Documented clients: VS Code, JetBrains IDEs, Visual Studio (marked Experimental), the Sourcegraph web app, and a CLI installed with <code>npm install -g @sourcegraph/cody</code> on Node.js v20+ — itself "in the Experimental stage for Enterprise accounts." No standalone desktop app and no mobile client are documented.</p>
+    <p>Cody is an editor extension first. Documented clients: VS Code, JetBrains IDEs, Visual Studio (marked Experimental), the Sourcegraph web app, and a CLI. No standalone desktop app and no mobile client are documented.</p>
 
     <p>Outlier is the opposite shape: a native macOS app for Apple Silicon, M1 or later, macOS 26+. No Intel build, no Windows, no Linux, no mobile app, no editor extension. Its coding agent runs inside its own window rather than inside your editor: point it at a project and it reads the files, edits them, and runs your tests. What it can't do is type alongside you: want ghost text in your gutter as you type? Cody does that; Outlier doesn't.</p>
 
     <h2>Which model runs, and where your code goes</h2>
-    <p>Cody routes to frontier cloud models: Claude Opus 4.8 through 4.5, Sonnet 5 and 4.5, Haiku 4.5; Gemini 2.5 Pro and 3.5 Flash; GPT-5.4 down through GPT-4o and o3. Chat defaults to Sonnet 4.5. Autocomplete is separate: DeepSeek V2 Lite Base and an Autoedits fine-tune of DeepSeek Coder V2 via Fireworks.ai: open weights, consumed as a hosted API rather than run by you.</p>
+    <p>Cody routes to frontier cloud models; Sourcegraph's docs say it uses "all the latest LLMs."</p>
 
-    <p>Inference is entirely remote. The FAQ says Cody sends code snippets of up to 28 KB per request to a third-party cloud LLM, and that even a self-hosted instance needs internet access for those calls, routed by default through Cody Gateway. The written guarantees are strong: Sourcegraph and its partner LLMs "do not use code from Cody Enterprise or Cody Pro teams to train models," partner LLMs retain nothing "beyond the time it takes to generate the output," fine-tuning is opt-in, and enterprises can bypass the Gateway entirely. One caveat: the only documented local-inference path is the Ollama page, which still says support is "available for Cody Free and Pro plans," switched off in July 2025.</p>
+    <p>Inference is entirely remote. The FAQ says Cody sends code snippets to a third-party cloud LLM, and that even a self-hosted instance needs internet access for those calls, routed by default through Cody Gateway. The written guarantees are strong: Sourcegraph and its partner LLMs "do not use code from Cody Enterprise or Cody Pro teams to train models," partner LLMs retain nothing "beyond the time it takes to generate the output," fine-tuning is opt-in, and enterprises can bypass the Gateway entirely. One caveat: the only documented local-inference path is the Ollama page, which still says support is "available for Cody Free and Pro plans," switched off in July 2025.</p>
 
     <p>Outlier's answer is structural rather than contractual. Six tiers download once and run locally, from Nano 4B (2.37 GB) to Plus 397B-a17b (209 GB, streaming experts from SSD at ~14 GB peak RSS). The coding tier is Core 27B: 15.13 GB, 24 GB of RAM, weights published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a>. No account, no cap, Wi-Fi off if you like: there's no data policy to read because there's no transfer.</p>
 
@@ -186,12 +187,12 @@
         </tr>
         <tr>
           <td><strong>Model</strong></td>
-          <td>Cloud: Opus 4.8, GPT-5.4, Gemini 3.5 Flash; default Sonnet 4.5</td>
+          <td>Cloud: frontier third-party LLMs</td>
           <td>On-device: 6 tiers, 4B → 397B</td>
         </tr>
         <tr>
           <td><strong>Code leaves the machine</strong></td>
-          <td>Yes: up to 28 KB per request, even self-hosted</td>
+          <td>Yes: snippets go to a cloud LLM, even self-hosted</td>
           <td>No; offline</td>
         </tr>
         <tr>
@@ -221,7 +222,7 @@
     <p><em>Corrected 2026-09-29: an earlier version said 9 of 9; a stricter recount of the same test found 7 of the 9 apps still running at the end.</em></p>
     <p>Here's my side, measured rather than lifted off a leaderboard. On a blind slice of SWE-bench Verified, the local 27B resolved about <strong>45%: 18 of 40</strong>. Core 27B scores <strong>0.951</strong> on HumanEval. In my own test Outlier's agent built nine apps, and 7 of the 9 were still running at the end of the run (an informal test; the apps and the pass criterion are not published), using the default model for 8, 16 and 24 GB+ Macs, and I published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself.</p>
 
-    <p>Those are my own runs on my own hardware, not a submission, not audited, and 40 instances is a small slice. Forty-five percent is a real result for a 15 GB model running with the network off. It's also below what the strongest cloud coding agents resolve, and Cody hands your prompt to exactly those models. On a hard multi-file bug in an unfamiliar repo, I'd expect Opus 4.8 through Cody to land the fix more often. Sourcegraph publishes no resolve rate for Cody that I could find, so there's no number to set beside mine.</p>
+    <p>Those are my own runs on my own hardware, not a submission, not audited, and 40 instances is a small slice. Forty-five percent is a real result for a 15 GB model running with the network off. It's also below what the strongest cloud coding agents resolve, and Cody hands your prompt to exactly those models. On a hard multi-file bug in an unfamiliar repo, I'd expect a frontier cloud model through Cody to land the fix more often. Sourcegraph publishes no resolve rate for Cody that I could find, so there's no number to set beside mine.</p>
 
     <p>The context gap is starker than the model gap anyway. Cody builds context from keyword search, the Sourcegraph Search API against remote repositories, and the code graph, plus @-mentions of files, symbols and repos, so it answers questions about code that never touched your laptop. Outlier can't, and local model quality doesn't fix that.</p>
 
@@ -230,10 +231,10 @@
     <ul>
       <li><strong>Organization-scale context.</strong> Retrieval spans every remote repository the company has indexed. For a 5,000-repo org, that's context Outlier can't see, because the code isn't on the machine.</li>
       <li><strong>Permission-aware retrieval.</strong> The FAQ states retrieval ensures only code the user has read permission for is retrieved: a hard problem a single-user tool never has to solve, and a requirement in regulated shops.</li>
-      <li><strong>No hardware ceiling.</strong> Opus 4.8 and GPT-5.4 don't care about your RAM, quantization or thermals, and the model list refreshes without a re-download.</li>
+      <li><strong>No hardware ceiling.</strong> Frontier cloud models don't care about your RAM, quantization or thermals, and the model list refreshes without a re-download.</li>
       <li><strong>Written data guarantees.</strong> Contractual no-training on Enterprise code, zero retention, opt-in fine-tuning, and bring-your-own-key if you'd rather the vendor never see a prompt.</li>
       <li><strong>Enterprise governance.</strong> RBAC gating, admin-chosen models, Context Filters excluding whole repositories from Cody's context (regex on repo name), an org-wide Prompt Library. A desktop app has no answer.</li>
-      <li><strong>One assistant across a mixed toolchain</strong>: VS Code, eleven JetBrains IDEs, Visual Studio, the web) with nothing to provision locally. It behaves the same on an 8 GB laptop as on a workstation.</li>
+      <li><strong>One assistant across a mixed toolchain</strong>: VS Code, the JetBrains IDEs, Visual Studio, the web) with nothing to provision locally. It behaves the same on an 8 GB laptop as on a workstation.</li>
     </ul>
 
     <h2>Who should pick which</h2>
@@ -244,7 +245,7 @@
     <p><strong>My side's gaps, plainly:</strong> no image generation, no mobile app, no voice mode, no Windows or Linux build, no cloud sync. The coding tier wants 24 GB of RAM. And Outlier never sees a repository that isn't on your disk.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> plan changes from the <a href="https://sourcegraph.com/blog/changes-to-cody-free-pro-and-enterprise-starter-plans">June 25, 2025 announcement</a>; clients, models, Gateway and FAQ details from <a href="https://sourcegraph.com/docs/cody">sourcegraph.com/docs/cody</a>; data terms from <a href="https://sourcegraph.com/terms/cody-notice">the Cody notice</a>; the $16K figure from <a href="https://sourcegraph.com/pricing">sourcegraph.com/pricing</a>. All checked July 2026. <strong>Sourcegraph publishes no per-seat Cody price</strong>, so I left out the ~$59/user/month figure circulating on third-party review sites: no primary source confirms it. Outlier numbers measured on an M1 Ultra: SWE-bench Verified blind slice 18/40, HumanEval 0.951 on Core 27B, plus the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>; pricing as of 2026-07-23. Competitor pricing and policies change often: check the sources before deciding.
+      <strong>Sources and receipts:</strong> plan changes from the <a href="https://sourcegraph.com/blog/changes-to-cody-free-pro-and-enterprise-starter-plans">June 25, 2025 announcement</a>; clients, Gateway and FAQ details from <a href="https://sourcegraph.com/docs/cody">sourcegraph.com/docs/cody</a>; data terms from <a href="https://sourcegraph.com/terms/cody-notice">the Cody notice</a>; the $16K figure from <a href="https://sourcegraph.com/pricing">sourcegraph.com/pricing</a>. I re-read the docs landing page and the pricing page on 2026-10-19; the 2025 announcement, the Cody notice and the FAQ details are dated documents I did not re-read for this update. <strong>Sourcegraph publishes no per-seat Cody price</strong>, so I left out the ~$59/user/month figure circulating on third-party review sites: no primary source confirms it. Outlier numbers measured on an M1 Ultra: SWE-bench Verified blind slice 18/40, HumanEval 0.951 on Core 27B, plus the <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt benchmark</a>; Sourcegraph pricing as of 2026-10-19. Competitor pricing and policies change often: check the sources before deciding.
     </div>
 
     <div class="cta">
