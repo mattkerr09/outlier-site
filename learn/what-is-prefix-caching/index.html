@@ -9,13 +9,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>What is prefix caching (KV cache reuse)? | Outlier</title>
-  <meta name="description" content="Prefix caching reuses the key/value tensors a transformer already computed for a shared prompt prefix, so only the differing suffix gets prefilled. How it works, why it needs an exact token match, and the three bugs that silently killed it in our runtime.">
+  <meta name="description" content="Prefix caching reuses key/value tensors for a shared prompt prefix, so only the suffix is prefilled. It needs an exact token match; three bugs killed it.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-22">
   <link rel="canonical" href="https://outlier.host/learn/what-is-prefix-caching/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="What is prefix caching (KV cache reuse)?">
-  <meta property="og:description" content="Prefix caching reuses the key/value tensors a transformer already computed for a shared prompt prefix, so only the differing suffix gets prefilled. How it works, why it needs an exact token match, and the three bugs that silently killed it in our runtime.">
+  <meta property="og:description" content="Prefix caching reuses key/value tensors for a shared prompt prefix, so only the suffix is prefilled. It needs an exact token match; three bugs killed it.">
   <meta property="og:url" content="https://outlier.host/learn/what-is-prefix-caching/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "What is prefix caching (KV cache reuse)?", "description": "Prefix caching reuses the key/value tensors a transformer already computed for a shared prompt prefix, so only the differing suffix gets prefilled. How it works, why it needs an exact token match, and the three bugs that silently killed it in our runtime.", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-prefix-caching/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "What is prefix caching (KV cache reuse)?", "description": "Prefix caching reuses key/value tensors for a shared prompt prefix, so only the suffix is prefilled. It needs an exact token match; three bugs killed it.", "datePublished": "2026-07-22", "dateModified": "2026-07-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-prefix-caching/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is prefix caching (KV cache reuse)?", "item": "https://outlier.host/learn/what-is-prefix-caching/"}]}
