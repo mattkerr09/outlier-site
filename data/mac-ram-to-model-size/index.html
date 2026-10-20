@@ -181,7 +181,7 @@
       <tr><td>Vision 3.8</td><td>27B</td><td>15.5 GB</td><td>17.2 <span style="opacity:.7">(measured 2026-08-19, shipped 1.11.792; see the <a href="https://outlier.host/#benchmarks">benchmarks table</a>)</span></td></tr>
       <tr><td>Plus</td><td>397B MoE</td><td>209 GB</td><td>1.59</td></tr>
     </tbody></table>
-    <p class="disclaim" style="margin-top:-0.6rem">Numbers are from an M1 Ultra, MLX 4-bit, batch size 1. Newer chips (M2/M3/M4) run faster, but the ranking stays the same.</p>
+    <p class="disclaim" style="margin-top:-0.6rem">Numbers are from an M1 Ultra, MLX 4-bit, batch size 1; the Plus figure is the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process. Newer chips (M2/M3/M4) run faster, but the ranking stays the same.</p>
     <h2>How a 209 GB model runs on a 64 GB Mac</h2>
     <p>Plus 397B is 209 GB on disk. That's way past 64 GB of RAM, and yet it runs. The trick is that it's a Mixture-of-Experts model, so only a slice of its parameters fire on any given token. Outlier's V9 paged engine holds the active experts in memory and streams the rest off the SSD, which keeps peak memory hovering around 14 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
 
