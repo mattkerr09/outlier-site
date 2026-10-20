@@ -121,7 +121,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon", "item": "https://outlier.host/data/v11-streaming-engine-benchmarks/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What engine does Outlier use for Plus now?", "acceptedAnswer": {"@type": "Answer", "text": "V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at 1.59 tok/s at the shipped K=20 setting (the 2026-05-01 K sweep), peaking at 14.04 GB. (This page's own per-token RSS protocol read 11 GB RSS and 3.6 GB wired.) The V10 and V11 streaming engines were retired."}}, {"@type": "Question", "name": "Why were the streaming engines retired?", "acceptedAnswer": {"@type": "Answer", "text": "V10 and V11 per-token expert streaming committed 57 to 58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30 to 40 percent tok/s gain. V9 paged uses 3.6 GB Wired (15x less). On a footprint-first tier, that trade favors V9."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What engine does Outlier use for Plus now?", "acceptedAnswer": {"@type": "Answer", "text": "V9 paged inference (K=20 hot experts per layer plus an 8 GB LRU cache). It runs Plus 397B at 1.59 tok/s at the shipped K=20 setting (the 2026-05-01 K sweep), peaking at 14.04 GB. (This page's own per-token RSS protocol read 11 GB RSS and 3.6 GB wired.) The V10 and V11 streaming engines were retired."}}, {"@type": "Question", "name": "Why were the streaming engines retired?", "acceptedAnswer": {"@type": "Answer", "text": "V10 and V11 per-token expert streaming committed 57 to 58 GB of Metal-wired memory during prefill, enough to crash a 32 GB Mac, for only a 30 to 40 percent tok/s gain. V9 paged uses 3.6 GB Wired (15x less). On a footprint-first tier, that trade favors V9."}}, {"@type": "Question", "name": "How were the numbers measured?", "acceptedAnswer": {"@type": "Answer", "text": "The comparison table: 5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token. The current engine's 1.59 tok/s and 14.04 GB peak come from the separate K=20 sweep of 2026-05-01 (5 prompts of 80 tokens, fresh process, M1 Ultra with 64 GB, MLX 4-bit)."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -152,10 +152,10 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li><strong>Current engine (V9 paged):</strong> Plus 397B runs at <strong>1.59 tok/s</strong> at the shipped K=20 setting (the 2026-05-01 K sweep: 5 prompts &times; 80 tokens, fresh process), peaking at <strong>14.04 GB</strong> on a 64 GB Mac. (The comparison table below uses a different protocol, per-token RSS sampling, which read 11 GB RSS and 3.6 GB wired.)</li>
+        <li><strong>Current engine (V9 paged):</strong> Plus 397B runs at <strong>1.59 tok/s</strong> at the shipped K=20 setting (the 2026-05-01 K sweep: 5 prompts &times; 80 tokens, M1 Ultra with 64 GB, MLX 4-bit, fresh process), peaking at <strong>14.04 GB</strong>. (The comparison table below uses a different protocol, per-token RSS sampling, which read 11 GB RSS and 3.6 GB wired.)</li>
         <li><strong>Both streaming engines retired:</strong> V11 in v1.11.71, V10 two builds later in v1.11.73.</li>
         <li><strong>Why:</strong> per-token streaming on V10/V11 committed <strong>57–58 GB of Metal-wired memory</strong> during prefill. That's enough to crash a 32 GB Mac, and all it bought was a ~30–40% tok/s gain.</li>
-        <li>V9 paged (K=20 hot experts + 8 GB LRU) sits at 3.6 GB, <strong>15× less wired memory</strong>. On a footprint-first tier, that's the trade you want.</li>
+        <li>V9 paged (K=20 hot experts + 8 GB LRU) sits at 3.6 GB wired in this page's per-token protocol, <strong>15× less wired memory</strong>. On a footprint-first tier, that's the trade you want.</li>
       </ul>
     </div>
 
@@ -187,7 +187,7 @@
         <tr><td>V11 hybrid LRU</td><td>3.0</td><td>13 GB</td><td>58 GB</td><td>retired v1.11.71</td></tr>
       </tbody>
     </table>
-    <p>Look at the Wired Memory column. That's the one that mattered. V10 and V11 streamed experts per token, which committed 57–58 GB of Metal command-buffer memory during prefill, enough to take down a 32 GB Mac on the very first generation. The payoff was a ~30–40% tok/s bump over V9. V9 paged holds 3.6 GB Wired at 2.1 tok/s, 15× less. This tier exists to fit a 209 GB model on a small Mac, so footprint beats speed and V9 ships. <strong>On the 2.1 figure:</strong> that is this benchmark's own per-token RSS protocol. The pre-ship K-override sweep, run at the shipped K=20 setting over 5 prompts of 80 tokens with model load timed separately, measures 1.59 tok/s (per-prompt 1.35&ndash;1.65) and 14.04 GB peak. Where the two disagree the rest of this site publishes the lower, shipping-config number; the comparison below is kept on one protocol so the engines stay comparable to each other.</p>
+    <p>Look at the Wired Memory column. That's the one that mattered. V10 and V11 streamed experts per token, which committed 57–58 GB of Metal command-buffer memory during prefill, enough to take down a 32 GB Mac on the very first generation. The payoff was a ~30–40% tok/s bump over V9. V9 paged holds 3.6 GB Wired at 2.1 tok/s (this page's per-token protocol), 15× less. This tier exists to fit a 209 GB model on a small Mac, so footprint beats speed and V9 ships. <strong>On the 2.1 figure:</strong> that is this benchmark's own per-token RSS protocol. The pre-ship K-override sweep, run at the shipped K=20 setting over 5 prompts of 80 tokens with model load timed separately, measures 1.59 tok/s (per-prompt 1.35&ndash;1.65) and 14.04 GB peak. Where the two disagree the rest of this site publishes the lower, shipping-config number; the comparison below is kept on one protocol so the engines stay comparable to each other.</p>
 
     <h2>Vision 35B-A3B: engine comparison</h2>
     <table>
@@ -205,7 +205,7 @@
     <ul>
       <li><strong>135/135 turns coherent.</strong> No output collapse, no repetition loops.</li>
       <li><strong>0 crashes, 0 segfaults</strong> across both Plus N=4 (100 turns) and Vision N=2 (35 turns).</li>
-      <li>Engine-swap V11→V9→V11 round-trip held up: <strong>post-swap tok/s 1.51 vs pre-swap 1.36</strong>, no regression.</li>
+      <li>Engine-swap V11→V9→V11 round-trip held up: <strong>post-swap tok/s 1.51 vs pre-swap 1.36</strong> in the V11 soak protocol (not the shipping-config figure), no regression.</li>
       <li>Idle-resume across a 5-minute sleep came back clean. No orphan threads, no leaked tensors.</li>
       <li>But memory pressure on 50-turn Plus hit <strong>14.34 GB peak vs smoke 7.34 GB</strong>. That's the regression that got it retired.</li>
     </ul>
@@ -231,7 +231,7 @@
       </div>
       <div class="faq-item">
         <h3>How were the numbers measured?</h3>
-        <p>5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token.</p>
+        <p>The comparison table: 5-run mean per configuration, fresh process per run, on an M1 Ultra with OS-level RSS sampled per token. The current engine's 1.59 tok/s and 14.04 GB peak come from the separate K=20 sweep of 2026-05-01 (5 prompts of 80 tokens, fresh process, M1 Ultra with 64 GB, MLX 4-bit).</p>
       </div>
     </div>
 
