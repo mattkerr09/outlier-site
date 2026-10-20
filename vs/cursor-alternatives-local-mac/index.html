@@ -147,6 +147,7 @@
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-05-19</span>
       <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Cursor, Zed">Cursor and Zed claims checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -171,8 +172,8 @@
     <p>The first two come down to model quality, not the editor. The third comes down to latency. Cursor's predictive completion runs on fast cloud models tuned for very low first-token latency, and that's the property nobody has cracked locally yet.</p>
 
     <h2>What Cursor's own reviewers say</h2>
-    <p>The credit first, because it is substantial and this page is not worth reading if it pretends otherwise. Cursor holds 5.0 from 948 reviews on Product Hunt and won the 2024 Golden Kitty for AI Copilot Product of the Year (<a href="https://www.producthunt.com/products/cursor">producthunt.com/products/cursor</a>, checked 2026-09-16). The thing reviewers say they would actually miss is the completion: &ldquo;Tab completion is the thing I&rsquo;d actually miss. It&rsquo;s the only one that predicts the edit I was already going to make rather than offering me a paragraph I have to read first.&rdquo; That is the same gap described further down, from the other side.</p>
-    <p>Two complaints recur in the same reviews, and they are the two reasons people go looking for this page. On big codebases: &ldquo;It quietly loses the thread on a big repo and doesn&rsquo;t tell you.&rdquo; On the plan: &ldquo;pricing and usage caps sting.&rdquo; The first is the more interesting of the two, because it is not about money. It is a context limit that shows up as the assistant being confidently wrong instead of saying it lost the thread. If that is what brought you here, the fix you want is an agent that reads the repository from disk as it works rather than carrying it in a window, and that is a different shape of tool, not a cheaper Cursor.</p>
+    <p>The credit first, because it is substantial and this page is not worth reading if it pretends otherwise. Cursor holds 5.0 from 968 reviews on Product Hunt and won the 2024 Golden Kitty for AI Copilot Product of the Year (<a href="https://www.producthunt.com/products/cursor">producthunt.com/products/cursor</a>, checked 2026-10-19). AI autocomplete is one of the strengths reviewers tag most often there, which is the same gap described further down, from the other side.</p>
+    <p>Two complaints recur in the same reviews, and they are the two reasons people go looking for this page. Product Hunt&rsquo;s own summary of the reviews lists occasional context loss on larger jobs and fast-changing pricing and limits among the common complaints. The first is the more interesting of the two, because it is not about money. It is a context limit, and one reviewer asks for clearer feedback when the assistant&rsquo;s confidence is low. If that is what brought you here, the fix you want is an agent that reads the repository from disk as it works rather than carrying it in a window, and that is a different shape of tool, not a cheaper Cursor.</p>
 
     <h2>The honest local options on a Mac</h2>
     <table>
@@ -194,7 +195,7 @@
     <p>Outlier isn't an editor plugin. It's a Mac-native AI app, and the agent loop is the whole point. It reads your project, edits files, runs commands, and pauses for approval when it should. You hop between your editor and Outlier instead of getting AI inline. So it's less "AI in your face" and more "an agent quietly doing structured work." Core 27B scored 0.951 on HumanEval pass@1 in <a href="/data/outlier-tier-benchmarks-2026-08/">our August run</a>. It won't match cloud agents: Claude Code is faster and better at editing large codebases. What the local agent gives you is code that stays on your Mac, offline and unmetered, and in our own test it built nine apps, and 7 of the 9 were still running at the end of the run (an informal test; the apps and the pass criterion are not published), using the default model for 8, 16 and 24 GB+ Macs.</p>
 
     <h3>Zed</h3>
-    <p>Zed is the new kid. Lightweight, and you can point it at any LLM API endpoint, a local Ollama or LM Studio included. The integration is thinner than Cursor or Continue.dev. But the editor is genuinely fast, and the direction it's heading is worth watching.</p>
+    <p>Zed is the new kid. Lightweight, and you can point it at a long list of LLM providers, a local Ollama or LM Studio included (<a href="https://zed.dev/pricing">zed.dev/pricing</a> lists both as supported providers). The integration is thinner than Cursor or Continue.dev. But the editor is genuinely fast, and the direction it's heading is worth watching.</p>
 
     <h2>The predictive-completion gap</h2>
     <p>This is the part where local really shows its seams. Cursor's "tab completion" fires off multi-line, context-aware suggestions almost instantly. Matching that on your own machine takes two things:</p>
