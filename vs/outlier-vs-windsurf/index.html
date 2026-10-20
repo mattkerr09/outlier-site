@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>Windsurf (now Devin Desktop) vs Outlier: cloud or local?</title>
-  <meta name="description" content="Windsurf became Devin Desktop on June 2, 2026, and its models are all cloud-hosted. Outlier runs coding AI on your Mac. Cost, privacy, agents compared.">
+  <meta name="description" content="Windsurf is now Devin Desktop, and its models are all cloud-hosted. Outlier runs coding AI on your Mac. Cost, privacy, agents compared.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-09-29">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-windsurf/">
@@ -139,19 +139,20 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Windsurf / Devin Desktop">Devin Desktop (Windsurf) prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Windsurf no longer ships under that name: Cognition acquired it and rebranded it Devin Desktop on June 2, 2026, and windsurf.com now redirects to devin.ai. Its agent harness runs on your machine, but every model is vendor-hosted: inference always leaves the machine, so your prompts and the files the agent reads go to Cognition's cloud, and training on that data is the default unless you pay to opt out. Cloud repo indexing is narrower than it's often described: it's a Teams/Enterprise feature, and on Free, Pro and Max the codebase index is built locally. Outlier runs the model itself on your Mac (no account, no quota, nothing uploaded) but its Core 27B measured about 45% on a blind SWE-bench Verified slice, behind the strongest cloud coding agents.</p>
+      <p>Windsurf no longer ships under that name: Cognition acquired it and rebranded it Devin Desktop, and windsurf.com now redirects to devin.ai. Its agent harness runs on your machine, but every model is vendor-hosted: inference always leaves the machine, so your prompts and the files the agent reads go to Cognition's cloud, and training on that data is the default unless you pay to opt out. Cloud repo indexing is narrower than it's often described: it's a Teams/Enterprise feature, and on Free, Pro and Max the codebase index is built locally. Outlier runs the model itself on your Mac (no account, no quota, nothing uploaded) but its Core 27B measured about 45% on a blind SWE-bench Verified slice, behind the strongest cloud coding agents.</p>
     </div>
 
     <p class="lead">I'm Matt Kerr and I build Outlier, so read this as a comparison written by an interested party. Every claim about the other product is sourced to its own docs, and my numbers are here even where they're unflattering.</p>
 
     <h2>Read this first: "Windsurf" is now Devin Desktop</h2>
-    <p>Windsurf is a retired name. Codeium became Windsurf, Cognition acquired it, and on June 2, 2026 it became <strong>Devin Desktop</strong>; windsurf.com now 308-redirects to devin.ai/desktop.</p>
+    <p>Windsurf is a retired name. Codeium became Windsurf, Cognition acquired it, and it became <strong>Devin Desktop</strong>; windsurf.com now 308-redirects to devin.ai/desktop.</p>
 
-    <p>Plans, pricing and extensions carried over. The agent is mid-transition: <strong>Cascade</strong>, the agent that defined Windsurf, is still the shipping default, while Cognition's next-generation <strong>Devin Local</strong> agent, which its docs say takes up to 30% fewer tokens than Cascade for the same task, is in preview and not yet at parity: it doesn't persist memories between sessions, doesn't support workflows, and isn't available in the JetBrains plugin. Cognition says it's meant to eventually replace Cascade. Three product identities in two years is a real risk if you're standardizing a team.</p>
+    <p>Plans, pricing and extensions carried over. The agent is mid-transition: <strong>Cascade</strong>, the agent that defined Windsurf, is still the shipping default, while Cognition's next-generation <strong>Devin Local</strong> agent is in preview and not yet at parity: it doesn't persist memories between sessions, doesn't support workflows, and isn't available in the JetBrains plugin. Cognition says it's meant to eventually replace Cascade. Three product identities in two years is a real risk if you're standardizing a team.</p>
 
     <h2>Where each one lives</h2>
     <p>Outlier is a native macOS app for Apple Silicon, M1 or later, macOS 26+. That's the whole surface area: no Windows or Linux build, no mobile app, no web version, no extension.</p>
@@ -161,9 +162,9 @@
     <h2>Which model is doing the work</h2>
     <p>Outlier ships six tiers that download once and run on your GPU, from Nano 4B to Plus 397B-a17b, which pages MoE experts off the SSD. Six are Apache 2.0, the weights are on Hugging Face, and on an M1 Ultra Nano runs about 71.7 tok/s and Core 27B about 20.7.</p>
 
-    <p>Devin Desktop routes to a large hosted catalog: OpenAI, Anthropic, Google, DeepSeek, Moonshot, Zhipu, Minimax, xAI. Cognition doesn't publish a headline number, so I counted the model table at docs.devin.ai/desktop/models on 2026-07-23: about <strong>170 entries on Pro and about 175 on Enterprise</strong> (169 and 174 distinct labels, since a couple appear twice).</p>
+    <p>Devin Desktop routes to a large hosted catalog: its pricing page lists frontier models from OpenAI, Anthropic, Google and SpaceXAI, plus open-source models. Cognition doesn't publish a headline number, and its models doc at docs.devin.ai/desktop/models points you to the in-app model selector for what's available, so I'm not quoting a count.</p>
 
-    <p>On top of that catalog sit Cognition's own SWE models, and their claims are per-model rather than family-wide. <strong>SWE-1.5</strong> was announced as a frontier-size model with hundreds of billions of parameters, served on Cerebras at up to 950 tok/s. <strong>SWE-1.7</strong>, the current one, is quoted at 1000 TPS via Cerebras and ships with no published parameter count; the models doc now calls SWE-1.5 "our previous frontier agentic coding model."</p>
+    <p>On top of that catalog sit Cognition's own SWE models. <strong>SWE-2</strong> is the latest, in Medium, High and Max reasoning-effort variants; the models doc calls <strong>SWE-1.7</strong> the previous flagship and lists SWE-1.7 Lightning as a faster version served on Cerebras.</p>
 
     <p>All of it is vendor-hosted. "Devin Local" is a local agent <em>harness</em> with access to your files and tools, not local weights. The ACP docs list five example pluggable agents (Codex CLI, Claude Agent, OpenCode, Junie and Gemini CLI) and say any agent that speaks ACP can run inside Devin Desktop. What that establishes is narrower than "no local option": no Devin-supplied model runs on your machine, and Cognition documents no local runtime. Since OpenCode is open source, you could in principle point an ACP agent at local weights yourself, and the same doc tells you the cost of doing it, that Devin Desktop's privacy policy and legal terms no longer apply and billing goes directly to the third party. Out of the box, though: no network, no model.</p>
 
@@ -176,12 +177,12 @@
 
     <p>So if you're an individual on Pro, your repository is not being cloned to Cognition's servers. The exposure is real but smaller than the usual telling: the snippets your local index retrieves are attached to every request that goes to the hosted model, so the code still travels: a retrieved slice at a time, rather than a whole-repo copy sitting in someone else's storage.</p>
 
-    <p>Then training. Cognition's Platform Terms of Service, effective June 30, 2026, say it may use Customer Data for model training. Paid subscribers can opt out on the Data Controls page, which also enables Zero Data Retention; the free tier has no documented opt-out. One caveat: Cognition's enterprise security page says it does not train on customer data by default, contradicting those consumer terms, that page appears to cover enterprise deployments only.</p>
+    <p>Then training. Cognition's Platform Terms of Service say it may use Customer Data for model training. Paid subscribers can opt out on the Data Controls page, which also enables Zero Data Retention; the free tier has no documented opt-out. One caveat: Cognition's enterprise security page says it does not train on customer data by default, contradicting those consumer terms, that page appears to cover enterprise deployments only.</p>
 
     <h2>What you pay</h2>
-    <p>Devin Desktop: <strong>Free</strong> at $0 with a light agent quota and unlimited Tab completions; <strong>Pro</strong> at $20/mo, adding frontier models from OpenAI, Anthropic and Google plus cloud agents; <strong>Max</strong> at $200/mo for higher quotas; Teams at $80/mo base plus $40 per seat. Every one of those figures is from <a href="https://devin.ai/pricing">devin.ai/pricing</a>, checked 2026-09-16, and if you came here looking for Windsurf, note that windsurf.com/pricing now redirects there permanently. Yearly terms aren&rsquo;t published, so I can&rsquo;t give an honest annual figure.</p>
+    <p>Devin Desktop: <strong>Free</strong> at $0 with a light agent quota and unlimited Tab completions; <strong>Pro</strong> at $20/mo, adding frontier models from OpenAI, Anthropic, Google and SpaceXAI plus cloud agents; <strong>Max</strong> at $200/mo for higher quotas; Teams at $80/mo base plus $40 per seat. Every one of those figures is from <a href="https://devin.ai/pricing">devin.ai/pricing</a>, checked 2026-10-19, and if you came here looking for Windsurf, note that windsurf.com/pricing now redirects there permanently. Yearly terms aren&rsquo;t published, so I can&rsquo;t give an honest annual figure.</p>
 
-    <p>You also can't compute what $20 buys in advance: quota numbers aren't published, only that your daily quota exceeds a seventh of your weekly one, and overflow is billed at API list prices. Credits became quotas in March 2026, with existing subscribers grandfathered indefinitely.</p>
+    <p>You also can't compute what $20 buys in advance: quota numbers aren't published, only that the allowance refreshes daily and weekly, and overflow is billed at API pricing.</p>
 
     <p>Outlier: the free tier is Nano and Lite, no account, no cap. Pro covers all six tiers; Founders Lifetime is $249. No quotas, the compute is yours.</p>
 
@@ -203,7 +204,7 @@
         <tr>
           <td><strong>Model</strong></td>
           <td>6 local tiers, 4B–397B</td>
-          <td>~170 hosted models on Pro, incl. SWE-1.7</td>
+          <td>Large hosted catalog, incl. SWE-2</td>
         </tr>
         <tr>
           <td><strong>Code leaves machine</strong></td>
@@ -241,14 +242,14 @@
     <h2>Agentic ability and repo context: my honest receipts</h2>
     <p>This is where Outlier is behind, and I'd rather say so up front. On a blind slice of SWE-bench Verified the local 27B measured about <strong>45%: 18 of 40</strong>: my own harness, not a leaderboard submission, published because it's real, not because it flatters me. Core 27B scores <strong>0.951 on HumanEval</strong>. Against a hosted agent with hundreds of billions of parameters, that's a gap: on a long refactor with cross-module coupling, the cloud agent lands changes a 27B on your laptop won't.</p>
 
-    <p>Repo-scale context is the second gap, and it's a gap on both paths: Devin Desktop's local index on Free/Pro/Max is backed by a hosted model with a far larger context budget than a 27B holds in local RAM, and on Teams and Enterprise it can index whole remote repositories in the cloud on top of that. On a two-million-line monorepo neither difference is subtle. Throughput is the third: SWE-1.7 at 1000 TPS on Cerebras against Core 27B's 20.7 tok/s on an M1 Ultra.</p>
+    <p>Repo-scale context is the second gap, and it's a gap on both paths: Devin Desktop's local index on Free/Pro/Max is backed by a hosted model with a far larger context budget than a 27B holds in local RAM, and on Teams and Enterprise it can index whole remote repositories in the cloud on top of that. On a two-million-line monorepo neither difference is subtle. Throughput is the third: Cognition serves a faster SWE-1.7 variant on Cerebras, and Core 27B does 20.7 tok/s on an M1 Ultra.</p>
 
     <p><em>Corrected 2026-09-29: an earlier version said 9 of 9; a stricter recount of the same test found 7 of the 9 apps still running at the end.</em></p>
     <p>Where local holds up: reading unfamiliar code, writing a function, explaining a stack trace, refactoring one file. In my own test Outlier's agent built nine apps, and 7 of the 9 were still running at the end of the run (an informal test; the apps and the pass criterion are not published), using the default model for 8, 16 and 24 GB+ Macs, and I published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself, but cloud agents like Claude Code are still faster and better at editing large codebases.</p>
 
     <h2>Where Windsurf (Devin Desktop) genuinely wins</h2>
     <ul>
-      <li><strong>Breadth, scale and speed no local app can approach.</strong> Roughly 170 models on Pro across eight vendors, switchable per request, so a bad answer costs you a dropdown rather than a re-download. A frontier-size model, SWE-1.5 was announced at hundreds of billions of parameters, can't sit resident on a 16 GB laptop at all, and SWE-1.7 at 1000 TPS on Cerebras is orders of magnitude past consumer Apple silicon.</li>
+      <li><strong>Breadth, scale and speed no local app can approach.</strong> A large hosted catalog, switchable per request, so a bad answer costs you a dropdown rather than a re-download. Cognition's own models run on datacenter hardware, one of them on Cerebras, which consumer Apple silicon can't match for speed.</li>
       <li><strong>Cloud agents leave your machine alone.</strong> Long refactors run in remote VMs: no RAM, GPU or battery cost, and they survive a closed lid.</li>
       <li><strong>Cross-platform.</strong> macOS, Windows, Linux, JetBrains, CLI. Outlier is Mac-only, which serves part of a mixed team at best.</li>
       <li><strong>Deep agent tooling, with an escape hatch.</strong> MCP servers, skills, hooks, workflows, AGENTS.md rules, worktrees and subagents, plus ACP, which drives Claude Agent, Codex CLI or Gemini CLI from the same editor. Cognition built the door out of their own product.</li>
@@ -263,7 +264,7 @@
     <p><strong>Use both,</strong> what I'd tell most developers: keep the sensitive and offline work local, and send the gnarly refactor to a cloud agent with a far bigger model behind it.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Every Devin Desktop claim comes from Cognition's own primary sources, checked 2026-07-23: windsurf.com's redirect, the product and rebrand pages, devin.ai/pricing, the docs for quota, Devin Local, ACP, context awareness, remote indexing and models, and the Platform ToS. The model counts are mine, not Cognition's: they publish no headline number, so I parsed the table on the models doc and counted 170 Pro and 175 Enterprise rows (169 and 174 distinct labels) on 2026-07-23. Throughput is quoted per model (950 tok/s belongs to the SWE-1.5 announcement, 1000 TPS to SWE-1.7) and the parameter figure to SWE-1.5 only. Where two of their pages disagree on training defaults I said so instead of picking one, and I left out the reported acquisition price and the commonly cited annual discount: no primary source confirms either. <strong>Competitor pricing and data policies change often: verify before you buy.</strong> Outlier's numbers are mine and all describe <strong>Core 27B</strong>: ~45% (18/40, older build, 2026-06-25) on a blind SWE-bench Verified slice, 0.951 HumanEval, 20.7 tok/s on an M1 Ultra. Outlier has no image generation, voice mode, mobile app, Windows/Linux build, or cloud sync.
+      <strong>Sources and receipts:</strong> Every Devin Desktop claim comes from Cognition's own primary sources: windsurf.com's redirect, the product and rebrand pages, <a href="https://devin.ai/pricing">devin.ai/pricing</a>, the docs for quota, Devin Local, ACP, context awareness, remote indexing and <a href="https://docs.devin.ai/desktop/models">models</a>, and the Platform ToS. On 2026-10-19 I re-read devin.ai/pricing and the models doc and re-tested the windsurf.com redirect; the other docs and the ToS I did not re-read for this update. Where two of their pages disagree on training defaults I said so instead of picking one, and I left out the reported acquisition price and the commonly cited annual discount: no primary source confirms either. <strong>Competitor pricing and data policies change often: verify before you buy.</strong> Outlier's numbers are mine and all describe <strong>Core 27B</strong>: ~45% (18/40, older build, 2026-06-25) on a blind SWE-bench Verified slice, 0.951 HumanEval, 20.7 tok/s on an M1 Ultra. Outlier has no image generation, voice mode, mobile app, Windows/Linux build, or cloud sync.
     </div>
 
     <div class="cta">
