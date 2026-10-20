@@ -122,7 +122,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Ollama — running models bigger than your RAM", "item": "https://outlier.host/vs/outlier-vs-ollama/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can Outlier run that Ollama can't?", "acceptedAnswer": {"@type": "Answer", "text": "Models bigger than your RAM. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac; we have not tested Ollama on that model."}}, {"@type": "Question", "name": "Is Ollama better than Outlier for anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is cross-platform, open source, free, and has a much larger model catalog. It is also a great scripting backend."}}, {"@type": "Question", "name": "Can I use both Outlier and Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many developers run Ollama as a headless backend and Outlier as a daily-driver agent app."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can Outlier run that Ollama can't?", "acceptedAnswer": {"@type": "Answer", "text": "Models bigger than your RAM. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac; we have not tested Ollama on that model."}}, {"@type": "Question", "name": "Is Ollama better than Outlier for anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend."}}, {"@type": "Question", "name": "Can I use both Outlier and Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many developers run Ollama as a headless backend and Outlier as a daily-driver agent app."}}]}
   </script>
 <!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
      arrival; an ordinary visitor gets none. See /privacy.html. -->
@@ -147,6 +147,7 @@
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-05-19</span>
       <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Ollama">Ollama prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -159,17 +160,17 @@
       </ul>
     </div>
 
-    <p class="lead">Ollama is the most popular way to run a model on your own machine. It's free, it's open source, and the GGUF library is enormous. It is also no longer only local: Ollama now sells cloud inference, hosted in the US, Europe and Singapore. Outlier runs no cloud at all. There is no server of ours for your prompt to reach. Outlier picks a narrower fight. It's Mac-only and MLX-native, and its paged-MoE engine runs Plus 397B on a 64 GB Mac. Two very different design centers. Below is where each one actually wins.</p>
+    <p class="lead">Ollama is the most popular way to run a model on your own machine. It's free to run locally, it's open source, and the GGUF library is enormous. It is also no longer only local: Ollama now sells <a href="https://ollama.com/pricing">cloud inference</a>, hosted primarily in the United States, with some capacity routed to Europe. Outlier runs no cloud at all. There is no server of ours for your prompt to reach. Outlier picks a narrower fight. It's Mac-only and MLX-native, and its paged-MoE engine runs Plus 397B on a 64 GB Mac. Two very different design centers. Below is where each one actually wins.</p>
 
     <h2>What each one is</h2>
-    <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local models. You get a model registry and a chat REPL, plus an OpenAI-compatible API. The backend is llama.cpp, so the format is GGUF. It runs on macOS, Linux, and Windows, and it's free and open source under the MIT license. Honestly, the "ollama pull" then "ollama run" loop is about as clean as local-LLM setup gets.</p>
+    <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local models. You get a model registry and a chat REPL, plus an OpenAI-compatible API. The backend is llama.cpp, so the format is GGUF. It runs on macOS, Linux, and Windows, and it's free and open source under the <a href="https://github.com/ollama/ollama">MIT license</a>. Honestly, the "ollama pull" then "ollama run" loop is about as clean as local-LLM setup gets.</p>
     <p><strong>Outlier</strong> is a Mac desktop app. There's a chat UI, an agent loop wired to MCP tools, a project memory layer, and an inference backend built on Apple's MLX framework. Models are MLX-native and 4-bit quantized. Apple Silicon only. The free tier covers Nano and Lite and it's genuinely usable, while paid tiers open up the bigger models.</p>
 
     <h2>Where Ollama wins</h2>
     <ul>
       <li><strong>Cross-platform.</strong> Linux, Windows, Mac. Not on a Mac? Then Outlier isn't even an option for you, and Ollama is.</li>
       <li><strong>Open source.</strong> MIT licensed. You can audit it, self-host it, and you're not betting on one vendor sticking around.</li>
-      <li><strong>Free.</strong> Always has been. No paid tiers lurking.</li>
+      <li><strong>Free locally.</strong> Running models on your own hardware costs nothing and is unlimited. Ollama's paid plans (Pro $20 a month, Max $100, Team $500) are for its cloud models, not the local app.</li>
       <li><strong>Model variety.</strong> If it's in GGUF, it runs. The Llama family, Mistral, Phi, Gemma. The library is huge.</li>
       <li><strong>Composable.</strong> It's built to sit behind other tools. Open WebUI, LangChain, whatever scripts you've got.</li>
     </ul>
@@ -193,7 +194,7 @@
         <tr><td>Max model on 64 GB Mac</td><td>~50 GB (e.g., Qwen 70B 4-bit)</td><td>397B via streaming</td></tr>
         <tr><td>Built-in agent</td><td>No (BYO)</td><td>Yes (MCP-based)</td></tr>
         <tr><td>Project memory</td><td>No</td><td>Yes</td></tr>
-        <tr><td>Pricing</td><td>$0</td><td>$0 Free + Founders Lifetime at $249</td></tr>
+        <tr><td>Pricing</td><td><a href="https://ollama.com/pricing">$0 locally; cloud plans from $20/mo</a></td><td>$0 Free + Founders Lifetime at $249</td></tr>
       </tbody>
     </table>
 
@@ -208,7 +209,7 @@
       </div>
       <div class="faq-item">
         <h3>Is Ollama better than Outlier for anything?</h3>
-        <p>Yes. It is cross-platform, open source, free, and has a much larger model catalog. It is also a great scripting backend.</p>
+        <p>Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend.</p>
       </div>
       <div class="faq-item">
         <h3>Can I use both Outlier and Ollama?</h3>
