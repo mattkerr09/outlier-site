@@ -9,13 +9,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>Outlier Plus: a 397B model on a 64 GB Mac | Outlier</title>
-  <meta name="description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 14 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
+  <meta name="description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 14 GB resident, streaming experts from SSD. 1.59 tok/s measured on an M1 Ultra.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-08-12">
+  <meta name="last-modified" content="2026-10-19">
   <link rel="canonical" href="https://outlier.host/learn/397b-model-on-64gb-mac/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier Plus: a 397B model on a 64 GB Mac">
-  <meta property="og:description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 14 GB resident by streaming experts from SSD. Measured: 1.59 tok/s. Slow, and it works.">
+  <meta property="og:description" content="Outlier Plus is a 397B mixture-of-experts. It runs on a 64 GB Mac at about 14 GB resident, streaming experts from SSD. 1.59 tok/s measured on an M1 Ultra.">
   <meta property="og:url" content="https://outlier.host/learn/397b-model-on-64gb-mac/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -174,7 +174,7 @@
       <h2>Method</h2>
 
       <ul>
-        <li>Peak memory 14.04 GB, from the 2026-05-01 K=20 sweep on an M1 Ultra Mac Studio, 64 GB, running the V9 paged engine (the same run that measured 1.59 tok/s).</li>
+        <li>Peak memory 14.04 GB, from the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process, on an M1 Ultra Mac Studio with 64 GB, MLX 4-bit, V9 paged engine (the same run that measured 1.59 tok/s).</li>
         <li>Decode speed 1.59 tokens per second, same machine and engine. Speed varies by Mac; SSD bandwidth matters more here than for tiers that fit in memory.</li>
         <li>Model: Qwen3.5-397B-A17B, top-10 routing of 512 experts, MLX 4-bit. 209 GB on disk.</li>
         <li>Minimum memory in our catalog is 64 GB, set from the kernel wired-memory limit rather than from the model size.</li>
