@@ -67,6 +67,13 @@ FAIL_DAYS = 45
 MIN_PAGES = 40
 #: The exempt list may shrink. Adding a page to it silences this gate for that page, so the size is pinned.
 EXEMPT_MAX = 4
+#: 2026-10-20 (the claims verifier): rival prices are quoted OUTSIDE vs/ best/ seo/vs/ too — learn/, how-to/, for/,
+#: data/ — and nothing dated them ("Perplexity $20" on a learn page, a price Perplexity no longer prints). Every other
+#: indexable page that quotes a rival's price now needs a claim set like the rest. The 24 pages that already did so on
+#: that day are a BACKLOG: they warn, by name, until dated; any other page fails. Edit the backlog BY REMOVAL ONLY —
+#: BACKLOG_MAX pins its size, so adding a page to silence the gate fails in the same run.
+BACKLOG_MAX = 23
+BACKLOG_FILE = Path(__file__).with_name("claim_freshness_backlog.json")
 EXEMPT_FILE = HERE / "claim_freshness_exempt.json"
 
 SCOPE_GLOBS = ("vs/*/index.html", "best/*/index.html", "seo/vs/*/index.html")
@@ -80,7 +87,7 @@ MONTHS = ["january", "february", "march", "april", "may", "june", "july", "augus
 _MONTH_RE = "|".join(m.capitalize() for m in MONTHS)
 #: "checked 2026-07-23", "as of July 2026", "verified on 23 July 2026", "read on October 19, 2026"
 STAMP = re.compile(
-    r"(?i)\b(?:re-?checked|checked|verified|re-?read|as of|retrieved|accessed|last checked)\s+(?:on\s+)?"
+    r"(?i)\b(?:re-?checked|checked|verified|(?:re-?)?read|as of|retrieved|accessed|last checked)\s+(?:on\s+)?"
     r"(?P<d>\d{4}-\d{2}-\d{2}"
     rf"|\d{{1,2}}\s+(?:{_MONTH_RE})\s+\d{{4}}"
     rf"|(?:{_MONTH_RE})\s+\d{{1,2}},?\s+\d{{4}}"
@@ -283,14 +290,54 @@ def stale_texts(text: str, set_texts: list[str], today: dt.date) -> list[tuple]:
             continue
         # the clause the statement lives in: back to the last sentence/clause break, forward to the end of the date
         start = max(text.rfind(". ", 0, m.start()), text.rfind("; ", 0, m.start()), text.rfind(": ", 0, m.start()), 0)
-        clause = text[start:m.end() + 80]
+        # the clause ends at its own sentence break: "… checked 2026-07-01. Outlier is $249" is NOT about us (verifier)
+        ends = [i for i in (text.find(". ", m.end()), text.find("; ", m.end())) if i != -1]
+        clause = text[start:min(ends + [m.end() + 80])]
         if OURS_WORDS.search(clause):
             continue
         out.append((age, m.group(0), text[max(0, m.start() - 70):m.end() + 40].strip()))
     return out
 
 
-def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int | None = None) -> dict:
+def _judge_sets(pg, rel: str, today: dt.date, res: dict) -> list:
+    """Every claim set on one page: malformed, future, unreadable, stale or aging. Returns the valid ones."""
+    page_sets = []
+    for s in pg.sets:
+        d = s["date"]
+        label = s["label"] or "(unnamed)"
+        where = f"{rel} [{label}]"
+        dd = parse_date(d) if ISO.match(d) else None
+        if dd is None:
+            res["fail"].append(f"malformed  {where}: data-claims-checked={d!r} is not a real YYYY-MM-DD date")
+            continue
+        if dd > today:
+            res["fail"].append(f"malformed  {where}: {d} is in the future (today is {today})")
+            continue
+        if not says_date(s["text"], dd):
+            res["fail"].append(f"malformed  {where}: the element's text {s['text'][:60]!r} does not state {d}, "
+                               f"so the reader cannot see the date the machine reads")
+            continue
+        age = (today - dd).days
+        rec = {"page": rel, "label": label, "date": d, "age": age}
+        res["sets"].append(rec)
+        page_sets.append(rec)
+        if age > FAIL_DAYS:
+            res["fail"].append(f"stale      {where}: checked {d}, {age} days ago (limit {FAIL_DAYS})")
+        elif age > WARN_DAYS:
+            res["warn"].append(f"warn       {where}: checked {d}, {age} days ago (warns past {WARN_DAYS}, "
+                               f"fails past {FAIL_DAYS})")
+    return page_sets
+
+
+def load_backlog() -> list:
+    if not BACKLOG_FILE.exists():
+        return []
+    d = json.loads(BACKLOG_FILE.read_text(encoding="utf-8"))
+    return [k for k in d.get("pages", [])]
+
+
+def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int | None = None,
+         backlog: list | None = None, backlog_max: int | None = None) -> dict:
     """Judge every page. Returns {'sets': [...], 'pages': n, 'rival_pages': n, 'warn': [...], 'fail': [...]}."""
     exempt = load_exempt() if exempt is None else exempt
     exempt_max = EXEMPT_MAX if exempt_max is None else exempt_max
@@ -322,31 +369,7 @@ def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int
         else:
             why = why_rival_page(rel, raw, prose, mine, owned)
             need = True                                  # default-deny: a page here needs a date unless exempt
-        page_sets = []
-        for s in pg.sets:
-            d = s["date"]
-            label = s["label"] or "(unnamed)"
-            where = f"{rel} [{label}]"
-            dd = parse_date(d) if ISO.match(d) else None
-            if dd is None:
-                res["fail"].append(f"malformed  {where}: data-claims-checked={d!r} is not a real YYYY-MM-DD date")
-                continue
-            if dd > today:
-                res["fail"].append(f"malformed  {where}: {d} is in the future (today is {today})")
-                continue
-            if not says_date(s["text"], dd):
-                res["fail"].append(f"malformed  {where}: the element's text {s['text'][:60]!r} does not state {d}, "
-                                   f"so the reader cannot see the date the machine reads")
-                continue
-            age = (today - dd).days
-            rec = {"page": rel, "label": label, "date": d, "age": age}
-            res["sets"].append(rec)
-            page_sets.append(rec)
-            if age > FAIL_DAYS:
-                res["fail"].append(f"stale      {where}: checked {d}, {age} days ago (limit {FAIL_DAYS})")
-            elif age > WARN_DAYS:
-                res["warn"].append(f"warn       {where}: checked {d}, {age} days ago (warns past {WARN_DAYS}, "
-                                   f"fails past {FAIL_DAYS})")
+        page_sets = _judge_sets(pg, rel, today, res)
 
         if rel in exempt:
             # What a machine can still check about a human judgement: a rival's price, or a page whose whole subject is
@@ -372,6 +395,46 @@ def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int
     for rel in exempt:
         if rel not in seen_rel:
             res["fail"].append(f"exempt     {rel}: listed as exempt but the page does not exist; remove the entry")
+
+    # every OTHER indexable page that quotes a rival's price (the 2026-10-20 widening; BACKLOG_MAX above)
+    backlog = load_backlog() if backlog is None else backlog
+    backlog_max = BACKLOG_MAX if backlog_max is None else backlog_max
+    if len(backlog) > backlog_max:
+        res["fail"].append(f"backlog: claim_freshness_backlog.json lists {len(backlog)} pages, pinned at {backlog_max}. "
+                           f"A page was ADDED, which silences this gate for it. Date the page instead.")
+    on_backlog = set(backlog)
+    for path in sorted(root.rglob("index.html")):
+        rel = path.relative_to(root).as_posix()
+        if rel in seen_rel or any(part.startswith((".", "_")) for part in path.relative_to(root).parts):
+            continue
+        raw = path.read_text(encoding="utf-8", errors="replace")
+        if re.search(r'name="robots" content="[^"]*noindex', raw):
+            continue
+        pg = read_page(path)
+        figs = rival_figures(squash(pg.prose), mine)
+        if not figs and not pg.sets:
+            continue
+        seen_rel.add(rel)
+        res["pages"] += 1
+        page_sets = _judge_sets(pg, rel, today, res)
+        if figs:
+            res["rival_pages"] += 1
+            res["why"][rel] = [f"price {figs[0]}" + (f" +{len(figs) - 1}" if len(figs) > 1 else "")]
+        listed = rel in on_backlog
+        if figs and not page_sets:
+            msg = f"{rel}: quotes a rival's price ({res['why'][rel][0]}) outside /vs/ and /best/ with no data-claims-checked date"
+            if listed:
+                res["warn"].append(f"backlog    {msg} (on claim_freshness_backlog.json: date it, then remove the entry)")
+            else:
+                res["fail"].append(f"undated    {msg}")
+        elif listed:
+            res["fail"].append(f"backlog    {rel}: is dated now or quotes no rival price; remove it from claim_freshness_backlog.json")
+        for age, stamp, ctx in stale_texts(squash(pg.text), [x["text"] for x in pg.sets], today):
+            line = f"stale-text {rel}: still says {stamp!r} ({age} days ago): ...{ctx}..."
+            (res["warn"] if listed else res["fail"]).append(line)
+    for rel in backlog:
+        if not (root / rel).is_file():
+            res["fail"].append(f"backlog    {rel}: listed on the backlog but the page does not exist; remove the entry")
     return res
 
 
@@ -429,6 +492,16 @@ def self_check(verbose: bool = False) -> int:
         # a hand-made page under seo/vs/ is not "generated", but it is still default-deny
         "seo/vs/hand-made-undated/index.html": (_page("<p>Some assistants wrap a cloud model.</p>"), "undated", False),
         "seo/vs/hand-made-exempt/index.html": (_page("<p>Some assistants wrap a cloud model.</p>"), None, False),
+        # the 2026-10-20 widening: a rival price anywhere else
+        "learn/undated-price/index.html": (_page("<p>Perplexity Pro is $20 a month.</p>"), "undated", False),
+        "learn/backlogged/index.html": (_page("<p>Perplexity Pro is $20 a month.</p>"), None, True),
+        "learn/dated-ok/index.html": (_page(stamp(3)), None, False),
+        "learn/no-rival/index.html": (_page("<p>Unified memory is shared by the CPU and GPU.</p>"), None, False),
+        "learn/backlog-but-dated/index.html": (_page(stamp(3)), "backlog", False),
+        # verifier holes: a bare "read <date>", and "Outlier" in the NEXT sentence after a stale date
+        "vs/read-old/index.html": (_page(stamp(2, "<p>Copilot Pro price, read 2026-07-01.</p>")), "stale-text", False),
+        "vs/ours-next-sentence/index.html": (_page(stamp(2, "<p>Cline Pro price, checked 2026-07-23. Outlier is one price.</p>")),
+                                             "stale-text", False),
     }
     exempt = {"vs/exempt-ok/index.html": "open-weight models", "vs/exempt-priced/index.html": "was clean once",
               "vs/ghost/index.html": "page that no longer exists",
@@ -440,7 +513,8 @@ def self_check(verbose: bool = False) -> int:
             _write(root, rel, h)
         _write(root, "_seo_build/owned_pages.json",
                json.dumps(["seo/vs/generated-undated/index.html", "seo/vs/generated-dated/index.html"]))
-        res = scan(root, today, exempt=exempt, exempt_max=4)
+        backlog = ["learn/backlogged/index.html", "learn/backlog-but-dated/index.html", "learn/ghost-backlog/index.html"]
+        res = scan(root, today, exempt=exempt, exempt_max=4, backlog=backlog, backlog_max=3)
         joined = "\n".join(res["fail"])
         for rel, (_h, verdict, expect_warn) in cases.items():
             fails = [f for f in res["fail"] if f" {rel}" in f or f"{rel}:" in f or f"{rel} [" in f]
@@ -455,6 +529,11 @@ def self_check(verbose: bool = False) -> int:
                 bad.append(f"{rel}: should not warn, got {warns[0][:90]}")
         if "ghost" not in joined:
             bad.append("an exempt entry for a page that does not exist was not reported")
+        if "ghost-backlog" not in joined:
+            bad.append("a backlog entry for a page that does not exist was not reported")
+        if not any("pinned at 2" in f for f in scan(root, today, exempt=exempt, exempt_max=4, backlog=backlog,
+                                                   backlog_max=2)["fail"]):
+            bad.append("a backlog over BACKLOG_MAX did not fail")
         # pin: a bigger exempt list than the cap must fail
         over = scan(root, today, exempt=exempt, exempt_max=3)
         if not any("pinned at 3" in f for f in over["fail"]):
