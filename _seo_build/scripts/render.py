@@ -127,6 +127,34 @@ APP_VERSION = _detect_app_version()
 WORKING_SET_GB = 4.0
 TODAY = date.today().isoformat()
 
+#: The <meta name="description"> (and og:/twitter:/JSON-LD description, which the template and article_jsonld() take
+#: from the same variable) for pages whose own text is too long to be a search snippet. Google shows about 155
+#: characters (scripts/serp_length_gate.py). The learn builder uses its visible quick-answer paragraph as the
+#: description, so cutting the snippet there would cut the paragraph readers see; this table keeps the two apart.
+#: Plain characters, never &rsquo; / &ndash; entities: the template escapes the value, so an entity written here
+#: reaches the snippet as the literal text "&rsquo;" (it did on mlx-explained and what-is-unified-memory until
+#: 2026-10-19). Key = "<category>/<slug>"; main() refuses an entry that matches no page or runs over 155.
+META_DESCRIPTION = {
+    "learn/mlx-explained":
+        "MLX is Apple's array framework for Apple Silicon: one GPU and CPU device, no host–device copy, and the 4-bit "
+        "dense format of every shipping tier but Plus.",
+    "learn/ternary-quantization-explained":
+        "Ternary quantization stores weights as three values (typically -1, 0, +1) plus a per-channel scale: around "
+        "1.6 bits per weight, with sign-and-add matmuls.",
+    "learn/what-is-unified-memory":
+        "Unified memory gives the CPU and GPU one address space on Apple Silicon: no separate VRAM, no PCIe "
+        "round-trip. The GPU reads weights from main memory.",
+    "learn/k-override-explained":
+        "K_override sets how many experts the paged engine keeps in RAM. Higher K reduces cache misses but inflates "
+        "RAM and can slow decode if compute-bound.",
+    "learn/paged-moe-explained":
+        "A 397B-parameter MoE too big for unified memory is paged from disk. The router picks experts per token; the "
+        "engine keeps top-K in RAM and reads the rest.",
+    "run/run-vision-on-m3-max-macbook-pro":
+        "Outlier Vision 3.8 (27B dense, 15.5 GB) on MacBook Pro M3 Max (36, 48, 64, 96 or 128 GB, 300-400 GB/s): "
+        "estimated speed, RAM headroom, install steps.",
+}
+
 env = Environment(
     loader=FileSystemLoader(str(TPL_DIR)),
     autoescape=select_autoescape(enabled_extensions=("html",)),
@@ -1820,6 +1848,15 @@ def main():
             else:
                 _keep.append(r)
         p["related"] = _keep
+
+    _unused = set(META_DESCRIPTION)
+    for p in pages:
+        _k = f"{p['category']}/{p['slug']}"
+        if _k in META_DESCRIPTION:
+            assert len(META_DESCRIPTION[_k]) <= 155, f"META_DESCRIPTION[{_k!r}] is over 155 characters"
+            p["description"] = META_DESCRIPTION[_k]
+            _unused.discard(_k)
+    assert not _unused, f"META_DESCRIPTION entries that match no page: {sorted(_unused)}"
 
     # write
     written = {}
