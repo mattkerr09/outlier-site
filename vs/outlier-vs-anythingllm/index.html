@@ -139,6 +139,7 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="AnythingLLM">AnythingLLM prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -153,7 +154,7 @@
 
     <p>The model layer is deliberately swappable. AnythingLLM front-ends 20-plus providers: OpenAI, Anthropic, Bedrock, Gemini, Ollama, LM Studio, OpenRouter, DeepSeek, Mistral, Groq and llama.cpp-compatible open weights among them. Nine vector databases and eight-plus embedding providers are equally pluggable. AnythingLLM ships no LLM of its own: it does bundle a default native embedder and a built-in transcription model, but the chat model is always something you bring.</p>
 
-    <p>The desktop build is the one that matters here. One-click install, no account, no email verification, no credit card, plus a built-in LLM provider that downloads open-weight models to run on your own CPU or GPU, desktop-exclusive and absent from Docker and cloud. Desktop policy is that chats and documents are never transmitted off your device. Anonymous telemetry is on by default and can be turned off in Settings or with <code>DISABLE_TELEMETRY=true</code>.</p>
+    <p>The desktop build is the one that matters here. One-click install, no account, no email verification, no credit card, plus a built-in LLM provider that downloads open-weight models to run on your own CPU or GPU. Desktop has it, Docker offers it as an opt-in, and the hosted cloud does not have it. Desktop policy is that chats and documents are never transmitted off your device. Anonymous telemetry is on by default and can be turned off in Settings or with <code>DISABLE_TELEMETRY=true</code>.</p>
 
     <h2>What Outlier is</h2>
     <p>Outlier is a native Mac app for Apple Silicon (M1 or later, macOS 26+). It runs models on-device, needs no account, has no usage caps and works with Wi-Fi off. The difference in posture is that Outlier ships the models: six tiers from Nano (4B, 2.37 GB, 6 GB RAM, 71.7 tok/s on M1 Ultra) through Core 27B up to Plus, a 397B-a17b MoE streaming experts from SSD in ~14 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase.</p>
@@ -199,7 +200,7 @@
         </tr>
         <tr>
           <td><strong>Bundled vs assembled</strong></td>
-          <td>Assembled: no LLM of its own (embedder and transcription bundled); desktop adds a downloader</td>
+          <td>Assembled: no LLM of its own (embedder and transcription bundled); desktop adds a downloader, Docker has it opt-in</td>
           <td>Bundled: models, runtime and app ship together</td>
         </tr>
         <tr>
@@ -234,7 +235,7 @@
       <li><strong>Teams.</strong> A continuous path from single-user desktop to multi-user Docker to cloud with SSO, RBAC and embeddable widgets. Outlier has no team story at all.</li>
       <li><strong>Document RAG.</strong> Workspaces embed your documents into a real vector store, nine of them pluggable, so a large corpus gets retrieved against rather than pasted. Outlier's file handling is context injection, not retrieval: attachments are stuffed into the prompt, with no embeddings and no vector index, so a folder of long PDFs is a hard ceiling rather than a slow query. Outlier indexes codebases on demand, but that's one narrow case, not a general document store.</li>
       <li><strong>Automation and orchestration.</strong> Custom agent skills, a visual Agent Flows builder and cron Scheduled Jobs that keep running when nobody's at the keyboard, plus data connectors that ingest straight into a workspace. Outlier has web search and MCP connectors of its own, but nothing scheduled and no flow builder, every action needs you present to start it.</li>
-      <li><strong>Momentum.</strong> Roughly 63.7k GitHub stars, monthly releases (v1.15.0 on 2026-06-25), commits the same week I wrote this.</li>
+      <li><strong>Momentum.</strong> Roughly 67.3k GitHub stars, the latest release v1.18.0 on 2026-10-13, and a commit pushed this week.</li>
     </ul>
 
     <p>Two caveats before you buy. AnythingLLM Cloud has no built-in LLM by design, the hosted instance has no GPU and limited CPU and RAM, so $50 or $99 a month buys hosting, with model API costs on top; cloud also drops custom agents and MCP for security reasons. And since v1.15.0 the desktop app's on-device "Magic Features" (system-wide dictation, highlight-to-act, predictive typing) carry free daily limits, with Pro removing them and the watermark on AI-generated documents. Pro's price isn't in the docs.</p>
@@ -252,7 +253,7 @@
     <p><strong>Running both is reasonable.</strong> They aren't the same category: one is a platform you configure, the other an appliance you open. If you already run AnythingLLM against Ollama and you're happy, don't switch.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> license, stars and releases from <a href="https://github.com/Mintplex-Labs/anything-llm">github.com/Mintplex-Labs/anything-llm</a> and the GitHub API (read 2026-07-23); builds and the account-free install from <a href="https://anythingllm.com/download">anythingllm.com/download</a>; cloud pricing and the no-built-in-LLM limitation from <a href="https://anythingllm.com/cloud">anythingllm.com/cloud</a> and <a href="https://docs.anythingllm.com/cloud/limitations">its limitations page</a>; desktop-vs-Docker availability, telemetry defaults and system requirements from docs.anythingllm.com; Magic Features and Pro from the <a href="https://github.com/Mintplex-Labs/anything-llm/releases/tag/v1.15.0">v1.15.0 notes</a>. Outlier specs measured on an M1 Ultra Mac Studio; HumanEval 0.951 and the ~45% (18/40, older build, 2026-06-25) blind SWE-bench Verified slice are my own runs on my own hardware, not leaderboard submissions, and a 40-instance slice is noisy; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">benchmark detail here</a>. Competitor pricing and policies change: check the links. I left out anything I couldn't confirm from a primary source.
+      <strong>Sources and receipts:</strong> license, stars and releases from <a href="https://github.com/Mintplex-Labs/anything-llm">github.com/Mintplex-Labs/anything-llm</a> and the GitHub API (read 2026-10-19); builds and the account-free install from <a href="https://anythingllm.com/download">anythingllm.com/download</a>; cloud pricing and the no-built-in-LLM limitation from <a href="https://anythingllm.com/cloud">anythingllm.com/cloud</a> and <a href="https://docs.anythingllm.com/cloud/limitations">its limitations page</a>; desktop-vs-Docker availability from the <a href="https://docs.anythingllm.com/installation-desktop/overview">desktop overview</a>, telemetry defaults from the <a href="https://docs.anythingllm.com/installation-desktop/privacy">desktop privacy policy</a>, system requirements from the <a href="https://docs.anythingllm.com/installation-desktop/system-requirements">system requirements page</a>, and the provider list from the <a href="https://docs.anythingllm.com/features/language-models">language models page</a>; the Model Router from the <a href="https://docs.anythingllm.com/changelog/v1.13.0">v1.13.0 changelog</a>; Magic Features and Pro from the <a href="https://github.com/Mintplex-Labs/anything-llm/releases/tag/v1.15.0">v1.15.0 notes</a> and the <a href="https://docs.anythingllm.com/pro/overview">Pro docs</a>. Outlier specs measured on an M1 Ultra Mac Studio; HumanEval 0.951 and the ~45% (18/40, older build, 2026-06-25) blind SWE-bench Verified slice are my own runs on my own hardware, not leaderboard submissions, and a 40-instance slice is noisy; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">benchmark detail here</a>. Competitor pricing and policies change: check the links. I left out anything I couldn't confirm from a primary source.
     </div>
 
     <div class="cta">
