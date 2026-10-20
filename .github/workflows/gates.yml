@@ -15,7 +15,9 @@ name: gates
 
 on:
   push:
-    branches: [main]
+    # next: every session pushes here; the last step promotes main only if every gate passed (README, Deploys).
+    # main: still checked on push, so a push that skipped next (--no-verify, another machine) shows red.
+    branches: [main, next]
   schedule:
     - cron: "17 * * * *"   # hourly, offset so it never lands on the hour with everything else
   workflow_dispatch:
@@ -23,6 +25,11 @@ on:
 jobs:
   gates:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write      # the promote step pushes main; nothing else writes
+    concurrency:
+      group: gates-${{ github.ref }}
+      cancel-in-progress: false   # never cancel a promotion half-way
     steps:
       - uses: actions/checkout@v4
         with:
@@ -204,3 +211,18 @@ jobs:
             diff <(echo) /tmp/seo.txt | grep -E '^> +(THIN|VOICE|DUP)' | head -40
             exit 1
           fi
+
+      # outlier.host deploys main (Porkbun static hosting pulls it on every push), so a commit reaches visitors only
+      # through here: every step above passed on `next`, and main is fast-forwarded to this exact commit. Steps with an
+      # `if:` still require every earlier step to have succeeded. A push that is not a fast-forward is refused (main
+      # moved some other way): rebase next onto origin/main and push next again.
+      - name: Promote next to main (every gate above passed)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/next'
+        run: |
+          git fetch -q origin main
+          if ! git merge-base --is-ancestor origin/main "$GITHUB_SHA"; then
+            echo "::error::main is not an ancestor of next ($GITHUB_SHA): rebase next onto origin/main and push next again"
+            exit 1
+          fi
+          git push origin "$GITHUB_SHA:refs/heads/main"
+          echo "promoted $GITHUB_SHA to main; Porkbun deploys it from there" >> "$GITHUB_STEP_SUMMARY"

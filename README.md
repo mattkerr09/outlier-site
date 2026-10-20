@@ -31,6 +31,25 @@ The GitHub Pages API also 404s for this repository. The whole repo is synced to
 the host, and **path exclusion lives in the host configuration, outside this
 repo** — `_config.yml`, `.nojekyll` and `exclude:` lists have no effect here.
 
+### Deploys go through `next` — push there, never to `main`
+
+Porkbun deploys `main` the moment it moves, so `main` is the gated branch:
+
+1. Push your commits to `next` (`git push origin HEAD:next`, after rebasing onto `origin/main`).
+2. `.github/workflows/gates.yml` runs every gate on that exact commit.
+3. Only if all of them pass, its last step fast-forwards `main` to that commit, and Porkbun deploys it.
+
+A red gate leaves `main` where it was: the site keeps serving the last commit that passed. Fix it on `next` and push
+again. If `main` moved some other way, the promote step refuses (not a fast-forward); rebase `next` onto `origin/main`.
+
+The local half is `scripts/githooks/pre-push`, installed per checkout with `git config core.hooksPath scripts/githooks`.
+It refuses a direct push to `main`, and runs `claim_freshness_gate` and `faq_schema_visible_gate` on a push to `next`.
+
+**The honest limit.** Nothing on GitHub stops a push to `main`: there is no branch protection. `git push --no-verify`,
+or a push from a checkout or a machine without the hook, still reaches `main` and goes live. CI still runs the gates on
+such a push and shows red, but after the fact. Closing that needs GitHub branch protection on `main` (with the workflow
+allowed to push it), a change to the repository's settings that has not been made.
+
 ### How long a change takes to reach a visitor, and the one that never does
 
 Measured 2026-09-07, twice, on two different paths: a push is still serving the OLD copy at

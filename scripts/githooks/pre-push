@@ -1,0 +1,39 @@
+#!/bin/sh
+# outlier.host deploys main: Porkbun static hosting pulls it on every push (README, "Deploys"). So main moves only
+# when CI has run every gate on `next` and fast-forwarded main to that exact commit (.github/workflows/gates.yml,
+# "Promote next to main"). This hook is the local half:
+#   - a direct push to main (or deleting it) is refused: push to next instead;
+#   - a push to next first runs the two fast claim gates on the exact commit being pushed.
+# Installed per checkout:  git config core.hooksPath scripts/githooks
+# Its limit, stated in the README: `git push --no-verify`, or a push from a checkout without this hook, still reaches
+# main. CI's promote step is what holds; this only catches a mistake before it costs a CI run.
+input=$(cat)
+status=0
+nl='
+'
+IFS="$nl"
+for line in $input; do
+  IFS=' '
+  set -- $line
+  IFS="$nl"
+  local_sha=$2
+  remote_ref=$3
+  case "$remote_ref" in
+    refs/heads/main)
+      echo "pre-push: refusing a direct push to main. outlier.host deploys main the moment it moves." >&2
+      echo "pre-push: push to next instead (git push origin HEAD:next); CI runs every gate and promotes main." >&2
+      status=1 ;;
+    refs/heads/next)
+      case "$local_sha" in 0000000000000000000000000000000000000000) continue ;; esac
+      tmp=$(mktemp -d "${TMPDIR:-/tmp}/outlier-site-prepush.XXXXXX") || { status=1; continue; }
+      git archive "$local_sha" | tar -x -C "$tmp"
+      if ( cd "$tmp" && python3 scripts/claim_freshness_gate.py . && python3 scripts/faq_schema_visible_gate.py . ) >&2; then
+        echo "pre-push: claim gates pass on $(echo "$local_sha" | cut -c1-9); CI runs the rest before main moves." >&2
+      else
+        echo "pre-push: a claim gate failed on $(echo "$local_sha" | cut -c1-9) — not pushed." >&2
+        status=1
+      fi
+      rm -rf "$tmp" ;;
+  esac
+done
+exit $status
