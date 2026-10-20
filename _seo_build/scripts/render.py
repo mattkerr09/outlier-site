@@ -284,7 +284,10 @@ def write_page(category: str, slug: str, title: str, description: str,
             related=related,
             breadcrumb_jsonld=crumb_jsonld(category, CATEGORY_LABEL[category], h1, canonical),
             article_jsonld=article_jsonld(title, description, canonical, published, modified),
-            faq_jsonld=faq_jsonld(faq) if faq else "",
+            # 2026-10-20: no FAQ schema. _base.html never SHOWS the faq list, and Google requires FAQ markup to be
+            # visible on the page; 28 rendered pages carried a stock block no reader could see.
+            # scripts/faq_schema_visible_gate.py fails CI if it comes back.
+            faq_jsonld="",
             updated=modified,
             app_version=APP_VERSION,
             # 2026-09-29: the Download button's counting-link tag — the SAME value
