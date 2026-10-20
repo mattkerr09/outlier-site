@@ -938,11 +938,14 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
                 f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
             )
         else:
+            # 2026-10-20 (verifier): this quoted the category description as "the surface around the model", which
+            # read as a circle once competitors.csv lost its unconfirmed "lack agent surfaces" clause. Say what
+            # Outlier adds; claim nothing about the rival.
             quick = (
                 f"<p>{u['one_liner']}. The {c['short_name']} category runs open weights on your own "
-                f"hardware, as Outlier does, so the deciding difference for {u['name']} is not the "
-                f"data path but the surface around the model: {_lower_first(c['description'])}. Outlier "
-                f"answers it with the on-device {u['recommended_tier']} tier and an agent loop. "
+                f"hardware, as Outlier does, so for {u['name']} the deciding difference is not the "
+                f"data path but what is built around the model. Outlier answers it with the on-device "
+                f"{u['recommended_tier']} tier and an agent loop that reads your files and runs and checks code. "
                 f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
             )
         rec_tier = u["recommended_tier"]
@@ -967,13 +970,22 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         body = []
         body.append(claims_line(c))
         body.append(f"<h2>What is the core difference for {u['name']}?</h2>")
-        body.append(
-            f"<p>For {u['name']}, the deciding axis between Outlier and {c['short_name']} is the "
-            f"data path. {c['description']}. Outlier holds the prompt and response for "
-            f"{u['name']} on the Mac and delivers tokens at the local memory bandwidth of the "
-            f"chip; on the recommended {_tier_name(rec_tier)} tier, that means working out of the on-disk "
-            f"checkpoint without a network round-trip per turn.</p>"
-        )
+        if is_cloud:
+            body.append(
+                f"<p>For {u['name']}, the deciding axis between Outlier and {c['short_name']} is the "
+                f"data path. {c['description']}. Outlier holds the prompt and response for "
+                f"{u['name']} on the Mac and delivers tokens at the local memory bandwidth of the "
+                f"chip; on the recommended {_tier_name(rec_tier)} tier, that means working out of the on-disk "
+                f"checkpoint without a network round-trip per turn.</p>"
+            )
+        else:
+            # 2026-10-20 (verifier): a local rival has no network round-trip either, so "the data path" is not the
+            # axis here; this paragraph said it was, against the quick answer above.
+            body.append(
+                f"<p>For {u['name']}, Outlier and {c['short_name']} both keep the prompt and the response on "
+                f"your Mac. {c['description']}. Outlier runs {u['name']} on the recommended "
+                f"{_tier_name(rec_tier)} tier from the on-disk checkpoint and adds the agent loop described above.</p>"
+            )
         body.append(f"<h2>How does the data path differ for {u['name']} on {c['short_name']}?</h2>")
         if is_cloud:
             body.append(
