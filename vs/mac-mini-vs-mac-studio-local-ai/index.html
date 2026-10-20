@@ -154,7 +154,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Buy for unified memory first and bandwidth second. As of 19 October 2026 a Mac mini tops out at 64GB and 307GB/s (M5 Pro, from $1,699); a Mac Studio starts at 36GB and 460GB/s for $2,499 on M5 Max, reaches 128GB on the 614GB/s chip that starts at $3,099, and the M5 Ultra starts at 96GB and 1.2TB/s for $5,499 and configures to 512GB. Memory can't be upgraded later, so the largest model the machine will ever run is decided at checkout.</p>
+      <p>Buy for unified memory first and bandwidth second. As of 19 October 2026 a Mac mini tops out at 64GB and 307GB/s (M5 Pro, from $1,699); a Mac Studio starts at 36GB and 460GB/s for $2,499 on M5 Max, reaches 128GB on the 614GB/s chip that starts at $3,099, and the M5 Ultra starts at 96GB and 1.2TB/s for $5,499 and configures to 256GB, or to 512GB from late October, Apple says. Memory can't be upgraded later, so the largest model the machine will ever run is decided at checkout.</p>
       <p style="margin-top:.8rem"><strong>Check the date.</strong> The specs and prices on this page were read from Apple on 19 October 2026. Apple's buy pages no longer sell the M4 mini, M4 Max Studio or M3 Ultra Studio, so this page covers the machines Apple sells now; the older chips are covered on our <a href="https://outlier.host/vs/m1-vs-m4-for-local-ai/">M1 vs M4 page</a>. What does not change: memory cannot be upgraded later, so buy for the largest model you want to run, and re-check Apple's pages before you order.</p>
     </div>
 <div class="pbox" data-pbox="answer">
@@ -181,7 +181,7 @@
       <li><strong>16GB (base M6 mini):</strong> a 4B model is a 2.37GB download needing 6GB of RAM; a 9B model is 5.04GB needing 12GB. A 26B MoE model at 15.61GB has a 16GB minimum: it runs, but that's the floor.</li>
       <li><strong>24GB (M6 mini upgraded, M5 Pro mini base):</strong> dense 27B models become practical (15.13GB on disk, about 20.7 tok/s on an M1 Ultra) and the 27B dense Vision 3.8 model at 15.5GB fits.</li>
       <li><strong>64GB (M5 Pro mini at its top configuration; M5 Max Studio, 40-core GPU only):</strong> the floor for very large paged-MoE models. Outlier's 397B-a17b tier is a 209GB download streaming experts from SSD at 1.59 tok/s on my M1 Ultra with 64GB: batch speed, not conversational. Outlier lists 64GB as the minimum and 128GB as recommended for that tier; the Mac mini stops at that 64GB minimum, while the Mac Studio reaches 128GB on the 40-core-GPU M5 Max and more on the M5 Ultra.</li>
-      <li><strong>96GB (M5 Ultra Studio base):</strong> the same models with headroom, at 1.2TB/s; the M5 Ultra configures to 256GB or 512GB.</li>
+      <li><strong>96GB (M5 Ultra Studio base):</strong> the same models with headroom, at 1.2TB/s; the M5 Ultra configures to 256GB, and to 512GB from late October, Apple says.</li>
     </ul>
 
     <p>Bandwidth decides how pleasant that is. A 4B model measures 71.7 tok/s on my M1 Ultra and 32 tok/s on an M4 MacBook Air (single prompt, 2026-05-04, indicative). A 24GB M6 mini should run a 27B model, but slower than the 20.7 tok/s I measured on an M1 Ultra; I have not measured it.</p>
@@ -200,11 +200,11 @@
       </thead>
       <tbody>
         <tr><td><strong>Starting price</strong></td><td>$899</td><td>$1,699</td><td>$2,499</td><td>$5,499</td></tr>
-        <tr><td><strong>Unified memory</strong></td><td>16GB → 32GB</td><td>24GB → 64GB (18/20 chip, $1,899)</td><td>36GB → 128GB (40-core GPU chip, $3,099)</td><td>96GB → 512GB (80-core GPU chip, $6,799)</td></tr>
+        <tr><td><strong>Unified memory</strong></td><td>16GB → 32GB</td><td>24GB → 64GB (18/20 chip, $1,899)</td><td>36GB → 128GB (40-core GPU chip, $3,099)</td><td>96GB → 256GB, 512GB from late October (80-core GPU chip, $6,799)</td></tr>
         <tr><td><strong>Memory bandwidth</strong></td><td>153 / 170GB/s</td><td>307GB/s</td><td>460 / 614GB/s</td><td>1.2TB/s</td></tr>
         <tr><td><strong>Base storage</strong></td><td>256GB</td><td>512GB</td><td>512GB</td><td>1TB</td></tr>
         <tr><td><strong>Max continuous power</strong></td><td>155W</td><td>155W</td><td>480W</td><td>480W</td></tr>
-        <tr><td><strong>Thunderbolt</strong></td><td>3× TB4</td><td>3× TB5</td><td>4× TB5</td><td>4× TB5</td></tr>
+        <tr><td><strong>Thunderbolt</strong></td><td>3× TB4</td><td>3× TB5</td><td>4× TB5</td><td>6× TB5 (4 back, 2 front)</td></tr>
         <tr><td><strong>$ per GB, base config</strong></td><td>~$56</td><td>~$71</td><td>~$69</td><td>~$57</td></tr>
         <tr><td><strong>Largest Outlier tier</strong> (all Pro-only)</td><td>Quick 26B-a4b</td><td>Vision 3.8 27B</td><td>Plus 397B-a17b at 64GB</td><td>Plus 397B-a17b</td></tr>
         <tr><td><strong>Upgradeable later</strong></td><td>No</td><td>No</td><td>No</td><td>No</td></tr>
@@ -224,7 +224,7 @@
 
     <h2>Upgrade paths: there aren't any</h2>
 
-    <p>Unified memory is configure-to-order with no user-serviceable path, so the ceiling is fixed at checkout and "I'll add RAM later" isn't a plan. What you <em>can</em> add is storage over Thunderbolt 5 at up to 120Gb/s: four ports on the Studio, three on the M5 Pro mini, Thunderbolt 4 on the M6 mini. No substitute for memory. Networking is the same story as memory: 10Gb Ethernet is standard on the Studio and a configure-to-order option on the mini, so it has to be chosen at checkout too.</p>
+    <p>Unified memory is configure-to-order with no user-serviceable path, so the ceiling is fixed at checkout and "I'll add RAM later" isn't a plan. What you <em>can</em> add is storage over Thunderbolt 5 at up to 120Gb/s: six ports on the M5 Ultra Studio, four on the M5 Max Studio, three on the M5 Pro mini, Thunderbolt 4 on the M6 mini. No substitute for memory. Networking is the same story as memory: 10Gb Ethernet is standard on the Studio and a configure-to-order option on the mini, so it has to be chosen at checkout too.</p>
 
     <p>M5 Pro (up to 307GB/s, 64GB) and M5 Max (up to 614GB/s, 128GB) shipped in the MacBook Pro in March 2026, claiming over 4× the peak GPU compute for AI versus the previous generation. Both are in Apple's desktops now: M5 Pro in the Mac mini, M5 Max in the Mac Studio.</p>
 

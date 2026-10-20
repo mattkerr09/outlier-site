@@ -145,7 +145,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon tops out today at 512GB in a Mac Studio (M5 Ultra, 1.2TB/s) and 128GB in an M5 Max MacBook Pro (614GB/s), while NVIDIA publishes 1,792GB/s over 96GB for the RTX PRO 6000. So a 120B model runs on either Mac and won't load on a 32GB RTX 5090 at all, while on models that fit both, the discrete GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
+      <p>Unified memory decides <em>which</em> models you can run; dedicated VRAM decides <em>how fast</em> they run once they fit. Apple silicon tops out today at 256GB in a Mac Studio (M5 Ultra, 1.2TB/s; Apple lists 512GB for late October) and 128GB in an M5 Max MacBook Pro (614GB/s), while NVIDIA publishes 1,792GB/s over 96GB for the RTX PRO 6000. So a 120B model runs on either Mac and won't load on a 32GB RTX 5090 at all, while on models that fit both, the discrete GPU processes prompts around 20x faster. Pick unified memory for capacity per dollar and low power; pick dedicated VRAM for prompt speed, batching, and fine-tuning.</p>
     </div>
 
     <p class="lead">Disclosure first: I build Outlier, a local AI app that only runs on Apple Silicon, so I have an obvious interest in one side of this. I've stuck to published specs and public benchmark tables, and labeled every number I couldn't verify at the source. Where a discrete GPU wins, it wins.</p>
@@ -160,7 +160,7 @@
     <h2>Capacity: what actually fits</h2>
     <p>At the March 2025 M3 Ultra launch Apple offered up to 512GB, and its claim that models over 600 billion parameters run on device was attached to that configuration. <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a> today lists the M5 Ultra at 96GB, configurable to 256GB or 512GB, at 1.2TB/s, and the M5 Max at 36GB, configurable to 128GB, at up to 614GB/s. The largest laptop pool is the 128GB M5 Max MacBook Pro at 614GB/s. DGX Spark ships 128GB of coherent memory at 273GB/s for inference up to 200B. An RTX 5090 has 32GB; the RTX PRO 6000 has 96GB with ECC.</p>
 
-    <p>So at its 96GB base a Mac Studio ties the PRO 6000 on nameplate capacity and loses to it on bandwidth, 1.2TB/s against 1,792GB/s. Above 96GB, the M5 Ultra's 256GB and 512GB options are capacity that no single card on the NVIDIA pages I read offers. Against consumer cards, 128GB or 512GB against a 5090's 32GB is a four- to sixteen-fold difference and decides whether a model loads at all.</p>
+    <p>So at its 96GB base a Mac Studio ties the PRO 6000 on nameplate capacity and loses to it on bandwidth, 1.2TB/s against 1,792GB/s. Above 96GB, the M5 Ultra's 256GB option, and the 512GB one Apple lists for late October, are capacity that no single card on the NVIDIA pages I read offers. Against consumer cards, 128GB or 512GB against a 5090's 32GB is a four- to sixteen-fold difference and decides whether a model loads at all.</p>
 
     <p>Those are hard ceilings. Spill out of VRAM and the offloaded layers cross PCIe at a fraction of GDDR7 bandwidth, and throughput falls off a cliff. Unified memory degrades gently instead. Here's what my app's tiers need:</p>
 
@@ -194,9 +194,9 @@
         <tr><th></th><th>Apple silicon (unified)</th><th>NVIDIA GB10 (unified)</th><th>Discrete GPU (VRAM)</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>Capacity</strong></td><td>96–512GB (M5 Ultra); 36–128GB (M5 Max)</td><td>128GB LPDDR5x</td><td>32GB (5090) / 96GB (PRO 6000)</td></tr>
+        <tr><td><strong>Capacity</strong></td><td>96–256GB (M5 Ultra; 512GB from late October); 36–128GB (M5 Max)</td><td>128GB LPDDR5x</td><td>32GB (5090) / 96GB (PRO 6000)</td></tr>
         <tr><td><strong>Bandwidth</strong></td><td>153GB/s (M5) to 1.2TB/s (M5 Ultra)</td><td>273GB/s</td><td>1,792GB/s (PRO 6000); 5090: no figure on NVIDIA's page</td></tr>
-        <tr><td><strong>What fits</strong></td><td>~120B-class at 4-bit in 96–128GB; 600B-class needs the 512GB M5 Ultra; larger only by SSD paging</td><td>200B, per NVIDIA</td><td>What fits the card, then a cliff</td></tr>
+        <tr><td><strong>What fits</strong></td><td>~120B-class at 4-bit in 96–128GB; 600B-class needs the 512GB M5 Ultra (late October, per Apple); larger only by SSD paging</td><td>200B, per NVIDIA</td><td>What fits the card, then a cliff</td></tr>
         <tr><td><strong>7B Q4_0 prefill / decode</strong></td><td>714 / 70 t/s (M4 Max)</td><td>n/a</td><td>14,073 / 290 t/s (5090)</td></tr>
         <tr><td><strong>Power</strong></td><td>480W whole Mac Studio</td><td>140W SoC</td><td>575W card / 1,000W system (5090); 600W (PRO 6000)</td></tr>
         <tr><td><strong>Price per GB of pool</strong></td><td>~$69 (M5 Max, 36GB) / ~$57 (M5 Ultra, 96GB)</td><td>~$37</td><td>~$62 (5090); no vendor price for the PRO 6000</td></tr>
