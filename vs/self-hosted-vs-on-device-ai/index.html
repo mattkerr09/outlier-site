@@ -139,6 +139,7 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="RunPod, Lambda, Hugging Face Inference Endpoints">RunPod, Lambda and Hugging Face GPU prices checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -173,7 +174,7 @@
         <tr><td><strong>Model size</strong></td><td>Unbounded via tensor parallelism</td><td>Installed memory; paging costs speed</td></tr>
         <tr><td><strong>Concurrency</strong></td><td>Many users per GPU</td><td>One person at a time</td></tr>
         <tr><td><strong>Bandwidth</strong></td><td>H100 SXM 3.35 TB/s</td><td>Consumer unified memory</td></tr>
-        <tr><td><strong>Recurring cost</strong></td><td>$0.69–$4.29/hr per GPU</td><td>No per-hour line</td></tr>
+        <tr><td><strong>Recurring cost</strong></td><td>$0.80–$4.50/hr per GPU</td><td>No per-hour line</td></tr>
         <tr><td><strong>Network</strong></td><td>Required per token</td><td>None after download</td></tr>
         <tr><td><strong>Security</strong></td><td>You add TLS, keys, limits</td><td>No listening endpoint</td></tr>
         <tr><td><strong>Ops burden</strong></td><td>Cluster, secrets, on-call</td><td>An app install</td></tr>
@@ -197,15 +198,15 @@
     <ul>
       <li><strong>Zero marginal cost per user.</strong> Nothing to meter or scale, the thousandth user costs nothing.</li>
       <li><strong>It works with the network off.</strong> A self-hosted endpoint can't, by construction. Any outage (provider, transit or your own cluster) takes the assistant down.</li>
-      <li><strong>No round trip per token,</strong> and no third party holding physical custody of the RAM the model runs in. AWS's data-privacy FAQ says "we do not access or use your content for any purpose without your agreement," but doesn't explicitly address AI/ML training use: confirm that in the service terms, which differ per provider.</li>
+      <li><strong>No round trip per token,</strong> and no third party holding physical custody of the RAM the model runs in. <a href="https://aws.amazon.com/compliance/data-privacy-faq/">AWS's data-privacy FAQ</a> says "We do not access or use your customer content for any purpose without your agreement," but doesn't explicitly address AI/ML training use: confirm that in the service terms, which differ per provider.</li>
       <li><strong>Apple Silicon is the native target.</strong> vLLM's install matrix covers CUDA, ROCm, XPU and CPU; Apple Silicon appears only "via vLLM-Metal," a separate project outside the main repo, plus CPU-only support. In practice, self-hosting means NVIDIA.</li>
       <li><strong>Nothing to secure.</strong> Ollama binds 127.0.0.1, and its FAQ's answer for network access is Nginx, ngrok or Cloudflare Tunnel: auth is what the operator adds. vLLM's <code>--api-key</code> is a header check, a floor rather than a security model. A misconfigured bind puts an unauthenticated endpoint on the internet; an app with no socket can't.</li>
     </ul>
 
     <h2>The cost and ops math people skip</h2>
-    <p>RunPod Secure Cloud lists H100 PCIe at $2.89/hr and RTX 4090 at $0.69/hr, storage billed separately. Run either around the clock, 730 hours a month, and that's roughly $2,110 and $504 respectively. Lambda's H100 SXM is $4.29/GPU/hr, about $3,100/month, with no egress fees. Hugging Face Inference Endpoints run $0.80/hr on an L4 to $4.50/hr on an H100.</p>
+    <p>RunPod Secure Cloud lists H100 PCIe at $2.89/hr and RTX 4090 at $0.89/hr, storage billed separately. Run either around the clock, 730 hours a month, and that's roughly $2,110 and $650 respectively. Lambda's H100 SXM is $4.29/GPU/hr, about $3,100/month, with no egress fees. Hugging Face Inference Endpoints run $0.80/hr on an L4 to $4.50/hr on an H100.</p>
 
-    <p>Serverless softens that: RunPod bills per second "from when a worker starts until it fully stops," and Flex workers scale to zero, though the idle timeout, five seconds by default, is still billed, and the next request pays a cold start.</p>
+    <p>Serverless softens that: RunPod bills Serverless workers per second, and Flex workers scale to zero, though idle time is still billed and the next request pays a cold start.</p>
 
     <p>Then the work itself. vLLM's Kubernetes guide walks you through a GPU cluster, a shared-memory <code>emptyDir</code> that tensor-parallel inference requires, plus optional model-cache storage (a PersistentVolumeClaim or <code>hostPath</code>) and, for gated models, a Secret holding a Hugging Face token: before TLS, authz, rate limiting or on-call. Owning metal moves the problem to facilities: NVIDIA rates the H100 SXM at up to 700W configurable, per GPU, before cooling.</p>
 
@@ -219,7 +220,7 @@
     <p><strong>Run both</strong>: something on-device for routine and confidential work, a server for jobs needing 671B parameters or dozens of concurrent requests. They're two places to put the same weights.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> capabilities, install matrix, <code>serve</code> flags and Kubernetes requirements from <a href="https://github.com/vllm-project/vllm">vllm-project/vllm</a> and <a href="https://docs.vllm.ai/en/latest/">its docs</a>; throughput and PagedAttention from the <a href="https://vllm.ai/blog/2023-06-20-vllm">June 20, 2023 launch post</a>, dated accordingly; llama.cpp and Ollama from their repos and <a href="https://docs.ollama.com/faq">the FAQ</a>; <a href="https://github.com/ml-explore/mlx">ml-explore/mlx</a>; pricing from <a href="https://www.runpod.io/pricing">RunPod</a>, <a href="https://lambda.ai/service/gpu-cloud#pricing">Lambda</a> and <a href="https://huggingface.co/pricing">Hugging Face</a>, monthly totals my arithmetic at 730 h/month; H100 specs from <a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA</a>; the Llama 3.3, DeepSeek-V3 and Open WebUI license files; Outlier figures measured on an M1 Ultra. <strong>GPU pricing and vendor policies change often</strong>: re-check the sources before budgeting.
+      <strong>Sources and receipts:</strong> capabilities, install matrix, <code>serve</code> flags and Kubernetes requirements from <a href="https://github.com/vllm-project/vllm">vllm-project/vllm</a> and <a href="https://docs.vllm.ai/en/latest/">its docs</a>; throughput and PagedAttention from the <a href="https://vllm.ai/blog/2023-06-20-vllm">June 20, 2023 launch post</a>, dated accordingly; llama.cpp and Ollama from their repos and <a href="https://docs.ollama.com/faq">the FAQ</a>; <a href="https://github.com/ml-explore/mlx">ml-explore/mlx</a>; pricing from <a href="https://www.runpod.io/pricing">RunPod</a>, <a href="https://lambda.ai/service/gpu-cloud#pricing">Lambda</a> and <a href="https://huggingface.co/pricing">Hugging Face</a>, all read 2026-10-19, monthly totals my arithmetic at 730 h/month; H100 specs from <a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA</a>; the Llama 3.3, DeepSeek-V3 and Open WebUI license files; Outlier figures measured on an M1 Ultra. <strong>GPU pricing and vendor policies change often</strong>: re-check the sources before budgeting.
     </div>
 
     <div class="cta">
