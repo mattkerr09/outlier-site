@@ -139,6 +139,7 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="GPT4All">GPT4All and Nomic prices and plans checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
@@ -155,8 +156,8 @@
 
     <p>Credit where it's due: the "Enable Datalake" sharing toggle defaults to Off, so does off-device embedding, and the docs warn plainly that using a remote provider means "your prompts leave your computer to the API provider."</p>
 
-    <h2>Where the project stands as of July 2026</h2>
-    <p>GPT4All's newest release is v3.10.0, published 2025-02-25. The GitHub API reports the repo was last pushed 2025-05-27, and that commit was a CI config change, the last substantive commits are from February 2025. PyPI still shows bindings 2.8.2, and 730 issues and 42 pull requests are open with no visible triage.</p>
+    <h2>Where the project stands as of October 2026</h2>
+    <p>GPT4All's newest release is v3.10.0, published 2025-02-25. The GitHub API reports the repo was last pushed 2025-05-27, and that commit was a CI config change, the last substantive commits are from February 2025. PyPI still shows bindings 2.8.2, and 733 issues and 42 pull requests are open with no visible triage.</p>
 
     <p>There's no deprecation notice and the repo isn't archived, but there's no statement either way. An issue titled "Is GPT4all dead?" has been open since August 2025 with no maintainer reply, every comment is from someone outside the organization. Nomic's homepage now describes the company as "the domain-specific AI platform for architecture, engineering, and construction firms," and GPT4All appears in neither the navigation nor the pricing page. The download page works; the product just isn't part of the company's story.</p>
 
@@ -177,7 +178,7 @@
     <h2>Platform support and licensing: where Outlier loses</h2>
     <p>I'll be blunt. GPT4All runs on Windows (down to an Intel Core i3 2nd Gen), Windows ARM, macOS Monterey 12.6+, and Ubuntu/Linux x86-64, plus a community Flathub build. Outlier is Apple Silicon only: M1 or later, macOS 26+. No Intel Macs, no Windows, no Linux. If your team isn't all on modern Macs, Outlier isn't an option and GPT4All is.</p>
 
-    <p>Licensing goes the same way. GPT4All is MIT-licensed and free for commercial use, no account, no paid tier: Nomic's pricing page covers only its Platform and Developer API, from $40 per user per month with a $1,000 monthly minimum, and doesn't mention GPT4All. Outlier's app is closed source. Nano and Lite are free with no account; Pro covers all six tiers, Founders Lifetime at $249. If open source is a requirement rather than a preference, that ends the comparison.</p>
+    <p>Licensing goes the same way. GPT4All is MIT-licensed and free for commercial use, no account, no paid tier: Nomic's pricing page covers only its Platform and Agent API, with a free plan, Individual at $20 a month, Business at $40 per user per month (25-seat minimum) and a custom Enterprise plan, and doesn't mention GPT4All. Outlier's app is closed source. Nano and Lite are free with no account; Pro covers all six tiers, Founders Lifetime at $249. If open source is a requirement rather than a preference, that ends the comparison.</p>
 
     <h2>Side-by-side</h2>
     <table>
@@ -211,7 +212,7 @@
       <li><strong>LocalDocs is free, cross-platform, and in the box.</strong> Point it at a folder, chat with your files, see which snippets came back. Outlier's nearest equivalents, projects and web research with citations, are Pro-gated and Mac-only, so if you want folder-grounded chat without paying, GPT4All is the one that does it.</li>
       <li><strong>A Python SDK, not just a server.</strong> Both apps expose an OpenAI-compatible local endpoint, but <code>pip install gpt4all</code> gives you a first-party library and documented LangChain, Weaviate, and OpenLIT integrations. Outlier has the endpoint and nothing built on top of it.</li>
       <li><strong>Verifiable privacy defaults.</strong> Server off and localhost-only, Datalake sharing off, off-device embedding off.</li>
-      <li><strong>Optional hybrid use.</strong> The same window can talk to Groq, OpenAI, or Mistral, added in v3.10.0, so one app covers local and cloud.</li>
+      <li><strong>Optional hybrid use.</strong> The same window can talk to Groq, OpenAI, or Mistral, which v3.10.0 made easier to configure, so one app covers local and cloud.</li>
       <li><strong>Community depth.</strong> 77,000+ GitHub stars since March 2023 means tutorials and forum answers for almost anything you'll hit.</li>
     </ul>
 
@@ -223,7 +224,7 @@
     <p><strong>The honest tiebreaker</strong> is maintenance. A frozen app still works, the binary doesn't stop running. But it won't load next year's models, and nobody's answering the issue tracker.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> GPT4All license, stars, last-push date, and the open issue and pull-request split (730 issues + 42 PRs; the repo's <code>open_issues_count</code> of 772 counts both) from the <a href="https://api.github.com/repos/nomic-ai/gpt4all">GitHub API</a> and the <a href="https://github.com/nomic-ai/gpt4all/releases">releases page</a> (read 2026-07-23). Catalog size range from the 32 entries in <code>models3.json</code> on the repo's main branch. Platform requirements, components, server behavior, settings defaults, and LocalDocs from <a href="https://docs.gpt4all.io/">docs.gpt4all.io</a>. Pricing and positioning from <a href="https://www.nomic.ai/pricing">nomic.ai/pricing</a> and <a href="https://www.nomic.ai/">nomic.ai</a>; bindings version from PyPI. Model-ceiling claims are unverified community comments on issue #3558, labeled as such above. Outlier tier sizes and RAM floors measured on an M1 Ultra Mac Studio; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">benchmark method here</a>. Which Outlier tiers have public weights was checked against the <a href="https://huggingface.co/Outlier-Ai">Outlier-Ai org listing</a> on 2026-07-23; per-tier feature availability comes from the shipping app's entitlement map, and licensing from the <a href="https://outlier.host/terms.html">terms page</a>. Competitor pricing and project status change: check the primary sources.
+      <strong>Sources and receipts:</strong> GPT4All license, stars, last-push date, and the open issue and pull-request split (733 issues + 42 PRs; the repo's <code>open_issues_count</code> of 775 counts both) from the <a href="https://api.github.com/repos/nomic-ai/gpt4all">GitHub API</a> and the <a href="https://github.com/nomic-ai/gpt4all/releases">releases page</a> (read 2026-10-19). Catalog size range from the 32 entries in <code>models3.json</code> on the repo's main branch. Platform requirements from the <a href="https://github.com/nomic-ai/gpt4all">repo README</a>; components, server behavior, settings defaults, and LocalDocs from <a href="https://docs.gpt4all.io/">docs.gpt4all.io</a>. Pricing and positioning from <a href="https://www.nomic.ai/pricing">nomic.ai/pricing</a> and <a href="https://www.nomic.ai/">nomic.ai</a>; bindings version from <a href="https://pypi.org/project/gpt4all/">PyPI</a>. Model-ceiling claims are unverified community comments on issue #3558, labeled as such above. Outlier tier sizes and RAM floors measured on an M1 Ultra Mac Studio; <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">benchmark method here</a>. Which Outlier tiers have public weights was checked against the <a href="https://huggingface.co/Outlier-Ai">Outlier-Ai org listing</a> on 2026-07-23; per-tier feature availability comes from the shipping app's entitlement map, and licensing from the <a href="https://outlier.host/terms.html">terms page</a>. Competitor pricing and project status change: check the primary sources.
     </div>
 
     <div class="cta">
