@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>Mistral vs Qwen: open model families compared (2026)</title>
-  <meta name="description" content="Mistral vs Qwen open weights: sizes, Apache 2.0 licensing, strengths, and what runs on a Mac at 16GB, 24GB and 64GB. By Outlier's founder, who ships Qwen.">
+  <meta name="description" content="Mistral vs Qwen open weights: sizes, licensing, strengths, and what runs on a Mac at 16GB, 24GB and 64GB. By Outlier's founder, who ships Qwen.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/mistral-vs-qwen/">
@@ -23,7 +23,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mistral vs Qwen: open model families compared (2026)">
-  <meta name="twitter:description" content="Two Apache 2.0 open-weight families, compared on sizes, licensing, task strengths and Mac RAM.">
+  <meta name="twitter:description" content="Two open-weight families, compared on sizes, licensing, task strengths and Mac RAM.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -139,24 +139,25 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Mistral, Alibaba Cloud Model Studio (Qwen)">Mistral and Alibaba Cloud Model Studio prices and licenses checked 2026-10-19</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Both families ship genuine Apache 2.0 open weights you can embed in a commercial product without vendor approval or per-seat fees. Qwen covers the whole size ladder in one family, 0.8B through 397B-A17B, and documents Apple Silicon support in its own README; Mistral's locally-sized general-purpose open models stop at Ministral 3 14B before jumping to an 119B sparse model. Neither current flagship is open: qwen3.7-max is API-only, and Mistral keeps OCR 4, Codestral and the Magistral models closed.</p>
+      <p>Both families ship genuine Apache 2.0 open weights you can embed in a commercial product without vendor approval or per-seat fees. Qwen covers the whole size ladder in one family, 0.8B through 397B-A17B, plus a 2.4T-A95B flagship under its own license, and documents Apple Silicon support in its own README; Mistral's locally-sized general-purpose open models stop at Ministral 3 14B before jumping to an 119B sparse model. Neither family's open weights are all Apache 2.0: Qwen3.8-2.4T-A95B has its own license, and Mistral's Medium 3.5 and Devstral 2 use a Modified MIT License.</p>
     </div>
 
     <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs models on-device, and five of its six tiers are Qwen weights. The sixth is Gemma. I'm not a neutral referee. What I offer instead is the view of someone who shipped one of these families commercially, read the licenses because he had to, and measured what each size costs in RAM.</p>
 
     <h2>What each family ships</h2>
-    <p>Mistral AI is French. Its Mistral 3 release in December 2025 put out Mistral Large 3 (675B total, 41B active, sparse MoE) plus Ministral 3 at 3B, 8B and 14B, all Apache 2.0, in base, instruct and reasoning variants. Mistral Small 4 followed: also Apache 2.0, 119B total with 6.5B active across 128 experts, 256k context. The API catalogue splits in two, and neither list below is exhaustive: read the pricing page for the current split. Open weights include Medium 3.5, Small 4, Large 3, Ministral 3 at all three sizes, Devstral 2 and the Voxtral speech models. Premier, meaning closed, includes OCR 4, Codestral, Codestral Embed, Magistral Medium and Magistral Small.</p>
+    <p>Mistral AI is French. Its Mistral 3 release in December 2025 put out Mistral Large 3 (675B total, 41B active, sparse MoE) plus Ministral 3 at 3B, 8B and 14B, all Apache 2.0, in base, instruct and reasoning variants. Mistral Small 4 followed: also Apache 2.0, 119B total with 6.5B active across 128 experts, 256k context. Mistral's API price list now groups models as flagship, specialized, third-party hosted and code models and no longer says which are open, so check the license on each model's Hugging Face card. Small 4, Large 3, Ministral 3 at all three sizes and Magistral Small are Apache 2.0. Medium 3.5 and the 123B Devstral 2 are open weights under a Modified MIT License, which Medium's card describes as carrying exceptions for companies with large revenue.</p>
 
-    <p>Alibaba's Qwen team states it flatly in its own repo: all their open-weight models are Apache 2.0. The current run: Qwen3.5 at 397B-A17B in February, then 122B-A10B, 35B-A3B and 27B, then 9B, 4B, 2B and 0.8B in March; Qwen3.6 at 35B-A3B and 27B in April. Qwen3.6-27B is dense, with a native 262,144-token context extending toward a million with RoPE scaling.</p>
+    <p>Qwen's open-weight models up to 397B-A17B, and Qwen3.8-27B, list Apache 2.0 on their Hugging Face model cards. The current run: Qwen3.5 at 397B-A17B in February, then 122B-A10B, 35B-A3B and 27B, then 9B, 4B, 2B and 0.8B in March; Qwen3.6 at 35B-A3B and 27B in April; Qwen3.8 in August, with a 2.4T-A95B flagship and a 27B. Qwen3.6-27B is dense, with a native 262,144-token context extending toward a million with RoPE scaling.</p>
 
     <p>The asymmetry that matters isn't the model count. It's the ladder. Qwen gives you one prompt format from 0.8B to a 397B MoE. Mistral gives you a very good small model, a 14B, then a large jump.</p>
 
     <h2>Licensing, the part that decides products</h2>
-    <p>Apache 2.0 is a standard OSI license: use, modify, quantize, fine-tune, redistribute, sell. No approval step, no per-seat fee, no acceptable-use appendix bolted on. Both Mistral's open models and every Qwen open-weight release sit there: checked on the model cards, not the marketing pages.</p>
+    <p>Apache 2.0 is a standard OSI license: use, modify, quantize, fine-tune, redistribute, sell. No approval step, no per-seat fee, no acceptable-use appendix bolted on. Mistral's Small 4, Large 3 and Ministral 3 models and Qwen's releases up to 397B-A17B, plus Qwen3.8-27B, sit there: checked on the model cards, not the marketing pages. Not everything does. Mistral's Medium 3.5 and Devstral 2 are under a Modified MIT License, and Qwen3.8-2.4T-A95B ships under its own Qwen3.8-Max License, which asks for the model name to be displayed above 100 million monthly active users or US$20 million in monthly revenue and requires a separate license for large model-as-a-service businesses.</p>
 
     <p>Compare that to the vendor-specific licenses used elsewhere in open weights: Google's Gemma Terms of Use, Meta's Llama Community License. Those aren't OSI licenses. They're vendor documents with their own use policies you have to read, comply with, and pass through to your users. I know because I check it: Outlier's Quick tier is a Gemma 4 model, which Google publishes under Apache 2.0 (see the <a href="https://huggingface.co/google/gemma-4-26B-A4B-it" rel="nofollow">model card</a>), so all six tiers ship Apache 2.0; I had listed Quick under the Gemma Terms of Use until I read the card. That's why Apache 2.0 keeps winning inside product teams.</p>
 
@@ -172,15 +173,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td><strong>Sizes available</strong></td><td>Ministral 3 3B / 8B / 14B; Small 4 119B-A6.5B; Large 3 675B-A41B</td><td>0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B, 397B-A17B</td></tr>
-        <tr><td><strong>License</strong></td><td>Apache 2.0 on open models; OCR 4, Codestral and Magistral sit in the closed Premier tier</td><td>Apache 2.0 on all open releases; qwen3.7-max API-only</td></tr>
+        <tr><td><strong>Sizes available</strong></td><td>Ministral 3 3B / 8B / 14B; Small 4 119B-A6.5B; Large 3 675B-A41B</td><td>0.8B, 2B, 4B, 9B, 27B, 35B-A3B, 122B-A10B, 397B-A17B, 2.4T-A95B</td></tr>
+        <tr><td><strong>License</strong></td><td>Apache 2.0 on Small 4, Large 3 and Ministral 3; Medium 3.5 and Devstral 2 use a Modified MIT License</td><td>Apache 2.0 up to 397B-A17B and on 3.8-27B; Qwen3.8-2.4T-A95B has its own license</td></tr>
         <tr><td><strong>Context</strong></td><td>256k on Small 4 and Ministral 3 8B</td><td>262k on Qwen3.6-27B, ~1M with RoPE scaling</td></tr>
         <tr><td><strong>Apple Silicon</strong></td><td>Community MLX conversions; cards lead with vLLM</td><td>mlx-lm and mlx-vlm documented at release</td></tr>
         <tr><td><strong>Mac RAM fit</strong></td><td>16 GB: Ministral 3 8B 4-bit, 5.6 GB, multimodal. Above that, nothing between 14B and 119B</td><td>16 GB: 4B / 2B / 0.8B, 9B at 12 GB. 24 GB: 27B at 16.1 GB, 35B-A3B at 19 GB</td></tr>
         <tr><td><strong>Strengths by task</strong></td><td>Multimodal small model, sparse-MoE efficiency, speech</td><td>Long context, coding at 27B, full size ladder</td></tr>
         <tr><td><strong>Language coverage</strong></td><td colspan="2">Not verified from primary sources for either family: no scorecard here. Read the model cards.</td></tr>
-        <tr><td><strong>Local tooling</strong></td><td>Ministral 3 is an official Ollama library entry (3b / 8b / 14b, 1.3M pulls); no Mistral Small 4 entry. Vibe CLI is Apache 2.0 with a documented offline local-models path</td><td>Qwen 3.5/3.6 in Ollama; Qwen Code CLI speaks OpenAI, Anthropic and Gemini protocols and points at Ollama or vLLM</td></tr>
-        <tr><td><strong>Cloud fallback</strong></td><td>Ministral 3 3B $0.10/$0.10, Large 3 $0.50/$1.50</td><td>Not quoted: Model Studio publishes no per-model rate I could cite, and its pricing is volume-tiered and varies by region</td></tr>
+        <tr><td><strong>Local tooling</strong></td><td>Ministral 3 is an official Ollama library entry (3b / 8b / 14b, 1.5M downloads); no Mistral Small 4 entry. Vibe CLI is Apache 2.0 with a documented offline local-models path</td><td>Qwen 3.5/3.6 in Ollama; Qwen Code CLI speaks OpenAI, Anthropic and Gemini protocols and points at Ollama or vLLM</td></tr>
+        <tr><td><strong>Cloud fallback</strong></td><td>Ministral 3 3B $0.10/$0.10, Large 3 $0.50/$1.50</td><td>Not quoted: Alibaba's Model Studio pricing page lists per-model rates, tiered by request size and varying by region</td></tr>
       </tbody>
     </table>
 
@@ -196,7 +197,7 @@
     <ul>
       <li><strong>The 8B slot.</strong> Apache 2.0, multimodal, 256k context, 5.6 GB at 4-bit. For a 16 GB machine that needs vision, that's a hard package to argue with.</li>
       <li><strong>Sparse efficiency at the top.</strong> 119B total with 6.5B active is the architecture that suits Apple's unified memory on a high-RAM Mac.</li>
-      <li><strong>Jurisdiction and a readable paper trail.</strong> Mistral is EU-based, and the scope of its training exclusion is written down rather than implied. The privacy policy says Mistral does not use your input and output to train its models "when you use Le Chat Enterprise or the paid version of our APIs", and that is the whole exclusion. Pro and Team conversations aren't in it; they're covered by an account-level opt-out you have to find and switch on. Narrower than the marketing reads, but legible.</li>
+      <li><strong>Jurisdiction and a readable paper trail.</strong> Mistral is EU-based, and its privacy policy has a table of what it does with your data, including training on "Your Input and Output, subject to your opt-out." Read the table before you assume anything about a given plan.</li>
       <li><strong>Legible pricing.</strong> Flat published per-million rates, a 50% batch discount, a 90% cached-input discount. Model Studio uses volume-tiered pricing on several models and varies by region, which makes an honest quote harder.</li>
     </ul>
 
@@ -208,19 +209,19 @@
       <li><strong>Context on a dense local model.</strong> 262k native on a 27B you can run at home changes whole-repo work.</li>
     </ul>
 
-    <p>Two things I expected to put on that list didn't survive checking, so they aren't on it. Ollama carries Ministral 3 as an official library entry (3B, 8B and 14B, 13 tags, 1.3M pulls, vision and tool use) so distribution is not a Qwen-only advantage; the only hole is Mistral Small 4. And Mistral's Vibe CLI is Apache 2.0, documents an offline local-models path, and lists a Mistral account as optional, so "Qwen's tooling is the local-friendly one" is not true as a general claim. I'd rather run a list where every item checks out than pad the column.</p>
+    <p>Two things I expected to put on that list didn't survive checking, so they aren't on it. Ollama carries Ministral 3 as an official library entry (3B, 8B and 14B, 13 tags, 1.5M downloads, vision and tool use) so distribution is not a Qwen-only advantage; the only hole is Mistral Small 4. And Mistral's Vibe CLI is Apache 2.0, documents an offline local-models path, and lists a Mistral account as optional, so "Qwen's tooling is the local-friendly one" is not true as a general claim. I'd rather run a list where every item checks out than pad the column.</p>
 
     <h2>Which family to build on</h2>
-    <p><strong>Pick Mistral</strong> if you're targeting 16 GB machines and need vision in a small model, if EU jurisdiction is a procurement requirement, or if you want flat published API pricing without a regional asterisk.</p>
+    <p><strong>Pick Mistral</strong> if you're targeting 16 GB machines and need vision in a small model, if EU jurisdiction is a procurement requirement, or if you want flat published API pricing.</p>
 
     <p><strong>Pick Qwen</strong> if you're shipping on Apple Silicon, if you need one family to cover a MacBook Air and a Mac Studio without changing prompt formats twice, or if long context on a dense local model decides your product.</p>
 
-    <p><strong>Assume the frontier stays closed either way.</strong> github.com/QwenLM/Qwen3.7 returns a 404 and the README lists open weights only through Qwen3.6; Mistral holds OCR 4, Codestral and the Magistral models in its closed Premier tier. Both move fast enough (Qwen shipped 3.5, 3.6 and a closed 3.7 in six months) that bundling weights means a permanent re-quantize treadmill. That's my week.</p>
+    <p><strong>Don't assume the frontier stays closed.</strong> github.com/QwenLM/Qwen3.7 returns a 404, but the Qwen repository's README now covers Qwen3.8, including an open 2.4T-A95B release it calls Qwen-Max-class; on Mistral's side, Medium 3.5 is open weights under a Modified MIT License. Both move fast enough (Qwen shipped 3.5, 3.6, an API-only 3.7 and an open 3.8 in six months) that bundling weights means a permanent re-quantize treadmill. That's my week.</p>
 
-    <p>One last note. Alibaba's "never use your data for model training" commitment lives in the Model Studio docs, and that scope is the paid API. I could not verify the consumer Qwen chat app's data handling, those pages render client-side and returned no policy text. Don't accept a claim about Qwen Chat without a primary read. If you'd rather skip the question, that's the case for <a href="https://outlier.host/learn/what-is-local-ai/">running weights yourself</a>.</p>
+    <p>One last note. I could not verify the consumer Qwen chat app's data handling, those pages render client-side and returned no policy text. Don't accept a claim about Qwen Chat without a primary read. If you'd rather skip the question, that's the case for <a href="https://outlier.host/learn/what-is-local-ai/">running weights yourself</a>.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Sizes, licenses and context windows read from the repos and model cards themselves: <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B</a>, <a href="https://github.com/QwenLM/Qwen3.6">QwenLM/Qwen3.6</a>, <a href="https://huggingface.co/mistralai/Mistral-Small-4-119B-2603">Mistral Small 4</a>, <a href="https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512">Ministral 3 8B</a>, <a href="https://mistral.ai/news/mistral-3/">Mistral 3</a>. 4-bit sizes from mlx-community. Mistral prices and the open/Premier split from <a href="https://mistral.ai/pricing/api">mistral.ai/pricing/api</a>; local-tooling facts from <a href="https://ollama.com/library/ministral-3">ollama.com/library/ministral-3</a> and Mistral's CLI setup docs; the training-exclusion wording quoted from Mistral's privacy policy. Qwen cloud prices are deliberately absent: I could not find a linkable Alibaba Model Studio page publishing per-model rates, and Model Studio pricing is volume-tiered and region-varying, so any figure I quoted would be unverifiable. Outlier tier sizes, RAM floors and tok/s measured on an M1 Ultra. Competitor pricing, licensing and policies change without notice: verify anything load-bearing at the source. I left out per-language benchmarks and the Voxtral license terms: couldn't confirm either primarily.
+      <strong>Sources and receipts:</strong> Sizes, licenses and context windows read from the repos and model cards themselves: <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B</a>, <a href="https://github.com/QwenLM/Qwen3.6">QwenLM/Qwen3.6</a>, <a href="https://huggingface.co/mistralai/Mistral-Small-4-119B-2603">Mistral Small 4</a>, <a href="https://huggingface.co/mistralai/Ministral-3-8B-Instruct-2512">Ministral 3 8B</a>, <a href="https://mistral.ai/news/mistral-3/">Mistral 3</a>. 4-bit sizes from mlx-community. Mistral prices from <a href="https://mistral.ai/pricing/api">mistral.ai/pricing/api</a> and Mistral licenses from the Hugging Face model cards (for example <a href="https://huggingface.co/mistralai/Mistral-Medium-3.5-128B">Medium 3.5</a> and <a href="https://huggingface.co/mistralai/Devstral-2-123B-Instruct-2512">Devstral 2</a>); local-tooling facts from <a href="https://ollama.com/library/ministral-3">ollama.com/library/ministral-3</a> and Mistral's CLI setup docs; the training wording quoted from <a href="https://legal.mistral.ai/terms/privacy-policy">Mistral's privacy policy</a> (effective September 3, 2026). Qwen cloud prices are deliberately absent: <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing">Alibaba's Model Studio pricing page</a> is tiered by request size and varies by region, so a single figure would mislead. Qwen3.8 licensing from the <a href="https://github.com/QwenLM/Qwen3.5">Qwen repository README</a> and the <a href="https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/raw/main/LICENSE">Qwen3.8-Max License</a>. Outlier tier sizes, RAM floors and tok/s measured on an M1 Ultra. Competitor pricing, licensing and policies change without notice: verify anything load-bearing at the source. I left out per-language benchmarks and the Voxtral license terms: couldn't confirm either primarily.
     </div>
 
     <div class="cta">
