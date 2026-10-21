@@ -51,6 +51,17 @@ def _ours() -> set[str]:
         out.update(re.findall(r'<div class="price">(?:<span[^>]*>)?(\$\d[\d,]*(?:\.\d\d)?)', home))
     except Exception:
         pass
+    # 2026-10-21: the card says $249 in the HTML and a dated script switches the founders price on (founding_offer_gate),
+    # so the founders figures are no longer in the price block. They come from the offer file itself, the one source the
+    # pages' switch reads: Outlier's founders price and the founding bundle's. Reading only the card turned $124.50 into
+    # 147 "undated rival prices" the moment the card changed.
+    try:
+        offer = json.loads((pathlib.Path(__file__).resolve().parent.parent / "data" / "founding_offer.json")
+                           .read_text(encoding="utf-8"))
+        for o in offer.get("offers", []):
+            out.update(p for p in o.get("prices", []) if re.fullmatch(r"\$\d[\d,]*(?:\.\d\d)?", p))
+    except Exception:
+        pass
     # 2026-09-28: every price we show as the thing to pay carries its pay-in-4 amount
     # beside it ("$249 · or 4 × $62.25"), so a quarter of each of our prices is ours
     # too, rounded half up to the cent the way the pages print it ($124.50 -> $31.13).
