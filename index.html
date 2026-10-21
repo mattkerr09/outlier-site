@@ -1141,9 +1141,9 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
 
 
       <div class="tier reveal d2" data-lifetime-card>
-        <div class="tn" data-lt-name>Founders Lifetime</div>
-        <div class="price"><span data-lt-price>$124.50</span> <small>once</small> <span data-lt-bnpl><span class="bnpl-dot">&middot;</span>or&nbsp;4&nbsp;&times;&nbsp;$31.13</span></div>
-        <div class="payterms" data-lt-offer><strong>50% off $249</strong>, first 25 buyers. The Buy button applies <strong>FOUNDINGOUTLIER</strong> for you at checkout; if the checkout shows $249, enter it under &ldquo;Have a discount code?&rdquo;</div>
+        <div class="tn" data-lt-name>Lifetime</div>
+        <div class="price"><span data-lt-price>$249</span> <small>once</small> <span data-lt-bnpl><span class="bnpl-dot">&middot;</span>or&nbsp;4&nbsp;&times;&nbsp;$62.25</span></div>
+        <div class="payterms" data-lt-offer hidden><strong>50% off $249</strong>, first 25 buyers. The Buy button applies <strong>FOUNDINGOUTLIER</strong> for you at checkout; if the checkout shows $249, enter it under &ldquo;Have a discount code?&rdquo;</div>
         <p class="blurb">Pro for as long as Outlier exists, including future model releases.</p>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Every tier and every feature</li>
@@ -1151,7 +1151,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Activates on up to 3 Macs at a time</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> No subscription, no renewal</li>
         </ul>
-        <a class="btn btn-primary" data-buy="lifetime" data-lt-btn href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=home" target="_blank" rel="noopener noreferrer nofollow">Buy Founders Lifetime: $124.50 or&nbsp;4&nbsp;&times;&nbsp;$31.13</a>
+        <a class="btn btn-primary" data-buy="lifetime" data-lt-btn href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=home" target="_blank" rel="noopener noreferrer nofollow">Buy Pro Lifetime: $249 or&nbsp;4&nbsp;&times;&nbsp;$62.25</a>
         <div class="payterms-sub">30-day money-back guarantee &middot; 3 Macs</div>
         <p class="bnpl-note" data-outlier-bnpl hidden></p>
       </div>
@@ -1494,7 +1494,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
       </details>
       <details>
         <summary>What does Pro include?</summary>
-        <div class="body">A one-time $249. Everything: all six tiers and every feature itemised in the pricing cards above, <a href="/learn/fine-tune-ai-locally/">on-device fine-tuning</a> included. Local generation is never metered or charged per token. <strong>Core 27B is the daily driver.</strong> There is no middle tier. Lifetime is <strong>Founders Lifetime</strong>: pay once, keep everything Pro has including future model releases; &ldquo;Founders&rdquo; means you bought early: there are 25 founding seats for Outlier, and when they are gone the price goes back up. The offer bar at the top of every page reads the store live, and says so the moment the founding seats are gone.</div>
+        <div class="body">A one-time $249. Everything: all six tiers and every feature itemised in the pricing cards above, <a href="/learn/fine-tune-ai-locally/">on-device fine-tuning</a> included. Local generation is never metered or charged per token. <strong>Core 27B is the daily driver.</strong> There is no middle tier. Lifetime is <strong>Founders Lifetime</strong>: pay once, keep everything Pro has including future model releases; &ldquo;Founders&rdquo; means you bought early: there are 25 founding seats for Outlier at half price, and the offer ends when they are gone or on 24 November 2026 at 5:26&nbsp;pm Pacific time, whichever comes first. The offer bar at the top of every page reads the store live, and comes down the moment the offer ends.</div>
       </details>
       <details>
         <summary>Does my data stay private?</summary>
@@ -1778,6 +1778,7 @@ outlier-c 62303  25u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTE
 <!-- Windows waiting list. Renders into this div; the script does nothing if it
      is absent, so placement is a decision made here rather than guessed. -->
 <div data-founding data-was="$249" data-now="$124.50" style="max-width:520px;margin:1.25rem auto 0"></div>
+<script data-founding-ends="2026-11-25T01:26:00Z">(function(){var end=Date.parse("2026-11-25T01:26:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
 <script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
 <div data-win-notify style="max-width:520px;margin:1.25rem auto 0"></div>
 <script src="https://kerr-subscribe.kerrco.workers.dev/notify.js" defer></script>
@@ -1808,29 +1809,30 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
 </script>
 <script>
 /* Buy and Download events for Plausible, and the founders price kept honest.
-   - The founders price holds only while seats remain. This reads the same public count
-     the top banner reads (the worker reads Dodo). When the seats are gone, the card falls
-     back to $249, so the page never advertises a price nobody can get.
+   - The card says $249 in the HTML. The founders price is switched ON here, and only before the
+     offer's end (2026-11-25T01:26:00Z, from data/founding_offer.json; founding_offer_gate.py holds this date to
+     it) AND while the worker, which reads Dodo, reports seats left. So when the offer ends or the
+     seats are gone, every visitor, with or without JavaScript, sees $249: the page never advertises
+     a price nobody can get, and nobody has to remember the date.
    - A static Dodo link cannot pre-apply a discount code (Dodo's docs: only API-created
      sessions can), and Dodo's redirect carries no amount. So a Buy click records which
      price was on offer, in localStorage on this origin, with no personal data; the
      thank-you page reads it to report the purchase value. */
 (function () {
-  var founding = true;
+  var founding = false;
   var card = document.querySelector('[data-lifetime-card]');
+  var end = Date.parse("2026-11-25T01:26:00Z"), now = typeof window.__kcNow === 'number' ? window.__kcNow : Date.now();
   try {
-    fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host')
+    if (card && now < end) fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host')
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d || typeof d.left !== 'number' || !card) return;
-        if (d.soldOut || d.left <= 0) {
-          founding = false;
-          card.querySelector('[data-lt-name]').textContent = 'Lifetime';
-          card.querySelector('[data-lt-price]').textContent = '$249';
-          card.querySelector('[data-lt-bnpl]').innerHTML = '<span class="bnpl-dot">·</span>or\u00a04\u00a0×\u00a0$62.25';
-          card.querySelector('[data-lt-offer]').hidden = true;
-          card.querySelector('[data-lt-btn]').textContent = 'Buy Pro Lifetime: $249 or\u00a04\u00a0×\u00a0$62.25';
-        }
+        if (!d || typeof d.left !== 'number' || d.soldOut || d.left <= 0) return;
+        founding = true;
+        card.querySelector('[data-lt-name]').textContent = 'Founders Lifetime';
+        card.querySelector('[data-lt-price]').textContent = '$124.50';
+        card.querySelector('[data-lt-bnpl]').innerHTML = '<span class="bnpl-dot">·</span>or\u00a04\u00a0×\u00a0$31.13';
+        card.querySelector('[data-lt-offer]').hidden = false;
+        card.querySelector('[data-lt-btn]').textContent = 'Buy Founders Lifetime: $124.50 or\u00a04\u00a0×\u00a0$31.13';
       }).catch(function () {});
   } catch (e) {}
   document.addEventListener('click', function (e) {
@@ -1849,8 +1851,9 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
 </script>
 <script data-pbox-script>
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+var end=Date.parse("2026-11-25T01:26:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
-.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+.then(function(d){if(!d||d.soldOut||!(d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
 </script>
 </body>
 </html>

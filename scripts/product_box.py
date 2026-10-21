@@ -37,6 +37,7 @@ would read to them as new content.
 """
 from __future__ import annotations
 
+import json
 import pathlib
 import re
 import sys
@@ -80,10 +81,14 @@ STYLE = """<style data-pbox-style>
 </style>
 """
 
-SCRIPT = """<script data-pbox-script>
-(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
-fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
-.then(function(d){if(!d||d.soldOut)return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+#: The founders-price spans are revealed only before the offer's end date (data/founding_offer.json, the one source) and
+#: while the worker reports seats left. founding_offer_gate.py fails a page whose reveal is not dated, or dated otherwise.
+FOUNDING_ENDS = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
+SCRIPT = f"""<script data-pbox-script>
+(function(){{var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+var end=Date.parse("{FOUNDING_ENDS}"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){{return r.json()}})
+.then(function(d){{if(!d||d.soldOut||!(d.left>0))return;m.forEach(function(e){{e.hidden=false;}});}}).catch(function(){{}});}})();
 </script>
 """
 
