@@ -105,6 +105,13 @@ jobs:
           # correct the claim, move the date, or take the claim off. --self-check proves it fails on its own fixtures.
           python3 scripts/claim_freshness_gate.py --self-check
           python3 scripts/claim_freshness_gate.py .
+          # 10-21 (CEO): FOUNDINGOUTLIER and FOUNDINGBUNDLE end at the moment in data/founding_offer.json. Every page
+          # carries that date and switches the founders price off by itself at that moment (the bar's guard, the dated
+          # reveal, the card that is $249 in the HTML); this fails if a page is not wired to that date or shows the price
+          # in its raw HTML, and once the date has passed it fails on ANY founding markup left. The scheduled run keeps
+          # checking the clock with nobody pushing. --self-check proves it fails on each missing switch.
+          python3 scripts/founding_offer_gate.py --self-check
+          python3 scripts/founding_offer_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
           python3 scripts/meta_gate.py .
@@ -116,6 +123,8 @@ jobs:
           python3 scripts/download_reachable_gate.py .
           python3 scripts/checkout_link_gate.py .
           python3 scripts/seat_count_gate.py .
+          # and once the worker (which reads Dodo) reports no founding seats left, the same leftovers fail here
+          python3 scripts/founding_offer_gate.py --live .
           python3 scripts/checkout_price_gate.py --break-test
           python3 scripts/checkout_price_gate.py .
           # Wired 2026-09-16, after sitting unwired since it was written. Its
