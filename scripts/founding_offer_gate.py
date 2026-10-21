@@ -59,10 +59,34 @@ NOT_PAGES = {"data/founding_offer.json", "data/product-facts.json"}
 UA = {"User-Agent": "kerr-ops/1.0 (founding_offer_gate)"}
 
 
+#: 10-21 (CEO): until the product is renamed in Dodo a $249 buyer's receipt still says "Founders Lifetime", so the pricing
+#: and thank-you pages say so, inside <span data-receipt-name>. That span may name the receipt's product only while Dodo's
+#: record (data/product-facts.json, synced from Dodo) still carries that name; once it is renamed, the note fails.
+RECEIPT = re.compile(r"<span data-receipt-name>([^<]*)</span>")
+
+
 def load(root: pathlib.Path) -> dict:
     d = json.loads((root / "data" / "founding_offer.json").read_text(encoding="utf-8"))
     d["_end"] = dt.datetime.fromisoformat(d["ends"].replace("Z", "+00:00"))
+    try:
+        d["_receipt"] = json.loads((root / "data" / "product-facts.json").read_text(encoding="utf-8")).get("product_name") or ""
+    except (OSError, ValueError):
+        d["_receipt"] = ""
     return d
+
+
+def receipt_notes(rel: str, src: str, offer: dict) -> tuple[str, list[str]]:
+    """The page with each receipt-name note that matches Dodo's product name taken out, and a failure for each that
+    does not (the receipt no longer says it, or the note names something else)."""
+    bad = []
+
+    def keep_or_flag(m):
+        name = html.unescape(m.group(1)).strip().strip("“”\"'")
+        if name and name in offer["_receipt"]:
+            return ""
+        bad.append(f"{rel}: a receipt note names {name!r}, but Dodo's product is {offer['_receipt']!r}")
+        return m.group(0)
+    return RECEIPT.sub(keep_or_flag, src), bad
 
 
 def price_patterns(offer: dict) -> list[re.Pattern]:
@@ -187,6 +211,8 @@ def check(root: pathlib.Path, now: dt.datetime, live: bool) -> int:
     if over:
         print(f"the founding offer is OVER: {why}")
         for rel, src in files:
+            src, flagged = receipt_notes(rel.as_posix(), src, offer)
+            bad += flagged
             hits = sorted({m.group(0) for p in leftover_patterns(offer) for m in p.finditer(src)})
             if hits:
                 bad.append(f"{rel}: still carries {', '.join(hits[:6])}")
@@ -194,6 +220,8 @@ def check(root: pathlib.Path, now: dt.datetime, live: bool) -> int:
         print(f"the founding offer is on until {ends}; checking the switch is wired and nothing static shows the price")
         pats, day = price_patterns(offer), ends[:10]
         for rel, src in files:
+            src, flagged = receipt_notes(rel.as_posix(), src, offer)
+            bad += flagged
             if rel.suffix.lower() in (".html", ".htm"):
                 bad += wiring(rel.as_posix(), src, ends)
                 hits = sorted({m.group(0) for p in pats for m in p.finditer(visible_text(src))})
@@ -250,11 +278,19 @@ def self_check() -> int:
         ("clean after the end", clean, clean, "Pro Lifetime: $249 once.", after, 0),
     ]
     wrong = []
-    for name, home, other, llms, when, want in cases:
+    note = '<p>Your receipt may say <span data-receipt-name>&ldquo;Founders Lifetime&rdquo;</span>: the same licence.</p>'
+    cases += [  # the receipt note: allowed while Dodo's product carries the name, before and after the end; not after a rename
+        ("receipt note, Dodo still says it", wired + card % ends + note, wired, "", before, 0),
+        ("receipt note after the end, Dodo still says it", clean + note, clean, "", after, 0),
+        ("receipt note after Dodo renamed it", clean + note, clean, "", after, 1, "Outlier — Lifetime Licence"),
+    ]
+    for name, home, other, llms, when, want, *rn in cases:
+        receipt_name = rn[0] if rn else "Outlier — Founders Lifetime"
         with tempfile.TemporaryDirectory() as t:
             r = pathlib.Path(t)
             (r / "data").mkdir()
             (r / "data" / "founding_offer.json").write_text(offer)
+            (r / "data" / "product-facts.json").write_text(json.dumps({"product_name": receipt_name}))
             (r / "index.html").write_text(home)
             (r / "llms.txt").write_text(llms + "\n")
             for i in range(MIN_PAGES):
