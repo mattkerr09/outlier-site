@@ -1148,7 +1148,7 @@ def build_howto_pages() -> list[dict]:
         ("upgrade-to-the-pro-tier", "How to upgrade to Outlier Pro",
          "Pro unlocks the Quick, Core, Vision 3.8, and Plus tiers.",
          [("Open Settings &gt; Pro", "The Pro section appears on the General tab in v1.11.469."),
-          ("Buy through Dodo Payments", "Pro is a one-time purchase: Founders Lifetime at $249."),
+          ("Buy through Dodo Payments", "Pro is a one-time purchase: the Outlier Lifetime Licence at $249."),
           ("Paste your license key", "Settings &gt; license &gt; Activate. The key is verified against whichever issuer sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the key."),
           ("Restart the app", "The Pro-gated tiers appear in the model picker after restart.")]),
     ]
@@ -1361,7 +1361,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s context (8K on Free, 32K on Pro) is enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
-            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: Founders Lifetime at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the verified reply regardless of which product you bought.",
+            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: the Outlier Lifetime Licence at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the verified reply regardless of which product you bought.",
         }
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
