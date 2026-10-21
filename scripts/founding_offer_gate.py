@@ -53,6 +53,9 @@ DATE_LIT = re.compile(r'Date\.parse\("([^"]+)"\)')
 #: code, not pages: the gates and generators name the codes on purpose
 SKIP_DIRS = {".git", ".github", "scripts", "node_modules"}
 SERVED = {".html", ".htm", ".txt", ".xml", ".json", ".md"}
+#: records, not pages: the offer file itself, and Dodo's product record (sync_product_facts.py), whose product name stays
+#: "Outlier — Founders Lifetime" until the product is renamed in Dodo (the receipt's name; Matthew's account change)
+NOT_PAGES = {"data/founding_offer.json", "data/product-facts.json"}
 UA = {"User-Agent": "kerr-ops/1.0 (founding_offer_gate)"}
 
 
@@ -63,10 +66,11 @@ def load(root: pathlib.Path) -> dict:
 
 
 def price_patterns(offer: dict) -> list[re.Pattern]:
-    """What a founding PRICE looks like in text. 'Founders Lifetime' alone is the Dodo product's name, sold at
-    $249 too, so it is not one; the founders price, the codes and the offer's own figures are."""
+    """What the founding offer looks like in text: the founders price, the codes, the offer's own figures, and the
+    founders' product name. 10-21 (CEO): the product is the "Outlier Lifetime Licence"; "Founders Lifetime" only fits
+    while the founders price exists, so the page names it only beside that price (the home card's dated script)."""
     pats = [re.compile(r"\bfounders?['’]?\s+prices?\b", re.I), re.compile(r"\bfounding\s+prices?\b", re.I),
-            re.compile(r"\bfirst\s+\d+\s+buyers\b", re.I)]
+            re.compile(r"\bfirst\s+\d+\s+buyers\b", re.I), re.compile(r"\bFounders\s+Lifetime\b", re.I)]
     for o in offer["offers"]:
         pats.append(re.compile(r"\b" + re.escape(o["code"]) + r"\b"))
         pats += [re.compile(re.escape(p) + r"(?![\d])") for p in o.get("prices", [])]
@@ -122,7 +126,7 @@ def served_files(root: pathlib.Path):
     for p in sorted(root.rglob("*")):
         rel = p.relative_to(root)
         if p.is_file() and p.suffix.lower() in SERVED and not (set(rel.parts) & SKIP_DIRS) \
-                and rel.as_posix() != "data/founding_offer.json":
+                and rel.as_posix() not in NOT_PAGES:
             yield rel, p.read_text(encoding="utf-8", errors="ignore")
 
 
@@ -240,6 +244,7 @@ def self_check() -> int:
         ("visible code in JSON-LD", wired + card % ends + '<script type="application/ld+json">{"d":"FOUNDINGOUTLIER"}</script>', wired, "", before, 1),
         ("undated llms line", wired + card % ends, wired, "the first 25 buyers pay $124.50", before, 1),
         ("bundle price shown", wired + card % ends + "<p>All three for $428</p>", wired, "", before, 1),
+        ("founders' product name in prose", wired + card % ends, wired + "<p>Pro is a one-time Founders Lifetime at $249.</p>", "", before, 1),
         ("leftovers after the end", wired + card % ends, wired, f"founders price $124.50 until {ends[:10]}", after, 1),
         ("hidden span left after the end", clean, clean + span, "", after, 1),
         ("clean after the end", clean, clean, "Pro Lifetime: $249 once.", after, 0),
