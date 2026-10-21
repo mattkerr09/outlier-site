@@ -65,7 +65,7 @@ def load(root: pathlib.Path) -> dict:
 def price_patterns(offer: dict) -> list[re.Pattern]:
     """What a founding PRICE looks like in text. 'Founders Lifetime' alone is the Dodo product's name, sold at
     $249 too, so it is not one; the founders price, the codes and the offer's own figures are."""
-    pats = [re.compile(r"\bfounders?['’]?\s+price\b", re.I), re.compile(r"\bfounding\s+price\b", re.I),
+    pats = [re.compile(r"\bfounders?['’]?\s+prices?\b", re.I), re.compile(r"\bfounding\s+prices?\b", re.I),
             re.compile(r"\bfirst\s+\d+\s+buyers\b", re.I)]
     for o in offer["offers"]:
         pats.append(re.compile(r"\b" + re.escape(o["code"]) + r"\b"))
