@@ -117,6 +117,8 @@ jobs:
           python3 scripts/meta_gate.py .
 
       - name: Gates that check live third parties
+        env:
+          GITHUB_TOKEN: ${{ github.token }}   # download_version_gate reads the latest release; unauthenticated reads share 60/h
         run: |
           set -e
           python3 scripts/download_version_gate.py .

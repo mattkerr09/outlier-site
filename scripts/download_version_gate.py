@@ -47,6 +47,7 @@ from __future__ import annotations
 import datetime as _dt
 
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -74,7 +75,14 @@ PROSE_SITES = [
 
 
 def latest_tag() -> str:
-    req = urllib.request.Request(API, headers={"User-Agent": UA})
+    # 10-21: the 1.11.952 bump sat on next for 20 minutes because this read hit GitHub's UNAUTHENTICATED limit (60 an
+    # hour per address, shared by every job on a hosted runner): "HTTP Error 403: rate limit exceeded". CI passes the
+    # job's own token (read-only here); without one the read is unauthenticated, as before.
+    headers = {"User-Agent": UA}
+    tok = os.environ.get("GITHUB_TOKEN", "").strip()
+    if tok:
+        headers["Authorization"] = f"Bearer {tok}"
+    req = urllib.request.Request(API, headers=headers)
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.load(r)["tag_name"].lstrip("v")
 
