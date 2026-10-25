@@ -122,6 +122,15 @@ def _detect_app_version() -> str:
 
 
 APP_VERSION = _detect_app_version()
+# 2026-10-24: the download's size comes from the release record (seo/_data/release.json, written by
+# scripts/bump_site_version.py from the GitHub asset), never typed — the hand-typed "290 MB" outlived three builds.
+# A record for a version other than the homepage's stops the build, like a version mismatch does above.
+sys.path.insert(0, str(ROOT / "scripts"))
+import download_size as _download_size  # noqa: E402
+_REC = _download_size.load(ROOT)
+if _REC.get("version") != APP_VERSION:
+    raise SystemExit(f"render.py: seo/_data/release.json is for {_REC.get('version')}, the homepage advertises {APP_VERSION}")
+DMG_MB = _REC["dmg_mb"]
 # What a tier needs beyond its weights to run fully in memory — the same 4 GB the app's
 # recommender uses (desktop_app/backend/server.py WORKING_SET_GB).
 WORKING_SET_GB = 4.0
@@ -290,6 +299,7 @@ def write_page(category: str, slug: str, title: str, description: str,
             faq_jsonld="",
             updated=modified,
             app_version=APP_VERSION,
+            dmg_mb=DMG_MB,
             # 2026-09-29: the Download button's counting-link tag — the SAME value
             # scripts/wrap_counting_links.py derives from the page's path.
             page_tag=_page_tag,
@@ -1371,7 +1381,7 @@ def build_howto_pages() -> list[dict]:
         faq = [
             ("Do I need to create an account?", "No. The free tiers (Nano, Lite) work without any account or license key."),
             ("Will my code or prompts be sent anywhere?", "No. After the one-time model download, the chat path makes no network requests."),
-            ("How big is the download?", "The DMG itself is about 290 MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."),
+            ("How big is the download?", f"The DMG itself is about {DMG_MB} MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."),
         ]
         related = [
             {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},

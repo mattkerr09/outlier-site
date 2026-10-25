@@ -112,6 +112,11 @@ jobs:
           # checking the clock with nobody pushing. --self-check proves it fails on each missing switch.
           python3 scripts/founding_offer_gate.py --self-check
           python3 scripts/founding_offer_gate.py .
+          # 10-24 (CEO audit): every "NNN MB" about the download must be the release record's figure
+          # (seo/_data/release.json, written by bump_site_version.py from the GitHub asset). The site said
+          # "290 MB" in ~250 places while the 1.11.960 DMG was 276,293,500 bytes. --self-check plants a wrong figure.
+          python3 scripts/download_size_gate.py --self-check
+          python3 scripts/download_size_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
           python3 scripts/meta_gate.py .
@@ -123,6 +128,7 @@ jobs:
           set -e
           python3 scripts/download_version_gate.py .
           python3 scripts/download_reachable_gate.py .
+          python3 scripts/download_size_gate.py --live .   # the record vs the published asset's bytes
           python3 scripts/checkout_link_gate.py .
           python3 scripts/seat_count_gate.py .
           # and once the worker (which reads Dodo) reports no founding seats left, the same leftovers fail here

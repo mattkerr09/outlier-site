@@ -2,6 +2,7 @@
 """Move the site to a new app version: pointers AND the app-catalog snapshot.
 
     python3 scripts/bump_site_version.py 1.11.840 [--check]
+    python3 scripts/bump_site_version.py 1.11.840 --size-only   # the download size only
 
 WHY BOTH IN ONE COMMAND. tier_catalog_sync_gate compares models.csv to the app's
 tier list, and in CI it can only do that through seo/_data/app_tiers.json, whose
@@ -77,6 +78,32 @@ def sweep_download_urls(new: str, skip: set[pathlib.Path], check: bool) -> tuple
     return len(planned), planned
 
 
+def write_size(version: str, check: bool = False) -> int:
+    """seo/_data/release.json from the GitHub release asset's size, then every size claim swept to it.
+    OUTLIER_DMG_BYTES (the staged DMG's size) stands in only when the release API cannot be read."""
+    import os
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import download_size as _ds
+    try:
+        n = _ds.fetch_release_bytes(version)
+        how = "the GitHub release asset"
+    except Exception as e:                      # noqa: BLE001 — any failure to read the record
+        if not os.environ.get("OUTLIER_DMG_BYTES"):
+            print(f"  ⚠️ SIZE NOT WRITTEN: the release record for v{version} could not be read ({e}). "
+                  "download_size_gate will refuse until scripts/bump_site_version.py "
+                  f"{version} --size-only runs.")
+            return 1
+        n, how = int(os.environ["OUTLIER_DMG_BYTES"]), "OUTLIER_DMG_BYTES (the staged DMG)"
+    planned = _ds.sweep(_ds.mb(n), ROOT)
+    print(f"  size: {n:,} bytes = {_ds.mb(n)} MB, from {how}; {len(planned)} page(s) "
+          f"{'would change' if check else 'written'}")
+    if not check:
+        _ds.write(version, n, ROOT)
+        for p, t in planned:
+            p.write_text(t, encoding="utf-8")
+    return 0
+
+
 def current_version() -> str | None:
     m = re.search(r'"softwareVersion":\s*"([\d.]+)"',
                   (ROOT / "index.html").read_text(encoding="utf-8", errors="replace"))
@@ -92,6 +119,9 @@ def main(argv: list[str]) -> int:
     if not re.fullmatch(r"\d+\.\d+\.\d+", new):
         print(f"FAIL: {new!r} is not a version.")
         return 1
+    if "--size-only" in argv:
+        # Repair the size without a version bump: the record + every claim, for `new` (the advertised version).
+        return write_size(new, check)
     if "--sweep-only" in argv:
         # Repair drift without a version bump: every Download button -> `new`.
         n, planned = sweep_download_urls(new, set(), check)
@@ -148,6 +178,11 @@ def main(argv: list[str]) -> int:
               "refuse until it is — that refusal is the guard working. Re-run "
               "scripts/refresh_app_tiers.py with the app reachable.")
         return 1
+
+    # 2026-10-24: the download's size, from the release record — never typed (download_size.py says why).
+    rc_size = write_size(new)
+    if rc_size:
+        return rc_size
 
     print(f"\n  written. No prose edits: what changed in {new} belongs in its GitHub "
           "release notes, never on the homepage (no_release_narration_gate.py).")
