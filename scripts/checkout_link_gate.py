@@ -75,6 +75,7 @@ from __future__ import annotations
 
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -158,16 +159,71 @@ class _NoFollow(urllib.request.HTTPRedirectHandler):
 _OPENER = urllib.request.build_opener(_NoFollow)
 
 
-def head_no_follow(url: str) -> tuple[int, str]:
-    """(status, Location) for one HEAD, redirects NOT followed. (0, '') if it could not be made."""
-    req = urllib.request.Request(url, method="HEAD", headers=HUB_UA)
+# 2026-10-29: two CI runs in a row (the 1.11.974 site push) failed on ONE of 346 HEADs of the same Buy link, a different
+# page each time, answered with nothing at all ("HEAD 0 -> no Location"); the other 345 got the right 303. No answer is not
+# a wrong link, so it is asked again (twice, after a short pause). A real wrong link always answers (404, or a 303 to the
+# wrong place) and is never retried, so the gate is exactly as strict about links as before. _self_check_retry proves both.
+_NO_ANSWER_RETRIES = (2.0, 5.0)
+
+
+def head_no_follow(url: str, _sleep=time.sleep) -> tuple[int, str]:
+    """(status, Location) for one HEAD, redirects NOT followed. (0, '') if no answer came after the retries."""
+    for pause in (0.0,) + _NO_ANSWER_RETRIES:
+        if pause:
+            _sleep(pause)
+        req = urllib.request.Request(url, method="HEAD", headers=HUB_UA)
+        try:
+            with _OPENER.open(req, timeout=30) as r:
+                return r.status, r.headers.get("Location", "") or ""
+        except urllib.error.HTTPError as e:
+            return e.code, (e.headers.get("Location", "") if e.headers else "") or ""
+        except Exception:
+            continue
+    return 0, ""
+
+
+def _self_check_retry() -> list[str]:
+    """Offline: no answer twice then a 303 is a 303; no answer every time is 0; an HTTP 404 is returned at once."""
+    global _OPENER
+    real, out = _OPENER, []
+
+    class _Resp:
+        def __init__(self, status, loc):
+            self.status, self.headers = status, {"Location": loc}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    def _opener(script):
+        calls = []
+
+        class _O:
+            def open(self, req, timeout=30):
+                calls.append(req.full_url)
+                step = script[min(len(calls) - 1, len(script) - 1)]
+                if step == "none":
+                    raise OSError("no answer")
+                if step == "404":
+                    raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, None)
+                return _Resp(303, "https://checkout.dodopayments.com/buy/x")
+        return _O(), calls
+
     try:
-        with _OPENER.open(req, timeout=30) as r:
-            return r.status, r.headers.get("Location", "") or ""
-    except urllib.error.HTTPError as e:
-        return e.code, (e.headers.get("Location", "") if e.headers else "") or ""
-    except Exception:
-        return 0, ""
+        _OPENER, calls = _opener(["none", "none", "303"])
+        if head_no_follow("https://example.invalid/a", _sleep=lambda s: None)[0] != 303 or len(calls) != 3:
+            out.append("a link that answered on the third try was not read as its 303")
+        _OPENER, calls = _opener(["none"])
+        if head_no_follow("https://example.invalid/b", _sleep=lambda s: None) != (0, "") or len(calls) != 3:
+            out.append("a link that never answered was not reported as no answer after 3 tries")
+        _OPENER, calls = _opener(["404", "303"])
+        if head_no_follow("https://example.invalid/c", _sleep=lambda s: None)[0] != 404 or len(calls) != 1:
+            out.append("an HTTP 404 was retried (a wrong link must fail at once)")
+    finally:
+        _OPENER = real
+    return out
 
 
 def pages(root: Path):
@@ -180,6 +236,10 @@ def pages(root: Path):
 def main() -> int:
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".").resolve()
     failures: list[str] = []
+    _bad = _self_check_retry()
+    if _bad:
+        print("FAIL: the gate's own retry logic is broken: " + "; ".join(_bad))
+        return 1
 
     found: dict[str, list[str]] = {}
     as_href: set[str] = set()
