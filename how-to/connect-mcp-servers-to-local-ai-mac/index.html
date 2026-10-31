@@ -105,7 +105,7 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can a local AI use MCP tools?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Outlier connects to MCP servers running locally over stdio and to hosted servers over Streamable HTTP, and exposes their tools to the model."}}, {"@type": "Question", "name": "Do I need to paste an API token for a hosted MCP server?", "acceptedAnswer": {"@type": "Answer", "text": "Not necessarily — you can authenticate through your browser instead, so the app holds a scoped credential rather than a long-lived token pasted into a config file."}}, {"@type": "Question", "name": "Does using MCP send my conversation to the cloud?", "acceptedAnswer": {"@type": "Answer", "text": "The model still runs locally. But a remote MCP server necessarily receives whatever the model sends it, so treat each hosted tool as its own privacy decision."}}, {"@type": "Question", "name": "Which models can call MCP tools?", "acceptedAnswer": {"@type": "Answer", "text": "Tiers with tool-calling support. Core is the reliable choice for agentic work."}}]}
   </script>
   <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "headline": "How to connect MCP servers to a local AI on your Mac", "description": "Give a local model real tools. Connect MCP servers — local ones and hosted ones over Streamable HTTP with browser sign-in — to Outlier on macOS.", "datePublished": "2026-08-14", "dateModified": "2026-08-14", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/connect-mcp-servers-to-local-ai-mac/", "image": "https://outlier.host/og-card.png"}
+{"@context": "https://schema.org", "@type": "Article", "headline": "How to connect MCP servers to a local AI on your Mac", "description": "Give a local model real tools. Connect MCP servers — local ones and hosted ones over Streamable HTTP with browser sign-in — to Outlier on macOS.", "datePublished": "2026-08-14", "dateModified": "2026-10-31", "author": {"@type": "Organization", "name": "Outlier"}, "publisher": {"@type": "Organization", "name": "Outlier", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}, "mainEntityOfPage": "https://outlier.host/how-to/connect-mcp-servers-to-local-ai-mac/", "image": "https://outlier.host/og-card.png"}
   </script>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "How-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "How to connect MCP servers to a local AI on your Mac", "item": "https://outlier.host/how-to/connect-mcp-servers-to-local-ai-mac/"}]}
@@ -134,7 +134,7 @@
     <h1>How to connect MCP servers to a local AI on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Outlier · solo-built in Grand Rapids · published 2026-08-14</span>
-      <span class="updated-pill">Last updated 2026-08-14</span>
+      <span class="updated-pill">Last updated 2026-10-31</span>
     </div>
 
     <div class="quick-answer">
@@ -157,6 +157,7 @@
     <p><strong>Local (stdio)</strong> servers run as a process on your Mac. Good for filesystem access, local databases, anything already on the machine.</p>
     <p><strong>Hosted (Streamable HTTP)</strong> servers live on someone else's infrastructure, the service you're integrating with. These are the ones that need authentication, and the honest way to do that is a browser sign-in rather than a pasted token that never expires.</p>
     <p>Outlier speaks both. Choose token auth or browser sign-in per connection when you add it.</p>
+    <p>One switch decides whether the online ones run: with 🌐 web off, Outlier won't use a connected tool that reaches the internet (a hosted server, or a local one that fetches, searches or browses the web). It says so instead, and your local servers (files, git, databases on this Mac) keep working. Turn web on when you want the hosted ones.</p>
 
     <h2>Adding one</h2>
     <ol>

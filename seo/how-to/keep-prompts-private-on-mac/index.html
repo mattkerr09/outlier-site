@@ -22,7 +22,7 @@
 <meta name="twitter:image" content="https://outlier.host/og-card.png">
 <script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script><script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"How-to","item":"https://outlier.host/seo/how-to/"},{"@type":"ListItem","position":3,"name":"How to keep prompts private on a Mac","item":"https://outlier.host/seo/how-to/keep-prompts-private-on-mac/"}]}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to keep prompts private on a Mac | Outlier","description":"Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.","url":"https://outlier.host/seo/how-to/keep-prompts-private-on-mac/","datePublished":"2026-06-17","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to keep prompts private on a Mac | Outlier","description":"Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.","url":"https://outlier.host/seo/how-to/keep-prompts-private-on-mac/","datePublished":"2026-06-17","dateModified":"2026-10-31","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
 <style>
 :root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
 *{box-sizing:border-box}
@@ -81,7 +81,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 </nav>
 <span class="tag">How-to</span>
 <h1>How to keep prompts private on a Mac</h1>
-<p class="byline">Last updated 2026-10-19 &middot; Outlier v1.11.945</p>
+<p class="byline">Last updated 2026-10-31 &middot; Outlier v1.11.945</p>
 
 <div class="qa"><strong>Quick answer</strong><p>Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device. The whole sequence below stays on the Mac.</p></div>
 <div class="pbox" data-pbox="answer">
@@ -96,7 +96,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <h2>Steps</h2>
 <ol>
 <li><strong>Install Outlier.</strong> Apple-signed and notarized; bundle includes the entire inference stack.</li>
-<li><strong>Disable web search.</strong> In Settings, toggle Search off. Without it, the only network traffic is one-time model pulls.</li>
+<li><strong>Turn web off.</strong> Turn the 🌐 web switch in the composer off. Then chat sends nothing out, an agent command that downloads from the internet asks you first, and the rest of the app's traffic is model downloads and the update check.</li>
 <li><strong>Use Little Snitch or LuLu to verify.</strong> The chat path makes no outbound requests once the model is downloaded.</li>
 <li><strong>Audit the bundle.</strong> The signed binary is reproducible from the public commit on GitHub.</li>
 </ol>
@@ -112,7 +112,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to keep prompts private on a mac&rdquo;. Specifically, the product surface in v1.11.469 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How can I prove no prompt is leaving the device?</h2><p>Run Outlier with the network monitor of your choice (Little Snitch, LuLu, <code>pktap</code>). Once the model is downloaded, send a chat message with web search disabled. The expected packet count to any non-loopback destination is zero. The loopback traffic on <code>127.0.0.1:8766</code> is the front end speaking to the local FastAPI sidecar; that is the entire chat path.</p>
 <h2>Where does this guide fit in the rest of the lineup?</h2>
-<p>If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and avoid the web-search toggle. Once both are off, the running app touches only loopback for the chat path.</p>
+<p>If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and leave the 🌐 web switch off. Once both are off, the running app touches only loopback for the chat path, and an agent command that downloads from the internet asks you first.</p>
 <h2>One unique number</h2>
 <p>4 steps, zero network requests after the model is downloaded. Disabling search drops outbound traffic to zero on the chat path; the only remaining network is the model-download check, which can be paused.</p>
 
