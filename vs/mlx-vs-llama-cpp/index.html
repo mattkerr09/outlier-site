@@ -187,7 +187,7 @@
 
     <p>llama-server is a different class of thing. Per its README: OpenAI-compatible chat, responses and embeddings routes, Anthropic Messages-compatible completions, reranking, parallel decoding with multi-user slots, continuous batching, multimodal, schema-constrained JSON, tool calling for effectively any model, speculative decoding, LoRA adapters, prompt caching with KV reuse, API-key auth, and a web UI. If you need a server this quarter, that list is the whole argument.</p>
 
-    <p>Embedding splits the same way. llama.cpp compiles to small self-contained binaries and exposes <code>libllama</code>. MLX's Python path needs native arm64 Python 3.10+ — Rosetta breaks it, so you're bundling a Python runtime inside a notarized <code>.app</code> unless you move to <code>mlx-swift</code>. That's first-party and covers macOS and iOS, but command-line SwiftPM can't build its Metal shaders, so the final build goes through Xcode.</p>
+    <p>Embedding splits the same way. llama.cpp compiles to small self-contained binaries and exposes <code>libllama</code>. MLX's Python path needs native arm64 Python 3.10 or later. Rosetta breaks it, so you're bundling a Python runtime inside a notarized <code>.app</code> unless you move to <code>mlx-swift</code>. That's first-party and covers macOS and iOS, but command-line SwiftPM can't build its Metal shaders, so the final build goes through Xcode.</p>
 
     <h2>Runtime-by-runtime</h2>
     <table>

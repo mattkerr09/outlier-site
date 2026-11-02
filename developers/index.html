@@ -240,9 +240,9 @@ r = litellm.completion(
           across chunks, <code>role</code> in the first delta,
           <code>finish_reason</code> on the last, terminated by
           <code>[DONE]</code></li>
-      <li><code>stream_options: {"include_usage": true}</code> — adds a final
+      <li><code>stream_options: {"include_usage": true}</code> adds a final
           chunk carrying real token counts</li>
-      <li><code>response_format: {"type": "json_object"}</code> — genuinely
+      <li><code>response_format: {"type": "json_object"}</code> genuinely
           constrains the reply. Without it the same prompt came back as prose
           with markdown headings, which is how we know the flag is doing the
           work and not the model's habit</li>
