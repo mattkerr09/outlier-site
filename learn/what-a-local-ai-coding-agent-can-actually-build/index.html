@@ -125,9 +125,6 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can a local AI coding agent actually build?", "acceptedAnswer": {"@type": "Answer", "text": "Bounded, testable programs. In a real measured session an offline 27B built and self-tested a bank account class (13/13 tests passing), a 5-file library management system, a sqlite-backed contacts app, a precedence-correct arithmetic evaluator, and a 33-file build where every file compiled."}}, {"@type": "Question", "name": "How good is a local 27B at coding compared to Claude?", "acceptedAnswer": {"@type": "Answer", "text": "On a blind slice of SWE-bench Verified it measured ~45% (18/40, older build, 2026-06-25). On bounded, in-distribution, testable tasks it already matches a cloud flagship. On breadth-bound tasks, flawless multi-step novel reasoning with no test, and 40+-step autonomous runs, it doesn't match locally, those are the cases to escalate."}}, {"@type": "Question", "name": "Does the local agent verify its own work?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It runs the tests, and when one fails it computes the true answer itself and fixes whichever side is actually wrong (the code, or a test asserting a wrong value) with a guard that blocks weakening a good test to fake a pass. Selecting on run-the-tests, not on \"compiles\" or self-approval, is the single biggest quality lever."}}]}
   </script>
-<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
-     arrival; an ordinary visitor gets none. See /privacy.html. -->
-<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
 .pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}

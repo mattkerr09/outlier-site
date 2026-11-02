@@ -112,9 +112,6 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is paged MoE inference?", "acceptedAnswer": {"@type": "Answer", "text": "Running a Mixture-of-Experts model by keeping active experts in RAM and streaming the rest from SSD on demand, similar to how an OS pages virtual memory."}}, {"@type": "Question", "name": "Why does paging only work for MoE models?", "acceptedAnswer": {"@type": "Answer", "text": "Because MoE activates just a few experts per token, so most weights can stay on disk. Dense models need all weights every token and can't be paged this way."}}, {"@type": "Question", "name": "How fast is paged MoE inference?", "acceptedAnswer": {"@type": "Answer", "text": "On an M1 Ultra with 64 GB, Outlier's V9 paged engine ran Plus 397B at about 1.59 tok/s with a 14.04 GB peak during generation (the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process)."}}]}
   </script>
-<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
-     arrival; an ordinary visitor gets none. See /privacy.html. -->
-<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
 .pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}

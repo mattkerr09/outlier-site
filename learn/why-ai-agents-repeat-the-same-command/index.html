@@ -115,9 +115,6 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is an agent repeating a command always a bug?", "acceptedAnswer": {"@type": "Answer", "text": "No, which is why the headline counts only non-edit tools. Re-running a test after an edit is correct, and re-applying an identical patch can be too, so str_replace sits outside the guard by design. What is not correct is dispatching a byte-identical read, grep or test run when nothing has changed since the last one."}}, {"@type": "Question", "name": "Why does the model not simply remember what it already ran?", "acceptedAnswer": {"@type": "Answer", "text": "Sometimes it cannot see it: long runs summarise or drop older turns, so the result of call twelve may be out of view by call sixty. But that is the convenient half of the story. Our loop had a guard whose entire job was to catch this, and it was letting repeats through. Blaming the model's memory would have hidden a defect in our own dispatch path."}}, {"@type": "Question", "name": "Where should a dedup guard actually sit?", "acceptedAnswer": {"@type": "Answer", "text": "At the point of dispatch, downstream of every argument mutation, hashing the exact payload the tool will receive. Run it any earlier and it signs a draft rather than the real call, and the normalisation applied afterwards silently defeats it."}}]}
   </script>
-<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
-     arrival; an ordinary visitor gets none. See /privacy.html. -->
-<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
 .pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}

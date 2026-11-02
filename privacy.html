@@ -58,7 +58,8 @@
   <div class="wrap">
     <a class="back" href="/">← Back to Outlier</a>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 2026-10-31 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Last updated: 2026-11-02 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Changed 2026-11-02: removed Sled, the affiliate-attribution script, and the cookie it could set.</p>
     <p class="updated">Changed 2026-10-31: added how agent commands behave when web is off (they ask before reaching the internet).</p>
     <p class="dim">2026-09-29: the list of what leaves your Mac was incomplete. Added three things the app already did: the price check when you open an upgrade window, the daily license re-check, and the services you connect yourself (an MCP server, a Google Custom Search key, a Gist import). None of them is new.</p>
 
@@ -100,7 +101,7 @@
     <h2>What Outlier does NOT do</h2>
     <ul>
       <li>No inference telemetry. We do not log your prompts, model outputs, or which questions you ask.</li>
-      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host runs scripts from other hosts, and this is the whole list: Plausible, which sets no cookies and stores no IP addresses; Sled, for affiliate attribution; the Meta pixel, which does track across sites; our own affiliate-referral script, served from a Kerr &amp; Company worker, which only reads a partner code off the link you arrived by; our own mailing-list form script, from the same kind of worker, which sends nothing unless you type an address into a form (described above); and, on the home page only, our own assistant widget and founding-seats banner, from a Kerr &amp; Company worker: the assistant sends only the messages you type into it, and the banner fetches how many founding seats remain and remembers in your browser's local storage (key <code>kc-founding-dismissed</code>) that you closed it. None of them are in the app. <!-- Counted and rewritten 2026-09-21: this said "four scripts" while 254 pages loaded the mailing-list script and the home page loaded two more; a list that says it is complete has to be. --></li>
+      <li>No analytics SDK in the desktop app. (The marketing site at outlier.host runs scripts from other hosts, and this is the whole list: Plausible, which sets no cookies and stores no IP addresses; the Meta pixel, which does track across sites; our own affiliate-referral script, served from a Kerr &amp; Company worker, which only reads a partner code off the link you arrived by; our own mailing-list form script, from the same kind of worker, which sends nothing unless you type an address into a form (described above); and, on the home page only, our own assistant widget and founding-seats banner, from a Kerr &amp; Company worker: the assistant sends only the messages you type into it, and the banner checks whether the sale is still on and remembers in your browser's local storage (key <code>kc-founding-dismissed</code>) that you closed it. None of them are in the app. <!-- Counted and rewritten 2026-09-21: this said "four scripts" while 254 pages loaded the mailing-list script and the home page loaded two more; a list that says it is complete has to be. --></li>
       <!-- Added 2026-08-13. This page listed Plausible as the only thing the marketing site
            touched, which read as a complete list and was not one: outlier.host loads its four
            typefaces from Google Fonts and Fontshare, and loading a font is an HTTP request that
@@ -119,21 +120,19 @@
            almost every visitor does. It records which affiliate sent a visit, never who
            the visitor is. "One cookie, sometimes" is the only honest version — "no
            cookies" would now be false and "we use cookies" would overstate it. -->
-      <li>Cookies, and exactly what sets them. <a href="https://usesled.com">Sled</a> sets a
-      single <code>ta_ref</code> cookie only if you arrive through an affiliate link, so that
-      affiliate is credited if you buy; it never records who you are. The Meta pixel sets its
-      own <code>_fbp</code> cookie on every visit, however you arrived, and that identifier is
-      what lets Meta connect this visit to your activity on their platforms. Neither is
-      requested by the desktop app, the shipping bundle contains no reference to either
-      host.</li>
+      <!-- 2026-11-02: Sled retired (Matthew). Its script is off every page, so its conditional ta_ref cookie is gone. -->
+      <li>Cookies, and exactly what sets them. The Meta pixel sets its own <code>_fbp</code>
+      cookie on every visit, however you arrived, and that identifier is what lets Meta connect
+      this visit to your activity on their platforms. It is not requested by the desktop app,
+      and the shipping bundle contains no reference to its host.</li>
       <!-- Rewritten 2026-08-18, when the fonts became first-party. The previous
            version of this paragraph was accurate and that was the problem: it
            correctly disclosed that reading this page exposed your IP to Google
            and Fontshare, on a site whose headline is that nothing leaves your
            Mac. An honest disclosure of a contradiction is still a
            contradiction. -->
-      <!-- Added 2026-09-21 with the affiliate-referral script. Sled's cookie above and this
-           are two different mechanisms and both are disclosed: this one is not a cookie. -->
+      <!-- Added 2026-09-21 with the affiliate-referral script. This one is not a cookie (Sled's
+           was, until it was retired on 2026-11-02). -->
       <li>Affiliate referrals. If you arrive from an affiliate or partner link, the link's
       referral code is kept in your browser's local storage on this site (key
       <code>kc_aff</code>) for 30 days and is attached to the checkout link if you buy, so the

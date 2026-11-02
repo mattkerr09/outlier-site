@@ -112,9 +112,6 @@
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What counts as a failed edit?", "acceptedAnswer": {"@type": "Answer", "text": "A refusal by the edit tool, recorded in the trace: the agent quotes the text it wants replaced, and if that anchor is missing or appears more than once, the tool writes nothing and returns an error. That is the event we counted, 25 of 434 calls. It measures mechanics, not correctness — an edit can apply perfectly and still be the wrong change."}}, {"@type": "Question", "name": "Is 94.2% a good apply rate?", "acceptedAnswer": {"@type": "Answer", "text": "Good enough that the failures left are cheap. All 25 came back as errors the agent could read and retry against, not as silently corrupted files, and both dominant causes are fixed by re-reading the file and quoting a longer anchor. It is specific to our agent and our traces, so it does not carry across to another harness."}}, {"@type": "Question", "name": "Why did you not adopt SWE-Edit?", "acceptedAnswer": {"@type": "Answer", "text": "Because our own number made its gain unavailable to us. Microsoft's report describes lifting edit success on open reasoning models from a 75.6–82.0% band to 93.9–95.9%, via a viewer/editor subagent split plus a whole-file-rewrite fallback. At 94.2% we were already inside that post-fix band, so the benefit lifts a floor we do not stand on, while the costs would still have been ours to pay."}}]}
   </script>
-<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
-     arrival; an ordinary visitor gets none. See /privacy.html. -->
-<script async src="https://usesled.com/kerr-and-company/t.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
 .pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
