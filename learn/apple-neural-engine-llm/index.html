@@ -119,6 +119,16 @@
      arrival; an ordinary visitor gets none. See /privacy.html. -->
 <script async src="https://usesled.com/kerr-and-company/t.js"></script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
 </head>
 <body>
 <nav>
@@ -144,6 +154,12 @@
       <span class="qa-label">Quick answer</span>
       <p>Not in any way that helps you. The Neural Engine can run transformer layers, Core ML's own per-op device map confirms it, but only while the graph stays shallow. At 8 layers everything is still on the ANE. At 16 layers Core ML silently moves <em>every operation</em> to the CPU, and a 32-layer graph runs at roughly 4–7 tokens per second, entirely on CPU. The GPU-to-ANE handoff that usually gets blamed for this measures 0.84 ms, which is nothing. Residency is the wall, not the handoff.</p>
     </div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=learn-apple-neural-engine-llm-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.987/Outlier-1.11.987-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=learn-apple-neural-engine-llm-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
 
     <p class="lead">Every Mac spec sheet advertises a Neural Engine. Mine has sixteen cores. So when I started building local AI on Apple silicon, the obvious question was why that hardware sits essentially unused while the GPU does all the work generating text, and whether I could put it to work. I spent a session finding out, and the answer surprised me in a specific way: the thing everyone assumes is the problem turned out to be fine, and the real blocker is somewhere nobody points at.</p>
 

@@ -418,8 +418,14 @@ def main(argv: list[str]) -> int:
             print("  --answer needs ARMS_REGISTRY=<the experiment registry>: a page inside a running test must be skipped")
             return 2
         arms = live_arms()
-        skip = set(argv[argv.index("--skip") + 1:]) if "--skip" in argv else set()
-        for rel in answer_targets():
+        skip = set()
+        if "--skip" in argv:
+            for a in argv[argv.index("--skip") + 1:]:
+                if a.startswith("--"):
+                    break
+                skip.add(a)
+        prefixes = argv[argv.index("--prefix") + 1].split(",") if "--prefix" in argv else ["vs"]
+        for rel in [r for pre in prefixes for r in answer_targets(pre)]:
             path = "/" + rel[: -len("index.html")]
             if path in arms or rel in skip or path.strip("/") + "/" in {x.strip("/") + "/" for x in skip}:
                 print(f"  SKIP ({'arm' if path in arms else 'asked'}) {rel}")
