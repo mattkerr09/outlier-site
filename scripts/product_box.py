@@ -38,6 +38,7 @@ would read to them as new content.
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import sys
@@ -342,6 +343,30 @@ def seo_targets() -> list[str]:
     return out
 
 
+def live_arms() -> set[str]:
+    """outlier.host paths inside a registered experiment (the operator's ARMS registry) — never changed before their read."""
+    f = pathlib.Path(os.environ.get("ARMS_REGISTRY", "")) if os.environ.get("ARMS_REGISTRY") else None
+    if f is None:
+        return set()
+    if not f.exists():
+        return set()
+    return {l.split("|")[1].strip() for l in f.read_text(encoding="utf-8").splitlines() if l.startswith("outlier.host |")}
+
+
+def answer_targets(prefix: str = "vs") -> list[str]:
+    """2026-11-02 (Matthew's content order, CONTENT-STANDARD 7): every <prefix>/ page with a Quick answer and no answer box
+    yet. 51 of 61 /vs/ pages had their only Download/Buy at the end, so a phone reader met no button for screens."""
+    out = []
+    for p in sorted((ROOT / prefix).glob("*/index.html")):
+        s = p.read_text(encoding="utf-8")
+        if 'name="robots" content="noindex' in s or 'http-equiv="refresh"' in s.lower():
+            continue
+        if not re.search(r'<div class="(?:quick-answer|qa)"', s) or 'data-pbox="answer"' in s:
+            continue
+        out.append(str(p.relative_to(ROOT)))
+    return out
+
+
 def main(argv: list[str]) -> int:
     check = "--check" in argv
     version = current_version()
@@ -387,6 +412,24 @@ def main(argv: list[str]) -> int:
             if not check:
                 p.write_text(new, encoding="utf-8")
         print(f"  {changed} page(s) with a bare Download {'would change' if check else 'written'} (v{version})")
+        return 0
+    if "--answer" in argv:
+        if not os.environ.get("ARMS_REGISTRY") or not pathlib.Path(os.environ["ARMS_REGISTRY"]).exists():
+            print("  --answer needs ARMS_REGISTRY=<the experiment registry>: a page inside a running test must be skipped")
+            return 2
+        arms = live_arms()
+        skip = set(argv[argv.index("--skip") + 1:]) if "--skip" in argv else set()
+        for rel in answer_targets():
+            path = "/" + rel[: -len("index.html")]
+            if path in arms or rel in skip or path.strip("/") + "/" in {x.strip("/") + "/" for x in skip}:
+                print(f"  SKIP ({'arm' if path in arms else 'asked'}) {rel}")
+                continue
+            p = ROOT / rel
+            new = insert(p.read_text(encoding="utf-8"), rel, version, False, answer_only=True)
+            changed += 1
+            if not check:
+                p.write_text(new, encoding="utf-8")
+        print(f"  {changed} page(s) {'would change' if check else 'written'} (v{version})")
         return 0
     if "--seo" in argv:
         for rel in seo_targets():
