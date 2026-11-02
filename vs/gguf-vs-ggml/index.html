@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>GGUF vs GGML: what changed and which to use (2026)</title>
+  <meta name="description" content="GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-02">
+  <link rel="canonical" href="https://outlier.host/vs/gguf-vs-ggml/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="GGUF vs GGML: what changed and which to use (2026)">
+  <meta property="og:description" content="GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.">
+  <meta property="og:url" content="https://outlier.host/vs/gguf-vs-ggml/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GGUF vs GGML: what changed and which to use (2026)">
+  <meta name="twitter:description" content="GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer p { color: var(--text); margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    /* These pages carry no scroll wrapper, so a table wider than the column
+       pushed the whole page sideways on a phone. Measured at 375px:
+       /vs/outlier-vs-chatgpt/ overflowed by 88px and
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px — the page itself
+       slid, not just the table. display:block makes the table its own scroll
+       container; the content keeps its full width (measured 447px scrolling
+       inside a 343px box) instead of being squeezed. The two pinned layers
+       are an edge shadow and the two local ones scroll with the content, so
+       an edge shows only on a side that still has columns behind it. Alpha
+       zero is spelled with the background colour, not `transparent`, which
+       some engines interpolate through transparent-black as a grey smear. */
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","headline":"GGUF vs GGML: what changed and which to use (2026)","description":"GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.","datePublished":"2026-11-02","dateModified":"2026-11-02","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/gguf-vs-ggml/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"GGUF vs GGML","item":"https://outlier.host/vs/gguf-vs-ggml/"}]}
+  </script>
+<!-- Sled affiliate attribution. Sets a ta_ref cookie ONLY on an affiliate
+     arrival; an ordinary visitor gets none. See /privacy.html. -->
+<script async src="https://usesled.com/kerr-and-company/t.js"></script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
+    <h1>GGUF vs GGML: what changed, and which one to use</h1>
+    <div class="byline-row">
+      <span class="byline">By Matt Kerr · Outlier · published 2026-11-02</span>
+      <span class="updated-pill">Last updated 2026-11-02</span>
+      <span class="byline" data-claims-checked="2026-11-02" data-claims-set="llama.cpp, ggml and Hugging Face GGUF pages">llama.cpp, ggml and Hugging Face GGUF pages checked 2026-11-02</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>GGML is the older llama.cpp model file format. GGUF replaced it on August 21, 2023, and existing GGML files stopped loading. Use GGUF today. The name GGML also lives on as the tensor library under llama.cpp, so one word is a library and the other is a file format. They are not rival formats.</p>
+    </div>
+
+    <p class="lead">I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs MLX-format models, so I have no stake in which of these two names you pick. I read the project pages behind this on 2026-11-02 and name each one below. If you are choosing between GGUF and Apple's MLX instead, that is a different question, and <a href="/vs/gguf-vs-mlx-model-formats/">GGUF vs MLX</a> answers it.</p>
+
+    <h2>Why one word means two things</h2>
+
+    <p>The confusion starts because GGML names two different things.</p>
+
+    <p>First, ggml is a library. Its README describes a tensor library for machine learning, written in plain C and C++ with no dependencies, under the MIT license. llama.cpp is built on top of it.</p>
+
+    <p>Second, GGML was the name of the first file format for models run by that library. The GGUF specification says GGUF succeeds three older formats. GGML was the unversioned baseline. GGMF added a version number. GGJT aligned the tensors so a file could be loaded with mmap. When someone says "a GGML model", they mean a file in one of those three.</p>
+
+    <h2>What was wrong with the old files</h2>
+
+    <p>The GGUF spec has a section on the history, and it is blunt about the problems.</p>
+
+    <ul>
+      <li>The header held a fixed list of hyperparameters that did not say which model architecture the file belonged to.</li>
+      <li>The only way to add a new hyperparameter was to add it to the end of that list, which broke existing models.</li>
+      <li>Each architecture needed its own conversion script.</li>
+      <li>Keeping old files readable took tricks, such as packing the quantization version into the ftype field.</li>
+    </ul>
+
+    <p>The spec's conclusion is that one well-documented format that every executor supports beats bending an old format to fit.</p>
+
+    <h2>What GGUF changed</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>GGML, GGMF, GGJT</th>
+          <th>GGUF</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>First four bytes</strong></td><td><code>lmgg</code>, <code>fmgg</code>, <code>tjgg</code> as the llama.cpp converter reads them</td><td><code>GGUF</code></td></tr>
+        <tr><td><strong>Header</strong></td><td>A fixed hyperparameter list</td><td>Magic, version, tensor count and a count of key-value metadata pairs</td></tr>
+        <tr><td><strong>Architecture</strong></td><td>Not identified by the hyperparameter structure</td><td>A <code>general.architecture</code> key in the metadata</td></tr>
+        <tr><td><strong>Adding information</strong></td><td>Append to the end of the list and risk breaking old models</td><td>Add a key; extensibility is a design goal, so new information should not break existing models</td></tr>
+        <tr><td><strong>Vocabulary</strong></td><td>Embedded as a list of strings, each with its length in front</td><td>Described by tokenizer keys in the same key-value metadata</td></tr>
+        <tr><td><strong>mmap</strong></td><td>Added in GGJT through tensor alignment</td><td>A design goal; the file is padded to an alignment boundary</td></tr>
+        <tr><td><strong>Versions</strong></td><td>GGML unversioned, GGMF v1, GGJT v1 to v3</td><td>v1; v2 widened counts from uint32 to uint64; v3 added big-endian support (little-endian is the default)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The date the old files stopped loading</h2>
+
+    <p>The change was pull request #2398 in llama.cpp, titled "GGUF". Georgi Gerganov opened it on July 26, 2023, and it merged on August 21, 2023. Its description calls it a breaking change: all existing ggml models would no longer be compatible after the merge. To get a working file you reconverted from the original model data, such as Meta's PTH files or a Hugging Face checkpoint, with the repo's convert script.</p>
+
+    <p>So a tutorial from before late August 2023 that says "download the GGML file" describes files llama.cpp stopped loading when that change merged.</p>
+
+    <p>One thing predates the switch. The k-quant types, Q2_K through Q6_K, merged into llama.cpp on June 5, 2023 in pull request #1684, by Iwan Kawrakow, about two and a half months before GGUF. The Q4_K and Q6_K names you see on GGUF downloads today were not invented for GGUF. The format changed and the quantization types carried over.</p>
+
+    <h2>How to tell which one you have</h2>
+
+    <p>Read the first four bytes. A GGUF file starts with the letters GGUF. The older formats start with other tags, and the llama.cpp converter checks for three of them: <code>lmgg</code> for GGML, <code>fmgg</code> for GGMF and <code>tjgg</code> for GGJT. On a Mac, <code>head -c 4 yourfile</code> prints them. A <code>.gguf</code> suffix is a good sign, but the four bytes are the real check.</p>
+
+    <h2>If you still have an old GGML file</h2>
+
+    <p>llama.cpp ships a converter, <code>convert_llama_ggml_to_gguf.py</code>. Its description is "Convert GGML models to GGUF", and its input option asks for a GGMLv3 file. It also warns that the conversion is best-effort, that special tokens may not convert correctly, and that you should use a native GGUF model if possible.</p>
+
+    <p>I would take that advice. Download a GGUF build of the same model instead. I did not run the script for this page, so I can't tell you how a particular old file will come out.</p>
+
+    <h2>Where the name ggml still shows up</h2>
+
+    <p><strong>whisper.cpp.</strong> Its models README describes its model files as being in a custom ggml format, with names like <code>ggml-base.en.bin</code>, and the page does not mention GGUF. A file with ggml in its name is not always an old language model. It may be a speech-to-text model for whisper.cpp.</p>
+
+    <p><strong>The ggml-org name.</strong> llama.cpp and ggml both live under ggml-org on GitHub. Hugging Face's GGUF page points to a Space named <code>ggml-org/gguf-my-repo</code> that converts and quantizes your own model weights into GGUF. The word ggml in a project name is about the library, not the old files.</p>
+
+    <h2>Which one to use</h2>
+
+    <p>For a language model, use GGUF. Hugging Face's GGUF page lists llama.cpp, LM Studio, GPT4All and Ollama as tools that use GGUF files. If a guide tells you to fetch a GGML file, treat the guide as out of date and look for a GGUF build.</p>
+
+    <p>Once you are on GGUF, the format name stops mattering and the quantization name takes over. A Q4_K file and a Q6_K file are both GGUF, and the quant sets the trade between size and quality. <a href="/vs/4-bit-vs-8-bit-quantization/">4-bit vs 8-bit quantization</a> covers that trade.</p>
+
+    <p>On a Mac, GGUF is one of two practical choices. The other is Apple's MLX, which is a different kind of thing from GGUF. <a href="/vs/gguf-vs-mlx-model-formats/">GGUF vs MLX</a> explains how, and <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> helps you size the model once you have picked one.</p>
+
+    <div class="receipts">
+      <strong>Sources and receipts:</strong> All read on 2026-11-02. The GGUF history, design goals, versions and byte order are from the <a href="https://github.com/ggml-org/ggml/blob/master/docs/gguf.md">GGUF specification</a> in the ggml repo. What ggml is, and its MIT license, is from the <a href="https://github.com/ggml-org/ggml">ggml README</a>. The August 21, 2023 merge and the breaking-change wording are from <a href="https://github.com/ggml-org/llama.cpp/pull/2398">llama.cpp pull request #2398</a>. The k-quant dates and author are from <a href="https://github.com/ggml-org/llama.cpp/pull/1684">pull request #1684</a>. The four-byte tags, version ranges and warnings are from <a href="https://github.com/ggml-org/llama.cpp/blob/master/convert_llama_ggml_to_gguf.py">convert_llama_ggml_to_gguf.py</a>. The whisper.cpp file format is from its <a href="https://github.com/ggml-org/whisper.cpp/blob/master/models/README.md">models README</a>. The tools list and the gguf-my-repo Space are from <a href="https://huggingface.co/docs/hub/gguf">Hugging Face's GGUF page</a>. I ran no model and no benchmark for this page, and it carries no speed figures. Projects change their docs, so verify at source.
+    </div>
+
+    <div class="cta">
+      <h3>Want the packaged version instead?</h3>
+      <p>On-device on Apple silicon: no account, no caps, nothing uploaded. Free tier is Nano 4B and Lite 9B. No web search, no image generation, Mac only.</p><p>Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. macOS 15+. In the US, Klarna or Afterpay at checkout: four payments, two weeks apart. Refund window: 30 days, no questions asked.</p>
+      <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-gguf-vs-ggml&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.987/Outlier-1.11.987-arm64.dmg" rel="nofollow">Download free (276 MB)</a> <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-gguf-vs-ggml-end" rel="nofollow" style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--border);margin:.5rem 0 0 .5rem">Buy Pro</a>
+      <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+    </div>
+
+    <div class="related">
+      <p>Related: <a href="/vs/gguf-vs-mlx-model-formats/">GGUF vs MLX</a> &nbsp;·&nbsp; <a href="https://outlier.host/how-to/how-much-ram-for-local-ai/">How much RAM do you need for local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> &nbsp;·&nbsp; <a href="https://outlier.host/vs/">All comparisons</a></p>
+    </div>
+  </div>
+</article>
+
+
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier &middot; Grand Rapids, MI</span>
+    <span><a href="https://outlier.host/privacy.html">Privacy</a> &middot; <a href="https://outlier.host/vs/">More comparisons</a></span>
+  </div>
+  <div class="wrap">
+    <span>Made by <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. I'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$249" data-now="$124.50" hidden></div>
+<script data-founding-ends="2026-11-25T01:26:00Z">(function(){var end=Date.parse("2026-11-25T01:26:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+var end=Date.parse("2026-11-25T01:26:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut||!(d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=vs-gguf-vs-ggml');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+</body>
+</html>
