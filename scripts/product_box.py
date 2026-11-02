@@ -98,6 +98,17 @@ fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').t
 REFUND = "Refund window: 30 days, no questions asked."
 
 
+
+def founding_until() -> str:
+    """'24 November, 5:26&nbsp;pm Pacific' from data/founding_offer.json "ends", the instant every page switches the
+    founders price off (2026-11-02, CEO: show the price's true end next to it). Lives only inside the hidden founders
+    spans, which the reveal script shows before that instant and while seats are left."""
+    import datetime as _dt
+    from zoneinfo import ZoneInfo
+    ends = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
+    t = _dt.datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(ZoneInfo("America/Los_Angeles"))
+    return f"{t.day} {t.strftime('%B')}, {t.hour % 12 or 12}:{t.minute:02d}&nbsp;{'am' if t.hour < 12 else 'pm'} Pacific"
+
 def current_version() -> str:
     s = (ROOT / "index.html").read_text(encoding="utf-8")
     m = re.search(r"releases/download/v(\d+\.\d+\.\d+)/Outlier-\1-arm64\.dmg", s)
@@ -126,7 +137,7 @@ def box(tag: str, spot: str, version: str, src: str | None = None) -> str:
     return (
         f'<div class="pbox" data-pbox="{spot}">\n'
         f'<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25'
-        f'<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>\n'
+        f'<span data-pbox-founding hidden> &middot; founders price $124.50 until {founding_until()}, while seats last</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}" rel="nofollow">Download free</a> '
         f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">Free to start (Nano and Lite). macOS 26+, Apple silicon. '
@@ -146,7 +157,7 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
     return (
         f'<div class="pbox" data-pbox="end">\n'
         f'<p class="pbox-price">Outlier Pro: $249 once &middot; or 4 &times; $62.25'
-        f'<span data-pbox-founding hidden> &middot; founders price $124.50 while seats last</span></p>\n'
+        f'<span data-pbox-founding hidden> &middot; founders price $124.50 until {founding_until()}, while seats last</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">{req}{REFUND}</p>\n'
         f'</div>\n'
@@ -209,7 +220,7 @@ STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp
                  "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
                  "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
 STD_PRICE_NEW = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25"
-                 "<span data-pbox-founding hidden>; $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;"
+                 f"<span data-pbox-founding hidden>; $124.50 for the first 25 until {founding_until()} &middot;&nbsp;or&nbsp;4&nbsp;"
                  "&times;&nbsp;$31.13</span>. macOS 26+. In the US, Klarna or Afterpay at checkout: four "
                  "payments, two weeks apart. " + REFUND)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
@@ -219,7 +230,7 @@ STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_ST
 HOME_OLD = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 "
             "for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.")
 HOME_NEW = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25<span data-pbox-founding "
-            "hidden> &mdash; or $124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. "
+            f"hidden> &mdash; or $124.50 for the first 25 until {founding_until()} &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13</span>. "
             "No subscription, no per-token cost.")
 _FOUNDERS_SHOWN = re.compile(r"124\.50|31\.13")
 
