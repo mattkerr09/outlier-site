@@ -479,7 +479,7 @@ def self_check(verbose: bool = False) -> int:
                                          "stale-text", False),
         "vs/our-old-date/index.html": (_page(stamp(2, "<p>Outlier pricing as of 2026-07-23.</p>")), None, False),
         "vs/exempt-ok/index.html": (_page("<p>Gemma and Llama are open-weight model families.</p>"), None, False),
-        "vs/exempt-priced/index.html": (_page("<p>The API costs $15 per million tokens.</p>"), "exempt", False),
+        "vs/exempt-priced/index.html": (_page("<p>The API costs $18 per million tokens.</p>"), "exempt", False),
         "vs/table-only/index.html": (_page(
             "<table><tr><th>Tool</th><th>Plan</th></tr><tr><td>Outlier</td><td>one price</td></tr>"
             "<tr><td>Ollama</td><td>free</td></tr></table>"), "undated", False),

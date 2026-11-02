@@ -90,7 +90,7 @@ def check(src, price):
             tables += 1
             for cells in body:
                 for i in theirs:
-                    if i < len(cells) and re.search(re.escape(price) + r'\b', cells[i]):
+                    if i < len(cells) and re.search(re.escape(price) + r'(?![\d,]|\.\d)', cells[i]):
                         found.append(
                             f'column {header[i]!r}, row {cells[0]!r}: {cells[i]!r}')
 
@@ -113,7 +113,7 @@ def check(src, price):
             tables += 1
             for cells in their_rows:
                 for i, cell in enumerate(cells[1:], start=1):
-                    if re.search(re.escape(price) + r'\b', cell):
+                    if re.search(re.escape(price) + r'(?![\d,]|\.\d)', cell):
                         col = header[i] if i < len(header) else f'col {i}'
                         found.append(f'row {cells[0]!r}, column {col!r}: {cell!r}')
     return tables, found
