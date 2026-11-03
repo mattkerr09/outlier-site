@@ -125,7 +125,9 @@ def article_text_of(s: str) -> str:
 _INARTICLE_CHROME_RE = re.compile(
     # 2026-09-29: "pbox" — the product box (scripts/product_box.py), a Download/Buy block like
     # the cta: furniture repeated on every page, never content, so it never dates a page.
-    r'<div class="(?:related|cta|crumb|crumbs|foot|pbox)"[^>]*>.*?</div>', re.S | re.I)
+    # 2026-11-03: "byline-row" — who wrote it and when. Changing the author line from "Outlier · solo-built in Grand
+    # Rapids" to "Matt Kerr · Outlier" on 90 pages is not a content update and must not date them (WHAT-WORKS 11-02).
+    r'<div class="(?:related|cta|crumb|crumbs|foot|pbox|byline-row)"[^>]*>.*?</div>', re.S | re.I)
 
 
 #: Version strings and datelines are CHURN, not content — and they live INSIDE the
