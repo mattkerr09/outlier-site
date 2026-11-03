@@ -357,8 +357,13 @@ def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int
         rel = path.relative_to(root).as_posix()
         seen_rel.add(rel)
         is_hub = rel in HUB_FILES
-        res["pages"] += 1
         raw = path.read_text(encoding="utf-8", errors="replace")
+        # 2026-11-03: a merged page's redirect stub (meta refresh + noindex) shows a reader nothing but a link onward,
+        # so it quotes no rival claim. /vs/outlier-vs-llama-cpp/ became one and failed here as an undated rival page.
+        if (not is_hub and re.search(r'http-equiv="refresh"', raw)
+                and re.search(r'name="robots" content="[^"]*noindex', raw)):
+            continue
+        res["pages"] += 1
         pg = read_page(path)
         prose = squash(pg.prose)
         text = squash(pg.text)
@@ -467,6 +472,10 @@ def self_check(verbose: bool = False) -> int:
         "vs/outlier-vs-stale/index.html": (_page(stamp(46)), "stale ", False),
         "vs/outlier-vs-ancient/index.html": (_page(stamp(120)), "stale ", False),
         "vs/outlier-vs-undated/index.html": (_page("<p>ChatGPT Plus is $20 a month.</p>"), "undated", False),
+        # a merged page's redirect stub is not a page a reader reads; a refresh WITHOUT noindex is still judged
+        "vs/outlier-vs-moved/index.html": ('<html><head><meta name="robots" content="noindex, follow">'
+                                          '<meta http-equiv="refresh" content="0; url=/vs/x/"></head><body><p>ChatGPT Plus is $20.</p></body></html>', None, False),
+        "vs/outlier-vs-refresh-only/index.html": (_page('<meta http-equiv="refresh" content="0; url=/vs/x/"><p>ChatGPT Plus is $20 a month.</p>'), "undated", False),
         "vs/priced-but-undated/index.html": (_page("<p>Claude Pro costs $20.</p>"), "undated", False),
         "vs/future/index.html": (_page(stamp(-3)), "malformed", False),
         "vs/badformat/index.html": (_page('<p>$20</p><span data-claims-checked="19/10/2026">checked 19/10/2026</span>'),
