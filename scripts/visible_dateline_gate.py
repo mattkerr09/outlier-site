@@ -127,7 +127,7 @@ _INARTICLE_CHROME_RE = re.compile(
     # the cta: furniture repeated on every page, never content, so it never dates a page.
     # 2026-11-03: "byline-row" — who wrote it and when. Changing the author line from "Outlier · solo-built in Grand
     # Rapids" to "Matt Kerr · Outlier" on 90 pages is not a content update and must not date them (WHAT-WORKS 11-02).
-    r'<div class="(?:related|cta|crumb|crumbs|foot|pbox|byline-row)"[^>]*>.*?</div>', re.S | re.I)
+    r'<div class="(?:related|cta|crumb|crumbs|foot|pbox|byline-row)"[^>]*>.*?</div>|<p class="byline-row"[^>]*>.*?</p>', re.S | re.I)
 
 
 #: Version strings and datelines are CHURN, not content — and they live INSIDE the
