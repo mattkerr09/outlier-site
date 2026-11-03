@@ -90,6 +90,9 @@ jobs:
           # snapshot it exits 1: blocked, never a quiet pass.
           python3 scripts/tier_catalog_sync_gate.py .
           python3 scripts/tier_figure_gate.py .
+          # 11-03: the macOS floor gate ran only in the local offline runner, never here, and it was one-sided: the
+          # product box said "macOS 26+" on 133 pages for a day while the app runs on macOS 15. Two-sided now, and wired.
+          python3 scripts/macos_floor_gate.py .
           # Wired 2026-09-16, ahead of the Product Hunt comparison pages: those
           # pages state rivals' prices, and this is the gate that makes each one
           # cite where it came from. It PASSES today (0.2s, refuses on an empty
