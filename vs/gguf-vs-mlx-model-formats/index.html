@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"GGUF vs MLX: which format to run on a Mac | Outlier","description":"GGUF is a portable single-file container read by llama.cpp; MLX is Apple's runtime for Apple silicon. Which to download on a Mac, and the limits of each.","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/gguf-vs-mlx-model-formats/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"GGUF vs MLX: which format to run on a Mac | Outlier","description":"GGUF is a portable single-file container read by llama.cpp; MLX is Apple's runtime for Apple silicon. Which to download on a Mac, and the limits of each.","datePublished":"2026-07-23","dateModified":"2026-11-03","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/gguf-vs-mlx-model-formats/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"GGUF vs MLX model formats","item":"https://outlier.host/vs/gguf-vs-mlx-model-formats/"}]}
@@ -135,12 +135,12 @@
     <h1>GGUF vs MLX: how the two local model formats actually differ</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="updated-pill">Updated 2026-11-03</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>On a Mac with Apple silicon, either one runs. Pick GGUF for the widest choice of models and a file that also works on an Intel Mac, an NVIDIA box or plain CPU. Pick MLX if you are staying on Apple silicon and want to fine-tune on your Mac or build a native Swift app. About eight times as many models carry the gguf tag as the mlx tag on Hugging Face (counts read 2026-10-19), and I found no clean same-hardware speed test of the two, so treat any "MLX is X% faster" figure as confounded. They aren't competing products: GGUF is a single self-describing file that llama.cpp reads on Metal, CUDA, HIP, Vulkan or plain CPU, and MLX is Apple's MIT-licensed array framework, which runs safetensors weights through Metal against unified memory.</p>
+      <p>On a Mac with Apple silicon, either one runs. Pick GGUF for the widest choice of models and a file that also works on an Intel Mac, an NVIDIA box or plain CPU. Pick MLX if you are staying on Apple silicon and want to fine-tune on your Mac or build a native Swift app. About eight times as many models carry the gguf tag as the mlx tag on Hugging Face (counts read 2026-10-19). When I ran the same model at 4-bit both ways on one Mac (Qwen3-8B on an M1 Ultra, 3 November 2026), llama.cpp's GGUF showed the first word sooner, 0.76 s against 1.19 s on a 515-token prompt, and MLX wrote faster after that, 78 against 62 tokens a second, so MLX finished first on any answer longer than about 130 tokens. They aren't competing products: GGUF is a single self-describing file that llama.cpp reads on Metal, CUDA, HIP, Vulkan or plain CPU, and MLX is Apple's MIT-licensed array framework, which runs safetensors weights through Metal against unified memory.</p>
     </div>
 
     <p class="lead">Disclosure first: I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs MLX-format models on-device, so I am on one side of this particular comparison. That's why I'd rather explain the mechanism than sell a conclusion. This page is about the file <em>formats</em>; <a href="/vs/mlx-vs-llama-cpp/">MLX vs llama.cpp</a> compares the runtimes that read them. Most GGUF-vs-MLX arguments go wrong in the first sentence, because the two things being compared aren't the same kind of thing.</p>
@@ -197,7 +197,31 @@
 
     <p>The most-cited head-to-head numbers come from Ollama, which moved its Apple silicon path onto MLX in preview on 2026-03-30. Their published figures, tested on M5 hardware: prefill 1,154 tok/s on 0.18 versus 1,810 on 0.19; decode 58 versus 112 tok/s. That looks like a decisive format win. It isn't. Version 0.18 ran a Q4_K_M GGUF and 0.19 ran NVFP4 through MLX: engine, version and quantization scheme all changed at once.</p>
 
-    <p>The preview also carried hard limits: a Mac with more than 32 GB of unified memory, and only one accelerated model at first. Ollama has kept investing: a 2026-06-11 update added NVIDIA's NVFP4 4-bit format, up to 20% faster output through fused Metal kernels, and a snapshot system for agent workloads, with the claim that NVFP4 roughly halves the quality loss of 4-bit quantization relative to unquantized BF16, measured on Gemma 4 12B. Still not a clean A/B. I couldn't find any first-party benchmark isolating GGUF against MLX at matched bit-width on identical hardware, so treat every "MLX is X% faster" number as confounded.</p>
+    <p>The preview also carried hard limits: a Mac with more than 32 GB of unified memory, and only one accelerated model at first. Ollama has kept investing: a 2026-06-11 update added NVIDIA's NVFP4 4-bit format, up to 20% faster output through fused Metal kernels, and a snapshot system for agent workloads, with the claim that NVFP4 roughly halves the quality loss of 4-bit quantization relative to unquantized BF16, measured on Gemma 4 12B. Still not a clean A/B. I couldn't find any first-party benchmark isolating GGUF against MLX at matched bit-width on identical hardware, so treat every "MLX is X% faster" number as confounded. So I ran one.</p>
+
+    <h2>I measured it: the same model, both ways, on one Mac</h2>
+
+    <p>On 3 November 2026 I ran Qwen3-8B at 4-bit through both, on my M1 Ultra (64 GB, macOS 26.3.1). Each side used its publisher's own 4-bit build: Qwen's Q4_K_M GGUF, read by llama.cpp, and the mlx-community 4-bit MLX weights, run by MLX LM at the exact versions Outlier 1.11.990 ships. Both got the same 515 prompt tokens, greedy decoding, exactly 128 new tokens, a fresh cache every run and a 4,096-token context. One warm-up, then five measured runs each, taking turns going first, with nothing else generating on the Mac.</p>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>GGUF (llama.cpp build 9090)</th>
+          <th>MLX (MLX LM 0.31.3, MLX 0.31.2)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>4-bit scheme</strong></td><td>Q4_K_M: 217 tensors in 4-bit K-quants, 37 in 6-bit; 4.91 bits per weight</td><td>4-bit, group size 64, bf16 scales; 4.50 bits per weight</td></tr>
+        <tr><td><strong>File size</strong></td><td>5.03 GB</td><td>4.61 GB</td></tr>
+        <tr><td><strong>First token, 515-token prompt</strong></td><td>0.76 s (runs: 0.75&ndash;0.76)</td><td>1.19 s (runs: 1.17&ndash;1.25)</td></tr>
+        <tr><td><strong>Reading the prompt</strong></td><td>678 tokens a second</td><td>434 tokens a second</td></tr>
+        <tr><td><strong>Writing the answer</strong></td><td>62.2 tokens a second (runs: 57.1&ndash;63.7)</td><td>78.4 tokens a second (runs: 78.4&ndash;78.5)</td></tr>
+        <tr><td><strong>Memory, by each runtime&rsquo;s own count</strong></td><td>the 5.03 GB file mapped in, plus 0.60 GB of cache reserved for all 4,096 tokens and 0.34 GB of working buffers</td><td>5.26 GB at peak: the weights plus a cache that grows with the conversation</td></tr>
+      </tbody>
+    </table>
+    <p>Figures are medians of the five runs. What it means in use: llama.cpp starts answering sooner, and MLX writes faster once it starts. On this prompt the two cross at about 130 tokens, so a one-line answer arrives first from llama.cpp and a paragraph or longer arrives first from MLX. Long prompts, like a pasted document or a long chat, lean on llama.cpp&rsquo;s faster prompt reading; long answers lean on MLX&rsquo;s faster writing.</p>
+
+    <p>What it doesn&rsquo;t show is which format is better in general. The two 4-bit schemes differ: the GGUF keeps some tensors at 6-bit and is 9% bigger, and on a Mac writing speed tracks how many bytes are read per token. The engines and their kernels differ too, and this is one model on one Mac. I measured speed, first token, memory and size, not answer quality. New llama.cpp and MLX releases will move these numbers, which is why the date is on them.</p>
 
     <h2>Which one belongs in your setup</h2>
 
