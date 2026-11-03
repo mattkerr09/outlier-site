@@ -169,6 +169,17 @@ jobs:
       - name: Visible dateline honesty
         run: python3 scripts/visible_dateline_gate.py
 
+      # 11-03: five gates the local offline runner (site_offline_gates.sh) runs were run by nothing here. The JSON-LD
+      # dateline's pair ran, it did not; that let an author-line change that dated a page 39 days reach main. Wired.
+      - name: Offline gates CI had not been running
+        run: |
+          set -e
+          python3 scripts/jsonld_dateline_gate.py .
+          python3 scripts/derived_price_gate.py .
+          python3 scripts/rival_price_gate.py .
+          python3 scripts/tier_count_gate.py .
+          python3 scripts/tier_lineup_gate.py .
+
       - name: Every sitemap URL is reachable from the homepage
         run: python3 scripts/orphan_page_gate.py
 
