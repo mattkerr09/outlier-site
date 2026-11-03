@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Every "macOS N or later" sentence on the site must not promise LESS than the binary requires.
+"""Every "macOS N or later" sentence about Outlier must state EXACTLY the floor the binary requires: never less, never more.
 
 2026-09-21 (Crisp found it on itself first): the installed Outlier bundle's Python runtime,
 libmlx and libssl carry minos 26.0 — Homebrew builds them for the build box's macOS — and
@@ -7,7 +7,12 @@ dyld refuses to load them on anything older; the site said "macOS 12+" on 99 pag
 on macOS 12–15 pays and the engine never starts. The number comes from
 data/binary-requirements.json (measured from the INSTALLED bundle by vtool), never typed.
 
-    python3 scripts/macos_floor_gate.py [root]      # exits 1 on any page promising less
+    python3 scripts/macos_floor_gate.py [root]      # exits 1 on any page promising less, or asking for more
+
+2026-11-03: TWO-SIDED. The gate only failed a claim BELOW the floor, so when the floor dropped from macOS 26 to 15
+(1.11.952, 10-21) the product box generator kept saying "macOS 26+" and re-rendered it onto 133 pages on 11-02 with
+this gate green. A claim above the floor tells a buyer on macOS 15-25 that Outlier will not run on their Mac. Now any
+Outlier claim that is not the floor fails.
 """
 from __future__ import annotations
 import json, pathlib, re, sys
@@ -124,7 +129,7 @@ def main() -> int:
         pages += 1
         for v in ours:
             claims += 1
-            if _ver(v) < FLOOR:
+            if _ver(v) != FLOOR:
                 bad.append((str(p), v))
     print(f"floor from the installed bundle: macOS {FACTS['min_macos']} ({FACTS['mach_o_files']} Mach-O files, bundle {FACTS['bundle_version']})")
     print(f"{claims} claim(s) about Outlier on {pages} page(s); {len(other)} claim(s) about other products left as written")
@@ -135,9 +140,10 @@ def main() -> int:
         by = {}
         for f, v in bad: by.setdefault(v, []).append(f)
         for v, fs in sorted(by.items()):
-            print(f"FAIL — {len(fs)} claim(s) promise macOS {v}, below the binary's {FACTS['min_macos']}; first: {fs[0]}")
+            side = "below" if _ver(v) < FLOOR else "above"
+            print(f"FAIL — {len(fs)} claim(s) say macOS {v}, {side} the binary's {FACTS['min_macos']}; first: {fs[0]}")
         return 1
-    print("PASS — no page promises a macOS the binary refuses")
+    print("PASS — every Outlier macOS claim states the binary's floor, no lower and no higher")
     return 0
 
 
