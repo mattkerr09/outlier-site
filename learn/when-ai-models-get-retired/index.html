@@ -110,13 +110,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Your favorite AI model will be retired. Then what?", "description": "GPT-4 is gone from ChatGPT. Claude's early models are deprecated. Every rented model eventually gets retired out from under you. Local weights don't.", "datePublished": "2026-06-09", "dateModified": "2026-09-15", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/when-ai-models-get-retired/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Your favorite AI model will be retired. Then what?", "description": "GPT-4 is gone from ChatGPT. Claude's early models are deprecated. Every rented model eventually gets retired out from under you. Local weights don't.", "datePublished": "2026-06-09", "dateModified": "2026-11-04", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/when-ai-models-get-retired/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Your favorite AI model will be retired. Then what?", "item": "https://outlier.host/learn/when-ai-models-get-retired/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do AI companies retire models?", "acceptedAnswer": {"@type": "Answer", "text": "Serving capacity. Every old model kept online occupies GPUs that newer, more efficient models could use. Retiring old checkpoints is routine fleet management for providers, which is exactly why it keeps happening on a schedule users don't set."}}, {"@type": "Question", "name": "Can a local model ever be taken away?", "acceptedAnswer": {"@type": "Answer", "text": "Not once it's on your disk. Open weights plus a local runtime have no server dependency, so there's nothing to shut off. The model file you download today runs identically for as long as you keep it and have a Mac to run it on."}}, {"@type": "Question", "name": "Doesn't sticking with an old model mean falling behind?", "acceptedAnswer": {"@type": "Answer", "text": "Only if you never update. The difference is who decides: with local weights you adopt new models when you're ready, instead of being migrated mid-project. Outlier ships new tiers and includes them in Pro, but the old ones stay runnable."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why do AI companies retire models?", "acceptedAnswer": {"@type": "Answer", "text": "Serving capacity. Every old model kept online occupies GPUs that newer, more efficient models could use. Retiring old checkpoints is routine fleet management for providers, which is exactly why it keeps happening on a schedule users don't set."}}, {"@type": "Question", "name": "Can a local model ever be taken away?", "acceptedAnswer": {"@type": "Answer", "text": "Not once it's on your disk. Open weights plus a local runtime have no server dependency, so there's nothing to shut off. The model file you download today runs identically for as long as you keep it and have a Mac to run it on."}}, {"@type": "Question", "name": "Doesn't sticking with an old model mean falling behind?", "acceptedAnswer": {"@type": "Answer", "text": "Only if you never update. The difference is who decides: with local weights you adopt new models when you're ready, instead of being migrated mid-project. Outlier ships new tiers and includes them in Pro. A retired tier is not kept in the picker: two have been retired, and each old id now loads its successor."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -147,7 +147,7 @@
     <h1>Your favorite AI model will be retired. Then what?</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-06-09</span>
-      <span class="updated-pill">Last updated 2026-09-15</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
@@ -214,7 +214,7 @@
        kind of number a changelog gets shouted at over.</p>
     <p>It was not a loss, and the reason is worth knowing because it is a real
        property of running models on your own machine rather than someone else's.
-       The context default is raised from its base toward 262,144 depending on how
+       The context default is raised from its base, up to the plan's cap (128K on Pro), depending on how
        much RAM is actually free, so above roughly 16&nbsp;GB of headroom both
        tiers already resolved to the same window. Below it they diverged, and the
        retired tier took <em>more</em>, 4&nbsp;GB of key-value cache against 2&nbsp;GB,
@@ -230,7 +230,7 @@
     <p>Successors are usually stronger on benchmarks. They are also different. Different writing voice, different instruction-following quirks, different failure modes. The prompts you spent months refining behave differently overnight, and entire workflows built on one model's behavior quietly degrade. The recurring "did it get worse?" complaint threads after every silent model swap are this exact phenomenon: not weaker models, moved ones.</p>
     <p>For API users it's sharper. A deprecated endpoint is a production incident with a countdown attached, and re-validating an app against a new model is real engineering work you didn't schedule.</p>
     <h2>The version of this that can't happen to you</h2>
-    <p>An open-weight model is a stack of files. Outlier's tiers, Nano through Plus 397B, are exactly that: weights on your disk (published openly on HuggingFace), run by an engine on your Mac. Nobody can retire them, because there is no server to turn off. The model that writes a certain way today writes the same way in five years, unless <em>you</em> decide to swap it. Upgrades exist (new tiers ship and Pro seats include them), but they arrive as an option you choose, not a migration you're forced through.</p>
+    <p>An open-weight model is a stack of files. Outlier's tiers, Nano through Plus 397B, are exactly that: weights on your disk (published openly on HuggingFace), run by an engine on your Mac. No server can switch them off, and the file you downloaded does not change. What we can change is which tiers the app offers, and we have, twice (see the ledger above): a retired tier's id now loads its successor, so what you get under that name can change. New tiers ship and Pro includes them, and a retired id is mapped forward rather than left to fail.</p>
     <div class="receipts"><strong>Receipts:</strong> GPT-4's ChatGPT retirement (April 2025) was announced by OpenAI; both OpenAI and Anthropic publish living deprecation pages for their model lineups. Outlier's weights are downloadable and auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>.</div>
     <h2>What this means for how you choose tools</h2>
     <p>If your AI use is casual, retirements are a shrug: you adapt in an afternoon. If you've built anything durable on a model (a writing voice, a coding workflow, an app, a research process), the deprecation schedule is a risk you're carrying whether you priced it or not. The hedge is cheap: keep the workflows that matter on weights you control, and rent the cloud for the jobs where its ceiling genuinely matters. Stability where you need it, novelty where you want it.</p>
@@ -247,7 +247,7 @@
       </div>
       <div class="faq-item">
         <h3>Doesn't sticking with an old model mean falling behind?</h3>
-        <p>Only if you never update. The difference is who decides: with local weights you adopt new models when you're ready, instead of being migrated mid-project. Outlier ships new tiers and includes them in Pro, but the old ones stay runnable.</p>
+        <p>Only if you never update. The difference is who decides: with local weights you adopt new models when you're ready, instead of being migrated mid-project. Outlier ships new tiers and includes them in Pro. A retired tier is not kept in the picker: two have been retired, and each old id now loads its successor.</p>
       </div>
     </div>
     <div class="cta">
