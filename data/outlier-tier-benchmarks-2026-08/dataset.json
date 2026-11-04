@@ -1,11 +1,11 @@
 {
   "name": "Outlier tier benchmarks, August 2026",
-  "description": "MMLU, agentic SWE-bench and decode speed for every shipping Outlier tier, measured on an M1 Ultra against the shipping v1.11.757 build. Unmeasured tiers are marked as such rather than estimated.",
+  "description": "MMLU, agentic SWE-bench and decode speed for every shipping Outlier tier, measured on an M1 Ultra against the shipping v1.11.757 and v1.11.804 builds. Unmeasured tiers are marked as such rather than estimated.",
   "url": "https://outlier.host/data/outlier-tier-benchmarks-2026-08/",
   "creator": "Outlier (Matt Kerr)",
   "license": "CC-BY-4.0",
   "datePublished": "2026-08-09",
-  "dateModified": "2026-08-24",
+  "dateModified": "2026-11-04",
   "hardware": "Apple M1 Ultra, 64 GB unified memory, macOS",
   "app_version": "1.11.804",
   "mmlu": {
@@ -162,13 +162,13 @@
     "results": {
       "nano": 71.7,
       "lite": 53.4,
+      "quick": 43.6,
       "core": 20.7,
-      "code": 20.7,
       "plus": 1.59,
-      "vision": 16.31
+      "vision38": 17.2
     },
     "source_dataset_last_updated": "2026-05-20",
-    "note": "Carried over from the local-AI-benchmarks dataset (last updated 2026-05-20), so these are an older measurement round than the MMLU and SWE-bench columns, which were taken on 2026-08-09. Speed varies by Mac. Plus is the exception: 1.59 tok/s comes from the pre-ship K-override sweep at the shipped K=20 setting (5 prompts x 80 tokens, isolated subprocess, model load excluded and timed separately at 3.0 s). Per-prompt rates in that run were 1.35/1.52/1.62/1.65/1.64. The engine-comparison dataset separately reports ~2.1 tok/s for V9 paged under its own per-token RSS protocol; where the two disagree this dataset publishes the lower, shipping-config figure."
+    "note": "Carried over from the local-AI-benchmarks dataset (last updated 2026-05-20), so Nano, Lite and Core are an older measurement round than the MMLU and HumanEval columns (2026-08-24, build 1.11.804) and the SWE-bench column (2026-08-09 and 2026-08-17). Quick is the median of 20 runs through the shipped 1.11.804 app on 2026-08-24, and Vision 3.8 was measured on 2026-08-19 (shipped in 1.11.792); the row for the retired Vision 3.6 is gone. Speed varies by Mac. Plus is the exception: 1.59 tok/s comes from the pre-ship K-override sweep at the shipped K=20 setting (5 prompts x 80 tokens, isolated subprocess, model load excluded and timed separately at 3.0 s). Per-prompt rates in that run were 1.35/1.52/1.62/1.65/1.64. The engine-comparison dataset separately reports ~2.1 tok/s for V9 paged under its own per-token RSS protocol; where the two disagree this dataset publishes the lower, shipping-config figure."
   },
   "note": "Published because a benchmark table without its conditions is not a benchmark. Every figure states its sample size, decoding settings and date; every gap says why it is a gap.",
   "humaneval": {
