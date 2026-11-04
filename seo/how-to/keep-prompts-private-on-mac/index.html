@@ -97,15 +97,13 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <li><strong>Audit the traffic.</strong> The app&rsquo;s source is not public, so a network monitor is the audit. The model weights are public on Hugging Face (Outlier-Ai).</li>
 </ol>
 <h2>What is the specific thing to know about this guide?</h2>
-<p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code>: the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
+<p>The chat path calls only <code>http://127.0.0.1:8766</code>: the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
 <h2>What can go wrong with this guide?</h2>
 <ul><li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs two third-party scripts (Plausible (no cookies, no IP storage) and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites), and the Tauri auto-updater makes external calls. Neither script is in the desktop app. Turn the auto-updater off and stay on Free if you want no network at all after the download; on Pro the app re-checks its licence key once a day and keeps working if that check cannot connect. The full list is on the <a href='/privacy.html'>privacy page</a>.</li></ul>
 <h2>How does this guide differ from the cloud equivalent?</h2>
 <p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;your prompts and files do not leave the device&rsquo;, which you can check with a network monitor.</p>
-<p><p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code>: the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p></p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to keep prompts private on a mac&rdquo;?</h2>
-<p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code>: the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
-<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to keep prompts private on a mac&rdquo;. Specifically, the product surface in v1.11.469 covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
+<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to keep prompts private on a mac&rdquo;. Specifically, the product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
 <h2>How can I prove no prompt is leaving the device?</h2><p>Run Outlier with the network monitor of your choice (Little Snitch, LuLu, <code>pktap</code>). Once the model is downloaded, send a chat message with web search disabled. No non-loopback packet should carry your message. You may still see the app&rsquo;s own connections (the update check, the price check while an upgrade window is open, and on Pro the licence check). The loopback traffic on <code>127.0.0.1:8766</code> is the front end speaking to the local FastAPI sidecar; that is the entire chat path.</p>
 <h2>Where does this guide fit in the rest of the lineup?</h2>
 <p>If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and leave the 🌐 web switch off. Once both are off, the chat path touches only loopback (on Pro the app still re-checks its licence key once a day), and an agent command that downloads from the internet asks you first.</p>
@@ -125,7 +123,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <div class="related">
 <h3>Related pages</h3>
 <ul>
-<li><a href="/seo/learn/mlx-explained/">What is MLX?</a></li><li><a href="/seo/learn/what-is-unified-memory/">What is unified memory?</a></li><li><a href="/seo/run/run-nano-on-m4-air-13/">Run Nano on a 16 GB M4 Air</a></li><li><a href="/seo/run/run-compact-on-m4-pro-macbook-pro/">Run Core on a M4 Pro MacBook Pro</a></li><li><a href="/seo/vs/cloud-coding-assistants-for-code-review/">Outlier vs cloud coding assistants for code review</a></li>
+<li><a href="/seo/learn/mlx-explained/">What is MLX?</a></li><li><a href="/seo/learn/what-is-unified-memory/">What is unified memory?</a></li><li><a href="/seo/run/run-nano-on-m4-air-13/">Run Nano on a 16 GB M4 Air</a></li><li><a href="/seo/run/run-compact-on-m4-pro-macbook-pro/">Run Core on an M4 Pro MacBook Pro</a></li><li><a href="/seo/vs/cloud-coding-assistants-for-code-review/">Outlier vs cloud coding assistants for code review</a></li>
 </ul>
 </div>
 
