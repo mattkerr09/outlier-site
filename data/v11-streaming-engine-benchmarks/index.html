@@ -115,7 +115,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Decode tok/s, RSS, and Metal-wired-memory data for Outlier's V9 paged engine (current) and the retired V10/V11 streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-10-19","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/v11-streaming-engine-benchmarks/dataset.json"}}
+  {"@context":"https://schema.org","@type":"Dataset","name":"Outlier streaming engine benchmarks — V10 + V11","description":"Decode tok/s, RSS, and Metal-wired-memory data for Outlier's V9 paged engine (current) and the retired V10/V11 streaming engines on Apple Silicon. Plus 397B and Vision 35B tiers.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-05-09","dateModified":"2026-11-04","measurementTechnique":"Soak harness, 5+ run aggregation, isolated subprocess per configuration","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/v11-streaming-engine-benchmarks/dataset.json"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Streaming engine benchmarks — Plus + Vision tok/s on Apple Silicon", "item": "https://outlier.host/data/v11-streaming-engine-benchmarks/"}]}
@@ -152,7 +152,7 @@
     <h1>Streaming engine benchmarks: Plus + Vision tok/s on Apple Silicon</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-05-09</span>
-      <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
     <p><em>Corrected 2026-09-29: the quick answer and FAQ said ~2.1 tok/s; that is this benchmark&rsquo;s protocol, and the shipping figure is 1.59.</em></p>
 
@@ -225,7 +225,7 @@
 
     <h2>How to reproduce</h2>
     <ol>
-      <li>Install Outlier. You'll want Pro tier, or Founders for Plus 397B: <a href="https://outlier.host/">outlier.host</a></li>
+      <li>Install Outlier. You'll want Pro (the $49 licence), which includes Plus 397B: <a href="https://outlier.host/">outlier.host</a></li>
       <li>Open Settings → Engine Mode. Plus runs on Capacity (V9 paged), and any old V10/V11 preference auto-migrates to Capacity for you.</li>
       <li>Run a multi-prompt set and grab tok/s from the response footer.</li>
       <li>While it's generating, sample OS RSS with <code>ps -o pid,rss,command -p $(pgrep -f outlier-cli)</code>.</li>

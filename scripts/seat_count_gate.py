@@ -9,10 +9,13 @@ back. The count lives in data/product-facts.json, synced from Dodo by
 scripts/sync_product_facts.py; this gate makes the pages agree with it.
 
 ⚠️ IT MATCHES THE PROMISE SHAPE, NOT EVERY NUMBER NEAR THE WORD "MAC".
-outlier.host says "five Macs instead of five seats" and "Outlier is a one-time
-per-Mac tool" — a PRICING comparison (five purchases vs five SaaS seats), not a
-claim about one licence. A naive `\\d+ Macs` matcher flags it and teaches the
-next person to delete a true sentence to silence a gate. So this looks for:
+outlier.host once said "five Macs instead of five seats" and "Outlier is a
+one-time per-Mac tool", meant as a pricing comparison. Buyers read it as one
+licence per Mac, and one licence covers 3 (audit M1, 2026-11-04), so the pages now say
+one licence per person, up to 3 Macs at a time. The gate still looks for the promise
+shape rather than every number near "Mac": a naive `\\d+ Macs` matcher flags true
+sentences about a rival's licence and teaches the next person to delete them to
+silence a gate. So this looks for:
 
   * "up to N <machines|Macs|devices|computers>" — the promise shape, and
   * a bare count within CONTEXT_CHARS of "licence"/"license"/"activat"
@@ -33,10 +36,10 @@ WORDS = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
 #: long as it existed: it handles spelled numbers fine (WORDS), so the hole
 #: was never the numeral — it was the NOUN. An enumerated noun list is an
 #: allowlist, and the count it misses is invisible rather than wrong.
-#: "seats" is deliberately NOT here: "five Macs instead of five seats" is the
-#: site's pricing metaphor about a five-person team, true on 19 of the 20
-#: pages that say "five", and a gate that fails on those teaches people to
-#: delete true sentences to silence it.
+#: "seats" is deliberately NOT here: pages say "seat" about rivals' per-seat
+#: prices, which is true, and a gate that fails on those teaches people to
+#: delete true sentences to silence it. (The retired "five Macs instead of five
+#: seats" line was the one use that read as a licence count; it is gone.)
 DEVICE = r"(?:macs?|machines?|devices?|computers?|activations?)"
 UP_TO = re.compile(rf"up\s+to\s+(\d+|{'|'.join(WORDS)})\s+{DEVICE}\b", re.I)
 BARE = re.compile(rf"\b(\d+|{'|'.join(WORDS)})\s+{DEVICE}\b", re.I)
