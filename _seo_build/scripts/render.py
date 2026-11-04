@@ -1127,7 +1127,7 @@ def build_howto_pages() -> list[dict]:
         ("keep-prompts-private-on-mac", "How to keep prompts private on a Mac",
          "Why local-only inference is the default for Outlier, and how to check what is leaving the device.",
          [("Install Outlier", "Apple-signed and notarized; bundle includes the entire inference stack."),
-          ("Turn web off", "Turn the 🌐 web switch in the composer off. Then chat sends nothing out, an agent command that downloads from the internet asks you first, and the rest of the app's traffic is model downloads and the update check."),
+          ("Turn web off", "Turn the 🌐 web switch in the composer off. Then chat sends nothing out, an agent command that downloads from the internet asks you first, and the rest of the app's traffic is model downloads, the update check, the price check in an upgrade window and, on Pro, the licence check."),
           ("Use Little Snitch or LuLu to verify", "The chat path makes no outbound requests once the model is downloaded. You will still see the app's own connections: the update check (GitHub), the price check while an upgrade window is open, and on Pro the licence check. None of them carries what you typed."),
           ("Audit the traffic", "The app's source is not public, so a network monitor is the audit. The model weights are public on Hugging Face (Outlier-Ai).")]),
         ("free-up-disk-space-for-large-models", "How to free up disk space for large local models",
