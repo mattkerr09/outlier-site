@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>4-bit vs 8-bit quantization: which to run locally? | Outlier</title>
-  <meta name="description" content="4-bit is the right default for most local LLM work: faster and smaller, at a tiny quality cost. When 8-bit is worth the memory, with llama.cpp numbers.">
+  <meta name="description" content="Measured on a Mac: 4-bit wrote 30% faster than 8-bit from half the memory and scored 95 vs 94 on 100 GSM8K problems. When 8-bit is still worth it.">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-09-24">
   <link rel="canonical" href="https://outlier.host/vs/4-bit-vs-8-bit-quantization/">
@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"4-bit vs 8-bit quantization: which to run locally? | Outlier","description":"4-bit is the right default for most local LLM work: faster and smaller, at a tiny quality cost. When 8-bit is worth the memory, with llama.cpp numbers.","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/4-bit-vs-8-bit-quantization/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"4-bit vs 8-bit quantization: which to run locally? | Outlier","description":"Measured on a Mac: 4-bit wrote 30% faster than 8-bit from half the memory and scored 95 vs 94 on 100 GSM8K problems. When 8-bit is still worth it.","datePublished":"2026-07-23","dateModified":"2026-11-04","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/4-bit-vs-8-bit-quantization/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"4-bit vs 8-bit quantization","item":"https://outlier.host/vs/4-bit-vs-8-bit-quantization/"}]}
@@ -145,12 +145,12 @@
     <h1>4-bit vs 8-bit quantization for local LLMs: which should you run?</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-10-19</span>
+      <span class="updated-pill">Updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>4-bit is the right default for almost all local LLM work, and it's faster as well as smaller: on llama.cpp's Llama-3.1-8B numbers, Q4_K_M generates 71.93 tokens/sec from a 4.58 GiB file while Q8_0 manages 50.93 tokens/sec from 7.95 GiB. 8-bit earns its extra memory when you need quantization eliminated as a variable: evals, debugging, work that hinges on exact recall. The real decision usually isn't 4 vs 8 on one model, though; it's a bigger model at 4-bit against a smaller one at 8-bit, and the bigger model normally wins.</p>
+      <p>4-bit is the right default for almost all local LLM work, and it's faster as well as smaller. I measured it on 3 November 2026 with Qwen3-8B on my M1 Ultra, on the MLX versions Outlier ships: 4-bit wrote 79.0 tokens a second against 60.8 for 8-bit, from a 4.61 GB file against 8.70 GB, with the same wait for the first word (1.18 s against 1.20 s). On the first 100 GSM8K math problems it got 95 right and 8-bit got 94; they disagreed on only 3 problems, which is no measurable difference. 8-bit earns its extra memory when you need quantization eliminated as a variable: evals, debugging, work that hinges on exact recall. The real decision usually isn't 4 vs 8 on one model, though; it's a bigger model at 4-bit against a smaller one at 8-bit, and the bigger model normally wins.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
@@ -160,6 +160,23 @@
 
 
     <p class="lead">Quantization isn't a product or anyone's competitor. It's the compression step that makes a model fit on hardware you already own, and every on-device Mac LLM app uses it. The real question is which bit width an app ships, and whether it tells you. Disclosure: I'm Matt Kerr, I build <a href="https://outlier.host/">Outlier</a>, a Mac app that ships 4-bit-class models, so check the sources, not me.</p>
+
+    <h2>I measured it: the same model at 4-bit and 8-bit on one Mac</h2>
+
+    <p>Published numbers for this question mostly come from llama.cpp on someone else's machine, so I ran it myself on 3 November 2026: Qwen3-8B, the mlx-community 4-bit and 8-bit builds (both affine, group size 64), on a 64 GB M1 Ultra running MLX 0.31.2 and MLX LM 0.31.3, the versions Outlier 1.11.990 ships. Speed is the median of five runs each, taking turns, on the same 515-token prompt with exactly 128 new tokens and a fresh cache. Quality is the first 100 problems of the GSM8K test set, with thinking off and greedy decoding, scored on the final number.</p>
+    <table>
+      <thead>
+        <tr><th></th><th>4-bit</th><th>8-bit</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Bits per weight</strong></td><td>4.50</td><td>8.50</td></tr>
+        <tr><td><strong>File size</strong></td><td>4.61 GB</td><td>8.70 GB</td></tr>
+        <tr><td><strong>First token, 515-token prompt</strong></td><td>1.18 s (runs 1.18&ndash;1.23)</td><td>1.20 s (runs 1.17&ndash;1.21)</td></tr>
+        <tr><td><strong>Writing the answer</strong></td><td>79.0 tokens a second</td><td>60.8 tokens a second</td></tr>
+        <tr><td><strong>GSM8K, first 100 problems</strong></td><td>95 right (95% interval 89&ndash;98)</td><td>94 right (95% interval 88&ndash;97)</td></tr>
+      </tbody>
+    </table>
+    <p>Both got 93 of the same problems right and 4 of the same problems wrong; 4-bit alone got 2 and 8-bit alone got 1. A split that small is what chance looks like (an exact paired test gives p = 1.0), so on these 100 problems the extra four bits bought nothing I could measure, while costing 23% of the writing speed and nearly twice the memory. The wait for the first word did not change: reading the prompt cost the same at both widths on this Mac. One model, one benchmark slice, one Mac, so treat it as a dated data point rather than a law; a hard long-context or exact-recall job is where 8-bit can still earn its keep, as the sections below explain.</p>
 
     <h2>What "4-bit" means, and why it isn't 4 bits</h2>
 
