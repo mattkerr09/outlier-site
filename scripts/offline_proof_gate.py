@@ -59,8 +59,25 @@ CONTROL = re.compile(r"-a</code>\s*is load-bearing|<code>-a</code> is load-beari
 # displayed in the hero. They were 17/seventeen (capture #1) while the hero showed
 # capture #2's answer — two real runs, but a reader joins them and finds the timings
 # disagree. Now both cite the run whose answer is on the page: 21 across 33s.
-SEVEN_NUM = re.compile(r"sampled\s+21\s*(?:&times;|×)")
-SEVEN_WORD = re.compile(r"sampled it twenty-one times", re.I)
+# 2026-11-04: re-taken on 1.11.992 (22 samples across a 24s Core answer). The count is no longer pinned here: the
+# caption's numeral and the prose's word are read from the page and must name the SAME number, so a re-capture moves
+# both or fails, and nobody has to edit this gate to re-take the receipt.
+SEVEN_NUM = re.compile(r"sampled\s+(\d{1,2})\s*(?:&times;|×)")
+SEVEN_WORD = re.compile(r"sampled it ([a-z]+(?:-[a-z]+)?) times", re.I)
+_ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen " \
+        "seventeen eighteen nineteen".split()
+_TENS = {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90}
+
+
+def word_number(w):
+    """'twenty-two' -> 22, 'seventeen' -> 17; None for anything else."""
+    w = w.lower()
+    if w in _ONES:
+        return _ONES.index(w)
+    head, _, tail = w.partition("-")
+    if head in _TENS and (not tail or tail in _ONES[1:10]):
+        return _TENS[head] + (_ONES.index(tail) if tail else 0)
+    return None
 # The machine-wide socket count FLUCTUATES — 324/328/347/357 were all observed
 # within minutes on 2026-08-18. Pinning one exact figure pinned a number no
 # reader could ever reproduce; the page now cites 347 (what the capture itself
@@ -115,11 +132,14 @@ def main() -> int:
             "leaves something that still LOOKS like proof.")
 
     # 4. the two spellings of the sample count agree
-    num, word = bool(SEVEN_NUM.search(text)), bool(SEVEN_WORD.search(text))
-    if num and word:
-        print("  sample count 17 in the caption and 'seventeen' in the prose — agree")
+    nm, wm = SEVEN_NUM.search(text), SEVEN_WORD.search(text)
+    num = int(nm.group(1)) if nm else None
+    word = word_number(wm.group(1)) if wm else None
+    if num is not None and num == word:
+        print(f"  sample count {num} in the caption and '{wm.group(1)}' in the prose — agree")
     else:
-        print(f"  sample count caption={'17' if num else 'MISSING'}  prose={'seventeen' if word else 'MISSING'}")
+        print(f"  sample count caption={num if num is not None else 'MISSING'}  "
+              f"prose={(wm.group(1) if wm else 'MISSING')}")
         failures.append(
             "    the sample count is written twice, as a numeral in the caption and a word in "
             "the prose, and they no longer agree. Two copies of one number drift; if the "
