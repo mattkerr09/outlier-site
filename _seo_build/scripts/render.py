@@ -955,7 +955,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
                 f"<p>{u['one_liner']}. The {c['short_name']} category runs open weights on your own "
                 f"hardware, as Outlier does, so for {u['name']} the deciding difference is not the "
                 f"data path but what is built around the model. Outlier answers it with the on-device "
-                f"{u['recommended_tier']} tier and an agent loop that reads your files and runs and checks code. "
+                f"{u['recommended_tier']} tier and, with Pro, an agent loop that reads your files and runs and checks code. "
                 f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
             )
         rec_tier = u["recommended_tier"]
@@ -994,7 +994,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             body.append(
                 f"<p>For {u['name']}, Outlier and {c['short_name']} both keep the prompt and the response on "
                 f"your Mac. {c['description']}. Outlier runs {u['name']} on the recommended "
-                f"{_tier_name(rec_tier)} tier from the on-disk checkpoint and adds the agent loop described above.</p>"
+                f"{_tier_name(rec_tier)} tier from the on-disk checkpoint and, with Pro, adds the agent loop described above.</p>"
             )
         body.append(f"<h2>How does the data path differ for {u['name']} on {c['short_name']}?</h2>")
         if is_cloud:
@@ -1032,7 +1032,8 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             f"<p>Moving a {u['name']} workflow from {c['short_name']} to Outlier is a one-time "
             f"DMG install plus a {by_tier_disk(rec_tier)} GB pull for the {_tier_name(rec_tier)} tier. "
             f"Outlier has no sign-in step, no per-token meter, and no rate-limit page to "
-            f"redirect through. The {u['name']} loop after install is open-prompt to local-decode.</p>"
+            f"redirect through.{'' if rec_tier in ('nano', 'lite') else ' The ' + _tier_name(rec_tier) + ' tier is part of Pro, so you paste a licence key once to activate it; Nano and Lite are the free tiers.'} "
+            f"The {u['name']} loop after install is open-prompt to local-decode.</p>"
         )
         body.append(f"<h2>What about quality at the {_tier_name(rec_tier)} tier for {u['name']}?</h2>")
         body.append(quality_block(rec_tier, u, c, u_slug))
@@ -1308,14 +1309,14 @@ def build_howto_pages() -> list[dict]:
         slug_pitfalls = {
             "install-outlier-on-mac": "<li>Gatekeeper prompts on first launch surprise users; the DMG is Developer-ID-signed (cert <code>9N3Z6J63T4</code>), so right-click + Open clears it permanently.</li><li>Some macOS versions move the app to a quarantine folder; <code>xattr -d com.apple.quarantine /Applications/Outlier.app</code> bypasses this.</li>",
             "download-a-model-tier": "<li>Hugging Face download interrupted partway leaves a half-checkpoint; the picker UI detects this on next launch and offers to resume.</li><li>Slow networks make the Plus tier&rsquo;s 209 GB pull effectively a multi-hour task.</li>",
-            "run-a-local-coding-assistant-on-mac": "<li>Without a Pro unlock the agent falls back to the free tiers (Nano/Lite), which are weaker on code; for top code quality you need Pro, which includes Core.</li><li>Project chip context can blow the window if the folder is large.</li>",
+            "run-a-local-coding-assistant-on-mac": "<li>The coding agent is a Pro feature: the free tiers (Nano and Lite) are chat only. For the agent, and for top code quality, you need Pro, which includes Core.</li><li>Project chip context can blow the window if the folder is large.</li>",
             "keep-prompts-private-on-mac": "<li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs three third-party scripts (Plausible (no cookies, no IP storage), Sled for affiliate attribution, and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites) and the Tauri auto-updater makes external calls. None of the three scripts are in the desktop app; turn the auto-updater off if you want strict no-network. The full list is on the <a href='/privacy.html'>privacy page</a>.</li>",
             "free-up-disk-space-for-large-models": "<li>Hugging Face cache may hold prior tier snapshots after an update.</li><li>The model picker&rsquo;s Delete button removes weights but leaves their config metadata; safe to ignore.</li>",
             "write-unit-tests-with-local-ai": "<li>Lite&rsquo;s code quality is good, not great; tricky tests sometimes need a manual second pass.</li><li>Long batches of tests in one prompt drop quality; break them up.</li>",
             "review-a-pull-request-locally": "<li>Very large diffs can still exceed Core&rsquo;s context window if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li>",
             "draft-shell-scripts-with-the-nano-tier": "<li>Nano is a 4B model; it occasionally hallucinates flag names. Always read the script before running it.</li><li>The 32 tok/s on M4 Air is single-prompt; back-to-back prompts may slow under thermal load.</li>",
             "set-up-the-companion-window": "<li>If Accessibility permission is denied, the companion has no app context to read.</li><li>Screen Recording permission is per-app and prompts on first capture only; deny once and it stays denied until reset in System Settings.</li>",
-            "upgrade-to-the-pro-tier": "<li>Save your license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by the payment processor, Dodo Payments for new purchases, not by Outlier directly.</li>",
+            "upgrade-to-the-pro-tier": "<li>Save your license key in your password manager; you re-enter it in Settings &gt; license &gt; Activate when you reinstall.</li><li>Refunds are handled by Outlier, not the payment processor: 30 days, no questions asked. Email matt@outlier.host with your order number.</li>",
         }
         body.append("<ul>" + slug_pitfalls.get(slug, "") + "</ul>")
         # Per-slug-specific cloud-equivalent comparison; varies enough to avoid 50-word collisions.

@@ -116,13 +116,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI coding offline on Apple Silicon","description":"A practical guide to running an AI coding workflow with no internet, no API keys, and no cloud, on M1/M2/M3/M4 Macs.","datePublished":"2026-05-19","dateModified":"2026-10-19","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/offline-ai-coding-apple-silicon/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"How to run AI coding offline on Apple Silicon","description":"A practical guide to running an AI coding workflow with no internet, no API keys, and no cloud, on M1/M2/M3/M4 Macs.","datePublished":"2026-05-19","dateModified":"2026-11-04","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/run/offline-ai-coding-apple-silicon/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run AI coding offline on Apple Silicon", "item": "https://outlier.host/run/offline-ai-coding-apple-silicon/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI coding work completely offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, chat, agent runs, file edits, and project memory all work with wifi turned off on any Apple Silicon Mac."}}, {"@type": "Question", "name": "What Mac do I need for offline AI coding?", "acceptedAnswer": {"@type": "Answer", "text": "Any Apple Silicon Mac (M1 or newer) with 16 GB or more of RAM. Serious coding with Core 27B is best on 32 GB or more."}}, {"@type": "Question", "name": "How does offline local AI compare to cloud tools?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code is faster and better at editing large codebases; a local Core 27B runs about 20.7 tok/s. Outlier keeps your code on your Mac, offline and unmetered; in our own test its agent built nine apps, and 7 of the 9 were still running at the end of the run (an informal test; the apps and the pass criterion are not published), using the default model for 8, 16 and 24 GB+ Macs."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can AI coding work completely offline?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. After the first model download, chat works with wifi turned off on any Apple Silicon Mac, and so do the agent runs, file edits, and project memory if you have Pro."}}, {"@type": "Question", "name": "What Mac do I need for offline AI coding?", "acceptedAnswer": {"@type": "Answer", "text": "Any Apple Silicon Mac (M1 or newer) with 16 GB or more of RAM. Serious coding with Core 27B is best on 32 GB or more."}}, {"@type": "Question", "name": "How does offline local AI compare to cloud tools?", "acceptedAnswer": {"@type": "Answer", "text": "Claude Code is faster and better at editing large codebases; a local Core 27B runs about 20.7 tok/s. Outlier keeps your code on your Mac, offline and unmetered; in our own test its agent built nine apps, and 7 of the 9 were still running at the end of the run (an informal test; the apps and the pass criterion are not published), using the default model for 8, 16 and 24 GB+ Macs."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 </head>
@@ -143,7 +143,7 @@
     <h1>How to run AI coding offline on Apple Silicon</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
@@ -151,7 +151,7 @@
       <ul>
         <li>Any Apple Silicon Mac (M1+) with 16 GB+ RAM runs the whole offline coding workflow.</li>
         <li><strong>Core 27B is the strongest coding tier.</strong> That's enough for real refactors.</li>
-        <li>Kill the wifi and it keeps working. Chat, agent, file edits, project memory.</li>
+        <li>Kill the wifi and it keeps working. Chat on the free tiers; agent, file edits and project memory on Pro.</li>
         <li>You give up speed compared with cloud. You get back zero API cost, no rate limit, no data leaving the box.</li>
       </ul>
     </div>
@@ -163,7 +163,7 @@
     <ol>
       <li>Grab the signed Mac DMG from <a href="https://outlier.host/">outlier.host</a>. The installer is about 276 MB.</li>
       <li>First launch pulls Nano 4B (~3 GB) from HuggingFace. After that one download, inference never touches the network again.</li>
-      <li>Want proof? Switch off your wifi. Chat, agent runs, file edits, project memory. All of it still runs.</li>
+      <li>Want proof? Switch off your wifi. Chat, and on Pro the agent runs, file edits and project memory. All of it still runs.</li>
     </ol>
     <p>You've got other choices here. Ollama, LM Studio, Jan, llama.cpp straight up. They differ on defaults, on how polished the UI is, on which models they make painless to load. The offline part is the same no matter which one you pick.</p>
 
@@ -196,7 +196,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>Can AI coding work completely offline?</h3>
-        <p>Yes. After the first model download, chat, agent runs, file edits, and project memory all work with wifi turned off on any Apple Silicon Mac.</p>
+        <p>Yes. After the first model download, chat works with wifi turned off on any Apple Silicon Mac, and so do the agent runs, file edits, and project memory if you have Pro.</p>
       </div>
       <div class="faq-item">
         <h3>What Mac do I need for offline AI coding?</h3>
