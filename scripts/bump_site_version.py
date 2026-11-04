@@ -40,6 +40,17 @@ FILES = {"index.html": 0,
          "learn/can-you-run-claude-locally/index.html": 0}
 
 
+# 2026-11-04 (1.11.993's bump refused, index.html "14 -> 1"): the home page's lsof receipt names the build it was CAPTURED
+# on ("Captured 2026-11-04 on Outlier 1.11.992 ..."). That is history, like the benchmark notes: it must not move, and it
+# must not count as a pointer left behind. Only this exact phrase is masked before counting; every other leftover still refuses.
+HISTORY_RE = re.compile(r"Captured \d{4}-\d{2}-\d{2} on Outlier 1\.11\.\d+")
+
+
+def _pointer_count(s: str, version: str) -> int:
+    """How many times `version` appears outside the history phrases above."""
+    return HISTORY_RE.sub("", s).count(version)
+
+
 def shapes(old: str, new: str) -> dict[str, str]:
     return {
         f'"softwareVersion": "{old}"': f'"softwareVersion": "{new}"',
@@ -143,10 +154,10 @@ def main(argv: list[str]) -> int:
     for name, allowed in FILES.items():
         p = ROOT / name
         s = p.read_text(encoding="utf-8")
-        before = s.count(old)
+        before = _pointer_count(s, old)
         for a, b in shapes(old, new).items():
             s = s.replace(a, b)
-        left = s.count(old)
+        left = _pointer_count(s, old)
         ok = left == allowed
         print(f"  {name}: {before} -> {left} (expected {allowed}) {'OK' if ok else 'MISMATCH'}")
         if not ok:
