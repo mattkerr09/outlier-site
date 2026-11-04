@@ -94,7 +94,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <li><strong>Switch to Nano.</strong> Settings &gt; Models &gt; Nano. The download is 2.37 GB.</li>
 <li><strong>Ask in plain English.</strong> &ldquo;A zsh function that resizes every PNG in a folder.&rdquo;</li>
 <li><strong>Read it before running it.</strong> Local generation is fast; verification is still on you.</li>
-<li><strong>Pin the result.</strong> Outlier&rsquo;s pinned-snippet panel keeps the working version visible.</li>
+<li><strong>Save the result.</strong> Copy the working version into a file of your own and run it from there.</li>
 </ol>
 <h2>What is the specific thing to know about this guide?</h2>
 <p>The Nano tier is 2.37 GB on disk and runs at 71.7 tok/s on the M1 Ultra reference, with an operator-reported ~32 tok/s on a 16 GB M4 Air (single-prompt observation, not yet &sigma;-qualified).</p><p>Check a generated script before you run it. <code>zsh -n script.zsh</code> (or <code>bash -n script.sh</code>) parses the file without executing anything, so a syntax slip shows up first. Then read every line that deletes, overwrites or escalates (<code>rm</code>, <code>mv</code>, <code>sudo</code>, a redirect into an existing file) twice, and run the script once against a copy of the folder it will touch.</p>

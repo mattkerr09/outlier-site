@@ -1255,7 +1255,7 @@ def build_howto_pages() -> list[dict]:
          "Use Core in code mode for code review and refactor without a network round-trip.",
          [("Install Outlier", f"Per the install guide. {OS_PLUS} Apple Silicon, 24 GB RAM minimum for Core."),
           ("Switch to Code mode", "The mode toggle is in the chat composer. The system prompt is tuned for terse code-first responses."),
-          ("Open a project", "Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>."),
+          ("Open a project", "Use the project chip to scope context to a folder."),
           ("Ask for a focused review", "Quote a single function. Bigger asks blow the context budget on smaller tiers.")]),
         ("keep-prompts-private-on-mac", "How to keep prompts private on a Mac",
          "Why local-only inference is the default for Outlier, and how to check what is leaving the device.",
@@ -1286,7 +1286,7 @@ def build_howto_pages() -> list[dict]:
          [("Switch to Nano", "Settings &gt; Models &gt; Nano. The download is 2.37 GB."),
           ("Ask in plain English", "&ldquo;A zsh function that resizes every PNG in a folder.&rdquo;"),
           ("Read it before running it", "Local generation is fast; verification is still on you."),
-          ("Pin the result", "Outlier&rsquo;s pinned-snippet panel keeps the working version visible.")]),
+          ("Save the result", "Copy the working version into a file of your own and run it from there.")]),
         ("set-up-the-companion-window", "How to set up the Outlier companion window",
          "Always-on-top mini chat that reads the active app context.",
          [("Enable the companion", "Toggle in the menu bar or via the keyboard shortcut."),
@@ -1382,7 +1382,7 @@ def build_howto_pages() -> list[dict]:
         "run-a-local-coding-assistant-on-mac":
             "<h2>What is different about Code mode versus chat?</h2>"
             "<p>Code mode ships with a terser system prompt, a lower default sampling "
-            "temperature, and a default project-scope chip that respects <code>.outlierignore</code>. "
+            "temperature, and a default project-scope chip. "
             "The agent loop has manual approval on as the default; auto-approve and sandboxed modes "
             "are settings, not the default. The reason that distinction is non-trivial is that the "
             "agent loop can run shell commands; manual approval is the safe choice when starting out.</p>",
@@ -1508,7 +1508,7 @@ def build_howto_pages() -> list[dict]:
         related_tier_lines = {
             "install-outlier-on-mac": "After install, the model picker shows six tiers in display order: Nano (2.37 GB), Lite (5.04 GB), Quick (15.61 GB), Core (15.13 GB), Vision 3.8 (15.5 GB), and Plus (209 GB). Tiers above the Mac&rsquo;s unified-memory headroom appear greyed out.",
             "download-a-model-tier": "The Plus tier is the outlier on size: 209 GB versus the next-largest Quick at 15.61 GB. Most users start with Nano or Lite, then graduate to Core once they have a use case that exercises the heavier weights.",
-            "run-a-local-coding-assistant-on-mac": "Code mode pairs naturally with the project chip and the .outlierignore file. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.",
+            "run-a-local-coding-assistant-on-mac": "Code mode pairs naturally with the project chip. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.",
             "keep-prompts-private-on-mac": "If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and leave the 🌐 web switch off. Once both are off, the chat path touches only loopback (on Pro the app still re-checks its licence key once a day), and an agent command that downloads from the internet asks you first.",
             "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision 3.8 adds 15.5 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
             "write-unit-tests-with-local-ai": "Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the tier for agent-driven test work: it produced no patch in any of 50 blind SWE-bench Verified tries, and it decodes slower than Lite.",

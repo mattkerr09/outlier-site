@@ -93,7 +93,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <ol>
 <li><strong>Install Outlier.</strong> Per the install guide. macOS 15+ Apple Silicon, 24 GB RAM minimum for Core.</li>
 <li><strong>Switch to Code mode.</strong> The mode toggle is in the chat composer. The system prompt is tuned for terse code-first responses.</li>
-<li><strong>Open a project.</strong> Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>.</li>
+<li><strong>Open a project.</strong> Use the project chip to scope context to a folder.</li>
 <li><strong>Ask for a focused review.</strong> Quote a single function. Bigger asks blow the context budget on smaller tiers.</li>
 </ol>
 <h2>What is the specific thing to know about this guide?</h2>
@@ -104,9 +104,9 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <p>Hosted coding assistants stream from a remote endpoint that your code went to. Outlier streams from a local sidecar at <code>127.0.0.1:8766</code>.</p>
 <h2>What does this guide <em>not</em> claim about &ldquo;how to run a local coding assistant on a mac&rdquo;?</h2>
 <p>This guide does not claim feature parity with cloud-side workflows for &ldquo;how to run a local coding assistant on a mac&rdquo;. Specifically, the product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
-<h2>What is different about Code mode versus chat?</h2><p>Code mode ships with a terser system prompt, a lower default sampling temperature, and a default project-scope chip that respects <code>.outlierignore</code>. The agent loop has manual approval on as the default; auto-approve and sandboxed modes are settings, not the default. The reason that distinction is non-trivial is that the agent loop can run shell commands; manual approval is the safe choice when starting out.</p>
+<h2>What is different about Code mode versus chat?</h2><p>Code mode ships with a terser system prompt, a lower default sampling temperature, and a default project-scope chip. The agent loop has manual approval on as the default; auto-approve and sandboxed modes are settings, not the default. The reason that distinction is non-trivial is that the agent loop can run shell commands; manual approval is the safe choice when starting out.</p>
 <h2>Where does this guide fit in the rest of the lineup?</h2>
-<p>Code mode pairs naturally with the project chip and the .outlierignore file. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.</p>
+<p>Code mode pairs naturally with the project chip. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.</p>
 <h2>One unique number</h2>
 <p>4 steps. Once the model is downloaded your chats and files stay on your Mac. Core is one model; the separate Code entry that shared its safetensors has been folded back in.</p>
 
