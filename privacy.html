@@ -58,7 +58,8 @@
   <div class="wrap">
     <a class="back" href="/">← Back to Outlier</a>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 2026-11-02 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Last updated: 2026-11-04 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Changed 2026-11-04: the price check now says it asks whether the sale is on, and a paragraph about checkout payment options that do not apply at these prices is gone.</p>
     <p class="updated">Changed 2026-11-02: removed Sled, the affiliate-attribution script, and the cookie it could set.</p>
     <p class="updated">Changed 2026-10-31: added how agent commands behave when web is off (they ask before reaching the internet).</p>
     <p class="dim">2026-09-29: the list of what leaves your Mac was incomplete. Added three things the app already did: the price check when you open an upgrade window, the daily license re-check, and the services you connect yourself (an MCP server, a Google Custom Search key, a Gist import). None of them is new.</p>
@@ -93,7 +94,7 @@
       <li><strong>Agent commands with web off</strong>: the agent has no web search, web pages or web-connected tools, and a command that downloads or installs from the internet asks you first, every time; if you approve it, it can reach the internet and nothing else on your Mac.</li>
       <li><strong>Web search</strong>: only when you toggle 🌐 search on for a turn. Sends your search query (not your full prompt history) to DuckDuckGo, Mojeek, and Wikipedia (and, during Deep Research only, additionally Crossref, OpenAlex, StackExchange, and Hacker News / Algolia). Results are then fed back into the local model.</li>
       <li><strong>App update check</strong>: Outlier periodically polls <a href="https://github.com/Outlier-host/outlier-app-releases/releases/latest/download/latest.json" target="_blank" rel="noopener noreferrer">a public GitHub URL</a> for new release metadata. HTTP GET only. Update payloads are cryptographically signed (minisign) and verified before install.</li>
-      <li><strong>The price in an upgrade window</strong>: when you open a window that offers Pro, the app asks <code>kerr-lead-agent.kerrco.workers.dev</code> whether founding seats are left, so it can show the right price. The request names the site and nothing else: no license key, no device id, nothing you typed. It is never sent on a timer.</li>
+      <li><strong>The price in an upgrade window</strong>: when you open a window that offers Pro, the app asks <code>kerr-lead-agent.kerrco.workers.dev</code> whether the sale is on, so it can show the right price. The request names the site and nothing else: no license key, no device id, nothing you typed. It is never sent on a timer.</li>
       <li><strong>Founders / Pro license activation</strong>: when you paste your license key into Settings &rarr; license, the key is sent to the vendor that issued it: <code>live.dodopayments.com</code> for keys bought now, or <code>api.polar.sh</code> for keys bought before 23 August 2026. The app decides from the key itself and sends it to one vendor only, along with a device name so the seat can be counted against your three activations. After that the app re-checks the key with the same vendor at startup and once a day; if the vendor can't be reached, Pro keeps working.</li>
     </ul>
     <p class="dim">The in-app Privacy Ledger (Settings → Privacy → Privacy ledger) lists the app&rsquo;s built-in destinations, the license check and the upgrade-window price check included (from version 1.11.866). It is kept by hand from the app&rsquo;s own network calls, and a test checks it against the hosts the app&rsquo;s code actually contacts.</p>
@@ -154,7 +155,7 @@
     </ul>
 
     <h2>Payments</h2>
-      <p>Paid tiers (Pro, the Outlier Lifetime Licence $49) are processed by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer">Dodo Payments</a>, which handles payment, licence issuance and the customer portal. Purchases made before 23 August 2026 were processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a> and those licences remain valid. We never see your card details. If Dodo offers an instalment option at checkout (Klarna or Afterpay, where they operate) that agreement is between you and the provider, who will run their own checks; Outlier is not party to it and receives only confirmation that the order was paid.</p>
+      <p>Paid tiers (Pro, the Outlier Lifetime Licence $49) are processed by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer">Dodo Payments</a>, which handles payment, licence issuance and the customer portal. Purchases made before 23 August 2026 were processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a> and those licences remain valid. We never see your card details.</p>
 
     <h2>Children</h2>
     <p>Outlier is not directed at children under 13.</p>
@@ -169,7 +170,7 @@
     <p class="dim">This policy is plain English. If a lawyer reading it tells you something is missing, email and I'll add it.</p>
     <div class="cta">
       <h3>Try Outlier free</h3>
-      <p>Free: Nano + Lite. Pro: $49 once. macOS 15+. Refund window: 30 days, no questions asked.</p>
+      <p>Free: Nano + Lite. Pro: $49 once<span data-pbox-founding hidden>; Black Friday price, all of November: $24.50 once, until 30 November</span>. macOS 15+. Refund window: 30 days, no questions asked.</p>
       <a class="btn" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=privacy&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.990/Outlier-1.11.990-arm64.dmg" rel="nofollow">Download free (276 MB)</a> <a class="btn ghost" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=privacy-end" rel="nofollow">Buy Pro</a>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
@@ -177,6 +178,12 @@
 <div data-founding data-was="$49" data-now="$24.50" hidden></div>
 <script data-founding-ends="2026-12-01T07:59:00Z">(function(){var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
 <script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
 <div class="foot"><p>Made by <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company</a></p></div>
 <script>
 /* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
