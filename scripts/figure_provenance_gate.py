@@ -286,7 +286,9 @@ def check_tier_decode_sitewide(root):
     mp = root / "seo" / "_data" / "models.csv"
     want = {r["tier_id"]: float(r["m1_ultra_toks"]) for r in csv.DictReader(mp.open())
             if (r.get("m1_ultra_toks") or "").strip()}
-    TIER = re.compile(r"\b(Nano|Lite|Quick|Core|Code|Compact|Vision|Plus|397B|Gemma 4|Qwen ?3\.6|Qwen3\.5-4B|"
+    # 11-04: "Quick(?! answer)": the page's own "Quick answer" label is not the Quick tier. A measured figure in a quick
+    # answer (the 4-bit vs 8-bit page: Qwen3-8B at 79.0 tokens a second) was read as a Quick-tier claim.
+    TIER = re.compile(r"\b(Nano|Lite|Quick(?! answer)|Core|Code|Compact|Vision|Plus|397B|Gemma 4|Qwen ?3\.6|Qwen3\.5-4B|"
                       r"Qwen3\.5-9B|Qwen ?3\.8|26B-A4B)\b")         # case-sensitive: "fenced-code" is not the Code tier
     OTHER_SILICON = re.compile(r"\bM[234]\b|\bM1 (Pro|Max)\b|\bA1[0-9]\b|iPhone|iPad", re.I)
     # "tokens a second" is the site's fourth spelling (the how-to model pages); a scan that misses it misses them
