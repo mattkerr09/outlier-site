@@ -46,6 +46,9 @@ CHECKS = [
     ("old price $249", re.compile(r"\$249(?!\d|[.,]\d)")),
     ("macOS 26 as the requirement", re.compile(r"macOS 26(?!\.\d)")),
     ("build 1.11.945", re.compile(r"1\.11\.945")),
+    # 11-04 (CEO, audit B6): the /seo/ template loaded the OLD Plausible tag (data-domain + script.js) while every other
+    # page loads the per-site snippet; one tag everywhere, so the old one fails here.
+    ("old Plausible tag", re.compile(r"plausible\.io/js/script\.js")),
 ]
 
 #: A passage that SAYS the price is a former one: "the former price", "old price", "price was", "was $249",
@@ -133,6 +136,7 @@ def self_check() -> int:
                            "<p>Pro: $249 once</p>", "<li>$249, then $124.50</li>", "$249/month"],
         "macOS 26 as the requirement": ["Apple Silicon, macOS 26 or later.", "signed DMG on macOS 26+ Apple Silicon.",
                                         "Needs macOS 26."],
+        "old Plausible tag": ['<script defer data-domain="outlier.host" src="https://plausible.io/js/script.js"></script>'],
         "build 1.11.945": ['<p class="byline">Last updated 2026-10-19 &middot; Outlier v1.11.945</p>',
                            "releases/download/v1.11.945/Outlier-1.11.945-arm64.dmg"],
     }
