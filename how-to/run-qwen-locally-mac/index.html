@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac (2026) | Outlier", "description": "Run Qwen on Apple Silicon: a quantized GGUF in Ollama or LM Studio sized to your RAM, or Outlier, whose models are mostly Qwen-based. Steps, RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-10-19", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run Qwen locally on a Mac (2026) | Outlier", "description": "Run Qwen on Apple Silicon: a quantized GGUF in Ollama or LM Studio sized to your RAM, or Outlier, whose models are mostly Qwen-based. Steps, RAM table.", "datePublished": "2026-06-15", "dateModified": "2026-11-04", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/run-qwen-locally-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run Qwen locally on a Mac", "item": "https://outlier.host/how-to/run-qwen-locally-mac/"}]}
@@ -153,7 +153,7 @@
     <h1>How to run Qwen locally on a Mac</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-06-15</span>
-      <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
@@ -204,7 +204,7 @@
     </ol>
     <p>Either way: pick the variant (a code-tuned Qwen for programming), pick a size from the table, download once, and you're offline-capable from then on. Other open runners like Jan (open-source, MIT) and GPT4All follow the same GGUF pattern if you want to shop around, and you can <a href="https://outlier.host/how-to/install-local-ai-on-mac/">walk the full install</a> step by step.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Qwen is published as open weights by Alibaba and runs locally as quantized GGUF through Ollama and LM Studio (both free; LM Studio also runs Apple's MLX format on Mac). Outlier's own models are built on the Qwen family, with a Plus tier that references a Qwen3.5-397B-class model, and the weights are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>.</div>
+    <div class="receipts"><strong>Receipts:</strong> Qwen is published as open weights by Alibaba and runs locally as quantized GGUF through Ollama and LM Studio (both free; LM Studio also runs Apple's MLX format on Mac). Outlier's own models are built on the Qwen family, with a Plus tier that references a Qwen3.5-397B-class model, and the weights are public on HuggingFace: Nano, Lite, Quick and Core in <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">Outlier's own repos</a>, Plus and Vision 3.8 as public community conversions of Qwen's models.</div>
 
     <h2>The Mac-native shortcut: Outlier</h2>
     <p>If you'd rather not assemble a stack, Outlier is a Mac app whose own models are mostly Qwen-based (five of its six tiers; Quick is built on Gemma). It's one signed download with no account and no Terminal, and it works with the Wi-Fi off. The bigger difference is the engine. GGUF tools need the whole model to fit in memory. Outlier's patent-pending paged engine loads parts of a model from the SSD as they're needed, so it can run models bigger than your RAM: its 397B-class Plus tier peaks at about 14 GB of memory on a 64 GB Mac, at about 1.6 tokens a second. Nano and Lite are free. Pro ($49 once) adds the larger tiers, the coding agent and deep research, and you can import your own MLX model. The <a href="https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/">397B-on-a-Mac breakdown</a> shows how the paging works.</p>
