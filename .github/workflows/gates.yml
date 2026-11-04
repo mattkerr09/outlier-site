@@ -120,6 +120,12 @@ jobs:
           # "290 MB" in ~250 places while the 1.11.960 DMG was 276,293,500 bytes. --self-check plants a wrong figure.
           python3 scripts/download_size_gate.py --self-check
           python3 scripts/download_size_gate.py .
+          # 11-04 (audit): the /seo/ generator typed the old $249 price and "macOS 26", and 47 built pages were stamped
+          # "Outlier v1.11.945" while 1.11.990 shipped. This reads the generator's sources (_seo_build/) AND every
+          # built file under seo/ for those three, and REFUSES (does not pass) on a tree with no generator or fewer
+          # than 20 pages. --self-check plants each bad string and each look-alike ($249.50, macOS 26.3.1).
+          python3 scripts/stale_seo_fact_gate.py --self-check
+          python3 scripts/stale_seo_fact_gate.py .
           # meta_gate runs LAST of the offline set: it proves the gates above
           # cannot report a false clean, by running each against an empty tree.
           python3 scripts/meta_gate.py .
