@@ -118,7 +118,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Gemma 4 vs Qwen 3.6 on a Mac: which one to run", "description": "Gemma 4 26B vs Qwen 3.6 27B on an M1 Ultra, measured: same file size, Gemma faster on long answers, Qwen ahead on knowledge and on real code bugs.", "datePublished": "2026-10-10", "dateModified": "2026-10-19", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/vs/gemma-4-vs-qwen-3-6/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Gemma 4 vs Qwen 3.6 on a Mac: which one to run", "description": "Gemma 4 26B vs Qwen 3.6 27B on an M1 Ultra, measured: same file size, Gemma faster on long answers, Qwen ahead on knowledge and on real code bugs.", "datePublished": "2026-10-10", "dateModified": "2026-11-04", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/vs/gemma-4-vs-qwen-3-6/"}, "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Compare", "item": "https://outlier.host/vs/"}, {"@type": "ListItem", "position": 3, "name": "Gemma 4 vs Qwen 3.6 on a Mac: which one to run", "item": "https://outlier.host/vs/gemma-4-vs-qwen-3-6/"}]}
@@ -155,7 +155,7 @@
     <h1>Gemma 4 vs Qwen 3.6 on a Mac: which one to run</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr &middot; solo-built in Grand Rapids &middot; published 2026-10-10</span>
-      <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
@@ -221,7 +221,7 @@
         </tbody>
     </table>
     <p>The two cross at about 85 tokens. A one-line answer comes back sooner from Qwen. A long draft comes back much sooner from Gemma: 1,000 tokens in about 18 seconds against about 47.</p>
-    <p>Treat Table 3 as a sketch. I computed it from the two measured numbers for each model, I did not time each length. The fixed wait came from a short prompt sent straight to the engine on build 1.11.669, and I have not re-measured it on 1.11.912. A new chat in the app adds Outlier's own system prompt, and I did not time Gemma's first word there. <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac</a> has the Qwen side of that wait.</p>
+    <p>Treat Table 3 as a sketch. I computed it from the two measured numbers for each model, I did not time each length. The fixed wait came from a short prompt sent straight to the engine on build 1.11.669, and I have not re-measured it since. A new chat in the app adds Outlier's own system prompt, and I did not time Gemma's first word there. <a href="https://outlier.host/data/local-ai-time-to-first-token-mac/">Time to first token on a Mac</a> has the Qwen side of that wait.</p>
 
     <h2>How good each one is</h2>
     <p>Same Mac, same app, the same questions where I could manage it. Where I could not, the sample column says so.</p>
@@ -247,7 +247,7 @@
 
     <h3>Real repositories</h3>
     <p>This is the big gap. Given a real bug in a real project and left to find the fix, Qwen fixed 23 of 50 in a blind SWE-bench Verified run. Gemma fixed none. Its patches were not wrong. In all 50 tries its agent never wrote one, so nothing was graded. An earlier run on a different set of 30 tasks gave 0 of 30, with 29 of those stalling without taking any action. I wrote up the pattern in <a href="https://outlier.host/learn/chat-coding-vs-agentic-coding/">chat coding vs agentic coding</a>.</p>
-    <p>Read that as a result about Gemma inside Outlier's agent loop. It says the pairing does not work for agent coding in my harness. It does not say Gemma cannot do it in someone else's, and I have not tried another. The short-code scores above say the model can write code. That is why Core is the default for agent work. These runs were on builds 1.11.757 and 1.11.788, and I have not re-run them on 1.11.912.</p>
+    <p>Read that as a result about Gemma inside Outlier's agent loop. It says the pairing does not work for agent coding in my harness. It does not say Gemma cannot do it in someone else's, and I have not tried another. The short-code scores above say the model can write code. That is why Core is the default for agent work. These runs were on builds 1.11.757 and 1.11.788, and I have not re-run them on a later build.</p>
 
     <h2>Which one I would run</h2>
     <ul>
