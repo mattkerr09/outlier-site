@@ -104,7 +104,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to use AI offline on your Mac", "description": "Most AI dies when Wi-Fi drops. The offline path on a Mac: one signed download, a model on your disk, Wi-Fi off, still answering. Test it in Airplane Mode.", "datePublished": "2026-06-15", "dateModified": "2026-10-19", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/use-ai-offline-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to use AI offline on your Mac", "description": "Most AI dies when Wi-Fi drops. The offline path on a Mac: one signed download, a model on your disk, Wi-Fi off, still answering. Test it in Airplane Mode.", "datePublished": "2026-06-15", "dateModified": "2026-11-04", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/use-ai-offline-mac/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to use AI offline on your Mac", "item": "https://outlier.host/how-to/use-ai-offline-mac/"}]}
@@ -141,7 +141,7 @@
     <h1>How to use AI offline on your Mac</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-06-15</span>
-      <span class="updated-pill">Last updated 2026-10-19</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
@@ -164,12 +164,12 @@
 
     <h2>Why most AI needs the internet</h2>
     <p>The big assistants don't run on your computer. ChatGPT, and most chat apps wrapped around it, are clients: you type, the text travels to a server farm, a model you never touch produces a reply, and it travels back. The intelligence lives in someone else's building. That's why a dropped connection breaks it, why there are usage caps, and why "is the model down?" is a question that exists at all. Your device is doing roughly as much thinking as a TV remote.</p>
-    <p>Local AI flips the arrangement. The model (the actual file of weights) gets downloaded to your Mac once, and after that the work happens on your Apple Silicon chip. No request leaves the machine. The internet was only ever the delivery truck; once the model is parked in your garage, you don't need the truck again. Open-weight models (the kind published openly, like the ones on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>) make this possible because the weights are yours to keep, not a service you ping.</p>
+    <p>Local AI flips the arrangement. The model (the actual file of weights) gets downloaded to your Mac once, and after that the work happens on your Apple Silicon chip. Your chats never leave the machine. The internet was only ever the delivery truck; once the model is parked in your garage, you don't need the truck again. Open-weight models (the kind published openly, like the ones on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>) make this possible because the weights are yours to keep, not a service you ping.</p>
 
     <h2>The offline setup (four steps)</h2>
     <p>No terminal, no Docker, no account. On an Apple Silicon Mac (M1 or newer, macOS 15+):</p>
     <ol>
-      <li><strong>Download the signed app, once.</strong> Grab Outlier: one notarized <code>.dmg</code> from the site, drag it to Applications. This is the only thing that needs the internet, and only this once.</li>
+      <li><strong>Download the signed app, once.</strong> Grab Outlier: one notarized <code>.dmg</code> from the site, drag it to Applications. Together with the model download in the next step, this is all the setup that needs the internet.</li>
       <li><strong>Pick a model and let it land on your disk.</strong> Open the app and choose a tier. Nano and Lite are free and small; they download to a folder on your Mac and stay there. Bigger tiers exist if you want them, but you don't need the cloud to use what you've downloaded.</li>
       <li><strong>Ask one question while still online</strong>, just to confirm the model loaded and you're getting answers. Nothing's offline yet; you're checking the engine turns over.</li>
       <li><strong>Cut the cord.</strong> Turn Wi-Fi off (or flip on Airplane Mode), then keep chatting. The answers come from the model already on your disk, computed on your chip. No reconnect, no "you're offline" wall.</li>
@@ -181,7 +181,7 @@
     <ul>
       <li><strong>Flip on Airplane Mode.</strong> Menu bar → turn Wi-Fi off, and disable Bluetooth too if you want to be strict. The Mac is now an island.</li>
       <li><strong>Ask something fresh.</strong> Pose a new question you haven't asked before, so there's no cached answer to lean on.</li>
-      <li><strong>Watch it answer anyway.</strong> The reply streams in with the radio off. If you want to be thorough, open Activity Monitor's Network tab while you ask: a truly local model sends nothing.</li>
+      <li><strong>Watch it answer anyway.</strong> The reply streams in with the radio off. If you want to be thorough, open Activity Monitor's Network tab while you ask: a truly local model sends none of what you type.</li>
     </ul>
     <p>Run the same test on a cloud app and it fails immediately, which is the point. Offline isn't a setting you trust; it's a thing you can see. Outlier runs with Wi-Fi off because the model is genuinely on your machine, not as a feature toggle, but because there's nowhere else for the work to happen.</p>
     <div class="receipts"><strong>Receipts:</strong> Inference (the per-query work an assistant does when you talk to it) is roughly 80–90% of AI's compute load, per <a href="https://www.technologyreview.com/2025/05/20/1116327/ai-energy-usage-climate-footprint-big-tech/" target="_blank" rel="noopener">MIT Technology Review (2025)</a>. Cloud AI ships that work to a data center every single message; offline AI does it on the chip you already own, which is why the network can be off. Outlier's weights are publicly inspectable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener">HuggingFace</a>: open files, not a remote service.</div>

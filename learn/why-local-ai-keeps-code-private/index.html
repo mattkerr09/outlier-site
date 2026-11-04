@@ -104,13 +104,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Why local AI keeps your code private","description":"A technical walkthrough of what 'private code' actually means with a local AI tool.","datePublished":"2026-05-19","dateModified":"2026-05-20","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/why-local-ai-keeps-code-private/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Why local AI keeps your code private","description":"A technical walkthrough of what 'private code' actually means with a local AI tool.","datePublished":"2026-05-19","dateModified":"2026-11-04","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/why-local-ai-keeps-code-private/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Why local AI keeps your code private", "item": "https://outlier.host/learn/why-local-ai-keeps-code-private/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is local AI more private than cloud AI?", "acceptedAnswer": {"@type": "Answer", "text": "Because the model runs on your Mac, your prompts and code never travel to a third-party server. With wifi off, the workflow still runs."}}, {"@type": "Question", "name": "Does a local AI tool ever send my code anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "Not for inference. Networks are used only for model downloads, app updates, and any cloud connectors you opt into."}}, {"@type": "Question", "name": "Who needs local AI most?", "acceptedAnswer": {"@type": "Answer", "text": "Anyone under data-handling rules in healthcare, finance, legal, or defense, and anyone working with pre-public IP or secrets."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Why is local AI more private than cloud AI?", "acceptedAnswer": {"@type": "Answer", "text": "Because the model runs on your Mac, your prompts and code never travel to a third-party server. With wifi off, the workflow still runs."}}, {"@type": "Question", "name": "Does a local AI tool ever send my code anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "Not for inference. The app goes online for model downloads, update checks, the price in an upgrade window and, on Pro, the licence check, and none of those carry your code. Web search and cloud connectors send requests only if you turn them on."}}, {"@type": "Question", "name": "Who needs local AI most?", "acceptedAnswer": {"@type": "Answer", "text": "Anyone under data-handling rules in healthcare, finance, legal, or defense, and anyone working with pre-public IP or secrets."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -141,14 +141,14 @@
     <h1>Why local AI keeps your code private</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-05-20</span>
+      <span class="updated-pill">Last updated 2026-11-04</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
         <li>The model runs on your Mac. No third-party server ever sees your prompt or the response.</li>
-        <li>Networks get touched for three things only: model downloads, app updates, and connectors you opt into.</li>
+        <li>Your prompts, files and chats never leave your Mac. The app goes online to download models, check for updates, show the price in an upgrade window and, on Pro, check your licence key. Web search and connectors send requests only when you turn them on.</li>
         <li>Want proof? Flip on airplane mode. Chat, agent, file edits, and project memory keep working.</li>
         <li>This matters most if you're in a regulated industry (HIPAA, finance, defense) or sitting on pre-public IP.</li>
       </ul>
@@ -199,10 +199,11 @@
     <h2>Where local tools do still talk to networks</h2>
     <p>Let's be straight about it. Local tools do hit the internet for a few things. None of them involve your code:</p>
     <ul>
-      <li><strong>Initial model download.</strong> The first time you use a model, its weights come down from HuggingFace. Once they're on disk, inference needs no network at all. Outlier grabs Nano (~3 GB) on first launch and pulls bigger tiers only when you ask for them.</li>
+      <li><strong>Initial model download.</strong> The first time you use a model, its weights come down from HuggingFace. Once they're on disk, inference needs no network at all. Outlier grabs Nano (2.37 GB) on first launch and pulls bigger tiers only when you ask for them.</li>
       <li><strong>App updates.</strong> The app checks for new versions now and then. You can switch that off.</li>
-      <li><strong>Website analytics.</strong> The marketing site runs Plausible, which is privacy-friendly and cookie-free. The app itself never phones home with usage data.</li>
-      <li><strong>Optional connectors.</strong> Opt into a web-search MCP tool, a Slack integration, or some cloud MCP server and those make their own calls, all clearly labeled. They're off until you turn them on.</li>
+      <li><strong>Price and licence checks.</strong> Opening an upgrade window asks Outlier's server whether the sale is on. On Pro, the app re-checks your licence key at startup and once a day, and keeps working if that check can't connect. Neither sends anything you typed.</li>
+      <li><strong>Website analytics.</strong> The marketing site runs Plausible, which sets no cookies and stores no IP addresses, and the Meta pixel, which sets a cookie (<code>_fbp</code>) and does track across sites. The app itself never phones home with usage data.</li>
+      <li><strong>Optional connectors.</strong> Turn on web search (Pro), or opt into a web-search MCP tool, a Slack integration, or some cloud MCP server and those make their own calls, all clearly labeled. They're off until you turn them on.</li>
     </ul>
 
     <h2>The verification test</h2>
@@ -225,7 +226,7 @@
       </div>
       <div class="faq-item">
         <h3>Does a local AI tool ever send my code anywhere?</h3>
-        <p>Not for inference. Networks are used only for model downloads, app updates, and any cloud connectors you opt into.</p>
+        <p>Not for inference. The app goes online for model downloads, update checks, the price in an upgrade window and, on Pro, the licence check, and none of those carry your code. Web search and cloud connectors send requests only if you turn them on.</p>
       </div>
       <div class="faq-item">
         <h3>Who needs local AI most?</h3>

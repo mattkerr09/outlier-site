@@ -1002,9 +1002,11 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
                 f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the practical "
                 f"consequences are tail-latency variance (the network adds unbounded variance per turn) "
                 f"and the {u['name']} prompts leaving your Mac on every request. Outlier&rsquo;s chat "
-                f"path on the {_tier_name(rec_tier)} tier issues no outbound HTTPS once the model is on disk; the "
-                f"only network request in the lifecycle is the one-time {by_tier_disk(rec_tier)} GB tier "
-                f"download from Hugging Face.</p>"
+                f"path on the {_tier_name(rec_tier)} tier issues no outbound HTTPS once the model is on disk, and your "
+                f"chats, files and prompts never leave the Mac. The app does go online for a few other things: "
+                f"the one-time {by_tier_disk(rec_tier)} GB tier download from Hugging Face, the update check, "
+                f"the price shown when an upgrade window opens and, on Pro, the licence check. Web search goes "
+                f"out only if you turn it on (Pro).</p>"
             )
         else:
             # No network per turn on either side, so no tail-latency or provider-logging
@@ -1014,8 +1016,10 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
                 f"<p>{privacy_axis}. For a {u['name']} workflow against {c['short_name']}, the prompt "
                 f"stays on the machine on both sides, so neither tail latency nor provider-side "
                 f"logging separates them. Outlier&rsquo;s chat path on the {_tier_name(rec_tier)} tier issues no "
-                f"outbound HTTPS once the model is on disk; the only network request in the lifecycle "
-                f"is the one-time {by_tier_disk(rec_tier)} GB tier download from Hugging Face.</p>"
+                f"outbound HTTPS once the model is on disk, and your chats, files and prompts never leave the Mac. "
+                f"The app does go online for a few other things: the one-time {by_tier_disk(rec_tier)} GB tier "
+                f"download from Hugging Face, the update check, the price shown when an upgrade window opens and, "
+                f"on Pro, the licence check. Web search goes out only if you turn it on (Pro).</p>"
             )
         body.append(f"<h2>Which Outlier tier handles {u['name']} best as an alternative to {c['short_name']}?</h2>")
         body.append(
@@ -1121,11 +1125,11 @@ def build_howto_pages() -> list[dict]:
           ("Open a project", "Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>."),
           ("Ask for a focused review", "Quote a single function. Bigger asks blow the context budget on smaller tiers.")]),
         ("keep-prompts-private-on-mac", "How to keep prompts private on a Mac",
-         "Why local-only inference is the default for Outlier, and how to verify nothing is leaving the device.",
+         "Why local-only inference is the default for Outlier, and how to check what is leaving the device.",
          [("Install Outlier", "Apple-signed and notarized; bundle includes the entire inference stack."),
           ("Turn web off", "Turn the 🌐 web switch in the composer off. Then chat sends nothing out, an agent command that downloads from the internet asks you first, and the rest of the app's traffic is model downloads and the update check."),
-          ("Use Little Snitch or LuLu to verify", "The chat path makes no outbound requests once the model is downloaded."),
-          ("Audit the bundle", "The signed binary is reproducible from the public commit on GitHub.")]),
+          ("Use Little Snitch or LuLu to verify", "The chat path makes no outbound requests once the model is downloaded. You will still see the app's own connections: the update check (GitHub), the price check while an upgrade window is open, and on Pro the licence check. None of them carries what you typed."),
+          ("Audit the traffic", "The app's source is not public, so a network monitor is the audit. The model weights are public on Hugging Face (Outlier-Ai).")]),
         ("free-up-disk-space-for-large-models", "How to free up disk space for large local models",
          "The Plus tier is 209 GB. Strategies for finding the room without losing your real data.",
          [("Inspect Hugging Face cache", "<code>~/.cache/huggingface/</code> often holds duplicate snapshots."),
@@ -1188,7 +1192,7 @@ def build_howto_pages() -> list[dict]:
             ("<p>The chat path in v1.11.469 calls only <code>http://127.0.0.1:8766</code>: the "
              "FastAPI sidecar bound to localhost. The Tauri Content Security Policy in "
              "<code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>",
-             "Disabling search drops outbound traffic to zero on the chat path; the only remaining network is the model-download check, which can be paused."),
+             "Turning web off stops your search queries leaving; the connections that remain are the update check and, on Pro, the licence check."),
         "free-up-disk-space-for-large-models":
             ("<p>The Plus tier alone is 209 GB on disk. A typical Mac with 512 GB total storage will "
              "feel pressure once the OS, Xcode, Photos, and Plus weights are all present.</p>"
@@ -1248,7 +1252,7 @@ def build_howto_pages() -> list[dict]:
             "<h2>How can I prove no prompt is leaving the device?</h2>"
             "<p>Run Outlier with the network monitor of your choice (Little Snitch, LuLu, "
             "<code>pktap</code>). Once the model is downloaded, send a chat message with web search "
-            "disabled. The expected packet count to any non-loopback destination is zero. The "
+            "disabled. No non-loopback packet should carry your message. You may still see the app's own connections (the update check, the price check while an upgrade window is open, and on Pro the licence check). The "
             "loopback traffic on <code>127.0.0.1:8766</code> is the front end speaking to the local "
             "FastAPI sidecar; that is the entire chat path.</p>",
         "free-up-disk-space-for-large-models":
@@ -1297,7 +1301,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                f"<p>Apple Silicon Mac, macOS 26 or later, and for {h1.lower()} the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). For {slug.replace('-', ' ')}, those are the minimums to load a tier; a long agent session needs more. Internet is required only for the one-time model download.</p>",
+                f"<p>Apple Silicon Mac, macOS 26 or later, and for {h1.lower()} the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). For {slug.replace('-', ' ')}, those are the minimums to load a tier; a long agent session needs more. You need the internet to download each model (and once to activate a Pro key); after that, chat works offline.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
@@ -1310,7 +1314,7 @@ def build_howto_pages() -> list[dict]:
             "install-outlier-on-mac": "<li>Gatekeeper prompts on first launch surprise users; the DMG is Developer-ID-signed (cert <code>9N3Z6J63T4</code>), so right-click + Open clears it permanently.</li><li>Some macOS versions move the app to a quarantine folder; <code>xattr -d com.apple.quarantine /Applications/Outlier.app</code> bypasses this.</li>",
             "download-a-model-tier": "<li>Hugging Face download interrupted partway leaves a half-checkpoint; the picker UI detects this on next launch and offers to resume.</li><li>Slow networks make the Plus tier&rsquo;s 209 GB pull effectively a multi-hour task.</li>",
             "run-a-local-coding-assistant-on-mac": "<li>The coding agent is a Pro feature: the free tiers (Nano and Lite) are chat only. For the agent, and for top code quality, you need Pro, which includes Core.</li><li>Project chip context can blow the window if the folder is large.</li>",
-            "keep-prompts-private-on-mac": "<li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs three third-party scripts (Plausible (no cookies, no IP storage), Sled for affiliate attribution, and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites) and the Tauri auto-updater makes external calls. None of the three scripts are in the desktop app; turn the auto-updater off if you want strict no-network. The full list is on the <a href='/privacy.html'>privacy page</a>.</li>",
+            "keep-prompts-private-on-mac": "<li>If web search is left enabled, the search backend (DDG with Wikipedia fallback) reaches the network even though chat itself does not.</li><li>Telemetry: this marketing site runs two third-party scripts (Plausible (no cookies, no IP storage) and the Meta pixel, which sets an <code>_fbp</code> cookie and does track across sites), and the Tauri auto-updater makes external calls. Neither script is in the desktop app. Turn the auto-updater off and stay on Free if you want no network at all after the download; on Pro the app re-checks its licence key once a day and keeps working if that check cannot connect. The full list is on the <a href='/privacy.html'>privacy page</a>.</li>",
             "free-up-disk-space-for-large-models": "<li>Hugging Face cache may hold prior tier snapshots after an update.</li><li>The model picker&rsquo;s Delete button removes weights but leaves their config metadata; safe to ignore.</li>",
             "write-unit-tests-with-local-ai": "<li>Lite&rsquo;s code quality is good, not great; tricky tests sometimes need a manual second pass.</li><li>Long batches of tests in one prompt drop quality; break them up.</li>",
             "review-a-pull-request-locally": "<li>Very large diffs can still exceed Core&rsquo;s context window if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li>",
@@ -1324,7 +1328,7 @@ def build_howto_pages() -> list[dict]:
             "install-outlier-on-mac": "<p>The cloud equivalent of installing a coding assistant is creating an account and pasting an API key. Outlier&rsquo;s install replaces both with a signed DMG.</p>",
             "download-a-model-tier": "<p>Cloud-side model selection happens in a dropdown bound to a billing tier. Outlier&rsquo;s model picker happens once, against on-disk weights you fetched yourself.</p>",
             "run-a-local-coding-assistant-on-mac": "<p>Hosted coding assistants stream from a remote endpoint that your code went to. Outlier streams from a local sidecar at <code>127.0.0.1:8766</code>.</p>",
-            "keep-prompts-private-on-mac": "<p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;packets do not leave the device&rsquo;, which is verifiable with a network monitor.</p>",
+            "keep-prompts-private-on-mac": "<p>The cloud privacy story is &lsquo;trust the provider&rsquo;. The Outlier privacy story is &lsquo;your prompts and files do not leave the device&rsquo;, which you can check with a network monitor.</p>",
             "free-up-disk-space-for-large-models": "<p>Cloud models do not consume your disk. They consume your wallet per token instead. The trade-off is direct.</p>",
             "write-unit-tests-with-local-ai": "<p>Hosted test-writing tools log your function-under-test alongside the prompt. Outlier&rsquo;s local path leaves no log on a third-party server.</p>",
             "review-a-pull-request-locally": "<p>Cloud PR review tools transmit the diff. Outlier&rsquo;s Code mode keeps it on the Mac, which matters when the diff has untested mitigations or unreleased features.</p>",
@@ -1366,7 +1370,7 @@ def build_howto_pages() -> list[dict]:
             "install-outlier-on-mac": "After install, the model picker shows six tiers in display order: Nano (2.37 GB), Lite (5.04 GB), Quick (15.61 GB), Core (15.13 GB), Vision 3.8 (15.5 GB), and Plus (209 GB). Tiers above the Mac&rsquo;s unified-memory headroom appear greyed out.",
             "download-a-model-tier": "The Plus tier is the outlier on size: 209 GB versus the next-largest Quick at 15.61 GB. Most users start with Nano or Lite, then graduate to Core once they have a use case that exercises the heavier weights.",
             "run-a-local-coding-assistant-on-mac": "Code mode pairs naturally with the project chip and the .outlierignore file. A typical session opens a single file, asks for a refactor or test scaffold, then iterates inline; the chat history persists across mode switches.",
-            "keep-prompts-private-on-mac": "If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and leave the 🌐 web switch off. Once both are off, the running app touches only loopback for the chat path, and an agent command that downloads from the internet asks you first.",
+            "keep-prompts-private-on-mac": "If your threat model excludes even outbound HTTPS, disable the auto-updater (Settings &gt; General &gt; Updates) and leave the 🌐 web switch off. Once both are off, the chat path touches only loopback (on Pro the app still re-checks its licence key once a day), and an agent command that downloads from the internet asks you first.",
             "free-up-disk-space-for-large-models": "A clean Outlier install with Nano + Lite costs about 8 GB. Adding Core lifts that to 23 GB, Vision 3.8 adds 15.5 GB, Quick adds 16 GB, Plus alone adds 209 GB. Quick numbers in the model picker.",
             "write-unit-tests-with-local-ai": "Lite is good enough for most pytest scaffolds; Core is the upgrade for tricky fixtures or property-based tests. Quick is not the right tier for any test work despite its fast tok/s.",
             "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
@@ -1377,7 +1381,7 @@ def build_howto_pages() -> list[dict]:
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
         body.append("<h2>One unique number</h2>")
-        unique_claim = f"{len(steps)} steps, zero network requests after the model is downloaded. {extra_unique}"
+        unique_claim = f"{len(steps)} steps. Once the model is downloaded your chats and files stay on your Mac. {extra_unique}"
         body.append(f"<p>{unique_claim}</p>")
         faq = [
             ("Do I need to create an account?", "No. The free tiers (Nano, Lite) work without any account or license key."),
