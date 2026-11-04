@@ -96,6 +96,47 @@ PRICE = _price_usd()                                  # "$49"
 OS_PLUS = product_box.OS_REQ                          # "macOS 15+"
 OS_OR_LATER = OS_PLUS.rstrip("+") + " or later"       # "macOS 15 or later"
 
+
+# 2026-11-04 (audit): this file said, in two places, that the weights of Outlier's tiers live on Hugging Face under
+# Outlier-Ai. That holds for Nano, Lite, Quick and Core only: Plus and Vision 3.8 download from public mlx-community
+# conversions of Qwen's models. Which tier lives where is read from data/tier-weight-sources.json (read from the app's
+# catalog and the Hugging Face API on 2026-11-04), like the price above, and never typed into a sentence here.
+_WEIGHT_ORDER = ("nano", "lite", "quick", "compact", "plus", "vision38")
+
+
+def _weight_sources() -> dict:
+    return json.loads((ROOT / "data" / "tier-weight-sources.json").read_text(encoding="utf-8"))["tiers"]
+
+
+def _and_list(names: list[str]) -> str:
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+
+
+def _weight_tiers(own: bool) -> str:
+    """"Nano, Lite, Quick and Core" (own=True) or "Plus and Vision 3.8" (own=False), in lineup order."""
+    t = _weight_sources()
+    return _and_list([t[k]["display"] for k in _WEIGHT_ORDER if t[k]["outlier_own_repo"] is own])
+
+
+def _weight_repo(tier_id: str) -> str:
+    return _weight_sources()[tier_id]["repo"]
+
+
+def _weight_gb(tier_id: str) -> str:
+    """The download size of a tier, read from models.csv (TIER_DISK_GB below has no Vision 3.8 row)."""
+    with (ROOT / "seo" / "_data" / "models.csv").open(encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["tier_id"] == tier_id:
+                v = float(r["disk_gb"])
+                return f"{v:.2f}".rstrip("0").rstrip(".") if v < 100 else f"{int(v)}"
+    raise KeyError(f"models.csv has no disk_gb for {tier_id}")
+
+
+def _weight_sources_sentence() -> str:
+    """One sentence, for a step or a short answer: which tiers are Outlier's own repos, and where the rest come from."""
+    return (f"{_weight_tiers(True)} are Outlier&rsquo;s own public repositories on Hugging Face (Outlier-Ai); "
+            f"{_weight_tiers(False)} download from public mlx-community conversions of Qwen&rsquo;s models.")
+
 # 2026-10-13 (Bing): pages that stay live but are not indexed. Each near-duplicate group of the /seo/run and /seo/vs
 # matrix keeps ONE indexable page (5-word-shingle Jaccard >= 0.5; scripts/near_dup_gate.py). The list and the reason
 # are in seo/_data/noindex.json; a listed page gets <meta name="robots" content="noindex, follow"> and no sitemap entry.
@@ -1221,7 +1262,7 @@ def build_howto_pages() -> list[dict]:
          [("Install Outlier", "Apple-signed and notarized; bundle includes the entire inference stack."),
           ("Turn web off", "Turn the 🌐 web switch in the composer off. Then chat sends nothing out, an agent command that downloads from the internet asks you first, and the rest of the app's traffic is model downloads, the update check, the price check in an upgrade window and, on Pro, the licence check."),
           ("Use Little Snitch or LuLu to verify", "The chat path makes no outbound requests once the model is downloaded. You will still see the app&rsquo;s own connections: the update check (GitHub), the price check while an upgrade window is open, and on Pro the licence check. None of them carries what you typed."),
-          ("Audit the traffic", "The app&rsquo;s source is not public, so a network monitor is the audit. The model weights are public on Hugging Face (Outlier-Ai).")]),
+          ("Audit the traffic", "The app&rsquo;s source is not public, so a network monitor is the audit. " + _weight_sources_sentence())]),
         ("free-up-disk-space-for-large-models", "How to free up disk space for large local models",
          "The Plus tier is 209 GB. Strategies for finding the room without losing your real data.",
          [("Inspect Hugging Face cache", "<code>~/.cache/huggingface/</code> often holds duplicate snapshots."),
@@ -1269,9 +1310,11 @@ def build_howto_pages() -> list[dict]:
              "The complete install touches three locations: <code>/Applications/Outlier.app</code>, "
              "<code>~/Library/Application Support/Outlier/</code>, and <code>~/.outlier/</code>."),
         "download-a-model-tier":
-            ("<p>Each tier&rsquo;s safetensors are pulled from a public Hugging Face repository under "
-             "the <code>Outlier-Ai</code> namespace. The Plus tier is the exception: it pulls from "
-             "<code>mlx-community/Qwen3.5-397B-A17B-4bit</code> at 209 GB.</p>"
+            (f"<p>Each tier&rsquo;s safetensors are pulled from a public Hugging Face repository, none of them gated. "
+             f"{_weight_tiers(True)} are Outlier&rsquo;s own repositories, under the <code>Outlier-Ai</code> namespace. "
+             f"{_weight_tiers(False)} are not: the app pulls Plus from <code>{_weight_repo('plus')}</code> at "
+             f"{_weight_gb('plus')} GB and Vision 3.8 from <code>{_weight_repo('vision38')}</code> at "
+             f"{_weight_gb('vision38')} GB, public community conversions of Qwen&rsquo;s models.</p>"
                "<p>Check free space before starting rather than during: the picker lists each tier&rsquo;s size next to its minimum RAM, and the gap between them is wide. Nano is 2.37 GB and will sit on almost any machine; Core is 15.13 GB, Quick 15.61 GB, and Plus is 209 GB, which is more than the entire internal drive on a good many Macs still in daily use.</p>",
              "Tier sizes range from 2.37 GB (Nano) to 209 GB (Plus); the Quick tier is 15.61 GB and Core is 15.13 GB."),
         "run-a-local-coding-assistant-on-mac":

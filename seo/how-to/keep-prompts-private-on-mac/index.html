@@ -94,7 +94,7 @@ code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflo
 <li><strong>Install Outlier.</strong> Apple-signed and notarized; bundle includes the entire inference stack.</li>
 <li><strong>Turn web off.</strong> Turn the 🌐 web switch in the composer off. Then chat sends nothing out, an agent command that downloads from the internet asks you first, and the rest of the app's traffic is model downloads, the update check, the price check in an upgrade window and, on Pro, the licence check.</li>
 <li><strong>Use Little Snitch or LuLu to verify.</strong> The chat path makes no outbound requests once the model is downloaded. You will still see the app&rsquo;s own connections: the update check (GitHub), the price check while an upgrade window is open, and on Pro the licence check. None of them carries what you typed.</li>
-<li><strong>Audit the traffic.</strong> The app&rsquo;s source is not public, so a network monitor is the audit. The model weights are public on Hugging Face (Outlier-Ai).</li>
+<li><strong>Audit the traffic.</strong> The app&rsquo;s source is not public, so a network monitor is the audit. Nano, Lite, Quick and Core are Outlier&rsquo;s own public repositories on Hugging Face (Outlier-Ai); Plus and Vision 3.8 download from public mlx-community conversions of Qwen&rsquo;s models.</li>
 </ol>
 <h2>What is the specific thing to know about this guide?</h2>
 <p>The chat path calls only <code>http://127.0.0.1:8766</code>: the FastAPI sidecar bound to localhost. The Tauri Content Security Policy in <code>tauri.conf.json</code> denies remote <code>connect-src</code> origins by default.</p>
