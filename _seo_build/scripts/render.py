@@ -69,6 +69,21 @@ def _ram_first_fit(mac, need_gb) -> int | None:
 ROOT = Path(__file__).resolve().parents[2]      # outlier-site/
 DATA = ROOT / "seo" / "_data"
 
+
+# 2026-11-04 (audit): this file typed the retired price and the retired OS floor into its own sentences, so a fresh
+# render walked 10 how-to pages back to a price and an OS floor the product no longer has. Both are read from where the site already keeps
+# them, like the version below, and never typed here: the price from data/product-facts.json (synced from Dodo by
+# scripts/sync_product_facts.py), the floor from data/binary-requirements.json (measured from the installed bundle,
+# through product_box.OS_REQ). scripts/stale_seo_fact_gate.py fails the build tree if either old figure comes back.
+def _price_usd() -> str:
+    cents = json.loads((ROOT / "data" / "product-facts.json").read_text(encoding="utf-8"))["price_cents"]
+    return f"${cents // 100}" if cents % 100 == 0 else f"${cents / 100:.2f}"
+
+
+PRICE = _price_usd()                                  # "$49"
+OS_PLUS = product_box.OS_REQ                          # "macOS 15+"
+OS_OR_LATER = OS_PLUS.rstrip("+") + " or later"       # "macOS 15 or later"
+
 # 2026-10-13 (Bing): pages that stay live but are not indexed. Each near-duplicate group of the /seo/run and /seo/vs
 # matrix keeps ONE indexable page (5-word-shingle Jaccard >= 0.5; scripts/near_dup_gate.py). The list and the reason
 # are in seo/_data/noindex.json; a listed page gets <meta name="robots" content="noindex, follow"> and no sitemap entry.
@@ -162,6 +177,13 @@ META_DESCRIPTION = {
     "run/run-vision-on-m3-max-macbook-pro":
         "Outlier Vision 3.8 (27B dense, 15.5 GB) on MacBook Pro M3 Max (36, 48, 64, 96 or 128 GB, 300-400 GB/s): "
         "estimated speed, RAM headroom, install steps.",
+    # 2026-11-04: these two read the price and the OS floor from the same two sources as the rest of this file.
+    "how-to/set-up-the-companion-window":
+        "Set up Outlier's companion window, an always-on-top mini chat that reads the app you are working in. "
+        f"Runs on your Mac: Apple silicon, {OS_OR_LATER}.",
+    "how-to/upgrade-to-the-pro-tier":
+        f"Outlier Pro adds the Quick, Core, Vision 3.8 and Plus tiers for {PRICE} once, with a 30-day refund. "
+        "How to upgrade inside the app.",
 }
 
 env = Environment(
@@ -1085,7 +1107,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
             (f"Does Outlier work offline?",
              "Yes. After the one-time model download, no network is required for chat or generation."),
             (f"Which Mac do I need?",
-             "Apple Silicon, macOS 26 or later. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."),
+             f"Apple Silicon, {OS_OR_LATER}. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."),
         ]
         related = [
             {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},
@@ -1106,7 +1128,7 @@ def build_howto_pages() -> list[dict]:
     """10 how-to pages."""
     items = [
         ("install-outlier-on-mac", "How to install Outlier on a Mac",
-         "Step-by-step install for the signed Outlier DMG on macOS 26+ Apple Silicon.",
+         f"Step-by-step install for the signed Outlier DMG on {OS_PLUS} Apple Silicon.",
          [("Download the signed DMG", "Pull the latest DMG from GitHub Releases. The download is signed by Developer ID and notarized by Apple."),
           ("Open the DMG", "Double-click. macOS verifies the notarization ticket; the first-open prompt is normal for Developer ID apps."),
           ("Drag Outlier.app to Applications", "The app is self-contained; no separate Python install is required."),
@@ -1120,7 +1142,7 @@ def build_howto_pages() -> list[dict]:
           ("Switch tiers in chat", "The active tier is shown in the bottom bar of the chat window.")]),
         ("run-a-local-coding-assistant-on-mac", "How to run a local coding assistant on a Mac",
          "Use Core in code mode for code review and refactor without a network round-trip.",
-         [("Install Outlier", "Per the install guide. macOS 26+ Apple Silicon, 24 GB RAM minimum for Core."),
+         [("Install Outlier", f"Per the install guide. {OS_PLUS} Apple Silicon, 24 GB RAM minimum for Core."),
           ("Switch to Code mode", "The mode toggle is in the chat composer. The system prompt is tuned for terse code-first responses."),
           ("Open a project", "Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>."),
           ("Ask for a focused review", "Quote a single function. Bigger asks blow the context budget on smaller tiers.")]),
@@ -1163,7 +1185,7 @@ def build_howto_pages() -> list[dict]:
         ("upgrade-to-the-pro-tier", "How to upgrade to Outlier Pro",
          "Pro unlocks the Quick, Core, Vision 3.8, and Plus tiers.",
          [("Open Settings &gt; Pro", "The Pro section appears on the General tab in v1.11.469."),
-          ("Buy through Dodo Payments", "Pro is a one-time purchase: the Outlier Lifetime Licence at $249."),
+          ("Buy through Dodo Payments", f"Pro is a one-time purchase: the Outlier Lifetime Licence at {PRICE}."),
           ("Paste your license key", "Settings &gt; license &gt; Activate. The key is verified against whichever issuer sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the key."),
           ("Restart the app", "The Pro-gated tiers appear in the model picker after restart.")]),
     ]
@@ -1173,7 +1195,7 @@ def build_howto_pages() -> list[dict]:
             ("<p>The DMG is signed by Developer ID <code>9N3Z6J63T4</code> and notarized via Apple&rsquo;s "
              "notarytool service. <code>spctl --assess</code> reports <em>accepted, source=Notarized "
              "Developer ID</em> on a clean machine.</p>"
-               "<p>The first launch takes longer while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated: re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, macOS 26 or later, and Intel Macs cannot run it at all.</p>",
+               "<p>The first launch takes longer while the bundled Python framework unpacks and warms; later launches skip that step. If Gatekeeper refuses the app outright rather than showing the ordinary first-open prompt, the download was almost certainly truncated: re-pull the DMG and check the size before opening it again. Apple Silicon only: M1 or newer, " + OS_OR_LATER + ", and Intel Macs cannot run it at all.</p>",
              "The complete install touches three locations: <code>/Applications/Outlier.app</code>, "
              "<code>~/Library/Application Support/Outlier/</code>, and <code>~/.outlier/</code>."),
         "download-a-model-tier":
@@ -1301,7 +1323,7 @@ def build_howto_pages() -> list[dict]:
         description = lead
         quick = f"<p>{lead} The whole sequence below stays on the Mac.</p>"
         body = [f"<h2>What you need first for &ldquo;{h1.lower()}&rdquo;</h2>",
-                f"<p>Apple Silicon Mac, macOS 26 or later, and for {h1.lower()} the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). For {slug.replace('-', ' ')}, those are the minimums to load a tier; a long agent session needs more. You need the internet to download each model (and once to activate a Pro key); after that, chat works offline.</p>",
+                f"<p>Apple Silicon Mac, {OS_OR_LATER}, and for {h1.lower()} the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). For {slug.replace('-', ' ')}, those are the minimums to load a tier; a long agent session needs more. You need the internet to download each model (and once to activate a Pro key); after that, chat works offline.</p>",
                 "<h2>Steps</h2>", "<ol>"]
         for k, v in steps:
             body.append(f"<li><strong>{k}.</strong> {v}</li>")
@@ -1376,7 +1398,7 @@ def build_howto_pages() -> list[dict]:
             "review-a-pull-request-locally": "For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.",
             "draft-shell-scripts-with-the-nano-tier": "Nano&rsquo;s context (8K on Free, 32K on Pro) is enough for shell-script generation. The 6 GB unified-memory minimum means even an entry-level M1 Air handles this; the M4 Air is comfortable headroom.",
             "set-up-the-companion-window": "The companion sees the active app via the AX tree, not via screenshot, until the user explicitly enables Screen Recording. The Vision tier is the only one wired to the screenshot path; other tiers ignore pixel data even when present.",
-            "upgrade-to-the-pro-tier": "Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: the Outlier Lifetime Licence at $249. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the verified reply regardless of which product you bought.",
+            "upgrade-to-the-pro-tier": f"Pro unlocks Quick, Core, Vision 3.8, and Plus; the free tier is Nano + Lite. Pro is a one-time purchase. Lifetime is one-time: the Outlier Lifetime Licence at {PRICE}. Paste your license key into Settings &gt; license &gt; Activate; it is verified against the issuer that sold it (live.dodopayments.com for new purchases, api.polar.sh for keys bought before 23 August 2026) and your tier is derived from the verified reply regardless of which product you bought.",
         }
         body.append(f"<h2>Where does this guide fit in the rest of the lineup?</h2>")
         body.append(f"<p>{related_tier_lines.get(slug, 'The lineup ranges from 6 GB unified memory (Nano) to 32+ GB (Plus); pick the tier that fits the guide&rsquo;s task and your Mac.')}</p>")
