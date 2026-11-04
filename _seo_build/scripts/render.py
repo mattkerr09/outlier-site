@@ -944,7 +944,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
         if is_cloud:
             quick = (
                 f"<p>{u['one_liner']}. The {c['short_name']} category answers this with a remote model; "
-                f"Outlier answers it with the on-device {u['recommended_tier']} tier. "
+                f"Outlier answers it with the on-device {_tier_name(u['recommended_tier'])} tier. "
                 f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
             )
         else:
@@ -955,7 +955,7 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
                 f"<p>{u['one_liner']}. The {c['short_name']} category runs open weights on your own "
                 f"hardware, as Outlier does, so for {u['name']} the deciding difference is not the "
                 f"data path but what is built around the model. Outlier answers it with the on-device "
-                f"{u['recommended_tier']} tier and, with Pro, an agent loop that reads your files and runs and checks code. "
+                f"{_tier_name(u['recommended_tier'])} tier and, with Pro, an agent loop that reads your files and runs and checks code. "
                 f"This page is the side-by-side specifically for {u['name']} workloads.</p>"
             )
         rec_tier = u["recommended_tier"]
@@ -1119,7 +1119,7 @@ def build_howto_pages() -> list[dict]:
           ("Wait for the green check", "The app verifies the safetensors and tokenizer before marking the tier ready."),
           ("Switch tiers in chat", "The active tier is shown in the bottom bar of the chat window.")]),
         ("run-a-local-coding-assistant-on-mac", "How to run a local coding assistant on a Mac",
-         "Use the Code-tuned variant of the Core model for code review and refactor without a network round-trip.",
+         "Use Core in code mode for code review and refactor without a network round-trip.",
          [("Install Outlier", "Per the install guide. macOS 26+ Apple Silicon, 24 GB RAM minimum for Core."),
           ("Switch to Code mode", "The mode toggle is in the chat composer. The system prompt is tuned for terse code-first responses."),
           ("Open a project", "Use the project chip to scope context to a folder. Outlier respects <code>.outlierignore</code>."),

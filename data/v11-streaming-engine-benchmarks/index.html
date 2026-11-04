@@ -173,7 +173,7 @@
 
 
     <div class="notice">
-      <strong>Engine version note:</strong> Both streaming engines have been retired, V11 in v1.11.71 and V10 in v1.11.73, after M1 Ultra sweeps found their per-token expert streaming committed 57–58 GB of Metal-wired memory. The current shipping engine for Plus (and the Vision default) is V9 paged inference. The retired engines' numbers are kept here for transparency; new installs use V9.
+      <strong>Engine version note:</strong> Both streaming engines have been retired, V11 in v1.11.71 and V10 in v1.11.73, after M1 Ultra sweeps found their per-token expert streaming committed 57–58 GB of Metal-wired memory. The current shipping engine for Plus is V9 paged inference. The Vision rows below were measured on Vision 3.6 (Qwen3.6-35B-A3B), which was retired in v1.11.796; the Vision tier that ships now is Vision 3.8 (Qwen3.8-27B, dense, 15.5 GB). The retired engines' numbers are kept here for transparency; new installs use V9.
     </div>
 
     <p class="lead">All three of Outlier's MoE engines run on the same trick. Keep the active experts in unified memory, pull cold ones off disk. V9 paged, V10 streaming, V11 hybrid. Where they split is how they cache, and that split is what decided which one shipped. The streaming variants lost to V9 paged because their per-token streaming pattern committed far more Metal-wired memory. The raw comparison is below.</p>
@@ -182,7 +182,7 @@
     <table>
       <tbody>
         <tr><th>Hardware</th><td>M1 Ultra Mac Studio, 64 GB unified memory, <code>iogpu.wired_limit_mb=57344</code></td></tr>
-        <tr><th>Model versions</th><td>Plus = Qwen3.5-397B-A17B MLX 4-bit; Vision = Qwen3.6-35B-A3B MLX 4-bit</td></tr>
+        <tr><th>Model versions</th><td>Plus = Qwen3.5-397B-A17B MLX 4-bit; Vision (3.6, retired) = Qwen3.6-35B-A3B MLX 4-bit</td></tr>
         <tr><th>Inference stack</th><td>mlx-lm 0.31.3, MLX 0.18.x</td></tr>
         <tr><th>Aggregation</th><td>5-run mean per configuration, fresh process per run (no warm-cache bias)</td></tr>
         <tr><th>Soak runs</th><td>50-turn multi-turn workloads on Plus; 20-turn on Vision</td></tr>
@@ -202,16 +202,16 @@
     </table>
     <p>Look at the Wired Memory column. That's the one that mattered. V10 and V11 streamed experts per token, which committed 57–58 GB of Metal command-buffer memory during prefill, enough to take down a 32 GB Mac on the very first generation. The payoff was a ~30–40% tok/s bump over V9. V9 paged holds 3.6 GB Wired at 2.1 tok/s (this page's per-token protocol), 15× less. This tier exists to fit a 209 GB model on a small Mac, so footprint beats speed and V9 ships. <strong>On the 2.1 figure:</strong> that is this benchmark's own per-token RSS protocol. The pre-ship K-override sweep, run at the shipped K=20 setting over 5 prompts of 80 tokens with model load timed separately, measures 1.59 tok/s (per-prompt 1.35&ndash;1.65) and 14.04 GB peak. Where the two disagree the rest of this site publishes the lower, shipping-config number; the comparison below is kept on one protocol so the engines stay comparable to each other.</p>
 
-    <h2>Vision 35B-A3B: engine comparison</h2>
+    <h2>Vision 3.6 (35B-A3B, retired): engine comparison</h2>
     <table>
       <thead><tr><th>Engine</th><th>tok/s</th><th>RSS peak</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td>V9 paged</td><td>16.31</td><td>~18 GB</td><td><strong>current default (24 GB+ Macs)</strong></td></tr>
+        <tr><td>V9 paged</td><td>16.31</td><td>~18 GB</td><td><strong>was the default for Vision 3.6 (24 GB+ Macs)</strong></td></tr>
         <tr><td>V10 streaming K=4</td><td>6.57</td><td>~3.5 GB</td><td>opt-in (lower RAM, slower)</td></tr>
         <tr><td>V11 hybrid LRU</td><td>10.92</td><td>1.60 GB</td><td>retired v1.11.71</td></tr>
       </tbody>
     </table>
-    <p>Vision is a little different. There's still a V10 opt-in for people on tight RAM, lower footprint at the cost of speed (~6.6 tok/s), but the default is V9 at 16.31 tok/s on 24 GB+ Macs. That old 16 GB MacBook Air result leaned on V11's LRU specifically. With V11 gone, the practical floor for Vision is 24 GB.</p>
+    <p>Vision 3.6 was a little different. There was a V10 opt-in for people on tight RAM, lower footprint at the cost of speed (~6.6 tok/s), but the default was V9 at 16.31 tok/s on 24 GB+ Macs. That old 16 GB MacBook Air result leaned on V11's LRU specifically. With V11 gone, the practical floor for Vision 3.6 was 24 GB, and Vision 3.8 needs 24 GB too.</p>
 
     <h2>Soak verdict: what passed and what didn't</h2>
     <p>Here's what the 2026-05-09 soak verdict on V11 turned up over 9 cycles. The quality numbers were fine. The memory number wasn't.</p>
