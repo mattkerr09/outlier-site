@@ -237,14 +237,27 @@ r = litellm.completion(
     <h2>9 · Which parameters actually do something</h2>
     <p>A drop-in endpoint that accepts a parameter and then ignores it is worse
     than one that rejects it, because your code carries on believing the
-    constraint applied. Every field below was sent to a running 1.11.808 engine
-    and the reply read back on 1 September 2026, so this is what was observed
-    rather than what the schema permits.</p>
+    constraint applied. Every field below was sent to a running engine and the
+    reply read back: 1.11.808 on 1 September 2026, and the 1.11.996 additions on
+    5 November 2026. So this is what was observed rather than what the schema
+    permits.</p>
 
     <p><strong>Honoured: the effect was measured, not assumed.</strong></p>
     <ul>
       <li><code>temperature</code>, <code>max_tokens</code>,
-          <code>max_completion_tokens</code></li>
+          <code>max_completion_tokens</code>. Leave the limit out and the reply runs
+          as long as the model's context allows, the way the reference API does;
+          before 1.11.996 a request without one stopped at 2,048 tokens, which
+          cut off clients such as Open WebUI and Goose that never send it</li>
+      <li><code>top_k</code>, from 1.11.996. With <code>top_k: 1</code> at
+          <code>temperature: 1.5</code>, three requests came back word for word
+          the same; without it, the same three differed</li>
+      <li><code>chat_template_kwargs: {"enable_thinking": true}</code>, from
+          1.11.996, turns the model's thinking on. The reasoning arrives as
+          <code>reasoning_content</code>, separate from the answer, in streamed and
+          plain replies, and an assistant turn's <code>reasoning_content</code> sent
+          back in the history is used. Without the flag, Outlier's models answer
+          without thinking, as before</li>
       <li><code>stop</code>. Truncates the reply and comes back with
           <code>finish_reason: "stop"</code></li>
       <li><code>stream</code>: <code>text/event-stream</code>, a stable id
