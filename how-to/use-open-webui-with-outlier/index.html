@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>Use Open WebUI with a local model on Mac (2026) | Outlier</title>
+  <meta name="description" content="Open WebUI works with Outlier on your Mac: turn on Outlier&#x27;s OpenAI-compatible API, start Open WebUI with its address and key, pick a model.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-05">
+  <link rel="canonical" href="https://outlier.host/how-to/use-open-webui-with-outlier/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Use Open WebUI with a local model on Mac (2026)">
+  <meta property="og:description" content="Open WebUI works with Outlier on your Mac: turn on Outlier&#x27;s OpenAI-compatible API, start Open WebUI with its address and key, pick a model.">
+  <meta property="og:url" content="https://outlier.host/how-to/use-open-webui-with-outlier/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Use Open WebUI with a local model on Mac (2026)">
+  <meta name="twitter:description" content="Open WebUI works with Outlier on your Mac: turn on Outlier&#x27;s OpenAI-compatible API, start Open WebUI with its address and key, pick a model.">
+<style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Open WebUI send my chats anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "Not in this setup. Your chat goes from Open WebUI to Outlier on 127.0.0.1, and Outlier runs the model on your Mac. Open WebUI can make network calls of its own, such as update checks and model downloads; we ran it with OFFLINE_MODE=True and its update check off, which stops those."}}, {"@type": "Question", "name": "Which Outlier models can I pick in Open WebUI?", "acceptedAnswer": {"@type": "Answer", "text": "The ones Outlier lists at /v1/models: outlier-nano, outlier-lite, outlier-quick, outlier-compact (Core) and outlier-vision38, as far as they are downloaded on your Mac."}}, {"@type": "Question", "name": "Does this work on Outlier's free plan?", "acceptedAnswer": {"@type": "Answer", "text": "No. The OpenAI-compatible API is part of Pro; on the free plan a request to it comes back 402 feature_locked."}}]}
+  </script>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "headline": "Use Open WebUI with Outlier on your Mac", "description": "Open WebUI works with Outlier on your Mac: turn on Outlier's OpenAI-compatible API, start Open WebUI with its address and key, pick a model.", "datePublished": "2026-11-05", "dateModified": "2026-11-05", "author": {"@type": "Person", "name": "Matt Kerr"}, "mainEntityOfPage": "https://outlier.host/how-to/use-open-webui-with-outlier/"}
+  </script>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "how-to", "item": "https://outlier.host/how-to/"}, {"@type": "ListItem", "position": 3, "name": "Use Open WebUI with Outlier", "item": "https://outlier.host/how-to/use-open-webui-with-outlier/"}]}
+  </script>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><!-- meta-pixel:begin --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq('init','1592291422272376');fbq('track','PageView');</script><!-- meta-pixel:end -->
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/how-to/">how-to</a></div>
+    <h1>Use Open WebUI with Outlier on your Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-11-05</span>
+      <span class="byline">Tested 2026-11-05: Outlier 1.11.994, Open WebUI 0.13.0</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li><strong>Yes, Open WebUI works with Outlier.</strong> It talks to Outlier's OpenAI-compatible API at <code>http://127.0.0.1:8766/v1</code>, and Outlier's models show up in its model picker.</li>
+        <li>Turn the API on in Outlier (Settings → Advanced → Developer; it is part of Pro), then start Open WebUI on your Mac with that address and your Outlier key.</li>
+        <li>Run Open WebUI on the Mac itself, not in Docker: Outlier only answers requests addressed to this Mac.</li>
+        <li>Open WebUI is the window; Outlier runs the model on your Mac.</li>
+      </ul>
+    </div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-use-open-webui-with-outlier-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.994/Outlier-1.11.994-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-use-open-webui-with-outlier-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 15+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+    <h2>What we ran</h2>
+    <p>On 2026-11-05, on an M1 Ultra Mac, we started Open WebUI 0.13.0 pointed at Outlier 1.11.994. It read Outlier's model list
+    (outlier-nano, outlier-lite, outlier-quick, outlier-compact and outlier-vision38), and outlier-nano answered a question
+    in its chat. Outlier's own log shows the requests from Open WebUI: <code>GET /v1/models</code> and
+    <code>POST /v1/chat/completions</code>, every one from 127.0.0.1 and every one answered 200.</p>
+    <figure>
+      <img src="open-webui-outlier-nano.jpg" width="800" height="600" loading="lazy" style="max-width:100%;height:auto;border-radius:10px"
+           alt="Open WebUI's chat window with the model outlier-nano selected, answering why running an AI model on your own Mac keeps your notes private">
+      <figcaption>Open WebUI 0.13.0 on this Mac, answering through Outlier's outlier-nano model.</figcaption>
+    </figure>
+
+    <h2>Set it up</h2>
+    <ol>
+      <li><strong>Turn on Outlier's API.</strong> In Outlier: Settings → Advanced → Developer → OpenAI-compatible API. Flip the toggle and copy the API key.</li>
+      <li><strong>Install Open WebUI in its own Python environment.</strong> It needs Python 3.11 or 3.12. With its dependencies it took 2.3&nbsp;GB here.
+        <pre><code>python3.11 -m venv ~/open-webui
+~/open-webui/bin/pip install open-webui</code></pre></li>
+      <li><strong>Start it from that folder, pointed at Outlier.</strong> Open WebUI writes a <code>.webui_secret_key</code> file into whichever folder you start it from, so start it from its own.
+        <pre><code>cd ~/open-webui
+OPENAI_API_BASE_URL=http://127.0.0.1:8766/v1 \
+OPENAI_API_KEY=your-outlier-key \
+ENABLE_OLLAMA_API=False \
+~/open-webui/bin/open-webui serve --host 127.0.0.1 --port 8080</code></pre></li>
+      <li><strong>Open <code>http://127.0.0.1:8080</code>, pick a model and chat.</strong> outlier-nano is the fastest; outlier-compact is Core, the strongest model that fits most Macs.</li>
+    </ol>
+
+    <h2>Things worth knowing</h2>
+    <ul>
+      <li><strong>Not in Docker.</strong> Outlier answers only requests addressed to this Mac (127.0.0.1 or localhost). A container reaches it as <code>host.docker.internal</code>, which it refuses. Install Open WebUI with pip, as above.</li>
+      <li><strong>A login, or none.</strong> If you are the only person using it, add <code>WEBUI_AUTH=False</code> to the start command and Open WebUI skips its login screen. That is how we ran it.</li>
+      <li><strong>A few extra requests.</strong> Besides your answer, Open WebUI asks the model for a chat title and some follow-up suggestions. They run on your Mac too, and show up in Outlier's log as extra completions.</li>
+      <li><strong>Text only.</strong> Outlier's <code>/v1</code> endpoint takes text. To ask about a picture, use Outlier's own window, where Vision 3.8 reads images.</li>
+    </ul>
+
+    <h2>Common questions</h2>
+    <h3>Does Open WebUI send my chats anywhere?</h3>
+    <p>Not in this setup. Your chat goes from Open WebUI to Outlier on 127.0.0.1, and Outlier runs the model on your Mac. Open WebUI can make network calls of its own, such as update checks and model downloads; we ran it with OFFLINE_MODE=True and its update check off, which stops those.</p>
+    <h3>Which Outlier models can I pick in Open WebUI?</h3>
+    <p>The ones Outlier lists at /v1/models: outlier-nano, outlier-lite, outlier-quick, outlier-compact (Core) and outlier-vision38, as far as they are downloaded on your Mac.</p>
+    <h3>Does this work on Outlier&#x27;s free plan?</h3>
+    <p>No. The OpenAI-compatible API is part of Pro; on the free plan a request to it comes back 402 feature_locked.</p>
+
+    <p>The API itself, with code for the OpenAI SDK, is on <a href="https://outlier.host/developers/">Outlier's developer page</a>, and the
+    general steps are in <a href="https://outlier.host/how-to/run-a-local-openai-api-on-mac/">how to run a local OpenAI-compatible API on your Mac</a>.
+    More guides are in <a href="https://outlier.host/how-to/">how-to</a>.</p>
+<div class="pbox" data-pbox="end">
+<p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=how-to-use-open-webui-with-outlier-box-end&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.994/Outlier-1.11.994-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=how-to-use-open-webui-with-outlier-box-end" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 15+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+  <div class="wrap">
+    <span>Made by <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. I'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$49" data-now="$24.50" hidden></div>
+<script data-founding-ends="2026-12-01T07:59:00Z">(function(){var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=how-to-run-a-local-openai-api-on-mac');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+<script src="/js/mac-only.js" defer></script>
+</body>
+</html>
