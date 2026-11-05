@@ -131,7 +131,10 @@ r = client.chat.completions.create(
     messages=[{"role": "user", "content": "Three taglines for a coffee truck"}],
 )
 print(r.choices[0].message.content)</code></pre>
-    <p>Streaming, <code>max_tokens</code>, <code>temperature</code>, and <code>finish_reason</code> behave like the reference API.</p>
+    <p>Streaming, <code>temperature</code> and <code>finish_reason</code> behave like the reference API, and so does
+    <code>max_tokens</code> with one limit today: an explicit value above 16,384 is refused with a <code>400</code>
+    error ("max_tokens: Input should be less than or equal to 16384"). Leave <code>max_tokens</code> out and the
+    reply can run longer, up to what the model's context leaves.</p>
 
     <p><strong>Images do not go through this endpoint.</strong> Sending
     OpenAI's multimodal form (a <code>content</code> array of
