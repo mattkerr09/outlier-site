@@ -99,10 +99,21 @@
   <main>
     <span class="pill">OpenAI-compatible · function calling · 100% local</span>
     <h1>Use Outlier as the engine behind your tools</h1>
-    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point LangChain, LiteLLM, Codex, or anything built on the OpenAI SDK at it: same code you already have, but the model runs locally and nothing leaves your machine.</p>
+    <p class="lede">Outlier exposes a standard <code>/v1/chat/completions</code> API on your own Mac. Point anything built on the OpenAI SDK at it: same code you already have, but the model runs locally and nothing leaves your machine. We have tested it with Open WebUI; the other recipes below are each tool's standard settings, not yet run by us.</p>
 
     <h2>1 · Turn it on</h2>
     <p>In Outlier: <strong>Settings → Advanced → Developer → OpenAI-compatible API</strong>. Flip the toggle and copy your endpoint and API key. The endpoint is loopback-only (<code>http://127.0.0.1:8766/v1</code>): nothing is exposed to your network (<a href="https://outlier.host/learn/what-is-127-0-0-1-8766/">what that address is, and how to check it</a>). The API is part of Pro: on the free plan the toggle opens the upgrade card instead, and a request to <code>/v1</code> comes back <code>402</code> with <code>feature_locked</code>.</p>
+
+    <h2>Tested with</h2>
+    <p><strong>Open WebUI</strong>, on 5 November 2026 (Outlier 1.11.994, Open WebUI 0.13.0 installed with pip on the Mac): it read Outlier's model list and answered through outlier-nano, and Outlier's log showed every request from 127.0.0.1 answered 200. <a href="https://outlier.host/how-to/use-open-webui-with-outlier/">The steps, with the screenshot</a>.</p>
+
+    <h2>Any app that takes an OpenAI-compatible base URL</h2>
+    <ul>
+      <li>Base URL: <code>http://127.0.0.1:8766/v1</code></li>
+      <li>API key: your Outlier key (Settings → Advanced → Developer)</li>
+      <li>Model: <code>outlier-nano</code>, <code>outlier-lite</code>, <code>outlier-quick</code>, <code>outlier-compact</code> (Core), <code>outlier-vision38</code> (text only on this endpoint) or <code>outlier-plus</code>, as far as each is downloaded; <code>GET /v1/models</code> lists exactly what your Mac has.</li>
+      <li>The app has to send the request from your Mac. Outlier answers only requests addressed to this Mac, so an app whose own servers make the call, or one running in a Docker container, cannot reach it.</li>
+    </ul>
 
     <h2>2 · OpenAI SDK: drop-in</h2>
     <pre><code>from openai import OpenAI
@@ -157,6 +168,9 @@ tc = r.choices[0].message.tool_calls[0]
 print(tc.function.name, tc.function.arguments)
 # → get_weather {"city": "Paris"}</code></pre>
     <p>Run your function, then send the result back as a <code>role:"tool"</code> message: multi-turn tool loops work the way the OpenAI docs describe, including streaming (<code>delta.tool_calls</code>, <code>finish_reason:"tool_calls"</code>).</p>
+
+    <h2>Recipes we haven't tested yet</h2>
+    <p>LangChain, Continue, Codex CLI and LiteLLM below are each tool's standard OpenAI-compatible settings. We have not run them against Outlier ourselves yet; when one passes a real run it moves up to "Tested with", with the date.</p>
 
     <h2>4 · LangChain</h2>
     <pre><code>from langchain_openai import ChatOpenAI
