@@ -138,8 +138,9 @@ print(r.choices[0].message.content)</code></pre>
     reply can run up to what the context leaves.</p>
 
     <p>A streamed answer starts at once: the response headers arrive right away, and while the request waits for another
-    one to finish, for its model to load or for a long prompt to be read, the stream sends a keep-alive comment every 15
-    seconds. If your client disconnects, Outlier stops that request alone; other requests carry on.</p>
+    one to finish, for its model to load or for a long prompt to be read, the stream sends an empty chunk every 15
+    seconds (same id as the rest of the stream, <code>delta</code> <code>{}</code>), so clients with an idle timeout stay
+    connected. If your client disconnects, Outlier stops that request alone; other requests carry on.</p>
 
     <p><strong>Images do not go through this endpoint.</strong> Sending
     OpenAI's multimodal form (a <code>content</code> array of
