@@ -9,10 +9,10 @@
   <meta name="referrer" content="same-origin">
   <script>
   /* FIRST SCRIPT ON THE PAGE, DELIBERATELY. Dodo's redirect appends payment_id, status,
-     license_key and email. Meta's pixel and Plausible both read the page URL, so before
-     this existed a buyer's licence key and email address were sent to Meta with the
-     PageView. Read the values into memory, then take them out of the address bar before
-     either script runs. Everything below reads window.__outlierReturn, never the URL. */
+     license_key and email. Plausible reads the page URL (and until 2026-11-06 the Meta pixel
+     did too: before this script existed a buyer's licence key and email address were sent
+     to Meta with the PageView). Read the values into memory, then take them out of the
+     address bar before analytics runs. Everything below reads window.__outlierReturn, never the URL. */
   (function () {
     var r = {};
     try {
@@ -90,25 +90,17 @@ window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push
 plausible.init()
 </script>
 
-  <!-- Meta pixel. Disclosed in /privacy.html, which names it, names the _fbp
-       cookie it sets, and no longer claims this site avoids cross-site tracking.
-       The policy changed in the SAME commit as this tag. -->
   <script>
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-  document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init','1592291422272376');fbq('track','PageView');
-  // Purchase, fired ONLY when the page carries a checkout_id.
+  // Purchase (Plausible revenue), fired ONLY when the page carries a succeeded payment.
+  // 2026-11-06: the Meta pixel is gone from this site (Matthew: "Remove it"); Plausible is the only analytics.
   //
   // Three things this deliberately does NOT do:
   //
   // 1. Fire on every view. This URL is bookmarkable, crawlable and shareable. An
   //    unconditional Purchase would count refreshes, the marketing team opening
-  //    the page, and any bot that follows the link -- then Meta would optimise the
-  //    campaign toward whatever produces those, which is not buyers. The
-  //    checkout_id is the only evidence on this page that a checkout happened.
+  //    the page, and any bot that follows the link, and the revenue figure would
+  //    count whatever produces those, which is not buyers. The payment id is the
+  //    only evidence on this page that a checkout happened.
   //
   // 2. Double-count. A refresh re-runs this script with the same id in the URL, so
   //    the id is recorded in sessionStorage and a repeat is skipped. Keyed on the
@@ -117,11 +109,7 @@ plausible.init()
   //
   // 3. Trust the URL for the amount. The value is the one price this product has.
   //    Reading it from a query parameter would let anyone inflate our reported
-  //    revenue by editing their address bar, and Meta would then bid against a
-  //    number a stranger chose.
-  //
-  // eventID is the checkout id so a future CAPI call can send the same id and Meta
-  // will deduplicate browser and server events into one purchase instead of two.
+  //    revenue by editing their address bar.
   //
   // v1.11.801: this gate read `checkout_id`. Dodo does not send that. It appends
   // payment_id, status, license_key and email — so the event could not have
@@ -130,8 +118,7 @@ plausible.init()
   // that never arrives. Either one alone makes Purchase silently unreachable.
   //
   // status is checked because Dodo redirects here for FAILURES too. Firing on a
-  // declined card would teach Meta to optimise toward people whose payments
-  // fail, which is worse than no signal at all.
+  // declined card would count a failed payment as revenue.
   try {
     var _r = window.__outlierReturn || {};
     var _pid = _r.payment_id;
@@ -144,8 +131,7 @@ plausible.init()
         // Dodo's redirect carries no amount and a static link cannot pre-apply the
         // founders code, so the homepage records "founding" or "regular" in
         // localStorage at the click (no personal data). Missing or older than a day:
-        // assume the full price. The exact paid amount needs Dodo's webhook sent to
-        // Meta server-side (CAPI), with the same eventID so Meta de-duplicates.
+        // assume the full price. The exact paid amount comes from /paid, below.
         var _value = 249.00;
         try {
           var _o = JSON.parse(localStorage.getItem('outlier_offer') || 'null');
@@ -156,13 +142,12 @@ plausible.init()
         // {"amount":124.5,"currency":"USD","app":"outlier"} for a succeeded payment of the
         // last 72 hours and a plain 404 for anything else — nothing about the buyer; CORS
         // is open to outlier.host only. The guess above stays the fallback (3 s, or any
-        // failure), and Purchase fires ONCE either way, with payment_id as the eventID.
+        // failure), and Purchase fires ONCE either way.
         var _fired = false;
         var _fire = function (value) {
           if (_fired) return;
           _fired = true;
           window.__outlierValue = value;
-          fbq('track', 'Purchase', {value: value, currency: 'USD'}, {eventID: _pid});
           if (window.plausible) plausible('Purchase', { revenue: { currency: 'USD', amount: value } });
         };
         var _guess = _value;
@@ -182,8 +167,6 @@ plausible.init()
     }
   } catch (e) { /* private mode blocks sessionStorage; never break the page */ }
   </script>
-  <noscript><img height="1" width="1" style="display:none" alt=""
-    src="https://www.facebook.com/tr?id=1592291422272376&ev=PageView&noscript=1"></noscript>
 </head>
 <body>
   <div class="wrap">
