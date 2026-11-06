@@ -127,14 +127,19 @@ r = client.chat.completions.create(
     model="outlier-nano",          # outlier-lite / outlier-quick / outlier-compact (Core)
                                    # outlier-plus
                                    # Vision 3.8 answers text here too, but this
-                                   # endpoint takes no images — see below.
+                                   # endpoint takes no images; see below.
     messages=[{"role": "user", "content": "Three taglines for a coffee truck"}],
 )
 print(r.choices[0].message.content)</code></pre>
-    <p>Streaming, <code>temperature</code> and <code>finish_reason</code> behave like the reference API, and so does
-    <code>max_tokens</code> with one limit today: an explicit value above 16,384 is refused with a <code>400</code>
-    error ("max_tokens: Input should be less than or equal to 16384"). Leave <code>max_tokens</code> out and the
-    reply can run longer, up to what the model's context leaves.</p>
+    <p>Streaming, <code>temperature</code>, <code>max_tokens</code> and <code>finish_reason</code> behave like the
+    reference API. An explicit <code>max_tokens</code> is accepted up to 262,144. Up to 16,384 it is used exactly; above
+    that, the reply is limited to what the context leaves (the model's context window on this Mac minus the prompt), and
+    when it stops there <code>finish_reason</code> is <code>"length"</code>. Leave <code>max_tokens</code> out and the
+    reply can run up to what the context leaves.</p>
+
+    <p>A streamed answer starts at once: the response headers arrive right away, and while the request waits for another
+    one to finish, for its model to load or for a long prompt to be read, the stream sends a keep-alive comment every 15
+    seconds. If your client disconnects, Outlier stops that request alone; other requests carry on.</p>
 
     <p><strong>Images do not go through this endpoint.</strong> Sending
     OpenAI's multimodal form (a <code>content</code> array of
@@ -251,7 +256,9 @@ r = litellm.completion(
           <code>max_completion_tokens</code>. Leave the limit out and the reply runs
           as long as the model's context allows, the way the reference API does;
           before 1.11.996 a request without one stopped at 2,048 tokens, which
-          cut off clients such as Open WebUI and Goose that never send it</li>
+          cut off clients such as Open WebUI and Goose that never send it. An explicit
+          value above 16,384, refused before 1.11.997, is accepted and capped at what
+          the context leaves</li>
       <li><code>top_k</code>, from 1.11.996. With <code>top_k: 1</code> at
           <code>temperature: 1.5</code>, three requests came back word for word
           the same; without it, the same three differed</li>
