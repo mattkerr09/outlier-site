@@ -183,8 +183,12 @@ def self_check():
         s = open(page, encoding="utf-8").read()
         planted = DATEMOD.sub('"dateModified":"2019-01-01"', s, count=1)
         assert planted != s, "PLANT DID NOT LAND — the check would have proved nothing"
-        open(page, "w", encoding="utf-8").write(
-            planted.replace("</body>", "<p>A sentence long enough to count as a real body-text change.</p></body>"))
+        #: 2026-11-07: the sentence goes INSIDE the <article> when the page has one. Appended after </article> it is not an
+        #: article change, so the plant was only ever caught through the fixture's first commit (the whole site); once the
+        #: date gates skip 40+ file sweeps, that commit no longer counts, and the self-check went blind.
+        sentence = "<p>A sentence long enough to count as a real body-text change.</p>"
+        end = "</article>" if "</article>" in planted else "</body>"
+        open(page, "w", encoding="utf-8").write(planted.replace(end, sentence + end, 1))
         subprocess.run(["git", "add", "-A"], cwd=work, capture_output=True)
         subprocess.run(["git", "-c", "user.email=t@t", "-c", "user.name=t",
                         "commit", "-qm", "plant"], cwd=work, capture_output=True)

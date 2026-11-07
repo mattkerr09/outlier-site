@@ -215,6 +215,19 @@ def _prose(text: str | None) -> str:
     return _PUNCT.sub(" ", text or "").lower().strip()
 
 
+#: Sitewide-sweep threshold, shared with the sitemap's lastmod rule (2026-11-07).
+SWEEP_FILES = 40
+_SIZE_CACHE: dict = {}
+
+
+def _commit_size(h: str) -> int:
+    """How many files commit h touched (cached; one `git show --name-only` per commit)."""
+    if h not in _SIZE_CACHE:
+        out = subprocess.run(["git", "show", "--name-only", "--format=", h], capture_output=True, text=True).stdout
+        _SIZE_CACHE[h] = len([l for l in out.split("\n") if l.strip()])
+    return _SIZE_CACHE[h]
+
+
 def last_body_change(path: str):
     #: 2026-09-29: the look-back was 8 commits. Every release moves ~240 pages' Download
     #: href (invisible here, correctly), and 09-28 alone added a counting-link wrap and two
@@ -232,6 +245,12 @@ def last_body_change(path: str):
         if not line.strip():
             continue
         h, d = line.split()[0], line.split()[1]
+        #: 2026-11-07 (Bing clean-up, CEO decision (a)): a commit that touches SWEEP_FILES or more files is a sitewide sweep,
+        #: not an edit to this page (the 266-file "runs on Apple Silicon Macs" line by every Download button dated 33 pages
+        #: 2026-11-04 whose last real edit was weeks earlier, and a page factory is what a reviewer reads into 125 pages with
+        #: one date). The same rule dates the sitemap (~/ops/qa/sitemap_real_lastmod.py) and the pages' own datelines.
+        if _commit_size(h) >= SWEEP_FILES:
+            continue
         #: Compare the page's VISIBLE TEXT at this commit and its parent, rather than
         #: scanning diff lines. See changed_body_text's docstring: line-scanning counts
         #: a CSS edit as a body change and mis-dated 132 pages to one stylesheet sweep.

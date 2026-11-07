@@ -96,11 +96,20 @@ def fetch(url: str) -> bytes | None:
         return None
 
 
+class _NoFollow(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *a, **kw):
+        return None   # report the redirect itself instead of the page it points to
+
+
 def status(url: str) -> int | None:
-    """Status code only. A deleted file is a question about presence, not bytes."""
+    """Status code only. A deleted file is a question about presence, not bytes.
+
+    2026-11-07: redirects are NOT followed. The 20 deleted stubs now answer a Cloudflare 301 to their target page; following
+    it read as "deleted, still 200" for every one. A 301/308 at a deleted path means it is unpublished and points elsewhere,
+    which is what removing it intended."""
     try:
         req = urllib.request.Request(url, headers={"User-Agent": UA}, method="GET")
-        with urllib.request.urlopen(req, timeout=45) as r:
+        with urllib.request.build_opener(_NoFollow).open(req, timeout=45) as r:
             return r.getcode()
     except urllib.error.HTTPError as e:
         return e.code
