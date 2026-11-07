@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+  <title>Will It Run: check if an AI model fits your Mac | Outlier</title>
+  <meta name="description" content="A free, read-only helper for Claude and ChatGPT that says whether an open AI model fits a Mac's memory, and roughly how fast it runs.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-07">
+  <link rel="canonical" href="https://outlier.host/will-it-run/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Will It Run: does this AI model fit my Mac?">
+  <meta property="og:description" content="A free, read-only helper for Claude and ChatGPT that says whether an open AI model fits a Mac's memory, and roughly how fast it runs.">
+  <meta property="og:url" content="https://outlier.host/will-it-run/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Will It Run: does this AI model fit my Mac?">
+  <meta name="twitter:description" content="A free, read-only helper for Claude and ChatGPT that says whether an open AI model fits a Mac's memory, and roughly how fast it runs.">
+<style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
+    .subscribe-strip h2{font-size:1.35rem;margin:0 0 .5rem;}
+    .subscribe-strip-why{color:var(--text-mid);line-height:1.7;margin:0 0 1.2rem;max-width:60ch;}
+    .subscribe-strip-form{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;}
+    .subscribe-strip-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+    .subscribe-strip-input{flex:1 1 20ch;min-width:0;padding:.8rem .95rem;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:1rem;font-family:inherit;}
+    .subscribe-strip-input:focus{outline:2px solid var(--accent);outline-offset:2px;}
+    .subscribe-strip-btn{padding:.85rem 1.3rem;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;font-family:inherit;cursor:pointer;}
+    .subscribe-strip-note{color:var(--text-dim);font-size:0.82rem;line-height:1.65;margin:.9rem 0 0;max-width:58ch;}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.82rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
+    .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
+    .quick-answer li:last-child { margin-bottom: 0; }
+    .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    /* A long unbreakable token in inline code pushed the page sideways: a
+       36-character path on /data/outlier-vs-claude-54-prompt-benchmark/ left
+       12px of horizontal scroll after the tables were contained. Scoped away
+       from pre > code, which should scroll as a block rather than rewrap. */
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.82rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .cta { margin-top: 3rem; padding: 1.8rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); text-align: center; }
+    .cta h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+    .cta p { color: var(--text-mid); margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; font-size: 0.96rem; transition: filter 0.2s, transform 0.2s; }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); color: #051b11; text-decoration: none; }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    .faq { margin-top: 1rem; }
+    .faq-item { margin-bottom: 1.3rem; }
+    .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
+    .faq-item p { margin-bottom: 0; color: var(--text-mid); }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+  .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is Will It Run free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It needs no account, no key and no plan. It reads a fixed table and changes nothing."}}, {"@type": "Question", "name": "Where do the numbers come from?", "acceptedAnswer": {"@type": "Answer", "text": "Apple's technical specifications for the Macs, and our own measurements for the models: each model's minimum memory, and its speed measured on a Mac Studio M1 Ultra with 64 GB. Speeds on other Macs are estimates, and every answer says which it is."}}, {"@type": "Question", "name": "Does it see my conversation?", "acceptedAnswer": {"@type": "Answer", "text": "No. Your assistant sends only the tool's inputs: a Mac name, a memory size, model names, a task and, if you asked, a minimum speed."}}]}
+  </script>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Will It Run: check if an AI model fits your Mac", "description": "A free, read-only helper for Claude and ChatGPT that says whether an open AI model fits a Mac's memory, and roughly how fast it runs.", "datePublished": "2026-11-07", "dateModified": "2026-11-07", "author": {"@type": "Person", "name": "Matt Kerr"}, "url": "https://outlier.host/will-it-run/"}
+  </script>
+  <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Developers", "item": "https://outlier.host/developers/"}, {"@type": "ListItem", "position": 3, "name": "Will It Run", "item": "https://outlier.host/will-it-run/"}]}
+  </script>
+  <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
+  <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="https://outlier.host/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="https://outlier.host/learn/">Learn</a></li>
+      <li><a href="https://outlier.host/#pricing">Pricing</a></li>
+      <li><a href="https://outlier.host/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/developers/">developers</a></div>
+    <h1>Will It Run: check if an AI model fits your Mac</h1>
+    <div class="byline-row">
+      <span class="byline">Matt Kerr · Outlier · published 2026-11-07</span>
+      <span class="updated-pill">Last updated 2026-11-07</span>
+    </div>
+
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <ul>
+        <li>Will It Run is a free helper your AI assistant can call: <code>https://mcp.outlier.host/mcp</code>. It is read-only and needs no account.</li>
+        <li>Ask Claude or ChatGPT things like &ldquo;Will Qwen3.6-27B run on my 16 GB MacBook Air M2?&rdquo; and it answers from a dated table, not a guess.</li>
+        <li>Memory fit comes from our own measurements. Speed is measured on one Mac (an M1 Ultra) and estimated for the others, and every answer says which.</li>
+      </ul>
+    </div>
+
+    <h2>Add it to your assistant</h2>
+    <p><strong>Claude:</strong> Settings &rsaquo; Connectors &rsaquo; Add custom connector, name it Will It Run, and paste <code>https://mcp.outlier.host/mcp</code>. Until the directory listing is live, this is the way in.</p>
+    <p><strong>ChatGPT:</strong> once it is listed in ChatGPT&rsquo;s app directory, add it from there. Until then it is Claude only.</p>
+    <p><strong>Anything else that speaks MCP:</strong> point it at the same address. It uses the Streamable HTTP transport and has no login.</p>
+
+    <h2>What it answers, with real examples</h2>
+    <p>Each of these was asked on the live server on 7 November 2026; the answers are the server&rsquo;s own words, shortened.</p>
+    <table>
+      <thead><tr><th>You ask</th><th>It answers</th></tr></thead>
+      <tbody>
+        <tr><td>Will Qwen3.6-27B run on my 16 GB MacBook Air M2?</td><td>Does not fit: it needs 24 GB, so it is 8 GB short. The download is 15.13 GB.</td></tr>
+        <tr><td>What can I run on a 16 GB MacBook Air M2?</td><td>Qwen3.5-4B fits with 10 GB to spare, Qwen3.5-9B with 4 GB, and Gemma-4-26B-a4b-it is tight at 0 GB, each with a speed range.</td></tr>
+        <tr><td>Compare a 24 GB MacBook Air 13 M4 with a 48 GB Mac mini M4 Pro for local AI.</td><td>On the Air both 27B models are tight and the 397B does not fit; on the mini everything but the 397B fits.</td></tr>
+        <tr><td>Which Mac runs Qwen3.6-27B at 10 tokens a second or more?</td><td>Only the Ultra Mac Studios in the table.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The six tools</h2>
+    <ul>
+      <li><strong>check_fit:</strong> does one model fit one Mac and memory size, and how much room is left.</li>
+      <li><strong>models_that_fit:</strong> every model that fits a Mac, for chat, coding, reading images or anything.</li>
+      <li><strong>computer_specs:</strong> a Mac&rsquo;s chip, cores, memory options and memory bandwidth.</li>
+      <li><strong>speed_estimate:</strong> roughly how many tokens a second a model runs at on a Mac.</li>
+      <li><strong>compare_macs:</strong> two Macs side by side.</li>
+      <li><strong>pick_mac:</strong> which Macs and memory sizes run the models you want.</li>
+    </ul>
+
+    <h2>What is in the table</h2>
+    <ul>
+      <li><strong>Macs:</strong> 27 Apple-silicon Macs from Apple&rsquo;s technical specifications, from the M1 to the M4 family and the Mac Studio M3 Ultra (table of 19 October 2026). Macs Apple released after that are being added.</li>
+      <li><strong>Models:</strong> six open models: Qwen3.5-4B, Qwen3.5-9B, Gemma-4-26B-a4b-it, Qwen3.6-27B, Qwen3.8-27B and Qwen3.5-397B-A17B, each with its minimum memory and download size from our own tests.</li>
+      <li><strong>Speed:</strong> measured on a Mac Studio M1 Ultra with 64 GB (800 GB/s). For other Macs the server scales that by memory bandwidth and shows a range labelled as an estimate. Public llama.cpp numbers suggest these estimates run low on smaller chips, so treat them as a floor. The 397B runs from the SSD, so it gets no estimate at all.</li>
+      <li><strong>Context:</strong> memory figures are measured at a 32K context. Longer contexts need more memory.</li>
+    </ul>
+
+    <h2>Limits</h2>
+    <ul>
+      <li>Macs only for now, and only the Macs and models in the table. An unknown name gets the closest matches, never a made-up answer.</li>
+      <li>No prices. We keep no dated price list, so it never quotes one.</li>
+      <li>One measured machine for speed. More are coming.</li>
+    </ul>
+
+    <h2>Privacy</h2>
+    <p>Your assistant sends only the tool&rsquo;s inputs (a Mac name, a memory size, model names, a task). The service keeps nothing and contacts no one else. The full section is in <a href="/privacy.html#will-it-run">our privacy policy</a>.</p>
+
+    <h2 id="support">Support</h2>
+    <p>Questions, a wrong answer, or a Mac or model you want added: email <a href="mailto:matt@outlier.host">matt@outlier.host</a>. A person reads every message.</p>
+
+    <p class="byline">Checked 2026-11-07 against the live server.</p>
+
+    <h2>Questions</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <h3>Is Will It Run free?</h3>
+        <p>Yes. It needs no account, no key and no plan. It reads a fixed table and changes nothing.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Where do the numbers come from?</h3>
+        <p>Apple's technical specifications for the Macs, and our own measurements for the models: each model's minimum memory, and its speed measured on a Mac Studio M1 Ultra with 64 GB. Speeds on other Macs are estimates, and every answer says which it is.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does it see my conversation?</h3>
+        <p>No. Your assistant sends only the tool's inputs: a Mac name, a memory size, model names, a task and, if you asked, a minimum speed.</p>
+      </div>
+    </div>
+
+    <div class="cta">
+      <h3>Run these models on your own Mac</h3>
+      <p>Outlier runs the same open models offline, sized to your Mac&rsquo;s memory. No account, no token bill.</p>
+      <a class="btn" href="/download/">Get Outlier</a>
+    </div>
+
+    <div class="related">
+      Related: <a href="/data/mac-ram-to-model-size/">Mac RAM to model size</a> · <a href="/developers/">Developers: the local API</a> · <a href="/ai-assistants/">Coding assistants on your Mac</a>
+    </div>
+  </div>
+</article>
+<section class="subscribe-strip">
+  <div class="wrap">
+    <h2>New models worth running</h2>
+    <p class="subscribe-strip-why">Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+    <form class="subscribe-strip-form" method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+      <input type="hidden" name="source" value="outlier-host">
+      <label class="subscribe-strip-label" for="sub-email">Email</label>
+      <input class="subscribe-strip-input" id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      <div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <button class="subscribe-strip-btn" type="submit">Keep me posted</button>
+    </form>
+    <p class="subscribe-strip-note" role="status" aria-live="polite">Your address and which of our sites you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Outlier · local AI for Mac · <a href="https://outlier.host/">outlier.host</a></span>
+    <span><a href="https://outlier.host/#faq">FAQ</a> · <a href="https://outlier.host/#support">Support</a></span>
+  </div>
+  <div class="wrap">
+    <span>Made by <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company</a></span>
+  </div>
+</footer>
+<script>
+(function(){
+  var f=document.querySelector('.subscribe-strip-form'); if(!f) return;
+  var n=document.querySelector('.subscribe-strip-note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. I'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$49" data-now="$24.50" hidden></div>
+<script data-founding-ends="2026-12-01T07:59:00Z">(function(){var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
+var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
+if(end-now<24*24*60*60*1000)setTimeout(function(){m.forEach(function(e){e.hidden=true;});},end-now);
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=how-to-run-a-local-openai-api-on-mac');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+<script src="/js/mac-only.js" defer></script>
+</body>
+</html>

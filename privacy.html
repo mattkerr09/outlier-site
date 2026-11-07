@@ -46,6 +46,7 @@
     <a class="back" href="/">← Back to Outlier</a>
     <h1>Privacy Policy</h1>
     <p class="updated">Last updated: 2026-11-07 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Changed 2026-11-07: added &ldquo;Will It Run (mcp.outlier.host)&rdquo;, the read-only helper that Claude, ChatGPT and other AI assistants can use to check whether a model fits a Mac. Nothing in the app changed.</p>
     <p class="updated">Changed 2026-11-07: from 24 August to 7 November 2026, when someone bought Outlier, our sales system sent Meta (Facebook) the price and a one-way coded copy of the buyer&rsquo;s email address (a SHA-256 hash), so Meta could count the sale for ads. We switched it off on 7 November. Nothing about a purchase goes to Meta now.</p>
     <p class="updated">Changed 2026-11-07: two headings said more than the list under them. &ldquo;What never leaves your Mac&rdquo; listed your prompts and your license key, but a chat you switch to a cloud model goes to that provider, and the license key goes to its vendor at activation and in the daily re-check. &ldquo;Only when you opt in&rdquo; was also wrong for the update check, the license re-check and the upgrade-window price check, which run on their own. The headings and those two lines now say exactly that. Nothing the app does changed.</p>
     <p class="updated">Changed 2026-11-06: removed Meta's (Facebook's) tracking pixel from every page of this site, and with it the cookie it set. Plausible, which sets no cookies, is the only analytics here.</p>
@@ -147,6 +148,14 @@
       <li>No automatic crash reporting. Crash logs are saved locally to <code>~/.outlier/crashes/</code>. You decide whether to email them via the Bug Report flow.</li>
       <li>No reading your filesystem outside what you explicitly mount as a Project, attach as a file, or grant via macOS file/screen permissions.</li>
     </ul>
+
+    <h2 id="will-it-run">Will It Run (mcp.outlier.host)</h2>
+    <p>Will It Run is a separate, read-only service that AI assistants such as Claude and ChatGPT can use to check whether an AI model fits a Mac. You add it to your assistant yourself. It is not part of the Outlier app, and the app never contacts it.</p>
+    <p><strong>What it receives.</strong> When your assistant uses one of its tools, it sends that tool&rsquo;s inputs: a Mac name (for example &ldquo;MacBook Air M2&rdquo;), a memory size in GB, one or more model names, a task (chat, coding, vision or anything) and, if you asked for one, a minimum speed. It never receives your conversation, your account details or anything on your Mac. Some assistants may also attach hints, such as your language or a rough location; the service ignores them. Like any web request, each one also arrives with the network address and software name of the computer that sent it, which is usually your assistant&rsquo;s own server, not yours. The service does not read them.</p>
+    <p><strong>What it does with them.</strong> It looks the answer up in tables built into the service (Apple&rsquo;s published Mac specifications and our own speed measurements) and sends the answer back. It makes no other requests and contacts no one else.</p>
+    <p><strong>What is kept.</strong> The service keeps nothing: no database, no log of questions or answers, no cookies. Cloudflare, which runs it, keeps its own traffic and security records for every site it serves, under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare&rsquo;s privacy policy</a>. We use what Cloudflare shows us only to keep the service running.</p>
+    <p><strong>Who else sees it.</strong> Nobody. We don&rsquo;t sell or share the inputs, and we don&rsquo;t use them for ads or to train anything. Your assistant sees your question and our answer under its own privacy policy.</p>
+    <p><strong>Your choices.</strong> There is nothing of yours to delete. To stop, remove Will It Run from your assistant&rsquo;s connectors. Questions: matt@outlier.host.</p>
 
     <h2>Payments</h2>
       <p>Paid tiers (Pro, the Outlier Lifetime Licence $49) are processed by <a href="https://dodopayments.com" target="_blank" rel="noopener noreferrer">Dodo Payments</a>, which handles payment, licence issuance and the customer portal. Purchases made before 23 August 2026 were processed by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer">Polar</a> and those licences remain valid. We never see your card details.</p>
