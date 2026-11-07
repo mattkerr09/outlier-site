@@ -226,6 +226,16 @@
     <h2>So which one should you pick?</h2>
     <p>Comfortable in a terminal and planning to script against a local model, or run it as a backend for other tools? Ollama. Want to open an app, browse a model list, download with a click, and chat: no commands, ever? LM Studio. Plenty of people keep both: Ollama humming as a headless server, LM Studio open when they just want to poke at a new model in a real window. Neither is the "right" answer in the abstract; the right answer is the one that matches how you like to work.</p>
 
+    <h2>When either one is enough, and when you need an agent</h2>
+    <p>Both are model runners: they answer the question you ask. An agent decides what to look at next. Ask a runner why a test fails and you bring it the test, the code, the stack trace and the config yourself; ask an agent and it reads the failing test off disk, follows the import, runs the test again after a change, and comes back when it has an answer or needs your permission. A runner also needs you there for every step, while an agent can be handed a twenty-minute job and left alone.</p>
+    <ul>
+      <li><strong>You want to chat with a local model:</strong> Ollama, or LM Studio if you would rather not touch a terminal.</li>
+      <li><strong>You want a local endpoint for your own code:</strong> Ollama.</li>
+      <li><strong>You want to try many models cheaply:</strong> either; LM Studio shows sizes before you download.</li>
+      <li><strong>You want something to work through a repository and report back, or finish a job while you are at lunch:</strong> that is an agent, and neither is trying to be one.</li>
+    </ul>
+    <p>Many people should use both kinds: a runner for quick questions and for anything wired into their own code, an agent for the long jobs.</p>
+
     <h2>A third option, if you're on a Mac</h2>
     <p>One honest caveat to both: GGUF runners are bound by RAM, and that wall is exactly where some models you might want to run live. Outlier is a Mac-native app (Apple Silicon only) that takes a different route, a patent-pending paged inference engine streams expert tensors off the SSD so it can run models <em>bigger</em> than the Mac's RAM. A 397B-parameter model runs at roughly 14 GB peak memory on a 64 GB Mac, where a GGUF tool would simply refuse to load it. It's a batteries-included app (chat, a coding agent, deep research, vision) rather than a pure runner or GUI, the free tier covers Nano and Lite with no account, and you can import your own MLX model. It's not for everyone: it's Mac-only, and if you need cross-platform or open source, Ollama and LM Studio are the answer. But if you're on Apple Silicon and the RAM ceiling is the thing blocking you, it's worth a look. See the side-by-sides: <a href="https://outlier.host/vs/outlier-vs-ollama/">Outlier vs Ollama</a> and <a href="https://outlier.host/vs/outlier-vs-lm-studio/">Outlier vs LM Studio</a>.</p>
 
