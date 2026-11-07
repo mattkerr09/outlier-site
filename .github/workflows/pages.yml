@@ -1,0 +1,92 @@
+name: pages
+
+# Publishes ONLY the site's files to GitHub Pages (Bing clean-up step 3, 2026-11-07). Before this, Pages built the whole
+# repository (legacy build with .nojekyll), so /scripts/, /_seo_build/, /seo/_data/ and README.md were public.
+#
+# WHY workflow_run AND NOT push: gates.yml fast-forwards main with GITHUB_TOKEN, and a push made with GITHUB_TOKEN never
+# triggers another workflow. So this runs when gates.yml completes successfully on next, and deploys what main now holds.
+#
+# SAFE BEFORE THE FLIP: while the repository's Pages build_type is still "legacy", the deploy step is skipped with a notice and
+# the run stays green. The CEO flips build_type to "workflow" (gh api) only after this is merged and green; that flip is the
+# one risky moment, and it is checked live straight away.
+
+on:
+  workflow_run:
+    workflows: [gates]
+    types: [completed]
+    branches: [next]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      build_type: ${{ steps.mode.outputs.build_type }}
+    steps:
+      - name: Check out main (what the gates just promoted)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Read the Pages build type
+        id: mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bt=$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null || echo unknown)
+          echo "build_type=$bt" >> "$GITHUB_OUTPUT"
+          echo "Pages build_type: $bt"
+
+      - name: Assemble the public site (everything except build tooling and internal files)
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          rsync -a ./ _site/ \
+            --exclude '.git/' --exclude '.github/' --exclude '.gitignore' \
+            --exclude 'scripts/' --exclude '_seo_build/' --exclude 'seo/_data/' \
+            --exclude 'README.md' --exclude '_site/' \
+            --exclude '*.bak' --exclude '*.bak_*' --exclude '.DS_Store'
+          # The artifact must hold the site and nothing internal. A check that fails on its own bug: count both sides.
+          for p in scripts _seo_build seo/_data README.md .github; do
+            if [ -e "_site/$p" ]; then echo "::error::internal path in the artifact: $p"; exit 1; fi
+          done
+          for p in index.html 404.html sitemap.xml robots.txt CNAME llms.txt privacy.html terms.html thank-you.html \
+                   about/index.html developers/index.html ai-assistants/index.html \
+                   67223b34aed54ecb802e8ffcbacb9ec2.txt 39a190ab445d73f57af4ed54a6992c18.txt; do
+            if [ ! -e "_site/$p" ]; then echo "::error::site file missing from the artifact: $p"; exit 1; fi
+          done
+          pages=$(find _site -name '*.html' | wc -l | tr -d ' ')
+          echo "artifact: $pages HTML files, $(du -sh _site | cut -f1)"
+          [ "$pages" -ge 200 ] || { echo "::error::only $pages HTML files: the site is incomplete"; exit 1; }
+
+      - name: Upload the artifact
+        if: steps.mode.outputs.build_type == 'workflow'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Not deployed (Pages is still on the legacy build)
+        if: steps.mode.outputs.build_type != 'workflow'
+        run: echo "::notice::Pages build_type is '${{ steps.mode.outputs.build_type }}', not 'workflow'. The artifact was built and checked, and nothing was deployed. Pages keeps serving its legacy build of main."
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.build_type == 'workflow'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
