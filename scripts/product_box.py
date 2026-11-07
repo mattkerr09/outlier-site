@@ -87,9 +87,11 @@ STYLE = """<style data-pbox-style>
 FOUNDING_ENDS = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
 SCRIPT = f"""<script data-pbox-script>
 (function(){{var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
-var end=Date.parse("{FOUNDING_ENDS}"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+function clock(){{return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}}
+var end=Date.parse("{FOUNDING_ENDS}"),now=clock();if(!(now<end))return;
+if(end-now<24*24*60*60*1000)setTimeout(function(){{m.forEach(function(e){{e.hidden=true;}});}},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){{return r.json()}})
-.then(function(d){{if(!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){{e.hidden=false;}});}}).catch(function(){{}});}})();
+.then(function(d){{now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){{e.hidden=false;}});}}).catch(function(){{}});}})();
 </script>
 """
 

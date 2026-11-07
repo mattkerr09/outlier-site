@@ -1814,12 +1814,28 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
 (function () {
   var founding = false;
   var card = document.querySelector('[data-lifetime-card]');
-  var end = Date.parse("2026-12-01T07:59:00Z"), now = typeof window.__kcNow === 'number' ? window.__kcNow : Date.now();
+  function clock() { return typeof window.__kcNow === 'number' ? window.__kcNow : Date.now(); }
+  var end = Date.parse("2026-12-01T07:59:00Z"), now = clock();
   try {
-    if (card && now < end) fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host')
+    if (card && now < end) {
+      var name = card.querySelector('[data-lt-name]'), price = card.querySelector('[data-lt-price]');
+      var bnpl = card.querySelector('[data-lt-bnpl]'), offer = card.querySelector('[data-lt-offer]');
+      var btn = card.querySelector('[data-lt-btn]');
+      var regular = { name: name.textContent, price: price.textContent, bnpl: bnpl.innerHTML,
+        offer: offer.hidden, btn: btn.textContent };
+      if (end - now < 24 * 24 * 60 * 60 * 1000) setTimeout(function () {
+        founding = false;
+        name.textContent = regular.name;
+        price.textContent = regular.price;
+        bnpl.innerHTML = regular.bnpl;
+        offer.hidden = regular.offer;
+        btn.textContent = regular.btn;
+      }, end - now);
+      fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host')
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d || d.soldOut || !(d.unlimited === true || (typeof d.left === 'number' && d.left > 0))) return;   // 2026-11-02: uncapped sale answers {unlimited: true, of: null}
+        now = clock();
+        if (!(now < end) || !d || d.soldOut || !(d.unlimited === true || (typeof d.left === 'number' && d.left > 0))) return;   // 2026-11-02: uncapped sale answers {unlimited: true, of: null}
         founding = true;
         card.querySelector('[data-lt-name]').textContent = 'Outlier Lifetime Licence';
         card.querySelector('[data-lt-price]').textContent = '$24.50';
@@ -1827,6 +1843,7 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
         card.querySelector('[data-lt-offer]').hidden = false;
         card.querySelector('[data-lt-btn]').textContent = 'Buy Outlier Lifetime Licence: $24.50';
       }).catch(function () {});
+    }
   } catch (e) {}
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('[data-buy], a[href$=".dmg"]') : null;
@@ -1844,9 +1861,11 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
 </script>
 <script data-pbox-script>
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
-var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
+var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
+if(end-now<24*24*60*60*1000)setTimeout(function(){m.forEach(function(e){e.hidden=true;});},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
-.then(function(d){if(!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
 </script>
 <script src="/js/mac-only.js" defer></script>
 </body>
