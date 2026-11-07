@@ -14,30 +14,40 @@ Then open `http://localhost:8000`.
 
 ## Deployment — read this before changing anything about hosting
 
-**This site is NOT served by GitHub Pages.** The previous version of this file
-said it was, and that sentence cost a session real work: acting on it, a careful
-and correct-looking `_config.yml` was written to stop the build tooling being
-served, and it was wholly inert. It had to be reverted.
-
-Verified by asking the server rather than reading this file:
+**Since 2026-11-07 (15:28–15:35Z) this site is served by GitHub Pages behind Cloudflare.** Before that it was Porkbun
+static hosting (`server: openresty`, `x-service: pixie-sh`), and everything this file used to say about the host
+(stale-on-404, deletions that never propagate, path exclusion configured at the host) described Porkbun. It no longer
+applies. Ask the server, not this file:
 
 ```
-$ curl -sI https://outlier.host | grep -i '^server\|^x-service'
-server: openresty
-x-service: pixie-sh
+$ curl -sI https://outlier.host | grep -i '^server\|^x-github\|^cf-cache'
+server: cloudflare
+x-github-request-id: …
+cf-cache-status: DYNAMIC
+$ gh api repos/mattkerr09/outlier-site/pages --jq '{build_type,source,cname}'
+{"build_type":"legacy","cname":"outlier.host","source":{"branch":"main","path":"/"}}
 ```
 
-The GitHub Pages API also 404s for this repository. The whole repo is synced to
-the host, and **path exclusion lives in the host configuration, outside this
-repo** — `_config.yml`, `.nojekyll` and `exclude:` lists have no effect here.
+- **DNS and TLS:** Cloudflare (proxied, SSL Full, Always Use HTTPS). `http://` and `www.` answer 301 to `https://outlier.host/`.
+  The rollback is in `~/ops/launch/outlier-dns-rollback.txt` (outside this repo).
+- **Build:** Pages publishes `main` at `/`, as is. `.nojekyll` is present, so Jekyll does not run: no file is
+  processed, and `_config.yml` / `exclude:` lists still have no effect. Keep `.nojekyll`. Without it, Jekyll would
+  hide the `_`-prefixed folders (`seo/_data/`, `_seo_build/`) and render any file that starts with `---`.
+- **`CNAME`** (`outlier.host`) must stay in the repo root; Pages reads the custom domain from it.
+- **URLs** (measured 2026-11-07): a folder without its slash (`/about`) answers 301 to `/about/`; `/thank-you` and
+  `/thank-you.html` both answer 200; an unknown path answers 404 with the site's own `404.html`.
+- **Headers:** Pages sends `cache-control: max-age=600` and no security headers (no HSTS, CSP or X-Frame-Options).
+  Headers can only be added at Cloudflare, not from this repo.
+- **Not on this host:** the founding-offer state (`kerr-lead-agent.kerrco.workers.dev/founding`) and checkout
+  (`kerr-affiliate-hub`) are Cloudflare Workers. The move did not touch them.
 
 ### Deploys go through `next` — push there, never to `main`
 
-Porkbun deploys `main` the moment it moves, so `main` is the gated branch:
+Pages builds `main` the moment it moves, so `main` is the gated branch:
 
 1. Push your commits to `next` (`git push origin HEAD:next`, after rebasing onto `origin/main`).
 2. `.github/workflows/gates.yml` runs every gate on that exact commit.
-3. Only if all of them pass, its last step fast-forwards `main` to that commit, and Porkbun deploys it.
+3. Only if all of them pass, its last step fast-forwards `main` to that commit, and Pages builds and publishes it.
 
 A red gate leaves `main` where it was: the site keeps serving the last commit that passed. Fix it on `next` and push
 again. If `main` moved some other way, the promote step refuses (not a fast-forward); rebase `next` onto `origin/main`.
@@ -50,36 +60,22 @@ or a push from a checkout or a machine without the hook, still reaches `main` an
 such a push and shows red, but after the fact. Closing that needs GitHub branch protection on `main` (with the workflow
 allowed to push it), a change to the repository's settings that has not been made.
 
-### How long a change takes to reach a visitor, and the one that never does
+### How long a change takes to reach a visitor
 
-Measured 2026-09-07, twice, on two different paths: a push is still serving the OLD copy at
-~7 minutes and is live by ~11-12. The home page pushed 19:08:59 was stale at 19:16 and live
-by 19:20; a root .txt pushed 19:18:17 was stale at 19:25 and live by 19:30. So when a gate
-says the deploy is behind, give it twelve minutes before believing it.
+On Pages: CI on `next` (the gates), then the promote, then a Pages build, then up to 10 minutes of edge cache
+(`max-age=600`). The first push after the move is being measured (2026-11-07); its timing replaces this sentence.
 
-**A DELETION NEVER PROPAGATES BY ITSELF.** The edge (openresty / `x-service: pixie-sh`,
-Porkbun static hosting) serves stale while revalidating and treats the origin's 404 as an
-error to keep serving stale through — `proxy_cache_use_stale` behaviour. Measured: a file
-deleted from the repo still answered 200 with `x-cache: STALE` fifty-five minutes later,
-while `?cb=<random>` and `Cache-Control: no-cache` both returned 404 from the origin.
+Deletions now propagate: a removed file answers 404 once the cache expires. (On Porkbun they never did, and the rule
+was "replace the contents, never `git rm`".)
 
-So **to unpublish something here, replace its contents; do not `git rm` it.** A 200
-revalidates successfully and the edge takes the new body. Removing the file puts the edge
-straight back into stale-on-404, holding the last 200 it saw, indefinitely.
-
-Verify with a PLAIN GET. Busting the cache asks the origin, which is not what a visitor,
-a crawler or a verifier sees, and it will tell you the deletion worked when it has not.
-
-⚠️ **`67223b34aed54ecb802e8ffcbacb9ec2.txt` must STAY in this repo.** It is a superseded
-IndexNow key file whose body is now `revoked`, which is what makes the old key stop
-validating. Deleting it would return the edge to serving the original body — the key —
-with no way to clear it from here. It looks like dead weight; it is a live control.
+⚠️ **`67223b34aed54ecb802e8ffcbacb9ec2.txt` must STAY in this repo.** It is a superseded IndexNow key file whose body is
+now `revoked`, which is what makes the old key stop validating. It looks like dead weight; it is a live control.
 
 ### The consequence that matters
 
 **Every tracked file in this repository is readable over HTTP.** There is no
-second line of defence. `scripts/`, `.github/`, `_seo_build/` and `.gitignore`
-are all servable, and internal notes committed here have twice been published at
+second line of defence. `scripts/`, `_seo_build/`, `seo/_data/` and this README
+are all servable (only dot-folders like `.github/` are not), and internal notes committed here have twice been published at
 `outlier.host/<filename>` before anyone noticed.
 
 So: **the contents of every tracked file must be safe for a stranger to read** —
