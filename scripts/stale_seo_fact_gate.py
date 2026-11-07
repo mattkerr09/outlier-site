@@ -37,6 +37,10 @@ GENERATOR = "_seo_build/scripts/render.py"
 #: /seo/ has 61 pages today. Far below that means the wrong directory, a failed checkout or a deleted tree, not
 #: a site that got clean. Low enough that retiring a handful of pages never trips it.
 MIN_PAGES = 20
+#: 2026-11-07 (Bing clean-up 3.4): /seo/ was dissolved and its 23 generated pages moved, unchanged, into /learn/, /how-to/,
+#: /vs/ and /run/ (outlier-site commit after bf8de7e08). They still carry the generator's sentences, so they stay in
+#: scope here at their new paths, and they count toward MIN_PAGES.
+MOVED_PAGES = ['how-to/download-a-model-tier/index.html', 'how-to/draft-shell-scripts-with-the-nano-tier/index.html', 'how-to/keep-prompts-private-on-mac/index.html', 'how-to/review-a-pull-request-locally/index.html', 'how-to/run-a-local-coding-assistant-on-mac/index.html', 'how-to/set-up-the-companion-window/index.html', 'how-to/upgrade-to-the-pro-tier/index.html', 'how-to/write-unit-tests-with-local-ai/index.html', 'learn/how-local-ai-gets-smarter/index.html', 'learn/k-override-explained/index.html', 'learn/mlx-explained/index.html', 'learn/self-healing-builds-explained/index.html', 'learn/what-is-unified-memory/index.html', 'learn/why-ai-agents-narrate-instead-of-acting/index.html', 'learn/why-local-ai-is-slow-to-start/index.html', 'learn/why-local-models-mis-indent-code/index.html', 'run/run-compact-on-m4-pro-macbook-pro/index.html', 'run/run-lite-on-m4-air-13/index.html', 'run/run-plus-on-m1-ultra-mac-studio/index.html', 'run/run-vision-on-m3-max-macbook-pro/index.html', 'vs/cloud-wrapped-local-ai-assistants/index.html', 'vs/hosted-llm-apis-for-summarization/index.html', 'vs/local-runtimes-for-shell-scripts/index.html']
 EXTS = {".py", ".html", ".json", ".csv", ".txt", ".md", ".js", ".css", ".yml", ".yaml", ".xml"}
 MAX_BYTES = 5_000_000
 
@@ -86,6 +90,10 @@ def walk(root: Path):
         for p in sorted(base.rglob("*")):
             if p.is_file() and p.suffix.lower() in EXTS and p.stat().st_size <= MAX_BYTES:
                 yield p
+    for rel in MOVED_PAGES:
+        p = root / rel
+        if p.is_file() and p.stat().st_size <= MAX_BYTES:
+            yield p
 
 
 def check(root: Path, min_pages: int = MIN_PAGES) -> int:
@@ -94,6 +102,7 @@ def check(root: Path, min_pages: int = MIN_PAGES) -> int:
               "called clean.")
         return 1
     pages = [p for p in (root / BUILT_DIR).rglob("*.html")] if (root / BUILT_DIR).is_dir() else []
+    pages += [root / rel for rel in MOVED_PAGES if (root / rel).is_file()]
     if len(pages) < min_pages:
         print(f"REFUSE: {len(pages)} built page(s) under {root / BUILT_DIR} (a real tree has at least {min_pages}) - "
               "this is not the tree the gate was written for, and a scan of nothing reads exactly like a clean one.")

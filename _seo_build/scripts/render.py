@@ -1,16 +1,9 @@
 #!/usr/bin/env python3
 """
-Programmatic SEO renderer for outlier-site Phase 1.
+Retired renderer. Its remaining pages are hand-owned in their real sections.
 
-Reads CSVs in seo/_data/, renders Jinja2 templates, writes HTML files into
-seo/<category>/<slug>/index.html (clean URLs). Generates sitemap.xml at
-repo root and a build report.
-
-Run from repo root (outlier-site/):
-    python3 _seo_build/scripts/render.py
-
-No network. Deterministic given the CSVs. Validates word counts + duplicate
-spans + internal-link resolution before exit.
+The builders below are kept for reference. The entry point and both writers
+stop before any output, so deleted pages and sitemap entries cannot return.
 """
 from __future__ import annotations
 
@@ -314,7 +307,7 @@ def crumb_jsonld(category: str, category_label: str, leaf: str, url: str) -> str
         "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL + "/"},
             {"@type": "ListItem", "position": 2, "name": category_label,
-             "item": f"{SITE_URL}/seo/{category}/"},
+             "item": f"{SITE_URL}/{category}/"},
             {"@type": "ListItem", "position": 3, "name": leaf, "item": url},
         ],
     })
@@ -349,10 +342,11 @@ def write_page(category: str, slug: str, title: str, description: str,
                h1: str, quick_answer_html: str, body_html: str,
                related: list[dict], faq: list[tuple[str, str]] | None,
                unique_claim: str) -> Path:
+    raise SystemExit("Renderer retired: pages are hand-owned; no files written")
     out_dir = ROOT / "seo" / category / slug
     out_dir.mkdir(parents=True, exist_ok=True)
     out = out_dir / "index.html"
-    canonical = f"{SITE_URL}/seo/{category}/{slug}/"
+    canonical = f"{SITE_URL}/{category}/{slug}/"
     tpl = env.get_template("_base.html")
     _page_tag = re.sub(r"[^a-z0-9-]+", "-", f"seo/{category}/{slug}".lower()).strip("-")[:80]
 
@@ -753,7 +747,7 @@ def build_run_pages(models, macs) -> list[dict]:
                f"The {_ram_base(mac)} GB base model is below the {m['min_ram_gb']} GB {m['display_name']} minimum, "
                f"so you need the {_ram_first_fit(mac, m['min_ram_gb'])} GB configuration or larger. ") +
             f"Step-by-step install instructions live on the "
-            f"<a href=\"/seo/how-to/install-outlier-on-mac/\">install guide</a>; the part that "
+            f"<a href=\"/how-to/install-local-ai-on-mac/\">install guide</a>; the part that "
             f"varies for this {mac['chip']} machine is that the {m['disk_gb']} GB pull from "
             f"<code>{m['hf_repo']}</code> over HTTPS lands in <code>~/Library/Application "
             f"Support/Outlier/models/{m['tier_id']}/</code> and download time is bandwidth-limited "
@@ -847,12 +841,12 @@ def build_run_pages(models, macs) -> list[dict]:
             )
         if tier_id == "plus":      # no bandwidth ratio applies to a tier that is limited by SSD reads
             guidance.append(
-                "The <a href=\"/seo/learn/what-is-unified-memory/\">unified-memory explainer</a> works "
+                "The <a href=\"/learn/what-is-unified-memory/\">unified-memory explainer</a> works "
                 "out why this tier streams from the SSD."
             )
         else:
             guidance.append(
-                f"The <a href=\"/seo/learn/what-is-unified-memory/\">unified-memory explainer</a> works "
+                f"The <a href=\"/learn/what-is-unified-memory/\">unified-memory explainer</a> works "
                 f"the bandwidth math out, and the bandwidth ratio for {mac['name']} is "
                 f"{bw_ratio:.2f}&times; M1 Ultra reference."
             )
@@ -867,10 +861,10 @@ def build_run_pages(models, macs) -> list[dict]:
              "No prompts or responses leave the device during chat. Model downloads are one-time HTTPS pulls from Hugging Face."),
         ]
         related = [
-            {"url": f"/seo/learn/what-is-unified-memory/", "label": "What is unified memory on Apple Silicon?"},
-            {"url": f"/seo/learn/mlx-explained/", "label": "What is MLX and why does Outlier use it?"},
-            {"url": f"/seo/how-to/install-outlier-on-mac/", "label": "How to install Outlier on a Mac"},
-            {"url": f"/seo/learn/k-override-explained/", "label": "What is K_override on the Plus tier?"},
+            {"url": f"/learn/what-is-unified-memory/", "label": "What is unified memory on Apple Silicon?"},
+            {"url": f"/learn/mlx-explained/", "label": "What is MLX and why does Outlier use it?"},
+            {"url": f"/how-to/install-local-ai-on-mac/", "label": "How to install Outlier on a Mac"},
+            {"url": f"/learn/k-override-explained/", "label": "What is K_override on the Plus tier?"},
         ]
         pages.append({
             "category": "run", "slug": slug, "title": title, "description": description,
@@ -955,7 +949,7 @@ def quality_block(tier_id: str, u: dict, c: dict, u_slug: str = "") -> str:
     # sentences collide on their own no matter what is bolted onto either end.
     return (
         f"<p>For a {u['name']} workload moving off {c['short_name']} onto the {_tier_name(tier_id)} tier: "
-        f"{note} The <a href=\"/seo/learn/mlx-explained/\">MLX explainer</a> has the per-tier "
+        f"{note} The <a href=\"/learn/mlx-explained/\">MLX explainer</a> has the per-tier "
         f"breakdown if you want to see how it compares with {c['short_name']}. "
         f"The measured accuracy figures are on the <a href=\"/data/outlier-tier-benchmarks-2026-08/\">tier benchmarks page</a> "
         f"(MMLU for every tier but Plus; HumanEval for Core and Vision 3.8 only), and for {u['name']} specifically: {relevance}</p>"
@@ -1192,11 +1186,11 @@ def build_vs_pages(competitors, use_cases) -> list[dict]:
              f"Apple Silicon, {OS_OR_LATER}. RAM minimum is set by the chosen tier; the Nano tier starts at 6 GB."),
         ]
         related = [
-            {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},
-            {"url": "/seo/learn/paged-moe-explained/", "label": "What is a paged Mixture-of-Experts model?"},
-            {"url": f"/seo/run/run-{rec_tier}-on-{rec_run_mac}/", "label": rec_run_label},
-            {"url": "/seo/how-to/install-outlier-on-mac/", "label": "How to install Outlier on a Mac"},
-            {"url": "/seo/learn/what-is-unified-memory/", "label": "What is unified memory?"},
+            {"url": "/learn/mlx-explained/", "label": "What is MLX?"},
+            {"url": "/learn/what-is-paged-moe-inference/", "label": "What is a paged Mixture-of-Experts model?"},
+            {"url": f"/run/run-{rec_tier}-on-{rec_run_mac}/", "label": rec_run_label},
+            {"url": "/how-to/install-local-ai-on-mac/", "label": "How to install Outlier on a Mac"},
+            {"url": "/learn/what-is-unified-memory/", "label": "What is unified memory?"},
         ]
         pages.append({
             "category": "vs", "slug": slug, "title": title, "description": description,
@@ -1499,9 +1493,9 @@ def build_howto_pages() -> list[dict]:
             ("How big is the download?", f"The DMG itself is about {DMG_MB} MB. Model tiers range from 2.4 GB (Nano) to 209 GB (Plus)."),
         ]
         related = [
-            {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},
-            {"url": "/seo/learn/what-is-unified-memory/", "label": "What is unified memory?"},
-            {"url": "/seo/run/run-compact-on-m4-pro-macbook-pro/", "label": "Run Core on an M4 Pro MacBook Pro"},
+            {"url": "/learn/mlx-explained/", "label": "What is MLX?"},
+            {"url": "/learn/what-is-unified-memory/", "label": "What is unified memory?"},
+            {"url": "/run/run-compact-on-m4-pro-macbook-pro/", "label": "Run Core on an M4 Pro MacBook Pro"},
         ]
         pages.append({
             "category": "how-to", "slug": slug, "title": title, "description": description,
@@ -1710,11 +1704,11 @@ def build_learn_pages() -> list[dict]:
              "Every benchmark on the site links to a source file path in the public Outlier repo, with the original command and stderr preserved."),
         ]
         related = [
-            {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},
-            {"url": "/seo/learn/what-is-unified-memory/", "label": "What is unified memory?"},
-            {"url": "/seo/learn/paged-moe-explained/", "label": "What is a paged MoE model?"},
-            {"url": "/seo/learn/ternary-quantization-explained/", "label": "What is ternary quantization?"},
-            {"url": "/seo/learn/k-override-explained/", "label": "What is K_override?"},
+            {"url": "/learn/mlx-explained/", "label": "What is MLX?"},
+            {"url": "/learn/what-is-unified-memory/", "label": "What is unified memory?"},
+            {"url": "/learn/what-is-paged-moe-inference/", "label": "What is a paged MoE model?"},
+            {"url": "/learn/what-is-ternary-quantization/", "label": "What is ternary quantization?"},
+            {"url": "/learn/k-override-explained/", "label": "What is K_override?"},
         ]
         # Drop the self-referential related link
         related = [r for r in related if r["url"].rstrip("/") != f"/seo/learn/{slug}"]
@@ -1872,6 +1866,7 @@ def write_sitemap(pages: list[dict]) -> Path:
     replaced and missing ones are appended. Hand-authored URLs are NEVER
     deleted.
     """
+    raise SystemExit("Renderer retired: pages are hand-owned; no files written")
     out = ROOT / "sitemap.xml"
 
     # URLs this renderer owns (leaf SEO pages + the developers page).
@@ -1974,6 +1969,7 @@ def write_sitemap(pages: list[dict]) -> Path:
 
 
 def main():
+    raise SystemExit("Renderer retired: pages are hand-owned; no files written")
     models = load_csv("models")
     macs = load_csv("macs")
     competitors = load_csv("competitors")

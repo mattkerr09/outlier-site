@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+<title>Why local AI agents narrate instead of acting (27% to 89%)</title>
+<meta name="description" content="In 63 real agent traces, 73% of a local model's turns narrated and never called a tool. How tool_choice required raised the action rate from 27% to 89%.">
+<link rel="canonical" href="https://outlier.host/learn/why-ai-agents-narrate-instead-of-acting/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why local AI agents narrate instead of acting | Outlier">
+<meta property="og:description" content="73% of agent turns produced no action in our benchmarks. The taxonomy behind it, and the one API field that took the action rate from 27% to 89%.">
+<meta property="og:url" content="https://outlier.host/learn/why-ai-agents-narrate-instead-of-acting/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why local AI agents narrate instead of acting | Outlier">
+<meta name="twitter:description" content="73% of agent turns produced no action. The measured taxonomy, and the fix that took the action rate from 27% to 89%.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
+<script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Concept","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Why AI agents narrate instead of acting","item":"https://outlier.host/learn/why-ai-agents-narrate-instead-of-acting/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Why local AI agents narrate instead of acting (27% → 89% with one API field)","description":"73% of agent turns produced no action in our benchmarks. The measured taxonomy behind it, and how tool_choice: required raised the action rate from 27% to 89%.","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"},"mainEntityOfPage":"https://outlier.host/learn/why-ai-agents-narrate-instead-of-acting/"}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p{margin:0 0 20px}li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+pre{background:#f6f8f7;border:1px solid var(--bd);border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.45;margin:0 0 20px}
+code{font-family:"SF Mono",Menlo,monospace;font-size:.92em}
+a{color:var(--acc)}
+.foot{margin-top:40px;padding-top:16px;border-top:1px solid var(--bd);font-size:14px;color:var(--mut)}
+
+/* Email capture. Injected into the pages the SEO renderer does not own.
+   Every custom property carries a fallback, and the fallbacks inherit rather
+   than hardcode: these 16 pages split across two themes — the five top-level
+   ones render dark (rgb(7,6,11)) and define no variables at all, while the
+   seo/ section indexes render light and define --bd/--mut. A single literal
+   colour would have been invisible on one half. `currentColor` plus opacity
+   is correct on both, which is the same failure that put .lede at
+   rgb(240,238,245) on a light page earlier today. */
+.sublist{border-top:1px solid var(--bd,rgba(127,127,127,.28));margin-top:40px;padding-top:24px}
+.sublist h3{margin:0 0 6px;font-size:15px;color:inherit}
+.sublist p{font-size:13px;color:var(--mut,currentColor);opacity:.72;margin:0 0 12px;line-height:1.6;max-width:60ch}
+.sublist form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sublist input[type=email]{flex:1 1 240px;min-width:0;padding:9px 11px;font:inherit;font-size:14px;color:inherit;background:transparent;border:1px solid var(--bd,rgba(127,127,127,.4));border-radius:7px}
+.sublist button{padding:9px 16px;font:inherit;font-size:14px;color:inherit;border-radius:7px;border:1px solid var(--bd,rgba(127,127,127,.55));background:transparent;cursor:pointer}
+.sublist button:hover:not(:disabled){border-color:currentColor}
+.sublist button:disabled{opacity:.55;cursor:default}
+.sublist .note{font-size:12px;color:var(--mut,currentColor);opacity:.72;margin:10px 0 0;min-height:1em}
+.sublist .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs"><a href="/">Outlier</a> › <a href="/learn/">Concepts</a> › Why agents narrate instead of acting</nav>
+
+<h1>Why local AI agents narrate instead of acting (27% → 89% with one API field)</h1>
+<p class="byline">Measured on Outlier's on-device SWE-bench harness · July 2026</p>
+
+<div class="qa"><strong>The short version</strong>
+In 63 real coding-agent sessions on a 27B local model, 73% of the model's turns produced <em>no action</em>: it wrote things like "Let me search for <code>allow_migrate</code> in the autodetector:" and then simply stopped, burning a full inference round-trip for nothing. The fix isn't a better prompt. It's making narration structurally impossible: <code>tool_choice: "required"</code>, which Outlier's OpenAI-compatible API now supports. Measured action rate went from 27% to 89%.</div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-learn-why-ai-agents-narrate-instead-of-acting-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.999/Outlier-1.11.999-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-learn-why-ai-agents-narrate-instead-of-acting-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 15+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+
+<h2>The measurement</h2>
+<p>A coding agent works in a loop: the model reads the state of a repository, calls a tool (search, read a file, edit a file, run a test), sees the result, and repeats. Every turn that doesn't call a tool is a wasted round-trip: on local hardware, roughly 12 seconds of compute that moves nothing forward.</p>
+<p>We instrumented 63 real agent sessions (SWE-bench Verified tasks, blind, greedy decoding) and counted what each of 8,569 model turns actually did:</p>
+<table>
+<tr><th>What the turn produced</th><th>Share</th></tr>
+<tr><td>A real tool call</td><td>27%</td></tr>
+<tr><td>Prose narration, no action ("Let me search for…")</td><td>~46%</td></tr>
+<tr><td>A single token, then silence ("Let", "I", "```")</td><td>~20%</td></tr>
+<tr><td>A tool call written in shorthand our parser dropped</td><td>~5%</td></tr>
+<tr><td>Other fragments</td><td>~2%</td></tr>
+</table>
+<p>The system prompt already ordered the model, in capitals, to emit tool calls only. It narrated anyway. At 27B scale, instruction-following alone does not survive a long agent context.</p>
+
+<h2>Three different bugs were hiding in that 73%</h2>
+<h3>1. The single-token stutter (a harness bug)</h3>
+<p>The strangest slice: 1,741 turns where the model generated exactly one visible token and stopped. Timing gave the cause away: those turns took 1.2 seconds against 18 for real ones, so the model wasn't being cut off; it was <em>choosing</em> to stop instantly. The trigger: when a turn produced prose and no tool call, our loop appended the text and re-prompted <em>without a user message</em>. The model, asked to speak again immediately after ending its own turn, ends the new turn after one token, and the loop repeats, forever, at 1.2s a spin. The fix is to always respond to a no-action turn with an explicit user message demanding a tool call, and to stop honestly after a few strikes.</p>
+<h3>2. Dropped shorthand tool calls (a parser bug)</h3>
+<p>458 "no-action" turns were actually the model calling a tool: in a shorthand format (<code>&lt;grep_repo&gt;…</code> instead of the canonical <code>&lt;tool_call&gt;&lt;function=grep_repo&gt;…</code>) that our parser threw away. Recovery is now automatic, and safe: shorthand is only recognized for names the request actually declared as tools, so real XML in a code answer can never be misread as a tool call.</p>
+<h3>3. Genuine narration (a model behavior: fixed structurally)</h3>
+<p>The rest is the model doing what chat models do: thinking out loud. No prompt fixes this reliably. What fixes it is removing the option.</p>
+
+<h2>What <code>tool_choice: "required"</code> does</h2>
+<p>OpenAI's API has a field for exactly this, and Outlier's OpenAI-compatible endpoint now implements it. The mechanism is structural: when a request sets <code>tool_choice: "required"</code>, Outlier ends the prompt with the exact opening syntax of a tool call, so the only thing the model <em>can</em> generate is the rest of one.</p>
+<pre>{
+  "model": "outlier-compact",
+  "messages": [...],
+  "tools": [...],
+  "tool_choice": "required"
+}</pre>
+<p>The forced-function form (<code>{"type": "function", "function": {"name": "grep_repo"}}</code>) is supported too, and giving up stays possible: finishing is itself a tool, so the model can always choose <code>finish</code> explicitly instead of trailing off.</p>
+
+<h2>The result</h2>
+<table>
+<tr><th></th><th>Before</th><th>After</th></tr>
+<tr><td>Turns producing a real tool call</td><td>27%</td><td><strong>89%</strong></td></tr>
+<tr><td>Single-token wasted turns</td><td>33% of calls</td><td><strong>0</strong></td></tr>
+</table>
+<p>Same model, same weights, same tasks. The difference is that the harness stopped losing actions and the API stopped letting the model narrate.</p>
+
+<h2>The honest caveats: including the one that bit us</h2>
+<p>Action rate is not task success. We promised to publish the resolution measurement with the misses included, and here is the miss: when we made <code>required</code> the <em>default</em> for our own coding agent, the first four benchmark tasks all ended with <strong>empty patches</strong>: including three that the unforced baseline had patched or solved. Forced to act on every turn, the model stopped deliberating and browsed the repository until time ran out.</p>
+<p>The lesson: some of that prose narration was <em>load-bearing thinking</em>: the model's natural pattern is to reason in text, <em>then</em> edit. Deleting the option to think made it act more and accomplish less. So our agent's default is back to <code>auto</code>, with the stutter-loop and dropped-shorthand fixes (which ban waste, not thinking) doing the real work. <code>tool_choice: "required"</code> remains available and correct as an API feature: many agent designs genuinely need it, especially routing and extraction loops where every turn <em>should</em> be a call. Just don't assume a forced action is a useful one.</p>
+<p>And the methodological note we keep re-learning: <em>most of what looked like model weakness in this investigation was our own code</em>. Before concluding a local model can't do something, verify the harness that measured it.</p>
+
+<div class="foot">
+<p>Outlier runs local AI on your own Mac: private, offline, no subscription. The OpenAI-compatible API (including <code>tool_choice: "required"</code>) ships in v1.11.787.</p>
+<p><a href="/">Download Outlier</a> · <a href="/learn/">More concepts</a></p>
+
+<p>Made by <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company</a></p>
+</div>
+</div>
+
+<div class="pbox" data-pbox="end">
+<p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-learn-why-ai-agents-narrate-instead-of-acting-box-end&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.999/Outlier-1.11.999-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-learn-why-ai-agents-narrate-instead-of-acting-box-end" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 15+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+<div class="sublist">
+<h3>New models worth running</h3>
+<p>Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+<form method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+<input type="hidden" name="source" value="outlier-host">
+<label class="vh" for="sub-email">Email</label>
+<input id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+<div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+<button type="submit">Keep me posted</button>
+</form>
+<p class="note" role="status" aria-live="polite">Your address and which site you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+</div>
+<script>
+(function(){
+  var f=document.querySelector('.sublist form'); if(!f) return;
+  var n=document.querySelector('.sublist .note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. I'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$49" data-now="$24.50" hidden></div>
+<script data-founding-ends="2026-12-01T07:59:00Z">(function(){var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
+var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
+if(end-now<24*24*60*60*1000)setTimeout(function(){m.forEach(function(e){e.hidden=true;});},end-now);
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script src="/js/mac-only.js" defer></script>
+</body>
+</html>

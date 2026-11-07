@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
+<title>Review a pull request without sending code out | Outlier</title>
+<meta name="description" content="Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API.">
+<link rel="canonical" href="https://outlier.host/how-to/review-a-pull-request-locally/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Review a pull request without sending code out | Outlier">
+<meta property="og:description" content="Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API.">
+<meta property="og:url" content="https://outlier.host/how-to/review-a-pull-request-locally/">
+<meta property="og:site_name" content="Outlier">
+<meta property="og:image" content="https://outlier.host/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Review a pull request without sending code out | Outlier">
+<meta name="twitter:description" content="Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API.">
+<meta name="twitter:image" content="https://outlier.host/og-card.png">
+<script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script><script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script><script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"How-to","item":"https://outlier.host/how-to/"},{"@type":"ListItem","position":3,"name":"Review a pull request without sending code out","item":"https://outlier.host/how-to/review-a-pull-request-locally/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Review a pull request without sending code out | Outlier","description":"Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API.","url":"https://outlier.host/how-to/review-a-pull-request-locally/","datePublished":"2026-06-17","dateModified":"2026-11-04","author":{"@type":"Organization","name":"Outlier"},"publisher":{"@type":"Organization","name":"Outlier"}}</script>
+<style>
+:root{--fg:#111;--mut:#666;--acc:#0b6;--bg:#fff;--bd:#eee}
+*{box-sizing:border-box}
+body{font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;color:var(--fg);background:var(--bg);margin:0}
+.wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+nav.crumbs{font-size:13px;color:var(--mut);margin-bottom:24px}
+nav.crumbs a{color:var(--mut);text-decoration:none;border-bottom:1px dotted #bbb}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px;letter-spacing:-.01em}
+h2{font-size:22px;margin:32px 0 8px}
+h3{font-size:17px;margin:20px 0 6px}
+p{margin:0 0 20px}li{margin:0 0 12px}
+.byline{color:var(--mut);font-size:13px;margin-bottom:24px}
+.qa{background:#f6f8f7;border-left:3px solid var(--acc);padding:14px 16px;margin:0 0 24px;font-size:15px}
+.qa strong{display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--acc);margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 20px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--bd);text-align:left}
+th{font-weight:600;background:#fafafa}
+.cta{display:inline-block;background:var(--fg);color:#fff;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;margin:8px 0}
+.cta:hover{background:#000}
+.related{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px;font-size:14px}
+.related ul{padding-left:18px}
+.foot{font-size:12px;color:var(--mut);margin-top:48px;border-top:1px solid var(--bd);padding-top:16px}
+.sublist{border-top:1px solid var(--bd);margin-top:40px;padding-top:24px}
+.sublist h3{margin:0 0 6px;font-size:15px}
+.sublist p{font-size:13px;color:var(--mut);margin:0 0 12px;line-height:1.6}
+.sublist form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sublist label.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sublist input[type=email]{flex:1 1 20ch;min-width:0;padding:9px 11px;border:1px solid var(--bd);border-radius:8px;font-size:14px;font-family:inherit}
+.sublist button{padding:10px 16px;border:0;border-radius:8px;background:var(--fg);color:#fff;font-size:14px;font-family:inherit;cursor:pointer}
+.sublist .note{font-size:12px;color:var(--mut);margin:10px 0 0;line-height:1.6}
+.foot a{color:var(--mut)}
+code{background:#f3f3f3;padding:1px 5px;border-radius:3px;font-size:13px;overflow-wrap:anywhere}
+.tag{display:inline-block;background:#eef;color:#335;font-size:11px;padding:2px 8px;border-radius:10px;margin-right:6px;text-transform:uppercase;letter-spacing:.04em}
+.phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
+.phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
+</style>
+<style data-pbox-style>
+.pbox{margin:1.6rem 0;padding:1rem 1.15rem;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+.pbox p{margin:.3rem 0}
+.pbox .pbox-price{font-weight:600}
+.pbox .pbox-btns{display:flex;flex-wrap:wrap;gap:.6rem;margin:.7rem 0 .5rem}
+.pbox .pbox-btns a{display:inline-block;padding:.55rem 1.05rem;border-radius:9px;text-decoration:none;font-weight:600}
+.pbox .pbox-dl{background:#0071e3;color:#fff}
+.pbox .pbox-buy{border:1px solid currentColor}
+.pbox .pbox-req{font-size:.85rem;opacity:.75}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="crumbs">
+<a href="/">Home</a> &rsaquo; <a href="/how-to/">How-to</a> &rsaquo; <span>Review a pull request without sending code out</span>
+</nav>
+<span class="tag">How-to</span>
+<h1>Review a pull request without sending code out</h1>
+<p class="byline">Last updated 2026-11-04</p>
+
+<div class="qa"><strong>Quick answer</strong><p>Use the Code mode in Outlier to scan a PR diff and surface issues without round-tripping to a hosted API. The whole sequence below stays on the Mac.</p></div>
+<div class="pbox" data-pbox="answer">
+<p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
+<p class="pbox-btns"><a class="pbox-dl" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-how-to-review-a-pull-request-locally-box-answer&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.999/Outlier-1.11.999-arm64.dmg" rel="nofollow">Download free</a> <a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-how-to-review-a-pull-request-locally-box-answer" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Free to start (Nano and Lite). macOS 15+, Apple silicon. Refund window: 30 days, no questions asked.</p>
+</div>
+
+
+<h2>What you need first for &ldquo;review a pull request without sending code out&rdquo;</h2>
+<p>Apple Silicon Mac, macOS 15 or later, and for review a pull request without sending code out the unified-memory minimum that the chosen tier requires (6 GB for Nano, 12 GB for Lite, 16 GB for Quick (24 GB to run it fully in memory), 24 GB for Core and Vision 3.8, 64 GB for Plus). For review a pull request locally, those are the minimums to load a tier; a long agent session needs more. You need the internet to download each model (and once to activate a Pro key); after that, chat works offline.</p>
+<h2>Steps</h2>
+<ol>
+<li><strong>Copy the diff.</strong> <code>git show HEAD</code> or fetch the PR locally.</li>
+<li><strong>Paste into Outlier in Code mode.</strong> The system prompt is tuned for code-first review.</li>
+<li><strong>Ask for a single axis at a time.</strong> Bug surface, then style, then perf.</li>
+<li><strong>Save the rendered review to your PR description.</strong> No part of the diff has left the Mac.</li>
+</ol>
+<h2>What is the specific thing to know about this guide?</h2>
+<p>For PR review, Core defaults to a 32K-token context window and goes up to 128K on Pro, which matters for long diffs.</p><p>Large diffs are the limiting factor, not the review itself. Split anything past a few hundred lines by file and review each in its own turn; a diff that overruns the context window gets silently truncated, and a review of half a change reads exactly like a review of all of it. Asking for one axis per pass (correctness, then style, then performance) also keeps each answer short enough to check.</p>
+<h2>What can go wrong with this guide?</h2>
+<ul><li>Very large diffs can still exceed Core&rsquo;s context window if the repo files are also pasted.</li><li>The review is only as good as the prompt&rsquo;s axis; ask for one thing per turn.</li></ul>
+<h2>How does this guide differ from the cloud equivalent?</h2>
+<p>Cloud PR review tools transmit the diff. Outlier&rsquo;s Code mode keeps it on the Mac, which matters when the diff has untested mitigations or unreleased features.</p>
+<h2>What does this guide <em>not</em> claim about &ldquo;review a pull request without sending code out&rdquo;?</h2>
+<p>This guide does not claim feature parity with cloud-side workflows for &ldquo;review a pull request without sending code out&rdquo;. Specifically, the product surface covers chat, file attachment, the local agent loop, project scoping, and the model picker. Cross-device sync, team workspaces, and shared session history are out of scope and are not on the v1.9 backlog either.</p>
+<h2>How wide is Core&rsquo;s context for PR review?</h2><p>Core defaults to a 32K context window and goes up to 128K on Pro. For PR review on diffs over 500 lines, that window keeps the whole diff plus the relevant surrounding code addressable in a single turn.</p>
+<h2>Where does this guide fit in the rest of the lineup?</h2>
+<p>For a 500-line diff, Core&rsquo;s context window holds the diff plus surrounding source. For longer diffs, paste the diff alone and reference the surrounding files by name; Outlier loads them via the project chip if needed.</p>
+<h2>One unique number</h2>
+<p>4 steps. Once the model is downloaded your chats and files stay on your Mac. Asking along a single axis at a time (correctness, then style, then perf) holds quality better than a single &lsquo;review this&rsquo; ask.</p>
+
+<a class="cta" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=seo-how-to-review-a-pull-request-locally&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.999/Outlier-1.11.999-arm64.dmg" rel="nofollow" data-plausible="Download" id="dl-cta">Download Outlier for Mac</a>
+<p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+<p style="font-size:0.8rem;margin:4px 0 0;color:#666;">Free &middot; M1 or newer &middot; macOS 15+ (free update) &middot; 276 MB. Intel Macs are not supported.</p>
+<div class="pbox" data-pbox="end">
+<p class="pbox-price">Outlier Pro: $49 once<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until 30 November</span></p>
+<p class="pbox-btns"><a class="pbox-buy" href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=seo-how-to-review-a-pull-request-locally-box-end" rel="nofollow">Buy Pro</a></p>
+<p class="pbox-req">Refund window: 30 days, no questions asked.</p>
+</div>
+
+
+<div class="related">
+<h3>Related pages</h3>
+<ul>
+<li><a href="/learn/mlx-explained/">What is MLX?</a></li><li><a href="/learn/what-is-unified-memory/">What is unified memory?</a></li><li><a href="/run/run-compact-on-m4-pro-macbook-pro/">Run Core on an M4 Pro MacBook Pro</a></li>
+</ul>
+</div>
+
+<div class="sublist">
+<h3>New models worth running</h3>
+<p>Open weights ship constantly and most are not worth your disk. When one beats a tier Outlier already has, on hardware you already own, we say so and what it replaces. That is the only reason we email.</p>
+<form method="post" action="https://kerr-subscribe.kerrco.workers.dev">
+<input type="hidden" name="source" value="outlier-host">
+<label class="vh" for="sub-email">Email</label>
+<input id="sub-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+<div aria-hidden="true" style="position:absolute;left:-9999px"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+<button type="submit">Keep me posted</button>
+</form>
+<p class="note" role="status" aria-live="polite">Your address and which site you sent it from. No IP, no user agent, no referer. Nothing is sent until you press the button. <a href="https://outlier.host/privacy.html">Privacy</a>.</p>
+</div>
+
+<div class="foot">
+<p>Local models run on your Mac. Cloud models and online tools send requests only when you turn them on. macOS 15+ on Apple Silicon (arm64). Apache 2.0 model weights. <a href="/">Back to home</a>.</p>
+<p>Made by <a href="https://kerrandcompanyholdings.com/">Kerr &amp; Company</a></p>
+</div>
+</div>
+<script>
+// UTM forwarding to Download CTA
+(function(){
+  try{
+    var p=new URLSearchParams(location.search);
+    var keep=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','ref'];
+    var pairs=[];keep.forEach(function(k){var v=p.get(k);if(v)pairs.push(encodeURIComponent(k)+'='+encodeURIComponent(v));});
+    if(pairs.length){
+      var a=document.getElementById('dl-cta');
+      if(a){a.href=a.href+(a.href.indexOf('?')<0?'?':'&')+pairs.join('&');}
+    }
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  var f=document.querySelector('.sublist form'); if(!f) return;
+  var n=document.querySelector('.sublist .note');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var b=f.querySelector('button'); b.disabled=true;
+    fetch(f.action,{method:'POST',body:new FormData(f)})
+      .then(function(r){return r.json().catch(function(){return {};})
+        .then(function(d){return {ok:r.ok&&d&&d.ok,err:d&&d.error};});})
+      .then(function(res){
+        if(res.ok){ n.textContent="You're on the list. I'll write when a model is worth your disk."; f.style.display='none'; }
+        else { n.textContent=res.err||'That did not save. Try again, or email matt@outlier.host.'; b.disabled=false; }
+      })
+      .catch(function(){ n.textContent='Could not reach the server. Try again, or email matt@outlier.host.'; b.disabled=false; });
+  });
+})();
+</script>
+<div data-founding data-was="$49" data-now="$24.50" hidden></div>
+<script data-founding-ends="2026-12-01T07:59:00Z">(function(){var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
+<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
+var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
+if(end-now<24*24*60*60*1000)setTimeout(function(){m.forEach(function(e){e.hidden=true;});},end-now);
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
+<script>
+/* Send the Mac link to yourself: the link carries the visitor's source and any affiliate id (kcCarry). */
+function kcCarry(url){try{var s=JSON.parse(localStorage.getItem('kc_aff')||'null');var v=(s&&s.exp>Date.now()&&s.v)||{};var q=[];var r=v.ref||v.landing_source;if(r)q.push('ref='+encodeURIComponent(r));['via','rekomi_ref','affonso_referral','awc','cjevent','irclickid'].forEach(function(k){if(v[k])q.push(k+'='+encodeURIComponent(v[k]));});return q.length?url+'&'+q.join('&'):url;}catch(e){return url;}}
+document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var url = kcCarry('https://outlier.host/?utm_source=phone-share&utm_medium=share&utm_campaign=seo-how-to-review-a-pull-request-locally');
+    var text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
+    if (window.plausible) { try { window.plausible('Send Mac Link'); } catch (e) {} }
+    if (navigator.share) { navigator.share({ title: 'Outlier for Mac', text: text, url: url }).catch(function () {}); }
+    else { location.href = 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' + encodeURIComponent(text + '\n\n' + url); }
+  });
+});
+</script>
+<script src="/js/mac-only.js" defer></script>
+</body>
+</html>
