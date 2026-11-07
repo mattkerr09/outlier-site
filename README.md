@@ -63,7 +63,7 @@ allowed to push it), a change to the repository's settings that has not been mad
 ### How long a change takes to reach a visitor
 
 On Pages: CI on `next` (the gates), then the promote, then a Pages build, then up to 10 minutes of edge cache
-(`max-age=600`). The first push after the move is being measured (2026-11-07); its timing replaces this sentence.
+(`max-age=600`). Measured on the first push after the move (2026-11-07): pushed to `next` at 16:34:19Z, and a plain GET (no cache-busting) of the changed file showed the new copy within 171 s, polled every 30 s; CI had promoted `main` by the same poll. On Porkbun the same path took 11–12 minutes.
 
 Deletions now propagate: a removed file answers 404 once the cache expires. (On Porkbun they never did, and the rule
 was "replace the contents, never `git rm`".)
