@@ -45,7 +45,8 @@
   <div class="wrap">
     <a class="back" href="/">← Back to Outlier</a>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 2026-11-06 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Last updated: 2026-11-07 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Changed 2026-11-07: two headings said more than the list under them. &ldquo;What never leaves your Mac&rdquo; listed your prompts and your license key, but a chat you switch to a cloud model goes to that provider, and the license key goes to its vendor at activation and in the daily re-check. &ldquo;Only when you opt in&rdquo; was also wrong for the update check, the license re-check and the upgrade-window price check, which run on their own. The headings and those two lines now say exactly that. Nothing the app does changed.</p>
     <p class="updated">Changed 2026-11-06: removed Meta's (Facebook's) tracking pixel from every page of this site, and with it the cookie it set. Plausible, which sets no cookies, is the only analytics here.</p>
     <p class="updated">Changed 2026-11-04: the model download line now says which tiers come from Outlier's own Hugging Face repositories and which from public mlx-community repositories, instead of saying every tier comes from Outlier-Ai.</p>
     <p class="updated">Changed 2026-11-04: the price check now says it asks whether the sale is on, and a paragraph about checkout payment options that do not apply at these prices is gone.</p>
@@ -56,15 +57,16 @@
 
     <p>Outlier is a Mac-native local AI app. The privacy story is short because the design choice is to keep things on your Mac unless you opt in.</p>
 
-    <h2>What never leaves your Mac</h2>
+    <h2>What stays on your Mac</h2>
     <ul>
-      <li>Your prompts, chat history, memory, personas, projects, and uploaded files.</li>
+      <li>Your prompts, chat history, memory, personas, projects, and uploaded files, as long as you use Outlier&rsquo;s local models. If you switch a chat to a cloud model with your own API key, that chat goes to the provider you chose (see below).</li>
       <li>Anything Outlier's local models generate. Inference runs on Apple Silicon via MLX, on-device.</li>
-      <li>License keys after activation. Stored at <code>~/.outlier/license.json</code> with 0600 perms.</li>
+      <li>Your license key is stored at <code>~/.outlier/license.json</code> with 0600 perms. It goes to one place only, the vendor that issued it: when you activate, and in the re-check at startup and once a day (see below).</li>
       <li>Bug reports created via Help &amp; Diagnostics. Saved to <code>~/.outlier/bug_reports/</code> locally. You decide whether to email them.</li>
     </ul>
 
-    <h2>What does leave your Mac (only when you opt in)</h2>
+    <h2>What can leave your Mac</h2>
+    <p>Three checks run on their own: the app update check, the license re-check, and the price check when you open an upgrade window. Each is described below, with exactly what it sends. Everything else on this list happens only when you use that feature.</p>
     <ul>
       <li><strong>The mailing list, if you type an address into a form on outlier.host</strong>: most
       pages here carry a &ldquo;new models worth running&rdquo; form. It sends nothing on page load; it posts once, when you
