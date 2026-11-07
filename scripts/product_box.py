@@ -98,6 +98,9 @@ fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').t
 
 #: The refund promise in terms.html's own words. Every box and end block says the same thing.
 REFUND = "Refund window: 30 days, no questions asked."
+#: 2026-11-07 (sales audit): tax and currency at the button, true per Dodo's November orders (6 of 8 buyers paid in their own
+#: currency, 4 of them with VAT or sales tax added at checkout). Every box says it right after the refund promise.
+TAX = "Priced in US dollars. Checkout shows your currency and any local tax."
 #: 2026-11-03: the macOS requirement comes from data/binary-requirements.json (measured from the installed bundle),
 #: never typed. The floor fell to macOS 15 on 10-21 and this file kept "macOS 26+" until 11-03, re-rendering it onto
 #: 133 pages; macos_floor_gate.py is now two-sided and fails a claim above the floor as well as below it.
@@ -147,7 +150,7 @@ def box(tag: str, spot: str, version: str, src: str | None = None) -> str:
         f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}" rel="nofollow">Download free</a> '
         f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">Free to start (Nano and Lite). {OS_REQ}, Apple silicon. '
-        f'{REFUND}</p>\n'
+        f'{REFUND} {TAX}</p>\n'
         f'</div>\n'
     )
 
@@ -165,7 +168,7 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
         f'<p class="pbox-price">Outlier Pro: $49 once'
         f'<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until {founding_until()}</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
-        f'<p class="pbox-req">{req}{REFUND}</p>\n'
+        f'<p class="pbox-req">{req}{REFUND} {TAX}</p>\n'
         f'</div>\n'
     )
 
@@ -226,7 +229,7 @@ STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp
                  "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
                  "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
 STD_PRICE_NEW = ("Free: Nano + Lite. Pro: $49 once"
-                 f"<span data-pbox-founding hidden>; Black Friday price, all of November: $24.50 once, until {founding_until()}</span>. {OS_REQ}. " + REFUND)
+                 f"<span data-pbox-founding hidden>; Black Friday price, all of November: $24.50 once, until {founding_until()}</span>. {OS_REQ}. " + REFUND + " " + TAX)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
                   'var(--border);margin:.5rem 0 0 .5rem"')
 STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_STYLE}>See Pro</a>'
