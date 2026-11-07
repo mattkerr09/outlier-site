@@ -1555,7 +1555,7 @@ def build_learn_pages() -> list[dict]:
          "Outlier&rsquo;s shipping models are MLX 4-bit, not ternary; ternary is a research direction covered by 3 provisional patents filed in April 2026."),
         ("mlx-explained",
          "What is MLX and why does Outlier use it?",
-         "MLX is Apple&rsquo;s array framework for Apple Silicon. It exposes the unified GPU and CPU as one device, avoids the host&ndash;device copy that CUDA frameworks require, and ships a quantization toolkit that targets the 4-bit dense format Outlier uses for every shipping tier except Plus.",
+         "MLX is Apple&rsquo;s array framework for Apple Silicon. It exposes the unified GPU and CPU as one device, avoids the host&ndash;device copy that CUDA frameworks require, and ships a quantization toolkit that targets the 4-bit weights Outlier ships for every tier (Quick and Plus are mixture-of-experts models).",
          "Outlier ships mlx_lm 0.31.3 inside the signed DMG; no separate Python install is required."),
         ("k-override-explained",
          "What is K_override on the Plus tier?",
@@ -1610,11 +1610,11 @@ def build_learn_pages() -> list[dict]:
             "OUTLIER_MMAP_EXPERTS=0, lazy_load=True</code>; this is what ships.</p>",
         "what-is-unified-memory":
             "<h2>What does this mean for the heaviest tiers?</h2>"
-            "<p>For dense tiers up to Vision (about 20 GB on disk), the bottleneck is unified-memory "
+            "<p>For dense tiers up to Vision 3.8 (a 15.5 GB download), the bottleneck is unified-memory "
             f"bandwidth and tok/s scales accordingly. Nano at 2.4 GB on disk runs at {toks('nano')} tok/s on "
-            f"the M1 Ultra (800 GB/s); Core at 15 GB runs at {toks('compact')} tok/s on the same machine. The "
-            f"ratio of those numbers ({float(toks('nano')) / float(toks('compact')):.2f}) is close to the ratio of the model sizes (15 / 2.4 = 6.25), "
-            "with the gap closed partly by the differences in compute density and quantization layout.</p>"
+            f"the M1 Ultra (800 GB/s); Core at 15 GB runs at {toks('compact')} tok/s on the same machine. So "
+            f"Nano decodes {float(toks('nano')) / float(toks('compact')):.2f} times faster while its weights are 6.25 times smaller (15 / 2.4): "
+            "weight size alone does not explain the measured speeds.</p>"
             "<p>For the Plus tier (209 GB on disk), the bottleneck shifts. Even a 128 GB Mac "
             "cannot hold the whole model in unified memory, so reads spill to NVMe. That is why "
             "fan-out <code>pread()</code> is the Plus-tier optimization "
@@ -1648,7 +1648,7 @@ def build_learn_pages() -> list[dict]:
         "mlx-explained":
             ("<p>MLX is Apple&rsquo;s array framework, released open-source in late 2023. Its core "
              "design choice is unified-memory-first: an array lives in one address space and is "
-             "accessible to the GPU, the CPU, and the Apple Neural Engine without an explicit copy. "
+             "accessible to both the GPU and the CPU without an explicit copy. "
              "On the Mac that means model weights load straight into the address space the GPU "
              "decodes against, no PCIe round-trip.</p>"
              "<p><code>mlx_lm</code> is the language-model subpackage. Outlier ships v0.31.3 inside the "
@@ -1677,7 +1677,7 @@ def build_learn_pages() -> list[dict]:
              "token requires reading the weights of the model out of memory once. The throughput "
              "ceiling for a tier is therefore (unified memory bandwidth) divided by (weight bytes per token).</p>",
              "<p>That is why decode tok/s scales with chip generation more than core count: M1 Ultra "
-             "is 800 GB/s, M2 Ultra and M3 Ultra are 800 GB/s, and base-tier "
+             "is 800 GB/s, M2 Ultra is 800 GB/s, M3 Ultra 819 GB/s, and base-tier "
              "M1/M4 Air are 68&ndash;120 GB/s.</p>",
              "<p>For the Plus tier, the bottleneck shifts from RAM bandwidth to NVMe read bandwidth because the model spills onto disk; that is the regime the v1.9 page-aligned <code>pread()</code> fanout targets.</p>"),
     }
