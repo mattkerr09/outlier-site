@@ -44,6 +44,8 @@
     a { color: var(--link); }
     .steps { padding-left: 1.2rem; }
     .steps li { margin: 0.7rem 0; }
+    .xsell { border-top: 1px solid var(--border); margin-top: 2.2rem; padding-top: 0.4rem; }
+    .xsell p { margin: 0.7rem 0; }
     .btn { display: inline-block; background: var(--accent); color: #07060b; font-weight: 600;
            padding: 0.85rem 1.4rem; border-radius: 10px; text-decoration: none; margin: 0.6rem 0 0.2rem; }
     /* Licence-key panel. Deliberately NO `display` property in these rules:
@@ -222,6 +224,22 @@ plausible.init()
       <strong>30 days, no questions asked</strong>: the same terms as on the
       <a href="/terms.html">terms page</a>.</p>
 
+    <!-- 2026-11-06 (Matthew: "our other apps and bundle should be offered at some point in the checkout as well").
+         Below the key and activation steps. The sale lines show only while /founding says the Black Friday offer is live
+         (the same reveal script as /download/), so from 1 December the block shows the plain prices. Sister links are
+         nofollow (RULES 52); this page stays noindex. data-owner-offer: from 1 December, "Owner price: 25% off with your
+         code" from the hub's per-buyer code (endpoint to come). -->
+    <div class="xsell" aria-labelledby="xsell-h">
+      <h2 id="xsell-h">Also from Kerr &amp; Company</h2>
+      <p><strong>Crisp Video</strong>: restores and upscales old video to 4K on your own Mac or PC. $29 once<span data-pbox-founding hidden>, or $14.50 through 30 November</span>.
+        <a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/crisp?src=ty-outlier-xsell" rel="nofollow">Get Crisp</a></p>
+      <p><strong>Docket SEO</strong>: audits your whole website on your own computer and tells you what to fix first. $59 once<span data-pbox-founding hidden>, or $29.50 through 30 November</span>.
+        <a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/docket?src=ty-outlier-xsell" rel="nofollow">Get Docket</a></p>
+      <p data-owner-offer hidden></p>
+      <p>All three together: $99<span data-pbox-founding hidden>, or $49.50 through November</span>.
+        <a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/bundle?src=ty-outlier-xsell" rel="nofollow">Get the bundle</a></p>
+    </div>
+
     <div class="foot">
       <p class="dim"><a href="/">Back to outlier.host</a> &middot;
         <a href="/privacy.html">Privacy</a> &middot;
@@ -314,5 +332,11 @@ plausible.init()
 })();
 </script>
 <script src="/js/mac-only.js" defer></script>
+<script data-pbox-script>
+(function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))return;
+fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
+.then(function(d){if(!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+</script>
 </body>
 </html>
