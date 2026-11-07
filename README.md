@@ -30,9 +30,13 @@ $ gh api repos/mattkerr09/outlier-site/pages --jq '{build_type,source,cname}'
 
 - **DNS and TLS:** Cloudflare (proxied, SSL Full, Always Use HTTPS). `http://` and `www.` answer 301 to `https://outlier.host/`.
   The rollback is in `~/ops/launch/outlier-dns-rollback.txt` (outside this repo).
-- **Build:** Pages publishes `main` at `/`, as is. `.nojekyll` is present, so Jekyll does not run: no file is
-  processed, and `_config.yml` / `exclude:` lists still have no effect. Keep `.nojekyll`. Without it, Jekyll would
-  hide the `_`-prefixed folders (`seo/_data/`, `_seo_build/`) and render any file that starts with `---`.
+- **Build (since 2026-11-07 17:20Z): Pages `build_type` is `workflow`.** `.github/workflows/pages.yml` publishes an
+  artifact of the site's files only. It assembles `_site` from `main` without `scripts/`, `_seo_build/`, `seo/_data/`,
+  `README.md` and `.github/`, fails if any of those is inside or a key site file is missing, and deploys it with
+  `actions/deploy-pages`. It runs after `gates.yml` succeeds on `next` (a push made with `GITHUB_TOKEN` triggers no
+  workflow, so it cannot run on push to main); `gh workflow run pages.yml` deploys by hand. Rollback: set `build_type`
+  back to `legacy`, which publishes the whole repo again. `.nojekyll` only matters to the legacy build: keep it for that
+  rollback.
 - **`CNAME`** (`outlier.host`) must stay in the repo root; Pages reads the custom domain from it.
 - **URLs** (measured 2026-11-07): a folder without its slash (`/about`) answers 301 to `/about/`; `/thank-you` and
   `/thank-you.html` both answer 200; an unknown path answers 404 with the site's own `404.html`.
@@ -47,7 +51,7 @@ Pages builds `main` the moment it moves, so `main` is the gated branch:
 
 1. Push your commits to `next` (`git push origin HEAD:next`, after rebasing onto `origin/main`).
 2. `.github/workflows/gates.yml` runs every gate on that exact commit.
-3. Only if all of them pass, its last step fast-forwards `main` to that commit, and Pages builds and publishes it.
+3. Only if all of them pass, its last step fast-forwards `main` to that commit; then `pages.yml` publishes the site files from `main`.
 
 A red gate leaves `main` where it was: the site keeps serving the last commit that passed. Fix it on `next` and push
 again. If `main` moved some other way, the promote step refuses (not a fast-forward); rebase `next` onto `origin/main`.
@@ -71,20 +75,12 @@ was "replace the contents, never `git rm`".)
 ⚠️ **`67223b34aed54ecb802e8ffcbacb9ec2.txt` must STAY in this repo.** It is a superseded IndexNow key file whose body is
 now `revoked`, which is what makes the old key stop validating. It looks like dead weight; it is a live control.
 
-### The consequence that matters
+### What is public
 
-**Every tracked file in this repository is readable over HTTP.** There is no
-second line of defence. `scripts/`, `_seo_build/`, `seo/_data/` and this README
-are all servable (only dot-folders like `.github/` are not), and internal notes committed here have twice been published at
-`outlier.host/<filename>` before anyone noticed.
-
-So: **the contents of every tracked file must be safe for a stranger to read** —
-including docstrings, test fixtures, error strings and sample data. A prose
-cleanup is not enough; a sanitised docstring once shipped alongside a fixture ten
-lines below that still quoted the internal line verbatim.
-
-`scripts/no_internal_docs_gate.py` enforces this and is the only thing enforcing
-it. CI runs it, along with nine other gates, on every push and hourly.
+Only what `pages.yml` puts in the artifact: the site's pages and assets. `scripts/`, `_seo_build/`, `seo/_data/`, this README
+and `.github/` are in the repository but not on outlier.host (measured 2026-11-07: each answers 404). Anything else you commit
+at the root or in a page folder IS published, so internal notes still never go in the site's folders; `no_internal_docs_gate`
+checks that, and its job did not change. A new internal folder must be added to the workflow's exclude list in the same commit.
 
 ## Gates
 
