@@ -248,7 +248,7 @@ def last_body_change(path: str):
         #: 2026-11-07 (Bing clean-up, CEO decision (a)): a commit that touches SWEEP_FILES or more files is a sitewide sweep,
         #: not an edit to this page (the 266-file "runs on Apple Silicon Macs" line by every Download button dated 33 pages
         #: 2026-11-04 whose last real edit was weeks earlier, and a page factory is what a reviewer reads into 125 pages with
-        #: one date). The same rule dates the sitemap (~/ops/qa/sitemap_real_lastmod.py) and the pages' own datelines.
+        #: one date). The same rule dates the sitemap and the pages' own datelines.
         if _commit_size(h) >= SWEEP_FILES:
             continue
         #: Compare the page's VISIBLE TEXT at this commit and its parent, rather than
