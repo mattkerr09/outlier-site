@@ -492,21 +492,8 @@ def build_run_pages(models, macs) -> list[dict]:
     # Curated pairs: each tier paired with the lowest-RAM Mac that satisfies it,
     # and a popular 2024-2025 Mac that satisfies it. Avoid impossible combos.
     curated = [
-        ("nano", "m1-macbook-air"),
-        ("nano", "m4-air-13"),
-        ("nano", "m4-mac-mini"),
-        ("nano", "m1-mac-mini"),
-        ("lite", "m1-pro-macbook-pro"),
         ("lite", "m4-air-13"),
-        ("lite", "m2-mac-mini"),
-        ("lite", "m4-imac"),
-        ("quick", "m4-air-15"),
-        ("quick", "m4-pro-mac-mini"),
-        ("quick", "m2-pro-macbook-pro"),
-        ("compact", "m1-max-macbook-pro"),
         ("compact", "m4-pro-macbook-pro"),
-        ("compact", "m4-pro-mac-mini"),
-        ("compact", "m2-max-macbook-pro"),
         # v1.11.798: Code folded into Core — same 27B weights, and the app no
         # longer lists it as a tier. These two pages are about running a coding
         # model on a MacBook Pro, which Core still is, so the DATA moves to
@@ -518,9 +505,7 @@ def build_run_pages(models, macs) -> list[dict]:
         # pages for one (tier, Mac) — which is literally why the shingle check
         # failed the build: five MacBook Pro pages shared 82 identical 50-word
         # runs. That page becomes a redirect instead.
-        ("compact", "m4-max-macbook-pro", "run-code-on-m4-max-macbook-pro"),
         ("plus", "m1-ultra-mac-studio"),
-        ("plus", "m4-ultra-mac-studio"),
         ("vision38", "m3-max-macbook-pro"),
     ]
     # The URL token is deliberately NOT the tier id. Vision 3.6 was retired for
@@ -885,7 +870,6 @@ def build_run_pages(models, macs) -> list[dict]:
             {"url": f"/seo/learn/what-is-unified-memory/", "label": "What is unified memory on Apple Silicon?"},
             {"url": f"/seo/learn/mlx-explained/", "label": "What is MLX and why does Outlier use it?"},
             {"url": f"/seo/how-to/install-outlier-on-mac/", "label": "How to install Outlier on a Mac"},
-            {"url": f"/seo/vs/cloud-coding-assistants-for-code-review/", "label": "Outlier vs cloud-based coding assistants for code review"},
             {"url": f"/seo/learn/k-override-explained/", "label": "What is K_override on the Plus tier?"},
         ]
         pages.append({
@@ -1027,21 +1011,8 @@ def claims_line(c: dict) -> str:
 def build_vs_pages(competitors, use_cases) -> list[dict]:
     """15 'Outlier vs [safe category] for [use case]' pages."""
     pairs = [
-        ("cloud-coding-assistants", "code-review"),
-        ("cloud-coding-assistants", "refactoring"),
-        ("cloud-coding-assistants", "test-writing"),
-        ("cloud-coding-assistants", "documentation"),
         ("hosted-llm-apis", "summarization"),
-        ("hosted-llm-apis", "data-cleaning"),
-        ("hosted-llm-apis", "brainstorming"),
         ("local-runtimes", "shell-scripts"),
-        ("local-runtimes", "regex"),
-        ("gguf-runners", "code-review"),
-        ("chat-only-desktop-apps", "refactoring"),
-        ("chat-only-desktop-apps", "test-writing"),
-        ("notebook-cloud-assistants", "data-cleaning"),
-        ("browser-extension-coding", "refactoring"),
-        ("container-based-runners", "shell-scripts"),
     ]
     cmap = {c["slug"]: c for c in competitors}
     umap = {u["slug"]: u for u in use_cases}
@@ -1530,9 +1501,7 @@ def build_howto_pages() -> list[dict]:
         related = [
             {"url": "/seo/learn/mlx-explained/", "label": "What is MLX?"},
             {"url": "/seo/learn/what-is-unified-memory/", "label": "What is unified memory?"},
-            {"url": "/seo/run/run-nano-on-m4-air-13/", "label": "Run Nano on a 16 GB M4 Air"},
             {"url": "/seo/run/run-compact-on-m4-pro-macbook-pro/", "label": "Run Core on an M4 Pro MacBook Pro"},
-            {"url": "/seo/vs/cloud-coding-assistants-for-code-review/", "label": "Outlier vs cloud coding assistants for code review"},
         ]
         pages.append({
             "category": "how-to", "slug": slug, "title": title, "description": description,
