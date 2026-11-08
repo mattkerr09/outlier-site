@@ -11,8 +11,8 @@
     "tok_per_sec": 2.1,
     "rss_gb": 11,
     "wired_memory_gb": 3.6,
-    "config": "K=20 hot experts/layer + 8 GB LRU cache",
-    "note": "tok_per_sec and rss_gb are this dataset's own per-token RSS-sampling protocol. The shipping figure the rest of the site publishes is 1.59 tok/s with a 14.04 GB peak, from the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process, M1 Ultra with 64 GB, MLX 4-bit."
+    "config": "K=20 hot experts/layer + 8 GB LRU cache (the app's setting until build 1.11.593; it ships K=40 since)",
+    "note": "tok_per_sec and rss_gb are this dataset's own per-token RSS-sampling protocol, at the old K=20 setting. The shipping figure the rest of the site publishes is 2.0 tok/s, 79 s to the first token and 18.0 GB peak memory, measured 2026-06-24 through the shipped app (build 1.11.593) at its K=40 setting, M1 Ultra with 64 GB, MLX 4-bit: the decode rate the app itself reports. Until 1.11.593 the app ran K=20 (1.59 tok/s, 14.04 GB peak in the 2026-05-01 sweep)."
   },
   "retired_v10_v11": {
     "wired_memory_gb_prefill": "57-58",

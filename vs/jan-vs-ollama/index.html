@@ -167,7 +167,7 @@
         <li>Jan gives you a clean desktop chat app with a built-in GUI; Ollama is a CLI-first engine that other apps build on: pick Jan to click-and-chat, Ollama to script and integrate.</li>
         <li>Both are <strong>free, open-source, and run models locally</strong>. Jan is Apache 2.0 licensed; Ollama is MIT licensed with a large model library.</li>
         <li>Under the hood they overlap: both run GGUF models through a llama.cpp-style engine, and both expose an OpenAI-compatible local API.</li>
-        <li>Both are RAM-bound, the model has to fit in memory. Pick based on workflow, not on which one is "better."</li>
+        <li>Both are RAM-bound: for usable speed the model has to fit in memory. Pick based on workflow, not on which one is "better."</li>
       </ul>
     </div>
 <div class="pbox" data-pbox="answer">
@@ -196,7 +196,7 @@
         <tr><td>License / openness</td><td>Open source (Apache 2.0)</td><td>Open source (MIT)</td></tr>
         <tr><td>Model format</td><td>GGUF (llama.cpp)</td><td>GGUF (llama.cpp)</td></tr>
         <tr><td>Model library</td><td>Curated in-app browser</td><td>Large, easy <code>pull</code> registry</td></tr>
-        <tr><td>Runs models &gt; RAM</td><td>No (RAM-bound)</td><td>No (RAM-bound)</td></tr>
+        <tr><td>Runs models &gt; RAM</td><td>Not at usable speed</td><td>Not at usable speed</td></tr>
         <tr><td>Cost</td><td>Free</td><td><a href="https://ollama.com/pricing">Free locally; cloud plans from $20/mo</a></td></tr>
         <tr><td>Best for</td><td>Click-and-chat users</td><td>Scripting, integration, backends</td></tr>
       </tbody>
@@ -215,7 +215,7 @@
 
     <h2>Which should you pick?</h2>
     <p>If you want to download one thing and start chatting in a real window, pick <strong>Jan</strong>. If you want to script against a model, integrate it into other software, or run it headless as a backend, pick <strong>Ollama</strong>: and put a GUI like Open WebUI on top if you later want one. Plenty of people run both: Ollama humming as the engine, a separate app as the face. Neither is a wrong answer; they're answers to different questions.</p>
-    <p>One shared limit is worth naming: both cap out at what fits in your RAM. If you specifically want to run a model <em>bigger</em> than your Mac's memory, that's a different architecture. <a href="https://outlier.host/">Outlier</a> is one Mac-native option there: a single signed app whose patent-pending paged inference engine streams expert tensors off the SSD, so a 397B-parameter model runs at roughly 14 GB peak RSS on a 64 GB Mac instead of needing 209 GB of RAM. It's Apple-Silicon-only and not open source, so it's a different trade than Jan or Ollama, but if "won't fit in RAM" is your blocker, it's worth knowing it exists.</p>
+    <p>One shared limit is worth naming: both cap out at what fits in your RAM. If you specifically want to run a model <em>bigger</em> than your Mac's memory, that's a different architecture. <a href="https://outlier.host/">Outlier</a> is one Mac-native option there: a single signed app whose patent-pending paged inference engine streams expert tensors off the SSD, so a 397B-parameter model runs at roughly 18 GB peak RSS on a 64 GB Mac instead of needing 209 GB of RAM. It's Apple-Silicon-only and not open source, so it's a different trade than Jan or Ollama, but if "won't fit in RAM" is your blocker, it's worth knowing it exists.</p>
 
     <h2>Questions about Jan vs Ollama</h2>
     <div class="faq">

@@ -192,7 +192,7 @@
 
     <h2>Tokens are also the speed unit</h2>
     <p>Generation speed is quoted as tokens per second, which is why the number feels abstract until you convert it. A comfortable adult reading pace is somewhere around 4&ndash;7 tokens per second, so anything above that arrives faster than you can read.</p>
-    <p>On my own M1 Ultra, our smallest tier runs at 71.7 tok/s and the 27B at 20.7 tok/s: both well past reading speed. The 397B tier manages 1.59 tok/s, which is genuinely slow enough to notice and is a deliberate trade for running a model that large on a desktop at all.</p>
+    <p>On my own M1 Ultra, our smallest tier runs at 71.7 tok/s and the 27B at 20.7 tok/s: both well past reading speed. The 397B tier manages 2.0 tok/s, which is genuinely slow enough to notice and is a deliberate trade for running a model that large on a desktop at all.</p>
 
     <h2>Does any of this change when the model runs locally?</h2>
     <p>Tokenisation, context windows and output caps work identically. What changes is the economics: there&rsquo;s no per-token bill, so a long document costs you time and memory rather than money.</p>
@@ -206,7 +206,7 @@
       <li><strong>Expect code to cost more.</strong> If you&rsquo;re near a limit with source files, you&rsquo;re nearer than the word count suggests.</li>
     </ul>
 
-    <div class="receipts"><strong>Receipts:</strong> the tokens-per-second figures are my own measurements on an M1 Ultra using the tiers we ship: Nano 4B at 71.7, Core 27B at 20.7, Plus 397B at 1.59 (the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process). The words-per-token ratios are the widely used English rules of thumb and are approximations, not guarantees: exact counts vary by model family, and the only authoritative number comes from running your text through that model&rsquo;s own tokeniser.</div>
+    <div class="receipts"><strong>Receipts:</strong> the tokens-per-second figures are my own measurements on an M1 Ultra using the tiers we ship: Nano 4B at 71.7, Core 27B at 20.7, Plus 397B at 2.0 (measured 2026-06-24 on build 1.11.593 at the shipped K=40 setting). The words-per-token ratios are the widely used English rules of thumb and are approximations, not guarantees: exact counts vary by model family, and the only authoritative number comes from running your text through that model&rsquo;s own tokeniser.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>

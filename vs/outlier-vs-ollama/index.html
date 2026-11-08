@@ -122,7 +122,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Ollama — running models bigger than your RAM", "item": "https://outlier.host/vs/outlier-vs-ollama/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can Outlier run that Ollama can't?", "acceptedAnswer": {"@type": "Answer", "text": "Models bigger than your RAM. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac; we have not tested Ollama on that model."}}, {"@type": "Question", "name": "Is Ollama better than Outlier for anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend."}}, {"@type": "Question", "name": "Can I use both Outlier and Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many developers run Ollama as a headless backend and Outlier as a daily-driver agent app."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can Outlier do that Ollama doesn't?", "acceptedAnswer": {"@type": "Answer", "text": "Running a mixture-of-experts model bigger than your RAM at a usable speed. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac by reading only the experts each token needs. llama.cpp, which Ollama grew out of, can memory-map a model bigger than RAM, but it then rereads weights from disk constantly and slows to a crawl; we have not tested Ollama on that model."}}, {"@type": "Question", "name": "Is Ollama better than Outlier for anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend."}}, {"@type": "Question", "name": "Can I use both Outlier and Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many developers run Ollama as a headless backend and Outlier as a daily-driver agent app."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -160,7 +160,7 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>Ollama runs everywhere and is open-source GGUF. Outlier is a Mac-native MLX app.</li>
+        <li>Ollama runs everywhere and is open source; it uses GGUF models, and since version 0.19 (March 2026) it also runs on MLX on Apple silicon, in preview for some models. Outlier is a Mac-only MLX app.</li>
         <li>Outlier's trick: <strong>paged MoE streaming runs Plus 397B on 64 GB</strong>. Ollama can't.</li>
         <li>Pick Ollama if you need cross-platform support or the biggest open-source catalog.</li>
         <li>Pick Outlier for the built-in agent loop and project memory (both Pro), and oversized MoE models.</li>
@@ -176,7 +176,7 @@
     <p class="lead">Ollama is the most popular way to run a model on your own machine. It's free to run locally, it's open source, and the GGUF library is enormous. It is also no longer only local: Ollama now sells <a href="https://ollama.com/pricing">cloud inference</a>, hosted primarily in the United States, with some capacity routed to Europe. Outlier runs no cloud at all. There is no server of ours for your prompt to reach. Outlier picks a narrower fight. It's Mac-only and MLX-native, and its paged-MoE engine runs Plus 397B on a 64 GB Mac. Two very different design centers. Below is where each one actually wins.</p>
 
     <h2>What each one is</h2>
-    <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local models. You get a model registry and a chat REPL, plus an OpenAI-compatible API. The backend is llama.cpp, so the format is GGUF. It runs on macOS, Linux, and Windows, and it's free and open source under the <a href="https://github.com/ollama/ollama">MIT license</a>. Honestly, the "ollama pull" then "ollama run" loop is about as clean as local-LLM setup gets.</p>
+    <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local models. You get a model registry and a chat REPL, plus an OpenAI-compatible API. Its backend grew out of llama.cpp and its library is GGUF; since version 0.19 (30 March 2026) it also runs on Apple&rsquo;s MLX on Apple silicon, announced as a preview for some models (<a href="https://ollama.com/blog/mlx">Ollama&rsquo;s post</a>). It runs on macOS, Linux, and Windows, and it's free and open source under the <a href="https://github.com/ollama/ollama">MIT license</a>. Honestly, the "ollama pull" then "ollama run" loop is about as clean as local-LLM setup gets.</p>
     <p><strong>Outlier</strong> is a Mac desktop app. There's a chat UI, an agent loop wired to MCP tools, a project memory layer, and an inference backend built on Apple's MLX framework. Models are MLX-native and 4-bit quantized. Apple Silicon only. The free tier covers Nano and Lite and it's genuinely usable, while Pro opens up the bigger models, the agent, project memory and vision.</p>
 
     <h2>Where Ollama wins</h2>
@@ -190,8 +190,8 @@
 
     <h2>Where Outlier wins</h2>
     <ul>
-      <li><strong>Running models bigger than your RAM.</strong> On a 64 GB Mac, Ollama tops out around 50 GB once you account for OS overhead. Plus 397B weighs 209 GB, so it just won't fit. The V9 paged engine runs the whole 397B model at roughly 14 GB peak OS RSS, streaming individual expert tensors off the SSD as they're needed. This is the thing Outlier was built to do.</li>
-      <li><strong>Apple Silicon native.</strong> The MLX backend talks to unified memory and Metal directly. This page has no head-to-head benchmark against llama.cpp on the same machine, so it makes no speed claim either way.</li>
+      <li><strong>Running models bigger than your RAM.</strong> On a 64 GB Mac, Ollama is comfortable up to about 50 GB of model once you account for OS overhead. Plus 397B weighs 209 GB. llama.cpp can memory-map a file that big, but it would reread weights from disk on nearly every token and crawl. The V9 paged engine runs the whole 397B model at roughly 18 GB peak OS RSS, streaming individual expert tensors off the SSD as they're needed. This is the thing Outlier was built to do.</li>
+      <li><strong>Built on MLX from the start.</strong> The backend talks to unified memory and Metal directly. Ollama now has an MLX backend too (in preview since March 2026), and this page has no head-to-head benchmark against llama.cpp on the same machine, so it makes no speed claim either way.</li>
       <li><strong>Bundled UX.</strong> Chat is free; agent mode, project memory, file editing and vision come with Pro. It's all one app. Nothing to wire up.</li>
       <li><strong>Models tuned for the lineup.</strong> Core 27B scored 0.951 on HumanEval pass@1 in <a href="/data/outlier-tier-benchmarks-2026-08/">our August run</a>, and every tier is calibrated so the experience stays coherent across all 6.</li>
     </ul>
@@ -202,8 +202,8 @@
       <tbody>
         <tr><td>Platforms</td><td>Mac, Linux, Windows</td><td>Mac (Apple Silicon)</td></tr>
         <tr><td>License</td><td>MIT (OSS)</td><td>Proprietary app, free Nano+Lite tier</td></tr>
-        <tr><td>Format</td><td>GGUF (llama.cpp)</td><td>MLX 4-bit</td></tr>
-        <tr><td>Models &gt; available RAM</td><td>Won't load</td><td>Plus 397B via the V9 paged engine (~1.59 tok/s on an M1 Ultra)</td></tr>
+        <tr><td>Format</td><td>GGUF; MLX on Apple silicon in preview since 0.19</td><td>MLX 4-bit</td></tr>
+        <tr><td>Models &gt; available RAM</td><td>Not designed for it (llama.cpp can memory-map one, very slowly)</td><td>Plus 397B via the V9 paged engine (~2.0 tok/s on an M1 Ultra)</td></tr>
         <tr><td>Max model on 64 GB Mac</td><td>~50 GB (e.g., Qwen 70B 4-bit)</td><td>397B via streaming</td></tr>
         <tr><td>Built-in agent</td><td>No (BYO)</td><td>Yes, built-in (Pro)</td></tr>
         <tr><td>Project memory</td><td>No</td><td>Yes (Pro)</td></tr>
@@ -217,8 +217,8 @@
     <h2>Questions about Outlier vs Ollama</h2>
     <div class="faq">
       <div class="faq-item">
-        <h3>What can Outlier run that Ollama can't?</h3>
-        <p>Models bigger than your RAM. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac; we have not tested Ollama on that model.</p>
+        <h3>What can Outlier do that Ollama doesn't?</h3>
+        <p>Running a mixture-of-experts model bigger than your RAM at a usable speed. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac by reading only the experts each token needs. llama.cpp, which Ollama grew out of, can memory-map a model bigger than RAM, but it then rereads weights from disk constantly and slows to a crawl; we have not tested Ollama on that model.</p>
       </div>
       <div class="faq-item">
         <h3>Is Ollama better than Outlier for anything?</h3>

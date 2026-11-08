@@ -196,7 +196,7 @@
     <ul>
       <li><strong>Outlier Nano (4B)</strong> on M4 MacBook Air: ~32 tokens/second</li>
       <li><strong>Outlier Core (27B)</strong> on M1 Ultra: ~20 tokens/second</li>
-      <li><strong>Outlier Plus (397B)</strong> on M1 Ultra via paged MoE inference: ~1.59 tokens/second</li>
+      <li><strong>Outlier Plus (397B)</strong> on M1 Ultra via paged MoE inference: ~2.0 tokens/second</li>
     </ul>
 
     <p>Memory bandwidth is the real limiting factor for LLM inference: more so than raw GPU core count. The GPU has to read model weights on every forward pass, and how fast it can do that determines throughput. The M2 Ultra delivers 800 GB/s of memory bandwidth. The M4 Max delivers 546 GB/s. An RTX 4090 hits 1,008 GB/s, but only across 24 GB of VRAM. Once your model exceeds that 24 GB, the entire setup breaks down; on Apple Silicon, larger models just use more of the shared pool.</p>
@@ -273,7 +273,7 @@
     <p>All three use the Metal GPU backend on Apple Silicon, meaning they route matrix operations to your chip's GPU cores automatically. You don't configure anything; the Mac just works.</p>
 
     <div class="receipts">
-      <strong>On the numbers:</strong> Speed figures in this article (32 tok/s on an M4 Air in a single prompt, 2026-05-04, indicative; ~20 tok/s on M1 Ultra for Core 27B, 1.59 tok/s for Plus 397B, the K=20 sweep of 2026-05-01) come from my own measured runs using Outlier on those machines. Your results may vary by model quantization and system load. Corrected 2026-10-19: an earlier version of this page said Outlier starts at a 1.5B model and that an 8 GB Mac runs only 1B to 3B models. Its smallest tier is the 4B Nano, which fits on 8 GB.
+      <strong>On the numbers:</strong> Speed figures in this article (32 tok/s on an M4 Air in a single prompt, 2026-05-04, indicative; ~20 tok/s on M1 Ultra for Core 27B, 2.0 tok/s for Plus 397B, the 2026-06-24 run on build 1.11.593, at the shipped K=40 setting) come from my own measured runs using Outlier on those machines. Your results may vary by model quantization and system load. Corrected 2026-10-19: an earlier version of this page said Outlier starts at a 1.5B model and that an 8 GB Mac runs only 1B to 3B models. Its smallest tier is the 4B Nano, which fits on 8 GB.
     </div>
 
     <div class="cta">

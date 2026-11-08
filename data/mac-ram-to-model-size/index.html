@@ -123,7 +123,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Mac RAM to AI model size — the reference table", "item": "https://outlier.host/data/mac-ram-to-model-size/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What size AI model can my Mac run?", "acceptedAnswer": {"@type": "Answer", "text": "Roughly your unified RAM minus a few GB for macOS. Nano needs 6 GB and Lite 12 GB, so 16 GB runs both and loads the 26B Quick model (24 GB is its comfortable size), 24 GB adds the 27B models, and 64 GB runs a 397B Mixture-of-Experts model via paged streaming (128 GB recommended)."}}, {"@type": "Question", "name": "How fast is local AI on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On an M1 Ultra: about 71.7 tok/s for a 4B model, 20.7 for a 27B model, and 1.59 for the 397B model via paged streaming. Newer chips are faster. Speed depends mostly on model size and chip generation."}}, {"@type": "Question", "name": "How much disk do AI models need?", "acceptedAnswer": {"@type": "Answer", "text": "From about 2.4 GB for a 4B model to 209 GB for the 397B model. You only download the tiers you use."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What size AI model can my Mac run?", "acceptedAnswer": {"@type": "Answer", "text": "Roughly your unified RAM minus a few GB for macOS. Nano needs 6 GB and Lite 12 GB, so 16 GB runs both and loads the 26B Quick model (24 GB is its comfortable size), 24 GB adds the 27B models, and 64 GB runs a 397B Mixture-of-Experts model via paged streaming (128 GB recommended)."}}, {"@type": "Question", "name": "How fast is local AI on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On an M1 Ultra: about 71.7 tok/s for a 4B model, 20.7 for a 27B model, and 2.0 for the 397B model via paged streaming. Newer chips are faster. Speed depends mostly on model size and chip generation."}}, {"@type": "Question", "name": "How much disk do AI models need?", "acceptedAnswer": {"@type": "Answer", "text": "From about 2.4 GB for a 4B model to 209 GB for the 397B model. You only download the tiers you use."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 </head>
@@ -153,7 +153,7 @@
       <ul>
         <li><strong>6 GB</strong> runs Nano 4B and <strong>12 GB</strong> runs Lite 9B, so <strong>16 GB</strong> handles both and loads Quick 26B (24 GB is its comfortable size). <strong>24 GB</strong> adds the 27B models, Core and Vision 3.8. <strong>64 GB</strong> is where Plus 397B becomes an option (128 GB recommended).</li>
         <li>On disk: Nano is 2.4 GB, Core 27B is 15.1 GB, Vision 3.8 is 15.5 GB. Plus 397B wants 209 GB.</li>
-        <li>Speed on my M1 Ultra: Nano hits 71.7 tok/s, Core 27B does 20.7, Plus 397B crawls at 1.59.</li>
+        <li>Speed on my M1 Ultra: Nano hits 71.7 tok/s, Core 27B does 20.7, Plus 397B crawls at 2.0.</li>
         <li>Quick math: usable model size is about your unified RAM minus a few GB for macOS.</li>
       </ul>
     </div>
@@ -169,7 +169,7 @@
       <tr><td>256 GB</td><td>Mac Studio</td><td>Plus 397B held fully in memory</td></tr>
     </tbody></table>
     <h2>Model size and speed (measured, M1 Ultra)</h2>
-    <div class="receipts"><strong>Receipts:</strong> Decode speeds are my own runs on a 64&nbsp;GB M1 Ultra, the <strong>2026-04-29</strong> batch, and the table keeps that batch. Where a figure has been re-measured since, the row says so and gives both. Disk sizes are read from the shipping tier catalog (checked <strong>2026-09-15</strong>): Nano 2.37&nbsp;GB &middot; Lite 5.04&nbsp;GB &middot; Quick 15.61&nbsp;GB &middot; Core 15.13&nbsp;GB &middot; Vision 3.8 15.5&nbsp;GB &middot; Plus 209&nbsp;GB. Corrected on the 2026-09-15 read: the quick answer said Plus ran at 2.1&nbsp;tok/s while this table said <strong>1.59</strong>: the table was right, and a page that disagrees with itself is worse than one that is simply out of date.</div>
+    <div class="receipts"><strong>Receipts:</strong> Decode speeds are my own runs on a 64&nbsp;GB M1 Ultra, the <strong>2026-04-29</strong> batch, and the table keeps that batch. Where a figure has been re-measured since, the row says so and gives both. Disk sizes are read from the shipping tier catalog (checked <strong>2026-09-15</strong>): Nano 2.37&nbsp;GB &middot; Lite 5.04&nbsp;GB &middot; Quick 15.61&nbsp;GB &middot; Core 15.13&nbsp;GB &middot; Vision 3.8 15.5&nbsp;GB &middot; Plus 209&nbsp;GB. Corrected on the 2026-09-15 read: the quick answer said Plus ran at 2.1&nbsp;tok/s while this table said <strong>1.59</strong>: the table was right, and a page that disagrees with itself is worse than one that is simply out of date. Corrected 2026-11-08: 1.59 was the old K=20 setting; the app has run K=40 since build 1.11.593, measured at 2.0.</div>
 
     <table><thead><tr><th>Model</th><th>Params</th><th>Disk</th><th>Decode tok/s</th></tr></thead><tbody>
       <tr><td>Nano</td><td>4B</td><td>2.4 GB</td><td>71.7</td></tr>
@@ -177,11 +177,11 @@
       <tr><td>Quick</td><td>26B MoE</td><td>15.6 GB</td><td>14.6 <span style="opacity:.7">(43.6 when re-measured on 2026-08-24, v1.11.804)</span></td></tr>
       <tr><td>Core</td><td>27B</td><td>15.1 GB</td><td>20.7</td></tr>
       <tr><td>Vision 3.8</td><td>27B</td><td>15.5 GB</td><td>17.2 <span style="opacity:.7">(measured 2026-08-19, shipped 1.11.792; see the <a href="https://outlier.host/#benchmarks">benchmarks table</a>)</span></td></tr>
-      <tr><td>Plus</td><td>397B MoE</td><td>209 GB</td><td>1.59</td></tr>
+      <tr><td>Plus</td><td>397B MoE</td><td>209 GB</td><td>2.0</td></tr>
     </tbody></table>
-    <p class="disclaim" style="margin-top:-0.6rem">Numbers are from an M1 Ultra, MLX 4-bit, batch size 1; the Plus figure is the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process. Newer chips (M2/M3/M4) run faster, but the ranking stays the same.</p>
+    <p class="disclaim" style="margin-top:-0.6rem">Numbers are from an M1 Ultra, MLX 4-bit, batch size 1; the Plus figure was measured 2026-06-24 on build 1.11.593 at the shipped K=40 setting. Newer chips (M2/M3/M4) run faster, but the ranking stays the same.</p>
     <h2>How a 209 GB model runs on a 64 GB Mac</h2>
-    <p>Plus 397B is 209 GB on disk. That's way past 64 GB of RAM, and yet it runs. The trick is that it's a Mixture-of-Experts model, so only a slice of its parameters fire on any given token. Outlier's V9 paged engine holds the active experts in memory and streams the rest off the SSD, which keeps peak memory hovering around 14 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
+    <p>Plus 397B is 209 GB on disk. That's way past 64 GB of RAM, and yet it runs. The trick is that it's a Mixture-of-Experts model, so only a slice of its parameters fire on any given token. Outlier's V9 paged engine holds the active experts in memory and streams the rest off the SSD, which keeps peak memory hovering around 18 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
 
     <h2>Questions about the RAM-to-model-size table</h2>
     <div class="faq">
@@ -191,7 +191,7 @@
       </div>
       <div class="faq-item">
         <h3>How fast is local AI on a Mac?</h3>
-        <p>On an M1 Ultra: about 71.7 tok/s for a 4B model, 20.7 for a 27B model, and 1.59 for the 397B model via paged streaming. Newer chips are faster. Speed depends mostly on model size and chip generation.</p>
+        <p>On an M1 Ultra: about 71.7 tok/s for a 4B model, 20.7 for a 27B model, and 2.0 for the 397B model via paged streaming. Newer chips are faster. Speed depends mostly on model size and chip generation.</p>
       </div>
       <div class="faq-item">
         <h3>How much disk do AI models need?</h3>

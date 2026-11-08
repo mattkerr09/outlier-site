@@ -27,7 +27,7 @@
   <meta name="twitter:description" content="A private, offline alternative to cloud AI like Claude and ChatGPT: local AI on your Mac, no caps, no data centers, and your chats stay on your Mac. Help build the offline coding-agent platform.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <!-- FONTS ARE SELF-HOSTED. This is a product claim, not a performance tweak.
-       Outlier's headline is that nothing leaves your Mac. Until 2026-08-18 this
+       Outlier's headline is privacy by default. Until 2026-08-18 this
        page opened four connections to Google and Fontshare before a visitor
        read a word, so the network tab disproved the hero copy on the way in —
        to the privacy-minded buyer who is the best customer here, and the most
@@ -924,10 +924,10 @@
 <!-- ============ HERO ============ -->
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow reveal in"><span class="dot"></span> Runs entirely on your Mac · notarized by Apple</div>
-    <h1 class="reveal d1 in">An AI assistant for code and research<br><span class="accent">that never leaves your&nbsp;Mac.</span></h1>
+    <div class="eyebrow reveal in"><span class="dot"></span> Runs on your Mac · notarized by Apple</div>
+    <h1 class="reveal d1 in">An AI assistant for code and research<br><span class="accent">private by default, on your&nbsp;Mac.</span></h1>
       <p class="future-line reveal d2">Your own AI, living in your house. Pull the plug on the internet and it keeps answering.</p>
-    <p class="sub reveal d2 in">Outlier is a Mac app that runs AI models on your own computer. It is a private alternative to ChatGPT and Claude. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, and there is no usage cap. Web search starts off, and nothing you type leaves your Mac unless you turn it on.</p>
+    <p class="sub reveal d2 in">Outlier is a Mac app that runs AI models on your own computer. It is a private alternative to ChatGPT and Claude. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, and there is no usage cap. Nothing you type leaves your Mac unless you turn on web search or pick a cloud model with your own API key. The few checks the app makes on its own carry none of your words, and <a href="https://outlier.host/privacy.html">the privacy page</a> lists each one.</p>
     <div class="cta-bar">
       <div class="cta-row reveal d3 in">
       <a class="btn btn-primary" href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1001/Outlier-1.11.1001-arm64.dmg" target="_blank" rel="noopener noreferrer nofollow">
@@ -1051,9 +1051,9 @@
     <div class="reveal">
       <div class="sec-head">
         <span class="kicker">Private by design</span>
-        <h2>Your prompts never<br><span class="accent">leave your Mac.</span></h2>
+        <h2>Private<br><span class="accent">by default.</span></h2>
       </div>
-      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Nothing you type leaves your Mac unless you turn web on</strong> (then the search query does, and in agent mode the pages and web tools it uses; with web off, a download the agent wants asks you first). On its own the app goes online only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. Nano, Lite, Quick and Core are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>; Plus and Vision 3.8 come from public community conversions of Qwen's models.</p>
+      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. <strong>Nothing you type leaves your Mac unless you turn web on or switch a chat to a cloud model with your own API key</strong> (with web on, the search query goes out, and in agent mode the pages and web tools it uses; with web off, a download the agent wants asks you first). On its own the app goes online only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. Nano, Lite, Quick and Core are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>; Plus and Vision 3.8 come from public community conversions of Qwen's models.</p>
       <div class="proof reveal d2">
         <div class="proof-head"><b></b>Captured 2026-11-04 on Outlier 1.11.992 while Core was answering, web search off. A past capture, not a live reading.</div>
 <pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
@@ -1100,7 +1100,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
     <div class="hw-grid">
       <div class="hw-card reveal"><div class="gb">16 GB</div><div class="mac">MacBook Air</div><div class="fit">Nano, Lite</div><div class="fit-note">Pro on 16 GB adds 128K context, the agent, memory and projects; Quick loads at 16 GB but wants 24, and Core and Vision need 24 GB.</div></div>
       <div class="hw-card reveal d1"><div class="gb">24–32 GB</div><div class="mac">MacBook Pro</div><div class="fit">+ Quick 26B, Core 27B, Vision 3.8 27B</div><div class="fit-note">They load here. A long agent session needs more: about 23 GB with Core and 38 GB with Vision 3.8 on our 64 GB test Mac.</div></div>
-      <div class="hw-card reveal d2"><div class="gb">64 GB</div><div class="mac">Mac Studio / MBP</div><div class="fit">All tiers; Plus 397B streams from the SSD, ~1.6 tokens/s</div></div>
+      <div class="hw-card reveal d2"><div class="gb">64 GB</div><div class="mac">Mac Studio / MBP</div><div class="fit">All tiers; Plus 397B streams from the SSD, ~2 tokens/s</div></div>
       <div class="hw-card reveal d3"><div class="gb">256 GB</div><div class="mac">Mac Studio</div><div class="fit">Plus 397B held fully in memory</div></div>
     </div>
     <p class="hw-foot reveal">Apple Silicon only, M1 or newer, on macOS 15 or later (a free update). Intel Macs are not supported.</p>
@@ -1326,7 +1326,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
           <tr class="flag">
             <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged</div></td>
             <td data-label="Plan"><span class="plan pro">Pro</span></td>
-            <td class="meta" data-label="Best for">Largest local tier · 397B MoE on high-end Macs. <strong>Slow on purpose-built hardware: 1.59 tok/s measured at the shipped K=20 setting on an M1&nbsp;Ultra, 60&ndash;90s to first token on 64&nbsp;GB.</strong> Use Core for everyday work.</td>
+            <td class="meta" data-label="Best for">Largest local tier · 397B MoE on high-end Macs. <strong>Slow on purpose-built hardware: 2.0 tok/s and 79&nbsp;s to the first token on a 64&nbsp;GB M1&nbsp;Ultra, measured 2026-06-24 on build 1.11.593 at the shipped K=40 setting.</strong> Use Core for everyday work.</td>
             <td class="meta" data-label="Disk / RAM">209 GB disk · 64 GB min, 128 GB recommended</td>
             <td class="meta" data-label="Speed / note">For depth, not for speed</td>
           </tr>
@@ -1390,9 +1390,9 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
           </tr>
           <tr>
             <td><div class="tname">Outlier Plus</div><div class="tbase">Qwen3.5-397B-A17B · V9 paged</div></td>
-            <td class="meta" data-label="MMLU">Not measured, the 209&nbsp;GB weights are not on the test machine. Plus itself runs here at 1.59&nbsp;tok/s, 14.04&nbsp;GB peak during generation, streaming experts from SSD; MMLU awaits a re-download, not a hardware limit.</td><td class="meta" data-label="HumanEval">Not measured</td>
+            <td class="meta" data-label="MMLU">Not measured, the 209&nbsp;GB weights are not on the test machine. Plus itself ran here at 2.0&nbsp;tok/s, 18.0&nbsp;GB peak (build 1.11.593, 2026-06-24), streaming experts from SSD; MMLU awaits a re-download, not a hardware limit.</td><td class="meta" data-label="HumanEval">Not measured</td>
             <td class="meta" data-label="SWE-bench (agentic)">Not measured</td>
-            <td class="meta" data-label="Decode">1.59 tok/s</td>
+            <td class="meta" data-label="Decode">2.0 tok/s</td>
             <td class="meta" data-label="Disk">209 GB</td>
           </tr>
           <tr>
@@ -1405,8 +1405,8 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
         </tbody>
       </table>
     </div>
-    <svg viewBox="0 0 640 244" class="bchart dchart" role="img" aria-label="Decode speed in tokens per second on an M1 Ultra, log scale: Nano 71.7, Lite 53.4, Quick 43.6, Core 20.7, Vision 3.8 17.2, Plus 1.59."><defs><linearGradient id="barfill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7b6cf6"/><stop offset="1" stop-color="#e4c7ff"/></linearGradient></defs><line x1="92.0" y1="30" x2="92.0" y2="247" class="cg"/><text x="92.0" y="263" class="cl cc">1</text><line x1="340.0" y1="30" x2="340.0" y2="247" class="cg"/><text x="340.0" y="263" class="cl cc">10</text><line x1="588.0" y1="30" x2="588.0" y2="247" class="cg"/><text x="588.0" y="263" class="cl cc">100</text><text x="82" y="48" class="cl" text-anchor="end">Nano</text><rect x="92" y="37" width="460.2" height="14" rx="3" class="cbar"/><text x="559.2" y="48" class="cl cn">71.7 <tspan class="cnote">4B dense</tspan></text><text x="82" y="79" class="cl" text-anchor="end">Lite</text><rect x="92" y="68" width="428.5" height="14" rx="3" class="cbar"/><text x="527.5" y="79" class="cl cn">53.4 <tspan class="cnote">9B dense</tspan></text><text x="82" y="110" class="cl" text-anchor="end">Quick</text><rect x="92" y="99" width="406.6" height="14" rx="3" class="cbar"/><text x="505.6" y="110" class="cl cn">43.6 <tspan class="cnote">26B MoE</tspan></text><text x="82" y="141" class="cl" text-anchor="end">Core</text><rect x="92" y="130" width="326.4" height="14" rx="3" class="cbar"/><text x="425.4" y="141" class="cl cn">20.7 <tspan class="cnote">27B dense</tspan></text><text x="82" y="172" class="cl" text-anchor="end">Vision</text><rect x="92" y="161" width="306.4" height="14" rx="3" class="cbar"/><text x="405.4" y="172" class="cl cn">17.2 <tspan class="cnote">27B dense</tspan></text><text x="82" y="203" class="cl" text-anchor="end">Plus</text><rect x="92" y="192" width="49.9" height="14" rx="3" class="cbar"/><text x="148.9" y="203" class="cl cn">1.59 <tspan class="cnote">397B MoE</tspan></text><text x="12" y="16" class="cl">tok/s &#183; log scale</text></svg>
-    <p class="chart-note">Decode speed on this M1 Ultra, log scale: the tiers span 45&times;, so a linear axis would flatten Plus to nothing. Nano, Lite and Core come from an <strong>earlier measurement round (2026-04-29)</strong> and Plus from the K=20 sweep of 2026-05-01; Quick is the median of 20 runs through the shipped 1.11.804 app on 2026-08-24, and Vision 3.8 was measured on 2026-08-19 (shipped in 1.11.792). The MMLU and HumanEval numbers above were taken on 2026-08-24 (build 1.11.804) and the SWE-bench numbers on 2026-08-09 (Core) and 2026-08-17 (Quick); the dataset file says so too. Speed varies by Mac.</p>
+    <svg viewBox="0 0 640 244" class="bchart dchart" role="img" aria-label="Decode speed in tokens per second on an M1 Ultra, log scale: Nano 71.7, Lite 53.4, Quick 43.6, Core 20.7, Vision 3.8 17.2, Plus 2.0."><defs><linearGradient id="barfill" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7b6cf6"/><stop offset="1" stop-color="#e4c7ff"/></linearGradient></defs><line x1="92.0" y1="30" x2="92.0" y2="247" class="cg"/><text x="92.0" y="263" class="cl cc">1</text><line x1="340.0" y1="30" x2="340.0" y2="247" class="cg"/><text x="340.0" y="263" class="cl cc">10</text><line x1="588.0" y1="30" x2="588.0" y2="247" class="cg"/><text x="588.0" y="263" class="cl cc">100</text><text x="82" y="48" class="cl" text-anchor="end">Nano</text><rect x="92" y="37" width="460.2" height="14" rx="3" class="cbar"/><text x="559.2" y="48" class="cl cn">71.7 <tspan class="cnote">4B dense</tspan></text><text x="82" y="79" class="cl" text-anchor="end">Lite</text><rect x="92" y="68" width="428.5" height="14" rx="3" class="cbar"/><text x="527.5" y="79" class="cl cn">53.4 <tspan class="cnote">9B dense</tspan></text><text x="82" y="110" class="cl" text-anchor="end">Quick</text><rect x="92" y="99" width="406.6" height="14" rx="3" class="cbar"/><text x="505.6" y="110" class="cl cn">43.6 <tspan class="cnote">26B MoE</tspan></text><text x="82" y="141" class="cl" text-anchor="end">Core</text><rect x="92" y="130" width="326.4" height="14" rx="3" class="cbar"/><text x="425.4" y="141" class="cl cn">20.7 <tspan class="cnote">27B dense</tspan></text><text x="82" y="172" class="cl" text-anchor="end">Vision</text><rect x="92" y="161" width="306.4" height="14" rx="3" class="cbar"/><text x="405.4" y="172" class="cl cn">17.2 <tspan class="cnote">27B dense</tspan></text><text x="82" y="203" class="cl" text-anchor="end">Plus</text><rect x="92" y="192" width="74.7" height="14" rx="3" class="cbar"/><text x="173.7" y="203" class="cl cn">2.0 <tspan class="cnote">397B MoE</tspan></text><text x="12" y="16" class="cl">tok/s &#183; log scale</text></svg>
+    <p class="chart-note">Decode speed on this M1 Ultra, log scale: the tiers span 45&times;, so a linear axis would flatten Plus to nothing. Nano, Lite and Core come from an <strong>earlier measurement round (2026-04-29)</strong> and Plus from the 2026-06-24 run on build 1.11.593, at the shipped K=40 setting; Quick is the median of 20 runs through the shipped 1.11.804 app on 2026-08-24, and Vision 3.8 was measured on 2026-08-19 (shipped in 1.11.792). The MMLU and HumanEval numbers above were taken on 2026-08-24 (build 1.11.804) and the SWE-bench numbers on 2026-08-09 (Core) and 2026-08-17 (Quick); the dataset file says so too. Speed varies by Mac.</p>
     <p class="provenance reveal"><a href="/data/outlier-tier-benchmarks-2026-08/">How these were run</a>: sample sizes, grading and hardware for every figure above. The download is a later build than the one measured; these figures have not been re-run on it.</p>
     <p class="provenance reveal"><strong>Why this table is unusual</strong>: checked on their live pages 2026-08-13, <a href="https://ollama.com" rel="nofollow">Ollama</a>, <a href="https://lmstudio.ai" rel="nofollow">LM&nbsp;Studio</a>, <a href="https://jan.ai" rel="nofollow">Jan</a> and <a href="https://www.nomic.ai/gpt4all" rel="nofollow">GPT4All</a> publish no MMLU, HumanEval or SWE-bench figure at all. That is not a criticism, the scores belong to the upstream models, but it means nobody in this category tells you what a local model will actually get right. These are ours to be held to.</p>
   </div>
@@ -1436,7 +1436,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
         </tbody>
       </table>
     </div>
-    <p class="provenance reveal">Honest framing: Outlier is not claiming parity with the best cloud coding agents today. The beta is the foundation; Pro and Founders revenue funds the climb toward that experience, locally. See the raw data: <a href="/data/outlier-vs-claude-54-prompt-benchmark/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">54-prompt Outlier vs Claude</a> · <a href="/data/local-ai-benchmarks-mac-2026/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">Mac local-AI benchmarks</a> · <a href="/data/v11-streaming-engine-benchmarks/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">streaming-engine tok/s</a> · <a href="/data/mac-ram-to-model-size/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">RAM → model size</a>.</p>
+    <p class="provenance reveal">Honest framing: Outlier is not claiming parity with the best cloud coding agents today. The beta is the foundation; licence sales fund the climb toward that experience, locally. See the raw data: <a href="/data/outlier-vs-claude-54-prompt-benchmark/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">54-prompt Outlier vs Claude</a> · <a href="/data/local-ai-benchmarks-mac-2026/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">Mac local-AI benchmarks</a> · <a href="/data/v11-streaming-engine-benchmarks/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">streaming-engine tok/s</a> · <a href="/data/mac-ram-to-model-size/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">RAM → model size</a>.</p>
   </div>
 </section>
 
@@ -1479,7 +1479,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </details>
       <details open>
         <summary>Is Outlier as good as the best cloud coding agents?</summary>
-        <div class="body">No: that's the goal, not the claim. It's a real local Mac app with shipped models and agent features, and it has not closed that gap yet. Founders and Pro revenue fund the work.</div>
+        <div class="body">No: that's the goal, not the claim. It's a real local Mac app with shipped models and agent features, and it has not closed that gap yet. Licence sales fund the work.</div>
       </details>
       <details>
         <summary>What's free?</summary>
@@ -1501,11 +1501,11 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </details>
       <details>
         <summary>What Mac do I need?</summary>
-        <div class="body">Apple Silicon (M1 or newer) on macOS 15 or later, which is a free update. Nano needs 6&nbsp;GB and Lite 12&nbsp;GB, so both fit a 16&nbsp;GB MacBook Air; Quick needs 16&nbsp;GB and wants 24; Core and Vision need 24&nbsp;GB; On a 64&nbsp;GB Mac, Plus streams from the SSD: about 1.6 tokens a second (roughly one word), and 60&ndash;90 seconds before the first one (measured on an M1&nbsp;Ultra, 64&nbsp;GB). It needs 209&nbsp;GB of free disk. Only a 256&nbsp;GB Mac holds it all in memory. For everyday speed, use Core. Intel Macs are not supported.</div>
+        <div class="body">Apple Silicon (M1 or newer) on macOS 15 or later, which is a free update. Nano needs 6&nbsp;GB and Lite 12&nbsp;GB, so both fit a 16&nbsp;GB MacBook Air; Quick needs 16&nbsp;GB and wants 24; Core and Vision need 24&nbsp;GB; On a 64&nbsp;GB Mac, Plus streams from the SSD: about 2 tokens a second (a word or so), and 79 seconds before the first one (measured on an M1&nbsp;Ultra with 64&nbsp;GB, build 1.11.593, 2026-06-24). It needs 209&nbsp;GB of free disk. Only a 256&nbsp;GB Mac holds it all in memory. For everyday speed, use Core. Intel Macs are not supported.</div>
       </details>
       <details>
         <summary>What doesn't work yet? (honest list)</summary>
-        <div class="body">Stop on a long Deep Research run frees the UI, but the backend keeps draining for a few more seconds. Plus takes 60&ndash;90 seconds to its first word on a 64&nbsp;GB M1&nbsp;Ultra. The Companion overlay is a v0, and Knowledge Stacks still uses a hash-based retriever; a real embedder lands in v1.12.</div>
+        <div class="body">Stop on a long Deep Research run frees the UI, but the backend keeps draining for a few more seconds. Plus took 79 seconds to its first word on a 64&nbsp;GB M1&nbsp;Ultra (measured 2026-06-24, build 1.11.593). The Companion overlay is a v0, and Knowledge Stacks still uses a hash-based retriever; a real embedder lands in v1.12.</div>
       </details>
       <details>
         <summary>Questions before buying?</summary>

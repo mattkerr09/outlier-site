@@ -11,12 +11,12 @@
     "Nano 4B": 71.7,
     "Lite 9B": 53.4,
     "Core 27B": 20.7,
-    "Plus 397B": 1.59
+    "Plus 397B": 2.0
   },
   "other": {
     "Nano 4B on M4 Air tok/s": 32,
     "Nano HumanEval pass@1 (full 164-set) pct": 81.1
   },
-  "plus_397b_note": "1.59 tok/s is the K=20 sweep of 2026-05-01: 5 prompts of 80 tokens, fresh process, model load excluded, M1 Ultra with 64 GB, MLX 4-bit, 14.04 GB peak. The engine-comparison dataset reports 2.1 under its own per-token RSS protocol; where the two disagree this dataset publishes the lower, shipping-config figure.",
+  "plus_397b_note": "2.0 tok/s, 79 s to the first token and 18.0 GB peak memory, measured 2026-06-24 through the shipped app (build 1.11.593) at its K=40 setting, M1 Ultra with 64 GB, MLX 4-bit: the decode rate the app itself reports. Until 1.11.593 the app ran K=20 (1.59 tok/s, 14.04 GB peak in the 2026-05-01 sweep). The engine-comparison dataset reports 2.1 for the old K=20 setting under its own per-token RSS protocol.",
   "note": "Outlier uniquely runs MoE models bigger than RAM via the V9 paged engine. Speed comparable to Ollama/LM Studio on shared 7B-27B classes."
 }

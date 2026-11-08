@@ -180,12 +180,12 @@
     <table><thead><tr><th>RAM</th><th>Mac</th><th>Models you can run</th></tr></thead><tbody>
       <tr><td>16 GB</td><td>MacBook Air</td><td>Nano 4B, Lite 9B</td></tr>
       <tr><td>24–32 GB</td><td>MacBook Pro</td><td>+ Core 27B, Vision 3.8 27B; Quick 26B is comfortable (16 GB minimum)</td></tr>
-      <tr><td>64 GB</td><td>Mac Studio / MBP</td><td>All tiers; Plus 397B streams from the SSD at about 1.6 tokens a second (measured, M1&nbsp;Ultra) and needs 209&nbsp;GB of free disk</td></tr>
+      <tr><td>64 GB</td><td>Mac Studio / MBP</td><td>All tiers; Plus 397B streams from the SSD at about 2 tokens a second (measured, M1&nbsp;Ultra) and needs 209&nbsp;GB of free disk</td></tr>
       <tr><td>256 GB</td><td>Mac Studio</td><td>Plus 397B held fully in memory</td></tr>
     </tbody></table>
     <p>(The coding-grade Core / Vision models won't load under about 24 GB. In practice 32 GB is the bucket you actually want.)</p>
     <h2>How Outlier stretches your RAM</h2>
-    <p>Plus 397B is the case that surprises people. A 397-billion-parameter model normally wants a server's worth of RAM, north of 200 GB. The V9 paged engine gets around that. It keeps only the active experts of this Mixture-of-Experts model in memory and streams the rest off your SSD, so the thing runs on a 64 GB Mac; we measured about 1.59 tokens/second on an M1 Ultra with 64 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
+    <p>Plus 397B is the case that surprises people. A 397-billion-parameter model normally wants a server's worth of RAM, north of 200 GB. The V9 paged engine gets around that. It keeps only the active experts of this Mixture-of-Experts model in memory and streams the rest off your SSD, so the thing runs on a 64 GB Mac; we measured about 2.0 tokens/second on an M1 Ultra with 64 GB. See <a href="https://outlier.host/learn/what-is-paged-moe-inference/">how paged MoE inference works</a>.</p>
     <h2>Which to buy for AI work</h2>
     <ul>
       <li><strong>16 GB</strong> is fine if you mostly chat, write, and do the occasional bit of code on the free tiers.</li>
