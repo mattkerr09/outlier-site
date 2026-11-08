@@ -164,7 +164,7 @@
 
     <p>On a typical Windows or Linux desktop, the CPU and GPU are separate chips connected by a PCIe bus. The GPU has its own pool of dedicated video RAM (VRAM): 8 GB, 16 GB, 24 GB depending on the card. LLM inference is essentially a huge sequence of matrix multiplications, and GPUs are built to execute those in parallel across thousands of cores.</p>
 
-    <p>The catch: a model has to fit inside that dedicated VRAM. An RTX 4090 has 24 GB. A 70B-parameter model in 4-bit quantization needs roughly 35 GB. It won't load. You're either paying for multiple high-end cards or you're stuck with smaller models.</p>
+    <p>The catch: a model has to fit inside that dedicated VRAM. An RTX 4090 has 24 GB. A 70B-parameter model in 4-bit quantization needs roughly 35 GB. It won't fit in 24 GB of graphics memory; with enough system memory it runs, but slowly. You're either paying for multiple high-end cards or you're stuck with smaller models.</p>
 
     <p>The other catch is the software stack. GPU-accelerated inference on PC relies almost entirely on NVIDIA's <code>CUDA</code> platform. AMD GPUs have <code>ROCm</code>, but driver and library coverage is narrower. Intel integrated graphics on Windows, the kind most laptops ship with, offer very limited acceleration for LLM workloads. Running a 7B+ model on integrated Intel or AMD graphics on a Windows laptop is possible but slow enough to be frustrating in practice.</p>
 
