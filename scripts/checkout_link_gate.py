@@ -2,13 +2,17 @@
 """Does every Buy button on this site still reach a real checkout?
 
 ⚠️ 2026-09-29 — THE METHOD CHANGED. Every Buy button now goes through the counting link
-(kerr-affiliate-hub /buy/outlier?src=<page>), and a GET of that link MINTS A REAL DODO
+(outlier.host or kerr-affiliate-hub /buy/outlier?src=<page>), and a GET of that link MINTS A REAL DODO
 CHECKOUT SESSION each time, while a browser user agent is counted as a customer (CEO). So
-this gate now sends ONE HEAD per distinct Buy link, redirect NOT followed, as
+this gate now sends HEAD requests per distinct Buy link, redirects NOT followed, as
 "kerr-ops/1.0 (checkout_link_gate)", and reads the 303's Location: this product's Dodo buy
 link, the thank-you return, and the page's tag. A control (an unknown product → 404) runs
 first. The history below explains why a FOLLOWED HEAD proved nothing on Polar; an unfollowed
 HEAD reads the redirect itself, which is the thing being checked.
+
+2026-11-08: outlier.host /buy/ redirects get HEAD too, NEVER GET. Only an exact
+302 to the hub with the same path and query permits a second, unfollowed HEAD.
+The unknown-product control still runs first, and the hub's 303 checks stay the same.
 
 Written 2026-08-18. The site takes money through exactly two Polar links and
 nothing checked either of them. A link checker cannot: Polar answers 200 for a
@@ -73,6 +77,7 @@ Passing here means the door opens, not that the till is right.
 """
 from __future__ import annotations
 
+from html import unescape
 import re
 import sys
 import time
@@ -136,8 +141,9 @@ HREF = re.compile(r'href\s*=\s*["\']https://checkout\.dodopayments\.com/buy/(pdt
 # $249 and $124.50, and FOUNDINGOUTLIER). A worker link IS the product's checkout link,
 # and it is fetched THROUGH the worker, so a broken worker fails here too.
 WORKER_PRODUCT = "pdt_0Nlgdu1f0s30YekSmpGwA"
-WORKER = re.compile(r"https://kerr-affiliate-hub\.kerrco\.workers\.dev/buy/outlier\?src=[a-z0-9-]+")
-WORKER_HREF = re.compile(r'href\s*=\s*["\'](https://kerr-affiliate-hub\.kerrco\.workers\.dev/buy/outlier\?src=[a-z0-9-]+)')
+WORKER_HOST = r"https://(?:kerr-affiliate-hub\.kerrco\.workers\.dev|outlier\.host)"
+WORKER = re.compile(WORKER_HOST + r"/buy/outlier\?src=[a-z0-9-]+")
+WORKER_HREF = re.compile(r'href\s*=\s*["\'](' + WORKER_HOST + r'/buy/outlier\?src=[a-z0-9-]+[^"\'\s<>]*)')
 
 # 2026-09-29 (CEO): link checks were being COUNTED as customers, and a GET of a /buy link
 # mints a real Dodo checkout session every time. So a hub link is checked with HEAD, WITHOUT
@@ -149,6 +155,8 @@ WORKER_HREF = re.compile(r'href\s*=\s*["\'](https://kerr-affiliate-hub\.kerrco\.
 HUB_UA = {"User-Agent": "kerr-ops/1.0 (checkout_link_gate)"}
 THANK_YOU = "https://outlier.host/thank-you.html"
 CONTROL_URL = "https://kerr-affiliate-hub.kerrco.workers.dev/buy/nosuchproduct-control?src=ops-gate-control"
+FIRST_PARTY = "https://outlier.host"
+HUB = "https://kerr-affiliate-hub.kerrco.workers.dev"
 
 
 class _NoFollow(urllib.request.HTTPRedirectHandler):
@@ -180,6 +188,16 @@ def head_no_follow(url: str, _sleep=time.sleep) -> tuple[int, str]:
         except Exception:
             continue
     return 0, ""
+
+
+def checkout_head(url: str) -> tuple[int, str]:
+    """Read the first-party hop explicitly; never auto-follow a Buy redirect."""
+    status, loc = head_no_follow(url)
+    if url.startswith(FIRST_PARTY + "/buy/"):
+        expected = HUB + url[len(FIRST_PARTY):]
+        if status == 302 and loc == expected:
+            return head_no_follow(loc)
+    return status, loc
 
 
 def _self_check_retry() -> list[str]:
@@ -296,7 +314,9 @@ def main() -> int:
             continue
         # 3. HEAD each distinct counting link; the 303's Location is the door.
         for url in urls:
-            status, loc = head_no_follow(url)
+            # HTML entities are syntax, not query bytes sent by a browser.
+            url = unescape(url)
+            status, loc = checkout_head(url)
             src = parse_qs(urlparse(url).query).get("src", [""])[0]
             lu = urlparse(loc) if loc else None
             lq = parse_qs(lu.query) if lu else {}

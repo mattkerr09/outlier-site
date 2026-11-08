@@ -57,7 +57,12 @@ MIN_TABLES = 20          # vacuity guard
 
 MONEY = re.compile(r"\$\d[\d,]*(?:\.\d\d)?")
 OURS = re.compile(r"(?i)\boutlier\b")
-PRICING_URL = re.compile(r"(?i)/(pricing|plans?|buy|subscribe|upgrade|billing)")
+# 2026-11-08: "subscriptions" too (gemini.google/subscriptions/ is Google's own plans page and was not recognised).
+PRICING_URL = re.compile(r"(?i)/(pricing|plans?|buy|subscribe|subscriptions?|upgrade|billing)")
+# 2026-11-08: our OWN links never count as a vendor's pricing citation. Until today the hub's /buy/outlier link matched
+# PRICING_URL and silently "cited" a price for 3 pages; the switch to outlier.host/buy/ exposed it.
+OUR_HOSTS = ("outlier.host", "kerr-affiliate-hub.kerrco.workers.dev")
+SKIPPED: list = []
 #: Header words that name a FIELD rather than a vendor. A header like "Monthly" means
 #: the vendor is on the other axis; treating it as a vendor is how a first pass read
 #: "24-month total" as a company.
@@ -84,9 +89,14 @@ def survey(site_root: str = "."):
             rel = os.path.relpath(path, site_root)
             raw = open(path, encoding="utf-8", errors="replace").read()
             cited = [u for u in re.findall(r'href="(https?://[^"]+)"', raw)
-                     if "outlier.host" not in u and PRICING_URL.search(u)]
+                     if not any(h in u for h in OUR_HOSTS) and PRICING_URL.search(u)]
             found = []
             for tbl in re.findall(r"<table.*?</table>", raw, re.S | re.I):
+                # 2026-11-08: a table explicitly marked as test questions (word problems, sample CSV answers) holds no
+                # company's price. Only this exact marker skips a table, and every skip is counted and printed.
+                if re.match(r'<table[^>]*\bdata-price-cells="test-data"', tbl, re.I):
+                    SKIPPED.append(rel)
+                    continue
                 rows = re.findall(r"<tr.*?</tr>", tbl, re.S | re.I)
                 if not rows:
                     continue
@@ -163,7 +173,7 @@ def main() -> int:
 
     print(f"rival_price_source_gate: {tables} tables; {len(found)} page(s) price a "
           f"non-Outlier entity; {len(bare)} cite no vendor pricing URL")
-    print(f"rival_price_source_gate: {len(baseline)} baselined, not enforced")
+    print(f"rival_price_source_gate: {len(baseline)} baselined, not enforced; {len(SKIPPED)} table(s) marked test-data skipped: {sorted(set(SKIPPED))}")
 
     if new:
         print(f"\nFAIL ({len(new)} new):")

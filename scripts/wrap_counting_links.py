@@ -8,7 +8,7 @@ WHY (CEO, 2026-09-28). GitHub's download counts are mostly our own checks and cr
 worker at kerr-affiliate-hub counts people, not robots, stores no IP or user agent, and
 302s to the file:
 
-    https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=<page-tag>&to=<GitHub DMG URL>
+    https://outlier.host/dl/outlier?src=<page-tag>&to=<GitHub DMG URL>
 
 It accepts Outlier-host/outlier-app-releases URLs only (anything else goes to
 outlier.host/#pricing). Buy buttons go to /buy/outlier?src=<page-tag>, which opens a Dodo
@@ -35,8 +35,8 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import hub_nofollow  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-DL_WORKER = "https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier"
-BUY_WORKER = "https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier"
+DL_WORKER = "https://outlier.host/dl/outlier"
+BUY_WORKER = "https://outlier.host/buy/outlier"
 GH_DMG = r"https://github\.com/Outlier-host/outlier-app-releases/releases/download/v\d+\.\d+\.\d+/Outlier-\d+\.\d+\.\d+-arm64\.dmg"
 # A bare GitHub DMG href (not already inside a wrapper, whose href starts with the worker).
 BARE_DL_RE = re.compile(r'href="(' + GH_DMG + r')"')

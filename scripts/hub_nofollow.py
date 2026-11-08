@@ -23,8 +23,10 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 HUB = "https://kerr-affiliate-hub.kerrco.workers.dev"
+FIRST_PARTY = "https://outlier.host"
 
-_TAG_RE = re.compile(r'<a\b[^>]*\bhref="' + re.escape(HUB) + r'/(?:dl|buy)/[^"]*"[^>]*>', re.S)
+_TAG_RE = re.compile(r'<a\b[^>]*\bhref="(?:' + re.escape(HUB) + "|" + re.escape(FIRST_PARTY)
+                     + r')/(?:dl|buy)/[^"]*"[^>]*>', re.S)
 _HREF_RE = re.compile(r'\bhref="[^"]*"')
 _REL_RE = re.compile(r'\brel="([^"]*)"')
 

@@ -16,6 +16,11 @@ import pathlib
 import re
 import sys
 
+# Cloudflare serves these two redirects, so neither has a file in this tree.
+# Query strings are already stripped by the href extractor below. Keep this
+# exact: other /buy/ and /dl/ paths still need a real file.
+FIRST_PARTY_REDIRECTS = {f'https://outlier.host/{route}/outlier' for route in ('dl', 'buy')}
+
 
 def main(root_arg):
     root = pathlib.Path(root_arg).resolve()
@@ -39,6 +44,8 @@ def main(root_arg):
     for p in pages:
         text = p.read_text(errors='ignore')
         for href in re.findall(r'href="([^"#?]+)', text):
+            if href in FIRST_PARTY_REDIRECTS:
+                continue
             # An absolute link to our own domain is an INTERNAL link wearing a
             # hostname. Skipping everything that starts with http left 3233 of
             # them unchecked — the same class of defect, invisible to the gate

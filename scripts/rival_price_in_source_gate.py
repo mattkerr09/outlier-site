@@ -368,9 +368,12 @@ def self_check() -> int:
     print("self-check: present price allowed ->", "PASS" if ok_pass else "FAIL")
     # 2026-10-01: our own links are never fetched (the product box's hub Buy/Download, checkout, our orgs, siblings).
     # cited() only — nothing here touches the network.
-    links = ('<a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/outlier?src=vs-x-end">Buy Pro</a>'
-             '<a href="https://kerr-affiliate-hub.kerrco.workers.dev/dl/outlier?src=vs-x&amp;to=https://github.com/'
+    hub = "https://kerr-affiliate-hub.kerrco.workers.dev"
+    links = (f'<a href="{hub}/buy/outlier?src=vs-x-end">Buy Pro</a>'
+             f'<a href="{hub}/dl/outlier?src=vs-x&amp;to=https://github.com/'
              'Outlier-host/outlier-app-releases/releases/download/v1.11.868/Outlier-1.11.868-arm64.dmg">Download</a>'
+             '<a href="https://outlier.host/buy/outlier?src=vs-x-end">Buy Pro</a>'
+             '<a href="https://outlier.host/dl/outlier?src=vs-x&amp;to=https://github.com/Outlier-host/x.dmg">Download</a>'
              '<a href="https://kerr-lead-agent.kerrco.workers.dev/lead">lead</a>'
              '<a href="https://test.checkout.dodopayments.com/buy/pdt_x">pay</a>'
              '<a href="https://github.com/Outlier-host/outlier-app-releases">ours</a>'

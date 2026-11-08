@@ -44,7 +44,7 @@ import re
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-HUB = "https://kerr-affiliate-hub.kerrco.workers.dev"
+HUB = "https://outlier.host"
 REPO = "https://github.com/Outlier-host/outlier-app-releases/releases/download"
 
 #: Pages that answer a question with no in-article Download/Buy (measured 2026-09-29).
