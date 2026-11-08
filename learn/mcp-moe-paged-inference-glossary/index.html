@@ -190,7 +190,7 @@
     <p>The wait between hitting send and the first token landing. Almost all of it is prefill, the model chewing through your prompt before it answers. Long prompt? TTFT can stretch to several seconds, even on a quick model. Outlier's prefill heartbeat exists for that moment, so the UI keeps a pulse instead of freezing.</p>
 
     <h2>Cold start / cold load</h2>
-    <p>Call an idle model and its weights have to load into unified memory first. That's the cold start. Plus 397B takes about 74 seconds to wake up. Core 27B, a few. Once it's hot it answers right away, so the cold load is a one-time tax.</p>
+    <p>Call an idle model and its weights have to load into unified memory first. That's the cold start. Plus 397B took 79 seconds to its first token (measured 2026-06-24, build 1.11.593). Core 27B, a few. Once it's hot it answers right away, so the cold load is a one-time tax.</p>
 
     <h2>Quantization-aware training (QAT)</h2>
     <p>With QAT the model trains already knowing it'll end up at low precision, so it learns weights that survive the squeeze without losing quality. The opposite of post-training quantization, which compresses a finished 16-bit model after the fact. Ternary models usually need QAT. 4-bit models mostly get away without it.</p>
