@@ -194,18 +194,18 @@
     <p>Two of these deserve a closer look, because they're the kind of thing people assume a small local model can't do reliably.</p>
 
     <h3>The precedence evaluator</h3>
-    <p>An arithmetic expression evaluator is a classic tripwire. Get the parser wrong and <code>2+3*4</code> comes out <code>20</code> instead of <code>14</code> because you evaluated left-to-right and ignored precedence. The agent got precedence right and got parentheses right: <code>(2+3)*4</code> correctly returns <code>20</code>. That is a small program, but it's exactly the kind of bounded, checkable logic where a local model can hit the correct answer every time, because a test can tell it when it's wrong.</p>
+    <p>An arithmetic expression evaluator is a classic tripwire. Get the parser wrong and <code>2+3*4</code> comes out <code>20</code> instead of <code>14</code> because you evaluated left-to-right and ignored precedence. The agent got precedence right and got parentheses right: <code>(2+3)*4</code> correctly returns <code>20</code>. That is a small program, but it's exactly the kind of bounded, checkable logic where a local model can reliably reach the correct answer, because a test can tell it when it's wrong.</p>
 
     <h3>The 33-file build</h3>
     <p>Thirty-three files that all compile is a different kind of achievement than one clever function. It's about coherence across a project: imports resolving, names matching, indentation surviving from file to file. This is the frontier where local agents historically fell apart (an earlier ceiling in Outlier's own testing was around 18 files before indentation drift crept in). Getting to 33 compiling files is the payoff of whole-file edits and self-checking rather than blind diff-patching.</p>
 
-    <h2>It checks its own work: and won't cheat to pass</h2>
+    <h2>It checks its own work, with a guard against gutting the tests</h2>
     <p>The reason these builds land isn't a smarter model. It's that the agent verifies itself. When a test fails, it doesn't just re-roll the code and hope. It computes the true expected answer itself, then decides which side is actually wrong:</p>
     <ul>
       <li>If the <strong>code</strong> is wrong, it fixes the code.</li>
       <li>If a <strong>test</strong> asserts a wrong value, it fixes the test.</li>
     </ul>
-    <p>That second case is dangerous, and there's a guard for it: the agent is blocked from <em>weakening</em> a good test just to force a green run. It can correct a test that genuinely encodes the wrong expected value, but it can't quietly delete an assertion to fake a pass. This is the difference between an agent that tells you the truth and one that games its own scoreboard.</p>
+    <p>That second case is dangerous, and there's a guard for it: a guard rejects a test edit that <em>weakens</em> a good test (an assertion or a test deleted, an <code>==</code> loosened) just to force a green run. It can still correct an expected value it works out to be wrong, and that working can be wrong too, so the guard narrows the cheat rather than closing every door. It's the difference between an agent that checks itself and one that games its own scoreboard.</p>
     <p>Which points at the single biggest lever in local coding: <strong>the execution oracle.</strong> Select the agent's work on <em>run-the-tests</em>, not on "it compiles" and not on "the model approved itself." Compiling is necessary and nowhere near sufficient; a model grading its own homework is worth even less. Running the tests is the only signal that survives contact with reality, and it's why the local agent can be trusted on the tasks above.</p>
 
     <h2>The honest number: 46% on a blind SWE-bench slice</h2>
