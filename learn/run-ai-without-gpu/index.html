@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Run AI on a Mac without a discrete GPU: real speeds","description":"No graphics card needed: Apple Silicon's GPU cores share unified memory with the CPU. Measured speeds for 4B, 27B and 397B models, and the RAM you need.","datePublished":"2026-06-18","dateModified":"2026-11-04","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Run AI on a Mac without a discrete GPU: real speeds","description":"No graphics card needed: Apple Silicon's GPU cores share unified memory with the CPU. Measured speeds for 4B, 27B and 397B models, and the RAM you need.","datePublished":"2026-06-18","dateModified":"2026-11-09","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/learn/run-ai-without-gpu/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://outlier.host/learn/"},{"@type":"ListItem","position":3,"name":"Run AI without a GPU","item":"https://outlier.host/learn/run-ai-without-gpu/"}]}
@@ -144,7 +144,7 @@
     <h1>How to run AI on Mac without a discrete GPU</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-06-18</span>
-      <span class="updated-pill">Updated November 4, 2026</span>
+      <span class="updated-pill">Updated November 9, 2026</span>
     </div>
 
     <div class="quick-answer">
@@ -180,7 +180,7 @@
 
     <ul>
       <li><strong>CPU cores</strong> (performance + efficiency clusters): handles the OS, scheduling, non-matrix work</li>
-      <li><strong>GPU cores</strong>: M4 MacBook Air has 10; M4 Max has 40; M1 Ultra has 64. These do the heavy matrix math for inference.</li>
+      <li><strong>GPU cores</strong>: the M4 MacBook Air has 8 or 10; M4 Max has up to 40; M1 Ultra has up to 64. These do the heavy matrix math for inference.</li>
       <li><strong>Neural Engine</strong>: a dedicated ML accelerator. The M4's Neural Engine runs at 38 TOPS. Used for certain model operations and on-device CoreML tasks.</li>
       <li><strong>Unified memory</strong>: shared by all of the above, with high-bandwidth access across the whole chip</li>
     </ul>
@@ -199,7 +199,7 @@
       <li><strong>Outlier Plus (397B)</strong> on M1 Ultra via paged MoE inference: ~2.0 tokens/second</li>
     </ul>
 
-    <p>Memory bandwidth is the real limiting factor for LLM inference: more so than raw GPU core count. The GPU has to read model weights on every forward pass, and how fast it can do that determines throughput. The M2 Ultra delivers 800 GB/s of memory bandwidth. The M4 Max delivers 546 GB/s. An RTX 4090 hits 1,008 GB/s, but only across 24 GB of VRAM. Once your model exceeds that 24 GB, the entire setup breaks down; on Apple Silicon, larger models just use more of the shared pool.</p>
+    <p>Memory bandwidth is the real limiting factor for LLM inference: more so than raw GPU core count. The GPU has to read model weights on every forward pass, and how fast it can do that determines throughput. The M2 Ultra delivers 800 GB/s of memory bandwidth. The M4 Max delivers 546 GB/s. An RTX 4090 carries 24 GB of GDDR6X on a 384-bit bus. NVIDIA&rsquo;s own spec page gives no bandwidth figure, but the size is the limit that matters here. Once your model exceeds that 24 GB, the entire setup breaks down; on Apple Silicon, larger models just use more of the shared pool.</p>
 
     <table>
       <thead>
@@ -212,7 +212,7 @@
       <tbody>
         <tr>
           <td>GPU cores</td>
-          <td>10-core GPU (on-chip)</td>
+          <td>8- or 10-core GPU (on-chip)</td>
           <td>16,384 CUDA cores (discrete)</td>
         </tr>
         <tr>
@@ -222,8 +222,8 @@
         </tr>
         <tr>
           <td>Memory bandwidth</td>
-          <td>120 GB/s (16 GB) / 273 GB/s (32 GB)</td>
-          <td>1,008 GB/s</td>
+          <td>120 GB/s</td>
+          <td>Not stated by NVIDIA (24 GB GDDR6X, 384-bit bus)</td>
         </tr>
         <tr>
           <td>Max model size</td>
@@ -232,8 +232,8 @@
         </tr>
         <tr>
           <td>Approximate price</td>
-          <td>$1,099 at launch (complete laptop)</td>
-          <td>~$1,600 (GPU only)</td>
+          <td>$999 at launch (13-inch, complete laptop)</td>
+          <td>~$1,600 at launch (GPU only)</td>
         </tr>
         <tr>
           <td>Discrete GPU required</td>
@@ -243,7 +243,7 @@
       </tbody>
     </table>
 
-    <p class="receipts"><strong>On that price:</strong> $1,099 was the M4 MacBook Air’s own price, and Apple no longer sells that machine: the Air line is M5, starting at <strong>$1,299</strong> for the 13-inch and $1,499 for the 15-inch (<a href="https://www.apple.com/shop/buy-mac/macbook-air">apple.com/shop/buy-mac/macbook-air</a>, read 2026-09-08). The comparison above is kept on the M4 Air because its bandwidth and GPU-core figures are the ones measured; a reader buying today pays $1,299 and gets a faster chip, which makes the against-the-GPU case stronger, not weaker.</p>
+    <p class="receipts"><strong>On that price:</strong> the M4 MacBook Air started at $999 for the 13-inch and $1,199 for the 15-inch, and Apple no longer sells it. The Air line is now M5, starting at <strong>$1,299</strong> for the 13-inch and $1,499 for the 15-inch (<a href="https://www.apple.com/shop/buy-mac/macbook-air">apple.com/shop/buy-mac/macbook-air</a>, read 2026-11-09). Every M4 MacBook Air has 120 GB/s of memory bandwidth, whatever its memory size, and an 8- or 10-core GPU (<a href="https://support.apple.com/en-us/122209">Apple&rsquo;s M4 MacBook Air tech specs</a>, read 2026-11-09). The RTX 4090 figures are from <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/">NVIDIA&rsquo;s RTX 4090 page</a>, read 2026-11-09. That page now shows no price; the ~$1,600 is the $1,599 launch price in NVIDIA&rsquo;s RTX 40 Series announcement. The comparison above is kept on the M4 Air because its bandwidth and GPU-core figures are the ones measured; a reader buying today pays $1,299 and gets a faster chip, which makes the against-the-GPU case stronger, not weaker.</p>
 
     <h2>The catch: you still need enough RAM</h2>
 
@@ -266,7 +266,7 @@
 
     <ul>
       <li><strong>Outlier</strong>: native Mac app that manages models, runs inference via MLX and Metal, and supports models from 4B up to 397B with paged inference. Nano tier is free. Requires macOS 15 or newer.</li>
-      <li><strong>Ollama</strong>: command-line tool with a local HTTP API. Pulls models from a registry, uses llama.cpp with Metal acceleration under the hood.</li>
+      <li><strong>Ollama</strong>: a Mac app and command-line tool with a local HTTP API. It pulls models from its own library and runs them on the Mac&rsquo;s GPU, with an MLX engine for Apple silicon in preview (ollama.com, read 2026-11-09).</li>
       <li><strong>LM Studio</strong>: GUI application, good for browsing and testing models without writing any code. Requires macOS 14 or newer.</li>
     </ul>
 
