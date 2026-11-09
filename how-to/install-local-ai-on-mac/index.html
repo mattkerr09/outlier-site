@@ -8,14 +8,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>How to install local AI on a Mac (step by step) | Outlier</title>
-  <meta name="description" content="Install a private, offline AI on your Mac. Download, drag to Applications, run. Apple Silicon, macOS 15+, no account needed.">
+  <title>How to run local AI on an Apple silicon Mac (2026) | Outlier</title>
+  <meta name="description" content="Run local AI on an Apple silicon Mac: what you need, three steps with measured times, which model fits your RAM, and LM Studio, Ollama and Msty compared.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-09-24">
+  <meta name="last-modified" content="2026-11-09">
   <link rel="canonical" href="https://outlier.host/how-to/install-local-ai-on-mac/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="How to install local AI on a Mac (step by step)">
-  <meta property="og:description" content="Install a private, offline AI on your Mac. Download, drag to Applications, run. Apple Silicon, macOS 15+, no account needed.">
+  <meta property="og:title" content="How to run local AI on an Apple silicon Mac (2026)">
+  <meta property="og:description" content="Run local AI on an Apple silicon Mac: what you need, three steps with measured times, which model fits your RAM, and LM Studio, Ollama and Msty compared.">
   <meta property="og:url" content="https://outlier.host/how-to/install-local-ai-on-mac/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -23,8 +23,8 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="How to install local AI on a Mac (step by step)">
-  <meta name="twitter:description" content="Install local AI on your Mac.">
+  <meta name="twitter:title" content="How to run local AI on an Apple silicon Mac (2026)">
+  <meta name="twitter:description" content="Run local AI on an Apple silicon Mac: what you need, three steps with measured times, which model fits your RAM, and LM Studio, Ollama and Msty compared.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
@@ -64,6 +64,9 @@
     .quick-answer ul { margin: 0 0 0 1.2rem; padding: 0; }
     .quick-answer li { color: var(--text); margin-bottom: 0.35rem; line-height: 1.5; }
     .quick-answer li:last-child { margin-bottom: 0; }
+    .quick-answer p { margin-bottom: 0.7rem; line-height: 1.55; }
+    .quick-answer p:last-child { margin-bottom: 0; }
+    .quick-answer ol { margin: 0 0 0.8rem 1.2rem; padding: 0; }
     .lead { font-size: 1.12rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 2rem; }
     article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
     article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
@@ -96,7 +99,7 @@
     .faq-item { margin-bottom: 1.3rem; }
     .faq-item h3 { margin: 0 0 0.35rem; font-size: 1.05rem; font-weight: 600; color: var(--text); }
     .faq-item p { margin-bottom: 0; color: var(--text-mid); }
-    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } article table { font-size: 0.84rem; } article th, article td { padding: 0.45rem 0.35rem; } }
     .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
     .receipts strong { color: var(--amber); }
   .phone-link{margin:.9rem 0 0;font-size:.9rem;color:var(--text-mid);}
@@ -105,13 +108,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "How to install local AI on a Mac (step by step)", "description": "Install a private, offline AI on your Mac. Download, drag to Applications, run. Apple Silicon, macOS 15+, no account needed.", "datePublished": "2026-06-09", "dateModified": "2026-11-04", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/install-local-ai-on-mac/"}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to run local AI on an Apple silicon Mac (2026)", "description": "Run local AI on an Apple silicon Mac: what you need, three steps with measured times, which model fits your RAM, and LM Studio, Ollama and Msty compared.", "datePublished": "2026-06-09", "dateModified": "2026-11-09", "author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/how-to/install-local-ai-on-mac/"}}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to install local AI on a Mac (step by step)", "item": "https://outlier.host/how-to/install-local-ai-on-mac/"}]}
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to run local AI on an Apple silicon Mac (2026)", "item": "https://outlier.host/how-to/install-local-ai-on-mac/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need an account to use it?", "acceptedAnswer": {"@type": "Answer", "text": "No. The free tier works with no account and no API key. Pro needs a licence key from your purchase, activated online once."}}, {"@type": "Question", "name": "Why does the first launch need internet?", "acceptedAnswer": {"@type": "Answer", "text": "Only to download the model weights once. After the model is on your disk, the app runs fully offline — no connection needed for chat or agent work."}}, {"@type": "Question", "name": "Will it run on an Intel Mac?", "acceptedAnswer": {"@type": "Answer", "text": "No. Outlier requires Apple Silicon (M1 or newer) because it uses Apple's MLX framework and the Mac's unified memory. Intel Macs are not supported."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which local AI model should I run on my Mac?", "acceptedAnswer": {"@type": "Answer", "text": "The biggest one that fits fully in your RAM, and the app suggests it for you: Nano on an 8 GB Mac, Lite on 16 GB or more, and Core on 24 GB or more with Pro. The table above lists each model's download size and minimum RAM."}}, {"@type": "Question", "name": "Can an 8 GB Mac run local AI?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Nano, a 4B model, runs fully in memory on an 8 GB Mac, and it's free. Lite and the bigger models need more memory than an 8 GB Mac has."}}, {"@type": "Question", "name": "Do I need an account to use it?", "acceptedAnswer": {"@type": "Answer", "text": "No. The free tier works with no account and no API key. Pro needs a licence key from your purchase, activated online once."}}, {"@type": "Question", "name": "Why does the first launch need internet?", "acceptedAnswer": {"@type": "Answer", "text": "Only to download the model weights once. After the model is on your disk, the app runs fully offline: no connection needed for chat or agent work."}}, {"@type": "Question", "name": "Will it run on an Intel Mac?", "acceptedAnswer": {"@type": "Answer", "text": "No. Outlier requires Apple silicon (M1 or newer) because it uses Apple's MLX framework and the Mac's unified memory. Intel Macs are not supported."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -139,20 +142,21 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/learn/">how-to</a></div>
-    <h1>How to install local AI on a Mac (step by step)</h1>
+    <h1>How to run local AI on an Apple silicon Mac</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-06-09</span>
-      <span class="updated-pill">Last updated 2026-11-04</span>
+      <span class="updated-pill">Last updated 2026-11-09</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <ul>
-        <li>Grab the notarized DMG from <strong>outlier.host</strong>, drag it to Applications, double-click.</li>
-        <li>First launch pulls the Nano model (~2.4 GB). After that, it's offline.</li>
-        <li>You'll need an Apple Silicon Mac (M1 or newer), macOS 15+, and ~3 GB free disk.</li>
-        <li>No account. No API key. The free tier works the second it opens.</li>
-      </ul>
+      <p>You need a Mac with Apple silicon (M1 or newer) on macOS 15 or later. Its memory (RAM) decides how big a model it can run. Then there are three steps:</p>
+      <ol>
+        <li><strong>Download the app.</strong> The 1.11.1006 DMG is 277 MB, about 22 seconds on a 100 Mbps connection.</li>
+        <li><strong>Open it.</strong> Drag it to Applications and double-click. On a fresh virtual Mac running macOS 15, it opened within 20 seconds.</li>
+        <li><strong>Pick the model it suggests.</strong> The app reads your RAM and names one: Nano (2.37 GB) on an 8 GB Mac, Lite (5.04 GB) on 16 GB or more. That download takes about 3 to 7 minutes at 100 Mbps, once.</li>
+      </ol>
+      <p>After that it works with Wi-Fi off. There's no account and no API key, and it's free to start.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro<span data-pbox-regular>: $49 once</span><span data-pbox-founding hidden> &middot; Launch price: $24.50 once, through November 30. From December 1: $49.</span></p>
@@ -161,53 +165,66 @@
 </div>
 
 
-    <p class="lead">Five minutes. No account. That's what it takes to get a real AI running on your Mac. You download a signed app, drag it to Applications, and the first time you open it, it grabs a small model so you can chat offline. Below is the exact process with Outlier, the requirements you actually need, and one quick way to prove it's running on your machine.</p>
+    <p class="lead">I make Outlier, a Mac app that runs AI models on the Mac itself, so the steps below use it. The times come from installing the published app on a fresh Mac on 9 November 2026. Three other apps that do the same job are compared at the end.</p>
 
-    <h2>Before you start: requirements</h2>
+    <h2>What your Mac needs</h2>
     <ul>
-      <li>An <strong>Apple Silicon Mac</strong> (M1 or newer) on macOS 15 or later, a free update. Intel is a hard no.</li>
-      <li><strong>macOS 15 or newer.</strong></li>
-      <li><strong>16 GB RAM</strong> is the sweet spot. The free tiers run fine here. Want bigger models? You'll want more.</li>
-      <li><strong>~3 GB free disk</strong> for that first model. Add bigger tiers and it climbs.</li>
+      <li><strong>Apple silicon.</strong> Any M-series chip, M1 or newer. Intel Macs can't run it. To check, open the Apple menu, choose About This Mac and read the Chip line.</li>
+      <li><strong>macOS 15 or later.</strong> It's a free update, and every Apple silicon Mac can install it.</li>
+      <li><strong>Enough RAM for the model.</strong> 8 GB runs Nano. 16 GB runs Lite comfortably. 24 GB is where the 27B models start. About This Mac shows it on the Memory line.</li>
+      <li><strong>Free disk.</strong> About 3 GB to start with Nano, about 6 GB with Lite. Each bigger model adds its own download.</li>
     </ul>
-    <h2>Which tiers your Mac can actually run</h2>
-    <p>The install is the same whatever your Mac; what differs is which tiers will load once
-    it is open. Both numbers below come from the shipping app&rsquo;s own tier catalog, so this
-    is what the app itself enforces rather than a rule of thumb.</p>
+
+    <h2>Pick a model for your RAM</h2>
+    <p>You don't choose at install time. The first screen suggests the biggest model on your plan that runs fully in your Mac's memory, keeping 4 GB free for macOS and the chat itself. Each model downloads the first time you pick it.</p>
     <table>
-      <thead><tr><th>Tier</th><th>Download</th><th>Minimum RAM</th><th>Runs on</th></tr></thead>
+      <thead><tr><th>Model</th><th>Download</th><th>Minimum RAM</th><th>Runs fully in memory on</th><th>Plan</th></tr></thead>
       <tbody>
-        <tr><td>Nano</td><td>2.37&nbsp;GB</td><td><strong>6&nbsp;GB</strong></td><td>Any Apple Silicon Mac</td></tr>
-        <tr><td>Lite</td><td>5.04&nbsp;GB</td><td>12&nbsp;GB</td><td>16&nbsp;GB Air and up</td></tr>
-        <tr><td>Quick</td><td>15.61&nbsp;GB</td><td>16&nbsp;GB</td><td>16&nbsp;GB, with little to spare</td></tr>
-        <tr><td>Core</td><td>15.13&nbsp;GB</td><td>24&nbsp;GB</td><td>24&nbsp;GB and up</td></tr>
-        <tr><td>Vision 3.8</td><td>15.5&nbsp;GB</td><td>24&nbsp;GB</td><td>24&nbsp;GB and up (the tier that reads images)</td></tr>
-        <tr><td>Plus 397B</td><td>209&nbsp;GB</td><td>64&nbsp;GB</td><td>64&nbsp;GB, and 220&nbsp;GB of free disk</td></tr>
+        <tr><td>Nano (4B)</td><td>2.37&nbsp;GB</td><td><strong>6&nbsp;GB</strong></td><td>8&nbsp;GB Macs and up</td><td>Free</td></tr>
+        <tr><td>Lite (9B)</td><td>5.04&nbsp;GB</td><td>12&nbsp;GB</td><td>16&nbsp;GB and up</td><td>Free</td></tr>
+        <tr><td>Quick (26B, 4B active)</td><td>15.61&nbsp;GB</td><td>16&nbsp;GB</td><td>24&nbsp;GB and up</td><td>Pro</td></tr>
+        <tr><td>Core (27B)</td><td>15.13&nbsp;GB</td><td>24&nbsp;GB</td><td>24&nbsp;GB and up</td><td>Pro</td></tr>
+        <tr><td>Vision 3.8 (27B, reads images)</td><td>15.5&nbsp;GB</td><td>24&nbsp;GB</td><td>24&nbsp;GB and up</td><td>Pro</td></tr>
+        <tr><td>Plus (397B)</td><td>209&nbsp;GB</td><td>64&nbsp;GB</td><td>None. It streams from the SSD, so keep 220&nbsp;GB of disk free</td><td>Pro</td></tr>
       </tbody>
     </table>
-    <p>The practical reading: <strong>a base 8&nbsp;GB Mac runs Nano and nothing else</strong>, 16&nbsp;GB
-    adds Lite comfortably, and 24&nbsp;GB is where the 27B tiers become an option. You do not choose
-    any of this at install time: tiers download individually, on first use, so the only thing the
-    installer itself needs is room for Nano.</p>
+    <p>Minimum RAM is the least the app will let you try a model on. The next column is where it runs well, and that's what the app suggests. So <strong>an 8&nbsp;GB Mac gets Nano</strong>, 16&nbsp;GB or more gets Lite on the free plan, and with Pro a Mac with 24&nbsp;GB or more gets Core.</p>
+    <p><strong>How fast.</strong> Speed is counted in tokens per second (a token is a word or a piece of one). In the 1.11.1006 release check (November 2026, the median of three runs on an M1 Ultra Mac Studio with 64 GB), Nano wrote 96.7 tok/s, Lite 69.4 and Core 24.5. The April 2026 benchmark on the same Mac had 71.7, 53.4 and 20.7, so plan on about 20 to 25 tok/s for Core. A MacBook Air has far less memory bandwidth than an M1 Ultra, so expect lower numbers on one.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> Download sizes and minimum RAM are read from the
-    shipping app&rsquo;s tier catalog (<code>server.py</code>), checked <strong>2026-09-15</strong>:
-    Nano 2.37&nbsp;GB/6&nbsp;GB &middot; Lite 5.04/12 &middot; Quick 15.61/16 &middot; Core 15.13/24
-    &middot; Vision 3.8 15.5/24 &middot; Plus 209&nbsp;GB/64&nbsp;GB with a 220&nbsp;GB disk floor.
-    These are the values the app enforces when it decides whether a tier will load, not estimates.</div>
+    <div class="receipts"><strong>Receipts:</strong> On 9 November 2026 the release check installed the
+    published 1.11.1006 DMG on a fresh Mac: GitHub&rsquo;s macOS 15 runner, a virtual M2 Pro with 14&nbsp;GB
+    of RAM. The file kept the quarantine flag a browser download carries, so macOS treated it like yours.
+    The signature and Gatekeeper checks passed. The app opened within 20 seconds, stayed up past 60
+    seconds, and its first screen recommended Outlier Lite (about 5&nbsp;GB) for that Mac. Download sizes
+    and minimum RAM are the shipping app&rsquo;s own tier catalog (<code>server.py</code>), checked again
+    for 1.11.1006 on <strong>2026-11-09</strong>.</div>
 
-    <h2>Step by step</h2>
+    <h2>Step by step, with times</h2>
     <ol>
-      <li><strong>Download.</strong> Head to <a href="https://outlier.host/">outlier.host</a> and hit Download. You'll get a notarized <code>.dmg</code> (about 277 MB).</li>
-      <li><strong>Open the DMG</strong> and drag the Outlier app into your Applications folder.</li>
-      <li><strong>Launch it.</strong> macOS Gatekeeper might ask you to confirm on that first open. The app's notarized, so just click Open.</li>
-      <li><strong>First model download.</strong> On first launch the app grabs Nano (~2.4 GB) so it has something to run with. You need a connection for this part, once.</li>
-      <li><strong>Start chatting.</strong> Type a prompt. That's it. You're running AI locally now, no account, no key.</li>
+      <li><strong>Download (about 22 seconds).</strong> Press Download free on this page. You get a signed, notarized <code>.dmg</code>. The 1.11.1006 file is 277 MB (276,975,098 bytes), about 22 seconds at 100 Mbps.</li>
+      <li><strong>Install (a few seconds).</strong> Open the DMG and drag Outlier into your Applications folder.</li>
+      <li><strong>Open it (within 20 seconds).</strong> macOS may ask once whether to open an app from the internet. Apple has notarized it, so click Open. On the fresh test Mac it was up within 20 seconds.</li>
+      <li><strong>Pick the suggested model (3 to 7 minutes, once).</strong> The first screen shows your chip and RAM, names a model and gives you one <strong>Download &amp; start</strong> button, with a link to pick a different one. Nano is 2.37 GB, about 3 minutes at 100 Mbps. Lite is 5.04 GB, about 7 minutes. This is the only step that needs internet.</li>
+      <li><strong>Chat.</strong> Type a question. The answer is written on your Mac, with no account and no key.</li>
     </ol>
+    <p>The download times are arithmetic, not measurements: the file size over a 100 Mbps line. A slower line takes longer in proportion.</p>
+
     <h2>Confirm it's actually local</h2>
-    <p>Want proof it's on your Mac and not some server? Once the first model has finished downloading, <strong>turn off wifi</strong> and send a prompt. It answers anyway. Chat keeps working. So does model switching, and so does project memory if you have Pro. All of it, offline.</p>
+    <p>Once the model has downloaded, <strong>turn off Wi-Fi</strong> and send a prompt. It still answers. Switching between models you've downloaded works offline too, and so does project memory if you have Pro.</p>
+
     <h2>Adding bigger models</h2>
-    <p>The free Nano and Lite tiers handle everyday stuff just fine. Doing serious coding or chewing through documents? Switch to Core 27B, which is part of Pro, wants a 24 GB+ Mac and downloads itself the first time you pick it. The biggest one, Plus 397B, is Pro too and needs a 64 GB+ Mac. Bigger model, bigger download. Watch your disk space.</p>
+    <p>The free Nano and Lite handle everyday questions, writing and summaries. For serious coding or long documents, Core 27B is part of Pro, wants a 24 GB Mac or bigger, and downloads itself the first time you pick it. The biggest, Plus 397B, is Pro too and needs a 64 GB Mac. Bigger models mean bigger downloads, so watch your disk space.</p>
+
+    <h2>Other ways to run local AI on a Mac</h2>
+    <div data-claims-checked="2026-11-09" data-claims-set="LM Studio, Ollama and Msty Studio">
+      <p>Three other apps do this job. Each line below was read on the app's own site on 9 November 2026, and each size is its Mac installer that day.</p>
+      <ul>
+        <li><strong>LM Studio</strong> 0.4.28 (573 MB): free for personal and internal business use. It finds MLX and GGUF models on Hugging Face from inside the app, and needs macOS 14 or later on Apple silicon.</li>
+        <li><strong>Ollama</strong> 0.40.15 (230 MB): free for local models. You pull a model from its library, then chat in its own Mac app or the terminal. It runs MLX on Apple silicon, and GGUF files too.</li>
+        <li><strong>Msty Studio</strong> 3.0.0 (257 MB): has a free tier. One app for local and online models, running Ollama, llama.cpp or MLX underneath, with a Model Matchmaker that suggests models for your device. It runs on Intel Macs too.</li>
+      </ul>
+    </div>
+    <p>Where Outlier differs: it offers a short list of MLX models tested on Macs and picks one for your RAM, so there's nothing to search for. It doesn't open GGUF files. If you want to try any model on Hugging Face, LM Studio or Ollama fits better. More detail: <a href="https://outlier.host/vs/ollama-vs-lm-studio/">Ollama vs LM Studio</a> and <a href="https://outlier.host/vs/outlier-vs-msty/">Outlier vs Msty</a>.</p>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
@@ -219,6 +236,14 @@
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <div class="faq-item">
+        <h3>Which local AI model should I run on my Mac?</h3>
+        <p>The biggest one that fits fully in your RAM, and the app suggests it for you: Nano on an 8 GB Mac, Lite on 16 GB or more, and Core on 24 GB or more with Pro. The table above lists each model's download size and minimum RAM.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can an 8 GB Mac run local AI?</h3>
+        <p>Yes. Nano, a 4B model, runs fully in memory on an 8 GB Mac, and it's free. Lite and the bigger models need more memory than an 8 GB Mac has.</p>
+      </div>
+      <div class="faq-item">
         <h3>Do I need an account to use it?</h3>
         <p>No. The free tier works with no account and no API key. Pro needs a licence key from your purchase, activated online once.</p>
       </div>
@@ -228,7 +253,7 @@
       </div>
       <div class="faq-item">
         <h3>Will it run on an Intel Mac?</h3>
-        <p>No. Outlier requires Apple Silicon (M1 or newer) because it uses Apple's MLX framework and the Mac's unified memory. Intel Macs are not supported.</p>
+        <p>No. Outlier requires Apple silicon (M1 or newer) because it uses Apple's MLX framework and the Mac's unified memory. Intel Macs are not supported.</p>
       </div>
     </div>
 
