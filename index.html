@@ -942,7 +942,7 @@
 
       <div class="nosub reveal d3 in">
         <p class="nosub-lead">Free to start: Nano + Lite.</p>
-        <p class="nosub-foot">Pro: every model for $49 once<span data-pbox-founding hidden> (Black Friday price, all of November: $24.50, until 30 November)</span>. 30-day refund. No subscription.</p>
+        <p class="nosub-foot">Pro: every model<span data-pbox-regular> for $49 once</span><span data-pbox-founding hidden>. Launch price: $24.50 once, through November 30. From December 1: $49</span>. 30-day refund. No subscription.</p>
       </div>
 
     <!-- product render: Outlier chat, on macOS -->
@@ -1135,7 +1135,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       <div class="tier reveal d2" data-lifetime-card>
         <div class="tn" data-lt-name>Outlier Lifetime Licence</div>
         <div class="price"><span data-lt-price>$49</span> <small>once</small> <span data-lt-bnpl></span></div>
-        <div class="payterms" data-lt-offer hidden><strong>Black Friday price, all of November: $24.50 once.</strong> From 1 December it&rsquo;s $49. The Buy button applies <strong>FOUNDINGOUTLIER</strong> for you at checkout; if the checkout shows $49, enter it under &ldquo;Have a discount code?&rdquo;</div>
+        <div class="payterms" data-lt-offer hidden><strong>Launch price: $24.50 once, through November 30.</strong> From December 1: $49. The Buy button applies <strong>FOUNDINGOUTLIER</strong> for you at checkout; if the checkout shows $49, enter it under &ldquo;Have a discount code?&rdquo;</div>
         <p class="blurb">Pro for as long as Outlier exists, including future model releases.</p>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Every tier and every feature</li>
@@ -1487,7 +1487,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </details>
       <details>
         <summary>What does Pro include?</summary>
-        <div class="body">A one-time $49. Everything: all six tiers and every feature itemised in the pricing cards above, <a href="/learn/fine-tune-ai-locally/">on-device fine-tuning</a> included. Local generation is never metered or charged per token. <strong>Core 27B is the daily driver.</strong> There is no middle tier. Lifetime is the <strong>Outlier Lifetime Licence</strong>: pay once, keep everything Pro has including future model releases. <span data-pbox-founding hidden>Black Friday price, all of November: $24.50 once, until 30 November. From 1 December it&rsquo;s $49. </span>The offer bar at the top of every page reads the store live, and comes down the moment the sale ends.</div>
+        <div class="body">A one-time $49. Everything: all six tiers and every feature itemised in the pricing cards above, <a href="/learn/fine-tune-ai-locally/">on-device fine-tuning</a> included. Local generation is never metered or charged per token. <strong>Core 27B is the daily driver.</strong> There is no middle tier. Lifetime is the <strong>Outlier Lifetime Licence</strong>: pay once, keep everything Pro has including future model releases. <span data-pbox-founding hidden>Launch price: $24.50 once, through November 30. From December 1: $49. </span>The offer bar at the top of every page reads the store live, and comes down the moment the launch price ends.</div>
       </details>
       <details>
         <summary>Does my data stay private?</summary>
@@ -1527,7 +1527,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </a>
       <a class="btn btn-ghost" data-buy="bottom" href="https://outlier.host/buy/outlier?src=home" target="_blank" rel="noopener noreferrer nofollow">Get Pro Lifetime</a>
     </div>
-    <p class="req reveal d1">Free · M1 or newer · macOS 15+ (free update) · 277 MB. Intel Macs are not supported. Pro is $49 once<span data-pbox-founding hidden> (Black Friday price, all of November: $24.50, until 30 November)</span>, with a 30-day refund.</p>
+    <p class="req reveal d1">Free · M1 or newer · macOS 15+ (free update) · 277 MB. Intel Macs are not supported. Pro is <span data-pbox-regular>$49 once</span><span data-pbox-founding hidden>$24.50 once at the launch price, through November 30 (from December 1: $49)</span>, with a 30-day refund.</p>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
   </div>
 </section>
@@ -1864,9 +1864,10 @@ document.querySelectorAll('[data-send-mac-link]').forEach(function (b) {
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
 var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
-if(end-now<24*24*60*60*1000)setTimeout(function(){m.forEach(function(e){e.hidden=true;});},end-now);
+function show(on){m.forEach(function(e){e.hidden=!on;var r=e.previousElementSibling;if(r&&r.hasAttribute&&r.hasAttribute('data-pbox-regular'))r.hidden=on;});}
+if(end-now<24*24*60*60*1000)setTimeout(function(){show(false);},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
-.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;show(true);}).catch(function(){});})();
 </script>
 <script src="/js/mac-only.js" defer></script>
 </body>

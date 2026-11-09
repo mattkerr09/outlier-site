@@ -89,9 +89,10 @@ SCRIPT = f"""<script data-pbox-script>
 (function(){{var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 function clock(){{return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}}
 var end=Date.parse("{FOUNDING_ENDS}"),now=clock();if(!(now<end))return;
-if(end-now<24*24*60*60*1000)setTimeout(function(){{m.forEach(function(e){{e.hidden=true;}});}},end-now);
+function show(on){{m.forEach(function(e){{e.hidden=!on;var r=e.previousElementSibling;if(r&&r.hasAttribute&&r.hasAttribute('data-pbox-regular'))r.hidden=on;}});}}
+if(end-now<24*24*60*60*1000)setTimeout(function(){{show(false);}},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){{return r.json()}})
-.then(function(d){{now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){{e.hidden=false;}});}}).catch(function(){{}});}})();
+.then(function(d){{now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;show(true);}}).catch(function(){{}});}})();
 </script>
 """
 
@@ -116,7 +117,26 @@ def founding_until() -> str:
     from zoneinfo import ZoneInfo
     ends = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
     t = _dt.datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(ZoneInfo("America/Los_Angeles"))
-    return f"{t.day} {t.strftime('%B')}"   # 2026-11-02 (CEO): "until 30 November", the US-time day the sale ends
+    return f"{t.strftime('%B')} {t.day}"   # 2026-11-09 (CEO): "through November 30", the US-time day the launch price ends
+
+
+def founding_next_day() -> str:
+    """'December 1': the US-time day the regular price starts, the day after founding_until()."""
+    import datetime as _dt
+    from zoneinfo import ZoneInfo
+    ends = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
+    t = _dt.datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(ZoneInfo("America/Los_Angeles"))
+    t = t + _dt.timedelta(days=1)
+    return f"{t.strftime('%B')} {t.day}"
+
+
+def launch_line(now: str = "$24.50", later: str = "$49") -> str:
+    """2026-11-09 (CEO): "Launch price: $24.50 once, through November 30. From December 1: $49." An introductory price
+    that names the price after it. No "Black Friday", "half price" or "% off", and no struck-through price: $49 has
+    never been charged, so a former-price comparison would not be honest (FTC 16 CFR 233.1; the EU's 30-day rule).
+    No closing full stop: the caller ends the sentence. The regular price beside it sits in <span data-pbox-regular>,
+    which the reveal hides while this line shows."""
+    return f"Launch price: {now} once, through {founding_until()}. From {founding_next_day()}: {later}"
 
 def current_version() -> str:
     s = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -145,8 +165,8 @@ def box(tag: str, spot: str, version: str, src: str | None = None) -> str:
     dmg = f"{REPO}/v{version}/Outlier-{version}-arm64.dmg"
     return (
         f'<div class="pbox" data-pbox="{spot}">\n'
-        f'<p class="pbox-price">Outlier Pro: $49 once'
-        f'<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until {founding_until()}</span></p>\n'
+        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $49 once</span>'
+        f'<span data-pbox-founding hidden> &middot; {launch_line()}.</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}" rel="nofollow">Download free</a> '
         f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">Free to start (Nano and Lite). {OS_REQ}, Apple silicon. '
@@ -165,8 +185,8 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
     req = (f"Free to start (Nano and Lite). {OS_REQ}, Apple silicon. " if requirements else "")
     return (
         f'<div class="pbox" data-pbox="end">\n'
-        f'<p class="pbox-price">Outlier Pro: $49 once'
-        f'<span data-pbox-founding hidden> &middot; Black Friday price, all of November: $24.50 once, until {founding_until()}</span></p>\n'
+        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $49 once</span>'
+        f'<span data-pbox-founding hidden> &middot; {launch_line()}.</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">{req}{REFUND} {TAX}</p>\n'
         f'</div>\n'
@@ -228,16 +248,16 @@ def bare_targets() -> list[str]:
 STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25; "
                  "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
                  "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
-STD_PRICE_NEW = ("Free: Nano + Lite. Pro: $49 once"
-                 f"<span data-pbox-founding hidden>; Black Friday price, all of November: $24.50 once, until {founding_until()}</span>. {OS_REQ}. " + REFUND + " " + TAX)
+STD_PRICE_NEW = ("Free: Nano + Lite. Pro<span data-pbox-regular>: $49 once</span>"
+                 f"<span data-pbox-founding hidden> &mdash; {launch_line()}</span>. {OS_REQ}. " + REFUND + " " + TAX)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
                   'var(--border);margin:.5rem 0 0 .5rem"')
 STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_STYLE}>See Pro</a>'
 #: The homepage's no-subscription line says the same founders price, statically.
 HOME_OLD = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 "
             "for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.")
-HOME_NEW = ("Pro: every model, $49 once<span data-pbox-founding "
-            f"hidden> &mdash; Black Friday price, all of November: $24.50 once, until {founding_until()}</span>. "
+HOME_NEW = ("Pro: every model<span data-pbox-regular>, $49 once</span><span data-pbox-founding "
+            f"hidden> &mdash; {launch_line()}</span>. "
             "No subscription, no per-token cost.")
 _FOUNDERS_SHOWN = re.compile(r"\$24\.50(?![\d])")   # 2026-11-02: the November sale price (was 124.50 / 31.13)
 

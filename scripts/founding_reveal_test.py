@@ -35,6 +35,22 @@ for path in sorted(ROOT.rglob("*.html")):
         copies += 1
 print(f"ok   {copies} HTML reveal copies match the generator")
 
+# 2026-11-09 (CEO, launch-price wording): a price left in plain text right before a launch-price span would show next to
+# the launch price, the "$49 once · $24.50" comparison the wording change removed. It must sit in <span data-pbox-regular>.
+beside, spans_seen = [], 0
+for path in sorted(ROOT.rglob("*.html")):
+    if ".git" in path.parts:
+        continue
+    page = path.read_text(encoding="utf-8")
+    for m in re.finditer(r"<span data-pbox-founding hidden>", page):
+        spans_seen += 1
+        before = page[max(0, m.start() - 200):m.start()]
+        if re.search(r"\$\d", before[before.rfind(">") + 1:]):
+            beside.append(f"{path.relative_to(ROOT)}: {before[-60:]!r}")
+assert spans_seen >= 200, f"only {spans_seen} launch-price spans found; the scan is broken"
+assert not beside, "a price sits right before a launch-price span outside data-pbox-regular:\n  " + "\n  ".join(beside[:10])
+print(f"ok   {spans_seen} launch-price spans, none with a bare price right before it")
+
 ANSWER = {"unlimited": True, "left": 1000000, "of": None, "soldOut": False,
           "endsAt": "2026-12-01T07:59:59Z"}
 CASES = [  # Keep the worker shapes covered as well as the deadline changes.
@@ -68,7 +84,10 @@ const nodes = {
   name: {textContent: initial.name}, price: {textContent: initial.price},
   bnpl: {innerHTML: initial.bnpl}, offer: {hidden: initial.offer}, btn: {textContent: initial.btn}
 };
-const spans = [{hidden: true}, {hidden: true}];
+// 2026-11-09: the regular price beside a launch-price span (<span data-pbox-regular>) hides while the launch price shows.
+const regular = () => ({hidden: false, hasAttribute: a => a === 'data-pbox-regular'});
+const regs = [regular(), regular()];
+const spans = [{hidden: true, previousElementSibling: regs[0]}, {hidden: true, previousElementSibling: regs[1]}, {hidden: true}];
 const card = {querySelector: s => nodes[s.match(/data-lt-(\w+)/)[1]]};
 global.window = useOverride ? {__kcNow: now} : {};
 Date.now = () => now;
@@ -99,7 +118,8 @@ function state() {
 }
 function check(sale) {
   if (kind === 'pbox') {
-    assert.deepStrictEqual(spans.map(s => s.hidden), [!sale, !sale]);
+    assert.deepStrictEqual(spans.map(s => s.hidden), [!sale, !sale, !sale]);
+    assert.deepStrictEqual(regs.map(r => r.hidden), [sale, sale]);
   } else {
     const expected = sale ? {...initial, name: 'Outlier Lifetime Licence', price: '$24.50', bnpl: '',
       offer: false, btn: 'Buy Outlier Lifetime Licence: $24.50'} : initial;

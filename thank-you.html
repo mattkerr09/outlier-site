@@ -225,7 +225,7 @@ plausible.init()
       <a href="/terms.html">terms page</a>.</p>
 
     <!-- 2026-11-06 (Matthew: "our other apps and bundle should be offered at some point in the checkout as well").
-         Below the key and activation steps. The sale lines show only while /founding says the Black Friday offer is live
+         Below the key and activation steps. The sale lines show only while /founding says the launch price is live
          (the same reveal script as /download/), so from 1 December the block shows the plain prices. Sister links are
          nofollow (RULES 52); this page stays noindex. data-owner-offer: from 1 December, "Owner price: 25% off with your
          code" from the hub's per-buyer code (endpoint to come).
@@ -233,9 +233,9 @@ plausible.init()
          for Outlier twice: only the other two apps are offered. -->
     <div class="xsell" aria-labelledby="xsell-h">
       <h2 id="xsell-h">Also from Kerr &amp; Company</h2>
-      <p><strong>Crisp Video</strong>: restores and upscales old video to 4K on your own Mac or PC. $29 once<span data-pbox-founding hidden>, or $14.50 through 30 November</span>.
+      <p><strong>Crisp Video</strong>: restores and upscales old video to 4K on your own Mac or PC. <span data-pbox-regular>$29 once</span><span data-pbox-founding hidden>Launch price: $14.50 once, through November 30. From December 1: $29</span>.
         <a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/crisp?src=ty-outlier-xsell" rel="nofollow">Get Crisp</a></p>
-      <p><strong>Docket SEO</strong>: audits your whole website on your own computer and tells you what to fix first. $59 once<span data-pbox-founding hidden>, or $29.50 through 30 November</span>.
+      <p><strong>Docket SEO</strong>: audits your whole website on your own computer and tells you what to fix first. <span data-pbox-regular>$59 once</span><span data-pbox-founding hidden>Launch price: $29.50 once, through November 30. From December 1: $59</span>.
         <a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/docket?src=ty-outlier-xsell" rel="nofollow">Get Docket</a></p>
       <p data-owner-offer hidden></p>
     </div>
@@ -336,9 +336,10 @@ plausible.init()
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
 var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
-if(end-now<24*24*60*60*1000)setTimeout(function(){m.forEach(function(e){e.hidden=true;});},end-now);
+function show(on){m.forEach(function(e){e.hidden=!on;var r=e.previousElementSibling;if(r&&r.hasAttribute&&r.hasAttribute('data-pbox-regular'))r.hidden=on;});}
+if(end-now<24*24*60*60*1000)setTimeout(function(){show(false);},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
-.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;m.forEach(function(e){e.hidden=false;});}).catch(function(){});})();
+.then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;show(true);}).catch(function(){});})();
 </script>
 </body>
 </html>
