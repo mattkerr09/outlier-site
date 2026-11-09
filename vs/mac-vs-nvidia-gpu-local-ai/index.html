@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mac vs NVIDIA for local AI: RTX is faster, Mac fits more</title>
-  <meta name="description" content="An RTX card generates tokens faster; a Mac holds bigger models. RTX 5090: 32GB of GDDR7. Mac Studio: up to 128GB (M5 Max) or 256GB (M5 Ultra) today.">
+  <meta name="description" content="An RTX card generates tokens faster; a Mac holds bigger models. RTX 5090: 32GB of GDDR7. Mac Studio: up to 128GB (M5 Max) or 512GB (M5 Ultra).">
   <meta name="theme-color" content="#07060b">
   <meta name="last-modified" content="2026-07-23">
   <link rel="canonical" href="https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/">
@@ -109,7 +109,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Mac vs NVIDIA for local AI: RTX is faster, Mac fits more","description":"An RTX card generates tokens faster; a Mac holds bigger models. RTX 5090: 32GB of GDDR7. Mac Studio: up to 128GB (M5 Max) or 256GB (M5 Ultra) today.","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Mac vs NVIDIA for local AI: RTX is faster, Mac fits more","description":"An RTX card generates tokens faster; a Mac holds bigger models. RTX 5090: 32GB of GDDR7. Mac Studio: up to 128GB (M5 Max) or 512GB (M5 Ultra).","datePublished":"2026-07-23","dateModified":"2026-10-19","author":{"@type":"Person","name":"Matt Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Apple unified memory vs an NVIDIA RTX GPU","item":"https://outlier.host/vs/mac-vs-nvidia-gpu-local-ai/"}]}
@@ -145,12 +145,12 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-07-23</span>
       <span class="updated-pill">Updated 2026-10-19</span>
-      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Apple, NVIDIA">Apple and NVIDIA prices and specs checked 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-11-09" data-claims-set="Apple, NVIDIA">Apple and NVIDIA prices and specs checked 2026-11-09</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>An NVIDIA RTX card runs a model faster; an Apple silicon Mac holds a bigger one. A GeForce RTX 5090 has 32GB of GDDR7 on a 512-bit bus; an M5 Ultra Mac Studio starts at 96GB of unified memory at 1.2 TB/s and configures up to 256GB, or 512GB from late October, <a href="https://www.apple.com/shop/buy-mac/mac-studio">Apple's buy page</a> says. Once a model fits in 32GB the RTX card wins on throughput by a wide margin, and once it doesn't, the Mac is often the only one still running it in memory.</p>
+      <p>An NVIDIA RTX card runs a model faster; an Apple silicon Mac holds a bigger one. A GeForce RTX 5090 has 32GB of GDDR7 on a 512-bit bus; an M5 Ultra Mac Studio starts at 96GB of unified memory at 1.2 TB/s and configures up to 256GB or 512GB, <a href="https://www.apple.com/shop/buy-mac/mac-studio">Apple's buy page</a> says. Once a model fits in 32GB the RTX card wins on throughput by a wide margin, and once it doesn't, the Mac is often the only one still running it in memory.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro<span data-pbox-regular>: $49 once</span><span data-pbox-founding hidden> &middot; Launch price: $24.50 once, through November 30. From December 1: $49.</span></p>
@@ -171,7 +171,7 @@
 
     <h2>What actually fits</h2>
     <p>Capacity flips the ordering. Outlier's tiers make a useful yardstick because the sizes are measured: Nano 4B is a 2.37GB download needing 6GB of RAM, Lite 9B is 5.04GB / 12GB, Core 27B is 15.13GB / 24GB, Vision 3.8 27B is 15.5GB / 24GB. All four fit a 32GB card. Nano and Lite fit anything. The 27B tiers at 15.13GB need a 16GB card and leave under a gigabyte for KV cache plus framebuffer, so 16GB is the floor rather than a comfortable fit; Vision 3.8 at 15.5 GB needs more than 16GB. On a 12GB 5070 both the 27B tiers and Vision overflow outright. 15.13GB of weights doesn't fit 12GB of VRAM before you add anything.</p>
-    <p>Above that it changes fast. A 70B model at 4-bit is roughly 40GB of weights before KV cache, so it doesn't fit a 5090 at all: llama.cpp spills the rest over PCIe and throughput collapses. Apple's March 2025 announcement said the Mac Studio with M3 Ultra could run models of over 600 billion parameters directly on device, with memory configurable up to 512GB. Apple's Mac Studio spec page today lists 256GB or 512GB as the options above the 96GB base, on the M5 Ultra with the 80-core GPU, and 128GB as the ceiling on the M5 Max. A 600B model at 4-bit is on the order of 300GB of weights, so that class of model needs the 512GB configuration. What a 256GB machine buys you is still real (on this page's own arithmetic (70B at 4-bit ≈ 40GB) it's a few hundred billion parameters, and no GeForce card comes close at any price).</p>
+    <p>Above that it changes fast. A 70B model at 4-bit is roughly 40GB of weights before KV cache, so it doesn't fit a 5090 at all: llama.cpp spills the rest over PCIe and throughput collapses. Apple's March 2025 announcement said the Mac Studio with M3 Ultra could run models of over 600 billion parameters directly on device, with memory configurable up to 512GB. Apple's Mac Studio spec page today lists 256GB or 512GB as the options above the 96GB base, on the M5 Ultra with the 80-core GPU, and 128GB as the ceiling on the M5 Max. Apple's configurator offers 256GB on either M5 Ultra and 512GB only on the 80-core GPU chip. A 600B model at 4-bit is on the order of 300GB of weights, so that class of model needs the 512GB configuration. What a 256GB machine buys you is still real (on this page's own arithmetic (70B at 4-bit ≈ 40GB) it's a few hundred billion parameters, and no GeForce card comes close at any price).</p>
     <p>One caveat cuts against Apple: you don't get the whole pool. macOS caps the GPU working set through Metal's <code>recommendedMaxWorkingSetSize</code>. The percentage of RAM people quote for it comes from community threads, not Apple documentation, so I won't repeat one: budget below the number on the box.</p>
 
     <h2>Side by side</h2>
@@ -186,7 +186,7 @@
       <tbody>
         <tr>
           <td><strong>Memory capacity</strong></td>
-          <td>36–128GB (M5 Max); 96–256GB (M5 Ultra; 512GB from late October)</td>
+          <td>36–128GB (M5 Max); 96–512GB (M5 Ultra; 512GB on the 80-core GPU chip)</td>
           <td>12GB (5070) · 16GB (5070 Ti, 5080) · 32GB (5090)</td>
         </tr>
         <tr>
@@ -196,7 +196,7 @@
         </tr>
         <tr>
           <td><strong>What fits at 4-bit</strong></td>
-          <td>A few hundred B at 4-bit on a 256GB M5 Ultra; 600B-class models need the 512GB M5 Ultra configuration, which Apple lists for late October</td>
+          <td>A few hundred B at 4-bit on a 256GB M5 Ultra; 600B-class models need the 512GB M5 Ultra configuration</td>
           <td>Fine to ~30B; 70B does not fit</td>
         </tr>
         <tr>
@@ -243,7 +243,7 @@
     <p><strong>Either way it's genuinely local.</strong> With llama.cpp, MLX or Ollama, inference runs on your machine and no prompt data goes to Apple or NVIDIA: there's no training-data policy to compare, because there's no vendor endpoint. On a Mac, Outlier is one packaged version of that: Apple Silicon only; Nano and Lite free with no account, no caps, and the remaining tiers behind Pro. On a PC none of it applies: llama.cpp or Ollama is where I'd start.</p>
 
     <div class="receipts">
-      <strong>Sources and receipts:</strong> Apple bandwidth, memory and 480W power: <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a>, read 2026-10-19. The 600B-class claim is from <a href="https://www.apple.com/newsroom/2025/03/apple-reveals-m3-ultra-taking-apple-silicon-to-a-new-extreme/">Apple Newsroom (March 2025)</a>, made for the M3 Ultra. The <strong>$2,499</strong> entry price is from <a href="https://www.apple.com/shop/buy-mac/mac-studio">apple.com/shop/buy-mac/mac-studio</a>, read 2026-10-19, where the Studio starts on M5 Max. The 5090's 575W total graphics power, 32GB of GDDR7, 512-bit bus and "No" for NVLink come from <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">NVIDIA's RTX 5090 page</a>, and the RTX PRO 6000's 96GB GDDR7 with ECC, 1,792 GB/s and 600W from <a href="https://www.nvidia.com/en-us/products/workstations/professional-desktop-gpus/rtx-pro-6000/">NVIDIA's RTX PRO 6000 page</a>. GeForce capacities and bus widths are from NVIDIA's <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/">RTX 5080</a> and <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5070-family/">RTX 5070 family</a> pages. The $1,999, $999, $749 and $549 prices are the Offer prices in the structured data on those four NVIDIA product pages; the visible price on each page is a placeholder, so I can't point you to a number you can read there. DGX Spark and RTX Spark are from <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">NVIDIA's DGX Spark page</a>, and the DGX Spark price rise from <a href="https://forums.developer.nvidia.com/t/2-23-2026-price-change-announcement/361713">NVIDIA's forum announcement</a>. Throughput is community-submitted llama.cpp scoreboard data, not a vendor benchmark, and the two threads differ slightly: the <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">Apple silicon thread</a> is labelled LLaMA 7B, the <a href="https://github.com/ggml-org/llama.cpp/discussions/15013">CUDA thread</a> Llama 2 7B: same architecture and near-identical cost per token, but not literally the same model. <strong>Not confirmed from primary sources:</strong> what the lack of NVLink means for a two-card rig. Outlier figures measured on a 64GB M1 Ultra. Pricing changes constantly: re-check both vendors before buying.
+      <strong>Sources and receipts:</strong> Apple bandwidth, memory and 480W power: <a href="https://www.apple.com/mac-studio/specs/">apple.com/mac-studio/specs</a>, read 2026-10-19. The 600B-class claim is from <a href="https://www.apple.com/newsroom/2025/03/apple-reveals-m3-ultra-taking-apple-silicon-to-a-new-extreme/">Apple Newsroom (March 2025)</a>, made for the M3 Ultra. The <strong>$2,499</strong> entry price is from <a href="https://www.apple.com/shop/buy-mac/mac-studio">apple.com/shop/buy-mac/mac-studio</a>, read 2026-11-09, where the Studio starts on M5 Max. The 5090's 575W total graphics power, 32GB of GDDR7, 512-bit bus and "No" for NVLink come from <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/">NVIDIA's RTX 5090 page</a>, and the RTX PRO 6000's 96GB GDDR7 with ECC, 1,792 GB/s and 600W from <a href="https://www.nvidia.com/en-us/products/workstations/professional-desktop-gpus/rtx-pro-6000/">NVIDIA's RTX PRO 6000 page</a>. GeForce capacities and bus widths are from NVIDIA's <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5080/">RTX 5080</a> and <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5070-family/">RTX 5070 family</a> pages. The $1,999, $999, $749 and $549 prices are the Offer prices in the structured data on those four NVIDIA product pages; the visible price on each page is a placeholder, so I can't point you to a number you can read there. DGX Spark and RTX Spark are from <a href="https://www.nvidia.com/en-us/products/workstations/dgx-spark/">NVIDIA's DGX Spark page</a>, and the DGX Spark price rise from <a href="https://forums.developer.nvidia.com/t/2-23-2026-price-change-announcement/361713">NVIDIA's forum announcement</a>. Throughput is community-submitted llama.cpp scoreboard data, not a vendor benchmark, and the two threads differ slightly: the <a href="https://github.com/ggml-org/llama.cpp/discussions/4167">Apple silicon thread</a> is labelled LLaMA 7B, the <a href="https://github.com/ggml-org/llama.cpp/discussions/15013">CUDA thread</a> Llama 2 7B: same architecture and near-identical cost per token, but not literally the same model. <strong>Not confirmed from primary sources:</strong> what the lack of NVLink means for a two-card rig. Outlier figures measured on a 64GB M1 Ultra. Pricing changes constantly: re-check both vendors before buying.
     </div>
 
     <div class="cta">

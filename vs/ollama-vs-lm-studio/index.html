@@ -158,7 +158,7 @@
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-06-13</span>
       <span class="updated-pill">Last updated 2026-10-19</span>
-      <span class="byline" data-claims-checked="2026-10-19" data-claims-set="Ollama and LM Studio">Ollama and LM Studio prices and plans checked 2026-10-19</span>
+      <span class="byline" data-claims-checked="2026-11-09" data-claims-set="Ollama and LM Studio">Ollama and LM Studio prices and plans checked 2026-11-09</span>
     </div>
 
     <div class="quick-answer">
@@ -203,7 +203,7 @@
     <table>
       <thead><tr><th>Dimension</th><th>Ollama</th><th>LM Studio</th></tr></thead>
       <tbody>
-        <tr><td>Interface</td><td>Command line + REPL</td><td>Graphical desktop app</td></tr>
+        <tr><td>Interface</td><td>Command line + REPL, plus a basic chat app</td><td>Graphical desktop app</td></tr>
         <tr><td>Platforms</td><td>macOS, Linux, Windows</td><td>macOS, Linux, Windows</td></tr>
         <tr><td>License</td><td>Open source (MIT)</td><td>Free, proprietary</td></tr>
         <tr><td>Model format</td><td>GGUF (llama.cpp); MLX on Apple Silicon in preview since 0.19</td><td>GGUF + MLX on Apple Silicon</td></tr>
@@ -215,7 +215,7 @@
         <tr><td>Price</td><td>$0 local; cloud from $20/mo</td><td>$0 local; hosted models from $20/mo</td></tr>
       </tbody>
     </table>
-    <p class="receipts"><strong>Prices checked 2026-10-19.</strong> Both are free to run locally and both now sell cloud inference on top. Ollama lists Free $0, <strong>Pro $20/month or $200/year</strong>, Max $100/month, Team $500/month and Enterprise custom, with per-million-token model pricing (<a href="https://ollama.com/pricing" rel="nofollow">ollama.com/pricing</a>). LM Studio lists Free $0 for local models, <strong>Bionic+ at $20 USD / month</strong> and <strong>Pro at $100 USD / month</strong> for US-hosted open models, with cloud credits for usage beyond a plan&rsquo;s allowance and team subscription plans &ldquo;coming soon&rdquo; (<a href="https://lmstudio.ai/pricing" rel="nofollow">lmstudio.ai/pricing</a>). Ollama&rsquo;s FAQ is explicit that the metering is cloud-only, &ldquo;running models on your own hardware is always unlimited&rdquo;, so the free local path is genuinely free on both, and the paid tiers buy hosted inference, not the local app. Ollama&rsquo;s cloud is hosted primarily in the United States, with peak pricing between 12:00 and 18:00 UTC on weekdays and concurrency of 1 request on Free against 3 on Pro. LM Studio&rsquo;s pricing page does not publish a credit rate, so this page does not quote one.</p>
+    <p class="receipts"><strong>Prices checked 2026-11-09.</strong> Both are free to run locally and both now sell cloud inference on top. Ollama lists Pay as you go at $0 (cloud use billed per token), <strong>Pro $20/month or $200/year</strong>, Max $100/month, Team $500/month (early access) and Enterprise custom, with per-million-token model pricing (<a href="https://ollama.com/pricing" rel="nofollow">ollama.com/pricing</a>). LM Studio lists Free $0 for local models, <strong>Bionic+ at $20 USD / month</strong> and <strong>Pro at $100 USD / month</strong> for US-hosted open models, with cloud credits for usage beyond a plan&rsquo;s allowance and team plans through an organization, with pooled pay-as-you-go credits or seat-based plans (<a href="https://lmstudio.ai/pricing" rel="nofollow">lmstudio.ai/pricing</a>). Ollama&rsquo;s FAQ is explicit that the metering is cloud-only, &ldquo;running models on your own hardware is always unlimited&rdquo;, so the free local path is genuinely free on both, and the paid tiers buy hosted inference, not the local app. Ollama&rsquo;s cloud is hosted primarily in the United States, with peak pricing between 12:00 and 18:00 UTC on weekdays and concurrency of 3 requests on Pay as you go and Pro, and 10 on Max and Team. LM Studio&rsquo;s pricing page does not publish a credit rate, so this page does not quote one.</p>
 
     <div class="receipts">
       <span class="r-label">The one real shared limit</span>
@@ -227,12 +227,12 @@
     <p>Comfortable in a terminal and planning to script against a local model, or run it as a backend for other tools? Ollama. Want to open an app, browse a model list, download with a click, and chat: no commands, ever? LM Studio. Plenty of people keep both: Ollama humming as a headless server, LM Studio open when they just want to poke at a new model in a real window. Neither is the "right" answer in the abstract; the right answer is the one that matches how you like to work.</p>
 
     <h2>When either one is enough, and when you need an agent</h2>
-    <p>Both are model runners: they answer the question you ask. An agent decides what to look at next. Ask a runner why a test fails and you bring it the test, the code, the stack trace and the config yourself; ask an agent and it reads the failing test off disk, follows the import, runs the test again after a change, and comes back when it has an answer or needs your permission. A runner also needs you there for every step, while an agent can be handed a twenty-minute job and left alone.</p>
+    <p>Ollama is a model runner, and LM Studio is a runner that now also ships an agent. A runner answers the question you ask. An agent decides what to look at next. Ask a runner why a test fails and you bring it the test, the code, the stack trace and the config yourself; ask an agent and it reads the failing test off disk, follows the import, runs the test again after a change, and comes back when it has an answer or needs your permission. A runner also needs you there for every step, while an agent can be handed a twenty-minute job and left alone.</p>
     <ul>
       <li><strong>You want to chat with a local model:</strong> Ollama, or LM Studio if you would rather not touch a terminal.</li>
       <li><strong>You want a local endpoint for your own code:</strong> Ollama.</li>
       <li><strong>You want to try many models cheaply:</strong> either; LM Studio shows sizes before you download.</li>
-      <li><strong>You want something to work through a repository and report back, or finish a job while you are at lunch:</strong> that is an agent, and neither is trying to be one.</li>
+      <li><strong>You want something to work through a repository and report back, or finish a job while you are at lunch:</strong> that is an agent. LM Studio's free tier now includes one, Bionic, and Ollama can launch outside agents such as Claude Code against its models.</li>
     </ul>
     <p>Many people should use both kinds: a runner for quick questions and for anything wired into their own code, an agent for the long jobs.</p>
 
