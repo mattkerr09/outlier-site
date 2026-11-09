@@ -121,7 +121,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio", "item": "https://outlier.host/data/local-ai-benchmarks-mac-2026/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.0 on the V9 paged engine. Nano hit about 32 tok/s on an M4 Air in a single prompt (2026-05-04, indicative)."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "This page publishes no head-to-head tok/s for them, so it makes no speed claim either way; Outlier uniquely runs MoE models bigger than RAM via its V9 paged engine."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Measured accuracy figures are on the tier benchmarks page: MMLU for every tier (Nano 52.0%, Core 27B 89.5%, n=200, build 1.11.804) and HumanEval for Core 27B (95.1%) and Vision 3.8 (94.5%)."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.0 on the V9 paged engine. Nano hit about 32 tok/s on an M4 Air in a single prompt (2026-05-04, indicative)."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "This page publishes no head-to-head tok/s for them, so it makes no speed claim either way; Outlier's V9 paged engine runs MoE models bigger than RAM at a usable speed; llama.cpp can memory-map them too, but rereads weights from disk and slows to a crawl."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Measured accuracy figures are on the tier benchmarks page: MMLU for every tier (Nano 52.0%, Core 27B 89.5%, n=200, build 1.11.804) and HumanEval for Core 27B (95.1%) and Vision 3.8 (94.5%)."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -238,7 +238,7 @@
       </div>
       <div class="faq-item">
         <h3>How does Outlier compare to Ollama and LM Studio?</h3>
-        <p>This page publishes no head-to-head tok/s for them, so it makes no speed claim either way; Outlier uniquely runs MoE models bigger than RAM via its V9 paged engine.</p>
+        <p>This page publishes no head-to-head tok/s for them, so it makes no speed claim either way; Outlier's V9 paged engine runs MoE models bigger than RAM at a usable speed; llama.cpp can memory-map them too, but rereads weights from disk and slows to a crawl.</p>
       </div>
       <div class="faq-item">
         <h3>What are Outlier's accuracy numbers?</h3>
