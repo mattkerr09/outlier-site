@@ -47,6 +47,7 @@ that a mismatch is detectable by hashing a deliberately altered copy.
 from __future__ import annotations
 
 import hashlib
+import re
 import subprocess
 import sys
 import time
@@ -60,10 +61,19 @@ UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/
 #: partial deploy that updated one and not the others is the thing to catch.
 FILES = {
     "index.html": "/",
-    "seo/how-to/install-outlier-on-mac/index.html": "/seo/how-to/install-outlier-on-mac/",
+    # 11-09: was seo/how-to/install-outlier-on-mac/, deleted with /seo/ in the Bing clean-up (ffe50fadd). From then
+    # every run compared 2 of 3 files and failed, and the scheduled job skipped every step after this one.
+    "how-to/install-local-ai-on-mac/index.html": "/how-to/install-local-ai-on-mac/",
     "og-card.png": "/og-card.png",
 }
 MIN_FILES = 3
+
+#: 11-09: since the move behind Cloudflare (7 Nov) the edge injects its Web Analytics beacon into every HTML page a
+#: browser asks for (Accept: text/html, or no Accept header, as urllib sends). That one tag is stripped before hashing,
+#: so a real deploy fault still shows, and its presence is reported as its own failure: privacy.html (7 Nov) says the
+#: Cloudflare script is being switched off and Plausible is the only analytics. Measured: stripping it makes the live
+#: home page and a how-to page byte-identical to HEAD.
+CF_BEACON = re.compile(rb'\n?<script\b[^>]*\bsrc="https://static\.cloudflareinsights\.com/beacon\.min\.js[^"]*"[^>]*>\s*</script>')
 
 #: Files deleted from the repo must stop being served. Suffixes the host will
 #: serve as-is; a deletion of anything else cannot be a publication problem.
@@ -165,7 +175,7 @@ def main() -> int:
         print("FAIL: hashing cannot distinguish different bytes. Instrument is broken.")
         return 1
 
-    checked, fails, dirty = 0, [], []
+    checked, fails, dirty, beacon_on = 0, [], [], []
     for path, url_path in FILES.items():
         head_bytes = at_head(path)
         if head_bytes is None:
@@ -184,6 +194,10 @@ def main() -> int:
         # verdict from one sample is luck.
         live = fetch(SITE + url_path)
         live2 = fetch(SITE + url_path)
+        if live is not None and CF_BEACON.search(live):
+            beacon_on.append(url_path)
+        live = CF_BEACON.sub(b"", live) if live is not None else None
+        live2 = CF_BEACON.sub(b"", live2) if live2 is not None else None
         if live is not None and live2 is not None and sha(live) != sha(live2):
             fails.append(
                 f"{path}: the edge served TWO DIFFERENT copies of {url_path} within one run "
@@ -217,7 +231,15 @@ def main() -> int:
         print(f"\n  note: uncommitted local edits in {', '.join(dirty)} — not a deploy problem,")
         print("        and deliberately not a failure. The comparison above used HEAD.")
 
+    if beacon_on:
+        fails.append(
+            f"Cloudflare injects its Web Analytics beacon (static.cloudflareinsights.com) into {', '.join(beacon_on)}.\n"
+            f"       privacy.html (7 Nov) says that script is being switched off and Plausible is our only analytics.\n"
+            f"       Turn off Web Analytics for outlier.host in Cloudflare; the compare above ignored the tag.")
+
     if checked < MIN_FILES:
+        for f in fails:
+            print(f"  {f}")
         print(f"\nFAIL: compared {checked} file(s), expected {MIN_FILES}.")
         print("      A gate that checked nothing prints the same word as a clean one.")
         return 1
