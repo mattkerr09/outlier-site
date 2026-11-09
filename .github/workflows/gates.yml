@@ -108,6 +108,10 @@ jobs:
           # correct the claim, move the date, or take the claim off. --self-check proves it fails on its own fixtures.
           python3 scripts/claim_freshness_gate.py --self-check
           python3 scripts/claim_freshness_gate.py .
+          # 11-09: block new absolute promises about the coding agent's honesty or self-checking.
+          # Existing exact sentences warn from a pinned baseline; new promises fail.
+          python3 scripts/honesty_claim_gate.py --self-check
+          python3 scripts/honesty_claim_gate.py .
           # 10-21 (CEO): FOUNDINGOUTLIER and FOUNDINGBUNDLE end at the moment in data/founding_offer.json. Every page
           # carries that date and switches the founders price off by itself at that moment (the bar's guard, the dated
           # reveal, the card that is $249 in the HTML); this fails if a page is not wired to that date or shows the price
