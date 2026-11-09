@@ -313,11 +313,11 @@
 
     /* ---------- signature stat band ---------- */
     .statband{margin-top:5.5rem;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);background:var(--bg-2);}
-    .statband .wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;padding:2rem 0;text-align:center;}
+    .statband .wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:2rem 0;text-align:center;}
     .stat .n{font-family:var(--display);font-size:1.92rem;font-weight:600;letter-spacing:-.02em;line-height:1;color:var(--text);}
     .stat .n.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
     .stat .l{font-family:var(--mono);font-size:0.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin-top:.5rem;}
-    @media(max-width:760px){.statband .wrap{grid-template-columns:repeat(2,1fr);gap:1.6rem;}}
+    @media(max-width:760px){.statband .wrap{grid-template-columns:repeat(3,1fr);gap:1rem;}}
 
     /* ---------- sections ---------- */
     section{padding:6.6rem 0;position:relative;z-index:1;}
@@ -927,7 +927,7 @@
     <div class="eyebrow reveal in"><span class="dot"></span> Runs on your Mac · notarized by Apple</div>
     <h1 class="reveal d1 in">An AI assistant for code and research<br><span class="accent">private by default, on your&nbsp;Mac.</span></h1>
       <p class="future-line reveal d2">Your own AI, living in your house. Pull the plug on the internet and it keeps answering.</p>
-    <p class="sub reveal d2 in">Outlier is a Mac app that runs AI models on your own computer. It is a private alternative to ChatGPT and Claude. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, and there is no usage cap. Nothing you type leaves your Mac unless you turn on web search or pick a cloud model with your own API key. The few checks the app makes on its own carry none of your words, and <a href="https://outlier.host/privacy.html">the privacy page</a> lists each one.</p>
+    <p class="sub reveal d2 in">Outlier is a Mac app that runs AI models on your own computer, for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, and there is no usage cap. Nothing you type leaves your Mac unless you turn on web search or pick a cloud model with your own API key. The few checks the app makes on its own carry none of your words, and <a href="https://outlier.host/privacy.html">the privacy page</a> lists each one.</p>
     <div class="cta-bar">
       <div class="cta-row reveal d3 in">
       <a class="btn btn-primary" href="https://outlier.host/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1006/Outlier-1.11.1006-arm64.dmg" target="_blank" rel="noopener noreferrer nofollow">
@@ -1037,11 +1037,9 @@
 <!-- ============ STAT BAND ============ -->
 <div class="statband">
   <div class="wrap">
-    <div class="stat reveal"><div class="n grad">∞</div><div class="l">Local generation</div></div>
     <div class="stat reveal d1"><div class="n">6</div><div class="l">Model tiers</div></div>
     <div class="stat reveal d1"><div class="n grad">89.5%</div><div class="l">MMLU · Core 27B</div></div>
     <div class="stat reveal d2"><div class="n">$0</div><div class="l">Cloud token bill</div></div>
-    <div class="stat reveal d2"><div class="n">100%</div><div class="l">On-device by default</div></div>
   </div>
 </div>
 
@@ -1061,7 +1059,7 @@ outlier-c 53887  16u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
 outlier-c 53887  19u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766 (LISTEN)
 outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<span class="p-lo">127.0.0.1</span>:64369 (ESTABLISHED)
 <span class="p-dim"># sampled 22&times; across a 24s answer — sockets leaving this Mac: 0</span></pre>
-        <div class="proof-foot">Every socket Outlier holds is <strong>127.0.0.1</strong>: your own machine. We sampled it twenty-two times while that answer was being generated and found <strong>zero</strong> connections to anywhere else. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns every socket on the machine instead: 168 when this was captured, and a different number each time you run it, because it counts every other process too. That is how a check like this can quietly prove nothing.</div>
+        <div class="proof-foot">Every socket the Outlier engine held was <strong>127.0.0.1</strong>: your own machine. We sampled it twenty-two times while that answer was being generated and found <strong>zero</strong> connections to anywhere else. The app&rsquo;s own few checks (updates, licence, price) are listed on the privacy page. Run it on your Mac and check. The <code>-a</code> is load-bearing: without it <code>lsof</code> ORs its filters and returns every socket on the machine instead: 168 when this was captured, and a different number each time you run it, because it counts every other process too. That is how a check like this can quietly prove nothing.</div>
       </div>
     </div>
     <div class="flowcard reveal d1">
@@ -1135,7 +1133,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       <div class="tier reveal d2" data-lifetime-card>
         <div class="tn" data-lt-name>Outlier Lifetime Licence</div>
         <div class="price"><span data-lt-price>$49</span> <small>once</small> <span data-lt-bnpl></span></div>
-        <div class="payterms" data-lt-offer hidden><strong>Launch price: $24.50 once, through November 30.</strong> From December 1: $49. The Buy button applies <strong>FOUNDINGOUTLIER</strong> for you at checkout; if the checkout shows $49, enter it under &ldquo;Have a discount code?&rdquo;</div>
+        <div class="payterms" data-lt-offer hidden><strong>Launch price: $24.50 once, through November 30.</strong> From December 1: $49. The Buy button applies the launch price for you at checkout.</div>
         <p class="blurb">Pro for as long as Outlier exists, including future model releases.</p>
         <ul>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Every tier and every feature</li>
@@ -1202,8 +1200,8 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
     <div class="sec-head reveal">
       <span class="kicker">Beyond chat</span>
       <h2>The rest of the app,<br><span class="accent">not just described.</span></h2>
-      <p>Three things Outlier does that a chat box does not. Same window, same
-      offline machine, nothing leaving it.</p>
+      <p>Three things Outlier does that a chat box does not, in the same window. Chat and the agent
+      run on your Mac; deep research goes to the web only when you turn it on.</p>
     </div>
 
     <div class="demos">
@@ -1213,7 +1211,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
           <div class="macbar">
             <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
             <span class="macbar-title">Outlier &middot; Deep research</span>
-            <span class="macbar-right"><span class="pill-offline"><b></b>Offline</span></span>
+            <span class="macbar-right"><span class="pill-offline"><b></b>Web search on</span></span>
           </div>
           <div class="dbody">
             <div class="dq"><b>Search</b><span>Apple M4 Max unified memory bandwidth</span></div>
