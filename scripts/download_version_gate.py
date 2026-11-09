@@ -201,6 +201,38 @@ def main(root_arg: str = ".") -> int:
             print(f"  {f}")
         print("\n  These are words, not links, so the download-URL check above cannot see them.")
 
+    # --- the updater mirror (CEO 2026-11-09, app 1.11.1007 on) -----------------
+    # updates/latest.json is the app's second update endpoint: the ship step copies the release's signed latest.json
+    # here, byte for byte. A stale copy would tell a user on the fallback path there is no update, and a missing one
+    # answers 404, so it must name the current release in its version and in every download URL, and every platform
+    # must carry a signature. It reads the local file only, so a GitHub download outage cannot turn this gate red.
+    mirror_fails = []
+    mirror = root / "updates" / "latest.json"
+    if not mirror.exists():
+        mirror_fails.append("updates/latest.json is missing: the app's second update endpoint would answer 404")
+    else:
+        try:
+            feed = json.loads(mirror.read_text(encoding="utf-8"))
+            plats = (feed.get("platforms") or {}) if isinstance(feed, dict) else {}
+            ver = str(feed.get("version", "") if isinstance(feed, dict) else "").lstrip("v")
+            print(f"  mirror updates/latest.json   v{ver}" + ("" if ver == current else "  <- STALE"))
+            if ver != current:
+                mirror_fails.append(f"updates/latest.json says v{ver}, current release is v{current}")
+            if not plats:
+                mirror_fails.append("updates/latest.json has no platforms")
+            for name, plat in plats.items():
+                if f"-{current}-" not in str((plat or {}).get("url", "")):
+                    mirror_fails.append(f"updates/latest.json {name}: the download URL does not name v{current}")
+                if not str((plat or {}).get("signature", "")).strip():
+                    mirror_fails.append(f"updates/latest.json {name}: no signature")
+        except ValueError as e:
+            mirror_fails.append(f"updates/latest.json is not valid JSON ({e})")
+    if mirror_fails:
+        print(f"\nFAIL: {len(mirror_fails)} updater mirror problem(s):")
+        for f in mirror_fails:
+            print(f"  {f}")
+        print("  The ship step writes it from the release's verified latest.json; copy that file, don't hand-edit it.")
+
     _today = _dt.date.today()
     _frozen_ok = _today <= SEO_FREEZE_UNTIL
     _blocking = [h for h in stale
@@ -212,13 +244,13 @@ def main(root_arg: str = ".") -> int:
         print(f"\n  THE {SEO_FREEZE_PREFIX} FREEZE LAPSED ON {SEO_FREEZE_UNTIL} — those pages "
               f"now count. Re-point them or move the date deliberately.")
 
-    if _blocking or mismatched or prose_fails:
+    if _blocking or mismatched or prose_fails or mirror_fails:
         return 1
     if stale:
         print(f"\nPASS — every page outside the {SEO_FREEZE_PREFIX} freeze names v{current} "
               f"({len(stale)} frozen page(s) still on an older build, by decision)")
     else:
-        print(f"\nPASS — {len(hits)} download URLs and {len(PROSE_SITES)} prose sites all name v{current}")
+        print(f"\nPASS — {len(hits)} download URLs, {len(PROSE_SITES)} prose sites and the updater mirror all name v{current}")
     return 0
 
 
