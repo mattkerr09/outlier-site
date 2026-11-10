@@ -766,6 +766,8 @@
        collected: the subscribe worker has no sending, so an "email me the link" form would take
        an address and never deliver the link. */
     .phone-link{display:none;margin:.75rem 0 0;font-size:.9rem;color:var(--text-mid);}
+    .win-link{margin:.75rem 0 0;font-size:.9rem;color:var(--text-mid);}
+    .win-link a{color:var(--text);text-decoration:underline;text-underline-offset:3px;}
     .phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;
       text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
     @media (max-width:760px),(hover:none) and (pointer:coarse){.phone-link{display:block;}}
@@ -970,6 +972,9 @@
     </div>
       <p class="trust reveal d3 in">v1.11.1006 · notarized · Free · M1 or newer · macOS 15+ (free update) · 277 MB</p>
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
+      <!-- 10 Nov (CEO, Show HN prep): 40+ visitors a week arrive on Windows. Shown only when the browser says Windows; no date
+           promised (the waiting list below deliberately names none). -->
+      <p class="win-link" hidden>On Windows? A Windows version is in testing. <a href="#windows">Get one email when it&rsquo;s ready</a>.</p>
     </div>
 
       <div class="nosub reveal d3 in">
@@ -1784,8 +1789,9 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
 <script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
 <!-- 10 Nov (Lighthouse contrast 1.08): the widget's shadow :host{all:initial} reset its text to black on its dark card;
      a colour set on the host element wins over :host, so the text is readable again. -->
-<div data-win-notify style="max-width:520px;margin:1.25rem auto 0;color:var(--text)"></div>
+<div id="windows" data-win-notify style="max-width:520px;margin:1.25rem auto 0;color:var(--text);scroll-margin-top:90px"></div>
 <script src="https://kerr-subscribe.kerrco.workers.dev/notify.js" defer></script>
+<script>(function(){try{var w=/Windows/i.test(navigator.userAgent)||/Win/i.test((navigator.userAgentData&&navigator.userAgentData.platform)||"");if(w){document.querySelectorAll(".win-link").forEach(function(e){e.hidden=false;});}}catch(_){}})();</script>
 <script>
 (function () {
   var bar = document.querySelector('.hero .cta-bar') || document.querySelector('.cta-bar');
