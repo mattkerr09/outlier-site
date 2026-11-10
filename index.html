@@ -198,6 +198,16 @@
     .cta-bar{display:flex;align-items:center;gap:1.15rem;flex-wrap:wrap;margin-bottom:1.5rem;}
     .cta-bar .trust{margin:0;}
     @media(max-width:760px){.cta-bar{gap:.7rem;}.cta-bar .trust{width:100%;}}
+    /* 10 Nov (blind SITE-BAR review + CEO): on a phone the 366px paragraph pushed Download below the first screen. Phones
+       only: the buttons come right after the headline and its one line; the paragraph and the rest follow. The DOM keeps
+       its order (screen readers still read the paragraph first); desktop places every block on its own grid row. */
+    @media (max-width:560px){
+      .hero .wrap{display:flex;flex-direction:column;}
+      .hero .wrap > *{order:3;}
+      .hero .wrap > .eyebrow{order:0;align-self:flex-start;}
+      .hero .wrap > h1,.hero .wrap > .future-line{order:1;}
+      .hero .wrap > .cta-bar{order:2;}
+    }
     .trust{margin-top:1.2rem;font-family:var(--mono);font-size:0.77rem;color:var(--text-dim);letter-spacing:.01em;}
     .checks{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:.7rem 1.9rem;margin:2.3rem 0 0;}
     .checks span{display:inline-flex;align-items:center;gap:.45rem;font-size:0.9rem;color:var(--text-mid);font-weight:500;}
