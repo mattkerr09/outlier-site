@@ -289,6 +289,8 @@
     .proof pre{font-family:var(--mono);font-size:0.65rem;line-height:1.72;color:#d8d2ec;padding:.75rem .85rem;
       overflow-x:auto;white-space:pre;margin:0;}
     .proof .p-cmd{color:var(--v0);}
+    /* 10 Nov (Quality Desk, 375px): the capture scrolled sideways behind a hidden scrollbar and read as cut off */
+    @media (max-width:560px){.proof pre{white-space:pre-wrap;overflow-wrap:anywhere;}}
     .proof .p-lo{color:var(--green-light);}
     .proof .p-dim{color:var(--text-faint);}
     .proof-foot{padding:.62rem .85rem .78rem;border-top:1px solid var(--border);font-size:0.77rem;
@@ -432,7 +434,7 @@
        block layout still inherits 740px and the page itself starts scrolling. */
     @media (max-width:640px){
       .tbl-wrap{overflow-x:visible;background-image:none;}
-      .tbl-wrap table,.tbl-wrap tbody,.tbl-wrap tr,.tbl-wrap td{display:block;}
+      .tbl-wrap table,.tbl-wrap tbody,.tbl-wrap tr,.tbl-wrap td,.tbl-wrap th[scope=row]{display:block;}
       /* .models/.cmp set min-width:740px/700px later in this sheet, so an
          equal-specificity override here would lose on source order alone.
          .tbl-wrap.models is one class heavier and wins wherever it sits. */
@@ -452,15 +454,18 @@
         margin-right:auto;padding-right:.6rem;
         font-family:var(--mono);font-size:0.65rem;letter-spacing:.06em;
         text-transform:uppercase;color:var(--text-dim);}
-      .tbl-wrap td:first-child,.cmp td:first-child{display:block;text-align:left;
-        padding:0 0 .55rem;}
+      .tbl-wrap td:first-child,.cmp td:first-child,.tbl-wrap th[scope=row]{display:block;text-align:left;
+        padding:0 0 .55rem;border-bottom:none;}
       .tbl-wrap td:first-child::before{display:none;}
-      .tbl-wrap tbody tr:hover td{background:none;}
+      .tbl-wrap tbody tr:hover td,.tbl-wrap tbody tr:hover th{background:none;}
     }
     table{border-collapse:collapse;width:100%;font-size:0.9rem;}
     th,td{padding:.9rem 1.05rem;text-align:left;border-bottom:1px solid var(--border);vertical-align:top;}
     thead th{background:var(--surface-2);font-family:var(--mono);font-weight:500;font-size:0.65rem;letter-spacing:.06em;text-transform:uppercase;color:var(--text-dim);}
-    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:last-child td,tbody tr:last-child th{border-bottom:none;}
+    /* 10 Nov (Lighthouse td-has-header): the compare table's row labels are row headers now; they look as the label cells did */
+    tbody th[scope=row]{font-weight:inherit;}
+    tbody tr:hover th[scope=row]{background:rgba(168,85,247,.03);}
     tbody tr:hover td{background:rgba(168,85,247,.03);}
     td.lbl{color:var(--text);font-weight:500;font-family:var(--head);}
     .cmp table{min-width:700px;}
@@ -915,7 +920,7 @@
 <!-- ============ NAV ============ -->
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="#top"><img src="logo.png" alt="Outlier" width="27" height="27">Outlier</a>
+    <a class="brand" href="#top"><img src="logo.png" alt="" width="27" height="27">Outlier</a>
     <button class="nav-toggle" aria-label="Menu" onclick="this.classList.toggle('active');document.querySelector('.nav-links').classList.toggle('open')">
       <span></span><span></span><span></span>
     </button>
@@ -1434,15 +1439,15 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
     <div class="tbl-wrap cmp reveal d1">
       <table>
         <thead>
-          <tr><th></th><th>Cloud AI tools</th><th>Cloud coding agents</th><th class="us">Outlier Free</th><th class="us">Outlier Pro</th></tr>
+          <tr><td></td><th scope="col">Cloud AI tools</th><th scope="col">Cloud coding agents</th><th scope="col" class="us">Outlier Free</th><th scope="col" class="us">Outlier Pro</th></tr>
         </thead>
         <tbody>
-          <tr><td class="lbl">Monthly cost</td><td class="n" data-label="Cloud AI tools">Monthly plan</td><td class="n" data-label="Cloud coding agents">Monthly plan or per-token billing</td><td class="y us" data-label="Outlier Free">$0</td><td class="y us" data-label="Outlier Pro"><span data-pbox-regular>$49 once</span><span data-pbox-founding hidden>$24.50 once at launch, $49 from December 1</span></td></tr>
-          <tr><td class="lbl">Usage model</td><td class="n" data-label="Cloud AI tools">Server-side limits</td><td class="n" data-label="Cloud coding agents">Usage windows / caps</td><td class="y us" data-label="Outlier Free">No token meter</td><td class="y us" data-label="Outlier Pro">No token meter</td></tr>
-          <tr><td class="lbl">Where inference runs</td><td class="n" data-label="Cloud AI tools">Provider cloud</td><td class="n" data-label="Cloud coding agents">Provider cloud</td><td class="y us" data-label="Outlier Free">Your Mac</td><td class="y us" data-label="Outlier Pro">Your Mac</td></tr>
-          <tr><td class="lbl">Privacy default</td><td class="n" data-label="Cloud AI tools">Remote request</td><td class="n" data-label="Cloud coding agents">Remote repo / context</td><td class="y us" data-label="Outlier Free">Local by default</td><td class="y us" data-label="Outlier Pro">Local by default</td></tr>
-          <tr><td class="lbl">Offline use</td><td class="n" data-label="Cloud AI tools">No</td><td class="n" data-label="Cloud coding agents">No</td><td class="y us" data-label="Outlier Free">Yes, once downloaded</td><td class="y us" data-label="Outlier Pro">Yes, once downloaded</td></tr>
-          <tr><td class="lbl">Current maturity</td><td style="color:var(--v0)" data-label="Cloud AI tools">Very mature</td><td style="color:var(--v0)" data-label="Cloud coding agents">Very mature</td><td class="us" data-label="Outlier Free">Useful beta</td><td class="us" data-label="Outlier Pro">Ambitious beta</td></tr>
+          <tr><th scope="row" class="lbl">Monthly cost</th><td class="n" data-label="Cloud AI tools">Monthly plan</td><td class="n" data-label="Cloud coding agents">Monthly plan or per-token billing</td><td class="y us" data-label="Outlier Free">$0</td><td class="y us" data-label="Outlier Pro"><span data-pbox-regular>$49 once</span><span data-pbox-founding hidden>$24.50 once at launch, $49 from December 1</span></td></tr>
+          <tr><th scope="row" class="lbl">Usage model</th><td class="n" data-label="Cloud AI tools">Server-side limits</td><td class="n" data-label="Cloud coding agents">Usage windows / caps</td><td class="y us" data-label="Outlier Free">No token meter</td><td class="y us" data-label="Outlier Pro">No token meter</td></tr>
+          <tr><th scope="row" class="lbl">Where inference runs</th><td class="n" data-label="Cloud AI tools">Provider cloud</td><td class="n" data-label="Cloud coding agents">Provider cloud</td><td class="y us" data-label="Outlier Free">Your Mac</td><td class="y us" data-label="Outlier Pro">Your Mac</td></tr>
+          <tr><th scope="row" class="lbl">Privacy default</th><td class="n" data-label="Cloud AI tools">Remote request</td><td class="n" data-label="Cloud coding agents">Remote repo / context</td><td class="y us" data-label="Outlier Free">Local by default</td><td class="y us" data-label="Outlier Pro">Local by default</td></tr>
+          <tr><th scope="row" class="lbl">Offline use</th><td class="n" data-label="Cloud AI tools">No</td><td class="n" data-label="Cloud coding agents">No</td><td class="y us" data-label="Outlier Free">Yes, once downloaded</td><td class="y us" data-label="Outlier Pro">Yes, once downloaded</td></tr>
+          <tr><th scope="row" class="lbl">Current maturity</th><td style="color:var(--v0)" data-label="Cloud AI tools">Very mature</td><td style="color:var(--v0)" data-label="Cloud coding agents">Very mature</td><td class="us" data-label="Outlier Free">Useful beta</td><td class="us" data-label="Outlier Pro">Ambitious beta</td></tr>
         </tbody>
       </table>
     </div>
@@ -1759,10 +1764,12 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
 
 <!-- Windows waiting list. Renders into this div; the script does nothing if it
      is absent, so placement is a decision made here rather than guessed. -->
-<div data-founding data-was="$49" data-now="$24.50" style="max-width:520px;margin:1.25rem auto 0"></div>
+<div data-founding data-was="$49" data-now="$24.50" style="max-width:520px;margin:1.25rem auto 0;color:var(--text)"></div>
 <script data-founding-ends="2026-12-01T07:59:00Z">(function(){var end=Date.parse("2026-12-01T07:59:00Z"),now=typeof window.__kcNow==="number"?window.__kcNow:Date.now();if(!(now<end))window.__kcFounding=1;})();</script>
 <script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>
-<div data-win-notify style="max-width:520px;margin:1.25rem auto 0"></div>
+<!-- 10 Nov (Lighthouse contrast 1.08): the widget's shadow :host{all:initial} reset its text to black on its dark card;
+     a colour set on the host element wins over :host, so the text is readable again. -->
+<div data-win-notify style="max-width:520px;margin:1.25rem auto 0;color:var(--text)"></div>
 <script src="https://kerr-subscribe.kerrco.workers.dev/notify.js" defer></script>
 <script>
 (function () {
