@@ -215,7 +215,8 @@
       .hero .wrap{display:grid;
         grid-template-columns:minmax(0,36.5rem) minmax(0,1fr);
         column-gap:3.5rem;align-items:start;}
-      .hero .wrap > .eyebrow{grid-column:1 / -1;grid-row:1;}
+      /* 10 Nov (blind review): a grid item is blockified, so the inline pill stretched the full 1180px; it keeps its own width. */
+      .hero .wrap > .eyebrow{grid-column:1 / -1;grid-row:1;justify-self:start;}
       /* The headline carries this column. At the shared 3rem cap it ran two
          lines (104px) against a 291px copy column, leaving a ~340px hole
          hanging under it -- the gap Matthew pointed at. Sizing it to the
@@ -224,13 +225,16 @@
       /* 10 Nov (blind SITE-BAR review, CEO): the future-line had no grid cell, so the grid auto-placed it in row 6, under
          the demo and the check row, and its -.75rem margin pulled it 12px into the checks. It is the copy column's lead
          line now (row 2), and every block below it moves down one row. */
-      .hero .wrap > h1{grid-column:1;grid-row:2 / span 3;margin-bottom:0;
+      .hero .wrap > h1{grid-column:1;grid-row:2 / span 4;margin-bottom:0;
         align-self:center;font-size:clamp(3.25rem,4.35vw,4.5rem);max-width:15ch;}
       .hero .wrap > .future-line{grid-column:2;grid-row:2;margin:.5rem 0 0;max-width:none;}
       .hero .wrap > p.sub{grid-column:2;grid-row:3;margin-top:.9rem;max-width:none;}
       .hero .wrap > .cta-bar{grid-column:2;grid-row:4;align-self:start;}
-      .hero .showcase{grid-column:1 / -1;grid-row:5;}
-      .hero .wrap > .checks{grid-column:1 / -1;grid-row:6;}
+      /* 10 Nov (Quality Desk): the "Free to start" card had no cell either, so it sat alone under the checks with half its
+         row empty. It explains the two buttons, so it goes right under them, as it does on phones. */
+      .hero .wrap > .nosub{grid-column:2;grid-row:5;margin:1rem 0 0;max-width:none;}
+      .hero .showcase{grid-column:1 / -1;grid-row:6;}
+      .hero .wrap > .checks{grid-column:1 / -1;grid-row:7;}
     }
     .showcase::before{content:"";position:absolute;inset:-6% 2% -18% 2%;z-index:-1;border-radius:50%;
       background:radial-gradient(ellipse at center,rgba(168,85,247,.42),rgba(99,102,241,.16) 45%,transparent 72%);
@@ -943,7 +947,8 @@
   <div class="wrap">
     <div class="eyebrow reveal in"><span class="dot"></span> Runs on your Mac · notarized by Apple</div>
     <h1 class="reveal d1 in">An AI assistant for code and research<br><span class="accent">private by default, on your&nbsp;Mac.</span></h1>
-      <p class="future-line reveal d2">Your own AI, living in your house. Pull the plug on the internet and it keeps answering.</p>
+      <!-- 10 Nov: "in" like the other hero lines. Without it the reveal observer left this line invisible on first load (a 77px hole under the phone headline, an empty slot at 1280). -->
+      <p class="future-line reveal d2 in">Your own AI, living in your house. Pull the plug on the internet and it keeps answering.</p>
     <p class="sub reveal d2 in">Outlier is a Mac app that runs AI models on your own computer, for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, and there is no usage cap. Nothing you type leaves your Mac unless you turn on web search or pick a cloud model with your own API key. The few checks the app makes on its own carry none of your words, and <a href="https://outlier.host/privacy.html">the privacy page</a> lists each one.</p>
     <div class="cta-bar">
       <div class="cta-row reveal d3 in">
