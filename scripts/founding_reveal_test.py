@@ -17,7 +17,8 @@ for key in ("name", "price", "bnpl", "offer", "btn"):
     node = re.search(r"<([a-z]+)\b([^>]*\bdata-lt-" + key + r"\b[^>]*)>(.*?)</\1>", home, re.S)
     regular[key] = (bool(re.search(r"\bhidden\b", node.group(2))) if key == "offer" else
                     node.group(3) if key == "bnpl" else html.unescape(re.sub(r"<[^>]*>", "", node.group(3))))
-assert regular["price"] == "$49"
+# 2026-11-11 (CEO): the regular Pro price from December 1 is $29 once.
+assert regular["price"] == "$29"
 
 # Read only the SCRIPT expression, without importing or running the generator.
 module = ast.parse((ROOT / "scripts/product_box.py").read_text())

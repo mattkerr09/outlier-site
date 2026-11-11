@@ -149,7 +149,8 @@ def self_check() -> int:
         "build 1.11.945": ['<p class="byline">Last updated 2026-10-19 &middot; Outlier v1.11.945</p>',
                            "releases/download/v1.11.945/Outlier-1.11.945-arm64.dmg"],
     }
-    good = ["The test Mac runs macOS 26.3.1.", "Pro is $49 once. Apple Silicon, macOS 15 or later. Outlier v1.11.990.",
+    # 2026-11-11 (CEO): clean regular-price fixtures use the December 1 price, $29.
+    good = ["The test Mac runs macOS 26.3.1.", "Pro is $29 once. Apple Silicon, macOS 15 or later. Outlier v1.11.990.",
             "A rival charges $249.50 a year.", "A rig that costs $2490.",
             "$249,000 of GPUs.", "The former price was $249 until October.",
             "<p>It was $249 before the sale.</p>"]
@@ -178,7 +179,7 @@ def self_check() -> int:
         _put(root, "seo/a/index.html", "<p>Pro is $249 once.</p>")
         _put(root, "seo/b/index.html", "<p>Requires macOS 26+.</p>")
         _put(root, "seo/c/index.html", '<p class="byline">Outlier v1.11.945</p>')
-        _put(root, "seo/clean/index.html", "<p>$49 once. macOS 15 or later. macOS 26.3.1 test Mac. v1.11.990.</p>")
+        _put(root, "seo/clean/index.html", "<p>$29 once. macOS 15 or later. macOS 26.3.1 test Mac. v1.11.990.</p>")
         _put(root, "seo/_data/release.json", '{"version": "1.11.990"}')
         found = []
         for p in walk(root):
@@ -199,8 +200,8 @@ def self_check() -> int:
     # 4. the clean fixture passes, and the empty / short trees are refused
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        _put(root, GENERATOR, 'PRICE = "$49"\n')
-        _put(root, "seo/clean/index.html", "<p>$49 once. macOS 15 or later.</p>")
+        _put(root, GENERATOR, 'PRICE = "$29"\n')
+        _put(root, "seo/clean/index.html", "<p>$29 once. macOS 15 or later.</p>")
         if _quiet(root, min_pages=1) != 0:
             ok = False
             notes.append("clean fixture: check() failed a tree with none of the three facts")
@@ -213,7 +214,7 @@ def self_check() -> int:
             notes.append("empty tree: check() did not refuse")
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        _put(root, "seo/a/index.html", "<p>$49 once.</p>")     # pages but no generator
+        _put(root, "seo/a/index.html", "<p>$29 once.</p>")     # pages but no generator
         if _quiet(root, min_pages=1) != 1:
             ok = False
             notes.append("no generator: check() did not refuse")

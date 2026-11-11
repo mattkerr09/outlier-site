@@ -130,7 +130,8 @@ def founding_next_day() -> str:
     return f"{t.strftime('%B')} {t.day}"
 
 
-def launch_line(now: str = "$24.50", later: str = "$49") -> str:
+#: 2026-11-11 (CEO): from December 1, the regular Pro price is $29 once.
+def launch_line(now: str = "$24.50", later: str = "$29") -> str:
     """2026-11-09 (CEO): "Launch price: $24.50 once, through November 30. From December 1: $49." An introductory price
     that names the price after it. No "Black Friday", "half price" or "% off", and no struck-through price: $49 has
     never been charged, so a former-price comparison would not be honest (FTC 16 CFR 233.1; the EU's 30-day rule).
@@ -165,7 +166,7 @@ def box(tag: str, spot: str, version: str, src: str | None = None) -> str:
     dmg = f"{REPO}/v{version}/Outlier-{version}-arm64.dmg"
     return (
         f'<div class="pbox" data-pbox="{spot}">\n'
-        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $49 once</span>'
+        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $29 once</span>'
         f'<span data-pbox-founding hidden> &middot; {launch_line()}.</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}" rel="nofollow">Download free</a> '
         f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
@@ -185,7 +186,7 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
     req = (f"Free to start (Nano and Lite). {OS_REQ}, Apple silicon. " if requirements else "")
     return (
         f'<div class="pbox" data-pbox="end">\n'
-        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $49 once</span>'
+        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $29 once</span>'
         f'<span data-pbox-founding hidden> &middot; {launch_line()}.</span></p>\n'
         f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
         f'<p class="pbox-req">{req}{REFUND} {TAX}</p>\n'
@@ -248,7 +249,7 @@ def bare_targets() -> list[str]:
 STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25; "
                  "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
                  "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
-STD_PRICE_NEW = ("Free: Nano + Lite. Pro<span data-pbox-regular>: $49 once</span>"
+STD_PRICE_NEW = ("Free: Nano + Lite. Pro<span data-pbox-regular>: $29 once</span>"
                  f"<span data-pbox-founding hidden> at the {launch_line()[0].lower()}{launch_line()[1:]}</span>. {OS_REQ}. " + REFUND + " " + TAX)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
                   'var(--border);margin:.5rem 0 0 .5rem"')
@@ -256,7 +257,7 @@ STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_ST
 #: The homepage's no-subscription line says the same founders price, statically.
 HOME_OLD = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 "
             "for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.")
-HOME_NEW = ("Pro: every model<span data-pbox-regular>, $49 once</span><span data-pbox-founding "
+HOME_NEW = ("Pro: every model<span data-pbox-regular>, $29 once</span><span data-pbox-founding "
             f"hidden> at the {launch_line()[0].lower()}{launch_line()[1:]}</span>. "
             "No subscription, no per-token cost.")
 _FOUNDERS_SHOWN = re.compile(r"\$24\.50(?![\d])")   # 2026-11-02: the November sale price (was 124.50 / 31.13)
