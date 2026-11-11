@@ -41,8 +41,11 @@
   var css = document.createElement('style');
   css.textContent =
     '.mac-only-note{margin:.6rem 0 0;font-size:.9rem;line-height:1.45;color:var(--text-mid,#5b5b66);}' +
-    '.mac-only-note button{font:inherit;color:var(--text,inherit);background:none;border:0;padding:0;' +
-    'text-decoration:underline;text-underline-offset:2px;cursor:pointer;}' +
+    (phone ?
+      '.mac-only-note{margin:0 0 .6rem;}.mac-only-note .btn{display:flex;margin-top:.5rem;white-space:normal;}' +
+      '@media (max-width:760px){.mac-only-note .btn{width:100%;}}' :
+      '.mac-only-note button{font:inherit;color:var(--text,inherit);background:none;border:0;padding:0;' +
+      'text-decoration:underline;text-underline-offset:2px;cursor:pointer;}') +
     'html.not-mac .phone-link{display:none !important;}';           // the home page's own phone line: one line, not two
   document.head.appendChild(css);
   document.documentElement.classList.add('not-mac');
@@ -50,6 +53,10 @@
   var done = [];
   Array.prototype.forEach.call(links, function (a) {
     if (a.closest('nav, header, footer')) return;     // a paragraph in the nav or footer would break their layout
+    if (phone) {
+      a.classList.remove('btn-primary');
+      if (a.classList.contains('btn')) a.classList.add('btn-ghost');
+    }
     var box = a.closest('.cta-bar, .pbox-btns, p, ul, ol, div') || a.parentNode;   // a list item's note goes after its list
     if (!box || done.indexOf(box) !== -1) return;
     done.push(box);
@@ -60,10 +67,11 @@
       (phone ? 'On a phone? ' : 'Not at your Mac? ')));
     var b = document.createElement('button');
     b.type = 'button';
-    b.textContent = 'Send yourself the Mac link.';
+    b.textContent = phone ? 'Send yourself the Mac link' : 'Send yourself the Mac link.';
+    if (phone) b.className = 'btn btn-primary';
     b.addEventListener('click', sendLink);
     note.appendChild(b);
-    box.parentNode.insertBefore(note, box.nextSibling);
+    box.parentNode.insertBefore(note, phone ? box : box.nextSibling);
   });
 
   document.addEventListener('click', function (e) {
