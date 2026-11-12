@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://outlier.host/will-it-run/mac-8gb/">
+  <meta property="og:url" content="https://outlier.host/will-it-run/mac-8gb/">
+  <title>What AI models can a Mac with 8 GB run?</title>
+  <meta name="description" content="A 8 GB Mac fits 5 models for short chats, 4 for long 32,000-token work. See both minimums, disk needs and chip speeds.">
+  <meta name="theme-color" content="#07060b">
+  <style>
+    /* Colours, type, article width and answer box follow the supplied learn template. */
+    :root { --bg: #07060b; --surface: #0e0d14; --text: #f0eef5; --text-mid: #a8a3b5;
+      --accent-light: #c084fc; --green: #34d399; --border: rgba(168,85,247,0.20);
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.65 var(--sans); }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    header, footer { padding: 1rem 0; border-bottom: 1px solid var(--border); color: var(--text-mid); }
+    article { padding: 2.5rem 0 4rem; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; }
+    h2 { font-size: 1.4rem; line-height: 1.28; margin: 2.4rem 0 1rem; }
+    h3 { font-size: 1.1rem; }
+    p { margin: 0 0 1.1rem; }
+    .byline, .source-label, .chip { display: block; color: var(--text-mid); font-size: 0.85rem; }
+    .byline { margin-bottom: 1.6rem; }
+    .quick-answer, .cta { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+    .qa-label { color: var(--accent-light); font-weight: 600; }
+    .quick-answer ul { margin: 0.6rem 0 0; padding-left: 1.2rem; }
+    .quick-answer li { margin-bottom: 0.5rem; }
+    .table-scroll { overflow-x: auto; margin: 1.2rem 0 1.6rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    caption { text-align: left; color: var(--text-mid); margin-bottom: 0.7rem; }
+    th, td { padding: 0.65rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+    thead th { color: var(--text-mid); font-size: 0.8rem; }
+    tbody th { font-weight: 500; overflow-wrap: anywhere; min-width: 11rem; }
+    #speed-table { min-width: 900px; }
+    #speed-table td { min-width: 10rem; }
+    .speed-value { display: block; font-weight: 600; }
+    details { margin-top: 0.5rem; font-size: 0.78rem; color: var(--text-mid); }
+    summary { cursor: pointer; color: var(--accent-light); }
+    samp { display: block; margin-top: 0.6rem; font: inherit; }
+    a { color: var(--accent-light); }
+    .cta { margin-top: 2.5rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--accent-light); outline-offset: 4px; }
+    footer { border-top: 1px solid var(--border); border-bottom: 0; font-size: 0.86rem; }
+    @media (max-width: 600px) { article { padding-top: 1.5rem; } th, td { padding: 0.5rem; } }
+  </style>
+</head>
+<body>
+<header><div class="wrap">Outlier · Local AI for Mac</div></header>
+<article><div class="wrap">
+  <h1>What AI models can a Mac with <span data-fact="memory">8</span> GB run?</h1>
+  <p class="byline">Outlier · Figures as of <span data-fact="data-date">8 November 2026</span></p>
+  <div class="quick-answer" id="answer">
+    <span class="qa-label">Quick answer</span>
+    <ul>
+      <li>A Mac with <span data-fact="memory">8</span> GB fits <span data-fact="short-fit-count">5</span> models for short chats, <span data-fact="fit-count">4</span> for long <span data-fact="long-context-label">32,000-token</span> work, from <span data-fact="model-count">33</span> models in our list. We use measured minimums where available and our cautious rule for the rest.</li>
+      <li>For long work, the roomiest fit is <span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span>. It has the lowest listed memory floor, <span data-fact="model:Qwen3.5-4B:min_ram_gb">6</span> GB, leaving <span data-fact="left:Qwen3.5-4B">2</span> GB above that floor.</li>
+      <li>For long work, the smallest fit by parameter count is <span data-fact="model:Qwen2.5-0.5B-Instruct:base_model">Qwen2.5-0.5B-Instruct</span>, listed as <span data-fact="model:Qwen2.5-0.5B-Instruct:params">0.5B dense</span>. It takes <span data-fact="model:Qwen2.5-0.5B-Instruct:disk_gb">0.28</span> GB on disk. The largest fit by parameter count is <span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span>, listed as <span data-fact="model:Qwen3.5-4B:params">4B dense</span>.</li>
+    </ul>
+  </div>
+
+  <h2>Every model that fits</h2>
+  <p>Fit, memory left and upgrade advice below use the long-work minimum. The two minimum columns show what changes for short chats. Measured rows use their measured minimum in both columns.</p>
+  <p>Start with the bottom of the hardware table. This memory tier includes older entry-level Macs, so the useful question is which downloads clear a small memory budget. Read the fit column before looking at speed. A file that is small enough to store can still ask for more working memory than this configuration has. The answer box identifies the model with the lowest floor and shows how much room remains above it.</p>
+<p>For a first choice here, compare the smallest parameter counts with their separate memory minimums. The list is short enough to check each model. Some tiny models appear in the excluded table because our rule reserves more room for them. Their names alone cannot tell you whether they belong on this Mac. Follow the next-memory column to see the actual jump needed for each candidate.</p>
+<p>The speed samples below cover only models in this tier. Pick your exact chip row to read the source behind a range. If your aim is to try several task types, first check which fitting models carry those tasks in the calculator. Keep the working conversation within the stated context when assessing whether this entry point meets your needs.</p>
+  <p>This is the lowest memory size listed for a Mac in our Mac list. Its complete fit list is <span data-fact="model:Qwen2.5-0.5B-Instruct:base_model">Qwen2.5-0.5B-Instruct</span>, <span data-fact="model:Qwen3.5-0.8B:base_model">Qwen3.5-0.8B</span>, <span data-fact="model:Llama-3.2-1B-Instruct:base_model">Llama-3.2-1B-Instruct</span>, <span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span>. Read the minimum beside each name before choosing. A smaller weight file can still have a higher memory floor in these rules.</p>
+  <div class="table-scroll" role="region" aria-label="Models that fit" tabindex="0">
+  <table id="fit-table"><caption>Models that fit long work, with measured minimums used where available</caption>
+    <thead><tr><th scope="col">Model</th><th scope="col">Fit</th><th scope="col">Short chats</th><th scope="col">Long <span data-fact="long-context-label">32,000-token</span> work</th>
+    <th scope="col">Memory left for long work</th><th scope="col">Disk</th></tr></thead>
+    <tbody><tr data-model="Qwen2.5-0.5B-Instruct">
+    <th scope="row"><span data-fact="model:Qwen2.5-0.5B-Instruct:base_model">Qwen2.5-0.5B-Instruct</span></th>
+    <td>tight</td>
+    <td><span data-fact="model:Qwen2.5-0.5B-Instruct:min_ram_gb_short">8</span> GB</td>
+    <td><span data-fact="model:Qwen2.5-0.5B-Instruct:min_ram_gb">8</span> GB</td>
+    <td><span data-fact="left:Qwen2.5-0.5B-Instruct">0</span> GB</td>
+    <td><span data-fact="model:Qwen2.5-0.5B-Instruct:disk_gb">0.28</span> GB</td>
+  </tr>
+<tr data-model="Qwen3.5-0.8B">
+    <th scope="row"><span data-fact="model:Qwen3.5-0.8B:base_model">Qwen3.5-0.8B</span></th>
+    <td>tight</td>
+    <td><span data-fact="model:Qwen3.5-0.8B:min_ram_gb_short">8</span> GB</td>
+    <td><span data-fact="model:Qwen3.5-0.8B:min_ram_gb">8</span> GB</td>
+    <td><span data-fact="left:Qwen3.5-0.8B">0</span> GB</td>
+    <td><span data-fact="model:Qwen3.5-0.8B:disk_gb">0.63</span> GB</td>
+  </tr>
+<tr data-model="Llama-3.2-1B-Instruct">
+    <th scope="row"><span data-fact="model:Llama-3.2-1B-Instruct:base_model">Llama-3.2-1B-Instruct</span></th>
+    <td>tight</td>
+    <td><span data-fact="model:Llama-3.2-1B-Instruct:min_ram_gb_short">8</span> GB</td>
+    <td><span data-fact="model:Llama-3.2-1B-Instruct:min_ram_gb">8</span> GB</td>
+    <td><span data-fact="left:Llama-3.2-1B-Instruct">0</span> GB</td>
+    <td><span data-fact="model:Llama-3.2-1B-Instruct:disk_gb">0.7</span> GB</td>
+  </tr>
+<tr data-model="Qwen3.5-4B">
+    <th scope="row"><span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span></th>
+    <td>fits</td>
+    <td><span data-fact="model:Qwen3.5-4B:min_ram_gb">6</span> GB measured</td>
+    <td><span data-fact="model:Qwen3.5-4B:min_ram_gb">6</span> GB measured</td>
+    <td><span data-fact="left:Qwen3.5-4B">2</span> GB</td>
+    <td><span data-fact="model:Qwen3.5-4B:disk_gb">2.37</span> GB</td>
+  </tr></tbody>
+  </table></div>
+
+  <h2>Speed table by chip</h2>
+  <p>The table covers all <span data-fact="mac-count">11</span> Mac models sold with <span data-fact="memory">8</span> GB in our Mac list, including older models. Each row names the exact Mac and chip. The representative models are <span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span>, <span data-fact="model:Qwen2.5-0.5B-Instruct:base_model">Qwen2.5-0.5B-Instruct</span>, <span data-fact="model:Llama-3.2-1B-Instruct:base_model">Llama-3.2-1B-Instruct</span>, <span data-fact="model:Qwen3.5-0.8B:base_model">Qwen3.5-0.8B</span>. They cover the roomiest fit, the smallest model, the largest model and the middle of this fit list, with repeated names removed.</p>
+  <div class="table-scroll" role="region" aria-label="Speed by Mac and chip" tabindex="0">
+  <table id="speed-table"><caption>Speed by chip for every Mac listed with <span data-fact="memory">8</span> GB</caption>
+    <thead><tr><th scope="col">Mac and chip</th><th scope="col"><span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span></th><th scope="col"><span data-fact="model:Qwen2.5-0.5B-Instruct:base_model">Qwen2.5-0.5B-Instruct</span></th><th scope="col"><span data-fact="model:Llama-3.2-1B-Instruct:base_model">Llama-3.2-1B-Instruct</span></th><th scope="col"><span data-fact="model:Qwen3.5-0.8B:base_model">Qwen3.5-0.8B</span></th></tr></thead>
+    <tbody><tr data-mac="m1-macbook-air">
+    <th scope="row"><span data-fact="mac:m1-macbook-air:name">MacBook Air M1</span><span class="chip"><span data-fact="mac:m1-macbook-air:chip">Apple M1</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 4.9 to 14 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.89 to 13.56 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 49 to 98 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>48.75 to 97.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 20 to 39 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>19.5 to 39 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 22 to 43 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>21.66 to 43.34 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m1-macbook-pro-13">
+    <th scope="row"><span data-fact="mac:m1-macbook-pro-13:name">MacBook Pro 13 M1</span><span class="chip"><span data-fact="mac:m1-macbook-pro-13:chip">Apple M1</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 4.9 to 14 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.89 to 13.56 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 49 to 98 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>48.75 to 97.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 20 to 39 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>19.5 to 39 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 22 to 43 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>21.66 to 43.34 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m1-mac-mini">
+    <th scope="row"><span data-fact="mac:m1-mac-mini:name">Mac mini M1</span><span class="chip"><span data-fact="mac:m1-mac-mini:chip">Apple M1</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 4.9 to 14 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.89 to 13.56 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 49 to 98 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>48.75 to 97.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 20 to 39 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>19.5 to 39 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 22 to 43 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>21.66 to 43.34 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m1-imac">
+    <th scope="row"><span data-fact="mac:m1-imac:name">iMac M1</span><span class="chip"><span data-fact="mac:m1-imac:chip">Apple M1</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 4.9 to 14 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.89 to 13.56 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 49 to 98 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>48.75 to 97.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 20 to 39 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>19.5 to 39 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 22 to 43 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>21.66 to 43.34 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 68.25 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m2-macbook-air">
+    <th scope="row"><span data-fact="mac:m2-macbook-air:name">MacBook Air M2</span><span class="chip"><span data-fact="mac:m2-macbook-air:chip">Apple M2</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 7.2 to 21 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.17 to 20.94 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 71 to 143 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>71.42 to 142.86 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 29 to 57 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>28.57 to 57.15 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 32 to 63 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>31.74 to 63.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m2-macbook-pro-13">
+    <th scope="row"><span data-fact="mac:m2-macbook-pro-13:name">MacBook Pro 13 M2</span><span class="chip"><span data-fact="mac:m2-macbook-pro-13:chip">Apple M2</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 7.2 to 21 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.17 to 20.94 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 71 to 143 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>71.42 to 142.86 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 29 to 57 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>28.57 to 57.15 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 32 to 63 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>31.74 to 63.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m2-mac-mini">
+    <th scope="row"><span data-fact="mac:m2-mac-mini:name">Mac mini M2</span><span class="chip"><span data-fact="mac:m2-mac-mini:chip">Apple M2</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 7.2 to 21 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.17 to 20.94 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 71 to 143 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>71.42 to 142.86 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 29 to 57 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>28.57 to 57.15 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 32 to 63 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>31.74 to 63.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m3-macbook-air-13">
+    <th scope="row"><span data-fact="mac:m3-macbook-air-13:name">MacBook Air 13 M3</span><span class="chip"><span data-fact="mac:m3-macbook-air-13:chip">Apple M3</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 7.2 to 20 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.17 to 20.44 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 71 to 143 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>71.42 to 142.86 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 29 to 57 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>28.57 to 57.15 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 32 to 63 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>31.74 to 63.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m3-macbook-air-15">
+    <th scope="row"><span data-fact="mac:m3-macbook-air-15:name">MacBook Air 15 M3</span><span class="chip"><span data-fact="mac:m3-macbook-air-15:chip">Apple M3</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 7.2 to 20 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.17 to 20.44 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 71 to 143 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>71.42 to 142.86 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 29 to 57 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>28.57 to 57.15 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 32 to 63 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>31.74 to 63.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="m3-imac">
+    <th scope="row"><span data-fact="mac:m3-imac:name">iMac M3</span><span class="chip"><span data-fact="mac:m3-imac:chip">Apple M3</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 7.2 to 20 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.17 to 20.44 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 71 to 143 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>71.42 to 142.86 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 29 to 57 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>28.57 to 57.15 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 32 to 63 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>31.74 to 63.5 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 100 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr>
+<tr data-mac="a18-pro-macbook-neo">
+    <th scope="row"><span data-fact="mac:a18-pro-macbook-neo:name">MacBook Neo</span><span class="chip"><span data-fact="mac:a18-pro-macbook-neo:chip">Apple A18 Pro</span></span></th>
+    <td data-speed-model="Qwen3.5-4B">
+    <span class="speed-value" data-speed-range>about 4.3 to 5.9 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.3 to 5.92 tokens/s; estimate from memory bandwidth; measured on an M1 Ultra 64 GB: 71.7 tokens/s at 800 GB/s; Mac bandwidth 60 GB/s</samp></details>
+  </td>
+<td data-speed-model="Qwen2.5-0.5B-Instruct">
+    <span class="speed-value" data-speed-range>about 43 to 86 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>42.85 to 85.72 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 60 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Llama-3.2-1B-Instruct">
+    <span class="speed-value" data-speed-range>about 17 to 34 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>17.14 to 34.29 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 60 GB/s divided by active weights in GB</samp></details>
+  </td>
+<td data-speed-model="Qwen3.5-0.8B">
+    <span class="speed-value" data-speed-range>about 19 to 38 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>19.04 to 38.1 tokens/s; estimate, not measured by us; 0.20 to 0.40 x Mac bandwidth 60 GB/s divided by active weights in GB</samp></details>
+  </td>
+  </tr></tbody>
+  </table></div>
+
+  <h2>What does not fit, and the next memory size</h2>
+  <p><span data-fact="excluded-count">29</span> models exceed <span data-fact="memory">8</span> GB for long work.</p>
+  <p>The next listed memory size is <span data-fact="next-memory">16</span> GB. It admits <span data-fact="next-addition-count">6</span> more models from this table. Those models are <span data-fact="model:Qwen3-0.6B:base_model">Qwen3-0.6B</span>, <span data-fact="model:Qwen3-4B-Instruct-2507:base_model">Qwen3-4B-Instruct-2507</span>, <span data-fact="model:gemma-3-4b-it-qat:base_model">gemma-3-4b-it-qat</span>, <span data-fact="model:Qwen2.5-Coder-7B-Instruct:base_model">Qwen2.5-Coder-7B-Instruct</span>, <span data-fact="model:Qwen3.5-9B:base_model">Qwen3.5-9B</span>, <span data-fact="model:Gemma-4-26B-a4b-it:base_model">Gemma-4-26B-a4b-it</span>. The last column below gives the next suitable size for each excluded model, including sizes outside these memory guides.</p>
+  <div class="table-scroll" role="region" aria-label="Models needing more memory" tabindex="0">
+  <table id="excluded-table"><caption>Models needing more memory for long work, with their short-chat minimums alongside</caption>
+    <thead><tr><th scope="col">Model</th><th scope="col">Short chats</th><th scope="col">Long <span data-fact="long-context-label">32,000-token</span> work</th>
+    <th scope="col">Memory short for long work</th><th scope="col">Next listed memory</th></tr></thead>
+    <tbody><tr data-model="Qwen3-0.6B">
+      <th scope="row"><span data-fact="model:Qwen3-0.6B:base_model">Qwen3-0.6B</span></th>
+      <td><span data-fact="model:Qwen3-0.6B:min_ram_gb_short">8</span> GB</td>
+      <td><span data-fact="model:Qwen3-0.6B:min_ram_gb">16</span> GB</td>
+      <td><span data-fact="short:Qwen3-0.6B">8</span> GB</td>
+      <td><span data-fact="next:Qwen3-0.6B">16</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-4B-Instruct-2507">
+      <th scope="row"><span data-fact="model:Qwen3-4B-Instruct-2507:base_model">Qwen3-4B-Instruct-2507</span></th>
+      <td><span data-fact="model:Qwen3-4B-Instruct-2507:min_ram_gb_short">16</span> GB</td>
+      <td><span data-fact="model:Qwen3-4B-Instruct-2507:min_ram_gb">16</span> GB</td>
+      <td><span data-fact="short:Qwen3-4B-Instruct-2507">8</span> GB</td>
+      <td><span data-fact="next:Qwen3-4B-Instruct-2507">16</span> GB</td>
+    </tr>
+<tr data-model="gemma-3-4b-it-qat">
+      <th scope="row"><span data-fact="model:gemma-3-4b-it-qat:base_model">gemma-3-4b-it-qat</span></th>
+      <td><span data-fact="model:gemma-3-4b-it-qat:min_ram_gb_short">16</span> GB</td>
+      <td><span data-fact="model:gemma-3-4b-it-qat:min_ram_gb">16</span> GB</td>
+      <td><span data-fact="short:gemma-3-4b-it-qat">8</span> GB</td>
+      <td><span data-fact="next:gemma-3-4b-it-qat">16</span> GB</td>
+    </tr>
+<tr data-model="Mistral-7B-Instruct-v0.3">
+      <th scope="row"><span data-fact="model:Mistral-7B-Instruct-v0.3:base_model">Mistral-7B-Instruct-v0.3</span></th>
+      <td><span data-fact="model:Mistral-7B-Instruct-v0.3:min_ram_gb_short">16</span> GB</td>
+      <td><span data-fact="model:Mistral-7B-Instruct-v0.3:min_ram_gb">18</span> GB</td>
+      <td><span data-fact="short:Mistral-7B-Instruct-v0.3">10</span> GB</td>
+      <td><span data-fact="next:Mistral-7B-Instruct-v0.3">18</span> GB</td>
+    </tr>
+<tr data-model="Qwen2.5-Coder-7B-Instruct">
+      <th scope="row"><span data-fact="model:Qwen2.5-Coder-7B-Instruct:base_model">Qwen2.5-Coder-7B-Instruct</span></th>
+      <td><span data-fact="model:Qwen2.5-Coder-7B-Instruct:min_ram_gb_short">16</span> GB</td>
+      <td><span data-fact="model:Qwen2.5-Coder-7B-Instruct:min_ram_gb">16</span> GB</td>
+      <td><span data-fact="short:Qwen2.5-Coder-7B-Instruct">8</span> GB</td>
+      <td><span data-fact="next:Qwen2.5-Coder-7B-Instruct">16</span> GB</td>
+    </tr>
+<tr data-model="Meta-Llama-3.1-8B-Instruct">
+      <th scope="row"><span data-fact="model:Meta-Llama-3.1-8B-Instruct:base_model">Meta-Llama-3.1-8B-Instruct</span></th>
+      <td><span data-fact="model:Meta-Llama-3.1-8B-Instruct:min_ram_gb_short">16</span> GB</td>
+      <td><span data-fact="model:Meta-Llama-3.1-8B-Instruct:min_ram_gb">18</span> GB</td>
+      <td><span data-fact="short:Meta-Llama-3.1-8B-Instruct">10</span> GB</td>
+      <td><span data-fact="next:Meta-Llama-3.1-8B-Instruct">18</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-8B">
+      <th scope="row"><span data-fact="model:Qwen3-8B:base_model">Qwen3-8B</span></th>
+      <td><span data-fact="model:Qwen3-8B:min_ram_gb_short">16</span> GB</td>
+      <td><span data-fact="model:Qwen3-8B:min_ram_gb">24</span> GB</td>
+      <td><span data-fact="short:Qwen3-8B">16</span> GB</td>
+      <td><span data-fact="next:Qwen3-8B">24</span> GB</td>
+    </tr>
+<tr data-model="Qwen3.5-9B">
+      <th scope="row"><span data-fact="model:Qwen3.5-9B:base_model">Qwen3.5-9B</span></th>
+      <td><span data-fact="model:Qwen3.5-9B:min_ram_gb">12</span> GB measured</td>
+      <td><span data-fact="model:Qwen3.5-9B:min_ram_gb">12</span> GB measured</td>
+      <td><span data-fact="short:Qwen3.5-9B">4</span> GB</td>
+      <td><span data-fact="next:Qwen3.5-9B">16</span> GB</td>
+    </tr>
+<tr data-model="gemma-3-12b-it-qat">
+      <th scope="row"><span data-fact="model:gemma-3-12b-it-qat:base_model">gemma-3-12b-it-qat</span></th>
+      <td><span data-fact="model:gemma-3-12b-it-qat:min_ram_gb_short">24</span> GB</td>
+      <td><span data-fact="model:gemma-3-12b-it-qat:min_ram_gb">48</span> GB</td>
+      <td><span data-fact="short:gemma-3-12b-it-qat">40</span> GB</td>
+      <td><span data-fact="next:gemma-3-12b-it-qat">48</span> GB</td>
+    </tr>
+<tr data-model="phi-4">
+      <th scope="row"><span data-fact="model:phi-4:base_model">phi-4</span></th>
+      <td><span data-fact="model:phi-4:min_ram_gb_short">24</span> GB</td>
+      <td><span data-fact="model:phi-4:min_ram_gb">32</span> GB</td>
+      <td><span data-fact="short:phi-4">24</span> GB</td>
+      <td><span data-fact="next:phi-4">32</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-14B">
+      <th scope="row"><span data-fact="model:Qwen3-14B:base_model">Qwen3-14B</span></th>
+      <td><span data-fact="model:Qwen3-14B:min_ram_gb_short">24</span> GB</td>
+      <td><span data-fact="model:Qwen3-14B:min_ram_gb">32</span> GB</td>
+      <td><span data-fact="short:Qwen3-14B">24</span> GB</td>
+      <td><span data-fact="next:Qwen3-14B">32</span> GB</td>
+    </tr>
+<tr data-model="gpt-oss-20b">
+      <th scope="row"><span data-fact="model:gpt-oss-20b:base_model">gpt-oss-20b</span></th>
+      <td><span data-fact="model:gpt-oss-20b:min_ram_gb_short">24</span> GB</td>
+      <td><span data-fact="model:gpt-oss-20b:min_ram_gb">24</span> GB</td>
+      <td><span data-fact="short:gpt-oss-20b">16</span> GB</td>
+      <td><span data-fact="next:gpt-oss-20b">24</span> GB</td>
+    </tr>
+<tr data-model="Mistral-Small-3.2-24B-Instruct-2506">
+      <th scope="row"><span data-fact="model:Mistral-Small-3.2-24B-Instruct-2506:base_model">Mistral-Small-3.2-24B-Instruct-2506</span></th>
+      <td><span data-fact="model:Mistral-Small-3.2-24B-Instruct-2506:min_ram_gb_short">32</span> GB</td>
+      <td><span data-fact="model:Mistral-Small-3.2-24B-Instruct-2506:min_ram_gb">36</span> GB</td>
+      <td><span data-fact="short:Mistral-Small-3.2-24B-Instruct-2506">28</span> GB</td>
+      <td><span data-fact="next:Mistral-Small-3.2-24B-Instruct-2506">36</span> GB</td>
+    </tr>
+<tr data-model="Devstral-Small-2-24B-Instruct-2512">
+      <th scope="row"><span data-fact="model:Devstral-Small-2-24B-Instruct-2512:base_model">Devstral-Small-2-24B-Instruct-2512</span></th>
+      <td><span data-fact="model:Devstral-Small-2-24B-Instruct-2512:min_ram_gb_short">32</span> GB</td>
+      <td><span data-fact="model:Devstral-Small-2-24B-Instruct-2512:min_ram_gb">36</span> GB</td>
+      <td><span data-fact="short:Devstral-Small-2-24B-Instruct-2512">28</span> GB</td>
+      <td><span data-fact="next:Devstral-Small-2-24B-Instruct-2512">36</span> GB</td>
+    </tr>
+<tr data-model="Gemma-4-26B-a4b-it">
+      <th scope="row"><span data-fact="model:Gemma-4-26B-a4b-it:base_model">Gemma-4-26B-a4b-it</span></th>
+      <td><span data-fact="model:Gemma-4-26B-a4b-it:min_ram_gb">16</span> GB measured</td>
+      <td><span data-fact="model:Gemma-4-26B-a4b-it:min_ram_gb">16</span> GB measured</td>
+      <td><span data-fact="short:Gemma-4-26B-a4b-it">8</span> GB</td>
+      <td><span data-fact="next:Gemma-4-26B-a4b-it">16</span> GB</td>
+    </tr>
+<tr data-model="Qwen3.6-27B">
+      <th scope="row"><span data-fact="model:Qwen3.6-27B:base_model">Qwen3.6-27B</span></th>
+      <td><span data-fact="model:Qwen3.6-27B:min_ram_gb">24</span> GB measured</td>
+      <td><span data-fact="model:Qwen3.6-27B:min_ram_gb">24</span> GB measured</td>
+      <td><span data-fact="short:Qwen3.6-27B">16</span> GB</td>
+      <td><span data-fact="next:Qwen3.6-27B">24</span> GB</td>
+    </tr>
+<tr data-model="Qwen3.8-27B">
+      <th scope="row"><span data-fact="model:Qwen3.8-27B:base_model">Qwen3.8-27B</span></th>
+      <td><span data-fact="model:Qwen3.8-27B:min_ram_gb">24</span> GB measured</td>
+      <td><span data-fact="model:Qwen3.8-27B:min_ram_gb">24</span> GB measured</td>
+      <td><span data-fact="short:Qwen3.8-27B">16</span> GB</td>
+      <td><span data-fact="next:Qwen3.8-27B">24</span> GB</td>
+    </tr>
+<tr data-model="gemma-3-27b-it-qat">
+      <th scope="row"><span data-fact="model:gemma-3-27b-it-qat:base_model">gemma-3-27b-it-qat</span></th>
+      <td><span data-fact="model:gemma-3-27b-it-qat:min_ram_gb_short">48</span> GB</td>
+      <td><span data-fact="model:gemma-3-27b-it-qat:min_ram_gb">64</span> GB</td>
+      <td><span data-fact="short:gemma-3-27b-it-qat">56</span> GB</td>
+      <td><span data-fact="next:gemma-3-27b-it-qat">64</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-30B-A3B">
+      <th scope="row"><span data-fact="model:Qwen3-30B-A3B:base_model">Qwen3-30B-A3B</span></th>
+      <td><span data-fact="model:Qwen3-30B-A3B:min_ram_gb_short">32</span> GB</td>
+      <td><span data-fact="model:Qwen3-30B-A3B:min_ram_gb">36</span> GB</td>
+      <td><span data-fact="short:Qwen3-30B-A3B">28</span> GB</td>
+      <td><span data-fact="next:Qwen3-30B-A3B">36</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-Coder-30B-A3B-Instruct">
+      <th scope="row"><span data-fact="model:Qwen3-Coder-30B-A3B-Instruct:base_model">Qwen3-Coder-30B-A3B-Instruct</span></th>
+      <td><span data-fact="model:Qwen3-Coder-30B-A3B-Instruct:min_ram_gb_short">32</span> GB</td>
+      <td><span data-fact="model:Qwen3-Coder-30B-A3B-Instruct:min_ram_gb">36</span> GB</td>
+      <td><span data-fact="short:Qwen3-Coder-30B-A3B-Instruct">28</span> GB</td>
+      <td><span data-fact="next:Qwen3-Coder-30B-A3B-Instruct">36</span> GB</td>
+    </tr>
+<tr data-model="gemma-4-31b-it">
+      <th scope="row"><span data-fact="model:gemma-4-31b-it:base_model">gemma-4-31b-it</span></th>
+      <td><span data-fact="model:gemma-4-31b-it:min_ram_gb_short">48</span> GB</td>
+      <td><span data-fact="model:gemma-4-31b-it:min_ram_gb">96</span> GB</td>
+      <td><span data-fact="short:gemma-4-31b-it">88</span> GB</td>
+      <td><span data-fact="next:gemma-4-31b-it">96</span> GB</td>
+    </tr>
+<tr data-model="DeepSeek-R1-Distill-Qwen-32B">
+      <th scope="row"><span data-fact="model:DeepSeek-R1-Distill-Qwen-32B:base_model">DeepSeek-R1-Distill-Qwen-32B</span></th>
+      <td><span data-fact="model:DeepSeek-R1-Distill-Qwen-32B:min_ram_gb_short">36</span> GB</td>
+      <td><span data-fact="model:DeepSeek-R1-Distill-Qwen-32B:min_ram_gb">48</span> GB</td>
+      <td><span data-fact="short:DeepSeek-R1-Distill-Qwen-32B">40</span> GB</td>
+      <td><span data-fact="next:DeepSeek-R1-Distill-Qwen-32B">48</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-32B">
+      <th scope="row"><span data-fact="model:Qwen3-32B:base_model">Qwen3-32B</span></th>
+      <td><span data-fact="model:Qwen3-32B:min_ram_gb_short">36</span> GB</td>
+      <td><span data-fact="model:Qwen3-32B:min_ram_gb">48</span> GB</td>
+      <td><span data-fact="short:Qwen3-32B">40</span> GB</td>
+      <td><span data-fact="next:Qwen3-32B">48</span> GB</td>
+    </tr>
+<tr data-model="Qwen3.6-35B-A3B">
+      <th scope="row"><span data-fact="model:Qwen3.6-35B-A3B:base_model">Qwen3.6-35B-A3B</span></th>
+      <td><span data-fact="model:Qwen3.6-35B-A3B:min_ram_gb_short">48</span> GB</td>
+      <td><span data-fact="model:Qwen3.6-35B-A3B:min_ram_gb">48</span> GB</td>
+      <td><span data-fact="short:Qwen3.6-35B-A3B">40</span> GB</td>
+      <td><span data-fact="next:Qwen3.6-35B-A3B">48</span> GB</td>
+    </tr>
+<tr data-model="Llama-3.3-70B-Instruct">
+      <th scope="row"><span data-fact="model:Llama-3.3-70B-Instruct:base_model">Llama-3.3-70B-Instruct</span></th>
+      <td><span data-fact="model:Llama-3.3-70B-Instruct:min_ram_gb_short">64</span> GB</td>
+      <td><span data-fact="model:Llama-3.3-70B-Instruct:min_ram_gb">96</span> GB</td>
+      <td><span data-fact="short:Llama-3.3-70B-Instruct">88</span> GB</td>
+      <td><span data-fact="next:Llama-3.3-70B-Instruct">96</span> GB</td>
+    </tr>
+<tr data-model="Llama-4-Scout-17B-16E-Instruct">
+      <th scope="row"><span data-fact="model:Llama-4-Scout-17B-16E-Instruct:base_model">Llama-4-Scout-17B-16E-Instruct</span></th>
+      <td><span data-fact="model:Llama-4-Scout-17B-16E-Instruct:min_ram_gb_short">96</span> GB</td>
+      <td><span data-fact="model:Llama-4-Scout-17B-16E-Instruct:min_ram_gb">128</span> GB</td>
+      <td><span data-fact="short:Llama-4-Scout-17B-16E-Instruct">120</span> GB</td>
+      <td><span data-fact="next:Llama-4-Scout-17B-16E-Instruct">128</span> GB</td>
+    </tr>
+<tr data-model="gpt-oss-120b">
+      <th scope="row"><span data-fact="model:gpt-oss-120b:base_model">gpt-oss-120b</span></th>
+      <td><span data-fact="model:gpt-oss-120b:min_ram_gb_short">96</span> GB</td>
+      <td><span data-fact="model:gpt-oss-120b:min_ram_gb">96</span> GB</td>
+      <td><span data-fact="short:gpt-oss-120b">88</span> GB</td>
+      <td><span data-fact="next:gpt-oss-120b">96</span> GB</td>
+    </tr>
+<tr data-model="Qwen3-235B-A22B">
+      <th scope="row"><span data-fact="model:Qwen3-235B-A22B:base_model">Qwen3-235B-A22B</span></th>
+      <td><span data-fact="model:Qwen3-235B-A22B:min_ram_gb_short">192</span> GB</td>
+      <td><span data-fact="model:Qwen3-235B-A22B:min_ram_gb">256</span> GB</td>
+      <td><span data-fact="short:Qwen3-235B-A22B">248</span> GB</td>
+      <td><span data-fact="next:Qwen3-235B-A22B">256</span> GB</td>
+    </tr>
+<tr data-model="Qwen3.5-397B-A17B">
+      <th scope="row"><span data-fact="model:Qwen3.5-397B-A17B:base_model">Qwen3.5-397B-A17B</span></th>
+      <td><span data-fact="model:Qwen3.5-397B-A17B:min_ram_gb">64</span> GB measured</td>
+      <td><span data-fact="model:Qwen3.5-397B-A17B:min_ram_gb">64</span> GB measured</td>
+      <td><span data-fact="short:Qwen3.5-397B-A17B">56</span> GB</td>
+      <td><span data-fact="next:Qwen3.5-397B-A17B">64</span> GB</td>
+    </tr></tbody>
+  </table></div>
+
+  <h2>Context length and data dates</h2>
+  <p><span data-fact="context-note">Memory minimums use a 32K context; longer contexts need more memory.</span> Default context is <span data-fact="context-tokens">32768</span> tokens.</p>
+  <p><span data-fact="measured-count">1</span> fitting model has a <span data-fact="reference-chip">M1 Ultra</span> measurement. <span data-fact="unmeasured-count">3</span> models have rule-based minimums without our measurements. Figures as of <span data-fact="data-date">8 November 2026</span>.</p>
+  <div class="receipts">
+    <p>Mac source.</p><samp><span data-fact="mac-provenance">Apple technical specifications (apple.com/mac and the specs page of each Mac, read 2026-11-07; the iMac M6 page says only &quot;up to 170GB/s&quot;, so its low end, 153 GB/s, is the 16 GB figure for the same M6 chip on the Mac mini page); table last changed 2026-11-07</span></samp>
+    <p>Chip ratio source.</p><samp><span data-fact="chip-provenance">llama.cpp&#39;s public Apple-silicon benchmark (github.com/ggml-org/llama.cpp/discussions/4167, read 2026-11-07): LLaMA 7B Q4_0 text generation, as a ratio to the M1 Ultra 48-core GPU</span></samp>
+    <p>Model source.</p><samp><span data-fact="model-provenance">Dates come from each source text; otherwise table last changed 2026-10-19</span></samp>
+    <p>Reference test machine.</p><samp><span data-fact="test-machine">M1 Ultra, 64 GB, 800 GB/s</span></samp>
+  </div>
+  <div class="table-scroll" role="region" aria-label="Model data dates" tabindex="0">
+    <table id="date-table"><caption>Source date and evidence for every model discussed</caption>
+      <thead><tr><th scope="col">Model</th><th scope="col">Source date</th><th scope="col">Evidence</th></tr></thead>
+      <tbody><tr data-model="Qwen3.5-4B">
+    <th scope="row"><span data-fact="model:Qwen3.5-4B:base_model">Qwen3.5-4B</span></th>
+    <td><span data-fact="model:Qwen3.5-4B:source_date">2026-04-29</span></td>
+    <td>Measured on M1 Ultra, measured on <span data-fact="measurement:Qwen3.5-4B:date">2026-04-29</span>; the build details weren't recorded with this figure</td>
+  </tr>
+<tr data-model="Qwen3.5-9B">
+    <th scope="row"><span data-fact="model:Qwen3.5-9B:base_model">Qwen3.5-9B</span></th>
+    <td><span data-fact="model:Qwen3.5-9B:source_date">table last changed 2026-10-19</span></td>
+    <td>Measured on M1 Ultra, the build and date weren't recorded with this figure</td>
+  </tr>
+<tr data-model="Gemma-4-26B-a4b-it">
+    <th scope="row"><span data-fact="model:Gemma-4-26B-a4b-it:base_model">Gemma-4-26B-a4b-it</span></th>
+    <td><span data-fact="model:Gemma-4-26B-a4b-it:source_date">2026-08-24</span></td>
+    <td>Measured on M1 Ultra, from build <span data-fact="measurement:Gemma-4-26B-a4b-it:build">1.11.804</span> on <span data-fact="measurement:Gemma-4-26B-a4b-it:date">2026-08-24</span></td>
+  </tr>
+<tr data-model="Qwen3.6-27B">
+    <th scope="row"><span data-fact="model:Qwen3.6-27B:base_model">Qwen3.6-27B</span></th>
+    <td><span data-fact="model:Qwen3.6-27B:source_date">table last changed 2026-10-19</span></td>
+    <td>Measured on M1 Ultra, the build and date weren't recorded with this figure</td>
+  </tr>
+<tr data-model="Qwen3.5-397B-A17B">
+    <th scope="row"><span data-fact="model:Qwen3.5-397B-A17B:base_model">Qwen3.5-397B-A17B</span></th>
+    <td><span data-fact="model:Qwen3.5-397B-A17B:source_date">2026-05-01</span></td>
+    <td>Measured on M1 Ultra, measured on <span data-fact="measurement:Qwen3.5-397B-A17B:date">2026-05-01</span>; the build details weren't recorded with this figure</td>
+  </tr>
+<tr data-model="Qwen3.8-27B">
+    <th scope="row"><span data-fact="model:Qwen3.8-27B:base_model">Qwen3.8-27B</span></th>
+    <td><span data-fact="model:Qwen3.8-27B:source_date">2026-08-19</span></td>
+    <td>Measured on M1 Ultra, from build <span data-fact="measurement:Qwen3.8-27B:build">1.11.792</span> on <span data-fact="measurement:Qwen3.8-27B:date">2026-08-19</span></td>
+  </tr>
+<tr data-model="Llama-3.3-70B-Instruct">
+    <th scope="row"><span data-fact="model:Llama-3.3-70B-Instruct:base_model">Llama-3.3-70B-Instruct</span></th>
+    <td><span data-fact="model:Llama-3.3-70B-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen2.5-Coder-7B-Instruct">
+    <th scope="row"><span data-fact="model:Qwen2.5-Coder-7B-Instruct:base_model">Qwen2.5-Coder-7B-Instruct</span></th>
+    <td><span data-fact="model:Qwen2.5-Coder-7B-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-4B-Instruct-2507">
+    <th scope="row"><span data-fact="model:Qwen3-4B-Instruct-2507:base_model">Qwen3-4B-Instruct-2507</span></th>
+    <td><span data-fact="model:Qwen3-4B-Instruct-2507:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Devstral-Small-2-24B-Instruct-2512">
+    <th scope="row"><span data-fact="model:Devstral-Small-2-24B-Instruct-2512:base_model">Devstral-Small-2-24B-Instruct-2512</span></th>
+    <td><span data-fact="model:Devstral-Small-2-24B-Instruct-2512:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-0.6B">
+    <th scope="row"><span data-fact="model:Qwen3-0.6B:base_model">Qwen3-0.6B</span></th>
+    <td><span data-fact="model:Qwen3-0.6B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="gemma-3-4b-it-qat">
+    <th scope="row"><span data-fact="model:gemma-3-4b-it-qat:base_model">gemma-3-4b-it-qat</span></th>
+    <td><span data-fact="model:gemma-3-4b-it-qat:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3.6-35B-A3B">
+    <th scope="row"><span data-fact="model:Qwen3.6-35B-A3B:base_model">Qwen3.6-35B-A3B</span></th>
+    <td><span data-fact="model:Qwen3.6-35B-A3B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3.5-0.8B">
+    <th scope="row"><span data-fact="model:Qwen3.5-0.8B:base_model">Qwen3.5-0.8B</span></th>
+    <td><span data-fact="model:Qwen3.5-0.8B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen2.5-0.5B-Instruct">
+    <th scope="row"><span data-fact="model:Qwen2.5-0.5B-Instruct:base_model">Qwen2.5-0.5B-Instruct</span></th>
+    <td><span data-fact="model:Qwen2.5-0.5B-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Llama-3.2-1B-Instruct">
+    <th scope="row"><span data-fact="model:Llama-3.2-1B-Instruct:base_model">Llama-3.2-1B-Instruct</span></th>
+    <td><span data-fact="model:Llama-3.2-1B-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Meta-Llama-3.1-8B-Instruct">
+    <th scope="row"><span data-fact="model:Meta-Llama-3.1-8B-Instruct:base_model">Meta-Llama-3.1-8B-Instruct</span></th>
+    <td><span data-fact="model:Meta-Llama-3.1-8B-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Mistral-7B-Instruct-v0.3">
+    <th scope="row"><span data-fact="model:Mistral-7B-Instruct-v0.3:base_model">Mistral-7B-Instruct-v0.3</span></th>
+    <td><span data-fact="model:Mistral-7B-Instruct-v0.3:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Mistral-Small-3.2-24B-Instruct-2506">
+    <th scope="row"><span data-fact="model:Mistral-Small-3.2-24B-Instruct-2506:base_model">Mistral-Small-3.2-24B-Instruct-2506</span></th>
+    <td><span data-fact="model:Mistral-Small-3.2-24B-Instruct-2506:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="gemma-3-12b-it-qat">
+    <th scope="row"><span data-fact="model:gemma-3-12b-it-qat:base_model">gemma-3-12b-it-qat</span></th>
+    <td><span data-fact="model:gemma-3-12b-it-qat:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="gemma-3-27b-it-qat">
+    <th scope="row"><span data-fact="model:gemma-3-27b-it-qat:base_model">gemma-3-27b-it-qat</span></th>
+    <td><span data-fact="model:gemma-3-27b-it-qat:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="gemma-4-31b-it">
+    <th scope="row"><span data-fact="model:gemma-4-31b-it:base_model">gemma-4-31b-it</span></th>
+    <td><span data-fact="model:gemma-4-31b-it:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-8B">
+    <th scope="row"><span data-fact="model:Qwen3-8B:base_model">Qwen3-8B</span></th>
+    <td><span data-fact="model:Qwen3-8B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-14B">
+    <th scope="row"><span data-fact="model:Qwen3-14B:base_model">Qwen3-14B</span></th>
+    <td><span data-fact="model:Qwen3-14B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-32B">
+    <th scope="row"><span data-fact="model:Qwen3-32B:base_model">Qwen3-32B</span></th>
+    <td><span data-fact="model:Qwen3-32B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-Coder-30B-A3B-Instruct">
+    <th scope="row"><span data-fact="model:Qwen3-Coder-30B-A3B-Instruct:base_model">Qwen3-Coder-30B-A3B-Instruct</span></th>
+    <td><span data-fact="model:Qwen3-Coder-30B-A3B-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-30B-A3B">
+    <th scope="row"><span data-fact="model:Qwen3-30B-A3B:base_model">Qwen3-30B-A3B</span></th>
+    <td><span data-fact="model:Qwen3-30B-A3B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="gpt-oss-20b">
+    <th scope="row"><span data-fact="model:gpt-oss-20b:base_model">gpt-oss-20b</span></th>
+    <td><span data-fact="model:gpt-oss-20b:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="gpt-oss-120b">
+    <th scope="row"><span data-fact="model:gpt-oss-120b:base_model">gpt-oss-120b</span></th>
+    <td><span data-fact="model:gpt-oss-120b:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="DeepSeek-R1-Distill-Qwen-32B">
+    <th scope="row"><span data-fact="model:DeepSeek-R1-Distill-Qwen-32B:base_model">DeepSeek-R1-Distill-Qwen-32B</span></th>
+    <td><span data-fact="model:DeepSeek-R1-Distill-Qwen-32B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="phi-4">
+    <th scope="row"><span data-fact="model:phi-4:base_model">phi-4</span></th>
+    <td><span data-fact="model:phi-4:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Llama-4-Scout-17B-16E-Instruct">
+    <th scope="row"><span data-fact="model:Llama-4-Scout-17B-16E-Instruct:base_model">Llama-4-Scout-17B-16E-Instruct</span></th>
+    <td><span data-fact="model:Llama-4-Scout-17B-16E-Instruct:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr>
+<tr data-model="Qwen3-235B-A22B">
+    <th scope="row"><span data-fact="model:Qwen3-235B-A22B:base_model">Qwen3-235B-A22B</span></th>
+    <td><span data-fact="model:Qwen3-235B-A22B:source_date">2026-11-08</span></td>
+    <td>Rule-based minimum, not measured by us</td>
+  </tr></tbody>
+    </table>
+  </div>
+  <div class="cta"><h2>Try Outlier on your Mac</h2>
+    <p>Use the memory table and the speed source labels above when choosing a local model.</p>
+    <a class="btn" href="https://outlier.host/dl/outlier?src=will-it-run-mac-8gb" rel="nofollow">Download Outlier</a>
+  </div>
+</div></article>
+<footer><div class="wrap">Outlier · Local AI for Mac</div></footer>
+</body>
+</html>

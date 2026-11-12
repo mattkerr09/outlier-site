@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://outlier.host/will-it-run/qwen3-8-27b/">
+  <meta property="og:url" content="https://outlier.host/will-it-run/qwen3-8-27b/">
+  <title>Can a Mac run Qwen3.8 27B?</title>
+  <meta name="description" content="Qwen3.8 27B has a measured minimum of 24 GB. See measurement details, Macs and speeds.">
+  <meta name="theme-color" content="#07060b">
+  <style>
+    /* Colours, type, article width and answer box follow the supplied learn template. */
+    :root { --bg: #07060b; --surface: #0e0d14; --text: #f0eef5; --text-mid: #a8a3b5;
+      --accent-light: #c084fc; --green: #34d399; --border: rgba(168,85,247,0.20);
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.65 var(--sans); }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    header, footer { padding: 1rem 0; border-bottom: 1px solid var(--border); color: var(--text-mid); }
+    article { padding: 2.5rem 0 4rem; }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; }
+    h2 { font-size: 1.4rem; line-height: 1.28; margin: 2.4rem 0 1rem; }
+    h3 { font-size: 1.1rem; }
+    p { margin: 0 0 1.1rem; }
+    .byline, .source-label, .chip { display: block; color: var(--text-mid); font-size: 0.85rem; }
+    .byline { margin-bottom: 1.6rem; }
+    .quick-answer, .cta { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+    .qa-label { color: var(--accent-light); font-weight: 600; }
+    .quick-answer ul { margin: 0.6rem 0 0; padding-left: 1.2rem; }
+    .quick-answer li { margin-bottom: 0.5rem; }
+    .table-scroll { overflow-x: auto; margin: 1.2rem 0 1.6rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    caption { text-align: left; color: var(--text-mid); margin-bottom: 0.7rem; }
+    th, td { padding: 0.65rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
+    thead th { color: var(--text-mid); font-size: 0.8rem; }
+    tbody th { font-weight: 500; overflow-wrap: anywhere; min-width: 11rem; }
+    #speed-table { min-width: 900px; }
+    #speed-table td { min-width: 10rem; }
+    .speed-value { display: block; font-weight: 600; }
+    details { margin-top: 0.5rem; font-size: 0.78rem; color: var(--text-mid); }
+    summary { cursor: pointer; color: var(--accent-light); }
+    samp { display: block; margin-top: 0.6rem; font: inherit; }
+    a { color: var(--accent-light); }
+    .cta { margin-top: 2.5rem; }
+    .btn { display: inline-block; padding: 0.7rem 1.4rem; background: var(--green); color: #051b11; border-radius: 8px; font-weight: 700; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--accent-light); outline-offset: 4px; }
+    footer { border-top: 1px solid var(--border); border-bottom: 0; font-size: 0.86rem; }
+    @media (max-width: 600px) { article { padding-top: 1.5rem; } th, td { padding: 0.5rem; } }
+  </style>
+</head>
+<body>
+<header><div class="wrap">Outlier · Local AI for Mac</div></header>
+<article><div class="wrap">
+  <h1>Can a Mac run <span data-fact="model:Qwen3.8-27B:display-name">Qwen3.8 27B</span>?</h1>
+  <div class="quick-answer" id="answer">
+    <span class="qa-label">Quick answer</span>
+    <p>Yes. <span data-fact="model:Qwen3.8-27B:display-name">Qwen3.8 27B</span> has a measured minimum of <span data-fact="model:Qwen3.8-27B:min_ram_gb">24</span> GB, from build <span data-fact="measurement:Qwen3.8-27B:build">1.11.792</span> on <span data-fact="measurement:Qwen3.8-27B:date">2026-08-19</span>.</p>
+    <p><span data-lead-speed-mac="m1-ultra-mac-studio">We measured <span data-fact="lead-speed:m1-ultra-mac-studio">17.2 tokens/s</span> on our <span data-fact="mac:m1-ultra-mac-studio:name">Mac Studio M1 Ultra</span>.</span> <span data-lead-speed-mac="m1-pro-macbook-pro">On the <span data-fact="mac:m1-pro-macbook-pro:name">MacBook Pro M1 Pro</span>, expect <span data-fact="lead-speed:m1-pro-macbook-pro">about 3.4 to 8.4 tokens/s</span>, estimated.</span></p>
+  </div>
+  <p class="byline">Outlier · Figures as of <span data-fact="data-date">8 November 2026</span> · Model date <span data-fact="model:Qwen3.8-27B:source_date">2026-08-19</span></p>
+  <h2>Size and tasks</h2>
+  <p>It can <span data-fact="tasks:Qwen3.8-27B">chat, help with code, and read images</span>. Allow <span data-fact="model:Qwen3.8-27B:disk_gb">15.5</span> GB on disk for the download. Its size is <span data-fact="model:Qwen3.8-27B:params">27B dense</span>.
+      By total parameter count, our list includes <span data-fact="smaller-count">19</span> smaller models and <span data-fact="larger-count">11</span> larger models.
+    Dense means the whole model is used for each token.</p>
+  <p>This Qwen model can help with code, talk through a question and read images. That combination
+    gives you a reason to consider it when you want to keep those jobs in the same download. It has
+    a measured reference speed, so the pace on our test Mac is known. The memory requirement rules
+    out the smallest configurations. Among nearby models, check the supported work as closely as the
+    file size. Sharing a total parameter count does not guarantee that another download can handle
+    the same pictures or coding requests.</p>
+  <p>The exact model ID is <span data-fact="model:Qwen3.8-27B:base_model">Qwen3.8-27B</span>.</p>
+  <p id="measurement-source">How we know: measured by us. <span data-fact="model:Qwen3.8-27B:source">measured 2026-08-19 on M1 Ultra via mlx_vlm 0.6.15 (48-token short-run aggregate); ships in 1.11.792; verified against the shipped sidecar, /health reports 8 tiers including vision38</span></p>
+
+  <h2>Which Macs can run it</h2>
+  <p>The memory checks below use the measured minimum.</p>
+  <p>Check the capacity installed in your Mac against its row below. This model reaches <span data-fact="compatible-mac-count">33</span>
+      of the <span data-fact="mac-count">38</span> Mac models with a suitable memory option. That leaves <span data-fact="incompatible-mac-count">five</span>
+      Macs without enough memory in any configuration shown.
+      Where a result says tight, the model fits with little room left.</p>
+  <p>Our <span data-fact="test-machine">M1 Ultra, 64 GB, 800 GB/s</span> test gives the <span data-fact="reference-chip">M1 Ultra</span> measurement shown here.
+    </p>
+  <div class="table-scroll" role="region" aria-label="Mac configurations and speed" tabindex="0">
+    <table id="model-macs"><caption>Macs grouped by their smallest fitting memory option</caption>
+      <thead><tr><th scope="col">Mac and chip</th><th scope="col">Every listed memory option</th><th scope="col">Chip speed source</th></tr></thead>
+      
+
+
+<tbody data-memory-group="24"><tr><th colspan="3" scope="rowgroup">First fitting configuration <span data-fact="group-memory:24">24</span> GB</th></tr><tr data-mac="m2-macbook-air">
+        <th scope="row"><span data-fact="mac:m2-macbook-air:name">MacBook Air M2</span> <span class="chip"><span data-fact="mac:m2-macbook-air:chip">Apple M2</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m2-macbook-air:8">8</span> GB does not fit. Next <span data-fact="upgrade:m2-macbook-air:8">24</span> GB configuration.</span><br><span data-configuration="16"><span data-fact="configuration:m2-macbook-air:16">16</span> GB does not fit. Next <span data-fact="upgrade:m2-macbook-air:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m2-macbook-air:24">24</span> GB tight.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.7 to 5.0 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.72 to 5.03 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m2-macbook-pro-13">
+        <th scope="row"><span data-fact="mac:m2-macbook-pro-13:name">MacBook Pro 13 M2</span> <span class="chip"><span data-fact="mac:m2-macbook-pro-13:chip">Apple M2</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m2-macbook-pro-13:8">8</span> GB does not fit. Next <span data-fact="upgrade:m2-macbook-pro-13:8">24</span> GB configuration.</span><br><span data-configuration="16"><span data-fact="configuration:m2-macbook-pro-13:16">16</span> GB does not fit. Next <span data-fact="upgrade:m2-macbook-pro-13:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m2-macbook-pro-13:24">24</span> GB tight.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.7 to 5.0 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.72 to 5.03 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m2-mac-mini">
+        <th scope="row"><span data-fact="mac:m2-mac-mini:name">Mac mini M2</span> <span class="chip"><span data-fact="mac:m2-mac-mini:chip">Apple M2</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m2-mac-mini:8">8</span> GB does not fit. Next <span data-fact="upgrade:m2-mac-mini:8">24</span> GB configuration.</span><br><span data-configuration="16"><span data-fact="configuration:m2-mac-mini:16">16</span> GB does not fit. Next <span data-fact="upgrade:m2-mac-mini:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m2-mac-mini:24">24</span> GB tight.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.7 to 5.0 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.72 to 5.03 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m3-macbook-air-13">
+        <th scope="row"><span data-fact="mac:m3-macbook-air-13:name">MacBook Air 13 M3</span> <span class="chip"><span data-fact="mac:m3-macbook-air-13:chip">Apple M3</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m3-macbook-air-13:8">8</span> GB does not fit. Next <span data-fact="upgrade:m3-macbook-air-13:8">24</span> GB configuration.</span><br><span data-configuration="16"><span data-fact="configuration:m3-macbook-air-13:16">16</span> GB does not fit. Next <span data-fact="upgrade:m3-macbook-air-13:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m3-macbook-air-13:24">24</span> GB tight.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.7 to 4.9 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.72 to 4.91 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m3-macbook-air-15">
+        <th scope="row"><span data-fact="mac:m3-macbook-air-15:name">MacBook Air 15 M3</span> <span class="chip"><span data-fact="mac:m3-macbook-air-15:chip">Apple M3</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m3-macbook-air-15:8">8</span> GB does not fit. Next <span data-fact="upgrade:m3-macbook-air-15:8">24</span> GB configuration.</span><br><span data-configuration="16"><span data-fact="configuration:m3-macbook-air-15:16">16</span> GB does not fit. Next <span data-fact="upgrade:m3-macbook-air-15:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m3-macbook-air-15:24">24</span> GB tight.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.7 to 4.9 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.72 to 4.91 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m3-imac">
+        <th scope="row"><span data-fact="mac:m3-imac:name">iMac M3</span> <span class="chip"><span data-fact="mac:m3-imac:chip">Apple M3</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m3-imac:8">8</span> GB does not fit. Next <span data-fact="upgrade:m3-imac:8">24</span> GB configuration.</span><br><span data-configuration="16"><span data-fact="configuration:m3-imac:16">16</span> GB does not fit. Next <span data-fact="upgrade:m3-imac:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m3-imac:24">24</span> GB tight.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.7 to 4.9 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.72 to 4.91 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 100 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-macbook-pro-14">
+        <th scope="row"><span data-fact="mac:m4-macbook-pro-14:name">MacBook Pro 14 M4</span> <span class="chip"><span data-fact="mac:m4-macbook-pro-14:chip">Apple M4</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m4-macbook-pro-14:16">16</span> GB does not fit. Next <span data-fact="upgrade:m4-macbook-pro-14:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m4-macbook-pro-14:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m4-macbook-pro-14:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.1 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.06 to 5.54 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 120 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-imac">
+        <th scope="row"><span data-fact="mac:m4-imac:name">iMac M4</span> <span class="chip"><span data-fact="mac:m4-imac:chip">Apple M4</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m4-imac:16">16</span> GB does not fit. Next <span data-fact="upgrade:m4-imac:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m4-imac:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m4-imac:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.1 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.06 to 5.54 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 120 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-mac-mini">
+        <th scope="row"><span data-fact="mac:m4-mac-mini:name">Mac mini M4</span> <span class="chip"><span data-fact="mac:m4-mac-mini:chip">Apple M4</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m4-mac-mini:16">16</span> GB does not fit. Next <span data-fact="upgrade:m4-mac-mini:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m4-mac-mini:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m4-mac-mini:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.1 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.06 to 5.54 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 120 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-pro-mac-mini">
+        <th scope="row"><span data-fact="mac:m4-pro-mac-mini:name">Mac mini M4 Pro</span> <span class="chip"><span data-fact="mac:m4-pro-mac-mini:chip">Apple M4 Pro</span></span></th>
+        <td data-configurations><span data-configuration="24"><span data-fact="configuration:m4-pro-mac-mini:24">24</span> GB tight.</span><br><span data-configuration="48"><span data-fact="configuration:m4-pro-mac-mini:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m4-pro-mac-mini:64">64</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 4.7 to 12 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.69 to 11.65 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 273 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-pro-macbook-pro">
+        <th scope="row"><span data-fact="mac:m4-pro-macbook-pro:name">MacBook Pro M4 Pro</span> <span class="chip"><span data-fact="mac:m4-pro-macbook-pro:chip">Apple M4 Pro</span></span></th>
+        <td data-configurations><span data-configuration="24"><span data-fact="configuration:m4-pro-macbook-pro:24">24</span> GB tight.</span><br><span data-configuration="48"><span data-fact="configuration:m4-pro-macbook-pro:48">48</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 4.7 to 12 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>4.69 to 11.65 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 273 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-air-13">
+        <th scope="row"><span data-fact="mac:m4-air-13:name">MacBook Air 13 M4</span> <span class="chip"><span data-fact="mac:m4-air-13:chip">Apple M4</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m4-air-13:16">16</span> GB does not fit. Next <span data-fact="upgrade:m4-air-13:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m4-air-13:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m4-air-13:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.1 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.06 to 5.54 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 120 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-air-15">
+        <th scope="row"><span data-fact="mac:m4-air-15:name">MacBook Air 15 M4</span> <span class="chip"><span data-fact="mac:m4-air-15:chip">Apple M4</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m4-air-15:16">16</span> GB does not fit. Next <span data-fact="upgrade:m4-air-15:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m4-air-15:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m4-air-15:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.1 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.06 to 5.54 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 120 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-macbook-air-13">
+        <th scope="row"><span data-fact="mac:m5-macbook-air-13:name">MacBook Air 13 M5</span> <span class="chip"><span data-fact="mac:m5-macbook-air-13:chip">Apple M5</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m5-macbook-air-13:16">16</span> GB does not fit. Next <span data-fact="upgrade:m5-macbook-air-13:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m5-macbook-air-13:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m5-macbook-air-13:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.6 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.63 to 5.51 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 153 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-macbook-air-15">
+        <th scope="row"><span data-fact="mac:m5-macbook-air-15:name">MacBook Air 15 M5</span> <span class="chip"><span data-fact="mac:m5-macbook-air-15:chip">Apple M5</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m5-macbook-air-15:16">16</span> GB does not fit. Next <span data-fact="upgrade:m5-macbook-air-15:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m5-macbook-air-15:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m5-macbook-air-15:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.6 to 5.5 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.63 to 5.51 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 153 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m6-macbook-pro-14">
+        <th scope="row"><span data-fact="mac:m6-macbook-pro-14:name">MacBook Pro 14 M6</span> <span class="chip"><span data-fact="mac:m6-macbook-pro-14:chip">Apple M6</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m6-macbook-pro-14:16">16</span> GB does not fit. Next <span data-fact="upgrade:m6-macbook-pro-14:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m6-macbook-pro-14:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m6-macbook-pro-14:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.6 to 6.2 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.63 to 6.18 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 153-170 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-pro-macbook-pro">
+        <th scope="row"><span data-fact="mac:m5-pro-macbook-pro:name">MacBook Pro M5 Pro</span> <span class="chip"><span data-fact="mac:m5-pro-macbook-pro:chip">Apple M5 Pro</span></span></th>
+        <td data-configurations><span data-configuration="24"><span data-fact="configuration:m5-pro-macbook-pro:24">24</span> GB tight.</span><br><span data-configuration="48"><span data-fact="configuration:m5-pro-macbook-pro:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m5-pro-macbook-pro:64">64</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 5.3 to 11 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>5.28 to 11.46 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 307 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m6-mac-mini">
+        <th scope="row"><span data-fact="mac:m6-mac-mini:name">Mac mini M6</span> <span class="chip"><span data-fact="mac:m6-mac-mini:chip">Apple M6</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m6-mac-mini:16">16</span> GB does not fit. Next <span data-fact="upgrade:m6-mac-mini:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m6-mac-mini:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m6-mac-mini:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.6 to 6.2 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.63 to 6.18 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 153-170 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-pro-mac-mini">
+        <th scope="row"><span data-fact="mac:m5-pro-mac-mini:name">Mac mini M5 Pro</span> <span class="chip"><span data-fact="mac:m5-pro-mac-mini:chip">Apple M5 Pro</span></span></th>
+        <td data-configurations><span data-configuration="24"><span data-fact="configuration:m5-pro-mac-mini:24">24</span> GB tight.</span><br><span data-configuration="48"><span data-fact="configuration:m5-pro-mac-mini:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m5-pro-mac-mini:64">64</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 5.3 to 11 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>5.28 to 11.46 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 307 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m6-imac">
+        <th scope="row"><span data-fact="mac:m6-imac:name">iMac M6</span> <span class="chip"><span data-fact="mac:m6-imac:chip">Apple M6</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m6-imac:16">16</span> GB does not fit. Next <span data-fact="upgrade:m6-imac:16">24</span> GB configuration.</span><br><span data-configuration="24"><span data-fact="configuration:m6-imac:24">24</span> GB tight.</span><br><span data-configuration="32"><span data-fact="configuration:m6-imac:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.6 to 6.2 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.63 to 6.18 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 153-170 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr></tbody>
+<tbody data-memory-group="32"><tr><th colspan="3" scope="rowgroup">First fitting configuration <span data-fact="group-memory:32">32</span> GB</th></tr><tr data-mac="m1-pro-macbook-pro">
+        <th scope="row"><span data-fact="mac:m1-pro-macbook-pro:name">MacBook Pro M1 Pro</span> <span class="chip"><span data-fact="mac:m1-pro-macbook-pro:chip">Apple M1 Pro</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m1-pro-macbook-pro:16">16</span> GB does not fit. Next <span data-fact="upgrade:m1-pro-macbook-pro:16">32</span> GB configuration.</span><br><span data-configuration="32"><span data-fact="configuration:m1-pro-macbook-pro:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 3.4 to 8.4 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>3.44 to 8.36 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 200 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m1-max-macbook-pro">
+        <th scope="row"><span data-fact="mac:m1-max-macbook-pro:name">MacBook Pro M1 Max</span> <span class="chip"><span data-fact="mac:m1-max-macbook-pro:chip">Apple M1 Max</span></span></th>
+        <td data-configurations><span data-configuration="32"><span data-fact="configuration:m1-max-macbook-pro:32">32</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m1-max-macbook-pro:64">64</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 6.9 to 14 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>6.88 to 14.06 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 400 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m2-pro-macbook-pro">
+        <th scope="row"><span data-fact="mac:m2-pro-macbook-pro:name">MacBook Pro M2 Pro</span> <span class="chip"><span data-fact="mac:m2-pro-macbook-pro:chip">Apple M2 Pro</span></span></th>
+        <td data-configurations><span data-configuration="16"><span data-fact="configuration:m2-pro-macbook-pro:16">16</span> GB does not fit. Next <span data-fact="upgrade:m2-pro-macbook-pro:16">32</span> GB configuration.</span><br><span data-configuration="32"><span data-fact="configuration:m2-pro-macbook-pro:32">32</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 3.4 to 8.9 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>3.44 to 8.93 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 200 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m2-max-macbook-pro">
+        <th scope="row"><span data-fact="mac:m2-max-macbook-pro:name">MacBook Pro M2 Max</span> <span class="chip"><span data-fact="mac:m2-max-macbook-pro:chip">Apple M2 Max</span></span></th>
+        <td data-configurations><span data-configuration="32"><span data-fact="configuration:m2-max-macbook-pro:32">32</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m2-max-macbook-pro:64">64</span> GB fits.</span><br><span data-configuration="96"><span data-fact="configuration:m2-max-macbook-pro:96">96</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 6.9 to 15 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>6.88 to 15.14 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 400 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr></tbody>
+<tbody data-memory-group="36"><tr><th colspan="3" scope="rowgroup">First fitting configuration <span data-fact="group-memory:36">36</span> GB</th></tr><tr data-mac="m3-pro-macbook-pro">
+        <th scope="row"><span data-fact="mac:m3-pro-macbook-pro:name">MacBook Pro M3 Pro</span> <span class="chip"><span data-fact="mac:m3-pro-macbook-pro:chip">Apple M3 Pro</span></span></th>
+        <td data-configurations><span data-configuration="18"><span data-fact="configuration:m3-pro-macbook-pro:18">18</span> GB does not fit. Next <span data-fact="upgrade:m3-pro-macbook-pro:18">36</span> GB configuration.</span><br><span data-configuration="36"><span data-fact="configuration:m3-pro-macbook-pro:36">36</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 2.6 to 7.1 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>2.58 to 7.06 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 150 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m3-max-macbook-pro">
+        <th scope="row"><span data-fact="mac:m3-max-macbook-pro:name">MacBook Pro M3 Max</span> <span class="chip"><span data-fact="mac:m3-max-macbook-pro:chip">Apple M3 Max</span></span></th>
+        <td data-configurations><span data-configuration="36"><span data-fact="configuration:m3-max-macbook-pro:36">36</span> GB fits.</span><br><span data-configuration="48"><span data-fact="configuration:m3-max-macbook-pro:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m3-max-macbook-pro:64">64</span> GB fits.</span><br><span data-configuration="96"><span data-fact="configuration:m3-max-macbook-pro:96">96</span> GB fits.</span><br><span data-configuration="128"><span data-fact="configuration:m3-max-macbook-pro:128">128</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 5.2 to 15 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>5.16 to 15.23 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 300-400 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m4-max-macbook-pro">
+        <th scope="row"><span data-fact="mac:m4-max-macbook-pro:name">MacBook Pro M4 Max</span> <span class="chip"><span data-fact="mac:m4-max-macbook-pro:chip">Apple M4 Max</span></span></th>
+        <td data-configurations><span data-configuration="36"><span data-fact="configuration:m4-max-macbook-pro:36">36</span> GB fits.</span><br><span data-configuration="48"><span data-fact="configuration:m4-max-macbook-pro:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m4-max-macbook-pro:64">64</span> GB fits.</span><br><span data-configuration="128"><span data-fact="configuration:m4-max-macbook-pro:128">128</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 7.1 to 19 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.05 to 19.08 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 410-546 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-max-macbook-pro">
+        <th scope="row"><span data-fact="mac:m5-max-macbook-pro:name">MacBook Pro M5 Max</span> <span class="chip"><span data-fact="mac:m5-max-macbook-pro:chip">Apple M5 Max</span></span></th>
+        <td data-configurations><span data-configuration="36"><span data-fact="configuration:m5-max-macbook-pro:36">36</span> GB fits.</span><br><span data-configuration="48"><span data-fact="configuration:m5-max-macbook-pro:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m5-max-macbook-pro:64">64</span> GB fits.</span><br><span data-configuration="128"><span data-fact="configuration:m5-max-macbook-pro:128">128</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 7.9 to 21 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.91 to 20.73 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 460-614 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-max-mac-studio">
+        <th scope="row"><span data-fact="mac:m5-max-mac-studio:name">Mac Studio M5 Max</span> <span class="chip"><span data-fact="mac:m5-max-mac-studio:chip">Apple M5 Max</span></span></th>
+        <td data-configurations><span data-configuration="36"><span data-fact="configuration:m5-max-mac-studio:36">36</span> GB fits.</span><br><span data-configuration="48"><span data-fact="configuration:m5-max-mac-studio:48">48</span> GB fits.</span><br><span data-configuration="64"><span data-fact="configuration:m5-max-mac-studio:64">64</span> GB fits.</span><br><span data-configuration="128"><span data-fact="configuration:m5-max-mac-studio:128">128</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 7.9 to 21 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>7.91 to 20.73 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 460-614 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr></tbody>
+
+<tbody data-memory-group="64"><tr><th colspan="3" scope="rowgroup">First fitting configuration <span data-fact="group-memory:64">64</span> GB</th></tr><tr data-mac="m1-ultra-mac-studio">
+        <th scope="row"><span data-fact="mac:m1-ultra-mac-studio:name">Mac Studio M1 Ultra</span> <span class="chip"><span data-fact="mac:m1-ultra-mac-studio:chip">Apple M1 Ultra</span></span></th>
+        <td data-configurations><span data-configuration="64"><span data-fact="configuration:m1-ultra-mac-studio:64">64</span> GB fits.</span><br><span data-configuration="128"><span data-fact="configuration:m1-ultra-mac-studio:128">128</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>17.2 tokens/s</span>
+    <span class="source-label" data-speed-label>measured on our M1 Ultra</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>17.2 tokens/s measured on an M1 Ultra 64 GB, 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m2-ultra-mac-studio">
+        <th scope="row"><span data-fact="mac:m2-ultra-mac-studio:name">Mac Studio M2 Ultra</span> <span class="chip"><span data-fact="mac:m2-ultra-mac-studio:chip">Apple M2 Ultra</span></span></th>
+        <td data-configurations><span data-configuration="64"><span data-fact="configuration:m2-ultra-mac-studio:64">64</span> GB fits.</span><br><span data-configuration="128"><span data-fact="configuration:m2-ultra-mac-studio:128">128</span> GB fits.</span><br><span data-configuration="192"><span data-fact="configuration:m2-ultra-mac-studio:192">192</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 14 to 22 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>13.76 to 21.64 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 800 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr></tbody>
+<tbody data-memory-group="96"><tr><th colspan="3" scope="rowgroup">First fitting configuration <span data-fact="group-memory:96">96</span> GB</th></tr><tr data-mac="m3-ultra-mac-studio">
+        <th scope="row"><span data-fact="mac:m3-ultra-mac-studio:name">Mac Studio M3 Ultra</span> <span class="chip"><span data-fact="mac:m3-ultra-mac-studio:chip">Apple M3 Ultra</span></span></th>
+        <td data-configurations><span data-configuration="96"><span data-fact="configuration:m3-ultra-mac-studio:96">96</span> GB fits.</span><br><span data-configuration="256"><span data-fact="configuration:m3-ultra-mac-studio:256">256</span> GB fits.</span><br><span data-configuration="512"><span data-fact="configuration:m3-ultra-mac-studio:512">512</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 14 to 21 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>14.08 to 21.16 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 819 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m5-ultra-mac-studio">
+        <th scope="row"><span data-fact="mac:m5-ultra-mac-studio:name">Mac Studio M5 Ultra</span> <span class="chip"><span data-fact="mac:m5-ultra-mac-studio:chip">Apple M5 Ultra</span></span></th>
+        <td data-configurations><span data-configuration="96"><span data-fact="configuration:m5-ultra-mac-studio:96">96</span> GB fits.</span><br><span data-configuration="256"><span data-fact="configuration:m5-ultra-mac-studio:256">256</span> GB fits.</span><br><span data-configuration="512"><span data-fact="configuration:m5-ultra-mac-studio:512">512</span> GB fits.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 21 to 31 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>20.64 to 30.96 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 1200 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr></tbody>
+
+
+
+
+<tbody data-memory-group="unavailable"><tr><th colspan="3" scope="rowgroup">No fitting configuration listed</th></tr><tr data-mac="m1-macbook-air">
+        <th scope="row"><span data-fact="mac:m1-macbook-air:name">MacBook Air M1</span> <span class="chip"><span data-fact="mac:m1-macbook-air:chip">Apple M1</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m1-macbook-air:8">8</span> GB does not fit. Next <span data-fact="upgrade:m1-macbook-air:8">24</span> GB on a different listed Mac.</span><br><span data-configuration="16"><span data-fact="configuration:m1-macbook-air:16">16</span> GB does not fit. Next <span data-fact="upgrade:m1-macbook-air:16">24</span> GB on a different listed Mac.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.2 to 3.3 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.17 to 3.26 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m1-macbook-pro-13">
+        <th scope="row"><span data-fact="mac:m1-macbook-pro-13:name">MacBook Pro 13 M1</span> <span class="chip"><span data-fact="mac:m1-macbook-pro-13:chip">Apple M1</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m1-macbook-pro-13:8">8</span> GB does not fit. Next <span data-fact="upgrade:m1-macbook-pro-13:8">24</span> GB on a different listed Mac.</span><br><span data-configuration="16"><span data-fact="configuration:m1-macbook-pro-13:16">16</span> GB does not fit. Next <span data-fact="upgrade:m1-macbook-pro-13:16">24</span> GB on a different listed Mac.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.2 to 3.3 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.17 to 3.26 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m1-mac-mini">
+        <th scope="row"><span data-fact="mac:m1-mac-mini:name">Mac mini M1</span> <span class="chip"><span data-fact="mac:m1-mac-mini:chip">Apple M1</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m1-mac-mini:8">8</span> GB does not fit. Next <span data-fact="upgrade:m1-mac-mini:8">24</span> GB on a different listed Mac.</span><br><span data-configuration="16"><span data-fact="configuration:m1-mac-mini:16">16</span> GB does not fit. Next <span data-fact="upgrade:m1-mac-mini:16">24</span> GB on a different listed Mac.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.2 to 3.3 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.17 to 3.26 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="m1-imac">
+        <th scope="row"><span data-fact="mac:m1-imac:name">iMac M1</span> <span class="chip"><span data-fact="mac:m1-imac:chip">Apple M1</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:m1-imac:8">8</span> GB does not fit. Next <span data-fact="upgrade:m1-imac:8">24</span> GB on a different listed Mac.</span><br><span data-configuration="16"><span data-fact="configuration:m1-imac:16">16</span> GB does not fit. Next <span data-fact="upgrade:m1-imac:16">24</span> GB on a different listed Mac.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.2 to 3.3 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.17 to 3.26 tokens/s; estimate: low end from memory bandwidth (Mac bandwidth 68.25 GB/s against 800 GB/s), high end from this chip&#39;s speed in llama.cpp&#39;s public Apple-silicon benchmark; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s</samp></details>
+  </td>
+      </tr>
+<tr data-mac="a18-pro-macbook-neo">
+        <th scope="row"><span data-fact="mac:a18-pro-macbook-neo:name">MacBook Neo</span> <span class="chip"><span data-fact="mac:a18-pro-macbook-neo:chip">Apple A18 Pro</span></span></th>
+        <td data-configurations><span data-configuration="8"><span data-fact="configuration:a18-pro-macbook-neo:8">8</span> GB does not fit. Next <span data-fact="upgrade:a18-pro-macbook-neo:8">24</span> GB on a different listed Mac.</span></td>
+        <td data-speed-model="Qwen3.8-27B">
+    <span class="speed-value" data-speed-range>about 1.0 to 1.4 tokens/s</span>
+    <span class="source-label" data-speed-label>estimate, not measured by us</span>
+    <details><summary>How we estimate speed</summary> <samp data-speed-source>1.03 to 1.42 tokens/s; estimate from memory bandwidth; measured on an M1 Ultra 64 GB: 17.2 tokens/s at 800 GB/s; Mac bandwidth 60 GB/s</samp></details>
+  </td>
+      </tr></tbody>
+    </table></div>
+  <h2>Nearby models by total parameter count</h2>
+  <p>Compare these similar-sized downloads if you want a different memory requirement or set of capabilities.</p>
+  <p data-comparison="Qwen3.6-27B">You could use <span data-fact="model:Qwen3.6-27B:display-name">Qwen3.6 27B</span> to <span data-fact="tasks:Qwen3.6-27B">chat and help with code</span>. Its measured minimum is the same <span data-fact="model:Qwen3.6-27B:min_ram_gb">24</span> GB of memory. Its download uses <span data-fact="disk-difference:Qwen3.6-27B">0.37</span> GB less disk space. Its size is <span data-fact="model:Qwen3.6-27B:params">27B dense</span>. Switching means giving up <span data-fact="removed-tasks:Qwen3.6-27B">image reading</span>.</p>
+<p data-comparison="gemma-3-27b-it-qat"><span data-fact="model:gemma-3-27b-it-qat:display-name">Gemma 3 27B (QAT)</span> can <span data-fact="tasks:gemma-3-27b-it-qat">chat and read images</span>, with a model size of <span data-fact="model:gemma-3-27b-it-qat:params">27B dense</span>. Its download uses <span data-fact="disk-difference:gemma-3-27b-it-qat">1.33</span> GB more disk space. Its long-work minimum is <span data-fact="model:gemma-3-27b-it-qat:min_ram_gb">64</span> GB of memory, <span data-fact="memory-difference:gemma-3-27b-it-qat">40</span> GB more. Switching means giving up <span data-fact="removed-tasks:gemma-3-27b-it-qat">coding help</span>.</p>
+<p data-comparison="Gemma-4-26B-a4b-it">To <span data-fact="tasks:Gemma-4-26B-a4b-it">chat</span>, you could try <span data-fact="model:Gemma-4-26B-a4b-it:display-name">Gemma 4 26B-A4B</span>. Its measured minimum is <span data-fact="model:Gemma-4-26B-a4b-it:min_ram_gb">16</span> GB of memory, <span data-fact="memory-difference:Gemma-4-26B-a4b-it">8</span> GB less. Its size is <span data-fact="model:Gemma-4-26B-a4b-it:params">26B MoE / 4B active</span>. Its download uses <span data-fact="disk-difference:Gemma-4-26B-a4b-it">0.11</span> GB more disk space. Switching means giving up <span data-fact="removed-tasks:Gemma-4-26B-a4b-it">coding help and image reading</span>.</p>
+  <p><a href="https://outlier.host/will-it-run/mac-24gb/">See the <span data-fact="linked-memory">24</span> GB memory page</a>
+    to compare the other models you could run with that much memory.</p>
+  <h2>Context and data dates</h2>
+  <p><span data-fact="context-note">Memory minimums use a 32K context; longer contexts need more memory.</span> This model starts with a <span data-fact="model:Qwen3.8-27B:context_default">32768</span>-token context. That is the text it can keep in view as you talk.
+      When planning longer conversations, leave more memory available than the minimum shown here.</p>
+  <p>The model source date is <span data-fact="model:Qwen3.8-27B:source_date">2026-08-19</span>. Figures as of <span data-fact="data-date">8 November 2026</span>.</p>
+  <div class="receipts">
+    <p>Mac source.</p><samp><span data-fact="mac-provenance">Apple technical specifications (apple.com/mac and the specs page of each Mac, read 2026-11-07; the iMac M6 page says only &quot;up to 170GB/s&quot;, so its low end, 153 GB/s, is the 16 GB figure for the same M6 chip on the Mac mini page); table last changed 2026-11-07</span></samp>
+    <p>Chip ratio source.</p><samp><span data-fact="chip-provenance">llama.cpp&#39;s public Apple-silicon benchmark (github.com/ggml-org/llama.cpp/discussions/4167, read 2026-11-07): LLaMA 7B Q4_0 text generation, as a ratio to the M1 Ultra 48-core GPU</span></samp>
+    <p>Model date source.</p><samp><span data-fact="model-provenance">Dates come from each source text; otherwise table last changed 2026-10-19</span></samp>
+  </div>
+  <div class="cta"><h2>Try Outlier on your Mac</h2>
+    <p>Choose a Mac configuration with enough memory for <span data-fact="model:Qwen3.8-27B:display-name">Qwen3.8 27B</span>, then download Outlier to get started.</p>
+    <a class="btn" href="https://outlier.host/dl/outlier?src=will-it-run-model-qwen3-8-27b" rel="nofollow">Download Outlier</a>
+  </div>
+</div></article>
+<footer><div class="wrap">Outlier · Local AI for Mac</div></footer>
+</body>
+</html>
