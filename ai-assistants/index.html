@@ -225,7 +225,8 @@ export OPENAI_MODEL=outlier-compact</code></pre>
       <li>One request runs at a time; others wait their turn, up to 10 minutes by default.</li>
       <li>An answer can ask for up to 262,144 tokens; above 16,384 it is capped at what the context leaves.</li>
       <li>Context is up to 131,072 tokens on Pro, depending on how much memory your Mac has free.</li>
-      <li>A single request can be up to 8 MB.</li>
+      <li>A long first message takes time to read, and a request stops at 10 minutes. Measured on 12 November 2026 on a 64 GB M1 Ultra, Core read a first message at about 100 tokens a second, so on that Mac a first message works up to about 60,000 tokens. A longer one ends with "request exceeded max_wall_seconds=600".</li>
+      <li>One message can be up to 400,000 characters, roughly 100,000 tokens of English, and a whole request up to 8 MB.</li>
     </ul>
 
     <h2>What stays on your Mac</h2>
