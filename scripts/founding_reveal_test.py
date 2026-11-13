@@ -3,7 +3,7 @@
 
     python3 scripts/founding_reveal_test.py        # exit 0 = every case as expected
 """
-import ast, html, json, pathlib, re, subprocess, sys, tempfile
+import ast, html, json, pathlib, re, runpy, subprocess, sys, tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 home = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -19,6 +19,53 @@ for key in ("name", "price", "bnpl", "offer", "btn"):
                     node.group(3) if key == "bnpl" else html.unescape(re.sub(r"<[^>]*>", "", node.group(3))))
 # 2026-11-11 (CEO): the regular Pro price from December 1 is $29 once.
 assert regular["price"] == "$29"
+
+# 2026-11-13, Matthew's order: regeneration and no-JavaScript fallbacks must agree.
+generator = runpy.run_path(str(ROOT / "scripts/product_box.py"))
+sale_line = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $29"
+assert generator["launch_line"]() == sale_line
+assert generator["founding_next_day"]() == "December 3"
+for output in (generator["box"]("sale-test", "answer", "1.11.1006"),
+               generator["end_box"]("sale-test", "1.11.1006"),
+               generator["STD_PRICE_NEW"], generator["HOME_NEW"]):
+    assert sale_line in output
+    assert "<span data-pbox-regular>" in output and "$29 once" in output
+assert regular["btn"] == "Buy Outlier Lifetime Licence: $29" and regular["offer"]
+schema = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', home, re.S)]
+app = next(v for v in schema if v.get("@type") == "SoftwareApplication")
+assert len(app["offers"]) == 2
+free, paid = app["offers"]
+assert free["price"] == "0" and "priceValidUntil" not in free
+assert (paid["name"], paid["price"], paid["priceValidUntil"]) == ("Outlier Lifetime Licence", "16.99", "2026-12-02")
+tool = (ROOT / "tools/can-my-mac-run-it/index.html").read_text()
+tool_app = next(json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', tool, re.S)
+                if json.loads(s).get("@type") == "WebApplication")
+assert tool_app["offers"] == {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+print("ok   sale generators, regular HTML fallbacks and all three JSON-LD Offers")
+
+# 2026-11-13, Matthew's order: the receipt-page fallback records the shown sale price.
+thanks = (ROOT / "thank-you.html").read_text()
+value_script = re.search(r'var _value = .*?catch \(e2\) \{\}', thanks, re.S).group()
+tracking = r"""
+const assert = require('assert');
+const source = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+const now = 1800000000000;
+Date.now = () => now;
+for (const [raw, expected] of [
+  [JSON.stringify({offer:'founding', t:now}), 16.99],
+  [JSON.stringify({offer:'regular', t:now}), 29],
+  [JSON.stringify({offer:'founding', t:now-86400000}), 29],
+  [null, 29], ['broken JSON', 29]
+]) {
+  global.localStorage = {getItem: () => raw, removeItem: () => {}};
+  eval(source);
+  assert.equal(_value, expected);
+}
+"""
+tracking_result = subprocess.run(["node", "-e", tracking], input=json.dumps(value_script),
+                                 capture_output=True, text=True, timeout=30)
+assert tracking_result.returncode == 0, tracking_result.stderr
+print("ok   receipt-page sale, regular, expired, missing and broken storage values")
 
 # Read only the SCRIPT expression, without importing or running the generator.
 module = ast.parse((ROOT / "scripts/product_box.py").read_text())
@@ -52,8 +99,10 @@ assert spans_seen >= 200, f"only {spans_seen} launch-price spans found; the scan
 assert not beside, "a price sits right before a launch-price span outside data-pbox-regular:\n  " + "\n  ".join(beside[:10])
 print(f"ok   {spans_seen} launch-price spans, none with a bare price right before it")
 
+# 2026-11-13, Matthew's order: the sale ends on 2 December US Pacific.
+assert end == "2026-12-03T07:59:00Z"
 ANSWER = {"unlimited": True, "left": 1000000, "of": None, "soldOut": False,
-          "endsAt": "2026-12-01T07:59:59Z"}
+          "endsAt": "2026-12-03T07:59:59Z"}
 CASES = [  # Keep the worker shapes covered as well as the deadline changes.
     ("uncapped", {"answer": ANSWER, "sale": True}),
     ("uncapped without left", {"answer": {"unlimited": True, "of": None}, "sale": True}),
@@ -122,8 +171,8 @@ function check(sale) {
     assert.deepStrictEqual(spans.map(s => s.hidden), [!sale, !sale, !sale]);
     assert.deepStrictEqual(regs.map(r => r.hidden), [sale, sale]);
   } else {
-    const expected = sale ? {...initial, name: 'Outlier Lifetime Licence', price: '$24.50', bnpl: '',
-      offer: false, btn: 'Buy Outlier Lifetime Licence: $24.50'} : initial;
+    const expected = sale ? {...initial, name: 'Outlier Lifetime Licence', price: '$16.99', bnpl: '',
+      offer: false, btn: 'Buy Outlier Lifetime Licence: $16.99'} : initial;
     assert.deepStrictEqual(state(), expected);
     const a = {hasAttribute: () => true};
     clicks({target: {closest: () => a}});

@@ -131,13 +131,15 @@ def founding_next_day() -> str:
 
 
 #: 2026-11-11 (CEO): from December 1, the regular Pro price is $29 once.
-def launch_line(now: str = "$24.50", later: str = "$29") -> str:
+def launch_line(now: str = "$16.99", later: str = "$29") -> str:
     """2026-11-09 (CEO): "Launch price: $24.50 once, through November 30. From December 1: $49." An introductory price
     that names the price after it. No "Black Friday", "half price" or "% off", and no struck-through price: $49 has
     never been charged, so a former-price comparison would not be honest (FTC 16 CFR 233.1; the EU's 30-day rule).
     No closing full stop: the caller ends the sentence. The regular price beside it sits in <span data-pbox-regular>,
     which the reveal hides while this line shows."""
-    return f"Launch price: {now} once, through {founding_until()}. From {founding_next_day()}: {later}"
+    # The dated launch-policy note above is superseded by Matthew's sale order.
+    # 2026-11-13, Matthew's order: a real sale against the paid November price.
+    return f"Black Friday sale: {now} once, 31% off our November price of $24.50, through {founding_until()}. Then {later}"
 
 def current_version() -> str:
     s = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -250,7 +252,7 @@ STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp
                  "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
                  "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
 STD_PRICE_NEW = ("Free: Nano + Lite. Pro<span data-pbox-regular>: $29 once</span>"
-                 f"<span data-pbox-founding hidden> at the {launch_line()[0].lower()}{launch_line()[1:]}</span>. {OS_REQ}. " + REFUND + " " + TAX)
+                 f"<span data-pbox-founding hidden> &middot; {launch_line()}</span>. {OS_REQ}. " + REFUND + " " + TAX)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
                   'var(--border);margin:.5rem 0 0 .5rem"')
 STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_STYLE}>See Pro</a>'
@@ -258,9 +260,11 @@ STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_ST
 HOME_OLD = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 "
             "for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.")
 HOME_NEW = ("Pro: every model<span data-pbox-regular>, $29 once</span><span data-pbox-founding "
-            f"hidden> at the {launch_line()[0].lower()}{launch_line()[1:]}</span>. "
+            f"hidden>. {launch_line()}</span>. "
             "No subscription, no per-token cost.")
-_FOUNDERS_SHOWN = re.compile(r"\$24\.50(?![\d])")   # 2026-11-02: the November sale price (was 124.50 / 31.13)
+# 2026-11-02: the November sale price (was 124.50 / 31.13)
+# 2026-11-13, Matthew's order: the current sale price is $16.99.
+_FOUNDERS_SHOWN = re.compile(r"\$16\.99(?![\d])")
 
 
 def _founders_visible(s: str) -> list[str]:

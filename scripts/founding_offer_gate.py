@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""The founding price switches off at the moment the offer ends, and nothing may show it after.
+"""The sale price switches off at the moment the offer ends, and nothing may show it after.
 
-WHY. FOUNDINGOUTLIER (50% off Pro Lifetime, 24 uses) and FOUNDINGBUNDLE ($428) both end at the moment in
-data/founding_offer.json. Dodo refuses an expired code, so a page that still shows the founding price after
+WHY. Matthew's 2026-11-13 order sets Outlier to $16.99, the bundle to $34.99, and the deadline in
+data/founding_offer.json. Dodo refuses an expired code, so a page that still shows the sale price after
 that moment offers a price nobody can get, to exactly the person who was ready to buy. A switch that waits
 for someone to remember the date is how that would happen, so the pages carry the date themselves:
 
@@ -11,7 +11,7 @@ for someone to remember the date is how that would happen, so the pages carry th
     so the bar never mounts;
   * the product boxes' founders-price spans are `hidden` in the HTML and their reveal script shows them
     only before the end date AND while the worker reports seats left;
-  * the home page's Lifetime card says $249 in the HTML itself. Its script applies the founders price only
+  * the home page's Lifetime card says $29 in the HTML itself. Its script applies the sale price only
     before the end date and while seats are left, so a visitor without JavaScript, and every crawler that
     reads raw HTML, gets the regular price.
 
@@ -20,7 +20,8 @@ Every date in a page is a literal and every one must equal "ends" in data/foundi
 WHAT FAILS
   always   a page loads founding.js without the dated guard right before it; a guard, a reveal script or
            the home card's script carries no end date or a different one; founding-price text a visitor
-           reads in the raw HTML (outside hidden elements and scripts; JSON-LD counts, crawlers read it).
+           reads in the raw HTML outside hidden elements and scripts. The paid JSON-LD Offer must carry
+           the exact sale price and priceValidUntil. Mounts must name the real November reference.
            A text file (llms.txt) may state the offer only on a line that names the end date.
   over     once the end date has passed, or with --live once the worker reports no seats left: ANY
            founding-offer markup left in a served file, hidden or not (the codes, the offer prices, the
@@ -57,6 +58,12 @@ SERVED = {".html", ".htm", ".txt", ".xml", ".json", ".md"}
 #: "Outlier — Founders Lifetime" until the product is renamed in Dodo (the receipt's name; Matthew's account change)
 NOT_PAGES = {"data/founding_offer.json", "data/product-facts.json"}
 UA = {"User-Agent": "kerr-ops/1.0 (founding_offer_gate)"}
+
+# 2026-11-13, Matthew's order: the paid November price is the only sale reference.
+SALE_END = "2026-12-03T07:59:00Z"
+SALE_LINE = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $29."
+BUNDLE_LINE = "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $59."
+MOUNT = re.compile(r'<div\b[^>]*\bdata-founding(?=[\s>])[^>]*>')
 
 
 #: 10-21 (CEO): until the product is renamed in Dodo a $249 buyer's receipt still says "Founders Lifetime", so the pricing
@@ -146,6 +153,105 @@ def visible_text(src: str) -> str:
     return " ".join(p.out)
 
 
+def sale_visible_text(rel: str, src: str) -> str:
+    """Otter's own monthly price shares the sale figure; keep its named exemption narrow."""
+    if rel == "vs/otter-ai-alternative-local/index.html":
+        src = src.replace("Pro $16.99/user/month billed monthly", "Otter Pro monthly price")
+    return visible_text(src)
+
+
+def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
+    """Matthew's 2026-11-13 order also covers hidden sale copy and accessibility text."""
+    if rel == "terms.html":
+        note = ('<p class="updated">Changed 2026-11-04: "lifetime" means the same for every Outlier lifetime licence, '
+                'the current $49 licence and the earlier Founding 200 and Founders 500 tiers: the lifetime of the '
+                'Outlier product, with 90 days\' notice and a final binary release if it is ever sunset.</p>')
+        src = src.replace(note, '')
+    # 2026-11-13 (Claude review): two kinds of buyer text keep the old tier names on purpose. (1) A receipt-name note:
+    # Dodo's product is still "Outlier — Founders Lifetime" (data/product-facts.json), so a buyer's receipt says it and
+    # the thank-you page explains it; receipt_notes() above checks each note against Dodo's record and fails it once the
+    # product is renamed. (2) terms.html's legal text naming the earlier licence tiers: legal wording is Matthew's call,
+    # never a sale edit. Both are taken out here BY EXACT TEXT, so any other mention still fails.
+    src = RECEIPT.sub("", src)
+    if rel == "terms.html":
+        for legal in ('and the earlier Founding 200 and Founders 500 tiers alike, lifetime means',
+                      'Your tier (Founding 200, Founders 500, Pro) is derived from'):
+            src = src.replace(legal, "")
+    if rel == "vs/unified-memory-vs-vram/index.html":
+        src = src.replace("DGX Spark's Founders Edition", "DGX Spark's NVIDIA edition")
+    class Buyer(Visible):
+        def handle_starttag(self, tag, attrs):
+            super().handle_starttag(tag, attrs)
+            for key, value in attrs:
+                if key in {"alt", "title", "aria-label", "aria-description", "content"}:
+                    self.out.append(value or "")
+
+        def handle_data(self, data):
+            # Hidden spans will be shown by the reveal; inspect them too.
+            if not any(tag in self.SKIP and tag != "noscript" and off for tag, off in self.stack):
+                if any(tag == "script" for tag, _ in self.stack):
+                    def strings(v):
+                        if isinstance(v, str):
+                            self.out.append(v)
+                        elif isinstance(v, dict):
+                            for child in v.values():
+                                strings(child)
+                        elif isinstance(v, list):
+                            for child in v:
+                                strings(child)
+                    try:
+                        strings(json.loads(data))
+                    except ValueError:
+                        self.out.append(data)
+                else:
+                    self.out.append(data)
+    p = Buyer()
+    p.feed(src)
+    p.close()
+    bad = []
+    if re.search(r"founding|founders", " ".join(p.out), re.I):
+        bad.append(f"{rel}: buyer copy still names the old offer")
+    allowed = {SALE_LINE.rstrip('.'), BUNDLE_LINE.rstrip('.'),
+               "$16.99 once in the Black Friday sale",
+               "$16.99 once in the Black Friday sale, $29 from December 3",
+               "in the Black Friday sale"}
+    for span in re.findall(r'<span data-pbox-founding hidden>(.*?)</span>', src, re.S):
+        text = html.unescape(span).strip().lstrip('·. ').rstrip('. ')
+        other_app = rel == "thank-you.html" and text in {
+            "Launch price: $14.50 once, through November 30. From December 1: $29",
+            "Launch price: $29.50 once, through November 30. From December 1: $59"}
+        if text not in allowed and not other_app:
+            bad.append(f"{rel}: sale span differs from Matthew's exact sale wording")
+    # A December price is never a former price. Keep these bans even during a real sale.
+    for text in re.findall(r'<(?:span|div)[^>]*(?:data-pbox-founding|data-lt-offer)[^>]*>(.*?)</(?:span|div)>', src, re.S):
+        if re.search(r"half price|50% off|save\s+\$|\bwas\s+\$|countdown", text, re.I):
+            bad.append(f"{rel}: prohibited discount claim in offer copy")
+    for text in re.findall(r'<div[^>]*data-lt-offer[^>]*>(.*?)</div>', src, re.S):
+        if html.unescape(re.sub(r'<[^>]+>', '', text)).strip() != SALE_LINE + " The Buy button applies the discount for you at checkout.":
+            bad.append(f"{rel}: card offer differs from Matthew's exact sale wording")
+    for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', src, re.S):
+        try:
+            value = json.loads(raw)
+        except ValueError:
+            if rel == "_seo_build/templates/_base.html" and raw in {"{{ breadcrumb_jsonld | safe }}", "{{ article_jsonld | safe }}"}:
+                continue
+            bad.append(f"{rel}: unreadable JSON-LD")
+            continue
+        def walk(v):
+            if isinstance(v, dict):
+                if v.get("@type") == "Offer" and v.get("name") == "Outlier Lifetime Licence":
+                    expected = ("29", None, "USD") if over else ("16.99", "2026-12-02", "USD")
+                    if (v.get("price"), v.get("priceValidUntil"), v.get("priceCurrency")) != expected:
+                        bad.append(f"{rel}: paid Offer price, validity and currency must be {expected}")
+                for child in v.values():
+                    walk(child)
+            elif isinstance(v, list):
+                for child in v:
+                    walk(child)
+        walk(value)
+    return bad
+
+
 def served_files(root: pathlib.Path):
     for p in sorted(root.rglob("*")):
         rel = p.relative_to(root)
@@ -156,6 +262,17 @@ def served_files(root: pathlib.Path):
 
 def wiring(rel: str, src: str, ends: str) -> list[str]:
     bad = []
+    mounts = MOUNT.findall(src)
+    if len(mounts) != len(BAR.findall(src)):
+        bad.append(f"{rel}: each shared offer script needs one sale mount")
+    for mount in mounts:
+        parser = html.parser.HTMLParser()
+        attrs = {}
+        parser.handle_starttag = lambda tag, pairs: attrs.update(pairs)
+        parser.feed(mount)
+        if any(attrs.get(k) != v for k, v in
+               {"data-ref": "$24.50", "data-now": "$16.99", "data-was": "$29"}.items()):
+            bad.append(f"{rel}: sale mount must name data-ref=$24.50, data-now=$16.99, data-was=$29")
     for m in BAR.finditer(src):
         g = GUARD.search(src[:m.start()])
         if not g:
@@ -199,6 +316,10 @@ def check(root: pathlib.Path, now: dt.datetime, live: bool) -> int:
         print(f"FAIL: data/founding_offer.json is missing or unreadable ({e}). It is the one source for the end date.")
         return 1
     ends = offer["ends"]
+    if (ends != SALE_END or [(o.get("what"), o.get("prices")) for o in offer["offers"]]
+            != [(SALE_LINE, ["$16.99"]), (BUNDLE_LINE, ["$34.99"])]):
+        print("FAIL: offer data differs from Matthew's 2026-11-13 sale order")
+        return 1
     over, why = now >= offer["_end"], f"the end date {ends} has passed"
     if live and not over:
         try:
@@ -208,6 +329,11 @@ def check(root: pathlib.Path, now: dt.datetime, live: bool) -> int:
             print(f"FAIL: could not read the founding worker ({e}). Whether seats are left is unknown, not 'yes'.")
             return 1
     bad: list[str] = []
+    for rel, src in files:
+        if rel.suffix.lower() in (".html", ".htm"):
+            bad += buyer_copy(rel.as_posix(), src, over=over)
+        elif rel.as_posix() in {"llms.txt", "llms-full.txt"} and re.search(r"founding|founders", src, re.I):
+            bad.append(f"{rel}: buyer text still names the old offer")
     if over:
         print(f"the founding offer is OVER: {why}")
         for rel, src in files:
@@ -224,7 +350,7 @@ def check(root: pathlib.Path, now: dt.datetime, live: bool) -> int:
             bad += flagged
             if rel.suffix.lower() in (".html", ".htm"):
                 bad += wiring(rel.as_posix(), src, ends)
-                hits = sorted({m.group(0) for p in pats for m in p.finditer(visible_text(src))})
+                hits = sorted({m.group(0) for p in pats for m in p.finditer(sale_visible_text(rel.as_posix(), src))})
                 if hits:
                     bad.append(f"{rel}: shows {', '.join(hits)} in the HTML itself; reveal it from a dated script instead")
             else:
@@ -248,38 +374,63 @@ def check(root: pathlib.Path, now: dt.datetime, live: bool) -> int:
 
 def self_check() -> int:
     """The gate must fail on each way the switch can be missing, and pass on a wired page and a clean one."""
-    ends = "2026-11-25T01:26:00Z"
+    ends = SALE_END
     guard = (f'<script data-founding-ends="{ends}">(function(){{var end=Date.parse("{ends}"),now=Date.now();'
              f'if(!(now<end))window.__kcFounding=1;}})();</script>\n')
+    mount = '<div data-founding data-ref="$24.50" data-now="$16.99" data-was="$29" hidden></div>\n'
     bar = '<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>\n'
     reveal = ('<script data-pbox-script>(function(){var m=1;var end=Date.parse("%s"),now=Date.now();'
               'if(!(now<end))return;fetch("x")})();</script>\n')
-    span = '<p>$249<span data-pbox-founding hidden> founders price $124.50</span></p>\n'
+    span = '<p>$29<span data-pbox-founding hidden>' + SALE_LINE + '</span></p>\n'
     card = ('<div data-lifetime-card>$249</div><script>var c=document.querySelector("[data-lifetime-card]");'
             'var end=Date.parse("%s");</script>\n')
     offer = json.dumps({"ends": ends, "worker": "http://127.0.0.1:9/", "offers": [
-        {"code": "FOUNDINGOUTLIER", "prices": ["$124.50", "$31.13"]}, {"code": "FOUNDINGBUNDLE", "prices": ["$428"]}]})
-    before, after = dt.datetime(2026, 11, 1, tzinfo=dt.timezone.utc), dt.datetime(2026, 11, 25, 2, tzinfo=dt.timezone.utc)
-    wired = guard + bar + span + reveal % ends
+        {"code": "FOUNDINGOUTLIER", "what": SALE_LINE, "prices": ["$16.99"]},
+        {"code": "FOUNDINGBUNDLE", "what": BUNDLE_LINE, "prices": ["$34.99"]}]})
+    before, after = dt.datetime(2026, 11, 1, tzinfo=dt.timezone.utc), dt.datetime(2026, 12, 3, 8, tzinfo=dt.timezone.utc)
+    wired = mount + guard + bar + span + reveal % ends
     clean = "<p>Pro Lifetime: $249 once.</p>\n"
     cases = [  # (name, home page, other page, llms line, when, expected exit)
-        ("wired, before the end", wired + card % ends, wired, f"founders price $124.50 until {ends[:10]}", before, 0),
+        ("wired, before the end", wired + card % ends, wired, f"{SALE_LINE} until {ends[:10]}", before, 0),
         ("bar with no guard", bar + card % ends, wired, "", before, 1),
-        ("guard with another date", guard.replace(ends, "2026-12-01T00:00:00Z") + bar + card % ends, wired, "", before, 1),
-        ("reveal with no date", wired + card % ends, guard + bar + span + reveal.replace('if(!(now<end))return;', '') % ends, "", before, 1),
+        ("guard with another date", mount + guard.replace(ends, "2026-12-01T00:00:00Z") + bar + card % ends, wired, "", before, 1),
+        ("reveal with no date", wired + card % ends, mount + guard + bar + span + reveal.replace('if(!(now<end))return;', '') % ends, "", before, 1),
         ("card script not dated", wired + card % "2027-01-01T00:00:00Z", wired, "", before, 1),
-        ("visible founders price", wired + card % ends + "<p>Buy for $124.50</p>", wired, "", before, 1),
+        ("visible founders price", wired + card % ends + "<p>Buy for $16.99</p>", wired, "", before, 1),
         ("visible code in JSON-LD", wired + card % ends + '<script type="application/ld+json">{"d":"FOUNDINGOUTLIER"}</script>', wired, "", before, 1),
-        ("undated llms line", wired + card % ends, wired, "the first 25 buyers pay $124.50", before, 1),
-        ("bundle price shown", wired + card % ends + "<p>All three for $428</p>", wired, "", before, 1),
+        ("undated llms line", wired + card % ends, wired, "the first 25 buyers pay $16.99", before, 1),
+        ("bundle price shown", wired + card % ends + "<p>All three for $34.99</p>", wired, "", before, 1),
         ("founders' product name in prose", wired + card % ends, wired + "<p>Pro is a one-time Founders Lifetime at $249.</p>", "", before, 1),
-        ("leftovers after the end", wired + card % ends, wired, f"founders price $124.50 until {ends[:10]}", after, 1),
+        ("leftovers after the end", wired + card % ends, wired, f"{SALE_LINE} until {ends[:10]}", after, 1),
         ("hidden span left after the end", clean, clean + span, "", after, 1),
         ("clean after the end", clean, clean, "Pro Lifetime: $249 once.", after, 0),
     ]
+    cases += [
+        ("missing data-ref", wired.replace(' data-ref="$24.50"', '') + card % ends, wired, "", before, 1),
+        ("wrong reference", wired.replace('data-ref="$24.50"', 'data-ref="$29"') + card % ends, wired, "", before, 1),
+        ("old launch price", wired.replace('data-now="$16.99"', 'data-now="$24.50"') + card % ends, wired, "", before, 1),
+        ("missing mount", wired.replace(mount, '') + card % ends, wired, "", before, 1),
+        ("dated paid schema", wired + card % ends + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"16.99","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', wired, "", before, 0),
+        ("undated paid schema", wired + card % ends + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"16.99","priceCurrency":"USD"}</script>', wired, "", before, 1),
+    ]
+    cases += [  # 2026-11-13, Matthew's order: buyer fields and false discounts stay guarded.
+        ("hidden old tier", wired + '<span hidden>Founders Lifetime</span>', wired, "", before, 1),
+        ("old tier in alt", wired + '<img alt="FOUNDING sale">', wired, "", before, 1),
+        ("old tier in meta", wired + '<meta name="description" content="Founders offer">', wired, "", before, 1),
+        ("old tier in aria", wired + '<button aria-label="Founding sale">Buy</button>', wired, "", before, 1),
+        ("old launch wording", wired.replace(SALE_LINE, 'Launch price: $24.50 once, through November 30. From December 1: $29.'), wired, "", before, 1),
+        ("wrong discount", wired.replace('31% off', '50% off'), wired, "", before, 1),
+        ("wrong former price", wired.replace('price of $24.50', 'price of $29'), wired, "", before, 1),
+        ("false savings", wired.replace(SALE_LINE, 'Save $12 against December prices'), wired, "", before, 1),
+        ("half price", wired.replace(SALE_LINE, 'Half price'), wired, "", before, 1),
+        ("countdown", wired.replace(SALE_LINE, 'Sale countdown'), wired, "", before, 1),
+        ("wrong paid schema", wired + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"24.50","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', wired, "", before, 1),
+        ("regular paid schema after end", clean + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"29","priceCurrency":"USD"}</script>', clean, "", after, 0),
+        ("sale paid schema after end", clean + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"16.99","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', clean, "", after, 1),
+    ]
     wrong = []
     note = '<p>Your receipt may say <span data-receipt-name>&ldquo;Founders Lifetime&rdquo;</span>: the same licence.</p>'
-    cases += [  # the receipt note: allowed while Dodo's product carries the name, before and after the end; not after a rename
+    cases += [  # 2026-11-13, Matthew's order: old receipt wording fails even before Dodo renames it
         ("receipt note, Dodo still says it", wired + card % ends + note, wired, "", before, 0),
         ("receipt note after the end, Dodo still says it", clean + note, clean, "", after, 0),
         ("receipt note after Dodo renamed it", clean + note, clean, "", after, 1, "Outlier — Lifetime Licence"),

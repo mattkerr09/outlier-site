@@ -134,10 +134,11 @@ plausible.init()
         // founders code, so the homepage records "founding" or "regular" in
         // localStorage at the click (no personal data). Missing or older than a day:
         // assume the full price. The exact paid amount comes from /paid, below.
-        var _value = 249.00;
+        // 2026-11-13, Matthew's sale order: match the price shown at the Buy click.
+        var _value = 29.00;
         try {
           var _o = JSON.parse(localStorage.getItem('outlier_offer') || 'null');
-          if (_o && _o.offer === 'founding' && (Date.now() - (_o.t || 0)) < 864e5) _value = 124.50;
+          if (_o && _o.offer === 'founding' && (Date.now() - (_o.t || 0)) < 864e5) _value = 16.99;
           localStorage.removeItem('outlier_offer');
         } catch (e2) {}
         // 2026-09-29 (CEO): the REAL amount, from the payment itself. /paid answers
@@ -335,7 +336,7 @@ plausible.init()
 <script data-pbox-script>
 (function(){var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
 function clock(){return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}
-var end=Date.parse("2026-12-01T07:59:00Z"),now=clock();if(!(now<end))return;
+var end=Date.parse("2026-12-03T07:59:00Z"),now=clock();if(!(now<end))return;
 function show(on){m.forEach(function(e){e.hidden=!on;var r=e.previousElementSibling;if(r&&r.hasAttribute&&r.hasAttribute('data-pbox-regular'))r.hidden=on;});}
 if(end-now<24*24*60*60*1000)setTimeout(function(){show(false);},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
