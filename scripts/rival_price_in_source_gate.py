@@ -60,6 +60,12 @@ def _ours() -> set[str]:
                            .read_text(encoding="utf-8"))
         for o in offer.get("offers", []):
             out.update(p for p in o.get("prices", []) if re.fullmatch(r"\$\d[\d,]*(?:\.\d\d)?", p))
+            # 2026-11-13 (Matthew's Black Friday order): a real sale quotes the price buyers paid all November as its
+            # reference ("31% off our November price of $24.50"). That is our own price too, so each offer names it in
+            # "ref"; without this the reference read as an unsourced rival price on 200+ pages.
+            ref = o.get("ref", "")
+            if isinstance(ref, str) and re.fullmatch(r"\$\d[\d,]*(?:\.\d\d)?", ref):
+                out.add(ref)
     except Exception:
         pass
     # 2026-09-28: every price we show as the thing to pay carries its pay-in-4 amount
