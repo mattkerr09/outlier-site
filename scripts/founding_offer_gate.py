@@ -167,12 +167,10 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
                 'the current $49 licence and the earlier Founding 200 and Founders 500 tiers: the lifetime of the '
                 'Outlier product, with 90 days\' notice and a final binary release if it is ever sunset.</p>')
         src = src.replace(note, '')
-    # 2026-11-13 (Claude review): two kinds of buyer text keep the old tier names on purpose. (1) A receipt-name note:
-    # Dodo's product is still "Outlier — Founders Lifetime" (data/product-facts.json), so a buyer's receipt says it and
-    # the thank-you page explains it; receipt_notes() above checks each note against Dodo's record and fails it once the
-    # product is renamed. (2) terms.html's legal text naming the earlier licence tiers: legal wording is Matthew's call,
-    # never a sale edit. Both are taken out here BY EXACT TEXT, so any other mention still fails.
-    src = RECEIPT.sub("", src)
+    # 2026-11-13 (Claude review): terms.html's legal text naming the earlier licence tiers keeps the old names on
+    # purpose: legal wording is Matthew's call (his to-do item 186), never a sale edit. Taken out here BY EXACT TEXT, so
+    # any other mention still fails. (The thank-you receipt note that was also exempt here is gone: the CEO renamed the
+    # Dodo product to "Outlier — Lifetime Licence" on 13 Nov, so receipts no longer say Founders.)
     if rel == "terms.html":
         for legal in ('and the earlier Founding 200 and Founders 500 tiers alike, lifetime means',
                       'Your tier (Founding 200, Founders 500, Pro) is derived from'):
@@ -431,8 +429,10 @@ def self_check() -> int:
     wrong = []
     note = '<p>Your receipt may say <span data-receipt-name>&ldquo;Founders Lifetime&rdquo;</span>: the same licence.</p>'
     cases += [  # 2026-11-13, Matthew's order: old receipt wording fails even before Dodo renames it
-        ("receipt note, Dodo still says it", wired + card % ends + note, wired, "", before, 0),
-        ("receipt note after the end, Dodo still says it", clean + note, clean, "", after, 0),
+        # 2026-11-13: Dodo renamed the product and Matthew's order bans the old tier in buyer copy, so a "Founders" receipt
+        # note now fails even where a stale fact file still carries the old name.
+        ("receipt note, Dodo still says it", wired + card % ends + note, wired, "", before, 1),
+        ("receipt note after the end, Dodo still says it", clean + note, clean, "", after, 1),
         ("receipt note after Dodo renamed it", clean + note, clean, "", after, 1, "Outlier — Lifetime Licence"),
     ]
     for name, home, other, llms, when, want, *rn in cases:
