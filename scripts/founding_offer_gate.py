@@ -56,7 +56,11 @@ SKIP_DIRS = {".git", ".github", "scripts", "node_modules"}
 SERVED = {".html", ".htm", ".txt", ".xml", ".json", ".md"}
 #: records, not pages: the offer file itself, and Dodo's product record (sync_product_facts.py), whose product name stays
 #: "Outlier — Founders Lifetime" until the product is renamed in Dodo (the receipt's name; Matthew's account change)
-NOT_PAGES = {"data/founding_offer.json", "data/product-facts.json"}
+#: updates/latest.json (2026-11-17, 1.11.1011): the mirror of the app's update feed, which the release chain writes and then
+#: checks byte-for-byte against the GitHub feed (ship_chain cmp); the app's update dialog shows its release notes. It is a
+#: record of a release, not buyer copy, and it can't carry this gate's date literal without changing the signed release's
+#: notes; the next release replaces it.
+NOT_PAGES = {"data/founding_offer.json", "data/product-facts.json", "updates/latest.json"}
 UA = {"User-Agent": "kerr-ops/1.0 (founding_offer_gate)"}
 
 # 2026-11-13, Matthew's order: the paid November price is the only sale reference.
