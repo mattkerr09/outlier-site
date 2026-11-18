@@ -108,9 +108,9 @@ class MeasuredAnswersRoundThreeB(unittest.TestCase):
             with self.subTest(page=rel):
                 before = git("show", f"{BASE}:{rel}", text=True)
                 after = (ROOT / rel).read_text(encoding="utf-8")
-                self.assertIn("Last updated 2026-11-16", after)
-                self.assertRegex(after, r'"dateModified":\s*"2026-11-16"')
-                self.assertIn('name="last-modified" content="2026-11-16"', after)
+                self.assertIn("Last updated 2026-11-18", after)
+                self.assertRegex(after, r'"dateModified":\s*"2026-11-18"')
+                self.assertIn('name="last-modified" content="2026-11-18"', after)
 
                 # Preserve every old price, sale line and licence term, including
                 # the original comparison list moved just below the first h2.
