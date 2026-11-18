@@ -11,7 +11,7 @@
   <title>Outlier vs Ollama: models bigger than RAM | Outlier</title>
   <meta name="description" content="Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run. Here's where each one fits.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-09-24">
+  <meta name="last-modified" content="2026-11-16">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-ollama/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs Ollama — running models bigger than your RAM">
@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-11-04","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-11-16","author": {"@type": "Person", "name": "Matt Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Ollama — running models bigger than your RAM", "item": "https://outlier.host/vs/outlier-vs-ollama/"}]}
@@ -153,18 +153,13 @@
     <h1>Outlier vs Ollama: running models bigger than your RAM</h1>
     <div class="byline-row">
       <span class="byline">Matt Kerr · Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-11-04</span>
+      <span class="updated-pill">Last updated 2026-11-16</span>
       <span class="byline" data-claims-checked="2026-11-09" data-claims-set="Ollama">Ollama prices and plans checked 2026-11-09</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <ul>
-        <li>Ollama runs everywhere and is open source; it uses GGUF models, and since version 0.19 (March 2026) it also runs on MLX on Apple silicon, in preview for some models. Outlier is a Mac-only MLX app.</li>
-        <li>Outlier's trick: <strong>paged MoE streaming runs Plus 397B on 64 GB</strong>. Ollama can't.</li>
-        <li>Pick Ollama if you need cross-platform support or the biggest open-source catalog.</li>
-        <li>Pick Outlier for the built-in agent loop and project memory (both Pro), and oversized MoE models.</li>
-      </ul>
+      <p>Try Outlier as an Ollama alternative on an Apple silicon Mac if you want chat and a coding agent in one app. In our <a href="/data/v11-streaming-engine-benchmarks/">shipped-app test</a> on build 1.11.593, Plus 397B ran at 2.0 tokens per second on a Mac Studio M1 Ultra with 64 GB, using 18.0 GB of peak memory. We have not tested Ollama on that model.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro<span data-pbox-regular>: $29 once</span><span data-pbox-founding hidden> &middot; Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $29.</span></p>
@@ -176,6 +171,12 @@
     <p class="lead">Ollama is the most popular way to run a model on your own machine. It's free to run locally, it's open source, and the GGUF library is enormous. It is also no longer only local: Ollama now sells <a href="https://ollama.com/pricing">cloud inference</a>, hosted primarily in the United States, with some capacity routed to Europe. Outlier runs no cloud at all. There is no server of ours for your prompt to reach. Outlier picks a narrower fight. It's Mac-only and MLX-native, and its paged-MoE engine runs Plus 397B on a 64 GB Mac. Two very different design centers. Below is where each one actually wins.</p>
 
     <h2>What each one is</h2>
+      <ul>
+        <li>Ollama runs everywhere and is open source; it uses GGUF models, and since version 0.19 (March 2026) it also runs on MLX on Apple silicon, in preview for some models. Outlier is a Mac-only MLX app.</li>
+        <li>Outlier's trick: <strong>paged MoE streaming runs Plus 397B on 64 GB</strong>. Ollama can't.</li>
+        <li>Pick Ollama if you need cross-platform support or the biggest open-source catalog.</li>
+        <li>Pick Outlier for the built-in agent loop and project memory (both Pro), and oversized MoE models.</li>
+      </ul>
     <p><strong>Ollama</strong> is a command-line runtime and HTTP server for local models. You get a model registry and a chat REPL, plus an OpenAI-compatible API. Its backend grew out of llama.cpp and its library is GGUF; since version 0.19 (30 March 2026) it also runs on Apple&rsquo;s MLX on Apple silicon, announced as a preview for some models (<a href="https://ollama.com/blog/mlx">Ollama&rsquo;s post</a>). It runs on macOS, Linux, and Windows, and it's free and open source under the <a href="https://github.com/ollama/ollama">MIT license</a>. Honestly, the "ollama pull" then "ollama run" loop is about as clean as local-LLM setup gets.</p>
     <p><strong>Outlier</strong> is a Mac desktop app. There's a chat UI, an agent loop wired to MCP tools, a project memory layer, and an inference backend built on Apple's MLX framework. Models are MLX-native and 4-bit quantized. Apple Silicon only. The free tier covers Nano and Lite and it's genuinely usable, while Pro opens up the bigger models, the agent, project memory and vision.</p>
 
