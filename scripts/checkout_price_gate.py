@@ -7,7 +7,10 @@ customer experiences — what the CHECKOUT charges. Docket found its app constan
 stale at 19900 against a live 34900 because nothing on the shipped path read it.
 
 This reads https://checkout.dodopayments.com/buy/<product id> with GET and
-compares the amount on the page to data/product-facts.json.
+compares the amount on the page to data/product-facts.json and the dated
+FOUNDINGOUTLIER offer in data/founding_offer.json. Before the offer ends, the
+fact-file price and sale price are allowed. From the end on, only the stated
+post-sale price is allowed.
 
 ⚠️ GET, NEVER HEAD. checkout_link_gate.py documents why with measurements: HEAD
 follows the redirect to the provider's homepage and answers 200 for a dead link.
@@ -26,11 +29,13 @@ is a gate that has never been shown capable of failing.
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import pathlib
 import re
 import subprocess
 import sys
+import time
 
 PRODUCT_ID = "pdt_0Nlgdu1f0s30YekSmpGwA"
 CHECKOUT = f"https://checkout.dodopayments.com/buy/{PRODUCT_ID}"
@@ -41,15 +46,17 @@ EXPECT_NAME = "Outlier"
 
 def price_patterns(cents: int) -> list[re.Pattern]:
     """Anchored ways the same amount can legitimately appear."""
-    dollars = cents // 100
-    return [
+    dollars, fraction = divmod(cents, 100)
+    patterns = [
         # (?![\d.]) not (?![\d]): the break-test caught "24900.50" matching,
         # because a trailing dot is not a digit. A gate that accepts 24900.50 as
         # 24900 accepts a hundredfold error.
         re.compile(rf"(?<![\d.]){cents}(?![\d.])"),             # 24900
-        re.compile(rf"(?<![\d.])\$?{dollars}\.00(?![\d])"),      # 249.00 / $249.00
-        re.compile(rf"(?<![\d.])\${dollars}(?![\d.])"),          # $249
+        re.compile(rf"(?<![\d.])\$?{dollars}\.{fraction:02d}(?![\d.])"),  # 16.99 / $16.99
     ]
+    if fraction == 0:
+        patterns.append(re.compile(rf"(?<![\d.])\${dollars}(?![\d.])"))  # $249
+    return patterns
 
 
 def _break_test() -> int:
@@ -71,7 +78,43 @@ def _break_test() -> int:
     return 0
 
 
-def main(argv: list[str]) -> int:
+def accepted_prices(root: pathlib.Path, cents: int, now: float) -> dict[int, str]:
+    """Read the offer strictly: missing price data must never widen the check."""
+    offer_p = root / "data" / "founding_offer.json"
+    try:
+        data = json.loads(offer_p.read_text(encoding="utf-8"))
+        ends = dt.datetime.fromisoformat(data["ends"].replace("Z", "+00:00"))
+        if ends.tzinfo is None:
+            raise ValueError("ends must include a timezone")
+        offer = next(o for o in data["offers"] if o["code"] == "FOUNDINGOUTLIER")
+        prices = offer["prices"]
+        if not isinstance(prices, list) or not all(isinstance(p, str) for p in prices):
+            raise ValueError("FOUNDINGOUTLIER prices must be a list of strings")
+        sale = re.search(r"\$(\d+)\.(\d{2})(?![\d.])", " ".join(prices))
+        if not sale:
+            raise ValueError("FOUNDINGOUTLIER prices has no $N.NN sale price")
+        after = re.search(r"\bThen\s+\$(\d+)(?:\.(\d{2}))?(?!\d|\.\d)", offer["what"])
+        if not after:
+            raise ValueError("FOUNDINGOUTLIER what has no parseable Then $N price")
+        sale_cents = int(sale[1]) * 100 + int(sale[2])
+        after_cents = int(after[1]) * 100 + int(after[2] or "0")
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, StopIteration) as e:
+        raise ValueError(f"cannot read FOUNDINGOUTLIER offer in {offer_p}: {str(e) or 'offer missing'}") from e
+    if now < ends.timestamp():
+        return {cents: "product-facts price before the offer ends",
+                sale_cents: "FOUNDINGOUTLIER sale price before the offer ends"}
+    return {after_cents: "FOUNDINGOUTLIER stated post-sale price from the offer end on"}
+
+
+def fetch_checkout() -> str:
+    """GET only: read the checkout without submitting anything."""
+    return subprocess.run(
+        ["curl", "-sL", "--max-time", "45", "-A", UA, CHECKOUT],
+        capture_output=True, text=True, timeout=60).stdout
+
+
+def main(argv: list[str], *, now: float | None = None) -> int:
+    """Use the real clock unless a test supplies an epoch timestamp as now."""
     if "--break-test" in argv:
         return _break_test()
     root = pathlib.Path(argv[0] if argv and not argv[0].startswith("-") else ".").resolve()
@@ -80,11 +123,14 @@ def main(argv: list[str]) -> int:
         print(f"FAIL: no {facts_p} — run scripts/sync_product_facts.py")
         return 1
     cents = json.loads(facts_p.read_text(encoding="utf-8"))["price_cents"]
+    try:
+        amounts = accepted_prices(root, cents, time.time() if now is None else now)
+    except ValueError as e:
+        print(f"FAIL: {e}")
+        return 1
 
     try:
-        out = subprocess.run(
-            ["curl", "-sL", "--max-time", "45", "-A", UA, CHECKOUT],
-            capture_output=True, text=True, timeout=60).stdout
+        out = fetch_checkout()
     except Exception as e:  # noqa: BLE001
         print(f"FAIL: could not read the live checkout ({e}) — not a pass")
         return 1
@@ -98,18 +144,19 @@ def main(argv: list[str]) -> int:
         print(f"FAIL: {EXPECT_NAME!r} not on the page — this is not our product")
         return 1
 
-    hits = [p.pattern for p in price_patterns(cents) if p.search(out)]
-    if not hits:
-        found = sorted(set(re.findall(r"\$ ?\d[\d,]*(?:\.\d{2})?", out)))[:6]
-        print(f"FAIL: the live checkout does not show {cents} cents "
-              f"(site/fact file says ${cents//100}).")
-        print(f"  price-shaped strings on the page: {found or '(none)'}")
-        print("  Either the checkout changed and the fact file is stale, or we are "
-              "advertising a price nobody is charged.")
-        return 1
-    print(f"PASS — live checkout charges ${cents//100} "
-          f"({len(hits)} of {len(price_patterns(cents))} anchored forms matched)")
-    return 0
+    for amount, reason in amounts.items():
+        patterns = price_patterns(amount)
+        hits = [p.pattern for p in patterns if p.search(out)]
+        if hits:
+            print(f"PASS: live checkout charges ${amount//100}.{amount%100:02d}, "
+                  f"{amount} cents: {reason}; "
+                  f"{len(hits)} of {len(patterns)} anchored forms matched")
+            return 0
+    found = sorted(set(re.findall(r"\$ ?\d[\d,]*(?:\.\d{2})?", out)))[:6]
+    print(f"FAIL: the live checkout does not show an accepted amount: {amounts}")
+    print(f"  price-shaped strings on the page: {found or '(none)'}")
+    print("  The checkout must charge a price the site states for this time.")
+    return 1
 
 
 if __name__ == "__main__":
