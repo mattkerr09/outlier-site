@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Is local AI safe from prompt injection? | Outlier</title>
+  <meta name="description" content="Local AI can still follow hostile text in a file or web page. See how approval, permission modes and web settings reduce the risk in Outlier.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-20">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="canonical" href="https://outlier.host/learn/is-local-ai-safe-from-prompt-injection/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Is local AI safe from prompt injection? The honest answer.">
+  <meta property="og:description" content="Local AI can still follow hostile text in a file or web page. See how approval, permission modes and web settings reduce the risk in Outlier.">
+  <meta property="og:url" content="https://outlier.host/learn/is-local-ai-safe-from-prompt-injection/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Is local AI safe from prompt injection? The honest answer.">
+  <meta name="twitter:description" content="Local AI can still follow hostile text in a file or web page. See how approval, permission modes and web settings reduce the risk in Outlier.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.875rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.875rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+</style>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Is local AI safe from prompt injection? The honest answer.", "description": "Local AI can still follow hostile text in a file or web page. See how approval, permission modes and web settings reduce the risk in Outlier.", "datePublished": "2026-11-20", "dateModified": "2026-11-20", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/is-local-ai-safe-from-prompt-injection/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Is local AI safe from prompt injection? The honest answer.", "item": "https://outlier.host/learn/is-local-ai-safe-from-prompt-injection/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="/learn/">Learn</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="/learn/">learn</a></div>
+    <h1>Is local AI safe from prompt injection? The honest answer.</h1>
+    <div class="byline-row">
+      <span class="byline"><a href="/about/">Matthew Kerr</a> &middot; Outlier &middot; published 2026-11-20</span>
+      <span class="updated-pill">Last updated <time datetime="2026-11-20">2026-11-20</time></span>
+    </div>
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>No. A local model that reads a web page or file can be steered by text inside it, just like a cloud model. Local inference removes the server copy of the chat, but it does not remove prompt injection. Keep web tools off for untrusted work and review what an agent will run before approving it.</p>
+    </div>
+
+    <h2>A file can contain instructions you did not give</h2>
+    <p>Prompt injection is an attempt to make a model follow instructions hidden in material it was asked to read. For example, imagine asking an agent to summarise a document. A paragraph in that document tells it to ignore your request, read another file and send the contents somewhere else. The paragraph is part of the document, but the model may treat it as an instruction.</p>
+    <p>That example describes a possible failure, not a measured Outlier incident. The same problem can arise when the model reads a web page or a local file. Putting the model on your Mac changes where the text is processed. It does not stop the model from mistaking someone else's text for your request.</p>
+
+    <h2>Local inference answers a different question</h2>
+    <p>A local model keeps the processing on your Mac and removes the server copy of that local chat. That helps with where your words go. Prompt injection concerns what the model does after it reads them. An agent with permission to change files or run commands can still propose a harmful step while working locally.</p>
+    <p>For Outlier, keep the chat on a local model and turn web tools off when working with untrusted text. Choosing a cloud model with your own API key sends the chat to that provider. Turning web on allows search, web pages and web-connected tools. Connections you set up yourself have their own requests. Read the <a href="/privacy.html">full network-use list</a> for the built-in checks and optional features.</p>
+
+    <h2>Use the controls Outlier documents</h2>
+    <ul>
+      <li><strong>Commands ask first with web off.</strong> The privacy page says a command that downloads or installs from the internet &ldquo;asks you first, every time&rdquo;. If you approve it, that command can reach the internet. See <a href="/privacy.html">Agent commands with web off</a>.</li>
+      <li><strong>Review approval before execution.</strong> The agent's plan card offers &ldquo;Approve&rdquo;, &ldquo;Approve edited&rdquo; and &ldquo;Deny&rdquo;. The home page states that every plan is reviewable and editable before it runs. See the <a href="/#demos">agent plan-review example</a>.</li>
+      <li><strong>Check permission modes and the audit log.</strong> The home page describes &ldquo;File read/write and shell execution behind permission modes, with a plan-review card, repair loop and audit log.&rdquo; See <a href="/#app">Agent tools, with approval</a>. Review the mode you are using before you start a task.</li>
+    </ul>
+    <p>These controls give you places to inspect what the agent wants to do and what it did. They do not establish that a model will reject every hostile instruction. Approval helps only if you understand the proposed action and decide whether it belongs in your task.</p>
+
+    <h2>Review the action against your original task</h2>
+    <p>Keep web tools off when the work does not need them, especially when reading material from someone you do not trust. This reduces the available network tools. It does not make instructions inside a file harmless, and an approved download command can still use the network.</p>
+    <p>Read the proposed commands, file paths and destinations. If you asked for a summary, a step that uploads a document or changes an unrelated file needs an explanation. Deny a plan you cannot account for. Ask for a smaller step that you can review before allowing the work to continue.</p>
+    <p>Keep a separate backup before an agent changes files you care about. Review its results and the audit log after it finishes. A useful local workflow combines keeping the text on the Mac with care over which actions you allow. You can <a href="/download/">download Outlier</a> and start with a task that uses harmless sample files.</p>
+    <div class="related">Related: <a href="/learn/is-local-ai-safe/">Is local AI safe?</a> &middot; <a href="/learn/">All articles</a></div>
+  </div>
+</article>
+</main>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier</span>
+    <span><a href="/privacy.html">Privacy</a> &middot; <a href="/learn/">Learn</a> &middot; <a href="https://outlier.host/">outlier.host</a></span>
+  </div>
+</footer>
+</body>
+</html>

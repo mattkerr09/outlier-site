@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can Chrome extensions read ChatGPT chats? | Outlier</title>
+  <meta name="description" content="An extension with page access can read a chat website. Learn about the 900,000-user case, check Chrome site access, and see what a desktop app changes.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-20">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="canonical" href="https://outlier.host/learn/can-chrome-extensions-read-chatgpt-chats/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Can Chrome extensions read your ChatGPT chats?">
+  <meta property="og:description" content="An extension with page access can read a chat website. Learn about the 900,000-user case, check Chrome site access, and see what a desktop app changes.">
+  <meta property="og:url" content="https://outlier.host/learn/can-chrome-extensions-read-chatgpt-chats/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Can Chrome extensions read your ChatGPT chats?">
+  <meta name="twitter:description" content="An extension with page access can read a chat website. Learn about the 900,000-user case, check Chrome site access, and see what a desktop app changes.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.875rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.875rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+</style>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Can Chrome extensions read your ChatGPT chats?", "description": "An extension with page access can read a chat website. Learn about the 900,000-user case, check Chrome site access, and see what a desktop app changes.", "datePublished": "2026-11-20", "dateModified": "2026-11-20", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/can-chrome-extensions-read-chatgpt-chats/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can Chrome extensions read your ChatGPT chats?", "item": "https://outlier.host/learn/can-chrome-extensions-read-chatgpt-chats/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="/learn/">Learn</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="/learn/">learn</a></div>
+    <h1>Can Chrome extensions read your ChatGPT chats?</h1>
+    <div class="byline-row">
+      <span class="byline"><a href="/about/">Matthew Kerr</a> &middot; Outlier &middot; published 2026-11-20</span>
+      <span class="updated-pill">Last updated <time datetime="2026-11-20">2026-11-20</time></span>
+    </div>
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Yes. A Chrome extension with access to a chat page can read what that page shows, including your conversation. Review which extensions can access your chat sites and remove those you do not use. Outlier's chat runs in its own app window, but that does not protect against malware already on the Mac.</p>
+    </div>
+
+    <h2>Page access includes the chat on the page</h2>
+    <p>A browser extension can add useful features to a website. To do that, it may ask to read and change the pages you visit. When that access includes a chat website, the extension can read the conversation shown there. Think about both the chat service receiving your message and the browser software allowed to see it.</p>
+    <p>The important question is which pages an extension can access. A feature name or an analytics consent prompt does not tell you everything that software can read. Before opening private work in a browser tab, review the extensions that have access to that site.</p>
+
+    <h2>The case involving over 900,000 users</h2>
+    <p>In January 2026, The Hacker News reported on two Chrome extensions:</p>
+    <ul>
+      <li>Chat GPT for Chrome with GPT-5, Claude Sonnet &amp; DeepSeek AI: 600,000 users.</li>
+      <li>AI Sidebar with Deepseek, ChatGPT, Claude, and more: 300,000 users.</li>
+    </ul>
+    <p>Together, they had over 900,000 users. OX Security said the extensions sent user conversations and all Chrome tab URLs to a remote server every 30 minutes. They had asked for consent to anonymous analytics data that would not identify users. The report said both were still downloadable when it was written, and one had lost its Featured badge. <a href="https://thehackernews.com/2026/01/two-chrome-extensions-caught-stealing.html">The Hacker News, January 2026</a>. Source read 2026-11-20 by our reviewer.</p>
+    <p>Those facts describe the two named extensions at the time of the report. They do not show that every extension reads chats or sends them away. They do show why checking access matters even when an extension presents itself as a helpful chat tool.</p>
+
+    <h2>Check the extensions in your browser</h2>
+    <ol>
+      <li>Type <code>chrome://extensions</code> into Chrome's address bar. Review the full list, including tools you installed for an old task.</li>
+      <li>Open Details for each extension. Check its permissions and Site access. Look for access to your chat website or to all sites.</li>
+      <li>Where Chrome offers a choice, limit site access to the pages that feature needs. If you do not understand why a tool needs access, leave it off while you check.</li>
+      <li>Remove extensions you no longer use. A smaller list is easier to review when you next need to share private text.</li>
+    </ol>
+    <p>Removing an extension stops future use of that installed copy. It does not recall information already sent elsewhere. If a chat contained a working credential, follow the steps for <a href="/learn/paste-passwords-or-api-keys-into-chatgpt/">passwords or API keys pasted into a chat</a> and rotate it with its issuer.</p>
+
+    <h2>What a desktop chat changes</h2>
+    <p>Outlier's chat runs in its own app window. It is not a web page a Chrome extension can read through site access. Local inference runs on the Mac, so you can work without putting the conversation into a chat website.</p>
+    <p>This does not protect against malware already on the Mac. Software that can read your screen or local files is a separate risk. A desktop window also does not make text private after you copy it into a website.</p>
+    <p>Read Outlier's <a href="/privacy.html">network-use list</a> before choosing features. Use a local model with web tools off for local work. Web search and agent web tools use the network when enabled, and choosing a cloud model with your own API key sends the chat to that provider. You can <a href="/download/">download Outlier</a> if that app workflow fits your task.</p>
+    <div class="related">Related: <a href="/learn/is-local-ai-safe/">Is local AI safe?</a> &middot; <a href="/learn/">All articles</a></div>
+  </div>
+</article>
+</main>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier</span>
+    <span><a href="/privacy.html">Privacy</a> &middot; <a href="/learn/">Learn</a> &middot; <a href="https://outlier.host/">outlier.host</a></span>
+  </div>
+</footer>
+</body>
+</html>
