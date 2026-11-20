@@ -216,6 +216,10 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
     allowed = {SALE_LINE.rstrip('.'), BUNDLE_LINE.rstrip('.'),
                "$16.99 once in the Black Friday sale",
                "$16.99 once in the Black Friday sale, $39 from December 3",
+               # 2026-11-20 (Outlier, Quality Desk read): the home FAQ "What does Pro include?" read "One payment in the
+               # Black Friday sale." during the sale, with no price. It now reads "One payment of $16.99 in the Black
+               # Friday sale, $39 from December 3." The same two facts as the table cell above; no comparison.
+               "of $16.99 in the Black Friday sale, $39 from December 3",
                "in the Black Friday sale"}
     for span in re.findall(r'<span data-pbox-founding hidden>(.*?)</span>', src, re.S):
         text = html.unescape(span).strip().lstrip('·. ').rstrip('. ')
@@ -230,8 +234,11 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
     for text in re.findall(r'<(?:span|div)[^>]*(?:data-pbox-founding|data-lt-offer)[^>]*>(.*?)</(?:span|div)>', src, re.S):
         if re.search(r"half price|\d+% off|November price|save\s+\$|\bwas\s+\$|countdown", text, re.I):
             bad.append(f"{rel}: prohibited discount claim in offer copy")
+    # 2026-11-20 (Outlier): from Sun 22 Nov 18:07Z the CEO re-prices Dodo to the sale price with no code
+    # (research/checkout-no-code-plan-2026-11-20.md), so "The Buy button applies the discount for you at checkout" stops
+    # being true. "Checkout charges the sale price." is true before (the hub applies the code) and after (the price is it).
     for text in re.findall(r'<div[^>]*data-lt-offer[^>]*>(.*?)</div>', src, re.S):
-        if html.unescape(re.sub(r'<[^>]+>', '', text)).strip() != SALE_LINE + " The Buy button applies the discount for you at checkout.":
+        if html.unescape(re.sub(r'<[^>]+>', '', text)).strip() != SALE_LINE + " Checkout charges the sale price.":
             bad.append(f"{rel}: card offer differs from Matthew's exact sale wording")
     for raw in re.findall(r'<script type="application/ld\+json">(.*?)</script>', src, re.S):
         try:
