@@ -168,7 +168,7 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
     """Matthew's 2026-11-13 order also covers hidden sale copy and accessibility text."""
     if rel == "terms.html":
         note = ('<p class="updated">Changed 2026-11-04: "lifetime" means the same for every Outlier lifetime licence, '
-                'the current $49 licence and the earlier Founding 200 and Founders 500 tiers: the lifetime of the '
+                'the current licence and the earlier Founding 200 and Founders 500 tiers: the lifetime of the '
                 'Outlier product, with 90 days\' notice and a final binary release if it is ever sunset.</p>')
         src = src.replace(note, '')
     # 2026-11-13 (Claude review): terms.html's legal text naming the earlier licence tiers keeps the old names on

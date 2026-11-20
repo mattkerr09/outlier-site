@@ -17,8 +17,8 @@ for key in ("name", "price", "bnpl", "offer", "btn"):
     node = re.search(r"<([a-z]+)\b([^>]*\bdata-lt-" + key + r"\b[^>]*)>(.*?)</\1>", home, re.S)
     regular[key] = (bool(re.search(r"\bhidden\b", node.group(2))) if key == "offer" else
                     node.group(3) if key == "bnpl" else html.unescape(re.sub(r"<[^>]*>", "", node.group(3))))
-# Sale builds show the sale price even before the scripts run.
-assert regular["price"] == "$16.99"
+# 2026-11-11 (CEO): the regular Pro price from December 1 is $29 once.
+assert regular["price"] == "$39"
 
 # 2026-11-13, Matthew's order: regeneration and no-JavaScript fallbacks must agree.
 generator = runpy.run_path(str(ROOT / "scripts/product_box.py"))
@@ -29,8 +29,8 @@ for output in (generator["box"]("sale-test", "answer", "1.11.1006"),
                generator["end_box"]("sale-test", "1.11.1006"),
                generator["STD_PRICE_NEW"], generator["HOME_NEW"]):
     assert sale_line in output
-    assert "<span data-pbox-regular hidden>" in output and "$39 once" in output
-assert regular["btn"] == "Buy Outlier Lifetime Licence: $16.99 once" and not regular["offer"]
+    assert "<span data-pbox-regular>" in output and "$39 once" in output
+assert regular["btn"] == "Buy Outlier Lifetime Licence: $39" and regular["offer"]
 schema = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', home, re.S)]
 app = next(v for v in schema if v.get("@type") == "SoftwareApplication")
 assert len(app["offers"]) == 2
@@ -41,7 +41,7 @@ tool = (ROOT / "tools/can-my-mac-run-it/index.html").read_text()
 tool_app = next(json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', tool, re.S)
                 if json.loads(s).get("@type") == "WebApplication")
 assert tool_app["offers"] == {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
-print("ok   sale generators, sale HTML fallbacks and all three JSON-LD Offers")
+print("ok   sale generators, regular HTML fallbacks and all three JSON-LD Offers")
 
 # 2026-11-13, Matthew's order: the receipt-page fallback records the shown sale price.
 thanks = (ROOT / "thank-you.html").read_text()
@@ -83,19 +83,21 @@ for path in sorted(ROOT.rglob("*.html")):
         copies += 1
 print(f"ok   {copies} HTML reveal copies match the generator")
 
-# Each visible sale span replaces a hidden regular price, instead of showing both.
-spans_seen = 0
-for path in sorted(ROOT.rglob("index.html")):
+# 2026-11-09 (CEO, launch-price wording): a price left in plain text right before a launch-price span would show next to
+# the launch price, the "$49 once · $24.50" comparison the wording change removed. It must sit in <span data-pbox-regular>.
+beside, spans_seen = [], 0
+for path in sorted(ROOT.rglob("*.html")):
     if ".git" in path.parts:
         continue
     page = path.read_text(encoding="utf-8")
-    for m in re.finditer(r"<span data-pbox-founding>", page):
+    for m in re.finditer(r"<span data-pbox-founding hidden>", page):
         spans_seen += 1
         before = page[max(0, m.start() - 200):m.start()]
-        if 'data-pbox-regular' in before:
-            assert re.search(r'<span data-pbox-regular hidden>[^<]*</span>$', before), path
-assert spans_seen >= 200, f"only {spans_seen} sale spans found; the scan is broken"
-print(f"ok   {spans_seen} static sale spans, paired regular prices hidden")
+        if re.search(r"\$\d", before[before.rfind(">") + 1:]):
+            beside.append(f"{path.relative_to(ROOT)}: {before[-60:]!r}")
+assert spans_seen >= 200, f"only {spans_seen} launch-price spans found; the scan is broken"
+assert not beside, "a price sits right before a launch-price span outside data-pbox-regular:\n  " + "\n  ".join(beside[:10])
+print(f"ok   {spans_seen} launch-price spans, none with a bare price right before it")
 
 # 2026-11-13, Matthew's order: the sale ends on 2 December US Pacific.
 assert end == "2026-12-03T07:59:00Z"
@@ -107,17 +109,17 @@ CASES = [  # Keep the worker shapes covered as well as the deadline changes.
     ("capped with seats", {"answer": {"left": 3, "of": 25}, "sale": True}),
     ("no seats", {"answer": {"left": 0, "of": 25}, "sale": False}),
     ("sold out", {"answer": {**ANSWER, "soldOut": True}, "sale": False}),
-    ("empty answer", {"answer": None, "sale": True}),
-    ("fetch failure", {"answer": ANSWER, "fail": True, "sale": True}),
+    ("empty answer", {"answer": None, "sale": False}),
+    ("fetch failure", {"answer": ANSWER, "fail": True, "sale": False}),
     ("loaded at deadline", {"answer": ANSWER, "start": 0, "sale": False}),
     ("loaded after deadline", {"answer": ANSWER, "start": 1, "sale": False}),
     ("fetch answers at deadline", {"answer": ANSWER, "response": 0, "sale": False}),
     ("fetch answers after deadline", {"answer": ANSWER, "response": 1, "sale": False}),
     ("open across deadline", {"answer": ANSWER, "sale": True, "expire": True}),
-    ("keep card name and markup", {"answer": ANSWER, "sale": True, "expire": True, "custom": True}),
+    ("restore saved DOM values", {"answer": ANSWER, "sale": True, "expire": True, "custom": True}),
     ("timer just under 24 days", {"answer": ANSWER, "sale": True, "start": -24*86400000+1}),
-    ("timer capped at 24 days", {"answer": ANSWER, "sale": True, "start": -24*86400000}),
-    ("timer capped above 24 days", {"answer": ANSWER, "sale": True, "start": -25*86400000}),
+    ("no timer at 24 days", {"answer": ANSWER, "sale": True, "start": -24*86400000}),
+    ("no timer above 24 days", {"answer": ANSWER, "sale": True, "start": -25*86400000}),
 ]
 harness = r"""
 const assert = require('assert');
@@ -126,22 +128,22 @@ const end = Date.parse(endIso), limit = 24*86400000;
 let now = end + (options.start ?? -60000), resolveFetch, rejectFetch, clicks, stored;
 const initial = {...original};
 if (options.custom) Object.assign(initial, {
-  name: 'Saved card name', bnpl: '<span>Saved line</span>'
+  name: 'Saved card name', bnpl: '<span>Saved pay-in-4 line</span>', btn: 'Saved button text'
 });
 const nodes = {
   name: {textContent: initial.name}, price: {textContent: initial.price},
   bnpl: {innerHTML: initial.bnpl}, offer: {hidden: initial.offer}, btn: {textContent: initial.btn}
 };
 // 2026-11-09: the regular price beside a launch-price span (<span data-pbox-regular>) hides while the launch price shows.
-const regular = () => ({hidden: true, hasAttribute: a => a === 'data-pbox-regular'});
+const regular = () => ({hidden: false, hasAttribute: a => a === 'data-pbox-regular'});
 const regs = [regular(), regular()];
-const spans = [{hidden: false, previousElementSibling: regs[0]}, {hidden: false, previousElementSibling: regs[1]}, {hidden: false}];
+const spans = [{hidden: true, previousElementSibling: regs[0]}, {hidden: true, previousElementSibling: regs[1]}, {hidden: true}];
 const card = {querySelector: s => nodes[s.match(/data-lt-(\w+)/)[1]]};
 global.window = useOverride ? {__kcNow: now} : {};
 Date.now = () => now;
 global.document = {
   querySelector: s => { assert.equal(s, '[data-lifetime-card]'); return card; },
-  querySelectorAll: s => { assert.equal(s, '[data-pbox-founding], [data-pbox-sale-button]'); return spans; },
+  querySelectorAll: s => { assert.equal(s, '[data-pbox-founding]'); return spans; },
   addEventListener: (event, handler) => { assert.equal(event, 'click'); clicks = handler; }
 };
 global.localStorage = {setItem: (key, value) => { assert.equal(key, 'outlier_offer'); stored = JSON.parse(value); }};
@@ -169,8 +171,8 @@ function check(sale) {
     assert.deepStrictEqual(spans.map(s => s.hidden), [!sale, !sale, !sale]);
     assert.deepStrictEqual(regs.map(r => r.hidden), [sale, sale]);
   } else {
-    const expected = {...initial, price: sale ? '$16.99' : '$39', offer: !sale,
-      btn: 'Buy Outlier Lifetime Licence: ' + (sale ? '$16.99 once' : '$39 once')};
+    const expected = sale ? {...initial, name: 'Outlier Lifetime Licence', price: '$16.99', bnpl: '',
+      offer: false, btn: 'Buy Outlier Lifetime Licence: $16.99'} : initial;
     assert.deepStrictEqual(state(), expected);
     const a = {hasAttribute: () => true};
     clicks({target: {closest: () => a}});
@@ -179,11 +181,11 @@ function check(sale) {
 }
 (async function () {
   eval(scripts[kind]);
+  check(false);
   const before = now < end;
-  check(before);
   assert.equal(fetched, before ? 1 : 0);
-  assert.equal(timers.length, before ? 1 : 0);
-  if (timers.length) assert.equal(timers[0].delay, Math.min(end-now, limit));
+  assert.equal(timers.length, before && end-now < limit ? 1 : 0);
+  if (timers.length) assert.equal(timers[0].delay, end-now);
   if (before) {
     if (options.response !== undefined) advance(end + options.response);
     if (options.fail) rejectFetch(new Error('offline'));

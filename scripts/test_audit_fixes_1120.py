@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Offline audit regression checks. Each fix has a planted failing CONTROL."""
-import datetime as dt
 from html.parser import HTMLParser
 import json
 from pathlib import Path
@@ -11,7 +10,6 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-import product_box
 import sitemap_lastmod
 import typed_url_pages
 
@@ -19,8 +17,12 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = "9d81bb8ef17f754c4b715b18ae59d9e456fd62a4"
 SALE = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39"
 BUNDLE = "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $79"
-CORRECTION = "Both removed. One-time price only: $39 once, $16.99 in the Black Friday sale through December 2."
-TERMS_PRICE = "$39 once ($16.99 in the Black Friday sale through December 2, 2026)"
+CORRECTION = "Both removed. Outlier has one price, paid once: $39 once; the Black Friday sale lowers it through December 2."
+TERMS_UPDATED = ('<p class="updated">Last updated: 2026-11-04 (one licence, one price, up to 3 Macs at a time; '
+                 '2026-11-02: a lost or dead Mac, we release its seat) · Kerr &amp; Company LLC, Grand Rapids, MI</p>')
+TERMS_CHANGED = ('<p class="updated">Changed 2026-11-04: "lifetime" means the same for every Outlier lifetime licence, '
+                 'the current licence and the earlier Founding 200 and Founders 500 tiers: the lifetime of the '
+                 "Outlier product, with 90 days' notice and a final binary release if it is ever sunset.</p>")
 
 
 class Visible(HTMLParser):
@@ -73,9 +75,15 @@ def check_pricing(raw):
     assert len(text.split()) >= 400, "pricing has too little content"
     for fact in ("Nano 4B", "Lite 9B", "Quick, Core, Vision and Plus", "8K context window",
                  "128K context window", "up to 3 Macs", "future model releases", "no subscription",
-                 "30 days, no questions asked", SALE, BUNDLE,
+                 "30 days, no questions asked", "$39 once", "$79 once",
                  "Apple Silicon (M1 or newer) on macOS 15 or later, which is a free update."):
         assert fact in text, f"missing pricing fact: {fact}"
+    spans = re.findall(r'<span data-pbox-founding hidden>(.*?)</span>', raw, re.S)
+    assert all(any(line in span for span in spans) for line in (SALE, BUNDLE)), "pricing sale lines must be in hidden founding spans"
+    static = re.sub(r'<span data-pbox-founding hidden>.*?</span>', "", raw, flags=re.S)
+    static = re.sub(r'<script\b[^>]*>.*?</script>', "", static, flags=re.S)
+    static = re.sub(r'data-now="[^"]*"', "", static)
+    assert not re.search(r'\$(?:16\.99|34\.99)(?![\d.])', static), "static pricing sale price outside hidden founding spans"
     schemas = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', raw, re.S)]
     faq = next(s for s in schemas if s.get("@type") == "FAQPage")
     assert [q["name"] for q in faq["mainEntity"]] == [
@@ -91,7 +99,8 @@ def check_correction(raw):
 
 def check_terms(raw):
     assert "$49" not in raw, "terms still say $49"
-    assert raw.count(TERMS_PRICE) == 2, "terms current prices missing"
+    assert raw.count(TERMS_UPDATED) == 1, "terms Last updated note differs"
+    assert raw.count(TERMS_CHANGED) == 1, "terms Changed note differs"
 
 
 def check_thanks(raw):
@@ -113,20 +122,6 @@ def check_home(raw):
     assert not re.search(r'\$49(?![\d.])', comments), "comment still says $49"
 
 
-def check_buy_prices(raw, sale=True):
-    buttons = re.findall(r'<a\b[^>]*href="[^" ]*/buy/outlier[^" ]*"[^>]*>.*?</a>', raw, re.S)
-    for button in buttons:
-        text = visible(button)
-        assert ("$16.99 once" if sale else "$39 once") in text, f"wrong button price: {text}"
-        assert ("$39" if sale else "$16.99") not in text, f"two button prices: {text}"
-    for box in re.findall(r'<p class="pbox-price">.*?</p>', raw, re.S):
-        text = visible(box)
-        prices = re.findall(r'\$\d+(?:\.\d+)?', text)
-        assert prices and prices[0] == ("$16.99" if sale else "$39"), f"wrong leading price: {text}"
-        if sale:
-            assert text.count("Then $39") == 1, "price box must say Then $39 once"
-    return len(buttons)
-
 
 class AuditFixes(unittest.TestCase):
     def control(self, check, good, bad, label):
@@ -142,6 +137,13 @@ class AuditFixes(unittest.TestCase):
                      '<meta charset="UTF-8"><meta name="robots" content="noindex">'), "pricing noindex")
         self.control(check_pricing, raw, raw.replace('<h3>Is it a subscription?</h3>',
                      '<h3>Another question?</h3>'), "FAQ not visible")
+        for price in ("$16.99", "$34.99"):
+            self.control(check_pricing, raw, raw.replace('<h1>Outlier pricing</h1>',
+                         f'<h1>Outlier pricing</h1><p>{price}</p>'), f"static pricing {price}")
+        self.control(check_pricing, raw, raw.replace('data-pbox-founding hidden>',
+                     'data-pbox-founding>', 1), "pricing sale span visible")
+        self.control(check_pricing, raw, raw.replace("Outlier is $39 once and the bundle is $79 once",
+                     "Outlier is $16.99 once and the bundle is $34.99 once"), "FAQ sale prices")
         self.assertIn('<loc>https://outlier.host/pricing/</loc>', read("sitemap.xml"))
         self.assertIn('<meta name="robots" content="noindex">', read("download/index.html"))
         for slug in typed_url_pages.PAGES:
@@ -164,61 +166,35 @@ class AuditFixes(unittest.TestCase):
     def test_2_benchmark_correction_only(self):
         rel = "data/local-ai-benchmarks-mac-2026/index.html"
         raw = read(rel)
-        self.control(check_correction, raw, raw.replace('One-time price only: <strong>$39 once</strong>',
-                     'One-time price only: <strong>$49 once</strong>'), "benchmark $49 once")
+        self.control(check_correction, raw, raw.replace('paid once: <strong>$39 once</strong>',
+                     'paid once: <strong>$49 once</strong>'), "benchmark $49 once")
         expected = before(rel).replace('Both removed; <strong>$49 once</strong> is the only Outlier price.',
-                                      'Both removed. One-time price only: <strong>$39 once</strong>, $16.99 in the Black Friday sale through December 2.')
-        self.assertEqual(raw, product_box.refresh_sale(expected), "benchmark data changed")
+                                      'Both removed. Outlier has one price, paid once: <strong>$39 once</strong>; the Black Friday sale lowers it through December 2.')
+        self.assertEqual(raw, expected, "benchmark data changed")
 
     def test_3_terms_prices_only(self):
         raw = read("terms.html")
-        self.control(check_terms, raw, raw.replace(TERMS_PRICE, "$49", 1), "terms $49")
-        self.assertEqual(raw, before("terms.html").replace("$49", TERMS_PRICE))
+        self.control(check_terms, raw, raw.replace("one licence, one price", "one licence, $49", 1), "terms $49")
+        self.control(check_terms, raw, raw.replace("one licence, one price", "one licence, same price", 1), "terms Last updated note")
+        self.control(check_terms, raw, raw.replace("the current licence and the earlier", "the current licence and earlier", 1), "terms Changed note")
+        expected = before("terms.html").replace("(one licence, $49, up to 3 Macs at a time;",
+                                               "(one licence, one price, up to 3 Macs at a time;")
+        expected = expected.replace("the current $49 licence and the earlier", "the current licence and the earlier")
+        self.assertEqual(raw, expected, "other terms wording changed")
         if (ROOT / "terms/index.html").exists():
             check_terms(read("terms/index.html"))
 
     def test_4_crisp_and_other_receipt_prices(self):
         raw = read("thank-you.html")
         self.control(check_thanks, raw, raw.replace("Then $29", "Then $19", 1), "Crisp Then $19")
-        self.control(check_thanks, raw, raw.replace('hidden>$29 once', 'hidden>$19 once', 1), "Crisp regular $19")
+        self.control(check_thanks, raw, raw.replace('data-pbox-regular>$29 once', 'data-pbox-regular>$19 once', 1), "Crisp regular $19")
         expected = before("thank-you.html").replace("$19 once", "$29 once").replace("Then $19", "Then $29")
-        self.assertEqual(raw, product_box.refresh_sale(expected))
+        self.assertEqual(raw, expected)
 
     def test_5_home_name_and_comments(self):
         raw = read("index.html")
         self.control(check_home, raw, raw.replace("reaches Matthew directly", "reaches Matt directly"), "Matt directly")
         self.control(check_home, raw, raw.replace("the current $39 regular price", "the current $49 regular price"), "stale price comment")
-
-    def test_6_sale_buttons_boxes_and_post_sale_build(self):
-        end = dt.datetime.fromisoformat(product_box.FOUNDING_ENDS.replace("Z", "+00:00"))
-        self.assertTrue(product_box.sale_open(end - dt.timedelta(microseconds=1)))
-        self.assertFalse(product_box.sale_open(end))
-        self.assertFalse(product_box.sale_open(end + dt.timedelta(microseconds=1)))
-        seen = pages = 0
-        for path in ROOT.rglob("index.html"):
-            if ".git" in path.parts or "_seo_build" in path.parts:
-                continue
-            raw = path.read_text(encoding="utf-8")
-            if "data-pbox-script" not in raw:
-                continue
-            pages += 1
-            seen += check_buy_prices(raw)
-            with patch.object(product_box, "sale_open", return_value=False):
-                check_buy_prices(product_box.refresh_sale(raw), sale=False)
-        self.assertGreater(pages, 200)
-        self.assertGreater(seen, 300)
-        raw = read("download/index.html")
-        self.control(check_buy_prices, raw, raw.replace('data-pbox-sale-button>$16.99 once',
-                     'data-pbox-sale-button>$39 once'), "sale button $39")
-        self.control(check_buy_prices, raw, raw.replace('data-pbox-regular hidden>: $39 once',
-                     'data-pbox-regular>: $39 once'), "regular price shown beside sale")
-        for on in (True, False):
-            with patch.object(product_box, "sale_open", return_value=on):
-                check_buy_prices(product_box.box("test", "answer", "1.11.1012"), on)
-                check_buy_prices(product_box.end_box("test", "1.11.1012"), on)
-        self.assertEqual(product_box._founders_visible(product_box.STD_PRICE_NEW), [])
-        self.assertTrue(product_box._founders_visible('<p>Uncontrolled sale: $16.99</p>'))
-        print(f"sale prices: {seen} Buy buttons on {pages} pages; post-sale rebuilds also checked")
 
     def test_7_sitemap_dates_and_control(self):
         _raw, changed, lagging = sitemap_lastmod.sync(ROOT, check=True)
