@@ -145,7 +145,8 @@ class AuditFixes(unittest.TestCase):
         self.control(check_pricing, raw, raw.replace("Outlier is $39 once and the bundle is $79 once",
                      "Outlier is $16.99 once and the bundle is $34.99 once"), "FAQ sale prices")
         self.assertIn('<loc>https://outlier.host/pricing/</loc>', read("sitemap.xml"))
-        self.assertIn('<meta name="robots" content="noindex">', read("download/index.html"))
+        # 2026-11-20 (cx-20261120-0615): /download/ is now indexable too; test_download_llms_compare_1120.py owns it.
+        self.assertNotIn('<meta name="robots" content="noindex">', read("download/index.html"))
         for slug in typed_url_pages.PAGES:
             self.assertEqual(read(f"{slug}/index.html"), typed_url_pages.build(slug))
         # Exercise --check's exit code on drift without writing to the checkout.
