@@ -119,6 +119,16 @@ def check(src, price):
     return tables, found
 
 
+#: A rival that genuinely charges a figure equal to our price, edited in deliberately as the docstring asks.
+#: Each entry is the EXACT failure line; any change to that cell (or the same figure anywhere else) fails again.
+#: 2026-11-20 (Outlier): Outlier Pro became $39 once from 3 Dec (Matthew, 19 Nov). GitHub Copilot Pro+ is "$39 per
+#: user per month", read on https://github.com/features/copilot/plans at 2026-11-20T01:14Z. Monthly vs one-time.
+KNOWN_COINCIDENCES = {
+    "vs/outlier-vs-github-copilot/index.html: column 'GitHub Copilot', row 'Cost': "
+    "'$0 / $10 / $39 / $100 monthly, usage-metered credits'",
+}
+
+
 def main(root):
     prices = canonical_prices(root)
     if not prices:
@@ -147,6 +157,7 @@ def main(root):
         print('rival_price_gate: found no comparison table with both an Outlier column '
               'and a rival column — nothing was actually checked', file=sys.stderr)
         return 1
+    failures = [f for f in failures if f not in KNOWN_COINCIDENCES]
     if failures:
         print(f'rival_price_gate: FAIL ({len(failures)} across {tables} comparison tables)', file=sys.stderr)
         for f in failures:
