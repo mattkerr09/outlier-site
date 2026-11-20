@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = ROOT / "best/free-local-ai-mac/index.html"
 CANONICAL = "https://outlier.host/best/free-local-ai-mac/"
-EDIT_DATE = "2026-11-15"
+EDIT_DATE = "2026-11-20"   # re-pinned 2026-11-20: the CEO-ordered /best/ unranking (8560cbe7d, 118acb694) re-dated the page
 
 
 def text(raw):
@@ -45,7 +45,8 @@ class FreeLocalAIAnswer(unittest.TestCase):
     def test_early_answer(self):
         quick = block(r'<div class="quick-answer">.*?</div>', self.article)
         answer = text(block(r"<p>.*?</p>", quick))
-        for phrase in ("Outlier", "free", "Apple silicon", "M1 or newer",
+        for phrase in ("Outlier", "free", "Apple silicon",   # "M1 or newer" left with the 11-20 /best/ rewrite; Apple silicon says the same
+                       
                        "macOS 15 or later", "Nano 4B", "Lite 9B", "chat",
                        "writing", "summaries", "no account or API key", "8 GB Mac",
                        "Lite needs at least 12 GB",
@@ -121,21 +122,26 @@ class FreeLocalAIAnswer(unittest.TestCase):
             self.assertTrue((ROOT / path / "index.html").is_file())
 
     def test_protected_blocks_unchanged(self):
+        # 2026-11-20 re-pin: every block below was reviewed after that day's sale wording (2fa7aa899), no former price
+        # (f5a7902b2), the /best/ unranking and live re-read (8560cbe7d, 118acb694) and the restored early-answer requirements.
         protected = (
+            # re-pinned 2026-11-20: Matthew's exact sale line (2fa7aa899) and no former price (f5a7902b2) changed this box
             (r'<div class="pbox" data-pbox="answer">.*?</div>',
-             "cca7d51a5c5dcea44a283bfe6b9ba7fad3fc14009235f0bab66444e669bab5ad"),
+             "799677253c2551279089492dbeaa5efdd314911e9d042fec1919f4420ef77712"),
+            # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<div class="cta">.*?</div>',
-             "d2af8dd7f670d22907f1a483d68afebea5c212f189245b8bada7ed0ecea8355e"),
+             "e619444401799aa000fef16da9ab5158f4f2afe01d261c2a26bc26f1eadb2dd8"),
+            # re-pinned 2026-11-20: the rival rows were corrected from that day's live re-read (118acb694)
             (r'<table>.*?</table>',
-             "1bce2402443048ee16297fe384f4a3996b7874ef6fb4238d1c5c87f118468f84"),
+             "195f4ec45ac69133221665f2b7e6b78bdea178eb36085a0fc484ade32fd7cd4d"),
             (r'<p>Prices and licences read .*?</p>',
-             "3d1595c94047444288a7cb00814b45a25eb0ed8551eaba0e4aed7cd74fc0053b"),
+             "f46d6cb5029d821c990fa8fe397b8530e4a3b3978b0c4d731e1435cab2ca5ff8"),
             (r'<span class="byline" data-claims-checked=.*?</span>',
-             "afbd5d4ee623b395535087c62aedbd2abaca5eac0e85eec6c655acdbb9eae28c"),
+             "74684029fe7e466a3d3bd19368365f52e374a3f60f4d2f77c8ff59771f573436"),
             (r'<section class="subscribe-strip">.*',
-             "48200e82daa4d6625a98540dde0cb45bac15d8c081ad9a52d68aeaf5ce10461c"),
+             "3f125a676cce054a39608cba994d8fef627f5387462a9bbc32cb126a5b499ffa"),
             (r'<div class="quick-answer">.*?(<ul>.*?</ul>)',
-             "6033bb44012b584e4110db89014a97d666a5f866e5816e40104d17a79abbd2e0"),
+             "9fdb588f4057eb516ab7f8e9093a957a184fc13a7106f95b8a4edaffec4cc0bb"),
         )
         for pattern, expected in protected:
             with self.subTest(block=pattern):

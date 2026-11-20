@@ -178,12 +178,15 @@ class PrivateOfflineGuide(unittest.TestCase):
 
     def test_legal_price_product_blocks_and_evidence_unchanged(self):
         protected = (
+            # re-pinned 2026-11-20: Matthew's exact sale line (2fa7aa899) and no former price (f5a7902b2) changed this box
             (r'<div class="pbox" data-pbox="answer">.*?</div>',
-             "9352e5f38b9de847abf0d26ce84864666b1368de39b886e9fe2b6fc39bd497d9"),
+             "5e4b019083633d31195d4280d75f8d93335194c021460314391abd2ace79b3e0"),
+            # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<div class="pbox" data-pbox="end">.*?</div>',
-             "e93be06a791f4c4c417ef884d280597ba867d1fdfa1eecf4c4d4486eb6cdd3f6"),
+             "ccee6c35f715af115dea091254d870a8182eba9e15c2a6b6784bd85510fc18f1"),
+            # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<a class="cta".*',
-             "a1e4799a6f468a9f30f0f01d042f50fe3fbc8a495e5d234ef64690290d3ce064"),
+             "146ab503b5c313b1637c175739f5ac9a5eb5aedcedfd72f5920be801cd21fc58"),
             (r'<p>The chat path calls only .*?</p>',
              "0a5dc7e6a4df08f0c90e44428481c732df32e4854617878124bd4fc908bb2b39"),
         )
