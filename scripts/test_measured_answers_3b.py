@@ -15,8 +15,9 @@ import unittest
 from test_measured_answers import QUICK, check_answer, git, visible
 
 
+# Retired the Round 3b O1, O2 and O3 measured-answer job's old-base scope and byte pins:
+# later reviewed sitewide edits make those byte pins wrong.
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "377abee170f13b947db480ee90e5013c10d04ca9"
 PAGES = {
     "vs/lm-studio-alternative/index.html":
         ("O2", "/data/local-ai-time-to-first-token-mac/", "first-token test", "0.90"),
@@ -26,7 +27,6 @@ PAGES = {
         ("O1", "/data/local-ai-math-word-problems-mac/", "word-problem test", "8.0"),
 }
 TEST = "scripts/test_measured_answers_3b.py"
-EARLIER = ("afb2e8a83", "51bfb4530", "74e2cca37")
 
 
 def check_opening(raw):
@@ -102,49 +102,6 @@ class MeasuredAnswersRoundThreeB(unittest.TestCase):
                     check_opening(raw[:quick.start()] + missing + raw[quick.end():])
                 print(f"{question} {rel}: sourced answer passes; invented figure and missing data link fail",
                       flush=True)
-
-    def test_only_answer_and_page_dates_changed(self):
-        for rel in PAGES:
-            with self.subTest(page=rel):
-                before = git("show", f"{BASE}:{rel}", text=True)
-                after = (ROOT / rel).read_text(encoding="utf-8")
-                self.assertIn("Last updated 2026-11-18", after)
-                self.assertRegex(after, r'"dateModified":\s*"2026-11-18"')
-                self.assertIn('name="last-modified" content="2026-11-18"', after)
-
-                # Preserve every old price, sale line and licence term, including
-                # the original comparison list moved just below the first h2.
-                old_list = re.search(r'      <ul>.*?</ul>', QUICK.search(before).group(), re.S).group()
-                heading = re.search(r'    <h2>.*?</h2>\n', before).group()
-                self.assertEqual(after.count(heading + old_list + "\n"), 1)
-                after = after.replace(heading + old_list + "\n", heading, 1)
-
-                def unchanged(raw):
-                    # Only the FIRST answer is mutable. The LM Studio page's
-                    # FAQ uses the same class and must compare byte for byte.
-                    raw = QUICK.sub("<answer>", raw, count=1)
-                    raw = re.sub(r'("dateModified":\s*")[^"]+', r'\1<date>', raw)
-                    raw = re.sub(r'(name="last-modified" content=")[^"]+', r'\1<date>', raw)
-                    return re.sub(r'Last updated \d{4}-\d{2}-\d{2}', "Last updated <date>", raw)
-
-                # Pins FAQ prose/schema, legal text, prices, publication and
-                # rival checked dates, CSS, existing links and all other copy.
-                self.assertEqual(unchanged(before), unchanged(after))
-
-    def test_earlier_rounds_untouched(self):
-        for commit in EARLIER:
-            protected = git("diff-tree", "--no-commit-id", "--name-only", "-r", commit, text=True).splitlines()
-            self.assertTrue(protected)
-            self.assertFalse(set(protected) & {*PAGES, TEST})
-            for rel in protected:
-                with self.subTest(commit=commit, page=rel):
-                    self.assertEqual(git("show", f"{BASE}:{rel}"), (ROOT / rel).read_bytes())
-
-    def test_changed_paths(self):
-        changed = set(git("diff", "--name-only", "-z", BASE, "--").decode().split("\0"))
-        changed.update(git("ls-files", "--others", "--exclude-standard", "-z").decode().split("\0"))
-        changed.discard("")
-        self.assertEqual(changed, {*PAGES, TEST}, f"unexpected changed paths: {changed}")
 
     def test_pre_push_to_next(self):
         with tempfile.TemporaryDirectory(prefix="outlier-measured-answers-3b-") as temp:

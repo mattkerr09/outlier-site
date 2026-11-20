@@ -21,15 +21,14 @@ from xml.etree import ElementTree
 from near_dup_gate import words, shingles
 from test_private_ai_pages_1120 import visible
 
+# Retired the 20 November real-search-questions job's old-base scope and byte pins:
+# later reviewed sitewide edits make those byte pins wrong.
 ROOT = Path(__file__).resolve().parent.parent
-BASE = 'b9ec5e1aae84224073e04245dcd0017679c392f9'
 LM = 'vs/lm-studio-vs-jan/index.html'
 MSTY = 'vs/msty-alternatives/index.html'
 CURSOR = 'learn/can-cursor-use-a-local-model-on-a-mac/index.html'
 PAGES = (LM, MSTY, CURSOR)
 NEW = (LM, MSTY)
-ALLOWED = {*PAGES, 'vs/index.html', 'vs/mac-native-ai-comparison/index.html',
-           'vs/jan-vs-ollama/index.html', 'sitemap.xml', 'scripts/test_real_questions_1120.py'}
 QUICK = re.compile(r'<div class="quick-answer"[^>]*>.*?</div>', re.S)
 STAMP = 'measured on Outlier 1.11.1012, 17 Nov 2026'
 MONEY = re.compile(r'\$\d+(?:\.\d+)?')
@@ -57,10 +56,6 @@ SOURCES = {
                'https://cursor.com/docs/settings/api-keys', 'https://cursor.com/pricing',
                'https://cursor.com/docs/models-and-pricing'},
 }
-
-
-def git(*args):
-    return subprocess.check_output(['git', *args], cwd=ROOT, text=True)
 
 
 def shown(raw):
@@ -262,20 +257,14 @@ class RealQuestions(unittest.TestCase):
         # A whole-page copy must be rejected by the same similarity measure.
         self.assertEqual(len(corpus[MSTY] & corpus[MSTY])/len(corpus[MSTY] | corpus[MSTY]), 1)
 
-    def test_scope_and_cursor_preservation(self):
-        changed = set(git('diff', '--name-only', BASE, '--').splitlines())
-        changed.update(git('ls-files', '--others', '--exclude-standard').splitlines())
-        self.assertTrue(changed <= ALLOWED, changed - ALLOWED)
-        before = git('show', BASE+':'+CURSOR)
-        after = (ROOT / CURSOR).read_text()
-        # FAQ, setup instructions, offer markup, nav, footer and styles stay exact.
-        for pattern in (r'<style>.*?</style>', r'<nav>.*?</nav>', r'<footer>.*?</footer>',
-                        r'<div class="pbox".*?</div>', r'<div class="cta">.*?</div>',
-                        r'<h2>Point those tools at Outlier</h2>.*?<h2>',
-                        r'<h2>Frequently asked questions</h2>.*?<div class="receipts">',
-                        r'<script type="application/ld\+json">\s*\{"@context": "https://schema.org", "@type": "FAQPage".*?</script>'):
-            self.assertEqual(re.search(pattern,before,re.S).group(), re.search(pattern,after,re.S).group())
-        self.assertEqual((ROOT / 'vs/outlier-vs-msty/index.html').read_text(), git('show', BASE+':vs/outlier-vs-msty/index.html'))
+    def test_cursor_faq_matches_visible_text(self):
+        raw = (ROOT / CURSOR).read_text()
+        faq = [(shown(q), shown(a)) for q, a in re.findall(
+            r'<div class="faq-item">\s*<h3>(.*?)</h3>\s*<p>(.*?)</p>\s*</div>', raw, re.S)]
+        schema = next(s for s in schemas(raw) if s.get('@type') == 'FAQPage')
+        self.assertTrue(faq)
+        self.assertEqual(faq, [(q['name'], q['acceptedAnswer']['text'])
+                               for q in schema['mainEntity']])
 
     def test_earlier_content(self):
         suite = unittest.TestSuite()

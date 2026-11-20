@@ -14,8 +14,9 @@ import unittest
 from urllib.parse import urlsplit
 
 
+# Retired the O4, O9 and O10 measured-answer job's old-base scope and byte pins:
+# later reviewed sitewide edits make those byte pins wrong.
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "83e91eb8d319880f43d76b4d0f1d3b643793e614"
 PAGES = (
     "how-to/run-qwen-locally-mac/index.html",
     "how-to/run-ai-on-16gb-mac/index.html",
@@ -137,34 +138,6 @@ class MeasuredAnswers(unittest.TestCase):
                 with self.assertRaisesRegex(AssertionError, "missing data link"):
                     check_answer(raw[:quick.start()] + missing + raw[quick.end():])
                 print(f"{rel}: sourced answer passes; invented figure and missing data link fail", flush=True)
-
-    def test_only_answer_and_page_dates_changed(self):
-        for rel in PAGES:
-            with self.subTest(page=rel):
-                before = git("show", f"{BASE}:{rel}", text=True)
-                after = (ROOT / rel).read_text(encoding="utf-8")
-                self.assertIn("Last updated 2026-11-16", after)
-                self.assertRegex(after, r'"dateModified":\s*"2026-11-16"')
-                self.assertIn('name="last-modified" content="2026-11-16"', after)
-                if rel.startswith("best/"):
-                    # Keep the old comparison list, including all price and licence
-                    # words, verbatim just below the first section heading.
-                    old_list = re.search(r'      <ul>.*?</ul>', QUICK.search(before).group(), re.S).group()
-                    anchor = '    <h2>How we compare them</h2>\n'
-                    self.assertEqual(after.count(anchor + old_list + "\n"), 1)
-                    after = after.replace(anchor + old_list + "\n", anchor, 1)
-                def unchanged(raw):
-                    raw = QUICK.sub("<answer>", raw)
-                    raw = re.sub(r'("dateModified":\s*")[^"]+', r'\1<date>', raw)
-                    raw = re.sub(r'(name="last-modified" content=")[^"]+', r'\1<date>', raw)
-                    return re.sub(r'Last updated \d{4}-\d{2}-\d{2}', "Last updated <date>", raw)
-                self.assertEqual(unchanged(before), unchanged(after))
-
-    def test_changed_paths(self):
-        changed = set(git("diff", "--name-only", "-z", BASE, "--").decode().split("\0"))
-        changed.update(git("ls-files", "--others", "--exclude-standard", "-z").decode().split("\0"))
-        changed.discard("")
-        self.assertFalse(changed - {*PAGES, TEST}, f"out-of-scope changes: {changed}")
 
     def test_pre_push_to_next(self):
         with tempfile.TemporaryDirectory(prefix="outlier-measured-answers-") as temp:

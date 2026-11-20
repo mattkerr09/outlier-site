@@ -15,8 +15,9 @@ import unittest
 from test_measured_answers import QUICK, check_answer, git, visible
 
 
+# Retired the Round 3 O5 measured-answer job's old-base scope and byte pins:
+# later reviewed sitewide edits make those byte pins wrong.
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "51bfb4530cbacd316266b127875baee5cc6483fb"
 PAGES = ("best/free-local-ai-mac/index.html",)
 TEST = "scripts/test_measured_answers_3.py"
 SOURCE = "/data/local-ai-time-to-first-token-mac/"
@@ -62,47 +63,6 @@ class MeasuredAnswersRoundThree(unittest.TestCase):
                 with self.assertRaisesRegex(AssertionError, "missing data link"):
                     check_answer(raw[:quick.start()] + missing + raw[quick.end():])
                 print(f"O5 {rel}: sourced answer passes; invented figure and missing data link fail", flush=True)
-
-    def test_only_answer_and_page_dates_changed(self):
-        for rel in PAGES:
-            with self.subTest(page=rel):
-                before = git("show", f"{BASE}:{rel}", text=True)
-                after = (ROOT / rel).read_text(encoding="utf-8")
-                self.assertIn("Last updated 2026-11-16", after)
-                self.assertRegex(after, r'"dateModified":\s*"2026-11-16"')
-                self.assertIn('name="last-modified" content="2026-11-16"', after)
-
-                # Keep the comparison list, including its price and licence
-                # words, verbatim below the first h2, as in the earlier rounds.
-                old_list = re.search(r'      <ul>.*?</ul>', QUICK.search(before).group(), re.S).group()
-                anchor = "    <h2>What 'free' means for each</h2>\n"
-                self.assertEqual(after.count(anchor + old_list + "\n"), 1)
-                after = after.replace(anchor + old_list + "\n", anchor, 1)
-
-                def unchanged(raw):
-                    raw = QUICK.sub("<answer>", raw)
-                    raw = re.sub(r'("dateModified":\s*")[^"]+', r'\1<date>', raw)
-                    raw = re.sub(r'(name="last-modified" content=")[^"]+', r'\1<date>', raw)
-                    return re.sub(r'Last updated \d{4}-\d{2}-\d{2}', "Last updated <date>", raw)
-
-                # Pins prices, sale copy, terms, FAQ prose/schema, publication
-                # dates, rival checked dates, legal text, styles and old links.
-                self.assertEqual(unchanged(before), unchanged(after))
-
-    def test_earlier_rounds_untouched(self):
-        for commit in ("afb2e8a834a3eecc9ed2b630933cc977a2d176eb", BASE):
-            protected = git("diff-tree", "--no-commit-id", "--name-only", "-r", commit, text=True).splitlines()
-            self.assertTrue(protected)
-            self.assertFalse(set(protected) & {*PAGES, TEST})
-            for rel in protected:
-                with self.subTest(commit=commit, page=rel):
-                    self.assertEqual(git("show", f"{commit}:{rel}"), (ROOT / rel).read_bytes())
-
-    def test_changed_paths(self):
-        changed = set(git("diff", "--name-only", "-z", BASE, "--").decode().split("\0"))
-        changed.update(git("ls-files", "--others", "--exclude-standard", "-z").decode().split("\0"))
-        changed.discard("")
-        self.assertEqual(changed, {*PAGES, TEST}, f"unexpected changed paths: {changed}")
 
     def test_pre_push_to_next(self):
         with tempfile.TemporaryDirectory(prefix="outlier-measured-answers-3-") as temp:
