@@ -8,14 +8,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>Can Cursor use a local model? Not directly | Outlier</title>
-  <meta name="description" content="Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.">
+  <title>Cursor local model on Mac? Not directly | Outlier</title>
+  <meta name="description" content="Cursor cannot reach localhost on your Mac. See why a local model needs a public HTTPS tunnel, which keys work, and Outlier's measured local API result.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-10-12">
+  <meta name="last-modified" content="2026-11-20">
   <link rel="canonical" href="https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Can Cursor use a local model on a Mac?">
-  <meta property="og:description" content="Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.">
+  <meta property="og:title" content="Cursor local model on Mac? Not directly | Outlier">
+  <meta property="og:description" content="Cursor cannot reach localhost on your Mac. See why a local model needs a public HTTPS tunnel, which keys work, and Outlier's measured local API result.">
   <meta property="og:url" content="https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -23,8 +23,8 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Can Cursor use a local model on a Mac?">
-  <meta name="twitter:description" content="Why localhost fails as the base URL in Cursor, what the tunnel workaround costs you, and what to use on a Mac instead.">
+  <meta name="twitter:title" content="Cursor local model on Mac? Not directly | Outlier">
+  <meta name="twitter:description" content="Cursor cannot reach localhost on your Mac. See why a local model needs a public HTTPS tunnel, which keys work, and Outlier's measured local API result.">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
     .subscribe-strip{border-top:1px solid var(--border);padding:2.6rem 0;}
@@ -118,7 +118,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "Can Cursor use a local model on a Mac? Not directly, and here is why", "description": "Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.", "datePublished": "2026-10-12", "dateModified": "2026-11-04", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Can Cursor use a local model on a Mac? Not directly, and here is why", "description": "Cursor's servers make the call when you set a custom base URL, so localhost is out of reach. What works instead on a Mac, and the one workaround.", "datePublished": "2026-10-12", "dateModified": "2026-11-20", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Can Cursor use a local model on a Mac?", "item": "https://outlier.host/learn/can-cursor-use-a-local-model-on-a-mac/"}]}
@@ -154,18 +154,15 @@
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/learn/">learn</a></div>
     <h1>Can Cursor use a local model on a Mac? Not directly, and here is why</h1>
     <div class="byline-row">
-      <span class="byline">Matthew Kerr &middot; solo-built in Grand Rapids &middot; published 2026-10-12</span>
-      <span class="updated-pill">Last updated 2026-11-04</span>
+      <span class="byline">Matthew Kerr &middot; solo-built in Grand Rapids &middot; published 12 October 2026</span>
+      <span class="updated-pill">Last updated 20 November 2026</span>
+      <span class="byline" data-claims-checked="2026-11-20" data-claims-set="Cursor">Cursor checked 20 November 2026</span>
     </div>
 
-    <div class="quick-answer">
-      <span class="qa-label">Quick answer</span>
-      <ul>
-        <li>Not directly. When you give Cursor your own key and address, Cursor's servers make the request, not your Mac. An address like 127.0.0.1 or localhost then points at the wrong computer. Cursor's help page says it routes these requests through its servers, and a reply on Cursor's forum says localhost and local-network addresses will not work.</li>
-        <li>The usual workaround is a public https tunnel (ngrok or Cloudflare Tunnel) in front of your local server. Your prompts then travel through the tunnel and Cursor's servers, which gives up most of the reason to run a model locally. Tab completion stays on Cursor's own models either way.</li>
-        <li>To keep the model and the code on your Mac, use a tool that runs on your Mac and calls the model itself: Cline in VS Code, Zed, or Aider in the terminal. Outlier's local API, a Pro feature, is at <code>http://127.0.0.1:8766/v1</code> for exactly that.</li>
-      </ul>
-      <p style="margin:.8rem 0 0;font-size:.9rem;color:var(--text-mid)">Checked on 2026-10-12. I did not run Cursor against a local model or a tunnel for this page. What it says about Cursor comes from Cursor's own help page and forum. What it says about Outlier I checked in the app's source for 1.11.918. There are no benchmark numbers here, and the receipts at the bottom name every source.</p>
+    <div class="quick-answer" data-claims-checked="2026-11-20" data-claims-set="Cursor">
+      <span class="qa-label">Quick answer · Cursor checked 20 November 2026</span>
+      <p>Not directly: Cursor routes custom-key requests through its own servers, so localhost cannot reach your Mac, as staff explained in <a href="https://forum.cursor.com/t/156489">April 2026</a> and again on <a href="https://forum.cursor.com/t/177245">4 November 2026</a>. You need a public HTTPS tunnel; <a href="https://cursor.com/docs/settings/api-keys">Cursor's docs</a> say custom keys work with chat models only and Tab stays on Cursor's models. Cursor's <a href="https://cursor.com/pricing">Plus plan is $8.00 a month</a> and <a href="https://cursor.com/docs/models-and-pricing">excludes your own API keys</a>.</p>
+      <p>Outlier's local API answered the official openai Python SDK with a first chunk in 0.69 seconds, measured on Outlier 1.11.1012, 17 Nov 2026, so any editor that can call a local OpenAI-compatible address can use it; a tunnel is needed for Cursor.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro<span data-pbox-regular>: $39 once</span><span data-pbox-founding hidden> &middot; Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39.</span></p>
@@ -177,7 +174,7 @@
 
     <h2>Why a localhost address fails in Cursor</h2>
     <p>Most coding tools that take a model address run on your Mac and call that address themselves. Cursor does not. When you add your own API key, or change the base URL, the request goes to Cursor's servers first. Cursor's help page for API keys says "all requests are routed through Cursor's servers for final prompt building." The server then calls the address you gave it.</p>
-    <p>That is why 127.0.0.1 and localhost fail. Those names mean this computer, to whichever computer reads them. When Cursor's server reads one, this computer is Cursor's, and nothing of yours is listening there. A reply on Cursor's forum from February 2026 puts it the same way: localhost is not supported directly, and local-network addresses will not work because the server cannot reach them. A symptom that fits is a local server whose log stays empty, because nothing ever connects to it.</p>
+    <p>That is why 127.0.0.1 and localhost fail. Those names mean this computer, to whichever computer reads them. When Cursor's server reads one, this computer is Cursor's, and nothing of yours is listening there. A reply on Cursor's forum from April 2026 puts it the same way: localhost is not supported directly, and local-network addresses will not work because the server cannot reach them. A symptom that fits is a local server whose log stays empty, because nothing ever connects to it.</p>
 
     <h2>What your own key covers in Cursor, and what it does not</h2>
     <p>The same help page lists limits that apply even when the address does work. Custom API keys only work with chat models. Tab completion continues using Cursor's built-in models. Cursor's Zero Data Retention policy does not apply to requests that use your own key, so the data terms are the ones of whoever is behind the key. The page does not mention local models at all.</p>
@@ -203,7 +200,7 @@
 
     <h2>What I did not test</h2>
     <ul>
-      <li>Cursor itself. Nothing here came from running it. Cursor changes often and the forum reply is from February 2026. If Cursor has added a way to call local models, tell me at matt@outlier.host and I will fix this page.</li>
+      <li>Cursor itself. Nothing here came from running it. Cursor changes often and the forum replies are from April and November 2026. If Cursor has added a way to call local models, tell me at matt@outlier.host and I will fix this page.</li>
       <li>A tunnel, with Outlier or with anything else.</li>
       <li>Cline, Zed or Aider against Outlier's API. The endpoint uses the OpenAI request shape and the developers page has working OpenAI SDK code, but I did not set up these three for this page.</li>
       <li>Any Outlier version before 1.11.918 for the Settings path.</li>
@@ -233,7 +230,7 @@
       </div>
     </div>
 
-    <div class="receipts"><strong>Receipts:</strong> Cursor: the API keys page on <a href="https://cursor.com/help/models-and-usage/api-keys" rel="noopener" target="_blank">Cursor's help site</a>, read on 2026-10-12 (the page carries no date), and the thread <a href="https://forum.cursor.com/t/connecting-local-ai-server-to-cursor-does-not-work/152940" rel="noopener" target="_blank">Connecting local AI server to Cursor does not work</a> on Cursor's forum, where the reply is dated 25 February 2026. I read both pages and did not run Cursor. Outlier: the Settings panel and where it sits, the Pro gate, the model names and the Host check come from the app's source for 1.11.918, the build the Download button linked to when I read it on 2026-10-12. The 421 test is my check of the installed 1.11.916 on a Mac Studio with an M1 Ultra earlier the same day. The page has no benchmark numbers.</div>
+    <div class="receipts"><strong>Receipts:</strong> Cursor: the API keys page on <a href="https://cursor.com/help/models-and-usage/api-keys" rel="noopener" target="_blank">Cursor's help site</a>, read on 20 November 2026, and the threads <a href="https://forum.cursor.com/t/156489" rel="noopener" target="_blank">Run a local LLM model with Cursor?</a> and <a href="https://forum.cursor.com/t/177245" rel="noopener" target="_blank">the November local-model discussion</a> on Cursor's forum, with replies from 2 April and 4 November 2026. The <a href="https://cursor.com/pricing">pricing page</a> and <a href="https://cursor.com/docs/models-and-pricing">plan docs</a> were read on 20 November 2026 too. I read both pages and did not run Cursor. Outlier: the Settings panel and where it sits, the Pro gate, the model names and the Host check come from the app's source for 1.11.918, the build the Download button linked to when I read it on 2026-10-12. The 421 test is my check of the installed 1.11.916 on a Mac Studio with an M1 Ultra earlier the same day. The first-chunk figure above is from the official openai Python SDK check, measured on Outlier 1.11.1012, 17 Nov 2026. It is not a test of Cursor or a tunnel.</div>
 
     <div class="cta">
       <h3>Try Outlier free</h3>
