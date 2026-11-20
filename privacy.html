@@ -45,7 +45,8 @@
   <div class="wrap">
     <a class="back" href="/">← Back to Outlier</a>
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: 2026-11-09 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Last updated: 2026-11-20 · Kerr &amp; Company LLC, Grand Rapids, MI</p>
+    <p class="updated">Changed 2026-11-20: added &ldquo;The monthly update&rdquo;, the new one-email-a-month list on the home page, which replaces the &ldquo;new models worth running&rdquo; form. People already on that list stay on it. Nothing in the app changed.</p>
     <p class="updated">Changed 2026-11-07: on 7 November 2026 we found that Cloudflare, which serves this site, was also adding its own cookieless Web Analytics script to every page. It is off: on 9 November we checked the pages from a browser and none of them loads it any more. Plausible is our only analytics.</p>
     <p class="updated">Changed 2026-11-07: added &ldquo;Will It Run (mcp.outlier.host)&rdquo;, the read-only helper that Claude, ChatGPT and other AI assistants can use to check whether a model fits a Mac. Nothing in the app changed.</p>
     <p class="updated">Changed 2026-11-07: from 24 August to 7 November 2026, when someone bought Outlier, our sales system sent Meta (Facebook) the price and a one-way coded copy of the buyer&rsquo;s email address (a SHA-256 hash), so Meta could count the sale for ads. We switched it off on 7 November. Nothing about a purchase goes to Meta now.</p>
@@ -72,9 +73,9 @@
     <p>Three checks run on their own: the app update check, the license re-check, and the price check when you open an upgrade window. Each is described below, with exactly what it sends. Everything else on this list happens only when you use that feature.</p>
     <ul>
       <li><strong>The &ldquo;Ask a question&rdquo; box on this site, if you type into it:</strong> a cloud AI model answers it (Llama 3.3 70B, run on Cloudflare Workers AI), working from the page&rsquo;s published prices and terms. Your question goes to Cloudflare to be answered; our worker keeps no copy of it. The box belongs to the website: the desktop app has no such box and never sends your chats there.</li>
-      <li><strong>The mailing list, if you type an address into a form on outlier.host</strong>: most
-      pages here carry a &ldquo;new models worth running&rdquo; form. It sends nothing on page load; it posts once, when you
-      press the button. What is stored is the address you typed and which of our sites you sent it from, on our own Cloudflare
+      <li><strong>The &ldquo;new models worth running&rdquo; list</strong>: until 20 November 2026 the home page carried
+      a &ldquo;new models worth running&rdquo; form, and the people who signed up then stay on that list with its promise. It sent
+      nothing on page load; it posted once, when you pressed the button. What is stored is the address you typed and which of our sites you sent it from, on our own Cloudflare
       Worker and D1 database at <code>kerr-subscribe.kerrco.workers.dev</code>: not a marketing SaaS, because
       dropping one of those onto a site that sells &ldquo;nothing leaves your machine&rdquo; would make the claim false in
       order to collect an email address. <strong>No IP address, no user agent, no referer, no fingerprint.</strong> That
@@ -84,6 +85,7 @@
       address given on another of our products is a separate row, and leaving one does not leave the other.
       Every email carries a one-click unsubscribe. The desktop app never sends this; there is no mailing-list code in the
       app at all.</li>
+      <li><strong>The monthly update.</strong> If you type your email address into &ldquo;Get one short update a month&rdquo; and press the button, it goes to kerr-subscribe.kerrco.workers.dev, a server we run on Cloudflare, and is kept in our own database there. We keep four things: the address, which of our sites you used, the day you signed up and the day you confirmed. We don&rsquo;t keep your IP address or anything about your browser. We use it for one thing: to send you one short email a month about Outlier, and only after you confirm. Before the first one we send you a single email with a link to confirm. If you don&rsquo;t confirm, you get nothing else, and the address is deleted 90 days after you signed up. The emails carry no tracking pixel, and their links aren&rsquo;t tracked. We don&rsquo;t sell or share the list, and it never goes to an advertising network. To leave, use the unsubscribe link in any email; one click deletes your address. To delete it at any time, with or without an email from us, enter it at <a href="https://kerr-subscribe.kerrco.workers.dev/unsubscribe">kerr-subscribe.kerrco.workers.dev/unsubscribe</a> or write to <a href="mailto:matt@outlier.host">matt@outlier.host</a>. Otherwise we keep it until you leave. There&rsquo;s no box to tick: pressing the button is the sign-up.</li>
       <li><strong>Model downloads from HuggingFace</strong>: when you activate a tier for the first time, the weights download from HuggingFace: Nano, Lite, Quick and Core from <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer">huggingface.co/Outlier-Ai</a>, Outlier's own repositories, and Plus and Vision 3.8 from public mlx-community repositories (community conversions of Qwen's models). HuggingFace sees your IP and which repo you fetched. No prompts, no chats, no model output is sent. After the download, the model runs locally forever.</li>
       <li><strong>Cloud API providers (OpenAI / Anthropic / OpenAI-compatible)</strong>: only when you explicitly switch to a cloud model in the picker AND provide your own API key. Your prompts and conversation history are sent to that provider per their terms. Your API key is stored locally; we never see it.</li>
       <li><strong>Anything you connect yourself</strong>: an MCP server, a Google Custom Search key, a chat you import from a Gist link: each one receives the requests that feature makes. None of them is set up by default.</li>
