@@ -21,6 +21,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  deployments: read
 
 concurrency:
   group: pages
@@ -32,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       build_type: ${{ steps.mode.outputs.build_type }}
+      sha: ${{ steps.mode.outputs.sha }}
     steps:
       - name: Check out main (what the gates just promoted)
         uses: actions/checkout@v4
@@ -45,6 +47,7 @@ jobs:
         run: |
           bt=$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null || echo unknown)
           echo "build_type=$bt" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "Pages build_type: $bt"
 
       - name: Assemble the public site (everything except build tooling and internal files)
@@ -90,3 +93,42 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # 2026-11-20 (Outlier session; CEO's top priority: Bing showing outlier.host again). RULES 60 says Bing and IndexNow get the
+  # changed URLs the same day as any price, name or page change. Until now every IndexNow send for outlier.host was done by
+  # hand. This sends ONLY the indexable pages (in sitemap.xml) changed between the previous successful Pages deployment and
+  # this one, plus llms.txt, plus pages deleted from the sitemap. It first proves the live site serves the key file. The key
+  # is public by design (it is served at the site root). A failed send turns this run red; the deploy itself is already done.
+  indexnow:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out what was deployed
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.sha }}
+          fetch-depth: 0
+
+      - name: Tell IndexNow (Bing, Yandex, Naver, Seznam) which pages this deploy changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          TO: ${{ needs.build.outputs.sha }}
+        run: |
+          set -euo pipefail
+          from=""
+          # Newest first. Skip this run's own deployment, then take the newest earlier one that succeeded. GitHub marks a
+          # successful deployment "inactive" once a newer one succeeds (read 2026-11-20: b8b4d1521 success, f5a7902b2 and
+          # every older one inactive), so both states mean "was deployed"; failure/error/pending do not.
+          for row in $(gh api "repos/$REPO/deployments?environment=github-pages&per_page=30" --jq '.[] | "\(.id):\(.sha)"'); do
+            id=${row%%:*}; sha=${row#*:}
+            if [ "$sha" = "$TO" ] || [ "$sha" = "$GITHUB_SHA" ]; then continue; fi
+            state=$(gh api "repos/$REPO/deployments/$id/statuses" --jq '.[0].state // ""')
+            if [ "$state" = "success" ] || [ "$state" = "inactive" ]; then from=$sha; break; fi
+          done
+          if [ -z "$from" ] || ! git cat-file -e "$from^{commit}" 2>/dev/null; then
+            echo "::warning::no earlier successful Pages deployment found; nothing sent to IndexNow"
+            exit 0
+          fi
+          echo "IndexNow range: $from..$TO"
+          python3 scripts/indexnow_after_deploy.py --host outlier.host --repo . --from "$from" --to "$TO"
