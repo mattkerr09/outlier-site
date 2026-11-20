@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PAGES = ("best/free-local-ai-mac/index.html",)
 TEST = "scripts/test_measured_answers_3.py"
 SOURCE = "/data/local-ai-time-to-first-token-mac/"
+RAM_SOURCE = "/data/mac-ram-to-model-size/"
 
 
 class MeasuredAnswersRoundThree(unittest.TestCase):
@@ -29,8 +30,8 @@ class MeasuredAnswersRoundThree(unittest.TestCase):
         for rel in PAGES:
             with self.subTest(page=rel, question="O5"):
                 raw = (ROOT / rel).read_text(encoding="utf-8")
-                quick, answer = check_answer(raw)
-                self.assertEqual([SOURCE], [href for href, _label in answer.links])
+                quick, answer = check_answer(raw, required_sources=(SOURCE, RAM_SOURCE))
+                self.assertEqual([RAM_SOURCE, SOURCE], [href for href, _label in answer.links])
                 self.assertIn("for free on Apple silicon", answer.text)
                 self.assertIn("Nano", answer.text)
                 self.assertIn("build 1.11.908", answer.text)
@@ -56,13 +57,16 @@ class MeasuredAnswersRoundThree(unittest.TestCase):
                 self.assertNotEqual(invented, quick.group(), "invented-figure plant did not land")
                 self.assertNotIn("987654.321", source)
                 with self.assertRaisesRegex(AssertionError, "unsourced number: 987654.321"):
-                    check_answer(raw[:quick.start()] + invented + raw[quick.end():])
+                    check_answer(raw[:quick.start()] + invented + raw[quick.end():],
+                                 required_sources=(SOURCE, RAM_SOURCE))
 
-                missing = quick.group().replace(f'<a href="{SOURCE}">first-token test</a>', "first-token test")
-                self.assertNotEqual(missing, quick.group(), "missing-link plant did not land")
-                with self.assertRaisesRegex(AssertionError, "missing data link"):
-                    check_answer(raw[:quick.start()] + missing + raw[quick.end():])
-                print(f"O5 {rel}: sourced answer passes; invented figure and missing data link fail", flush=True)
+                for href, label in ((SOURCE, "first-token test"), (RAM_SOURCE, "8 GB Mac")):
+                    missing = quick.group().replace(f'<a href="{href}">{label}</a>', label)
+                    self.assertNotEqual(missing, quick.group(), "missing-link plant did not land")
+                    with self.assertRaisesRegex(AssertionError, "missing data link: " + re.escape(href)):
+                        check_answer(raw[:quick.start()] + missing + raw[quick.end():],
+                                     required_sources=(SOURCE, RAM_SOURCE))
+                print(f"O5 {rel}: sourced answer passes; invented figure and either missing data link fail", flush=True)
 
     def test_pre_push_to_next(self):
         with tempfile.TemporaryDirectory(prefix="outlier-measured-answers-3-") as temp:

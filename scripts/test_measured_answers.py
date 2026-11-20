@@ -74,7 +74,7 @@ def git(*args, **kwargs):
                           capture_output=True, **kwargs).stdout
 
 
-def check_answer(raw):
+def check_answer(raw, required_sources=()):
     matches = list(QUICK.finditer(raw))
     assert len(matches) == 1, "expected one quick answer"
     quick = matches[0]
@@ -89,6 +89,8 @@ def check_answer(raw):
     assert 2 <= len(re.split(r"(?<=[.!?])\s+(?=[A-Z])", answer.text)) <= 4, \
         "expected two to four sentences"
     assert not re.search(r"[\u2013\u2014()]", answer.text), "use plain punctuation"
+    for source in required_sources:
+        assert source in [href for href, _label in answer.links], f"missing data link: {source}"
     sources = []
     for href, label in answer.links:
         url = urlsplit(href)
