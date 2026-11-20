@@ -275,8 +275,9 @@ def wiring(rel: str, src: str, ends: str) -> list[str]:
         parser.handle_starttag = lambda tag, pairs: attrs.update(pairs)
         parser.feed(mount)
         if any(attrs.get(k) != v for k, v in
-               {"data-ref": "$24.50", "data-now": "$16.99", "data-was": "$39"}.items()):
-            bad.append(f"{rel}: sale mount must name data-ref=$24.50, data-now=$16.99, data-was=$39")
+               {"data-now": "$16.99", "data-was": "$39"}.items()) or "data-ref" in attrs:
+            # 2026-11-20 (Matthew: no former price): the shared bar ignores data-ref since 13:57Z; a mount that names one fails.
+            bad.append(f"{rel}: sale mount must name data-now=$16.99 and data-was=$39, and no data-ref")
     for m in BAR.finditer(src):
         g = GUARD.search(src[:m.start()])
         if not g:
@@ -381,7 +382,7 @@ def self_check() -> int:
     ends = SALE_END
     guard = (f'<script data-founding-ends="{ends}">(function(){{var end=Date.parse("{ends}"),now=Date.now();'
              f'if(!(now<end))window.__kcFounding=1;}})();</script>\n')
-    mount = '<div data-founding data-ref="$24.50" data-now="$16.99" data-was="$39" hidden></div>\n'
+    mount = '<div data-founding data-now="$16.99" data-was="$39" hidden></div>\n'
     bar = '<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>\n'
     reveal = ('<script data-pbox-script>(function(){var m=1;var end=Date.parse("%s"),now=Date.now();'
               'if(!(now<end))return;fetch("x")})();</script>\n')
@@ -410,8 +411,8 @@ def self_check() -> int:
         ("clean after the end", clean, clean, "Pro Lifetime: $249 once.", after, 0),
     ]
     cases += [
-        ("missing data-ref", wired.replace(' data-ref="$24.50"', '') + card % ends, wired, "", before, 1),
-        ("wrong reference", wired.replace('data-ref="$24.50"', 'data-ref="$39"') + card % ends, wired, "", before, 1),
+        ("a former price is back", wired.replace('data-founding data-now=', 'data-founding data-ref="$24.50" data-now=') + card % ends, wired, "", before, 1),
+        ("wrong after-sale price", wired.replace('data-was="$39"', 'data-was="$29"') + card % ends, wired, "", before, 1),
         ("old launch price", wired.replace('data-now="$16.99"', 'data-now="$24.50"') + card % ends, wired, "", before, 1),
         ("missing mount", wired.replace(mount, '') + card % ends, wired, "", before, 1),
         ("dated paid schema", wired + card % ends + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"16.99","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', wired, "", before, 0),
