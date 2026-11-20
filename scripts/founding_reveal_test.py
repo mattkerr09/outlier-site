@@ -22,7 +22,7 @@ assert regular["price"] == "$39"
 
 # 2026-11-13, Matthew's order: regeneration and no-JavaScript fallbacks must agree.
 generator = runpy.run_path(str(ROOT / "scripts/product_box.py"))
-sale_line = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39"
+sale_line = "Black Friday sale: $16.99 once through December 2. Then $39"
 assert generator["launch_line"]() == sale_line
 assert generator["founding_next_day"]() == "December 3"
 for output in (generator["box"]("sale-test", "answer", "1.11.1006"),

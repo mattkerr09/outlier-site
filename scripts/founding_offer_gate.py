@@ -65,8 +65,8 @@ UA = {"User-Agent": "kerr-ops/1.0 (founding_offer_gate)"}
 
 # 2026-11-13, Matthew's order: the paid November price is the only sale reference.
 SALE_END = "2026-12-03T07:59:00Z"
-SALE_LINE = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39."
-BUNDLE_LINE = "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $79."
+SALE_LINE = "Black Friday sale: $16.99 once through December 2. Then $39."
+BUNDLE_LINE = "Black Friday sale: $34.99 once through December 2. Then $79."
 MOUNT = re.compile(r'<div\b[^>]*\bdata-founding(?=[\s>])[^>]*>')
 
 
@@ -222,13 +222,13 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
         other_app = rel == "thank-you.html" and text in {
             # 15 Nov (CEO): the other two apps' cross-sell lines on this page follow THEIR sale wording (Crisp and Check Engine
             # sites, launch/BLACK-FRIDAY-SALE-2026-11-13.md). The old "Launch price" lines were stale after the 13 Nov sale went live.
-            "Black Friday sale: $9.99 once, 31% off our November price of $14.50, through December 2. Then $29",
-            "Black Friday sale: $19.99 once, 32% off our November price of $29.50, through December 2. Then $39"}
+            "Black Friday sale: $9.99 once through December 2. Then $29",
+            "Black Friday sale: $19.99 once through December 2. Then $39"}
         if text not in allowed and not other_app:
             bad.append(f"{rel}: sale span differs from Matthew's exact sale wording")
     # A December price is never a former price. Keep these bans even during a real sale.
     for text in re.findall(r'<(?:span|div)[^>]*(?:data-pbox-founding|data-lt-offer)[^>]*>(.*?)</(?:span|div)>', src, re.S):
-        if re.search(r"half price|50% off|save\s+\$|\bwas\s+\$|countdown", text, re.I):
+        if re.search(r"half price|\d+% off|November price|save\s+\$|\bwas\s+\$|countdown", text, re.I):
             bad.append(f"{rel}: prohibited discount claim in offer copy")
     for text in re.findall(r'<div[^>]*data-lt-offer[^>]*>(.*?)</div>', src, re.S):
         if html.unescape(re.sub(r'<[^>]+>', '', text)).strip() != SALE_LINE + " The Buy button applies the discount for you at checkout.":
@@ -423,8 +423,9 @@ def self_check() -> int:
         ("old tier in meta", wired + '<meta name="description" content="Founders offer">', wired, "", before, 1),
         ("old tier in aria", wired + '<button aria-label="Founding sale">Buy</button>', wired, "", before, 1),
         ("old launch wording", wired.replace(SALE_LINE, 'Launch price: $24.50 once, through November 30. From December 1: $39.'), wired, "", before, 1),
-        ("wrong discount", wired.replace('31% off', '50% off'), wired, "", before, 1),
-        ("wrong former price", wired.replace('price of $24.50', 'price of $39'), wired, "", before, 1),
+        # 2026-11-20 (Matthew, 13:04:44Z): no comparison at all. The old sale sentence and any "% off" must now FAIL.
+        ("old comparison wording", wired.replace(SALE_LINE, 'Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39.'), wired, "", before, 1),
+        ("a percent-off claim", wired.replace(SALE_LINE, SALE_LINE.replace(' once through', ' once, 31% off, through')), wired, "", before, 1),
         ("false savings", wired.replace(SALE_LINE, 'Save $12 against December prices'), wired, "", before, 1),
         ("half price", wired.replace(SALE_LINE, 'Half price'), wired, "", before, 1),
         ("countdown", wired.replace(SALE_LINE, 'Sale countdown'), wired, "", before, 1),

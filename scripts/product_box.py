@@ -140,7 +140,7 @@ def launch_line(now: str = "$16.99", later: str = "$39") -> str:
     which the reveal hides while this line shows."""
     # The dated launch-policy note above is superseded by Matthew's sale order.
     # 2026-11-13, Matthew's order: a real sale against the paid November price.
-    return f"Black Friday sale: {now} once, 31% off our November price of $24.50, through {founding_until()}. Then {later}"
+    return f"Black Friday sale: {now} once through {founding_until()}. Then {later}"
 
 def price_spans(regular: str, sale: str) -> str:
     """Keep the regular price visible until the dated script reveals the sale."""

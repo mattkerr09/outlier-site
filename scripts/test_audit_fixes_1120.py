@@ -14,8 +14,8 @@ import sitemap_lastmod
 import typed_url_pages
 
 ROOT = Path(__file__).resolve().parents[1]
-SALE = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39"
-BUNDLE = "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $79"
+SALE = "Black Friday sale: $16.99 once through December 2. Then $39"
+BUNDLE = "Black Friday sale: $34.99 once through December 2. Then $79"
 CORRECTION = "Both removed. Outlier has one price, paid once: $39 once; the Black Friday sale lowers it through December 2."
 TERMS_UPDATED = ('<p class="updated">Last updated: 2026-11-04 (one licence, one price, up to 3 Macs at a time; '
                  '2026-11-02: a lost or dead Mac, we release its seat) · Kerr &amp; Company LLC, Grand Rapids, MI</p>')
@@ -100,12 +100,14 @@ def check_terms(raw):
 def check_thanks(raw):
     lines = [s for s in re.findall(r'<p><strong>.*?</p>', raw, re.S) if "once" in s]
     assert len(lines) == 2
-    expected = (("Crisp Video", "$29", "$9.99", "31%", "$14.50", "$29"),
-                ("Check Engine SEO", "$39", "$19.99", "32%", "$29.50", "$39"))
-    for line, (name, regular, sale, discount, november, later) in zip(lines, expected):
+    # 2026-11-20 (Matthew, 13:04:44Z): the sale line carries no comparison ("% off", "November price") any more.
+    expected = (("Crisp Video", "$29", "$9.99", "$29"),
+                ("Check Engine SEO", "$39", "$19.99", "$39"))
+    for line, (name, regular, sale, later) in zip(lines, expected):
         assert name in line
-        assert re.findall(r'\$\d+(?:\.\d+)?', line) == [regular, sale, november, later], "cross-sell prices differ"
-        assert f"Black Friday sale: {sale} once, {discount} off our November price of {november}, through December 2. Then {later}" in line
+        assert re.findall(r'\$\d+(?:\.\d+)?', line) == [regular, sale, later], "cross-sell prices differ"
+        assert f"Black Friday sale: {sale} once through December 2. Then {later}" in line
+        assert "% off" not in line and "November price" not in line
 
 
 def check_home(raw):

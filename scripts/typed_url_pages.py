@@ -169,7 +169,7 @@ def build(slug: str) -> str:
     version = product_box.current_version()
     box = product_box.box(f"{slug}-page", "answer", version, src=meta["src"])
     bundle = ('<p class="pbox-req">Or all three apps, Outlier, Crisp and Check Engine SEO: '
-              + product_box.price_spans("$79 once", "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $79")
+              + product_box.price_spans("$79 once", "Black Friday sale: $34.99 once through December 2. Then $79")
               + f': <a href="https://kerr-affiliate-hub.kerrco.workers.dev/buy/bundle?src=outlier-{slug}-bundle" rel="nofollow">the bundle</a>.</p>\n')
     box = box.replace('</p>\n', '</p>\n' + bundle, 1)
     return (
