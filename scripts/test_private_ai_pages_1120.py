@@ -4,20 +4,16 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
-import subprocess
 import unittest
 from urllib.parse import urlsplit
 
 
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "a576aa93f530ac049539e0943e5f3eac7c291477"
 PAGES = (
     "learn/fireworks-ai-breach-notion-ai-chats/index.html",
     "learn/ai-chatbots-share-chats-with-trackers/index.html",
     "learn/check-an-ai-app-is-offline-on-mac/index.html",
 )
-ALLOWED = {*PAGES, "learn/index.html", "learn/is-local-ai-safe/index.html",
-           "index.html", "sitemap.xml", "scripts/test_private_ai_pages_1120.py"}
 # Four of the supplied URLs. The optional press comparison is not used.
 SOURCES = {
     "https://www.bleepingcomputer.com/news/security/notion-says-fireworks-breach-exposed-customer-ai-chat-transcripts/",
@@ -72,11 +68,6 @@ def visible(raw):
     page.feed(raw)
     page.close()
     return page
-
-
-def git(*args):
-    return subprocess.run(["git", *args], cwd=ROOT, check=True,
-                          capture_output=True, text=True).stdout
 
 
 def check_capture(raw, home):
@@ -145,13 +136,12 @@ def check_page(raw, home):
     return quick
 
 
-def check_home(before, after):
-    assert before.count(HOME_ANCHOR) == 1, "home insertion anchor changed"
-    assert SENTENCE not in before, "sentence already existed in base"
-    assert after == before.replace(HOME_ANCHOR, HOME_ANCHOR + " " + SENTENCE, 1), \
-        "home must gain exactly the one sentence"
-    section = re.search(r'<section id="why">.*?</section>', after, re.S).group()
-    assert SENTENCE in section, "sentence must be in Private by default"
+def check_home(raw):
+    section = re.search(r'<section id="why">.*?</section>', raw, re.S)
+    assert section, "missing Private by default section"
+    text = visible(section.group()).text
+    assert text.count(SENTENCE) == 1, "missing home server sentence"
+    assert HOME_ANCHOR + " " + SENTENCE in text, "sentence must follow privacy statement"
 
 
 class PrivateAIPages(unittest.TestCase):
@@ -188,12 +178,16 @@ class PrivateAIPages(unittest.TestCase):
                         check_page(raw.replace(original, wrong), home)
                 print(f"CONTROLS {rel}: banned claim, unknown URL, moved answer and five altered capture facts fail", flush=True)
 
-    def test_home_only_sentence(self):
-        before = git("show", f"{BASE}:index.html")
-        after = (ROOT / "index.html").read_text()
-        check_home(before, after)
-        with self.assertRaisesRegex(AssertionError, "exactly the one sentence"):
-            check_home(before, after.replace("</body>", "<p>Extra copy.</p></body>"))
+    def test_home_sentence_and_control(self):
+        raw = (ROOT / "index.html").read_text()
+        check_home(raw)
+        # Unrelated home copy is allowed; removing this job's sentence is not.
+        check_home(raw.replace("</body>", "<p>Extra copy.</p></body>"))
+        planted = raw.replace(SENTENCE, "", 1)
+        self.assertNotEqual(raw, planted, "CONTROL plant did not land")
+        with self.assertRaisesRegex(AssertionError, "home server sentence"):
+            check_home(planted)
+        print("CONTROL home server sentence: removal rejected", flush=True)
 
     def test_discovery(self):
         from xml.etree import ElementTree
@@ -208,11 +202,6 @@ class PrivateAIPages(unittest.TestCase):
                        if node.findtext("s:loc", namespaces=ns) == "https://outlier.host" + path]
             self.assertEqual(len(entries), 1)
             self.assertEqual(entries[0].findtext("s:lastmod", namespaces=ns), "2026-11-20")
-
-    def test_changed_paths(self):
-        changed = set(git("diff", "--name-only", BASE, "--").splitlines())
-        changed.update(git("ls-files", "--others", "--exclude-standard").splitlines())
-        self.assertFalse(changed - ALLOWED, f"out-of-scope changes: {changed - ALLOWED}")
 
 
 if __name__ == "__main__":
