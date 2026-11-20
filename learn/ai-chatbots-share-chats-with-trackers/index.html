@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do AI chatbots share chats with trackers? | Outlier</title>
+  <meta name="description" content="Two 2026 studies found chat information reaching trackers under different test conditions. See what they measured and what you can change.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-20">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="canonical" href="https://outlier.host/learn/ai-chatbots-share-chats-with-trackers/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Do AI chatbots send your chats to trackers? Two 2026 studies, explained">
+  <meta property="og:description" content="Two 2026 studies found chat information reaching trackers under different test conditions. See what they measured and what you can change.">
+  <meta property="og:url" content="https://outlier.host/learn/ai-chatbots-share-chats-with-trackers/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Do AI chatbots send your chats to trackers? Two 2026 studies, explained">
+  <meta name="twitter:description" content="Two 2026 studies found chat information reaching trackers under different test conditions. See what they measured and what you can change.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.875rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.875rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+</style>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "Do AI chatbots send your chats to trackers? Two 2026 studies, explained", "description": "Two 2026 studies found chat information reaching trackers under different test conditions. See what they measured and what you can change.", "datePublished": "2026-11-20", "dateModified": "2026-11-20", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/ai-chatbots-share-chats-with-trackers/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Do AI chatbots send your chats to trackers? Two 2026 studies, explained", "item": "https://outlier.host/learn/ai-chatbots-share-chats-with-trackers/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="/learn/">Learn</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="/learn/">learn</a></div>
+    <h1>Do AI chatbots send your chats to trackers? Two 2026 studies, explained</h1>
+    <div class="byline-row">
+      <span class="byline"><a href="/about/">Matthew Kerr</a> &middot; Outlier &middot; published 2026-11-20</span>
+      <span class="updated-pill">Last updated <time datetime="2026-11-20">2026-11-20</time></span>
+    </div>
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>Some AI chat websites sent conversation information to trackers under the studies&#x27; test conditions. Your chats are never on our servers, because we never receive them. Outlier&#x27;s local chat runs on your Mac, with no chat web page or trackers in the chat; the dated lsof capture below shows the engine check.</p>
+    </div>
+
+    <h2>Two studies asked related questions</h2>
+    <p>A tracker is an outside service used by a website to record activity. A conversation title can reveal a topic even when the full message is absent. These studies looked at information reaching trackers through AI chat websites. They used different methods and reported different results.</p>
+    <table>
+      <caption>What each 2026 study reported</caption>
+      <thead><tr><th scope="col">Study and date</th><th scope="col">Scope and method</th><th scope="col">Finding</th></tr></thead>
+      <tbody>
+        <tr><td>Bekos, Tsouvalas, Nikiforakis and Polychronakis, Stony Brook University. Submitted 27 October 2026.</td><td>Audited the web interfaces of 42 general-purpose and domain-specific chat platforms, including health, legal and education services.</td><td>21 leaked conversation titles to third-party trackers. 9 leaked verbatim user prompts. A substantial number sent user emails to trackers.</td></tr>
+        <tr><td>IMDEA Networks Institute. Published 6 May 2026.</td><td>A separate study of trackers used by AI chat services. The report names ChatGPT, Claude, Grok and Perplexity. We do not have a verified total service count.</td><td>Reported trackers from Meta, Google, TikTok and others, with potential transmission of conversation information such as titles, permalinks and metadata.</td></tr>
+      </tbody>
+    </table>
+    <p>Sources: <a href="https://arxiv.org/abs/2610.37467">Penny for Your Prompts: A Measurement Study of Contextual Leakage in AI Chat Platforms, submitted 27 October 2026</a>, and <a href="https://networks.imdea.org/your-conversations-with-ai-may-not-be-as-private-as-you-think/">IMDEA Networks Institute, 6 May 2026</a>. Both sources read 2026-11-20 by our reviewer.</p>
+
+    <h2>How to read the difference</h2>
+    <p>The Stony Brook counts describe observed leakage under the study's test conditions. The IMDEA report describes tracker use and potential transmission of conversation information. Finding a tracker and observing a verbatim prompt reach it are different findings. The numbers from one study should not be attached to the other.</p>
+    <p>Neither result makes a lasting promise about any named service. A result under the study's test conditions covers that test. Different methods and results do not support calling a service clean or declaring every cloud chat unsafe. For a particular app, check the date, the feature in use and what information was actually observed leaving.</p>
+
+    <h2>Settings you can review now</h2>
+    <ul>
+      <li>Use your browser's tracker blocking options. They may reduce requests to outside trackers. They do not change the fact that a hosted model receives the prompt you send it.</li>
+      <li>Consider signed-out use where the service offers it. This can avoid attaching a signed-in account to the session, but it does not establish that tracking stops.</li>
+      <li>Read the app's own privacy settings. Check controls for history, training and connected features separately. A training setting alone does not answer which web requests a page makes.</li>
+    </ul>
+    <p>These are choices to review, not guarantees that a browser session has no sharing. For work that should stay off a chat website, a local model offers another way to do the task.</p>
+
+    <h2>A local chat and a marketing website are separate</h2>
+    <p>A local app with no chat web page and no trackers in its chat gives a website tracker no chat page to read. Outlier has no analytics SDK in the desktop app. Our marketing site uses Plausible: it counts page views, not chats. The site's scripts and the app's network uses are listed in our <a href="/privacy.html">privacy policy</a>.</p>
+    <div class="receipts" id="capture">
+      <p><strong>Existing home page measurement:</strong> Captured 2026-11-04 on Outlier 1.11.992 while Core was answering, web search off. A past capture, not a live reading.</p>
+      <p>It was sampled 22 times across a 24s answer. Sockets leaving this Mac: 0. Every socket the engine held used <code>127.0.0.1</code>. See the <a href="/#why">original lsof capture</a>.</p>
+    </div>
+    <p>You can inspect the engine while it answers with <code>lsof -a -p $(pgrep -x outlier-cli) -i -n -P</code>. The <code>-a</code> makes the process and network filters apply together. This past capture cannot describe a session on your Mac today, and connections can occur between samples. See <a href="/learn/check-an-ai-app-is-offline-on-mac/">how to run and read the check</a>.</p>
+    <p>Local mode means using a local model with web search off. Web search and cloud models send information to outside services only when you turn them on. <a href="/download/">Download Outlier</a> if that local workflow fits your work.</p>
+    <div class="related">Related: <a href="/learn/is-local-ai-safe/">Is local AI safe?</a> &middot; <a href="/learn/">All articles</a></div>
+  </div>
+</article>
+</main>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier</span>
+    <span><a href="/privacy.html">Privacy</a> &middot; <a href="/learn/">Learn</a> &middot; <a href="https://outlier.host/">outlier.host</a></span>
+  </div>
+</footer>
+</body>
+</html>

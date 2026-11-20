@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check if a Mac AI app is offline with lsof | Outlier</title>
+  <meta name="description" content="Run the exact lsof command for Outlier on Mac. Read local and remote addresses, keep the -a flag, and understand what one socket sample cannot prove.">
+  <meta name="theme-color" content="#07060b">
+  <meta name="last-modified" content="2026-11-20">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="canonical" href="https://outlier.host/learn/check-an-ai-app-is-offline-on-mac/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to check an AI app on your Mac is really offline: 30 seconds with lsof">
+  <meta property="og:description" content="Run the exact lsof command for Outlier on Mac. Read local and remote addresses, keep the -a flag, and understand what one socket sample cannot prove.">
+  <meta property="og:url" content="https://outlier.host/learn/check-an-ai-app-is-offline-on-mac/">
+  <meta property="og:site_name" content="Outlier">
+  <meta property="og:image" content="https://outlier.host/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to check an AI app on your Mac is really offline: 30 seconds with lsof">
+  <meta name="twitter:description" content="Run the exact lsof command for Outlier on Mac. Read local and remote addresses, keep the -a flag, and understand what one socket sample cannot prove.">
+  <meta name="twitter:image" content="https://outlier.host/og-card.png">
+  <style>
+    :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 17px; line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--accent-light); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--text); text-decoration: underline; }
+    .wrap { width: min(760px, calc(100% - 2rem)); margin: 0 auto; }
+    nav { position: sticky; top: 0; z-index: 10; background: rgba(7,6,11,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { display: flex; align-items: center; gap: 0.55rem; font-weight: 700; color: var(--text); font-size: 1.05rem; letter-spacing: -0.01em; }
+    .nav-brand:hover { color: var(--accent-light); text-decoration: none; }
+    .nav-logo { width: 26px; height: 26px; display: block; border-radius: 6px; }
+    .nav-links { display: flex; gap: 1.2rem; list-style: none; font-size: 0.92rem; }
+    .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+    article { padding: 3rem 0 4rem; }
+    .crumb { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .crumb a { color: var(--text-dim); }
+    .crumb a:hover { color: var(--accent-light); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.18; letter-spacing: -0.02em; margin-bottom: 1rem; font-weight: 700; }
+    .byline-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 1.6rem; flex-wrap: wrap; }
+    .byline { font-family: var(--mono); font-size: 0.875rem; color: var(--text-dim); }
+    .updated-pill { font-family: var(--mono); font-size: 0.875rem; font-weight: 500; color: var(--green-light); padding: 0.2rem 0.6rem; border: 1px solid rgba(52,211,153,0.25); border-radius: 100px; background: rgba(52,211,153,0.06); display: inline-flex; align-items: center; }
+    .quick-answer { padding: 1.2rem 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 2rem; }
+    .quick-answer .qa-label { display: block; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-light); margin-bottom: 0.65rem; font-weight: 600; font-family: var(--mono); }
+    article h2 { font-size: 1.4rem; line-height: 1.28; letter-spacing: -0.01em; margin: 2.4rem 0 1rem; font-weight: 700; }
+    article h3 { font-size: 1.1rem; margin: 1.6rem 0 0.7rem; font-weight: 600; }
+    article p { margin-bottom: 1.1rem; }
+    article p strong { font-weight: 600; }
+    article ul, article ol { margin: 0.8rem 0 1.2rem 1.4rem; }
+    article li { margin-bottom: 0.4rem; }
+    article code { font-family: var(--mono); font-size: 0.92em; background: var(--surface-2); padding: 0.12em 0.4em; border-radius: 4px; color: var(--accent-light); }
+    @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    article pre { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; margin: 1rem 0 1.4rem; font-size: 0.875rem; line-height: 1.5; }
+    article pre code { background: none; padding: 0; color: var(--text); font-size: inherit; }
+    article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
+    @media (max-width:640px){article table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;background-image:linear-gradient(to right,var(--bg),rgba(7,6,11,0)),linear-gradient(to left,var(--bg),rgba(7,6,11,0)),linear-gradient(to right,rgba(255,255,255,.14),rgba(255,255,255,0)),linear-gradient(to left,rgba(255,255,255,.14),rgba(255,255,255,0));background-position:0 0,100% 0,0 0,100% 0;background-repeat:no-repeat;background-size:26px 100%,26px 100%,18px 100%,18px 100%;background-attachment:local,local,scroll,scroll}}
+    article th, article td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    article th { color: var(--text-mid); font-weight: 600; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .receipts { padding: 1rem 1.2rem; background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.20); border-radius: var(--radius); margin: 1.4rem 0; font-size: 0.9rem; color: var(--text-mid); }
+    .receipts strong { color: var(--amber); }
+    .related { margin-top: 2.4rem; padding-top: 1.6rem; border-top: 1px solid var(--border); font-size: 0.95rem; color: var(--text-mid); }
+    .related a { font-weight: 600; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 0; color: var(--text-dim); font-size: 0.86rem; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.6rem; }
+    footer a { color: var(--text-dim); }
+    footer a:hover { color: var(--accent-light); text-decoration: none; }
+    @media (max-width: 600px) { .nav-links { gap: 0.7rem; font-size: 0.86rem; } article { padding: 1.8rem 0 2.4rem; } h1 { font-size: 1.6rem; } }
+</style>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Article", "headline": "How to check an AI app on your Mac is really offline: 30 seconds with lsof", "description": "Run the exact lsof command for Outlier on Mac. Read local and remote addresses, keep the -a flag, and understand what one socket sample cannot prove.", "datePublished": "2026-11-20", "dateModified": "2026-11-20", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/check-an-ai-app-is-offline-on-mac/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "How to check an AI app on your Mac is really offline: 30 seconds with lsof", "item": "https://outlier.host/learn/check-an-ai-app-is-offline-on-mac/"}]}
+  </script>
+</head>
+<body>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="nav-brand" href="https://outlier.host/"><img src="/logo.png" alt="" class="nav-logo" width="26" height="26">Outlier</a>
+    <ul class="nav-links">
+      <li><a href="/learn/">Learn</a></li>
+      <li><a href="/#pricing">Pricing</a></li>
+      <li><a href="/#app">App</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+<article>
+  <div class="wrap">
+    <div class="crumb"><a href="/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="/learn/">learn</a></div>
+    <h1>How to check an AI app on your Mac is really offline: 30 seconds with lsof</h1>
+    <div class="byline-row">
+      <span class="byline"><a href="/about/">Matthew Kerr</a> &middot; Outlier &middot; published 2026-11-20</span>
+      <span class="updated-pill">Last updated <time datetime="2026-11-20">2026-11-20</time></span>
+    </div>
+    <div class="quick-answer">
+      <span class="qa-label">Quick answer</span>
+      <p>To check Outlier while a local model answers, run the lsof command below in Terminal and read the addresses it lists. Your chats are never on our servers, because we never receive them. The home page&#x27;s dated capture found no sockets leaving the Mac with web search off; it is a past capture, not a live reading.</p>
+    </div>
+
+    <h2>The check takes about 30 seconds to start</h2>
+    <ol>
+      <li>Open Outlier with a downloaded local model. Turn web search off and keep the chat on that local model.</li>
+      <li>Ask a harmless question that gives you time to look while the answer is being written.</li>
+      <li>Open Terminal and paste this command. Run it again while the answer continues.</li>
+    </ol>
+    <pre><code>lsof -a -p $(pgrep -x outlier-cli) -i -n -P</code></pre>
+    <p>This command asks about Outlier's engine, named <code>outlier-cli</code>. It is not a check of all AI apps. For another app, first identify its model process and any helper processes. A result for the wrong process tells you nothing about the app you meant to inspect.</p>
+    <p>If the command prints nothing or reports an error, first run <code>pgrep -x outlier-cli</code> on its own. It should return a process number while the engine is running. An empty process lookup is not evidence of an offline answer. Read any lsof error before drawing a conclusion.</p>
+
+    <h2>Why the -a flag matters</h2>
+    <p><code>-p</code> selects the process number found by pgrep. <code>-i</code> selects network sockets. The <code>-a</code> is load-bearing: it makes both filters apply together. Without it, lsof ORs the filters and returns every socket on the machine instead. The <a href="/#why">home page's original capture</a> notes that this wrong command returned 168 then. That number changes as other processes come and go.</p>
+    <p><code>-n</code> keeps addresses numeric, and <code>-P</code> keeps port numbers numeric. They make the last column easier to read. Keep the command intact when you copy it.</p>
+
+    <h2>Read the address, then read the scope</h2>
+    <p><code>127.0.0.1</code> is your own Mac. A connection from that address to the same address stays within the machine. Outlier's window talks to its engine on port 8766. <a href="/learn/what-is-127-0-0-1-8766/">Our guide to that local address</a> explains why an offline app has a port at all.</p>
+    <p>A connection to a remote address is a network connection beyond that local address. It needs an explanation. The listing shows sockets and their endpoints, not the words sent through them. A remote socket alone does not tell you whether it carried a prompt, a download or a licence check. This command also covers the engine process only; it does not inspect every helper or the rest of your Mac.</p>
+    <div class="receipts" id="capture">
+      <p><strong>Existing home page measurement:</strong> Captured 2026-11-04 on Outlier 1.11.992 while Core was answering, web search off. A past capture, not a live reading.</p>
+      <p>It was sampled 22 times across a 24s answer. Sockets leaving this Mac: 0. Every socket the engine held used <code>127.0.0.1</code>. See the <a href="/#why">original lsof capture</a>.</p>
+    </div>
+
+    <h2>Check the known exceptions</h2>
+    <p>Outlier's <a href="/privacy.html">network-use list</a> describes these separate uses:</p>
+    <ul>
+      <li>Model downloads fetch the weights before you can use that model locally.</li>
+      <li>The app checks for updates.</li>
+      <li>Opening an upgrade window checks the current price.</li>
+      <li>Pro checks the licence. These built-in checks carry none of your chat words.</li>
+      <li>Web search sends your search query when you turn it on. Agent web pages and web tools also use the network when enabled.</li>
+      <li>A cloud model sends your chat to the provider you choose when you switch to it with your own API key.</li>
+    </ul>
+    <p>Connections you set up yourself, such as MCP servers, have their own requests. With web off, an agent command that downloads or installs from the internet asks first. Keep the task and settings in your notes when you repeat the check.</p>
+
+    <h2>What this check does not prove</h2>
+    <p>A sample is a moment. An app can connect between samples. A past capture is not a live reading, and the result above describes that build and that local answer. Repeating it improves what you observe, but does not turn it into a complete record.</p>
+    <p>It also does not check who can read local files. Malware or a browser extension already on the Mac can read local files it can access. Backups such as Time Machine or iCloud are separate: review where they copy your files and who can reach those copies.</p>
+
+    <h2>Why ask this question now?</h2>
+    <p>On 11 November 2026, BleepingComputer reported Notion AI transcripts exposed through its infrastructure provider Fireworks AI. <a href="https://www.bleepingcomputer.com/news/security/notion-says-fireworks-breach-exposed-customer-ai-chat-transcripts/">BleepingComputer, 11 November 2026</a>, read 2026-11-20 by our reviewer. On 27 October 2026, Stony Brook researchers submitted a study of 42 AI chat platforms that found titles reaching trackers on 21 and verbatim prompts on 9 under the study's test conditions. <a href="https://arxiv.org/abs/2610.37467">Penny for Your Prompts, submitted 27 October 2026</a>, read 2026-11-20 by our reviewer.</p>
+    <p>These are reasons to ask where your words go and to check a particular workflow. The <a href="/learn/fireworks-ai-breach-notion-ai-chats/">Fireworks explanation</a> covers the provider chain. The <a href="/learn/ai-chatbots-share-chats-with-trackers/">tracker study guide</a> compares the two studies. You can <a href="/download/">download Outlier</a> and repeat the local check on your own Mac.</p>
+    <div class="related">Related: <a href="/learn/is-local-ai-safe/">Is local AI safe?</a> &middot; <a href="/learn/">All articles</a></div>
+  </div>
+</article>
+</main>
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Outlier</span>
+    <span><a href="/privacy.html">Privacy</a> &middot; <a href="/learn/">Learn</a> &middot; <a href="https://outlier.host/">outlier.host</a></span>
+  </div>
+</footer>
+</body>
+</html>
