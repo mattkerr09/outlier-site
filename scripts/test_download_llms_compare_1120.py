@@ -129,7 +129,10 @@ def check_compare(raw):
             f"missing compare link: {path}"
     added = re.findall(r'    <p class="provenance reveal">Compare local apps:.*?</p>\n', section)
     assert len(added) == 1, "expected one Compare link row"
-    assert raw.replace(added[0], "", 1) == before("index.html"), "other home page copy changed"
+    # 2026-11-20: later jobs edit the home page too (the /help/ footer link, cx-20261120-0710), so this checks that the
+    # Compare row is the ONLY change inside the Compare section, not that the whole page is frozen at this job's base.
+    base_section = before("index.html")
+    assert section.replace(added[0], "", 1) in base_section, "other Compare-section copy changed"
 
 
 class DownloadLlmsCompare(unittest.TestCase):
@@ -161,7 +164,7 @@ class DownloadLlmsCompare(unittest.TestCase):
         self.assertEqual(read("pricing/index.html"), before("pricing/index.html"))
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            for slug in ("about", "pricing", "download"):
+            for slug in ("about", *typed_url_pages.PAGES, *getattr(typed_url_pages, "HELP_PAGES", ())):
                 target = root / slug / "index.html"
                 target.parent.mkdir()
                 target.write_text(read(f"{slug}/index.html"), encoding="utf-8")
