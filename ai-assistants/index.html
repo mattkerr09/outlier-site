@@ -107,7 +107,7 @@
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can Claude Code use a local model?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, through any server that speaks Anthropic's Messages API. Outlier is one: point ANTHROPIC_BASE_URL at it and set the model names. Expect it to be slower than Claude in the cloud."}}, {"@type": "Question", "name": "Do I need an Anthropic account for this?", "acceptedAnswer": {"@type": "Answer", "text": "No. The requests go to Outlier on your own Mac, and the key is Outlier's own API key, not an Anthropic one."}}, {"@type": "Question", "name": "Which Outlier model should a coding assistant use?", "acceptedAnswer": {"@type": "Answer", "text": "outlier-compact (Qwen3.6-27B), on a Mac with 24 GB of memory or more. It is the model we measured."}}]}
   </script>
   <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Use Claude Code and coding assistants with Outlier", "description": "Point Claude Code, OpenCode, Goose or Qwen Code at Outlier and they run on the model in your Mac. Tested steps, real timings, where the cloud still wins.", "datePublished": "2026-11-07", "dateModified": "2026-11-10", "author": {"@type": "Person", "name": "Matthew Kerr"}, "publisher": {"@type": "Organization", "name": "Outlier"}, "mainEntityOfPage": "https://outlier.host/ai-assistants/"}
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Use Claude Code and coding assistants with Outlier", "description": "Point Claude Code, OpenCode, Goose or Qwen Code at Outlier and they run on the model in your Mac. Tested steps, real timings, where the cloud still wins.", "datePublished": "2026-11-07", "dateModified": "2026-11-20", "author": {"@type": "Person", "name": "Matthew Kerr"}, "publisher": {"@type": "Organization", "name": "Outlier"}, "mainEntityOfPage": "https://outlier.host/ai-assistants/"}
   </script>
   <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Developers", "item": "https://outlier.host/developers/"}, {"@type": "ListItem", "position": 3, "name": "AI coding assistants", "item": "https://outlier.host/ai-assistants/"}]}
@@ -143,7 +143,7 @@
     <h1>Use Claude Code and other coding assistants with Outlier</h1>
     <div class="byline-row">
       <span class="byline">Matthew Kerr · Outlier · published 2026-11-07</span>
-      <span class="updated-pill">Last updated 2026-11-07</span>
+      <span class="updated-pill">Last updated 2026-11-20</span>
     </div>
 
     <div class="quick-answer">
@@ -152,7 +152,7 @@
         <li>Outlier's engine answers on <code>http://127.0.0.1:8766</code> in both of the shapes coding tools speak: Anthropic's Messages API (<code>/v1/messages</code>) and OpenAI's chat completions (<code>/v1/chat/completions</code>).</li>
         <li>So Claude Code, OpenCode, Goose and Qwen Code can use the model on your Mac instead of one in the cloud. We ran Claude Code against Outlier 1.11.999 with the network blocked, and both tasks passed.</li>
         <li>It is slow: 86.9 seconds for a one-word reply and 185.3 seconds for a small tool task on an M1 Ultra. For hard, multi-file work, Claude in the cloud still does better.</li>
-        <li>The local API is part of Outlier Pro.</li>
+        <li>On the free plan the local API serves Nano and Lite, with up to 8,192 tokens of context. Outlier Pro adds every other model and up to 131,072 tokens.</li>
       </ul>
     </div>
 <div class="pbox" data-pbox="answer">
