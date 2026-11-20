@@ -41,6 +41,17 @@ def _ours() -> set[str]:
                 out.add(f"${c // 100}" if c % 100 == 0 else f"${c / 100:.2f}")
     except Exception:
         pass
+    # 2026-11-20 (Outlier): our own offer file is the single source for the sale and post-sale prices (Matthew's 19 Nov
+    # change: Outlier $39 and the bundle $79 from 3 Dec). Dodo's record only moves on 3 Dec, so until then "$79" (the
+    # bundle's post-sale price, on the indexable /pricing/) read as an unsourced rival claim. Every $ figure in the
+    # offers' "what" and "prices" fields is ours; nothing else is added.
+    try:
+        offer = json.loads((pathlib.Path(__file__).resolve().parent.parent / "data" / "founding_offer.json").read_text(encoding="utf-8"))
+        for o in offer.get("offers") or []:
+            for text in [o.get("what") or ""] + list(o.get("prices") or []) + [o.get("ref") or ""]:
+                out.update(re.findall(r"\$\d[\d,]*(?:\.\d\d)?", text))
+    except Exception:
+        pass
     # 2026-09-24: the homepage card leads with the founders price ($124.50, 50% off
     # for the first 25 via a Dodo discount code), and the article CTA box states it
     # on every page. A discount is not a product field, so product-facts.json cannot

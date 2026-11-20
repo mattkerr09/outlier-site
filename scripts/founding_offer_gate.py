@@ -222,7 +222,7 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
         other_app = rel == "thank-you.html" and text in {
             # 15 Nov (CEO): the other two apps' cross-sell lines on this page follow THEIR sale wording (Crisp and Check Engine
             # sites, launch/BLACK-FRIDAY-SALE-2026-11-13.md). The old "Launch price" lines were stale after the 13 Nov sale went live.
-            "Black Friday sale: $9.99 once, 31% off our November price of $14.50, through December 2. Then $19",
+            "Black Friday sale: $9.99 once, 31% off our November price of $14.50, through December 2. Then $29",
             "Black Friday sale: $19.99 once, 32% off our November price of $29.50, through December 2. Then $39"}
         if text not in allowed and not other_app:
             bad.append(f"{rel}: sale span differs from Matthew's exact sale wording")
