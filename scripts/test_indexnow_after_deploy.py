@@ -252,7 +252,7 @@ def test_key_discovery_uses_name_pattern_and_stripped_content(repo, capsys):
 
 
 @pytest.mark.parametrize("result", [(404, "not deployed"), (200, "wrong key"),
-                                    (200, KEY + "\n"), URLError("offline"),
+                                    (200, KEY + "x"), (200, "x" + KEY), URLError("offline"),
                                     IncompleteRead(b"partial")])
 def test_bad_live_key_retries_and_never_posts(repo, monkeypatch, capsys, result):
     repo.commit({"index.html": "changed"})
@@ -266,6 +266,17 @@ def test_bad_live_key_retries_and_never_posts(repo, monkeypatch, capsys, result)
     assert "live key check failed after 6 tries" in plain
     assert report["sent"] == 0
     assert report["status"] == []
+
+
+def test_live_key_with_trailing_newline_is_accepted(repo, monkeypatch, capsys):
+    """outlier.host serves the key file with a trailing newline (33 bytes, read live 2026-11-20). An exact-bytes compare
+    would refuse it forever and nothing would ever be sent."""
+    repo.commit({"index.html": "changed"})
+    monkeypatch.setattr(indexnow.time, "sleep", lambda _s: None)
+    calls = fake_http(monkeypatch, get_results=[(200, KEY + "\n")])
+    assert run(repo) == 0
+    assert [c[0] for c in calls] == ["GET", "POST"]
+    assert output(capsys)[0]["sent"] == 1
 
 
 def test_live_key_becomes_ready_on_sixth_try(repo, monkeypatch, capsys):

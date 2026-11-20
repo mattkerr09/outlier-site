@@ -141,7 +141,9 @@ def verify_live_key(host: str, key: str) -> tuple[bool, str]:
     for attempt in range(6):
         try:
             status, body = http_request("GET", url)
-            if status == 200 and body == key:
+            # The live key file ends with a newline (33 bytes for a 32-character key, read 2026-11-20). IndexNow
+            # itself reads the file's text, so compare the stripped body; a wrong or extended key still fails.
+            if status == 200 and body.strip() == key:
                 return True, ""
             detail = f"HTTP {status}: {body[:300]}"
         except (URLError, OSError, HTTPException) as exc:
