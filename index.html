@@ -612,6 +612,8 @@
     .subscribe{max-width:56ch;margin:0 auto;text-align:center;}
     .subscribe-why{color:var(--text-mid);line-height:1.75;margin:0 0 1.6rem;}
     .subscribe-form{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;align-items:center;}
+    /* The success handler hides the form with the hidden attribute; display:flex above would override it (Listings, 19:59Z). */
+    .subscribe-form[hidden]{display:none;}
     .subscribe-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
     .subscribe-input{flex:1 1 22ch;min-width:0;padding:.85rem 1rem;border-radius:10px;
       border:1px solid rgba(255,255,255,0.14);background:var(--surface-2);color:var(--text);font-size:1.0625rem;}
