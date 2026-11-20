@@ -190,6 +190,16 @@ jobs:
           python3 scripts/tier_count_gate.py .
           python3 scripts/tier_lineup_gate.py .
 
+      # 2026-11-20 (Outlier): the scripts/test_*.py page tests were never run by CI, so 22 of them sat red unnoticed and hid a real
+      # regression (the /best/ rewrite dropped a quick answer's requirements and pushed answers below the method text). They are
+      # durable content checks now (byte pins against old bases retired), so a red one is a real page problem.
+      - name: Page tests (scripts/test_*.py)
+        run: |
+          set -e
+          python3 -m pip install --quiet "pytest==8.4.2"
+          python3 -m pytest -q -p no:cacheprovider $(ls scripts/test_*.py | grep -v test_install_page_upgrade_1120.py)
+          python3 scripts/test_install_page_upgrade_1120.py
+
       - name: Every sitemap URL is reachable from the homepage
         run: python3 scripts/orphan_page_gate.py
 
