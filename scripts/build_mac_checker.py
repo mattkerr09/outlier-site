@@ -135,7 +135,7 @@ def main(date):
             "Runs in your browser; nothing is sent.")
     ld_article = {"@context": "https://schema.org", "@type": "WebApplication", "name": "Can my Mac run it?",
                   "url": URL, "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (runs in the browser)",
-                  "description": desc, "author": {"@type": "Person", "name": "Matt Kerr"},
+                  "description": desc, "author": {"@type": "Person", "name": "Matthew Kerr"},
                   "datePublished": date, "dateModified": date, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}}
     ld_crumb = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"},
@@ -201,7 +201,7 @@ def main(date):
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;&rsaquo;&nbsp; <a href="https://outlier.host/run/">Run on your Mac</a></div>
     <h1>Can my Mac run local AI?</h1>
     <div class="byline-row">
-      <span class="byline">Matt Kerr &middot; Outlier &middot; published {date}</span>
+      <span class="byline">Matthew Kerr &middot; Outlier &middot; published {date}</span>
     </div>
 
     <p class="lead">{html.escape(answer)}</p>

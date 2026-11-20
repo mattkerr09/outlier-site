@@ -18,19 +18,19 @@ for key in ("name", "price", "bnpl", "offer", "btn"):
     regular[key] = (bool(re.search(r"\bhidden\b", node.group(2))) if key == "offer" else
                     node.group(3) if key == "bnpl" else html.unescape(re.sub(r"<[^>]*>", "", node.group(3))))
 # 2026-11-11 (CEO): the regular Pro price from December 1 is $29 once.
-assert regular["price"] == "$29"
+assert regular["price"] == "$39"
 
 # 2026-11-13, Matthew's order: regeneration and no-JavaScript fallbacks must agree.
 generator = runpy.run_path(str(ROOT / "scripts/product_box.py"))
-sale_line = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $29"
+sale_line = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39"
 assert generator["launch_line"]() == sale_line
 assert generator["founding_next_day"]() == "December 3"
 for output in (generator["box"]("sale-test", "answer", "1.11.1006"),
                generator["end_box"]("sale-test", "1.11.1006"),
                generator["STD_PRICE_NEW"], generator["HOME_NEW"]):
     assert sale_line in output
-    assert "<span data-pbox-regular>" in output and "$29 once" in output
-assert regular["btn"] == "Buy Outlier Lifetime Licence: $29" and regular["offer"]
+    assert "<span data-pbox-regular>" in output and "$39 once" in output
+assert regular["btn"] == "Buy Outlier Lifetime Licence: $39" and regular["offer"]
 schema = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', home, re.S)]
 app = next(v for v in schema if v.get("@type") == "SoftwareApplication")
 assert len(app["offers"]) == 2
@@ -53,9 +53,9 @@ const now = 1800000000000;
 Date.now = () => now;
 for (const [raw, expected] of [
   [JSON.stringify({offer:'founding', t:now}), 16.99],
-  [JSON.stringify({offer:'regular', t:now}), 29],
-  [JSON.stringify({offer:'founding', t:now-86400000}), 29],
-  [null, 29], ['broken JSON', 29]
+  [JSON.stringify({offer:'regular', t:now}), 39],
+  [JSON.stringify({offer:'founding', t:now-86400000}), 39],
+  [null, 39], ['broken JSON', 39]
 ]) {
   global.localStorage = {getItem: () => raw, removeItem: () => {}};
   eval(source);

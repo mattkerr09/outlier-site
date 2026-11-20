@@ -11,7 +11,7 @@ for someone to remember the date is how that would happen, so the pages carry th
     so the bar never mounts;
   * the product boxes' founders-price spans are `hidden` in the HTML and their reveal script shows them
     only before the end date AND while the worker reports seats left;
-  * the home page's Lifetime card says $29 in the HTML itself. Its script applies the sale price only
+  * the home page's Lifetime card says $39 in the HTML itself. Its script applies the sale price only
     before the end date and while seats are left, so a visitor without JavaScript, and every crawler that
     reads raw HTML, gets the regular price.
 
@@ -65,8 +65,8 @@ UA = {"User-Agent": "kerr-ops/1.0 (founding_offer_gate)"}
 
 # 2026-11-13, Matthew's order: the paid November price is the only sale reference.
 SALE_END = "2026-12-03T07:59:00Z"
-SALE_LINE = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $29."
-BUNDLE_LINE = "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $59."
+SALE_LINE = "Black Friday sale: $16.99 once, 31% off our November price of $24.50, through December 2. Then $39."
+BUNDLE_LINE = "Black Friday sale: $34.99 once, 29% off our November price of $49.50, through December 2. Then $79."
 MOUNT = re.compile(r'<div\b[^>]*\bdata-founding(?=[\s>])[^>]*>')
 
 
@@ -215,7 +215,7 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
         bad.append(f"{rel}: buyer copy still names the old offer")
     allowed = {SALE_LINE.rstrip('.'), BUNDLE_LINE.rstrip('.'),
                "$16.99 once in the Black Friday sale",
-               "$16.99 once in the Black Friday sale, $29 from December 3",
+               "$16.99 once in the Black Friday sale, $39 from December 3",
                "in the Black Friday sale"}
     for span in re.findall(r'<span data-pbox-founding hidden>(.*?)</span>', src, re.S):
         text = html.unescape(span).strip().lstrip('·. ').rstrip('. ')
@@ -244,7 +244,7 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
         def walk(v):
             if isinstance(v, dict):
                 if v.get("@type") == "Offer" and v.get("name") == "Outlier Lifetime Licence":
-                    expected = ("29", None, "USD") if over else ("16.99", "2026-12-02", "USD")
+                    expected = ("39", None, "USD") if over else ("16.99", "2026-12-02", "USD")
                     if (v.get("price"), v.get("priceValidUntil"), v.get("priceCurrency")) != expected:
                         bad.append(f"{rel}: paid Offer price, validity and currency must be {expected}")
                 for child in v.values():
@@ -275,8 +275,8 @@ def wiring(rel: str, src: str, ends: str) -> list[str]:
         parser.handle_starttag = lambda tag, pairs: attrs.update(pairs)
         parser.feed(mount)
         if any(attrs.get(k) != v for k, v in
-               {"data-ref": "$24.50", "data-now": "$16.99", "data-was": "$29"}.items()):
-            bad.append(f"{rel}: sale mount must name data-ref=$24.50, data-now=$16.99, data-was=$29")
+               {"data-ref": "$24.50", "data-now": "$16.99", "data-was": "$39"}.items()):
+            bad.append(f"{rel}: sale mount must name data-ref=$24.50, data-now=$16.99, data-was=$39")
     for m in BAR.finditer(src):
         g = GUARD.search(src[:m.start()])
         if not g:
@@ -381,11 +381,11 @@ def self_check() -> int:
     ends = SALE_END
     guard = (f'<script data-founding-ends="{ends}">(function(){{var end=Date.parse("{ends}"),now=Date.now();'
              f'if(!(now<end))window.__kcFounding=1;}})();</script>\n')
-    mount = '<div data-founding data-ref="$24.50" data-now="$16.99" data-was="$29" hidden></div>\n'
+    mount = '<div data-founding data-ref="$24.50" data-now="$16.99" data-was="$39" hidden></div>\n'
     bar = '<script src="https://kerr-lead-agent.kerrco.workers.dev/founding.js" defer></script>\n'
     reveal = ('<script data-pbox-script>(function(){var m=1;var end=Date.parse("%s"),now=Date.now();'
               'if(!(now<end))return;fetch("x")})();</script>\n')
-    span = '<p>$29<span data-pbox-founding hidden>' + SALE_LINE + '</span></p>\n'
+    span = '<p>$39<span data-pbox-founding hidden>' + SALE_LINE + '</span></p>\n'
     card = ('<div data-lifetime-card>$249</div><script>var c=document.querySelector("[data-lifetime-card]");'
             'var end=Date.parse("%s");</script>\n')
     offer = json.dumps({"ends": ends, "worker": "http://127.0.0.1:9/", "offers": [
@@ -411,7 +411,7 @@ def self_check() -> int:
     ]
     cases += [
         ("missing data-ref", wired.replace(' data-ref="$24.50"', '') + card % ends, wired, "", before, 1),
-        ("wrong reference", wired.replace('data-ref="$24.50"', 'data-ref="$29"') + card % ends, wired, "", before, 1),
+        ("wrong reference", wired.replace('data-ref="$24.50"', 'data-ref="$39"') + card % ends, wired, "", before, 1),
         ("old launch price", wired.replace('data-now="$16.99"', 'data-now="$24.50"') + card % ends, wired, "", before, 1),
         ("missing mount", wired.replace(mount, '') + card % ends, wired, "", before, 1),
         ("dated paid schema", wired + card % ends + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"16.99","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', wired, "", before, 0),
@@ -422,14 +422,14 @@ def self_check() -> int:
         ("old tier in alt", wired + '<img alt="FOUNDING sale">', wired, "", before, 1),
         ("old tier in meta", wired + '<meta name="description" content="Founders offer">', wired, "", before, 1),
         ("old tier in aria", wired + '<button aria-label="Founding sale">Buy</button>', wired, "", before, 1),
-        ("old launch wording", wired.replace(SALE_LINE, 'Launch price: $24.50 once, through November 30. From December 1: $29.'), wired, "", before, 1),
+        ("old launch wording", wired.replace(SALE_LINE, 'Launch price: $24.50 once, through November 30. From December 1: $39.'), wired, "", before, 1),
         ("wrong discount", wired.replace('31% off', '50% off'), wired, "", before, 1),
-        ("wrong former price", wired.replace('price of $24.50', 'price of $29'), wired, "", before, 1),
+        ("wrong former price", wired.replace('price of $24.50', 'price of $39'), wired, "", before, 1),
         ("false savings", wired.replace(SALE_LINE, 'Save $12 against December prices'), wired, "", before, 1),
         ("half price", wired.replace(SALE_LINE, 'Half price'), wired, "", before, 1),
         ("countdown", wired.replace(SALE_LINE, 'Sale countdown'), wired, "", before, 1),
         ("wrong paid schema", wired + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"24.50","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', wired, "", before, 1),
-        ("regular paid schema after end", clean + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"29","priceCurrency":"USD"}</script>', clean, "", after, 0),
+        ("regular paid schema after end", clean + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"39","priceCurrency":"USD"}</script>', clean, "", after, 0),
         ("sale paid schema after end", clean + '<script type="application/ld+json">{"@type":"Offer","name":"Outlier Lifetime Licence","price":"16.99","priceCurrency":"USD","priceValidUntil":"2026-12-02"}</script>', clean, "", after, 1),
     ]
     wrong = []
