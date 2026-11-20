@@ -27,6 +27,14 @@ import sys
 #: Outlier — Founders Lifetime. Named, because "whichever product happens to be
 #: first" is how a page ends up quoting another product's seat count.
 PRODUCT_ID = "pdt_0Nlgdu1f0s30YekSmpGwA"
+# AdPlaybook was dropped on 2026-11-07; Mind the Minutes was paused on
+# 2026-11-11. Dodo still lists both. Adding a product to the store means
+# adding its ID here so the family prices include only products we sell.
+SOLD = {
+    "pdt_0Nlgdu1f0s30YekSmpGwA",  # Outlier
+    "pdt_0NlgdruM2dusRx82wfrmQ",  # Crisp Pro
+    "pdt_0Nlgdu6xbdzeG5tDAWx79",  # Check Engine SEO
+}
 SOURCE = pathlib.Path.home() / "ops" / "launch" / "dodo-facts.json"
 OUT = pathlib.Path(__file__).resolve().parent.parent / "data" / "product-facts.json"
 
@@ -35,7 +43,11 @@ def build() -> dict:
     if not SOURCE.is_file():
         sys.exit(f"sync_product_facts: no source at {SOURCE} — run the Dodo fact writer first")
     src = json.loads(SOURCE.read_text(encoding="utf-8"))
-    prod = (src.get("products") or {}).get(PRODUCT_ID)
+    products = src.get("products") or {}
+    missing = SOLD - products.keys()
+    if missing:
+        sys.exit(f"sync_product_facts: sold IDs {', '.join(sorted(missing))} not in {SOURCE}")
+    prod = products.get(PRODUCT_ID)
     if not prod:
         sys.exit(f"sync_product_facts: {PRODUCT_ID} not in {SOURCE}")
 
@@ -56,7 +68,7 @@ def build() -> dict:
         "product_name": prod.get("name"),
         "seats": seats,
         "price_cents": prod.get("price_cents"),
-        # 2026-09-21: every Kerr product's price, not only Outlier's. The /vs/
+        # 2026-09-21: sold Kerr products' prices, not only Outlier's. The /vs/
         # pages name Crisp ($129) and Docket ($349) in their sibling-site line,
         # and rival_price_in_source_gate read those as RIVAL claims (its own
         # exclusion set was hand-typed and two entries long). One table here,
@@ -64,8 +76,8 @@ def build() -> dict:
         # reaches every gate at once.
         "family_price_cents": {
             str(v.get("name")): v.get("price_cents")
-            for v in (src.get("products") or {}).values()
-            if isinstance(v, dict) and v.get("price_cents")
+            for product_id, v in products.items()
+            if product_id in SOLD and isinstance(v, dict) and v.get("price_cents")
         },
         "activation_message": prod.get("activation_message_entitlement"),
         "source": str(src.get("source") or "dodo"),
