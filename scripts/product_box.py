@@ -57,8 +57,9 @@ TARGETS_BOTH = [
     "learn/i-was-wrong-about-our-own-ram-requirement/index.html",
     "learn/shrinking-a-mac-app-bundle/index.html",
     "vs/lm-studio-alternative/index.html",
-    "vs/when-ollama-is-enough/index.html",
-    "seo/learn/why-ai-agents-narrate-instead-of-acting/index.html",
+    # 2026-11-20: vs/when-ollama-is-enough 301s to vs/ollama-vs-lm-studio since the 7 Nov Bing clean-up (34cc0392f),
+    # and /seo/ moved to /learn/ etc. (ffe50fadd); the stale paths made every default run crash on a missing file.
+    "learn/why-ai-agents-narrate-instead-of-acting/index.html",
 ]
 #: A reference page: one box at the end, not in the middle of the docs.
 TARGETS_END_ONLY = ["developers/index.html"]
@@ -205,8 +206,7 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
 #: The bare Downloads outside /seo/'s articles (measured 2026-09-29: an in-article Download
 #: with no price and no Buy or pricing link beside it). The /seo/ articles are found by bare_targets().
 BARE_OTHER = [
-    "seo/index.html", "seo/how-to/index.html", "seo/learn/index.html",
-    "seo/run/index.html", "seo/vs/index.html",
+    # The five /seo/ hubs left with /seo/ on 7 Nov (ffe50fadd).
     "learn/can-you-run-claude-locally/index.html",
 ]
 _SMALL_PRINT = re.compile(r'\s*<p style="font-size:0\.8rem;[^"]*">.*?</p>', re.S)
@@ -235,6 +235,15 @@ def insert_end(s: str, rel: str, version: str) -> str:
     return _style_and_script(out)
 
 
+def _present(rel: str) -> bool:
+    """A listed page that no longer exists (merged, redirected or moved) is named and skipped, never a crash:
+    one stale entry used to stop the whole run before any page was written. Nothing is written for it."""
+    if (ROOT / rel).is_file():
+        return True
+    print(f"  GONE (no such page; drop it from the list) {rel}")
+    return False
+
+
 def bare_targets() -> list[str]:
     """The /seo/ articles (their last button is the bare Download) plus BARE_OTHER, less any
     page that already has an end box."""
@@ -244,6 +253,8 @@ def bare_targets() -> list[str]:
         if 'data-pbox="answer"' in s and 'data-pbox="end"' not in s:
             out.append(str(p.relative_to(ROOT)))
     for rel in BARE_OTHER:
+        if not _present(rel):
+            continue
         if 'data-pbox="end"' not in (ROOT / rel).read_text(encoding="utf-8"):
             out.append(rel)
     return out
@@ -505,6 +516,8 @@ def main(argv: list[str]) -> int:
             print(f"  SKIP (title-test arm) {rel}")
             continue
         p = ROOT / rel
+        if not _present(rel):
+            continue
         s = p.read_text(encoding="utf-8")
         if "data-pbox=" in s:
             continue
