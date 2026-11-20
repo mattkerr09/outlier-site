@@ -5,6 +5,7 @@
     python3 scripts/product_box.py --seo [--check]    # /seo/: the box after the Quick answer
     python3 scripts/product_box.py --bare [--check]   # the price + Buy under a bare Download
     python3 scripts/product_box.py --std-cta [--check]  # "See Pro" -> Buy Pro in the standard end block
+    python3 scripts/product_box.py --refresh [--check]  # refresh existing sale HTML and scripts
 
 WHY (CEO, 2026-09-28/29 — ops/search/WHAT-WORKS-2026-09-28.md, checklist item 1). A page
 that answers the question and then only offers the menu's Download button is a dead end.
@@ -13,9 +14,9 @@ Buy + requirements + the refund promise — right after the part that answers th
 and again at the end.
 
 HOW IT STAYS HONEST
-- The founders line is NOT hard-coded as available: it is a hidden mount filled by one small
-  script that asks the same /founding endpoint the site's bar uses and shows the line only
-  while seats remain (soldOut hides it). The static price is the regular one.
+- Sale builds lead with the sale price, including without JavaScript. The dated script
+  switches to the regular price at the deadline or on an explicit sold-out response.
+  Rebuild with --refresh after the deadline to update the no-JavaScript fallback too.
 - class="pbox" is chrome to visible_dateline_gate and seo_lint (like "cta" and "related"),
   so adding it never makes a page claim new content.
 - Idempotent: a page that already has a box (data-pbox) is left alone; --check writes nothing.
@@ -37,6 +38,7 @@ would read to them as new content.
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import os
 import pathlib
@@ -82,17 +84,18 @@ STYLE = """<style data-pbox-style>
 </style>
 """
 
-#: The founders-price spans are revealed only before the offer's end date (data/founding_offer.json, the one source) and
-#: while the worker reports seats left. founding_offer_gate.py fails a page whose reveal is not dated, or dated otherwise.
+#: The offer file remains the one source for the cutoff. Sale builds show the sale spans;
+#: the dated script switches open tabs, and --refresh updates the static fallback on rebuild.
 FOUNDING_ENDS = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
 SCRIPT = f"""<script data-pbox-script>
-(function(){{var m=document.querySelectorAll('[data-pbox-founding]');if(!m.length)return;
+(function(){{var m=document.querySelectorAll('[data-pbox-founding], [data-pbox-sale-button]');if(!m.length)return;
 function clock(){{return typeof window.__kcNow==="number"?window.__kcNow:Date.now();}}
-var end=Date.parse("{FOUNDING_ENDS}"),now=clock();if(!(now<end))return;
 function show(on){{m.forEach(function(e){{e.hidden=!on;var r=e.previousElementSibling;if(r&&r.hasAttribute&&r.hasAttribute('data-pbox-regular'))r.hidden=on;}});}}
-if(end-now<24*24*60*60*1000)setTimeout(function(){{show(false);}},end-now);
+var end=Date.parse("{FOUNDING_ENDS}"),now=clock();show(now<end);if(!(now<end))return;
+function expire(){{var left=end-clock();if(left<=0)show(false);else setTimeout(expire,Math.min(left,24*24*60*60*1000));}}
+expire();
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){{return r.json()}})
-.then(function(d){{now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;show(true);}}).catch(function(){{}});}})();
+.then(function(d){{now=clock();if(!(now<end)){{show(false);return;}}if(d&&(d.soldOut||(d.unlimited!==true&&typeof d.left==='number'&&d.left<=0)))show(false);}}).catch(function(){{}});}})();
 </script>
 """
 
@@ -110,18 +113,16 @@ OS_REQ = "macOS " + json.loads((ROOT / "data" / "binary-requirements.json").read
 
 
 def founding_until() -> str:
-    """'24 November, 5:26&nbsp;pm Pacific' from data/founding_offer.json "ends", the instant every page switches the
-    founders price off (2026-11-02, CEO: show the price's true end next to it). Lives only inside the hidden founders
-    spans, which the reveal script shows before that instant and while seats are left."""
+    """The last sale day in US Pacific time, from the offer file's cutoff."""
     import datetime as _dt
     from zoneinfo import ZoneInfo
     ends = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
     t = _dt.datetime.fromisoformat(ends.replace("Z", "+00:00")).astimezone(ZoneInfo("America/Los_Angeles"))
-    return f"{t.strftime('%B')} {t.day}"   # 2026-11-09 (CEO): "through November 30", the US-time day the launch price ends
+    return f"{t.strftime('%B')} {t.day}"
 
 
 def founding_next_day() -> str:
-    """'December 1': the US-time day the regular price starts, the day after founding_until()."""
+    """The US-time day the regular price starts, the day after founding_until()."""
     import datetime as _dt
     from zoneinfo import ZoneInfo
     ends = json.loads((ROOT / "data" / "founding_offer.json").read_text(encoding="utf-8"))["ends"]
@@ -130,16 +131,50 @@ def founding_next_day() -> str:
     return f"{t.strftime('%B')} {t.day}"
 
 
-#: 2026-11-11 (CEO): from December 1, the regular Pro price is $29 once.
 def launch_line(now: str = "$16.99", later: str = "$39") -> str:
-    """2026-11-09 (CEO): "Launch price: $24.50 once, through November 30. From December 1: $49." An introductory price
-    that names the price after it. No "Black Friday", "half price" or "% off", and no struck-through price: $49 has
-    never been charged, so a former-price comparison would not be honest (FTC 16 CFR 233.1; the EU's 30-day rule).
-    No closing full stop: the caller ends the sentence. The regular price beside it sits in <span data-pbox-regular>,
-    which the reveal hides while this line shows."""
-    # The dated launch-policy note above is superseded by Matthew's sale order.
-    # 2026-11-13, Matthew's order: a real sale against the paid November price.
+    """Use the paid November price as the comparison, never December's price."""
     return f"Black Friday sale: {now} once, 31% off our November price of $24.50, through {founding_until()}. Then {later}"
+
+
+def sale_open(now: dt.datetime | None = None) -> bool:
+    now = now if now is not None else dt.datetime.now(dt.timezone.utc)
+    return now < dt.datetime.fromisoformat(FOUNDING_ENDS.replace("Z", "+00:00"))
+
+
+def price_spans(regular: str, sale: str, button: bool = False) -> str:
+    """Static HTML follows the build date; JavaScript handles the cutoff in an open tab."""
+    on = sale_open()
+    marker = "data-pbox-sale-button" if button else "data-pbox-founding"
+    return (f'<span data-pbox-regular{" hidden" if on else ""}>{regular}</span>'
+            f'<span {marker}{"" if on else " hidden"}>{sale}</span>')
+
+
+def buy_label() -> str:
+    return "Buy Pro: " + price_spans("$39 once", "$16.99 once", button=True)
+
+
+def refresh_sale(s: str) -> str:
+    """Refresh existing boxes and buttons without changing article data or link targets."""
+    on = sale_open()
+    s = re.sub(r'<span data-pbox-regular(?: hidden)?>',
+               '<span data-pbox-regular' + (' hidden' if on else '') + '>', s)
+    s = re.sub(r'<span (data-pbox-founding|data-pbox-sale-button)(?: hidden)?>',
+               lambda m: '<span ' + m[1] + ('' if on else ' hidden') + '>', s)
+    s = re.sub(r'(<span data-lt-price>)\$[\d.]+(</span>)',
+               lambda m: m[1] + ('$16.99' if on else '$39') + m[2], s)
+    s = re.sub(r'data-lt-offer(?: hidden)?>', 'data-lt-offer' + ('' if on else ' hidden') + '>', s)
+    s = re.sub(r'(<a\b[^>]*data-lt-btn[^>]*>).*?</a>',
+               lambda m: m[1] + 'Buy Outlier Lifetime Licence: ' + ('$16.99' if on else '$39') + ' once</a>',
+               s, flags=re.S)
+
+    def button(m):
+        if 'data-lt-btn' in m[1] or 'data-pbox-sale-button' in m[2]:
+            return m[0]
+        return m[1] + buy_label() + '</a>'
+
+    s = re.sub(r'(<a\b[^>]*href="[^" ]*/buy/outlier[^" ]*"[^>]*>)(.*?)</a>', button, s, flags=re.S)
+    return re.sub(r'<script data-pbox-script>.*?</script>\n?', lambda m: SCRIPT, s, flags=re.S)
+
 
 def current_version() -> str:
     s = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -168,10 +203,9 @@ def box(tag: str, spot: str, version: str, src: str | None = None) -> str:
     dmg = f"{REPO}/v{version}/Outlier-{version}-arm64.dmg"
     return (
         f'<div class="pbox" data-pbox="{spot}">\n'
-        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $39 once</span>'
-        f'<span data-pbox-founding hidden> &middot; {launch_line()}.</span></p>\n'
+        f'<p class="pbox-price">Outlier Pro{price_spans(": $39 once", ": " + launch_line() + ".")}</p>\n'
         f'<p class="pbox-btns"><a class="pbox-dl" href="{HUB}/dl/outlier?src={src}&amp;to={dmg}" rel="nofollow">Download free</a> '
-        f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
+        f'<a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">{buy_label()}</a></p>\n'
         f'<p class="pbox-req">Free to start (Nano and Lite). {OS_REQ}, Apple silicon. '
         f'{REFUND} {TAX}</p>\n'
         f'</div>\n'
@@ -188,9 +222,8 @@ def end_box(tag: str, version: str, requirements: bool = True) -> str:
     req = (f"Free to start (Nano and Lite). {OS_REQ}, Apple silicon. " if requirements else "")
     return (
         f'<div class="pbox" data-pbox="end">\n'
-        f'<p class="pbox-price">Outlier Pro<span data-pbox-regular>: $39 once</span>'
-        f'<span data-pbox-founding hidden> &middot; {launch_line()}.</span></p>\n'
-        f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">Buy Pro</a></p>\n'
+        f'<p class="pbox-price">Outlier Pro{price_spans(": $39 once", ": " + launch_line() + ".")}</p>\n'
+        f'<p class="pbox-btns"><a class="pbox-buy" href="{HUB}/buy/outlier?src={src}" rel="nofollow">{buy_label()}</a></p>\n'
         f'<p class="pbox-req">{req}{REFUND} {TAX}</p>\n'
         f'</div>\n'
     )
@@ -251,26 +284,24 @@ def bare_targets() -> list[str]:
 STD_PRICE_OLD = ("Free: Nano + Lite. Pro: $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25; "
                  "$124.50 for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. macOS 26+. "
                  "In the US, Klarna or Afterpay at checkout: four payments, two weeks apart.")
-STD_PRICE_NEW = ("Free: Nano + Lite. Pro<span data-pbox-regular>: $39 once</span>"
-                 f"<span data-pbox-founding hidden> &middot; {launch_line()}</span>. {OS_REQ}. " + REFUND + " " + TAX)
+STD_PRICE_NEW = ("Free: Nano + Lite. Pro" + price_spans(": $39 once", ": " + launch_line())
+                 + f". {OS_REQ}. " + REFUND + " " + TAX)
 _STD_SEE_STYLE = ('style="background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px '
                   'var(--border);margin:.5rem 0 0 .5rem"')
 STD_SEE_OLD = f'<a class="btn" href="https://outlier.host/#pricing" {_STD_SEE_STYLE}>See Pro</a>'
 #: The homepage's no-subscription line says the same founders price, statically.
 HOME_OLD = ("Pro: every model, $249 once &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$62.25 &mdash; or $124.50 "
             "for the first 25 &middot;&nbsp;or&nbsp;4&nbsp;&times;&nbsp;$31.13. No subscription, no per-token cost.")
-HOME_NEW = ("Pro: every model<span data-pbox-regular>, $39 once</span><span data-pbox-founding "
-            f"hidden>. {launch_line()}</span>. "
-            "No subscription, no per-token cost.")
+HOME_NEW = ("Pro: every model" + price_spans(", $39 once", ". " + launch_line())
+            + ". No subscription, no per-token cost.")
 # 2026-11-02: the November sale price (was 124.50 / 31.13)
 # 2026-11-13, Matthew's order: the current sale price is $16.99.
 _FOUNDERS_SHOWN = re.compile(r"\$16\.99(?![\d])")
 
 
 def _founders_visible(s: str) -> list[str]:
-    """Founders figures left in the page's text outside the hidden /founding span, the founding bar's
-    data-now attribute and scripts: what a visitor would read after the seats sell out."""
-    t = re.sub(r"<span data-pbox-founding hidden>[^<]*</span>", "", s)
+    """Sale figures outside the controlled spans, bar attributes and scripts."""
+    t = re.sub(r"<span (?:data-pbox-founding|data-pbox-sale-button)(?: hidden)?>[^<]*</span>", "", s)
     t = re.sub(r"(?s)<script\b.*?</script>", "", t)
     t = re.sub(r'data-now="[^"]*"', "", t)
     t = re.sub(r"(?s)<[^>]+>", " ", t)
@@ -414,6 +445,22 @@ def main(argv: list[str]) -> int:
     check = "--check" in argv
     version = current_version()
     changed = 0
+    if "--refresh" in argv:
+        for p in sorted([*ROOT.rglob("index.html"), ROOT / "thank-you.html"]):
+            if any(part.startswith(".") or part == "_seo_build" for part in p.relative_to(ROOT).parts):
+                continue
+            if not p.exists():
+                continue
+            old = p.read_text(encoding="utf-8")
+            if "data-pbox-script" not in old:
+                continue
+            new = refresh_sale(old)
+            if old != new:
+                changed += 1
+                if not check:
+                    p.write_text(new, encoding="utf-8")
+        print(f"  {changed} sale page(s) {'would change' if check else 'written'}")
+        return 1 if check and changed else 0
     if "--std-cta" in argv:
         problems = []
         for rel in std_cta_targets():
