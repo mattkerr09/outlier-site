@@ -12,7 +12,9 @@ import xml.etree.ElementTree as ET
 
 
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "2fa7aa899"
+# 11-20: re-based on the commit that carries the live re-read's 12 rival corrections (ops qa/best-pages-2026-11-20/
+# claims_reread.md); rival text and claim dates may change only with a new dated re-read.
+BASE = "118acb694"
 PAGES = (
     "best/index.html",
     "best/local-llm-for-coding/index.html",
