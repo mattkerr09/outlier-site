@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build indexable /pricing/ and the noindex typed-URL /download/ page.
+"""Build indexable /pricing/ and /download/ pages.
 
     python3 scripts/typed_url_pages.py [--check]
 
@@ -17,6 +17,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import product_box  # noqa: E402
+import download_size  # noqa: E402
 
 PAGES = {
     "pricing": {"title": "Outlier pricing", "crumb": "pricing", "src": "pricing-page",
@@ -31,6 +32,44 @@ FAQ = (
     ("What happens after December 2?", "The Black Friday sale ends. From December 3, Outlier is $39 once and the bundle is $79 once. Nano and Lite stay free."),
     ("Is there a free version?", "Yes. Free includes Nano and Lite, local chat and sessions, the model picker and downloads, and an 8K context window per conversation. No account is needed."),
 )
+
+
+DOWNLOAD_REQUIREMENTS = "Apple Silicon only, M1 or newer, on macOS 15 or later (a free update). Intel Macs are not supported."
+DOWNLOAD_FAQ = (
+    ("Is Outlier free?", "Yes. Nano and Lite are free, with no account needed. Free includes local chat and saved sessions, the model picker and downloads, and an 8K context window per conversation."),
+    ("What Mac do I need?", DOWNLOAD_REQUIREMENTS),
+    ("Does it work offline?", "Yes. Download a model tier first, then it can answer with the network off. Pro needs a connection to activate the licence. If a later licence check cannot reach the server, Pro keeps working. Web search and cloud models need a connection when you choose to use them."),
+)
+
+
+def download_content(version: str) -> str:
+    size = download_size.load()["dmg_mb"]
+    return (f"""    <p class="updated-pill">Last updated 2026-11-20</p>
+    <p class="lead">Download Outlier for local AI chat on your Mac. Start free with Nano and Lite, then choose Pro if you want the other model tiers and features.</p>
+    <p>Current version: v{version}. The installer is about {size} MB. The app is signed and notarized. Model tiers download separately when you first use them.</p>
+    <h2>Before you download</h2>
+    <p>{DOWNLOAD_REQUIREMENTS}</p>
+    <p>Nano needs 6 GB of memory and Lite needs 12 GB, so both fit a 16 GB MacBook Air. Quick needs 16 GB to load and wants 24 GB. Core and Vision need 24 GB.</p>
+""")
+
+
+def download_details() -> str:
+    return ("""    <h2>What is free, and what does Pro add?</h2>
+    <p>Start with free local chat and saved sessions. Nano 4B and Lite 9B come with the model picker, model downloads and an 8K context window per conversation. There is no account to set up.</p>
+    <p>Pro adds Quick, Core, Vision and Plus. It also adds the coding agent, local memory, projects, a 128K context window and on-device fine-tuning. The Outlier Lifetime Licence is one payment, with no subscription or renewal. It covers up to 3 Macs at a time and includes future model releases for as long as Outlier exists. Read the <a href="/pricing/">Free and Pro pricing</a> before you buy.</p>
+    <h2>How to install Outlier</h2>
+    <ol>
+      <li>Download the DMG using the Download free button above.</li>
+      <li>Open the DMG and drag Outlier to Applications.</li>
+      <li>Open Outlier and download a model tier before going offline.</li>
+    </ol>
+    <p>Or install with Homebrew:</p>
+    <p><code>brew install --cask outlier-host/tap/outlier</code></p>
+    <p>Local chat runs on your Mac. Chat history and memory stay on your disk. Web search and cloud models are opt-in. The app checks for updates and, on Pro, checks your licence. See the <a href="/privacy.html">privacy policy</a> for what each connection sends.</p>
+    <h2>Download FAQ</h2>
+""" + "".join(
+        "    <h3>" + html.escape(q) + "</h3>\n    <p>" + html.escape(a) + "</p>\n"
+        for q, a in DOWNLOAD_FAQ))
 
 
 def pricing_content() -> str:
@@ -82,17 +121,14 @@ def _page_head(head: str, slug: str, meta: dict) -> str:
     h = re.sub(r'<meta name="description" content="[^"]*">',
                f'<meta name="description" content="{meta["description"]}">', h, count=1)
     h = re.sub(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{url}">', h, count=1)
-    if slug == "download":
-        h = h.replace('<meta name="viewport" content="width=device-width, initial-scale=1.0">',
-                  '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n'
-                  '  <meta name="robots" content="noindex">', 1)
-    if slug == "pricing":
+    if slug in {"pricing", "download"}:
+        faq = FAQ if slug == "pricing" else DOWNLOAD_FAQ
         schema = [
             {"@context": "https://schema.org", "@type": "WebPage", "name": meta["title"],
              "url": url, "dateModified": "2026-11-20"},
             {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
                 {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
-                for q, a in FAQ]},
+                for q, a in faq]},
         ]
         h += "".join('<script type="application/ld+json">' + json.dumps(v) + '</script>\n' for v in schema)
     return h + product_box.STYLE
@@ -112,9 +148,9 @@ def build(slug: str) -> str:
         + nav + "\n<article>\n  <div class=\"wrap\">\n"
         + f"    <div class=\"crumb\"><a href=\"https://outlier.host/\">Outlier</a> &nbsp;›&nbsp; {meta['crumb']}</div>\n"
         + f"    <h1>{meta['title']}</h1>\n"
-        + (pricing_content() if slug == "pricing" else "")
+        + (pricing_content() if slug == "pricing" else download_content(version))
         + box
-        + (pricing_faq() if slug == "pricing" else "")
+        + (pricing_faq() if slug == "pricing" else download_details())
         + "    <p><a href=\"https://outlier.host/\">← Back to outlier.host</a></p>\n"
         + "  </div>\n</article>\n\n" + footer + "\n" + tail + product_box.SCRIPT + '<script src="/js/mac-only.js?v=20261111" defer></script>\n' + "</body>\n</html>\n"
     )
