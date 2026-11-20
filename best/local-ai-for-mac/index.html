@@ -122,7 +122,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI apps for Mac compared in 2026", "item": "https://outlier.host/best/local-ai-for-mac/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which local AI app fits my Mac workflow?", "acceptedAnswer": {"@type": "Answer", "text": "For a Mac app with bundled tools, Outlier offers one signed download, no terminal, and a paged engine that runs models bigger than your RAM. If you live in the terminal or want cross-platform and fully open-source, Ollama is the developer favorite. LM Studio offers a polished GGUF chat GUI. The right answer depends on your goal: batteries-included, or DIY."}}, {"@type": "Question", "name": "Is there a free local AI for Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Ollama, Jan, and GPT4All are free and open-source. LM Studio is free and proprietary. Outlier's Nano and Lite tiers are free, local, and need no account; the larger tiers are paid. All of them run on the Mac you already own with Wi-Fi off."}}, {"@type": "Question", "name": "What runs the biggest models on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Tools that load models into RAM (Ollama, LM Studio, Jan, GPT4All) are, in practice, capped by how much RAM you have: past it, the engine rereads weights from disk on nearly every token and slows to a crawl. Outlier's patent-pending paged inference engine streams experts from disk, so a 397B-parameter model runs at roughly 18 GB peak RSS on a 64 GB Mac: bigger than the machine's memory. See how to run a 397B model on consumer hardware."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Which local AI app fits my Mac workflow?", "acceptedAnswer": {"@type": "Answer", "text": "For a Mac app with bundled tools, Outlier offers one signed download, no terminal, and a paged engine that runs models bigger than your RAM. If you live in the terminal or want cross-platform and fully open-source, Ollama is the developer favorite. LM Studio offers a polished GGUF chat GUI. The right answer depends on your goal: batteries-included, or DIY."}}, {"@type": "Question", "name": "Is there a free local AI for Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Ollama, Jan, and GPT4All are free and open-source. LM Studio is free and proprietary. Outlier's Nano and Lite tiers are free, local, and need no account; the larger tiers are paid. All of them run on the Mac you already own with Wi-Fi off."}}, {"@type": "Question", "name": "What runs the biggest models on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Tools that load models into RAM (Ollama, LM Studio, Jan, GPT4All) are, in practice, capped by how much RAM you have: past it, llama.cpp's default memory-mapping rereads weights from disk and slows sharply (we have not timed the other apps). Outlier's patent-pending paged inference engine streams experts from disk, so a 397B-parameter model runs at roughly 18 GB peak RSS on a 64 GB Mac: bigger than the machine's memory. See how to run a 397B model on consumer hardware."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -154,7 +154,7 @@
     <div class="byline-row">
       <span class="byline">Matthew Kerr · Outlier · published 2026-06-12</span>
       <span class="updated-pill">Last updated 2026-11-20</span>
-      <span class="byline" data-claims-checked="2026-11-09" data-claims-set="Ollama, LM Studio, Jan, GPT4All">Ollama, LM Studio, Jan and GPT4All prices and licences checked 2026-11-09</span>
+      <span class="byline" data-claims-checked="2026-11-20" data-claims-set="Ollama, LM Studio, Jan, GPT4All">Ollama, LM Studio, Jan and GPT4All prices and licences checked 2026-11-20</span>
     </div>
 
     <h2>How this page compares them</h2>
@@ -184,14 +184,14 @@
 
     <h2>The comparison table</h2>
     <table><thead><tr><th>App</th><th>Interface</th><th>Runs bigger than RAM</th><th>Bundled features</th><th>Price</th><th>Open source</th></tr></thead><tbody>
-      <tr><td>GPT4All</td><td>Desktop GUI</td><td>Not at usable speed</td><td>Chat UI, local docs</td><td>Free</td><td>Yes</td></tr>
-      <tr><td>Jan</td><td>Desktop GUI</td><td>Not at usable speed</td><td>Chat UI, OpenAI-compatible API</td><td>Free</td><td>Yes (Apache 2.0)</td></tr>
-      <tr><td>LM Studio</td><td>Desktop GUI</td><td>Not at usable speed</td><td>Chat UI, model browser, local server, Bionic agent</td><td>Free; optional paid hosted plans</td><td>No</td></tr>
-      <tr><td>Ollama</td><td>CLI, API and a basic chat app</td><td>Not at usable speed</td><td>Model runner; large library</td><td>Free locally; optional cloud plans</td><td>Yes</td></tr>
+      <tr><td>GPT4All</td><td>Desktop GUI</td><td>Pages from disk (not timed by us)</td><td>Chat UI, local docs</td><td>Free</td><td>Yes</td></tr>
+      <tr><td>Jan</td><td>Desktop GUI</td><td>Pages from disk (not timed by us)</td><td>Chat UI, OpenAI-compatible API</td><td>Free</td><td>Yes (Apache 2.0)</td></tr>
+      <tr><td>LM Studio</td><td>Desktop GUI</td><td>Pages from disk (not timed by us)</td><td>Chat UI, model browser, local server (Bionic agent is a separate free app)</td><td>Free; optional paid hosted plans</td><td>No</td></tr>
+      <tr><td>Ollama</td><td>CLI, API and a basic chat app</td><td>Pages from disk (not timed by us)</td><td>Model runner; large library</td><td>Free locally; optional cloud plans</td><td>Yes</td></tr>
       <tr><td><strong>Outlier</strong></td><td>Mac-native app</td><td>Yes (paged engine)</td><td>Chat free; coding agent, deep research, vision, voice on Pro</td><td>Free tier; Pro, $39 once</td><td>No (open weights)</td></tr>
     </tbody></table>
     <p>Four of the five are free and most are open-source. That's a genuine strength, and why a lot of people start there.</p>
-    <p>Prices and licences read 2026-10-19: Ollama on <a href="https://ollama.com/pricing">ollama.com/pricing</a> and in its <a href="https://github.com/ollama/ollama">GitHub repository</a> (MIT), LM Studio on <a href="https://lmstudio.ai/pricing">lmstudio.ai/pricing</a> and in its <a href="https://lmstudio.ai/app-terms">app terms</a>, Jan in its <a href="https://github.com/janhq/jan/blob/main/LICENSE">LICENSE file</a>, GPT4All in its <a href="https://github.com/nomic-ai/gpt4all">GitHub repository</a> (MIT).</p>
+    <p>Prices and licences read 2026-11-20: Ollama on <a href="https://ollama.com/pricing">ollama.com/pricing</a> and in its <a href="https://github.com/ollama/ollama">GitHub repository</a> (MIT), LM Studio on <a href="https://lmstudio.ai/pricing">lmstudio.ai/pricing</a> and in its <a href="https://lmstudio.ai/app-terms">app terms</a>, Jan in its <a href="https://github.com/janhq/jan/blob/main/LICENSE">LICENSE file</a>, GPT4All in its <a href="https://github.com/nomic-ai/gpt4all">GitHub repository</a> (MIT).</p>
 
     <h2>GPT4All: simple, open chat app</h2>
     <p><strong>What it is:</strong> a free, open-source desktop app from Nomic. Cross-platform, runs local GGUF models, privacy-focused, and approachable for first-timers.</p>
@@ -241,7 +241,7 @@
       </div>
       <div class="faq-item">
         <h3>What runs the biggest models on a Mac?</h3>
-        <p>Tools that load models into RAM (Ollama, LM Studio, Jan, GPT4All) are, in practice, capped by how much RAM you have: past it, the engine rereads weights from disk on nearly every token and slows to a crawl. Outlier's patent-pending paged inference engine streams experts from disk, so a 397B-parameter model runs at roughly 18 GB peak RSS on a 64 GB Mac: bigger than the machine's memory. See <a href="https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/">how to run a 397B model on consumer hardware</a>.</p>
+        <p>Tools that load models into RAM (Ollama, LM Studio, Jan, GPT4All) are, in practice, capped by how much RAM you have: past it, llama.cpp's default memory-mapping rereads weights from disk and slows sharply (we have not timed the other apps). Outlier's patent-pending paged inference engine streams experts from disk, so a 397B-parameter model runs at roughly 18 GB peak RSS on a 64 GB Mac: bigger than the machine's memory. See <a href="https://outlier.host/learn/how-to-run-397b-on-consumer-hardware/">how to run a 397B model on consumer hardware</a>.</p>
       </div>
     </div>
     <div class="cta">
