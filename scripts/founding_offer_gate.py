@@ -252,7 +252,11 @@ def buyer_copy(rel: str, src: str, over: bool = False) -> list[str]:
             if isinstance(v, dict):
                 if v.get("@type") == "Offer" and v.get("name") == "Outlier Lifetime Licence":
                     expected = ("39", None, "USD") if over else ("16.99", "2026-12-02", "USD")
-                    if (v.get("price"), v.get("priceValidUntil"), v.get("priceCurrency")) != expected:
+                    got = (v.get("price"), v.get("priceValidUntil"), v.get("priceCurrency"))
+                    # 2026-11-21 (Dec 3 price sweep row 42): during the sale a page may ALSO carry the after-sale offer,
+                    # exactly $39 with validFrom 2026-12-03 and no priceValidUntil, so search engines see both dates.
+                    future_ok = (not over and got == ("39", None, "USD") and v.get("validFrom") == "2026-12-03")
+                    if got != expected and not future_ok:
                         bad.append(f"{rel}: paid Offer price, validity and currency must be {expected}")
                 for child in v.values():
                     walk(child)
