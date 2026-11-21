@@ -109,11 +109,16 @@ def check(html, sitemap):
     assert all(src.startswith(prefix) for src, prefix in zip(sources, DOWNLOAD_SRC_PREFIXES))
     assert OFFLINE_CHECK in hrefs and '/learn/is-local-ai-safe/' in hrefs
     qa = re.search(r'<div class="quick-answer">.*?<p>(.*?)</p>', html, re.S).group(1)
-    assert len(text(qa).split()) <= 60
+    # The quick answer shares one paragraph with the measured-answer sentences (test_measured_answers_2, O8);
+    # the direct answer is its first two sentences.
+    answer = ' '.join(re.split(r'(?<=[.!?])\s+(?=[A-Z])', text(qa))[:2])
+    assert len(answer.split()) <= 60, 'direct answer too long'
     assert text(qa).startswith('A private AI server runs the model on hardware you control')
-    assert '4 November 2026 capture' in qa
+    assert 'so prompts are not sent to an AI vendor' in text(qa)
+    assert 'never reach a vendor' not in html
 
     section = article.split(f'<h2>{NEW_H2}</h2>', 1)[1].split('<h2>', 1)[0]
+    assert '4 November 2026 capture' in text(section), 'dated capture missing from the new section'
     table = blocks(section, 'table')[0]
     assert '<div class="table-scroll">' in section
     assert [text(h) for h in blocks(table, 'th')] == [
