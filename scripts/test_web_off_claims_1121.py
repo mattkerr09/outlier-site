@@ -30,8 +30,8 @@ EDITED_CLAIMS = {'learn/how-local-ai-gets-smarter/index.html': ['Runs on your Ma
                                                     "unless you use web search or Pro's Research mode, "
                                                     'cloud escalation or a cloud model.'],
  'index.html': ['Chats stay on your Mac unless you use web search or Research.',
-                'Outlier runs the model on your own Mac; your code and chats stay on it in Chat or Code '
-                'mode with web search off, while Pro can use Research in Auto mode.',
+                'Outlier runs the model on your own Mac, so your code and chats stay on it unless you use '
+                'web search or Research.',
                 "It edits code, runs tests and searches the web through web search or Pro's Research "
                 'mode.',
                 "Nothing you type leaves your Mac unless you use web search or Pro's Research mode, or "
