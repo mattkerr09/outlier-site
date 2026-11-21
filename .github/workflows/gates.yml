@@ -199,6 +199,10 @@ jobs:
           python3 -m pip install --quiet "pytest==8.4.2"
           python3 -m pytest -q -p no:cacheprovider $(ls scripts/test_*.py | grep -v test_install_page_upgrade_1120.py)
           python3 scripts/test_install_page_upgrade_1120.py
+          # 2026-11-21 (Outlier): script-style page tests (a main() under __name__ == '__main__') collect 0 pytest tests, so they
+          # never ran here; the GGUF page test (test_gguf_page_upgrade_1121.py) would have been the next silent one. Run every such
+          # file as a script too. set -e stops the step on the first one that exits non-zero.
+          for f in $(grep -l -E "__name__ *== *['\"]__main__['\"]" scripts/test_*.py); do echo "== $f"; python3 "$f" > /dev/null; done
 
       - name: Every sitemap URL is reachable from the homepage
         run: python3 scripts/orphan_page_gate.py
