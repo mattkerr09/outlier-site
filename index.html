@@ -10,12 +10,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
   <title>Outlier: AI without the data center, local on your Mac</title>
-  <meta name="description" content="AI without the data center. Outlier runs the model on your own Mac, so by default your code and chats stay on it, even offline. Free to start.">
+  <meta name="description" content="AI without the data center. Chats stay on your Mac unless you use web search or Research. Free to start.">
   <meta name="theme-color" content="#07060b">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://outlier.host/">
   <meta property="og:title" content="Outlier: AI without the data center, private on your Mac">
-  <meta property="og:description" content="AI without the data center. Outlier runs the model on your own Mac, so by default your code and chats stay on it, even offline. It edits code, runs tests and searches the web only when you turn search on. Free to start.">
+  <meta property="og:description" content="AI without the data center. Chats stay on your Mac unless you use web search or Research. It edits code, runs tests and searches the web through web search or Pro's Research mode. Free to start.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://outlier.host/">
   <meta property="og:image" content="https://outlier.host/og-card.png">
@@ -24,7 +24,7 @@
   <meta property="og:site_name" content="Outlier">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Outlier: AI without the data center, private on your Mac">
-  <meta name="twitter:description" content="AI without the data center. Outlier runs the model on your own Mac, so by default your code and chats stay on it, even offline. Free to start.">
+  <meta name="twitter:description" content="AI without the data center. Chats stay on your Mac unless you use web search or Research. Free to start.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <!-- FONTS ARE SELF-HOSTED. This is a product claim, not a performance tweak.
        Outlier's headline is privacy by default. Until 2026-08-18 this
@@ -973,7 +973,7 @@
     <div class="eyebrow reveal in"><span class="dot"></span> Runs on your Mac · notarized by Apple</div>
     <h1 class="reveal d1 in">AI without the data&nbsp;center.<br><span class="accent">Private and offline, on your&nbsp;Mac.</span></h1>
       <!-- 10 Nov: "in" like the other hero lines. Without it the reveal observer left this line invisible on first load (a 77px hole under the phone headline, an empty slot at 1280). -->
-      <p class="future-line reveal d2 in">Outlier runs the model on your own Mac, so by default your code and chats stay on it. Pull the plug on the internet and it keeps answering.</p>
+      <p class="future-line reveal d2 in">Outlier runs the model on your own Mac; your code and chats stay on it in Chat or Code mode with web search off, while Pro can use Research in Auto mode. Pull the plug on the internet and it keeps answering.</p>
     <p class="sub reveal d2 in">It&rsquo;s built for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, with no usage cap, and the <a href="/privacy.html">privacy page</a> explains the few connections it makes.</p>
     <div class="cta-bar">
       <div class="cta-row reveal d3 in">
@@ -1101,7 +1101,7 @@
         <span class="kicker">Private by design</span>
         <h2>Private<br><span class="accent">by default.</span></h2>
       </div>
-      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. Your chats are never on our servers, because we never receive them. <strong>Nothing you type leaves your Mac unless you turn web on or switch a chat to a cloud model with your own API key</strong> (with web on, the search query goes out, and in agent mode the pages and web tools it uses; with web off, a download the agent wants asks you first). On its own the app goes online only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. Nano, Lite, Quick and Core are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>; Plus and Vision 3.8 come from public community conversions of Qwen's models.</p>
+      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. Your chats are never on our servers, because we never receive them. <strong>Nothing you type leaves your Mac unless you use web search or Pro's Research mode, or pick a cloud model with your own API key</strong> (with web on, the search query goes out, and in agent mode the pages and web tools it uses; with web off, a download the agent wants asks you first). Apart from Pro choosing Research in Auto mode, the app goes online on its own only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. Nano, Lite, Quick and Core are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>; Plus and Vision 3.8 come from public community conversions of Qwen's models.</p>
       <div class="proof reveal d2">
         <div class="proof-head"><b></b>Captured 2026-11-04 on Outlier 1.11.992 while Core was answering, web search off. A past capture, not a live reading.</div>
 <pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
@@ -1251,7 +1251,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       <span class="kicker">Beyond chat</span>
       <h2>The rest of the app,<br><span class="accent">not just described.</span></h2>
       <p>Three things Outlier does that a chat box does not, in the same window. Chat and the agent
-      run on your Mac; deep research goes to the web only when you turn it on.</p>
+      run on your Mac; Pro's Research reads the web, and Auto can pick Research even with web search off.</p>
     </div>
 
     <div class="demos">
@@ -1519,7 +1519,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </details>
       <details>
         <summary>Does my data stay private?</summary>
-        <div class="body">Inference runs on your Mac; chat history and memory stay on your disk. Web (search, web pages, web-connected tools) and external API keys are opt-in: switch one on and that request leaves your device by design. With web off, an agent command that downloads from the internet asks first.</div>
+        <div class="body">Inference runs on your Mac; chat history and memory stay on your disk. Web search, web pages, web-connected tools and external API keys can send requests out, and Pro can pick Research in Auto mode even with web search off. With web off, an agent command that downloads from the internet asks first.</div>
       </details>
       <details>
         <summary>Do I need an internet connection?</summary>

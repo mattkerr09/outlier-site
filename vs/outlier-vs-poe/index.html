@@ -151,7 +151,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>Poe is Quora's cloud aggregator: one account and one pool of compute points buys models from OpenAI, Anthropic and Google, plus image, video and audio generators, on web, Mac, Windows, iPhone and Android. Outlier runs models on your own Mac: no account, no caps, nothing uploaded unless you turn on cloud escalation, works with Wi-Fi off. Poe's annual plans run $49.99 to $2,499.99; Outlier Pro is $39 once, and its two smallest models are free.</p>
+      <p>Poe is Quora's cloud aggregator: one account and one pool of compute points buys models from OpenAI, Anthropic and Google, plus image, video and audio generators, on web, Mac, Windows, iPhone and Android. Outlier runs models on your own Mac: no account, no caps, works with Wi-Fi off, and your words stay local unless you use web search or Pro's Research mode, or a cloud model with your own API key. Poe's annual plans run $49.99 to $2,499.99; Outlier Pro is $39 once, and its two smallest models are free.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro<span data-pbox-regular>: $39 once</span><span data-pbox-founding hidden> &middot; Black Friday sale: $16.99 once through December 2. Then $39.</span></p>
@@ -170,7 +170,7 @@
     <p>There's a real developer platform on top: a documented bot protocol, server bots, monetization, group chats, and an OpenAI-compatible REST API at <code>api.poe.com/v1</code> (plus an Anthropic-compatible endpoint) that Poe documents as working with Cursor, Cline and Continue, capped at 500 requests per minute.</p>
 
     <h2>What Outlier is</h2>
-    <p>Outlier is a native macOS app for Apple Silicon: M1 or later, macOS 15 or newer. No Windows, Linux, or iPhone build. What it does have is the whole model running on your machine: no account, no usage cap, and nothing leaving the device unless you enable cloud escalation, one optional setting that retries a task the local model can't finish on a cloud model using your own API key. It's off by default and never runs in private mode. Turn off Wi-Fi and it keeps working.</p>
+    <p>Outlier is a native macOS app for Apple Silicon: M1 or later, macOS 15 or newer. No Windows, Linux, or iPhone build. What it does have is the whole model running on your machine: no account, no usage cap, and your words stay local unless you use web search or Pro's Research mode, or cloud escalation with your own API key. It's off by default and never runs in private mode. Turn off Wi-Fi and it keeps working.</p>
 
     <p>Six tiers ship in the app, from Nano (4B, a 2.37 GB download, 6 GB RAM minimum, 71.7 tok/s on my M1 Ultra and about 32 tok/s on an M4 MacBook Air in one single-prompt run, 2026-05-04, indicative) through Core at 27B, up to Plus at 397B-a17b, which streams experts from SSD and peaks near 18 GB of RSS on a 64 GB Mac. All six base models are Apache 2.0 (Quick's Gemma 4 base included; see the <a href="https://huggingface.co/google/gemma-4-26B-A4B-it" rel="nofollow">model card</a>). Nano and Lite are free; Pro is a one-time purchase for all six tiers.</p>
 
@@ -243,7 +243,7 @@
 
     <p>The catch: that control is per bot, not per account, and no global training opt-out is documented. Memory can be switched off and its summaries deleted, though Poe notes summaries can outlive the chats they came from. The terms also take a worldwide, non-exclusive, royalty-free, transferable and perpetual license to your content: you keep ownership. Privacy policy dated April 30, 2026; terms March 19, 2026.</p>
 
-    <p>Outlier's half is short: inference happens in your Mac's memory, so there's no server log to request and no per-bot shield to read. The one exception is cloud escalation: off by default, your own API key, never in private mode. Leave it off and nothing you type leaves the Mac.</p>
+    <p>Outlier's half is short: inference happens in your Mac's memory, so there's no server log to request and no per-bot shield to read. Web search, Pro's Research and cloud escalation with your own API key can send data out. Pick Chat or Code mode with web search off to keep your words local; Pro can pick Research in Auto mode even with web search off.</p>
 
     <h2>Where Poe genuinely wins</h2>
     <p>Not concessions: facts about what a laptop can't do.</p>
@@ -258,7 +258,7 @@
     </ul>
 
     <h2>Where Outlier has the edge</h2>
-    <p>Four things, all structural rather than a matter of degree. Nothing you type is uploaded unless you enable cloud escalation (off by default, your own API key, never in private mode), so out of the box there's no policy to trust and no shield icon to check. It works offline: on a plane, in a basement, on hotel Wi-Fi that's pretending to work. No caps, so a long refactor costs nothing but time. And the price doesn't move with usage.</p>
+    <p>Four things, all structural rather than a matter of degree. Nothing you type leaves your Mac unless you use web search or Pro's Research mode, or pick a cloud model with your own API key. It works offline: on a plane, in a basement, on hotel Wi-Fi that's pretending to work. No caps, so a long refactor costs nothing but time. And the price doesn't move with usage.</p>
 
     <p>The honest quality receipt: on a blind slice of SWE-bench Verified Core 27B measured 46% (23 of 50, build 1.11.757, 2026-08-09), and I published a <a href="https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/">54-prompt side-by-side with Claude Opus</a> so you can compare the answers yourself. Strong for a model on your desk, not the same as the top of Poe's catalog. On a genuinely hard problem, a frontier cloud model still wins.</p>
 
