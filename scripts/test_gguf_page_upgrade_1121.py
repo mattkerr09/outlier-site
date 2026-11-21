@@ -125,7 +125,10 @@ def check(html, original, sitemap):
 
 
 def main():
-    base = subprocess.check_output(['git', 'merge-base', 'HEAD', 'next'], cwd=ROOT, text=True).strip()
+    # The page as it was before this upgrade. Pinned (Outlier, 2026-11-21): `git merge-base HEAD next` gave that commit only
+    # BEFORE the merge; on next itself it is the new commit, so CI compared the page with itself and failed. CI checks out
+    # full history (fetch-depth: 0), so the pinned commit is always there.
+    base = '8018760b0'
     original = subprocess.check_output(['git', 'show', f'{base}:{PAGE}'], cwd=ROOT, text=True)
     html = (ROOT / PAGE).read_text()
     sitemap = (ROOT / 'sitemap.xml').read_text()
