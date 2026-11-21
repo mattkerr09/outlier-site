@@ -144,7 +144,8 @@ def check(html, sitemap):
     assert visible and f'href="{OFFLINE_CHECK}"' in visible[1]
     answer = next(q['acceptedAnswer']['text'] for q in faq if q['name'] == NEW_FAQ)
     assert text(visible[1]) == answer
-    for phrase in ('127.0.0.1', "app's local key", '4 November 2026 capture', 'lsof'):
+    # 2026-11-21 (Outlier review): the local-key sentence was dropped; the key can fail open until 1018.
+    for phrase in ('127.0.0.1', 'other devices on the network cannot connect there', '4 November 2026 capture', 'lsof'):
         assert phrase in answer
     for question in ORIGINAL_FAQS:
         assert f'<h3>{question}</h3>' in article
