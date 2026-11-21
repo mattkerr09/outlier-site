@@ -164,7 +164,7 @@ def build(slug: str) -> str:
             + f'    <p>{meta["description"]}</p>\n'
             + f'    <p><a href="/help/#{meta["anchor"]}">{meta["link"]}</a></p>\n'
             + releases + '  </div>\n</article>\n\n' + footer + '\n' + tail
-            + '<script src="/js/mac-only.js?v=20261111" defer></script>\n</body>\n</html>\n'
+            + '<script src="/js/mac-only.js?v=20261121" defer></script>\n</body>\n</html>\n'
         )
     version = product_box.current_version()
     box = product_box.box(f"{slug}-page", "answer", version, src=meta["src"])
@@ -181,7 +181,7 @@ def build(slug: str) -> str:
         + box
         + (pricing_faq() if slug == "pricing" else download_details())
         + "    <p><a href=\"https://outlier.host/\">← Back to outlier.host</a></p>\n"
-        + "  </div>\n</article>\n\n" + footer + "\n" + tail + product_box.SCRIPT + '<script src="/js/mac-only.js?v=20261111" defer></script>\n' + "</body>\n</html>\n"
+        + "  </div>\n</article>\n\n" + footer + "\n" + tail + product_box.SCRIPT + '<script src="/js/mac-only.js?v=20261121" defer></script>\n' + "</body>\n</html>\n"
     )
 
 

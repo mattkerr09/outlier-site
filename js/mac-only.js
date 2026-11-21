@@ -41,11 +41,11 @@
   var css = document.createElement('style');
   css.textContent =
     '.mac-only-note{margin:.6rem 0 0;font-size:.9rem;line-height:1.45;color:var(--text-mid,#5b5b66);}' +
-    (phone ?
-      '.mac-only-note{margin:0 0 .6rem;}.mac-only-note .btn{display:flex;margin-top:.5rem;white-space:normal;}' +
-      '@media (max-width:760px){.mac-only-note .btn{width:100%;}}' :
-      '.mac-only-note button{font:inherit;color:var(--text,inherit);background:none;border:0;padding:0;' +
-      'text-decoration:underline;text-underline-offset:2px;cursor:pointer;}') +
+    // 21 Nov (CEO, blind review): on a phone the send-link button had become the first, full-width, purple button above
+    // Download and Buy. Phones now read like every other non-Mac visitor: Download and Buy keep their place, and one
+    // plain line with an underlined link follows the buttons.
+    '.mac-only-note button{font:inherit;color:var(--text,inherit);background:none;border:0;padding:0;' +
+    'text-decoration:underline;text-underline-offset:2px;cursor:pointer;}' +
     'html.not-mac .phone-link{display:none !important;}';           // the home page's own phone line: one line, not two
   document.head.appendChild(css);
   document.documentElement.classList.add('not-mac');
@@ -53,10 +53,6 @@
   var done = [];
   Array.prototype.forEach.call(links, function (a) {
     if (a.closest('nav, header, footer')) return;     // a paragraph in the nav or footer would break their layout
-    if (phone) {
-      a.classList.remove('btn-primary');
-      if (a.classList.contains('btn')) a.classList.add('btn-ghost');
-    }
     var box = a.closest('.cta-bar, .pbox-btns, p, ul, ol, div') || a.parentNode;   // a list item's note goes after its list
     if (!box || done.indexOf(box) !== -1) return;
     done.push(box);
@@ -68,10 +64,9 @@
     var b = document.createElement('button');
     b.type = 'button';
     b.textContent = phone ? 'Send yourself the Mac link' : 'Send yourself the Mac link.';
-    if (phone) b.className = 'btn btn-primary';
     b.addEventListener('click', sendLink);
     note.appendChild(b);
-    box.parentNode.insertBefore(note, phone ? box : box.nextSibling);
+    box.parentNode.insertBefore(note, box.nextSibling);
   });
 
   document.addEventListener('click', function (e) {

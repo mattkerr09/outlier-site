@@ -235,8 +235,10 @@
       /* 10 Nov (blind SITE-BAR review, CEO): the future-line had no grid cell, so the grid auto-placed it in row 6, under
          the demo and the check row, and its -.75rem margin pulled it 12px into the checks. It is the copy column's lead
          line now (row 2), and every block below it moves down one row. */
+      /* 21 Nov (CEO, blind review): centred against the copy column the headline sat low, with empty space above it.
+         It starts level with the copy's first line now. */
       .hero .wrap > h1{grid-column:1;grid-row:2 / span 4;margin-bottom:0;
-        align-self:center;font-size:clamp(3.25rem,4.35vw,4.5rem);max-width:15ch;}
+        align-self:start;font-size:clamp(3.25rem,4.35vw,4.5rem);max-width:15ch;}
       .hero .wrap > .future-line{grid-column:2;grid-row:2;margin:.5rem 0 0;max-width:none;}
       .hero .wrap > p.sub{grid-column:2;grid-row:3;margin-top:.9rem;max-width:none;}
       .hero .wrap > .cta-bar{grid-column:2;grid-row:4;align-self:start;}
@@ -972,7 +974,7 @@
     <h1 class="reveal d1 in">AI without the data&nbsp;center.<br><span class="accent">Private and offline, on your&nbsp;Mac.</span></h1>
       <!-- 10 Nov: "in" like the other hero lines. Without it the reveal observer left this line invisible on first load (a 77px hole under the phone headline, an empty slot at 1280). -->
       <p class="future-line reveal d2 in">Outlier runs the model on your own Mac, so by default your code and chats stay on it. Pull the plug on the internet and it keeps answering.</p>
-    <p class="sub reveal d2 in">It&rsquo;s built for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, and there is no usage cap. Nothing you type leaves your Mac unless you turn on web search or pick a cloud model with your own API key. The few checks the app makes on its own carry none of your words, and <a href="https://outlier.host/privacy.html">the privacy page</a> lists each one.</p>
+    <p class="sub reveal d2 in">It&rsquo;s built for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files stay on your Mac, with no usage cap, and the <a href="/privacy.html">privacy page</a> explains the few connections it makes.</p>
     <div class="cta-bar">
       <div class="cta-row reveal d3 in">
       <a class="btn btn-primary" href="https://outlier.host/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1012/Outlier-1.11.1012-arm64.dmg" target="_blank" rel="noopener noreferrer nofollow">
@@ -1904,6 +1906,6 @@ if(end-now<24*24*60*60*1000)setTimeout(function(){show(false);},end-now);
 fetch('https://kerr-lead-agent.kerrco.workers.dev/founding?site=outlier.host').then(function(r){return r.json()})
 .then(function(d){now=clock();if(!(now<end)||!d||d.soldOut||!(d.unlimited===true||d.left>0))return;show(true);}).catch(function(){});})();
 </script>
-<script src="/js/mac-only.js?v=20261111" defer></script>
+<script src="/js/mac-only.js?v=20261121" defer></script>
 </body>
 </html>
