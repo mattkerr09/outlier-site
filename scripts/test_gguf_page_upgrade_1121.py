@@ -13,8 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 PAGE = 'vs/gguf-vs-ggml/index.html'
 TITLE = 'What is GGUF? GGUF vs GGML, and which file to use'
 H1 = 'What is GGUF? GGUF vs GGML, and which one to use'
-DEFINITION = ('GGUF is the single-file model format llama.cpp and tools built on it load, '
-              'holding weights plus the metadata and tokenizer needed to run them.')
+DEFINITION = ('GGUF is the model file format that llama.cpp and the tools built on it load: '
+              'one file holds the weights plus the metadata and tokenizer needed to run them.')
 REPO = 'https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF'
 
 
