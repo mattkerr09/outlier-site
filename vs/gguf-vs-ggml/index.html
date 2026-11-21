@@ -8,22 +8,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="msvalidate.01" content="34D102FD9C044A2BDA597B176842725B" />
-  <title>GGUF vs GGML: what changed and which to use (2026)</title>
-  <meta name="description" content="GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.">
+  <title>What is GGUF? GGUF vs GGML, and which file to use</title>
+  <meta name="description" content="GGUF is the model file format used by llama.cpp. See inside a real file, learn what changed from GGML, and choose which file to download.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-11-02">
+  <meta name="last-modified" content="2026-11-21">
   <link rel="canonical" href="https://outlier.host/vs/gguf-vs-ggml/">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="GGUF vs GGML: what changed and which to use (2026)">
-  <meta property="og:description" content="GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.">
+  <meta property="og:title" content="What is GGUF? GGUF vs GGML, and which file to use">
+  <meta property="og:description" content="GGUF is the model file format used by llama.cpp. See inside a real file, learn what changed from GGML, and choose which file to download.">
   <meta property="og:url" content="https://outlier.host/vs/gguf-vs-ggml/">
   <meta property="og:site_name" content="Outlier">
   <meta property="og:image" content="https://outlier.host/og-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="GGUF vs GGML: what changed and which to use (2026)">
-  <meta name="twitter:description" content="GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.">
+  <meta name="twitter:title" content="What is GGUF? GGUF vs GGML, and which file to use">
+  <meta name="twitter:description" content="GGUF is the model file format used by llama.cpp. See inside a real file, learn what changed from GGML, and choose which file to download.">
   <meta name="twitter:image" content="https://outlier.host/og-card.png">
   <style>
     :root { --bg: #07060b; --surface: #0e0d14; --surface-2: #15131e; --text: #f0eef5; --text-mid: #a8a3b5; --text-dim: #6e6880; --accent: #A855F7; --accent-light: #C084FC; --green: #34d399; --green-light: #6ee7b7; --amber: #fbbf24; --border: rgba(168,85,247,0.10); --radius: 14px; --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; --mono: ui-monospace, "SF Mono", Menlo, monospace; }
@@ -75,11 +75,12 @@
        12px of horizontal scroll after the tables were contained. Scoped away
        from pre > code, which should scroll as a block rather than rewrap. */
     @media (max-width:640px){article :not(pre) > code{overflow-wrap:anywhere}}
+    .table-scroll { overflow-x: auto; margin: 1.2rem 0 1.6rem; }
     article table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.6rem; font-size: 0.92rem; }
     /* These pages carry no scroll wrapper, so a table wider than the column
        pushed the whole page sideways on a phone. Measured at 375px:
        /vs/outlier-vs-chatgpt/ overflowed by 88px and
-       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px — the page itself
+       /data/outlier-vs-claude-54-prompt-benchmark/ by 185px; the page itself
        slid, not just the table. display:block makes the table its own scroll
        container; the content keeps its full width (measured 447px scrolling
        inside a 343px box) instead of being squeezed. The two pinned layers
@@ -110,7 +111,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"GGUF vs GGML: what changed and which to use (2026)","description":"GGUF replaced the older GGML file format in August 2023. What each name means, why old files stopped loading, and what to download today.","datePublished":"2026-11-02","dateModified":"2026-11-02","author":{"@type":"Person","name":"Matthew Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/gguf-vs-ggml/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"What is GGUF? GGUF vs GGML, and which one to use","description":"GGUF is the model file format used by llama.cpp. See inside a real file, learn what changed from GGML, and choose which file to download.","datePublished":"2026-11-02","dateModified":"2026-11-21","author":{"@type":"Person","name":"Matthew Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/gguf-vs-ggml/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"GGUF vs GGML","item":"https://outlier.host/vs/gguf-vs-ggml/"}]}
@@ -132,16 +133,16 @@
 <article>
   <div class="wrap">
     <div class="crumb"><a href="https://outlier.host/">Outlier</a> &nbsp;›&nbsp; <a href="https://outlier.host/vs/">vs</a></div>
-    <h1>GGUF vs GGML: what changed, and which one to use</h1>
+    <h1>What is GGUF? GGUF vs GGML, and which one to use</h1>
     <div class="byline-row">
       <span class="byline">By Matthew Kerr · Outlier · published 2026-11-02</span>
-      <span class="updated-pill">Last updated 2026-11-02</span>
-      <span class="byline" data-claims-checked="2026-11-09" data-claims-set="llama.cpp, ggml and Hugging Face GGUF pages">llama.cpp, ggml and Hugging Face GGUF pages checked 2026-11-09</span>
+      <span class="updated-pill">Last updated 2026-11-21</span>
+      <span class="byline" data-claims-checked="2026-11-21" data-claims-set="llama.cpp, ggml and Hugging Face GGUF pages, TinyLlama GGUF file read and Hugging Face GGUF model count">llama.cpp, ggml and Hugging Face GGUF pages, TinyLlama GGUF file read and Hugging Face GGUF model count checked 2026-11-21</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>GGML is the older llama.cpp model file format. GGUF replaced it on August 21, 2023, and existing GGML files stopped loading. Use GGUF today. The name GGML also lives on as the tensor library under llama.cpp, so one word is a library and the other is a file format. They are not rival formats.</p>
+      <p>GGUF is the single-file model format llama.cpp and tools built on it load, holding weights plus the metadata and tokenizer needed to run them. GGML is the older llama.cpp model file format. GGUF replaced it on August 21, 2023, and existing GGML files stopped loading. Use GGUF today. The name GGML also lives on as the tensor library under llama.cpp, so one word is a library and the other is a file format. They are not rival formats.</p>
     </div>
 
     <p class="lead">I build <a href="https://outlier.host/">Outlier</a>, a Mac app that runs MLX-format models, so I have no stake in which of these two names you pick. I read the project pages behind this on 2026-11-02 and name each one below. If you are choosing between GGUF and Apple's MLX instead, that is a different question, and <a href="/vs/gguf-vs-mlx-model-formats/">GGUF vs MLX</a> answers it.</p>
@@ -200,6 +201,30 @@
 
     <p>Read the first four bytes. A GGUF file starts with the letters GGUF. The older formats start with other tags, and the llama.cpp converter checks for three of them: <code>lmgg</code> for GGML, <code>fmgg</code> for GGMF and <code>tjgg</code> for GGJT. On a Mac, <code>head -c 4 yourfile</code> prints them. A <code>.gguf</code> suffix is a good sign, but the four bytes are the real check.</p>
 
+    <h2>What is inside a real GGUF file</h2>
+
+    <p>On 21 November 2026 I read the first 8 MB of a public TinyLlama 1.1B Chat Q4_K_M file from <a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">Hugging Face</a> with a short reader written to the GGUF spec. The file was <code>tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf</code>.</p>
+
+    <div class="table-scroll" role="region" aria-label="Readings from the TinyLlama GGUF file" tabindex="0">
+      <table>
+        <thead><tr><th>Field</th><th>What I read</th></tr></thead>
+        <tbody>
+          <tr><td>First four bytes</td><td><code>GGUF</code></td></tr>
+          <tr><td>Version</td><td>3</td></tr>
+          <tr><td>Tensor count</td><td>201</td></tr>
+          <tr><td>Metadata pairs</td><td>23</td></tr>
+          <tr><td>Architecture</td><td><code>llama</code></td></tr>
+          <tr><td>Quantization</td><td>File type 15: Q4_K_M</td></tr>
+          <tr><td>Context length</td><td>2048</td></tr>
+          <tr><td>Tokenizer stored inside</td><td>32,000 tokens, 61,249 merges, a chat template</td></tr>
+          <tr><td>Tensor types</td><td>135 Q4_K, 21 Q6_K, 45 F32</td></tr>
+          <tr><td>Where the header and tensor index end</td><td>Byte 1,709,436 of 668,788,096, about 1.7 MB</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The file carries its own tokenizer and chat template. A Q4_K_M file mixes quantization types, as the Q4_K, Q6_K and F32 tensors show. The metadata takes up a tiny share of the file, so a tool can read it without loading the weights.</p>
+
     <h2>If you still have an old GGML file</h2>
 
     <p>llama.cpp ships a converter, <code>convert_llama_ggml_to_gguf.py</code>. Its description is "Convert GGML models to GGUF", and its input option asks for a GGMLv3 file. It also warns that the conversion is best-effort, that special tokens may not convert correctly, and that you should use a native GGUF model if possible.</p>
@@ -213,6 +238,8 @@
     <p><strong>The ggml-org name.</strong> llama.cpp and ggml both live under ggml-org on GitHub. Hugging Face's GGUF page points to a Space named <code>ggml-org/gguf-my-repo</code> that converts and quantizes your own model weights into GGUF. The word ggml in a project name is about the library, not the old files.</p>
 
     <h2>Which one to use</h2>
+
+    <p>Hugging Face listed 224,164 models in its <a href="https://huggingface.co/models?library=gguf">GGUF library filter</a>, read 21 November 2026.</p>
 
     <p>For a language model, use GGUF. Hugging Face's GGUF page lists llama.cpp, LM Studio, GPT4All and Ollama as tools that use GGUF files. If a guide tells you to fetch a GGML file, treat the guide as out of date and look for a GGUF build.</p>
 
