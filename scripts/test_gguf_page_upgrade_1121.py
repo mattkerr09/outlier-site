@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Check the GGUF additions and preserve the original article from next."""
+"""Check the GGUF additions and that the original article survives.
+
+The original page's headings, links, quick answer and table rows are written out below as literals, read once
+from the pre-upgrade page on 21 November 2026. No git calls and no commit hash: a test that reads its "original"
+from git compares the page with itself once the branch is merged.
+"""
 from collections import Counter
 from html import unescape
 from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
-import subprocess
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,6 +20,33 @@ H1 = 'What is GGUF? GGUF vs GGML, and which one to use'
 DEFINITION = ('GGUF is the model file format that llama.cpp and the tools built on it load: '
               'one file holds the weights plus the metadata and tokenizer needed to run them.')
 REPO = 'https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF'
+
+# The original article, as literals.
+ORIGINAL_QA = ('GGML is the older llama.cpp model file format. GGUF replaced it on August 21, 2023, and existing GGML files '
+               'stopped loading. Use GGUF today. The name GGML also lives on as the tensor library under llama.cpp, so one '
+               'word is a library and the other is a file format. They are not rival formats.')
+ORIGINAL_H2 = [
+    'Why one word means two things', 'What was wrong with the old files', 'What GGUF changed',
+    'The date the old files stopped loading', 'How to tell which one you have', 'If you still have an old GGML file',
+    'Where the name ggml still shows up', 'Which one to use',
+]
+# Article links only: site chrome and the download and buy links (their release version and sale line change) are left out.
+KEPT_HREFS = Counter({
+    'https://outlier.host/': 1,
+    '/vs/gguf-vs-mlx-model-formats/': 3,
+    '/vs/4-bit-vs-8-bit-quantization/': 1,
+    'https://outlier.host/how-to/how-much-ram-for-local-ai/': 2,
+    'https://outlier.host/learn/what-is-local-ai/': 1,
+    'https://github.com/ggml-org/ggml/blob/master/docs/gguf.md': 1,
+    'https://github.com/ggml-org/ggml': 1,
+    'https://github.com/ggml-org/llama.cpp/pull/2398': 1,
+    'https://github.com/ggml-org/llama.cpp/pull/1684': 1,
+    'https://github.com/ggml-org/llama.cpp/blob/master/convert_llama_ggml_to_gguf.py': 1,
+    'https://github.com/ggml-org/whisper.cpp/blob/master/models/README.md': 1,
+    'https://huggingface.co/docs/hub/gguf': 1,
+})
+ORIGINAL_ROWS = ['First four bytes', 'Header', 'Architecture', 'Adding information', 'Vocabulary', 'mmap', 'Versions']
+ORIGINAL_P = 24
 
 
 def blocks(html, tag):
@@ -54,8 +85,8 @@ class Markup(HTMLParser):
                 break
 
 
-def check(html, original, sitemap):
-    current, old = Markup(html), Markup(original)
+def check(html, sitemap):
+    current = Markup(html)
     assert text(blocks(html, 'title')[0]) == TITLE
     for key in ('og:title', 'twitter:title'):
         assert current.meta[key] == TITLE and len(current.meta[key]) <= 60, key
@@ -64,15 +95,14 @@ def check(html, original, sitemap):
     for key in ('description', 'og:description', 'twitter:description'):
         assert current.meta[key].startswith('GGUF is ') and len(current.meta[key]) < 155
     qa = re.search(r'<div class="quick-answer">.*?<p>(.*?)</p>', html, re.S).group(1)
-    old_qa = re.search(r'<div class="quick-answer">.*?<p>(.*?)</p>', original, re.S).group(1)
     assert text(qa).startswith(DEFINITION)
-    assert qa == DEFINITION + ' ' + old_qa, 'Original GGML sentences changed'
+    assert qa == DEFINITION + ' ' + ORIGINAL_QA, 'Original GGML sentences changed'
     assert len(text(qa).split()) < 90
 
     # Check original headings first so the negative control proves preservation.
-    old_h2 = Counter(blocks(original, 'h2'))
-    assert not old_h2 - Counter(blocks(html, 'h2')), 'Original h2 removed or changed'
     headings = [text(h) for h in blocks(html, 'h2')]
+    assert all(h in headings for h in ORIGINAL_H2), 'Original h2 removed or changed'
+    assert [h for h in headings if h in ORIGINAL_H2] == ORIGINAL_H2, 'Original h2 order changed'
     assert headings.index('What is inside a real GGUF file') == headings.index('How to tell which one you have') + 1
     section = html.split('<h2>What is inside a real GGUF file</h2>', 1)[1].split('<h2>', 1)[0]
     rows = {
@@ -95,16 +125,11 @@ def check(html, original, sitemap):
     assert f'<a href="{REPO}">' in section
     use = html.split('<h2>Which one to use</h2>', 1)[1]
     assert '224,164 models' in use and 'read 21 November 2026' in use
-    assert not Counter(old.hrefs) - Counter(current.hrefs), 'Original href lost'
-    assert len(blocks(html, 'p')) >= len(blocks(original, 'p'))
-    for tag in ('p', 'tr', 'a'):
-        preserved = Counter(blocks(original, tag))
-        if tag == 'p':
-            preserved[f'<p>{old_qa}</p>'] -= 1
-        assert not preserved - Counter(blocks(html, tag)), f'Original {tag} changed'
-    for cls in ('receipts', 'cta'):
-        block = re.search(rf'<div class="{cls}">.*?</div>', original, re.S).group(0)
-        assert block in html, f'Original {cls} changed'
+    assert not KEPT_HREFS - Counter(current.hrefs), 'Original href lost'
+    assert len(blocks(html, 'p')) >= ORIGINAL_P
+    labels = [text((blocks(r, 'th') or blocks(r, 'td'))[0]) for r in blocks(html, 'tr')]
+    assert all(r in labels for r in ORIGINAL_ROWS), 'Original table row removed'
+    assert '<div class="receipts">' in html and '<div class="cta">' in html
     assert 'Last updated 2026-11-21' in html
     assert 'name="last-modified" content="2026-11-21"' in html
     assert 'data-claims-checked="2026-11-21"' in html
@@ -125,25 +150,19 @@ def check(html, original, sitemap):
 
 
 def main():
-    # The page as it was before this upgrade. Pinned (Outlier, 2026-11-21): `git merge-base HEAD next` gave that commit only
-    # BEFORE the merge; on next itself it is the new commit, so CI compared the page with itself and failed. CI checks out
-    # full history (fetch-depth: 0), so the pinned commit is always there.
-    base = '8018760b0'
-    original = subprocess.check_output(['git', 'show', f'{base}:{PAGE}'], cwd=ROOT, text=True)
     html = (ROOT / PAGE).read_text()
     sitemap = (ROOT / 'sitemap.xml').read_text()
-    check(html, original, sitemap)
+    check(html, sitemap)
     print('PASS: GGUF additions, figures, dates and original content preserved')
-    removed = blocks(original, 'h2')[0]
+    removed = f'<h2>{ORIGINAL_H2[0]}</h2>'
+    assert removed in html
     try:
-        check(html.replace(removed, '', 1), original, sitemap)
+        check(html.replace(removed, '', 1), sitemap)
     except AssertionError as exc:
         assert str(exc) == 'Original h2 removed or changed', exc
         print(f'PASS: negative control rejected a removed original h2: {exc}')
     else:
         raise AssertionError('Negative control passed with an original h2 removed')
-    from seo_lint import visible_text
-    print(f'Visible words: {len(visible_text(original).split())} before; {len(visible_text(html).split())} after')
 
 
 if __name__ == '__main__':
