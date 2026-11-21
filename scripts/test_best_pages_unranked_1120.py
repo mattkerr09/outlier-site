@@ -26,6 +26,16 @@ PAGES = (
 )
 METHOD = "How this page compares them"
 DATE = "2026-11-20"
+# Later reviewed upgrades, pinned per page as literals (every other page keeps DATE and its table count):
+# best/private-ai-no-cloud/ was upgraded on 2026-11-21 and gained one table, "Where a private AI server
+# can run", whose first cells are listed here; its original rivals table must stay byte-identical.
+PAGE_DATES = {"best/private-ai-no-cloud/index.html": "2026-11-21"}
+EXTRA_TABLES = {"best/private-ai-no-cloud/index.html": [
+    "Your Mac, using the local apps below",
+    "Your own GPU server",
+    "A rented single-tenant GPU",
+    "An enterprise platform in your own cloud account",
+]}
 CLAIMS = re.compile(r'<span\b[^>]*data-claims-checked="[^"]+"[^>]*>.*?</span>', re.S)
 
 
@@ -155,12 +165,13 @@ class BestPagesUnranked(unittest.TestCase):
             with self.subTest(page=path):
                 raw = (ROOT / path).read_text()
                 page = Page(raw)
-                self.assertEqual(page.meta["last-modified"], DATE)
-                self.assertIn("Last updated " + DATE, text(raw))
+                date = PAGE_DATES.get(path, DATE)
+                self.assertEqual(page.meta["last-modified"], date)
+                self.assertIn("Last updated " + date, text(raw))
                 dated = [s for s in schemas(raw) if s.get("@type") in {"Article", "CollectionPage"}]
                 self.assertEqual(len(dated), 1)
-                self.assertEqual(dated[0]["dateModified"], DATE)
-                self.assertEqual(dates[page.canonical[0]], DATE)
+                self.assertEqual(dated[0]["dateModified"], date)
+                self.assertEqual(dates[page.canonical[0]], date)
 
     def test_urls_unchanged(self):
         self.assertEqual(
@@ -182,7 +193,15 @@ class BestPagesUnranked(unittest.TestCase):
         for path in PAGES:
             with self.subTest(page=path):
                 old_tables = rows(base_text(path))
-                new_tables = rows((ROOT / path).read_text())
+                new_raw = (ROOT / path).read_text()
+                new_tables = rows(new_raw)
+                if path in EXTRA_TABLES:
+                    extra = [t for t in new_tables if [text(r[0]) for r in t] == EXTRA_TABLES[path]]
+                    self.assertEqual(len(extra), 1, "the pinned extra table is missing or changed")
+                    new_tables = [t for t in new_tables if t is not extra[0]]
+                    tables = lambda raw: re.findall(r'<table\b.*?</table>', raw, re.S)
+                    kept = [t for t in tables(new_raw) if EXTRA_TABLES[path][0] not in t]
+                    self.assertEqual(kept, tables(base_text(path)), "original rivals table changed")
                 self.assertEqual(len(old_tables), len(new_tables))
                 for old, new in zip(old_tables, new_tables):
                     names = [text(row[0]) for row in new]
