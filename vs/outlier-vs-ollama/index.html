@@ -116,13 +116,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-11-18","author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-11-22","author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Ollama — running models bigger than your RAM", "item": "https://outlier.host/vs/outlier-vs-ollama/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can Outlier do that Ollama doesn't?", "acceptedAnswer": {"@type": "Answer", "text": "Running a mixture-of-experts model bigger than your RAM at a usable speed. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac by reading only the experts each token needs. llama.cpp, which Ollama grew out of, can memory-map a model bigger than RAM, but it then rereads weights from disk constantly and slows to a crawl; we have not tested Ollama on that model."}}, {"@type": "Question", "name": "Is Ollama better than Outlier for anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend."}}, {"@type": "Question", "name": "Can I use both Outlier and Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many developers run Ollama as a headless backend and Outlier as a daily-driver agent app."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What can Outlier do that Ollama doesn't?", "acceptedAnswer": {"@type": "Answer", "text": "Running a mixture-of-experts model bigger than your RAM at a usable speed. Outlier's paged MoE streaming runs Plus 397B on a 64 GB Mac by reading only the experts each token needs. llama.cpp, which Ollama grew out of, can memory-map a model bigger than RAM, but it then rereads weights from disk constantly and slows to a crawl; we have not tested Ollama on that model."}}, {"@type": "Question", "name": "Is Ollama better than Outlier for anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend."}}, {"@type": "Question", "name": "What is a good Ollama alternative with a nicer app for Mac?", "acceptedAnswer": {"@type": "Answer", "text": "Outlier, LM Studio, Jan and Msty Studio are all desktop apps, and all four are free to start. Outlier comes with six model tiers I picked and tested, sized to your Mac's memory, and adds a coding agent on Pro. LM Studio and Jan are free; Jan is open source. Msty Studio is the one of the four that still runs on Intel Macs."}}, {"@type": "Question", "name": "Can I use both Outlier and Ollama?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Many developers run Ollama as a headless backend and Outlier as a daily-driver agent app."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -153,8 +153,9 @@
     <h1>Outlier vs Ollama: running models bigger than your RAM</h1>
     <div class="byline-row">
       <span class="byline">Matthew Kerr · Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-11-18</span>
+      <span class="updated-pill">Last updated 2026-11-22</span>
       <span class="byline" data-claims-checked="2026-11-09" data-claims-set="Ollama">Ollama prices and plans checked 2026-11-09</span>
+      <span class="byline" data-claims-checked="2026-11-22" data-claims-set="LM Studio, Jan and Msty Studio">LM Studio, Jan and Msty Studio prices and requirements checked 2026-11-22</span>
     </div>
 
     <div class="quick-answer">
@@ -215,6 +216,19 @@
     <h2>Which one to pick</h2>
     <p>Need cross-platform, want open source, and your hardware can already load the model you need at full size? Ollama is your answer. On a Mac, want the polished all-in-one app, and want the option to run MoE models bigger than your RAM should allow? That's Outlier. And you don't have to choose. Plenty of developers keep Ollama running as a scripting backend and use Outlier as the app they actually sit in front of all day.</p>
 
+    <h2>Other Ollama alternatives with a Mac app</h2>
+    <p>If what you want from an Ollama alternative is a nicer app to chat in, four are worth a look on a Mac, mine included. Here is what each one's own site said on 22 November 2026:</p>
+    <table>
+      <thead><tr><th>App</th><th>Price to run models on your Mac</th><th>Mac it needs</th><th>What its site says about memory</th></tr></thead>
+      <tbody>
+        <tr><td>Outlier</td><td>Free (Nano and Lite); Pro $39 once</td><td>Apple silicon, macOS 15 or later</td><td>Nano 4B peaked at about 4 GB and Lite 9B at about 7 GB in <a href="/how-to/run-ai-on-16gb-mac/">our benchmarks</a></td></tr>
+        <tr><td><a href="https://lmstudio.ai/docs/app/system-requirements">LM Studio</a></td><td>Free; paid plans from $20 a month</td><td>LM Studio needs Apple silicon and macOS 14.0 or later; no Intel Macs</td><td>"16GB+ RAM recommended"</td></tr>
+        <tr><td><a href="https://docs.jan.ai/desktop/install/mac">Jan</a></td><td>Free and open source</td><td>Jan needs Apple silicon and macOS 13.6 or later; Intel Macs are no longer supported</td><td>16 GB: typically up to 7B models comfortably</td></tr>
+        <tr><td><a href="https://msty.ai/pricing">Msty Studio</a></td><td>Free tier; Aurum $149 a year or $349 once</td><td>Msty Studio runs on macOS 11 or later, Apple silicon or Intel</td><td>Not stated on its pricing or download page</td></tr>
+      </tbody>
+    </table>
+    <p>For 24 features side by side (MCP, voice, agents, local APIs), see <a href="/vs/mac-native-ai-comparison/">Outlier vs LM Studio vs Ollama vs Msty</a>. Choosing between the two best-known free ones? <a href="/vs/ollama-vs-lm-studio/">Ollama vs LM Studio</a>.</p>
+
     <h2>Questions about Outlier vs Ollama</h2>
     <div class="faq">
       <div class="faq-item">
@@ -224,6 +238,10 @@
       <div class="faq-item">
         <h3>Is Ollama better than Outlier for anything?</h3>
         <p>Yes. It is cross-platform, open source, free to run locally, and has a much larger model catalog. It is also a great scripting backend.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is a good Ollama alternative with a nicer app for Mac?</h3>
+        <p>Outlier, LM Studio, Jan and Msty Studio are all desktop apps, and all four are free to start. Outlier comes with six model tiers I picked and tested, sized to your Mac's memory, and adds a coding agent on Pro. LM Studio and Jan are free; Jan is open source. Msty Studio is the one of the four that still runs on Intel Macs.</p>
       </div>
       <div class="faq-item">
         <h3>Can I use both Outlier and Ollama?</h3>
