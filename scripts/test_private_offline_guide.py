@@ -65,6 +65,15 @@ def block(pattern, raw):
     return match.group(1) if match.lastindex else match.group(0)
 
 
+# A release moves every Download link to the new DMG (ship_chain's site bump). The protected blocks are compared with
+# only the version inside a release-asset URL replaced, so a release does not need a re-pin and any other edit still fails.
+RELEASE_ASSET = re.compile(r"(releases/download/v)\d+(?:\.\d+)+(/Outlier-)\d+(?:\.\d+)+(-arm64\.dmg)")
+
+
+def release_neutral(raw):
+    return RELEASE_ASSET.sub(r"\1VERSION\2VERSION\3", raw)
+
+
 class PrivateOfflineGuide(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -180,19 +189,19 @@ class PrivateOfflineGuide(unittest.TestCase):
         protected = (
             # re-pinned 2026-11-20: Matthew's exact sale line (2fa7aa899) and no former price (f5a7902b2) changed this box
             (r'<div class="pbox" data-pbox="answer">.*?</div>',
-             "5e4b019083633d31195d4280d75f8d93335194c021460314391abd2ace79b3e0"),
+             "13b4e87871517637be5ed3bfa4956fd935992668dfbe12e2fea0c62ba1e081bc"),
             # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<div class="pbox" data-pbox="end">.*?</div>',
              "ccee6c35f715af115dea091254d870a8182eba9e15c2a6b6784bd85510fc18f1"),
             # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<a class="cta".*',
-             "fe59564ee88b871d95f6173977eff757e0b66de6e8d95fbce22d4ba0e514ed29"),  # 21 Nov: only change, mac-only.js?v=20261111 -> v=20261121 (phone buttons fix)
+             "1cd23e4902f29328636e78b54fbbeda1065e820178fa22bac5352d5ecb475ef0"),  # 21 Nov: only change, mac-only.js?v=20261111 -> v=20261121 (phone buttons fix)
             (r'<p>The chat path calls only .*?</p>',
              "0a5dc7e6a4df08f0c90e44428481c732df32e4854617878124bd4fc908bb2b39"),
         )
         for pattern, expected in protected:
             with self.subTest(block=pattern):
-                self.assertEqual(hashlib.sha256(block(pattern, self.raw).encode()).hexdigest(),
+                self.assertEqual(hashlib.sha256(release_neutral(block(pattern, self.raw)).encode()).hexdigest(),
                                  expected)
 
     def test_useful_body_word_floor_and_download_next_step(self):

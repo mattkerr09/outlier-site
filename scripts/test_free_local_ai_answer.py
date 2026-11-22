@@ -33,6 +33,15 @@ def block(pattern, raw):
     return match.group(1) if match.lastindex else match.group(0)
 
 
+# A release moves every Download link to the new DMG (ship_chain's site bump). The protected blocks are compared with
+# only the version inside a release-asset URL replaced, so a release does not need a re-pin and any other edit still fails.
+RELEASE_ASSET = re.compile(r"(releases/download/v)\d+(?:\.\d+)+(/Outlier-)\d+(?:\.\d+)+(-arm64\.dmg)")
+
+
+def release_neutral(raw):
+    return RELEASE_ASSET.sub(r"\1VERSION\2VERSION\3", raw)
+
+
 class FreeLocalAIAnswer(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -127,10 +136,10 @@ class FreeLocalAIAnswer(unittest.TestCase):
         protected = (
             # re-pinned 2026-11-20: Matthew's exact sale line (2fa7aa899) and no former price (f5a7902b2) changed this box
             (r'<div class="pbox" data-pbox="answer">.*?</div>',
-             "799677253c2551279089492dbeaa5efdd314911e9d042fec1919f4420ef77712"),
+             "ade7f948ace65d223b964cb0665a6b110826adba4fecfaf8c330ac1c2b603b55"),
             # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<div class="cta">.*?</div>',
-             "e619444401799aa000fef16da9ab5158f4f2afe01d261c2a26bc26f1eadb2dd8"),
+             "91502cf6791b7129351f19e72251b32a1aed9dc0773ae355da647b708bb4b5dc"),
             # re-pinned 2026-11-20: the rival rows were corrected from that day's live re-read (118acb694)
             (r'<table>.*?</table>',
              "195f4ec45ac69133221665f2b7e6b78bdea178eb36085a0fc484ade32fd7cd4d"),
@@ -145,7 +154,7 @@ class FreeLocalAIAnswer(unittest.TestCase):
         )
         for pattern, expected in protected:
             with self.subTest(block=pattern):
-                self.assertEqual(hashlib.sha256(block(pattern, self.raw).encode()).hexdigest(),
+                self.assertEqual(hashlib.sha256(release_neutral(block(pattern, self.raw)).encode()).hexdigest(),
                                  expected)
 
     def test_article_word_floor_and_no_new_external_links(self):

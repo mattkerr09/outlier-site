@@ -39,6 +39,14 @@ EXTRA_TABLES = {"best/private-ai-no-cloud/index.html": [
 CLAIMS = re.compile(r'<span\b[^>]*data-claims-checked="[^"]+"[^>]*>.*?</span>', re.S)
 
 
+RELEASE_ASSET = re.compile(r"(releases/download/v)\d+(?:\.\d+)+(/Outlier-)\d+(?:\.\d+)+(-arm64\.dmg)")
+
+
+def release_neutral(link):
+    """The same Download link across releases: only the version in the release-asset path is replaced."""
+    return RELEASE_ASSET.sub(r"\1VERSION\2VERSION\3", link)
+
+
 @lru_cache(maxsize=None)
 def base_text(path):
     return subprocess.run(
@@ -187,7 +195,10 @@ class BestPagesUnranked(unittest.TestCase):
                 before, after = Page(base_text(path)), Page((ROOT / path).read_text())
                 self.assertEqual(before.canonical, after.canonical)
                 self.assertEqual(before.meta["og:url"], after.meta["og:url"])
-                self.assertTrue(set(before.links) <= set(after.links), "existing link removed")
+                # A release moves every Download link to the new version's DMG (ship_chain's site bump); that is the
+                # same link, not a removed one. Only the version inside a release-asset URL is compared loosely.
+                self.assertTrue({release_neutral(link) for link in before.links}
+                                <= {release_neutral(link) for link in after.links}, "existing link removed")
 
     def test_tables_are_alphabetical_and_rival_cells_unchanged(self):
         for path in PAGES:
