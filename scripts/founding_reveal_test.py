@@ -33,10 +33,13 @@ for output in (generator["box"]("sale-test", "answer", "1.11.1006"),
 assert regular["btn"] == "Buy Outlier Lifetime Licence: $39" and regular["offer"]
 schema = [json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', home, re.S)]
 app = next(v for v in schema if v.get("@type") == "SoftwareApplication")
-assert len(app["offers"]) == 2
-free, paid = app["offers"]
+# 2026-11-21 (3223a6d38): the home also carries the regular $39 offer from the day after the sale ends.
+assert len(app["offers"]) == 3
+free, paid, after = app["offers"]
 assert free["price"] == "0" and "priceValidUntil" not in free
 assert (paid["name"], paid["price"], paid["priceValidUntil"]) == ("Outlier Lifetime Licence", "16.99", "2026-12-02")
+assert (after["name"], after["price"], after["validFrom"]) == ("Outlier Lifetime Licence", "39", "2026-12-03")
+assert "priceValidUntil" not in after
 tool = (ROOT / "tools/can-my-mac-run-it/index.html").read_text()
 tool_app = next(json.loads(s) for s in re.findall(r'<script type="application/ld\+json">(.*?)</script>', tool, re.S)
                 if json.loads(s).get("@type") == "WebApplication")
