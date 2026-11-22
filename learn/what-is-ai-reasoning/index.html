@@ -11,7 +11,7 @@
   <title>What is AI reasoning? Thinking models explained (2026)</title>
   <meta name="description" content="AI reasoning means a model writes a chain of thought before answering. It's still next-token prediction. What it helps, what it costs, and where it lost.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-07-08">
+  <meta name="last-modified" content="2026-11-22">
   <link rel="canonical" href="https://outlier.host/learn/what-is-ai-reasoning/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="What is AI reasoning? Thinking models explained (2026)">
@@ -116,13 +116,13 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "Article", "headline": "What is AI reasoning? Thinking models explained", "description": "AI reasoning means a model writes a chain of thought before answering. It's still next-token prediction. What it helps, what it costs, and where it lost.", "datePublished": "2026-07-08", "dateModified": "2026-07-08", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-ai-reasoning/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
+  {"@context": "https://schema.org", "@type": "Article", "headline": "What is AI reasoning? Thinking models explained", "description": "AI reasoning means a model writes a chain of thought before answering. It's still next-token prediction. What it helps, what it costs, and where it lost.", "datePublished": "2026-07-08", "dateModified": "2026-11-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://outlier.host/learn/what-is-ai-reasoning/"}, "author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"}, "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/", "logo": {"@type": "ImageObject", "url": "https://outlier.host/logo.png"}}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "What is AI reasoning?", "item": "https://outlier.host/learn/what-is-ai-reasoning/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is a reasoning model always better than a normal one?", "acceptedAnswer": {"@type": "Answer", "text": "No. On my own measurement — Outlier Nano, 30 GSM8K math problems, greedy decoding — thinking mode scored 63.3% against 80% with thinking off, and thinking off was 32% faster. That is one model on one benchmark, so don't read it as a law. Read it as proof that the question has to be measured rather than assumed."}}, {"@type": "Question", "name": "Do thinking tokens cost me anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Thinking tokens are real tokens. In the cloud they take time and money, whether or not the chain of thought is shown to you. On-device they cost wall-clock time and battery. There's no free reasoning; you are buying compute with seconds."}}, {"@type": "Question", "name": "When should I turn thinking on?", "acceptedAnswer": {"@type": "Answer", "text": "Turn it on for problems with several dependent steps: multi-step math, code with interacting constraints, and planning. Leave it off for recall, summarization, formatting, and short factual answers, where the extra tokens buy nothing. Match the mode to the task instead of leaving thinking on by default."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is a reasoning model always better than a normal one?", "acceptedAnswer": {"@type": "Answer", "text": "No. On my own measurement (Outlier Nano, 30 GSM8K math problems, greedy decoding) thinking mode scored 63.3% against 80% with thinking off, and thinking off was 32% faster. That is one model on one benchmark, so don't read it as a law. Read it as proof that the question has to be measured rather than assumed."}}, {"@type": "Question", "name": "Do thinking tokens cost me anything?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Thinking tokens are real tokens. In the cloud they take time and money, whether or not the chain of thought is shown to you. On-device they cost wall-clock time and battery. There's no free reasoning; you are buying compute with seconds."}}, {"@type": "Question", "name": "When should I turn thinking on?", "acceptedAnswer": {"@type": "Answer", "text": "Turn it on for problems with several dependent steps: multi-step math, code with interacting constraints, and planning. Leave it off for recall, summarization, formatting, and short factual answers, where the extra tokens buy nothing. Match the mode to the task instead of leaving thinking on by default."}}, {"@type": "Question", "name": "What are the types of reasoning in AI?", "acceptedAnswer": {"@type": "Answer", "text": "The classic types are deductive (from rules to a conclusion that must follow), inductive (from examples to a likely pattern), abductive (from an observation to its likeliest explanation), analogical and common-sense reasoning. Today \"AI reasoning\" usually means a model writing out its working before it answers, and that working can use any of these."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -153,7 +153,7 @@
     <h1>What is AI reasoning? Thinking models explained</h1>
     <div class="byline-row">
       <span class="byline">Matthew Kerr · solo-built in Grand Rapids · published 2026-07-08</span>
-      <span class="updated-pill">Last updated 2026-07-08</span>
+      <span class="updated-pill">Last updated 2026-11-22</span>
     </div>
 
     <div class="quick-answer">
@@ -175,12 +175,21 @@
 
     <h2>What a reasoning model actually does</h2>
     <p>A reasoning model (you'll also see "thinking model," they mean the same thing) produces a chain of thought before the final answer. Ask it a word problem and instead of emitting an answer immediately, it emits a stretch of text where it restates the problem, tries an approach, notices a mistake, backs up, and only then writes the answer you asked for.</p>
-    <p>The examples you've probably met: OpenAI's o-series; DeepSeek-R1, a 671-billion-parameter mixture-of-experts model released with open weights; and the Qwen models, which ship a thinking mode you can switch on and off. That last one matters, because a toggle turns "is thinking better?" from an opinion into something you can measure.</p>
+    <p>The examples you've probably met: OpenAI's o-series and GPT-5; Google's Gemini thinking models; Anthropic's Claude, which takes an adjustable budget of thinking tokens; DeepSeek-R1, a 671-billion-parameter mixture-of-experts model released with open weights; and the Qwen models, which ship a thinking mode you can switch on and off. In 2026 thinking is often the default rather than a separate model: Qwen3.5 models think by default and can be told not to, and DeepSeek's API turns thinking on by default with an effort setting from low to max. A toggle matters, because it turns "is thinking better?" from an opinion into something you can measure.</p>
 
     <h2>Under the hood, it's still next-token prediction</h2>
-    <p>Here's the part the marketing tends to skip. There is no separate reasoning module bolted onto these models. It's the same architecture doing the same thing it always did (predicting the next token, one at a time) described in <a href="https://outlier.host/learn/">the large language model explainer</a>.</p>
+    <p>Here's the part the marketing tends to skip. There is no separate reasoning module bolted onto these models. It's the same architecture doing the same thing it always did: predicting the next token, one at a time.</p>
     <p>What changed is training and prompting. The model has been taught to spend tokens working the problem before it commits to an answer. And because every token it generates is another forward pass through the network, a long stretch of working means substantially more computation spent on that one question.</p>
     <p>That's the whole mechanism: <strong>more tokens equals more compute per question.</strong> It isn't a new kind of cognition. Which is also why it isn't free, and why it isn't automatically better.</p>
+
+    <h2>How a model learns to reason</h2>
+    <p>Three methods do most of the work, and they are often combined.</p>
+    <ul>
+      <li><strong>Training on worked solutions.</strong> A model is fine-tuned on problems paired with step-by-step solutions, so it learns to write its working before the answer. Because human-written solutions are expensive, researchers have proposed generating many attempts, keeping only the ones that reach the right final answer, and training on those.</li>
+      <li><strong>Reinforcement learning on checkable answers.</strong> The model is rewarded when its final answer is right, on problems where right can be checked, such as maths with a known answer or code with tests. DeepSeek's R1 model card says its first version, R1-Zero, was trained this way with no supervised step first, and that reasoning behaviours emerged on their own, along with problems like endless repetition and mixing languages.</li>
+      <li><strong>Copying a bigger model.</strong> A small model is trained on a large reasoning model's outputs. DeepSeek's R1 distills are this: small Qwen and Llama models fine-tuned on R1's reasoning traces.</li>
+    </ul>
+    <p>The other lever is spending more compute when the question is asked, not just when the model is trained, which is what a longer chain of thought does. One reported experiment had a 3-billion-parameter Llama model beat the 70-billion-parameter one on hard reasoning problems by scaling that answer-time compute. More thinking is a real lever. It isn't a free one, as the next section shows.</p>
 
     <h2>Thinking tokens are real tokens</h2>
     <p>Every token in that chain of thought has to be generated the same way any other token is. The consequences are concrete:</p>
@@ -188,7 +197,22 @@
       <li><strong>In the cloud, you pay for them.</strong> Money and latency, whether or not the provider shows you the chain. A hidden reasoning trace is still a billed one.</li>
       <li><strong>On your own machine, you pay in seconds and battery.</strong> There's no invoice, but there is a fan, a warm laptop, and a wait before the first useful word appears.</li>
     </ul>
+    <p>At scale it adds up. Reported comparisons on the AIME maths competition put reasoning models at 10 to 74 times the cost of their non-reasoning counterparts, and their long outputs take far longer to generate. Some can even be pushed into overthinking on purpose, to slow them down and run up the bill.</p>
     <p>None of that is a reason to avoid thinking modes. It's a reason to spend them where they buy something.</p>
+
+    <h2>Reasoning in the older sense: deductive, inductive, abductive</h2>
+    <p>Before "reasoning model" meant chain of thought, AI reasoning meant the kinds of inference a system could draw. Those kinds still describe what a model's working is doing:</p>
+    <table>
+      <thead><tr><th>Type</th><th>What it means</th><th>What it looks like in a model's working</th></tr></thead>
+      <tbody>
+        <tr><td>Deductive</td><td>From rules that hold to a conclusion that must follow</td><td>Applying a formula step by step in a maths problem</td></tr>
+        <tr><td>Inductive</td><td>From examples to a general pattern that is probably true</td><td>Spotting the rule in a few input and output pairs, then using it</td></tr>
+        <tr><td>Abductive</td><td>From an observation to its most likely explanation</td><td>Guessing which line of code caused an error message</td></tr>
+        <tr><td>Analogical</td><td>From a known case to a similar new one</td><td>Solving a problem by its likeness to a worked example</td></tr>
+        <tr><td>Common sense</td><td>Filling gaps with everyday knowledge</td><td>Assuming a dropped glass falls rather than floats</td></tr>
+      </tbody>
+    </table>
+    <p>A reasoning model doesn't pick a type and run it. It writes text that does one of these things, and writing the steps down is what makes the multi-step kinds more reliable.</p>
 
     <h2>I measured it on my own model, and thinking lost</h2>
     <p>I run a local model on Apple Silicon, so this is easy for me to test rather than argue about. I took Outlier's Nano tier, ran 30 GSM8K grade-school math problems through it with greedy decoding, and flipped the thinking mode on and off. GSM8K is exactly the kind of multi-step arithmetic that chain of thought is supposed to be built for.</p>
@@ -232,7 +256,7 @@
     <p>So: switch it on when you hand the model something with several dependent steps, and leave it off for everything else. If your tool exposes a toggle, that toggle is worth learning. And if you can run the same 20 or 30 prompts both ways on the work you actually do, do that once. It takes an afternoon and it settles the question for your setup permanently. A related idea, having the model verify its own output instead of just deliberating longer, is covered in <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">how an AI agent checks its own work</a>.</p>
     <p>Running locally makes this easier, mostly because the feedback is immediate and nothing is metered. You can run a benchmark thirty times over without watching a bill climb. That's the argument in <a href="https://outlier.host/learn/what-is-local-ai/">what local AI is</a>, and testing your own model is a good example of why it matters.</p>
 
-    <div class="receipts"><strong>Receipts:</strong> The thinking ON/OFF numbers are my own measurement, not a citation: Outlier's Nano tier, 30 GSM8K math problems, greedy decoding, thinking mode toggled and everything else held constant. Thinking OFF scored 80%, thinking ON scored 63.3%, and OFF was 32% faster. One model, one benchmark, one decoding setting: reported because it's a counterexample, not because it generalizes. The model descriptions (o-series, DeepSeek-R1 at 671B MoE with open weights, Qwen thinking mode) are public facts about those releases.</div>
+    <div class="receipts"><strong>Receipts:</strong> The thinking ON/OFF numbers are my own measurement, not a citation: Outlier's Nano tier, 30 GSM8K math problems, greedy decoding, thinking mode toggled and everything else held constant. Thinking OFF scored 80%, thinking ON scored 63.3%, and OFF was 32% faster. One model, one benchmark, one decoding setting: reported because it's a counterexample, not because it generalizes. The model descriptions (o-series, DeepSeek-R1 at 671B MoE with open weights, Qwen thinking mode) are public facts about those releases. Model examples and the cost figures from Wikipedia's <a href="https://en.wikipedia.org/wiki/Reasoning_model">Reasoning model</a> article (revised 2026-11-12, read 2026-11-22); R1-Zero and the R1 distills from the <a href="https://huggingface.co/deepseek-ai/DeepSeek-R1">DeepSeek-R1 model card</a>; Qwen3.5's default thinking mode from the <a href="https://huggingface.co/Qwen/Qwen3.5-4B">Qwen3.5-4B model card</a>; DeepSeek's default thinking and effort levels from its <a href="https://api-docs.deepseek.com/guides/thinking_mode">thinking mode guide</a>, all read 2026-11-22.</div>
 
     <h2>Frequently asked questions</h2>
     <div class="faq">
@@ -248,6 +272,10 @@
         <h3>When should I turn thinking on?</h3>
         <p>Turn it on for problems with several dependent steps: multi-step math, code with interacting constraints, and planning. Leave it off for recall, summarization, formatting, and short factual answers, where the extra tokens buy nothing. Match the mode to the task instead of leaving thinking on by default.</p>
       </div>
+      <div class="faq-item">
+        <h3>What are the types of reasoning in AI?</h3>
+        <p>The classic types are deductive (from rules to a conclusion that must follow), inductive (from examples to a likely pattern), abductive (from an observation to its likeliest explanation), analogical and common-sense reasoning. Today "AI reasoning" usually means a model writing out its working before it answers, and that working can use any of these.</p>
+      </div>
     </div>
 
     <div class="cta">
@@ -257,7 +285,7 @@
       <p class="phone-link">On your phone? <button type="button" data-send-mac-link>Send the Mac link to yourself</button></p>
     </div>
 
-    <div class="related">More: <a href="https://outlier.host/learn/">What is a large language model?</a> · <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/data/local-ai-math-word-problems-mac/">Local AI math word problems, measured</a> · <a href="https://outlier.host/learn/">All articles</a></div>
+    <div class="related">More: <a href="https://outlier.host/learn/">All Learn guides</a> · <a href="https://outlier.host/learn/how-an-ai-agent-checks-its-own-work/">How an AI agent checks its own work</a> · <a href="https://outlier.host/learn/what-is-local-ai/">What is local AI?</a> · <a href="https://outlier.host/data/local-ai-math-word-problems-mac/">Local AI math word problems, measured</a> · <a href="https://outlier.host/learn/">All articles</a></div>
   </div>
 </article>
 <section class="subscribe-strip">
