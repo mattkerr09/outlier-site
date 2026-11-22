@@ -157,7 +157,7 @@
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
-      <p>A private AI server runs the model on hardware you control, so prompts are not sent to an AI vendor. On a Mac, Outlier is that server when you choose a downloaded local model in Chat or Code mode with web search off after setup; Pro can pick Research in Auto mode. Outlier measured Nano 4B at 71.7 tokens per second on an M1 Ultra with 64 GB in its <a href="/data/local-ai-benchmarks-mac-2026/">Mac benchmarks</a>. The <a href="/how-to/keep-prompts-private-on-mac/">private chat setup guide</a> lists other app features that can still connect.</p>
+      <p>A private AI server runs the model on hardware you control, so prompts are not sent to an AI vendor. On a Mac, Outlier is that server when you choose a downloaded local model in Chat or Code mode with web search off after setup; Auto never starts Research with web search off. Outlier measured Nano 4B at 71.7 tokens per second on an M1 Ultra with 64 GB in its <a href="/data/local-ai-benchmarks-mac-2026/">Mac benchmarks</a>. The <a href="/how-to/keep-prompts-private-on-mac/">private chat setup guide</a> lists other app features that can still connect.</p>
     </div>
 <div class="pbox" data-pbox="answer">
 <p class="pbox-price">Outlier Pro<span data-pbox-regular>: $39 once</span><span data-pbox-founding hidden> &middot; Black Friday sale: $16.99 once through December 2. Then $39.</span></p>
@@ -187,7 +187,7 @@
     </tbody></table>
     </div>
     <p>Outlier is a Mac app whose engine runs on the Mac. In the <a href="/learn/check-an-ai-app-is-offline-on-mac/">4 November 2026 capture</a>, Core was answering with web search off. The engine was sampled 22 times across an answer. Sockets leaving the Mac: 0. It held only a listener and loopback connections at <code>127.0.0.1:8766</code>. This is a past capture, not a new check.</p>
-    <p><code>127.0.0.1</code> is the Mac's own loopback address. Other devices on the network cannot connect to a listener bound only there. There are <a href="/learn/is-local-ai-safe/">known connection exceptions</a>: model downloads, the update check, a price check while an upgrade window is open, the Pro licence check, web search when it is on, and Pro's Research, which Auto can pick even with web search off. Use the <a href="/learn/check-an-ai-app-is-offline-on-mac/">lsof method</a> to check your own Mac.</p>
+    <p><code>127.0.0.1</code> is the Mac's own loopback address. Other devices on the network cannot connect to a listener bound only there. There are <a href="/learn/is-local-ai-safe/">known connection exceptions</a>: model downloads, the update check, a price check while an upgrade window is open, the Pro licence check, web search when it is on, and Pro's Research, which runs only with web search on. Use the <a href="/learn/check-an-ai-app-is-offline-on-mac/">lsof method</a> to check your own Mac.</p>
     <h2>The private options, compared</h2>
     <table><thead><tr><th>Tool</th><th>Offline</th><th>Open weights</th><th>Notes</th></tr></thead><tbody>
       <tr><td>Jan</td><td>Yes</td><td>Yes</td><td>Open source (Apache 2.0) chat app; it can also connect to cloud models</td></tr>

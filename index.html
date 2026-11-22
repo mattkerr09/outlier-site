@@ -1101,7 +1101,7 @@
         <span class="kicker">Private by design</span>
         <h2>Private<br><span class="accent">by default.</span></h2>
       </div>
-      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. Your chats are never on our servers, because we never receive them. <strong>Nothing you type leaves your Mac unless you use web search or Pro's Research mode, or pick a cloud model with your own API key</strong> (with web on, the search query goes out, and in agent mode the pages and web tools it uses; with web off, a download the agent wants asks you first). Apart from Pro choosing Research in Auto mode, the app goes online on its own only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. Nano, Lite, Quick and Core are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>; Plus and Vision 3.8 come from public community conversions of Qwen's models.</p>
+      <p class="lead">Local model inference runs entirely on your Apple Silicon chip. Your prompts, files, code, and chat history stay on your disk, under your control. Your chats are never on our servers, because we never receive them. <strong>Nothing you type leaves your Mac unless you use web search or Pro's Research mode, or pick a cloud model with your own API key</strong> (with web on, the search query goes out, and in agent mode the pages and web tools it uses; with web off, a download the agent wants asks you first). With web search off, Auto never starts Research, and the app goes online on its own only for things that carry none of your words: model downloads, the update check, the price shown when you open an upgrade window, and on Pro the license check. No telemetry on inference. Nano, Lite, Quick and Core are auditable on <a href="https://huggingface.co/Outlier-Ai" target="_blank" rel="noopener noreferrer" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">HuggingFace</a>; Plus and Vision 3.8 come from public community conversions of Qwen's models.</p>
       <div class="proof reveal d2">
         <div class="proof-head"><b></b>Captured 2026-11-04 on Outlier 1.11.992 while Core was answering, web search off. A past capture, not a live reading.</div>
 <pre><span class="p-cmd">$ lsof -a -p $(pgrep -x outlier-cli) -i -n -P</span>
@@ -1251,7 +1251,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       <span class="kicker">Beyond chat</span>
       <h2>The rest of the app,<br><span class="accent">not just described.</span></h2>
       <p>Three things Outlier does that a chat box does not, in the same window. Chat and the agent
-      run on your Mac; Pro's Research reads the web, and Auto can pick Research even with web search off.</p>
+      run on your Mac; Pro's Research reads the web, and Research runs only with web search on.</p>
     </div>
 
     <div class="demos">
@@ -1519,7 +1519,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </details>
       <details>
         <summary>Does my data stay private?</summary>
-        <div class="body">Inference runs on your Mac; chat history and memory stay on your disk. Web search, web pages, web-connected tools and external API keys can send requests out, and Pro can pick Research in Auto mode even with web search off. With web off, an agent command that downloads from the internet asks first.</div>
+        <div class="body">Inference runs on your Mac; chat history and memory stay on your disk. Web search, web pages, web-connected tools and external API keys can send requests out; Research runs only with web search on. With web off, an agent command that downloads from the internet asks first.</div>
       </details>
       <details>
         <summary>Do I need an internet connection?</summary>
