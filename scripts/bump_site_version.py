@@ -37,7 +37,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 #: Every page must reach zero: the homepage no longer narrates release history.
 FILES = {"index.html": 0,
          "thank-you.html": 0,
-         "learn/can-you-run-claude-locally/index.html": 0}
+         "learn/can-you-run-claude-locally/index.html": 0,
+         # 2026-11-22 (1.11.1020's bump b9bfb63b failed CI): /download/ says "Current version: vX." and nothing moved it;
+         # fixed by hand in 96a727ba4. Its two DMG links are the release-URL shape below.
+         "download/index.html": 0}
 
 
 # 2026-11-04 (1.11.993's bump refused, index.html "14 -> 1"): the home page's lsof receipt names the build it was CAPTURED
@@ -58,6 +61,7 @@ def shapes(old: str, new: str) -> dict[str, str]:
         f"releases/download/v{old}/Outlier-{old}-arm64.dmg":
             f"releases/download/v{new}/Outlier-{new}-arm64.dmg",
         f"v{old} · notarized": f"v{new} · notarized",
+        f"Current version: v{old}.": f"Current version: v{new}.",
     }
 
 
