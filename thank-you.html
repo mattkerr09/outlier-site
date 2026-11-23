@@ -58,6 +58,15 @@
     .btn-copy { margin: .75rem 0 .4rem; font-size: .85rem; padding: .4rem .9rem; }
     .note { border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin: 1.6rem 0; }
     .foot { margin-top: 3rem; border-top: 1px solid var(--border); padding-top: 1.2rem; font-size: 0.92rem; }
+    /* found-question (kit component, 2026-11-23) */
+    .found { margin: 2.4rem 0 0; padding: 1.2rem 1.4rem 1.3rem; border: 1px solid var(--border); border-radius: 12px; background: rgba(255,255,255,.03); }
+    .found h2 { margin-top: 0; }
+    .found-row { display: flex; flex-wrap: wrap; gap: .5rem; margin: .8rem 0 0; }
+    .found-row[hidden] { display: none; }
+    .found-btn { font: inherit; font-size: .92rem; color: var(--text); background: transparent; cursor: pointer;
+                 border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: .45rem .95rem; min-height: 40px; }
+    .found-btn:hover, .found-btn:focus-visible { border-color: var(--accent); }
+    .found-done { margin: .8rem 0 0; }
     code { background: rgba(255,255,255,0.06); padding: 0.1rem 0.35rem; border-radius: 4px; }
   
 /* Email capture. Injected into the pages the SEO renderer does not own.
@@ -221,6 +230,42 @@ plausible.init()
       and I will answer directly, usually within a few hours (US Eastern). Refund window is
       <strong>30 days, no questions asked</strong>: the same terms as on the
       <a href="/terms.html">terms page</a>.</p>
+
+    <!-- 2026-11-23 (CEO's kit-to-site order; Article Studio's map, ops launch/app-bar/outlier/kit-to-site-2026-11-23.md): the
+         kit's found-question component (ops kit/site-starter/components/found-question.html, from Check Engine's /thank-you/),
+         in Outlier's own words. One optional tap; it POSTs only the fixed answer to the hub's /found/outlier, which adds it to a
+         daily count with the country Cloudflare reports (privacy.html says so). Nothing from the address bar goes with it. -->
+    <section class="found" data-found-box data-done="Thanks. Noted.">
+      <h2>Where did you hear about Outlier?</h2>
+      <p class="dim">One tap, and only the answer you pick is sent. Skip it if you like.</p>
+      <div class="found-row">
+        <button type="button" class="found-btn" data-found="claude">Claude</button>
+        <button type="button" class="found-btn" data-found="chatgpt">ChatGPT</button>
+        <button type="button" class="found-btn" data-found="google">Google</button>
+        <button type="button" class="found-btn" data-found="bing">Bing</button>
+        <button type="button" class="found-btn" data-found="youtube">YouTube</button>
+        <button type="button" class="found-btn" data-found="reddit">Reddit</button>
+        <button type="button" class="found-btn" data-found="producthunt">Product Hunt</button>
+        <button type="button" class="found-btn" data-found="friend">A friend or colleague</button>
+        <button type="button" class="found-btn" data-found="other">Somewhere else</button>
+      </div>
+      <p class="found-done" role="status" aria-live="polite"></p>
+    </section>
+    <script>
+    (function () {
+      var box = document.querySelector('[data-found-box]');
+      if (!box) return;
+      box.addEventListener('click', function (e) {
+        var b = e.target.closest && e.target.closest('[data-found]');
+        if (!b) return;
+        var u = 'https://kerr-affiliate-hub.kerrco.workers.dev/found/outlier?a=' + encodeURIComponent(b.getAttribute('data-found')) +
+          (e.isTrusted ? '&ct=1' : '');
+        try { fetch(u, { method: 'POST', mode: 'cors', credentials: 'omit', keepalive: true }).catch(function () {}); } catch (err) {}
+        box.querySelector('.found-row').hidden = true;
+        box.querySelector('.found-done').textContent = box.getAttribute('data-done') || '';
+      });
+    })();
+    </script>
 
     <!-- 2026-11-06 (Matthew: "our other apps and bundle should be offered at some point in the checkout as well").
          Below the key and activation steps. The sale lines show only while /founding says the launch price is live
