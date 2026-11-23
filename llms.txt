@@ -8,6 +8,8 @@
 > recover), MCP connectors, Projects, coding as a mode of the
 > Core tier, and six model tiers from 4B to 397B.
 
+Checked 2026-11-23 against the live site. Re-read and re-dated every 14 days.
+
 ## Is Outlier free?
 Nano and Lite are free. No account.
 Pro adds every model for $39 once. Black Friday sale: $16.99 once through December 2. Then $39. (The sale ends 2026-12-03 at 07:59 UTC.)
@@ -16,7 +18,7 @@ Refund window: 30 days, no questions asked. One payment, no subscription.
 
 ## Key documents
 - [Homepage](https://outlier.host/)
-- [About — who builds Outlier and why](https://outlier.host/about/)
+- [About: who builds Outlier and why](https://outlier.host/about/)
 - [Learn: how local AI works](https://outlier.host/learn/)
 - [What is local AI?](https://outlier.host/learn/what-is-local-ai/)
 - [Comparisons hub (Outlier vs Claude, Ollama, LM Studio, Jan)](https://outlier.host/vs/)
@@ -69,3 +71,95 @@ The model runs on the Mac and answers with the network off. Chats, memory and fi
 - HumanEval, 164 problems (2026-08-24): Core 95.1%, Vision 3.8 94.5%.
 - SWE-bench Verified, agentic, blind, official Docker: Core 46.0% (23 of 50, 2026-08-09).
 - The download is a later build than the one measured; these figures have not been re-run on it. Method: https://outlier.host/data/outlier-tier-benchmarks-2026-08/
+
+## Refunds
+30 days, no questions asked: email matt@outlier.host with your order number. The same terms are on https://outlier.host/terms.html. Pro is one payment, not a subscription, so there is nothing to cancel.
+
+## How it compares (rival facts read on their own pricing pages, with the date)
+- LM Studio and Ollama: the apps are free and run local models. Their paid plans are monthly, $20.00 to $100.00 a month, and sell models that run in their cloud (both plans checked 2026-11-22). LM Studio's Bionic agent is free and runs local models too; Bionic+ adds US-hosted cloud inference for frontier models at $20.00 a month (checked 2026-11-22). Outlier has no cloud plan: every tier, Plus included, runs on the Mac, and Pro is one payment.
+- Where LM Studio and Ollama win: they run on Windows and Linux as well as Macs, and they let you load a far wider range of open models. Outlier runs only on Apple Silicon Macs and ships six tested tiers.
+- Cloud AI tools and cloud coding agents (ChatGPT, Claude and the like) run frontier models in their own cloud, on a monthly plan or per-token billing. Outlier is not claiming parity with the best cloud coding agents today; the measured gap is here: https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/
+- Side-by-side pages: https://outlier.host/vs/
+
+## What Outlier can't do
+- Run on an Intel Mac, on Windows or Linux, or on a phone. It needs Apple silicon (M1 or newer) and macOS 15 or later. A Windows version is in testing, with no date promised.
+- Match the best cloud coding agents today (see the benchmark link above).
+- Answer fast on the largest tier: Plus (397B) runs at about 2 tokens a second on a 64 GB Mac (measured 2026-06-24, build 1.11.593). It is for depth, not speed.
+- Look anything up with web search off: web search, Research and web-connected tools need it on, and it is off by default.
+- Use more than 8K tokens of context on the free tiers (Pro: up to 128K).
+
+## Frequently asked questions (the home page's FAQ, word for word)
+
+### How many Macs does one license cover?
+Up to 3 Macs at a time; deactivate one to move it. Deactivate from Settings > License on the Mac you are leaving, then activate on the new one: you do not need to contact us, and there is no limit on how many times you move it.
+
+### Is Outlier as good as the best cloud coding agents?
+No: that's the goal, not the claim. It's a real local Mac app with shipped models and agent features, and it has not closed that gap yet. Licence sales fund the work.
+
+### What's free?
+Nano and Lite, the lightweight local tiers. Meant to be genuinely useful, not a trial.
+
+### What does Pro include?
+One payment. Everything: all six tiers and every feature itemised in the pricing cards above, on-device fine-tuning included. Local generation is never metered or charged per token. Core 27B is the daily driver. There is no middle tier. Lifetime is the Outlier Lifetime Licence: pay once, keep everything Pro has including future model releases. The offer bar at the top of every page reads the store live, and comes down the moment the sale ends.
+
+### Does my data stay private?
+Inference runs on your Mac; chat history and memory stay on your disk. Web search, web pages, web-connected tools and external API keys can send requests out; Research runs only with web search on. With web off, an agent command that downloads from the internet asks first.
+
+### Do I need an internet connection?
+Not to use it. The model runs on your Mac and answers with the network off: that is the whole point of the product, not a fallback mode. You need a connection three times: to download a tier the first time (once per tier, then it is yours on disk), to activate your license, and if you turn web on or approve an agent command that downloads something, which are things you choose to do rather than something it does on its own. On its own it checks for updates, and when you open an upgrade window it fetches the price to show you; neither carries anything you wrote. The license check runs at startup and once a day after that. If it cannot reach us it keeps your Pro features working rather than locking you out: an unreachable server is treated as no answer, not as a refusal. Only an explicit revocation from the payment provider ever changes anything.
+
+### What Mac do I need?
+Apple Silicon (M1 or newer) on macOS 15 or later, which is a free update. Nano needs 6 GB and Lite 12 GB, so both fit a 16 GB MacBook Air; Quick needs 16 GB and wants 24; Core and Vision need 24 GB; On a 64 GB Mac, Plus streams from the SSD: about 2 tokens a second (a word or so), and 79 seconds before the first one (measured on an M1 Ultra with 64 GB, build 1.11.593, 2026-06-24). It needs 209 GB of free disk. Only a 256 GB Mac holds it all in memory. For everyday speed, use Core. Intel Macs are not supported.
+
+### What doesn't work yet? (honest list)
+Stop on a long Deep Research run frees the UI, but the backend keeps draining for a few more seconds. Plus took 79 seconds to its first word on a 64 GB M1 Ultra (measured 2026-06-24, build 1.11.593). The Companion overlay is a v0, and Knowledge Stacks still uses a hash-based retriever; a real embedder lands in v1.12.
+
+### Questions before buying?
+matt@outlier.host reaches Matthew directly; there is no guaranteed response time.
+
+## Best-of lists
+- [AI assistants for Mac in 2026: cloud and local compared](https://outlier.host/best/best-ai-assistant-mac-2026/)
+- [Free local AI for Mac: what each option costs](https://outlier.host/best/free-local-ai-mac/)
+- [Local AI apps for Mac compared in 2026](https://outlier.host/best/local-ai-for-mac/)
+- [Local LLM families in 2026 compared by task and memory](https://outlier.host/best/local-llm-2026/)
+- [Local LLMs for coding on a Mac compared](https://outlier.host/best/local-llm-for-coding/)
+- [A private AI server on your own Mac, with no cloud](https://outlier.host/best/private-ai-no-cloud/)
+
+## Measured data and benchmarks
+- [Can a local 27B model code like Claude? The measured answer](https://outlier.host/data/can-a-local-27b-model-code-like-claude/)
+- [Local AI benchmarks for Mac (2026): Outlier vs Ollama vs LM Studio](https://outlier.host/data/local-ai-benchmarks-mac-2026/)
+- [Local AI and math word problems on a Mac: 12 of 20 right became 20 of 20](https://outlier.host/data/local-ai-math-word-problems-mac/)
+- [Why your local AI gives the same answer every time, and a 2-minute test](https://outlier.host/data/local-ai-same-answer-every-time-mac/)
+- [Local AI time to first token on a Mac: from 20 seconds to about 1](https://outlier.host/data/local-ai-time-to-first-token-mac/)
+- [Mac RAM to AI model size: the reference table](https://outlier.host/data/mac-ram-to-model-size/)
+- [Outlier tier benchmarks: MMLU on every shipping tier](https://outlier.host/data/outlier-tier-benchmarks-2026-08/)
+- [Outlier vs Claude: 54-prompt benchmark results (May 2026)](https://outlier.host/data/outlier-vs-claude-54-prompt-benchmark/)
+- [Prefix cache latency benchmarks: Outlier v659 to v662](https://outlier.host/data/prefix-cache-latency-benchmarks/)
+- [Streaming engine benchmarks: Plus + Vision tok/s on Apple Silicon](https://outlier.host/data/v11-streaming-engine-benchmarks/)
+
+## Run a specific model on your Mac
+- [How to run Claude-Code-style agents offline on a Mac](https://outlier.host/run/claude-code-style-agents-offline/)
+- [A local AI agent with computer use, fully offline on a Mac](https://outlier.host/run/local-ai-agent-computer-use-offline/)
+- [How to run AI coding offline on Apple Silicon](https://outlier.host/run/offline-ai-coding-apple-silicon/)
+- [How to run Qwen3.5-397B on a Mac without 512 GB of RAM](https://outlier.host/run/qwen35-397b-on-mac-without-512gb-ram/)
+- [How to run a 397B-parameter model on a 64 GB Mac Studio](https://outlier.host/run/run-397b-on-64gb-mac-studio/)
+- [Run Outlier Core on MacBook Pro M4 Pro](https://outlier.host/run/run-compact-on-m4-pro-macbook-pro/)
+- [Run Outlier Lite on MacBook Air 13 M4](https://outlier.host/run/run-lite-on-m4-air-13/)
+- [Run Outlier Plus on Mac Studio M1 Ultra](https://outlier.host/run/run-plus-on-m1-ultra-mac-studio/)
+- [Run Outlier Vision 3.8 on MacBook Pro M3 Max](https://outlier.host/run/run-vision-on-m3-max-macbook-pro/)
+
+## For your work
+- [Local AI for accountants and CPAs](https://outlier.host/for/accountants/)
+- [Private local AI for finance and accounting](https://outlier.host/for/finance/)
+- [Local AI for lawyers: client confidentiality without the cloud](https://outlier.host/for/lawyers/)
+- [Free local AI for students: no subscription, no usage caps](https://outlier.host/for/students/)
+- [Local AI for writers: your manuscript stays on your Mac](https://outlier.host/for/writers/)
+
+## Tools
+- [Will it run? Check a Mac and a model before you download](https://outlier.host/will-it-run/)
+- [Can my Mac run local AI?](https://outlier.host/tools/can-my-mac-run-it/)
+
+## More guides
+- Comparisons, Outlier against each alternative: https://outlier.host/vs/
+- Learn, how local AI works: https://outlier.host/learn/
+- How-to guides: https://outlier.host/how-to/
