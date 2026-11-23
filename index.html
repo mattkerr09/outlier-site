@@ -47,8 +47,12 @@
 
        2026-08-18: display + headings moved off Clash Display onto Satoshi, so the
        preload points at Satoshi 700 -- it was still fetching Clash Display 700,
-       a face nothing renders any more. -->
-  <link rel="preload" as="font" type="font/woff2" href="/fonts/f41d89b144.woff2" crossorigin>
+       a face nothing renders any more.
+
+       2026-11-23 (CEO fix 131): Satoshi and Clash Display were ITF Fontshare fonts, which section 02 of the ITF Free Font
+       License does not allow in a public repository (this one is). Headings now use Plus Jakarta Sans (SIL OFL 1.1),
+       the closest of four OFL faces compared at 1280 the same day; the preload is its latin file. -->
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/plus-jakarta-sans-latin.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="/fonts/a18ee4a68c.woff2" crossorigin>
   <link rel="stylesheet" href="/fonts/fonts.css">
   <style>
@@ -81,8 +85,8 @@
       --green:#34d399; --green-light:#6ee7b7;
       --amber:#fbbf24;
 
-      --display:'Satoshi',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-      --head:'Satoshi',-apple-system,sans-serif;
+      --display:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --head:'Plus Jakarta Sans',-apple-system,sans-serif;
       --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
       --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
 
