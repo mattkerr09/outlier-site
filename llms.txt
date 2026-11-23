@@ -40,3 +40,32 @@ Refund window: 30 days, no questions asked. One payment, no subscription.
 
 ## Who makes Outlier
 Outlier is made by Kerr & Company (https://kerrandcompanyholdings.com/), Matthew Kerr, one person in Grand Rapids, Michigan (https://outlier.host/about/), who also makes Crisp Video (offline video restore for Mac) and Check Engine SEO (website audits).
+
+## Models and the memory each needs
+Six tiers. Free: Nano and Lite. Pro: the other four. A 16 GB MacBook Air runs both free models.
+- Nano (Qwen3.5-4B, MLX 4-bit): free. 2.37 GB download, 6 GB minimum memory.
+- Lite (Qwen3.5-9B, MLX 4-bit): free. 5.04 GB download, 12 GB minimum memory.
+- Quick (Gemma 4 26B mixture of experts): Pro. 15.61 GB download, 16 GB minimum, 24 GB recommended. For reasoning, not positioned as a coding tier.
+- Core (Qwen3.6-27B, text): Pro. 15.13 GB download, 24 GB minimum. Coding is a mode of Core.
+- Vision 3.8 (Qwen3.8-27B, images and text): Pro. 15.5 GB download, 24 GB minimum.
+- Plus (Qwen3.5-397B-A17B, paged from the SSD): Pro. 209 GB of disk, 64 GB minimum, 128 GB recommended. About 2 tokens a second: for depth, not speed.
+Check a specific Mac and model: https://outlier.host/will-it-run/ and https://outlier.host/data/mac-ram-to-model-size/
+
+## Requirements
+- A Mac with Apple silicon (M1 or newer) on macOS 15 or later (a free update). Intel Macs are not supported.
+- No account. The free tiers need no payment and no sign-in.
+- Windows: in testing, no date promised.
+
+## What can leave your Mac (summary of https://outlier.host/privacy.html)
+The model runs on the Mac and answers with the network off. Chats, memory and files stay on the Mac's disk.
+- Three checks run on their own: the app update check (a GET to a public GitHub URL; updates are signed with minisign and verified before install), the licence re-check (at startup and once a day; if it can't reach the server, Pro keeps working), and the price check when you open an upgrade window (it names the site and nothing else).
+- Only when you use the feature: model downloads from Hugging Face (the first time you use each tier), web search (your search query goes to DuckDuckGo, Mojeek and Wikipedia), Research (it needs web search on), a cloud model with your own API key, an MCP server or anything else you connect yourself, and licence activation (the key goes to the vendor that issued it).
+- With web off, the agent has no web search, web pages or web-connected tools, and a command that downloads or installs from the internet asks you first, every time.
+
+## Measured benchmarks (our runs on a 64 GB Mac Studio M1 Ultra, with dates)
+- Nano decode: 92.6 tokens a second on Outlier 1.11.1020, three timed runs on 22 November 2026, with a peak of 5.5 to 5.8 GB of memory (https://outlier.host/data/local-ai-benchmarks-mac-2026/). The earlier round measured 71.7 (2026-04-29).
+- Decode, earlier rounds: Lite 53.4 and Core 20.7 tokens a second (2026-04-29); Quick 43.6 (median of 20 runs, 1.11.804, 2026-08-24); Vision 3.8 17.2 (2026-08-19, shipped in 1.11.792); Plus 2.0 (2026-06-24, build 1.11.593). Speed varies by Mac.
+- MMLU, 200 questions (2026-08-24, build 1.11.804): Nano 52.0%, Lite 77.0%, Quick 81.0%, Core 89.5%, Vision 3.8 82.5%.
+- HumanEval, 164 problems (2026-08-24): Core 95.1%, Vision 3.8 94.5%.
+- SWE-bench Verified, agentic, blind, official Docker: Core 46.0% (23 of 50, 2026-08-09).
+- The download is a later build than the one measured; these figures have not been re-run on it. Method: https://outlier.host/data/outlier-tier-benchmarks-2026-08/

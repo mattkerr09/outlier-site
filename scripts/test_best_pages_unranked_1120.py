@@ -186,10 +186,11 @@ class BestPagesUnranked(unittest.TestCase):
             re.findall(r'<loc>(.*?)</loc>', base_text("sitemap.xml")),
             re.findall(r'<loc>(.*?)</loc>', (ROOT / "sitemap.xml").read_text()),
         )
-        self.assertEqual(
-            re.findall(r'https://[^\s)]+', base_text("llms.txt")),
-            re.findall(r'https://[^\s)]+', (ROOT / "llms.txt").read_text()),
-        )
+        # 2026-11-23 (RULES 77 fix 2): llms.txt grew sections at its END. The guard keeps its purpose: every URL it had stays,
+        # unchanged and in order; new URLs may only follow them.
+        base_urls = re.findall(r'https://[^\s)]+', base_text("llms.txt"))
+        now_urls = re.findall(r'https://[^\s)]+', (ROOT / "llms.txt").read_text())
+        self.assertEqual(now_urls[:len(base_urls)], base_urls)
         for path in PAGES:
             with self.subTest(page=path):
                 before, after = Page(base_text(path)), Page((ROOT / path).read_text())

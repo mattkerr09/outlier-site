@@ -237,9 +237,10 @@
          line now (row 2), and every block below it moves down one row. */
       /* 21 Nov (CEO, blind review): centred against the copy column the headline sat low, with empty space above it.
          It starts level with the copy's first line now. */
-      .hero .wrap > h1{grid-column:1;grid-row:2 / span 4;margin-bottom:0;
+      .hero .wrap > h1{grid-column:1;grid-row:2 / span 2;margin-bottom:0;
         align-self:start;font-size:clamp(3.25rem,4.35vw,4.5rem);max-width:15ch;}
       .hero .wrap > .future-line{grid-column:2;grid-row:2;margin:.5rem 0 0;max-width:none;}
+      .hero .wrap > .hero-maker{grid-column:1;grid-row:4 / span 3;align-self:start;margin-top:1.6rem;}
       .hero .wrap > p.sub{grid-column:2;grid-row:3;margin-top:.9rem;max-width:none;}
       .hero .wrap > .cta-bar{grid-column:2;grid-row:4;align-self:start;}
       /* 10 Nov (Quality Desk): the "Free to start" card had no cell either, so it sat alone under the checks with half its
@@ -786,6 +787,15 @@
     .phone-link button{font:inherit;color:var(--text);background:none;border:0;padding:0;
       text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
     @media (max-width:760px),(hover:none) and (pointer:coarse){.phone-link{display:block;}}
+    /* 2026-11-23 (RULES 77 fix 5): every section with a decision ends with the hub's Download and Buy. */
+    .sec-cta{margin-top:1.75rem;}
+    /* 2026-11-23 (RULES 77 fix 4): the maker and a measured number, in the hero's left column at 1280 (under the headline). */
+    .hero-maker{margin:1.4rem 0 0;max-width:34rem;}
+    .hero-maker .maker-line{font-family:var(--display);font-size:clamp(1.05rem,1.55vw,1.22rem);line-height:1.5;color:var(--text);margin:0;}
+    .hero-maker .maker-src{font-size:.85rem;color:var(--text-mid);margin:.55rem 0 0;}
+    .hero-maker .maker-src a{color:var(--text);text-decoration:underline;text-underline-offset:3px;}
+    /* 2026-11-23 (RULES 77 fix 5): at phone widths the demo's code wraps instead of clipping sideways. */
+    @media (max-width:640px){.hero .thread .msg.ai pre.code{white-space:pre-wrap;overflow-wrap:anywhere;}}
     /* The "Ask a question" widget renders in a shadow root; on phones shrink it to its icon
        (its text stays in the DOM for screen readers) so it stops covering the hero buttons. */
     @media (max-width:640px){#kc-agent-host::part(button){font-size:0;gap:0;padding:.72rem;}}
@@ -935,6 +945,97 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "WebSite", "@id": "https://outlier.host/#website", "name": "Outlier", "url": "https://outlier.host/", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "WebPage", "@id": "https://outlier.host/#webpage", "url": "https://outlier.host/", "name": "Outlier: AI without the data center, local on your Mac", "description": "AI without the data center. Chats stay on your Mac unless you use web search or Research. Free to start.", "inLanguage": "en", "isPartOf": {"@id": "https://outlier.host/#website"}, "about": {"@type": "SoftwareApplication", "name": "Outlier"}, "author": {"@id": "https://outlier.host/about/#matthew-kerr"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "Person", "@id": "https://outlier.host/about/#matthew-kerr", "name": "Matthew Kerr", "url": "https://outlier.host/about/", "worksFor": {"@type": "Organization", "name": "Outlier", "url": "https://outlier.host/"}, "homeLocation": {"@type": "Place", "name": "Grand Rapids"}}
+  </script>
+  <!-- faq-jsonld:start -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How many Macs does one license cover?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Up to 3 Macs at a time; deactivate one to move it. Deactivate from Settings > License on the Mac you are leaving, then activate on the new one: you do not need to contact us, and there is no limit on how many times you move it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is Outlier as good as the best cloud coding agents?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No: that's the goal, not the claim. It's a real local Mac app with shipped models and agent features, and it has not closed that gap yet. Licence sales fund the work."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nano and Lite, the lightweight local tiers. Meant to be genuinely useful, not a trial."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Pro include?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One payment. Everything: all six tiers and every feature itemised in the pricing cards above, on-device fine-tuning included. Local generation is never metered or charged per token. Core 27B is the daily driver. There is no middle tier. Lifetime is the Outlier Lifetime Licence: pay once, keep everything Pro has including future model releases. The offer bar at the top of every page reads the store live, and comes down the moment the sale ends."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does my data stay private?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Inference runs on your Mac; chat history and memory stay on your disk. Web search, web pages, web-connected tools and external API keys can send requests out; Research runs only with web search on. With web off, an agent command that downloads from the internet asks first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need an internet connection?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not to use it. The model runs on your Mac and answers with the network off: that is the whole point of the product, not a fallback mode. You need a connection three times: to download a tier the first time (once per tier, then it is yours on disk), to activate your license, and if you turn web on or approve an agent command that downloads something, which are things you choose to do rather than something it does on its own. On its own it checks for updates, and when you open an upgrade window it fetches the price to show you; neither carries anything you wrote. The license check runs at startup and once a day after that. If it cannot reach us it keeps your Pro features working rather than locking you out: an unreachable server is treated as no answer, not as a refusal. Only an explicit revocation from the payment provider ever changes anything."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What Mac do I need?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Apple Silicon (M1 or newer) on macOS 15 or later, which is a free update. Nano needs 6 GB and Lite 12 GB, so both fit a 16 GB MacBook Air; Quick needs 16 GB and wants 24; Core and Vision need 24 GB; On a 64 GB Mac, Plus streams from the SSD: about 2 tokens a second (a word or so), and 79 seconds before the first one (measured on an M1 Ultra with 64 GB, build 1.11.593, 2026-06-24). It needs 209 GB of free disk. Only a 256 GB Mac holds it all in memory. For everyday speed, use Core. Intel Macs are not supported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What doesn't work yet? (honest list)",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Stop on a long Deep Research run frees the UI, but the backend keeps draining for a few more seconds. Plus took 79 seconds to its first word on a 64 GB M1 Ultra (measured 2026-06-24, build 1.11.593). The Companion overlay is a v0, and Knowledge Stacks still uses a hash-based retriever; a real embedder lands in v1.12."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Questions before buying?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "matt@outlier.host reaches Matthew directly; there is no guaranteed response time."
+      }
+    }
+  ]
+}
+  </script>
+  <!-- faq-jsonld:end -->
 <noscript><style>
 /* Every .reveal element starts at opacity:0 and is only made visible when the
    scroll observer adds .in. That means the hero — headline, subhead, both
@@ -984,6 +1085,12 @@
     <div class="eyebrow reveal in"><span class="dot"></span> Runs on your Mac · notarized by Apple</div>
     <h1 class="reveal d1 in">AI without the data&nbsp;center.<br><span class="accent">Private and offline, on your&nbsp;Mac.</span></h1>
       <!-- 10 Nov: "in" like the other hero lines. Without it the reveal observer left this line invisible on first load (a 77px hole under the phone headline, an empty slot at 1280). -->
+      <!-- 2026-11-23 (RULES 77 fix 4; words: Article Studio, launch/app-bar/outlier/rules77-gaps-2026-11-23.md): the maker, with a
+           measured number (our run, 22 Nov 2026, Outlier 1.11.1020). Not "offline": that run did not record the network state. -->
+    <div class="hero-maker reveal d2 in">
+      <p class="maker-line">I&rsquo;m Matthew Kerr, and I build Outlier in Grand Rapids. Across three timed runs on my M1 Ultra, Nano decoded 92.6 tokens a second.</p>
+      <p class="maker-src">Outlier 1.11.1020, measured 22 Nov 2026. <a href="/data/local-ai-benchmarks-mac-2026/">How it was measured</a></p>
+    </div>
       <p class="future-line reveal d2 in">Outlier runs the model on your own Mac, so your code and chats stay on it unless you use web search or Research. Pull the plug on the internet and it keeps answering.</p>
     <p class="sub reveal d2 in">It&rsquo;s built for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files are saved on your Mac, with no usage cap, and the <a href="/privacy.html">privacy page</a> explains the few connections it makes.</p>
     <div class="cta-bar">
@@ -1176,6 +1283,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
     </div>
     <p class="hw-foot reveal">Apple Silicon only, M1 or newer, on macOS 15 or later (a free update). Intel Macs are not supported.</p>
     <p class="hw-foot reveal">Choosing the machine first? <a href="/vs/m1-vs-m4-for-local-ai/">M1 vs M4</a> compares memory bandwidth, <a href="/vs/mac-mini-vs-mac-studio-local-ai/">Mac mini vs Mac Studio</a> compares 48&nbsp;GB against 96&nbsp;GB, and <a href="/vs/mac-vs-pc-for-local-ai/">Mac vs PC</a> covers why unified memory decides the model size.</p>
+    <div class="cta-row sec-cta reveal"><a class="btn btn-primary btn-sm" href="https://outlier.host/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1020/Outlier-1.11.1020-arm64.dmg" target="_blank" rel="noopener noreferrer">Download for Mac</a><a class="btn btn-ghost btn-sm" data-buy="hardware" href="https://outlier.host/buy/outlier?src=home" target="_blank" rel="noopener noreferrer nofollow">Buy Pro</a></div>
   </div>
 </section>
 
@@ -1412,6 +1520,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
       </table>
     </div>
     <p class="provenance reveal">Quick / Core / Vision / Plus 397B are all included with Pro, which is a one-time purchase. Coding used to be a separate Code tier on the same weights; it is now a mode of Core rather than a second download. Quick is useful for reasoning, not positioned as a coding tier.</p>
+    <div class="cta-row sec-cta reveal"><a class="btn btn-primary btn-sm" href="https://outlier.host/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1020/Outlier-1.11.1020-arm64.dmg" target="_blank" rel="noopener noreferrer">Download for Mac</a><a class="btn btn-ghost btn-sm" data-buy="models" href="https://outlier.host/buy/outlier?src=home" target="_blank" rel="noopener noreferrer nofollow">Buy Pro</a></div>
   </div>
 </section>
 
@@ -1480,6 +1589,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
     <p class="chart-note">Decode speed on this M1 Ultra, log scale: the tiers span 36&times;, so a linear axis would flatten Plus to nothing. Nano, Lite and Core come from an <strong>earlier measurement round (2026-04-29)</strong> and Plus from the 2026-06-24 run on build 1.11.593, at the shipped K=40 setting; Quick is the median of 20 runs through the shipped 1.11.804 app on 2026-08-24, and Vision 3.8 was measured on 2026-08-19 (shipped in 1.11.792). The MMLU and HumanEval numbers above were taken on 2026-08-24 (build 1.11.804) and the SWE-bench numbers on 2026-08-09 (Core) and 2026-08-17 (Quick); the dataset file says so too. Speed varies by Mac.</p>
     <p class="provenance reveal"><a href="/data/outlier-tier-benchmarks-2026-08/">How these were run</a>: sample sizes, grading and hardware for every figure above. The download is a later build than the one measured; these figures have not been re-run on it.</p>
     <p class="provenance reveal"><strong>Why this table is unusual</strong>: checked on their live pages 2026-08-13, <a href="https://ollama.com" rel="nofollow">Ollama</a>, <a href="https://lmstudio.ai" rel="nofollow">LM&nbsp;Studio</a>, <a href="https://jan.ai" rel="nofollow">Jan</a> and <a href="https://www.nomic.ai/gpt4all" rel="nofollow">GPT4All</a> publish no MMLU, HumanEval or SWE-bench figure at all. That is not a criticism, the scores belong to the upstream models, but it means nobody in this category tells you what a local model will actually get right. These are ours to be held to.</p>
+    <div class="cta-row sec-cta reveal"><a class="btn btn-primary btn-sm" href="https://outlier.host/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1020/Outlier-1.11.1020-arm64.dmg" target="_blank" rel="noopener noreferrer">Download for Mac</a></div>
   </div>
 </section>
 
@@ -1510,6 +1620,7 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
     <p class="provenance reveal">Honest framing: Outlier is not claiming parity with the best cloud coding agents today. See the method and scores: <a href="/data/outlier-vs-claude-54-prompt-benchmark/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">54-prompt Outlier vs Claude</a> · <a href="/data/local-ai-benchmarks-mac-2026/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">Mac local-AI benchmarks</a> · <a href="/data/v11-streaming-engine-benchmarks/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">streaming-engine tok/s</a> · <a href="/data/mac-ram-to-model-size/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">RAM → model size</a>.</p>
     <p class="provenance reveal">And LM Studio? Its new Bionic agent is free and runs local models too. For frontier models such as Kimi K3 and GLM 5.3 it offers US-hosted cloud inference on Bionic+, $20.00 a month. Outlier keeps even its largest tier on your Mac: Plus, a 397B model, runs on a 64 GB Mac at about 2 tokens a second, and Pro is one payment, not a subscription. <span data-claims-checked="2026-11-22" data-claims-set="LM Studio">LM Studio plans checked 2026-11-22</span> on <a href="https://lmstudio.ai/pricing" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;" rel="nofollow">lmstudio.ai/pricing</a>.</p>
     <p class="provenance reveal">Compare local apps: <a href="/vs/lm-studio-alternative/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">LM Studio alternative</a> · <a href="/best/local-ai-for-mac/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">best local AI app for Mac</a> · <a href="/vs/outlier-vs-ollama/" style="color:var(--v0);text-decoration:underline;text-underline-offset:2px;">Ollama app alternative</a>.</p>
+    <div class="cta-row sec-cta reveal"><a class="btn btn-ghost btn-sm" data-buy="compare" href="https://outlier.host/buy/outlier?src=home" target="_blank" rel="noopener noreferrer nofollow">Buy Pro</a><a class="btn btn-primary btn-sm" href="https://outlier.host/dl/outlier?src=home&amp;to=https://github.com/Outlier-host/outlier-app-releases/releases/download/v1.11.1020/Outlier-1.11.1020-arm64.dmg" target="_blank" rel="noopener noreferrer">Download for Mac</a></div>
   </div>
 </section>
 
