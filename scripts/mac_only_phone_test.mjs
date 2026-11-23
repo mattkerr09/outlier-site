@@ -1,26 +1,33 @@
 #!/usr/bin/env node
-// Run the shared script offline with just the DOM operations it uses.
+// Run the shared js/mac-only.js offline against a small DOM with the page shapes the site really has (23 Nov 2026 tally
+// of every .dmg link's parents): the home hero's .cta-bar > .cta-row, a p.pbox-btns pricing box, an article's div.cta card
+// with Download and Buy inline, a lone a.cta in the page wrapper, a list, and nav/header/footer (skipped).
+//
+// What it holds (CEO, 23 Nov 2026, under RULES 71, keeping the 21 Nov call):
+// - phones/tablets: a full-width OUTLINE button "Email yourself the Mac download link" right under Download and Buy,
+//   that always opens an email (its label says email), then the requirement line; Download and Buy are untouched;
+// - Windows/ChromeOS/Linux: the one plain line with "Send yourself the Mac link." (share sheet, else email);
+// - a Mac: nothing at all.
+// CONTROL: MAC_ONLY_JS=<the 21 Nov js/mac-only.js> node scripts/mac_only_phone_test.mjs  -> every non-Mac case FAILs
+// (no phone button, and the lone a.cta's note lands after the whole page wrapper).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 
-const source = readFileSync(new URL('../js/mac-only.js', import.meta.url), 'utf8');
+const source = readFileSync(process.env.MAC_ONLY_JS || new URL('../js/mac-only.js', import.meta.url), 'utf8');
+const DMG = 'https://outlier.host/dl/outlier?src=phone-test&to=https://example.test/Outlier-1.11.1020-arm64.dmg';
 
 class Element {
-  constructor(tagName, attributes = {}) {
-    this.tagName = tagName;
+  constructor(tag, attributes = {}) {
+    this.tagName = tag.toUpperCase();
     this.attributes = { ...attributes };
     this.children = [];
     this.parentNode = null;
     this.listeners = {};
+    const self = this;
     this.classList = {
-      contains: name => this.className.split(/\s+/).includes(name),
-      add: name => {
-        if (!this.classList.contains(name)) this.className = `${this.className} ${name}`.trim();
-      },
-      remove: name => {
-        this.className = this.className.split(/\s+/).filter(value => value !== name).join(' ');
-      }
+      contains: name => self.className.split(/\s+/).includes(name),
+      add: name => { if (!self.classList.contains(name)) self.className = `${self.className} ${name}`.trim(); }
     };
   }
   get className() { return this.attributes.class || ''; }
@@ -30,6 +37,10 @@ class Element {
   get nextSibling() {
     const siblings = this.parentNode.children;
     return siblings[siblings.indexOf(this) + 1] || null;
+  }
+  get nextElementSibling() {
+    const siblings = this.parentNode.children;
+    return siblings.slice(siblings.indexOf(this) + 1).find(node => node instanceof Element) || null;
   }
   setAttribute(name, value) { this.attributes[name] = value; }
   appendChild(child) { return this.insertBefore(child, null); }
@@ -42,15 +53,13 @@ class Element {
   }
   matches(selector) {
     if (selector.startsWith('.')) return this.classList.contains(selector.slice(1));
-    if (selector === 'a[href$=".dmg"]') {
-      return this.tagName === 'a' && (this.attributes.href || '').endsWith('.dmg');
-    }
-    assert.match(selector, /^[a-z]+$/);
-    return this.tagName === selector;
+    if (selector === 'a[href$=".dmg"]') return this.tagName === 'A' && (this.attributes.href || '').endsWith('.dmg');
+    assert.match(selector, /^[a-z]+$/, `selector the fixture does not model: ${selector}`);
+    return this.tagName === selector.toUpperCase();
   }
   closest(selector) {
     const selectors = selector.split(',').map(value => value.trim());
-    for (let node = this; node; node = node.parentNode) {
+    for (let node = this; node instanceof Element; node = node.parentNode) {
       if (selectors.some(value => node.matches(value))) return node;
     }
     return null;
@@ -59,9 +68,7 @@ class Element {
     return this.children.flatMap(child => child instanceof Element
       ? [...(child.matches(selector) ? [child] : []), ...child.querySelectorAll(selector)] : []);
   }
-  addEventListener(name, handler, capture = false) {
-    this.listeners[name] = { handler, capture };
-  }
+  addEventListener(name, handler, capture = false) { this.listeners[name] = { handler, capture }; }
 }
 
 function fixture(navigator) {
@@ -72,140 +79,131 @@ function fixture(navigator) {
   document.createElement = tag => new Element(tag);
   document.createTextNode = textContent => ({ textContent });
   const links = [];
-  function download(parent, classes = 'btn btn-primary btn-sm') {
-    const link = parent.appendChild(new Element('a', {
-      class: classes,
-      href: 'https://outlier.host/dl/outlier?src=phone-test&to=https://example.test/Outlier-arm64.dmg',
-      target: '_blank',
-      rel: 'noopener noreferrer nofollow'
-    }));
-    links.push({ link, original: { ...link.attributes } });
-    return link;
-  }
-  const skipped = ['nav', 'header', 'footer'].map(tag => {
-    const container = body.appendChild(new Element(tag));
-    download(container.appendChild(new Element('div')));
-    return container;
-  });
-  const main = body.appendChild(new Element('main'));
-  const boxes = [
-    main.appendChild(new Element('div', { class: 'cta-bar' })),
-    main.appendChild(new Element('div', { class: 'pbox-btns' })),
-    main.appendChild(new Element('p')),
-    main.appendChild(new Element('ul')),
-    main.appendChild(new Element('ol'))
-  ];
-  for (const box of boxes) {
-    const parent = ['ul', 'ol'].includes(box.tagName) ? box.appendChild(new Element('li')) : box;
-    download(parent);
-    download(parent, 'btn btn-primary'); // One note per box, but demote both links.
-    download(parent, 'text-link btn-primary'); // Do not add button styling to a text link.
-    box.appendChild(new Element('a', { class: 'btn btn-primary', href: '/buy/outlier?src=test' }));
-  }
+  const el = (parent, tag, attributes) => parent.appendChild(new Element(tag, attributes));
+  const download = (parent, cls = 'btn') => { const a = el(parent, 'a', { class: cls, href: DMG }); links.push(a); return a; };
+  const buy = (parent, cls = 'btn') => { const a = el(parent, 'a', { class: cls, href: '/buy/outlier?src=test' }); links.push(a); return a; };
+  const space = parent => parent.children.push({ textContent: ' ' });  // the " " between Download and Buy
+
+  const skipped = ['nav', 'header', 'footer'].map(tag => { const c = el(body, tag); download(el(c, 'div')); return c; });
+  const wrap = el(body, 'div', { class: 'wrap' });
+  // where each note must land: [parent the note goes in, the element it must follow]
+  const expect = [];
+
+  const bar = el(wrap, 'div', { class: 'cta-bar' });                        // home hero
+  const row = el(bar, 'div', { class: 'cta-row' });
+  download(row, 'btn btn-primary'); buy(row, 'btn btn-ghost');
+  el(bar, 'p', { class: 'trust' });
+  expect.push(['hero row', bar, row]);
+
+  const pbox = el(wrap, 'div', { class: 'pbox' });                          // pricing box (191 pages)
+  const btns = el(pbox, 'p', { class: 'pbox-btns' });
+  download(btns, 'pbox-dl'); space(btns); buy(btns, 'pbox-buy');
+  el(pbox, 'p', { class: 'pbox-req' });
+  expect.push(['pricing box', pbox, btns]);
+
+  const card = el(wrap, 'div', { class: 'cta' });                           // article card (166 pages)
+  el(card, 'h3'); el(card, 'p');
+  download(card); space(card); const cardBuy = buy(card);
+  el(card, 'p', { class: 'phone-link' });
+  expect.push(['article card', card, cardBuy]);
+
+  const lone = download(wrap, 'cta');                                       // a.cta straight in the wrapper (23 pages)
+  el(wrap, 'p', { class: 'phone-link' });
+  expect.push(['lone a.cta', wrap, lone]);
+
+  const list = el(wrap, 'ul');                                              // a list item
+  download(el(list, 'li'));
+  expect.push(['list', wrap, list]);
+
   const events = [];
   const window = { plausible: (name, options) => events.push({ name, ...options }) };
   const location = { pathname: '/phone-test/', href: 'https://outlier.host/phone-test/' };
+  const before = links.map(a => ({ ...a.attributes }));
   runInNewContext(source, { document, navigator, window, location });
-  return { document, main, boxes, skipped, links, events, window, location };
+  return { document, skipped, expect, links, before, events, window, location };
 }
 
+const mailto = url => 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') + '&body=' +
+  encodeURIComponent('Outlier for Mac is free to start. Open this on your Mac to download it.\n\n' + url);
+const SHARE_URL = 'https://outlier.host/?utm_source=phone-share&utm_medium=share';
+
 const cases = [
-  { name: 'iPhone', phone: true, navigator: {
-    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', platform: 'iPhone'
-  } },
-  { name: 'Android', phone: true, navigator: {
-    userAgent: 'Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36', platform: 'Linux armv8l'
-  } },
-  { name: 'Windows', navigator: {
-    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', platform: 'Win32'
-  } },
-  { name: 'Mac', mac: true, navigator: {
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', platform: 'MacIntel'
-  } },
-  { name: 'iPad', phone: true, navigator: {
-    userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', platform: 'iPad'
-  } },
-  { name: 'iPadOS desktop UA', kind: 'iPad', phone: true, navigator: {
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', platform: 'MacIntel', maxTouchPoints: 5
-  } },
-  { name: 'Linux', navigator: {
-    userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', platform: 'Linux x86_64'
-  } },
-  { name: 'ChromeOS', navigator: {
-    userAgent: 'Mozilla/5.0 (X11; CrOS x86_64 16093.0.0)', platform: 'Linux x86_64'
-  } }
+  { name: 'iPhone', phone: true, navigator: { userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', platform: 'iPhone' } },
+  { name: 'Android', phone: true, navigator: { userAgent: 'Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36', platform: 'Linux armv8l' } },
+  { name: 'iPad', phone: true, navigator: { userAgent: 'Mozilla/5.0 (iPad; CPU OS 18_0 like Mac OS X)', platform: 'iPad' } },
+  { name: 'iPadOS desktop UA', kind: 'iPad', phone: true, navigator: { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', platform: 'MacIntel', maxTouchPoints: 5 } },
+  { name: 'Windows', navigator: { userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)', platform: 'Win32' } },
+  { name: 'Linux', navigator: { userAgent: 'Mozilla/5.0 (X11; Linux x86_64)', platform: 'Linux x86_64' } },
+  { name: 'ChromeOS', navigator: { userAgent: 'Mozilla/5.0 (X11; CrOS x86_64 16093.0.0)', platform: 'Linux x86_64' } },
+  { name: 'Mac', mac: true, navigator: { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)', platform: 'MacIntel' } }
 ];
 
 for (const test of cases) {
   try {
+    const kind = test.kind || test.name;
     const f = fixture({ ...test.navigator });
     const notes = f.document.querySelectorAll('.mac-only-note');
     const css = f.document.head.textContent;
-    assert.equal(notes.length, test.mac ? 0 : f.boxes.length, 'one note per Download box');
-    for (const container of f.skipped) {
-      assert.equal(container.querySelectorAll('.mac-only-note').length, 0, 'skip nav, header and footer');
-    }
-    for (const box of f.boxes) {
-      assert.equal(box.children.at(-1).className, 'btn btn-primary', 'leave Buy links alone');
-    }
+    f.links.forEach((a, i) => assert.deepEqual(a.attributes, f.before[i], 'Download and Buy links are never changed'));
+    for (const c of f.skipped) assert.equal(c.querySelectorAll('.mac-only-note').length, 0, 'skip nav, header and footer');
     if (test.mac) {
+      assert.equal(notes.length, 0);
       assert.equal(css, '');
       assert.equal(f.document.documentElement.className, '');
       assert.deepEqual(f.document.listeners, {});
-    } else {
-      assert.ok(f.document.documentElement.classList.contains('not-mac'));
-      assert.ok(css.includes('html.not-mac .phone-link{display:none !important;}'));
-      for (const [index, note] of notes.entries()) {
-        const siblings = f.main.children;
-        assert.equal(siblings.indexOf(note), siblings.indexOf(f.boxes[index]) + (test.phone ? -1 : 1),
-          test.phone ? 'note must come before the Download box' : 'desktop note stays after the box');
-        assert.equal(note.attributes.role, 'note');
-        assert.equal(note.children[0].textContent,
-          'Outlier runs on Apple Silicon Macs (macOS 15+). ' + (test.phone ? 'On a phone? ' : 'Not at your Mac? '));
-        const button = note.querySelectorAll('button')[0];
-        assert.equal(button.className, test.phone ? 'btn btn-primary' : '', 'send button classes');
-        assert.equal(button.textContent, 'Send yourself the Mac link' + (test.phone ? '' : '.'));
-        assert.equal(button.type, 'button');
-      }
+      console.log(`PASS ${test.name}`);
+      continue;
+    }
+    assert.equal(notes.length, f.expect.length, 'one note per Download group');
+    assert.ok(f.document.documentElement.classList.contains('not-mac'));
+    assert.ok(css.includes('html.not-mac .phone-link{display:none !important;}'), 'the pages\' own phone line hides');
+    for (const [where, parent, follows] of f.expect) {
+      const note = parent.children[parent.children.indexOf(follows) + 1];
+      assert.ok(note && notes.includes(note), `${where}: the note sits right after Download/Buy`);
+      assert.equal(note.attributes.role, 'note');
+      const button = note.querySelectorAll('button')[0];
+      assert.equal(button.type, 'button');
       if (test.phone) {
-        assert.match(css, /@media\s*\(max-width:760px\)\{\.mac-only-note \.btn\{width:100%;\}\}/,
-          'send button fills phone widths');
-        assert.ok(!css.includes('.mac-only-note button{'), 'plain button reset must not override primary styling');
+        assert.equal(note.className, 'mac-only-note mac-only-phone', `${where}: phone note`);
+        assert.equal(button.className, 'mac-link-btn');
+        assert.equal(button.attributes['data-kc-cta'], '', 'the shared pill steps aside from it');
+        assert.equal(button.textContent, 'Email yourself the Mac download link');
+        assert.equal(note.children[1].textContent, 'Outlier runs on Apple Silicon Macs (macOS 15+).');
       } else {
-        assert.ok(css.includes('.mac-only-note button{font:inherit;color:var(--text,inherit);background:none;'));
+        assert.equal(note.className, 'mac-only-note', `${where}: desktop note`);
+        assert.equal(note.textContent, 'Outlier runs on Apple Silicon Macs (macOS 15+). Not at your Mac? Send yourself the Mac link.');
       }
-      const button = notes[0].querySelectorAll('button')[0];
-      const send = button.listeners.click.handler;
-      const text = 'Outlier for Mac is free to start. Open this on your Mac to download it.';
-      let shared;
-      const navigator = { ...test.navigator, share: data => { shared = data; return Promise.resolve(); } };
-      // A fresh run lets each navigator exercise both send paths without network access.
-      const shareFixture = fixture(navigator);
-      shareFixture.window.kcCarry = url => url + '&carried=1';
-      shareFixture.document.querySelectorAll('button')[0].listeners.click.handler();
-      assert.equal(JSON.stringify(shared), JSON.stringify({ title: 'Outlier for Mac', text,
-        url: 'https://outlier.host/?utm_source=phone-share&utm_medium=share&carried=1' }));
-      send();
-      assert.equal(f.location.href, 'mailto:?subject=' + encodeURIComponent('Outlier for Mac: download link') +
-        '&body=' + encodeURIComponent(text + '\n\nhttps://outlier.host/?utm_source=phone-share&utm_medium=share'));
-      const expectedEvent = { name: 'Send Mac Link', props: { from: 'mac-only-note', platform: test.kind || test.name } };
-      assert.equal(JSON.stringify(f.events), JSON.stringify([expectedEvent]));
-      assert.equal(JSON.stringify(shareFixture.events), JSON.stringify([expectedEvent]));
-      assert.equal(f.document.listeners.click.capture, true);
-      const link = f.links[3].link;
-      f.document.listeners.click.handler({ target: link.appendChild(new Element('svg')) });
-      assert.equal(JSON.stringify(f.events[1]), JSON.stringify({ name: 'Download non-Mac',
-        props: { platform: test.kind || test.name, page: '/phone-test/' } }));
     }
-    for (const { link, original } of f.links) {
-      const expected = { ...original };
-      if (test.phone && !link.closest('nav, header, footer')) {
-        expected.class = original.class.split(' ').filter(value => value !== 'btn-primary').join(' ');
-        if (original.class.split(' ').includes('btn')) expected.class += ' btn-ghost';
-      }
-      // Includes href with src, target, rel and all unrelated classes.
-      assert.deepEqual(link.attributes, expected, 'Download link attributes and classes');
+    if (test.phone) {
+      // full width, outlined (not filled), 44 px tall
+      assert.match(css, /\.mac-only-phone \.mac-link-btn\{display:block;width:100%;min-height:44px;/);
+      assert.match(css, /\.mac-link-btn\{[^}]*background:transparent;border:1\.5px solid currentColor;/);
+      assert.match(css, /\.mac-link-btn\{[^}]*border-color:color-mix\(in srgb,currentColor 45%,transparent\);/,
+        'a softer outline than Buy Pro');
+      assert.match(css, /\.mac-only-phone\{flex:1 0 100%;width:100%;/, 'takes its own row in the hero flex bar');
     }
+
+    // Sending: a phone always opens an email, even where a share sheet exists; a desktop shares, else emails.
+    let shared = null;
+    const s = fixture({ ...test.navigator, share: data => { shared = data; return Promise.resolve(); } });
+    s.window.kcCarry = url => url + '&carried=1';
+    s.document.querySelectorAll('.mac-only-note')[0].querySelectorAll('button')[0].listeners.click.handler();
+    const from = test.phone ? 'phone-button' : 'mac-only-note';
+    if (test.phone) {
+      assert.equal(shared, null, 'the "Email" button never opens the share sheet');
+      assert.equal(s.location.href, mailto(SHARE_URL + '&carried=1'));
+    } else {
+      assert.equal(JSON.stringify(shared), JSON.stringify({ title: 'Outlier for Mac',
+        text: 'Outlier for Mac is free to start. Open this on your Mac to download it.', url: SHARE_URL + '&carried=1' }));
+      notes[0].querySelectorAll('button')[0].listeners.click.handler();     // no share sheet: an email
+      assert.equal(f.location.href, mailto(SHARE_URL));
+    }
+    assert.equal(JSON.stringify(s.events), JSON.stringify([{ name: 'Send Mac Link', props: { from, platform: kind } }]));
+
+    assert.equal(f.document.listeners.click.capture, true);
+    const hero = f.links[0];
+    f.document.listeners.click.handler({ target: hero.appendChild(new Element('svg')) });
+    assert.equal(JSON.stringify(f.events.at(-1)), JSON.stringify({ name: 'Download non-Mac', props: { platform: kind, page: '/phone-test/' } }));
     console.log(`PASS ${test.name}`);
   } catch (error) {
     console.error(`FAIL ${test.name}: ${error.message}`);

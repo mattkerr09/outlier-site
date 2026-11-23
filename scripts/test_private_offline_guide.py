@@ -195,7 +195,7 @@ class PrivateOfflineGuide(unittest.TestCase):
              "ccee6c35f715af115dea091254d870a8182eba9e15c2a6b6784bd85510fc18f1"),
             # re-pinned 2026-11-20 with the sale-wording and no-former-price changes (2fa7aa899, f5a7902b2)
             (r'<a class="cta".*',
-             "1cd23e4902f29328636e78b54fbbeda1065e820178fa22bac5352d5ecb475ef0"),  # 21 Nov: only change, mac-only.js?v=20261111 -> v=20261121 (phone buttons fix)
+             "bf3eed46a57829e887c11eb03676799039546d7127c522bbd1a35dfd02f3e647"),  # 23 Nov: only change, mac-only.js?v=20261121 -> v=20261123 (phone outline button; proven by reverting the string)
             (r'<p>The chat path calls only .*?</p>',
              "0a5dc7e6a4df08f0c90e44428481c732df32e4854617878124bd4fc908bb2b39"),
         )

@@ -148,7 +148,7 @@ class FreeLocalAIAnswer(unittest.TestCase):
             (r'<span class="byline" data-claims-checked=.*?</span>',
              "74684029fe7e466a3d3bd19368365f52e374a3f60f4d2f77c8ff59771f573436"),
             (r'<section class="subscribe-strip">.*',
-             "01ef961676357504dfcd95987be42afc33977cc6d507220cc4a5ccc07307b96f"),  # 21 Nov: only change, mac-only.js?v=20261111 -> v=20261121 (phone buttons fix)
+             "839ca422db5df9b97e694c7bbf7362562bbaa1ca950498d16639a4adb769bca2"),  # 23 Nov: only change, mac-only.js?v=20261121 -> v=20261123 (phone outline button; proven by reverting the string)
             (r'<div class="quick-answer">.*?(<ul>.*?</ul>)',
              "9fdb588f4057eb516ab7f8e9093a957a184fc13a7106f95b8a4edaffec4cc0bb"),
         )
