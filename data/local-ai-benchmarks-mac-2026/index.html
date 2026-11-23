@@ -115,7 +115,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Dataset","name":"Local AI benchmarks on Mac, 2026 — Outlier, Ollama, LM Studio","description":"Decode tok/s and memory footprint data for the major local-AI options on Apple Silicon in 2026.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-04-30","dateModified":"2026-11-09","measurementTechnique":"Outlier numbers measured on M1 Ultra; Ollama and LM Studio referenced from public benchmark posts","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/local-ai-benchmarks-mac-2026/dataset.json"}}
+  {"@context":"https://schema.org","@type":"Dataset","name":"Local AI benchmarks on Mac, 2026 — Outlier, Ollama, LM Studio","description":"Decode tok/s and memory footprint data for the major local-AI options on Apple Silicon in 2026.","creator":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"datePublished":"2026-04-30","dateModified":"2026-11-23","measurementTechnique":"Outlier numbers measured on M1 Ultra; Ollama and LM Studio referenced from public benchmark posts","license":"creativecommons.org/licenses/by/4.0/","distribution":{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"https://outlier.host/data/local-ai-benchmarks-mac-2026/dataset.json"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio", "item": "https://outlier.host/data/local-ai-benchmarks-mac-2026/"}]}
@@ -152,13 +152,14 @@
     <h1>Local AI benchmarks for Mac (2026): Outlier vs Ollama vs LM Studio</h1>
     <div class="byline-row">
       <span class="byline">Matthew Kerr · Outlier · published 2026-04-30</span>
-      <span class="updated-pill">Last updated 2026-11-09</span>
+      <span class="updated-pill">Last updated 2026-11-23</span>
+      <span class="byline">Ollama measured by us on 23 November 2026 (0.40.17).</span>
     </div>
 
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>A small chat model, Outlier Nano 4B, runs at <strong>~70 tok/s</strong> on an M1 Ultra. We have not run Ollama or LM Studio on the same Mac, so this page makes no like-for-like comparison.</li>
+        <li>A small chat model, Outlier Nano 4B, runs at <strong>~70 tok/s</strong> on an M1 Ultra (April 2026 bench). On 22 and 23 November 2026 we ran Outlier and Ollama on the same M1 Ultra with the same base model, Qwen3.5-4B, in three timed runs each: Outlier 1.11.1020 decoded 92.6 tokens a second and Ollama 0.40.17 decoded 85.8. Ollama showed its first word sooner, 3.39 s to Outlier&rsquo;s 5.25 s on a 4,100-token prompt. We have not run LM Studio on this Mac.</li>
         <li>For 27B coding, <strong>Outlier Core 27B does 20.7 tok/s</strong> and is the strongest coding tier in the lineup.</li>
         <li>397B-class MoE? <strong>Outlier's paged engine runs it on a 64 GB Mac</strong> (V9 paged engine; ~2.0 tok/s measured on an M1 Ultra with 64 GB). We have not tested other apps on this model.</li>
         <li>Accuracy is on the <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">tier benchmarks page</a>: MMLU for every tier (Nano <strong>52.0%</strong>, n=200, build 1.11.804) and HumanEval for Core 27B and Vision 3.8. This page sticks to tok/s and memory.</li>
@@ -173,7 +174,7 @@
 
     <p class="lead">Raw numbers, not vibes. This is the benchmark data behind every major local-AI option on Apple Silicon in 2026. Outlier's figures come off my dev M1 Ultra. Ollama and LM Studio numbers cite public benchmark posts where it makes sense.</p>
 
-    <h2>Outlier lineup: measured (M1 Ultra, MLX 4-bit, batch 1, 4096 prefill, 256 decode)</h2>
+    <h2>Outlier lineup: measured April 2026 (M1 Ultra, MLX 4-bit, batch 1, 4096 prefill, 256 decode)</h2>
     <table>
       <thead><tr><th>Tier</th><th>Params</th><th>Disk</th><th>RAM (peak)</th><th>Decode tok/s</th></tr></thead>
       <tbody>
@@ -185,6 +186,7 @@
         <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~18 GB (V9 paged)</td><td><strong>2.0 (V9)</strong>: measured 2026-06-24 through the shipped app, build 1.11.593, at its K=40 setting, on an M1 Ultra with 64 GB: the decode rate the app itself reports, 79 s to the first token, 18.0 GB peak memory. Until 1.11.593 the app ran K=20, which measured 1.59 tok/s in the 2026-05-01 sweep. The engine-comparison page reports 2.1 for the old K=20 setting under its own per-token RSS protocol.</td></tr>
       </tbody>
     </table>
+    <p class="source">Nano again in November 2026 (Outlier 1.11.1020, a 4,170-token prompt on the free plan&rsquo;s 8K context, about 950 decoded tokens, three timed runs): 92.6 tok/s decode and a peak of 5.5 to 5.8 GB of memory. The table keeps April&rsquo;s shorter 256-token protocol, which is why its Nano row reads 71.7 tok/s and about 4 GB.</p>
     <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code>. The M1 Ultra Mac tok/s bench ran 2026-04-29. Accuracy figures are on the tier benchmarks page (MMLU n=200, build 1.11.804, 2026-08-24).</p>
 
     <h2>Outlier decode speed by tier (measured)</h2>
@@ -195,9 +197,11 @@
         <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M4 Air 16 GB</td><td>~32</td></tr>
         <tr><td>Outlier</td><td>Core 27B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>20.7</td></tr>
         <tr><td>Outlier</td><td>Plus 397B-A17B</td><td>MLX 4-bit, V9 paged</td><td>M1 Ultra 64 GB</td><td>2.0</td></tr>
+        <tr><td>Outlier 1.11.1020</td><td>Nano 4B (Qwen3.5-4B)</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>92.6 (22 Nov 2026, three timed runs, about 950 decoded tokens)</td></tr>
+        <tr><td>Ollama 0.40.17</td><td>Qwen3.5-4B</td><td>Q4_K_M GGUF</td><td>M1 Ultra 64 GB</td><td>85.8 (23 Nov 2026, same protocol)</td></tr>
       </tbody>
     </table>
-    <p class="source">Source: Outlier numbers measured locally on an M1 Ultra (the M4 Air figure is a single-prompt observation, 2026-05-04, indicative). We have not run Ollama or LM Studio on the same Macs, so this page makes no like-for-like comparison.</p>
+    <p class="source">Source: Outlier numbers measured locally on an M1 Ultra (the M4 Air figure is a single-prompt observation, 2026-05-04, indicative). Outlier and Ollama were run on one M1 Ultra (64 GB) on consecutive days, 22 and 23 November 2026. Both used greedy decoding with about 950 decoded tokens, a prompt of about 4,100 tokens, and medians of three timed runs after a warm-up. The files differ: Outlier&rsquo;s MLX 4-bit build against Ollama&rsquo;s Q4_K_M GGUF on its llama.cpp engine. We have not run LM Studio on the same Mac, so there is no LM Studio comparison.</p>
 
     <h2>Cost comparison (24 months, single Mac developer)</h2>
     <table>
