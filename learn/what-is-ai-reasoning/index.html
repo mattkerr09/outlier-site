@@ -154,6 +154,7 @@
     <div class="byline-row">
       <span class="byline">Matthew Kerr · solo-built in Grand Rapids · published 2026-07-08</span>
       <span class="updated-pill">Last updated 2026-11-23</span>
+      <span class="byline" data-claims-checked="2026-11-23" data-claims-set="Ollama">Thinking tokens counted by us on an M1 Ultra, 22 and 23 November 2026.</span>
     </div>
 
     <div class="quick-answer">
@@ -215,7 +216,7 @@
     <p>A reasoning model doesn't pick a type and run it. It writes text that does one of these things, and writing the steps down is what makes the multi-step kinds more reliable.</p>
 
     <h2>I measured it on my own model, and thinking lost</h2>
-    <p>I run a local model on Apple Silicon, so this is easy for me to test rather than argue about. I took Outlier's Nano tier, ran 30 GSM8K grade-school math problems through it with greedy decoding, and flipped the thinking mode on and off. GSM8K is exactly the kind of multi-step arithmetic that chain of thought is supposed to be built for.</p>
+    <p>I run a local model on Apple Silicon, so this is easy for me to test rather than argue about. I took Outlier's Nano model, ran 30 GSM8K grade-school math problems through it with greedy decoding in our R&amp;D harness, and flipped the thinking mode on and off. GSM8K is exactly the kind of multi-step arithmetic that chain of thought is supposed to be built for.</p>
 
     <table>
       <thead>
@@ -230,6 +231,45 @@
 
     <p>Thinking mode was worse by 16.7 percentage points, and thinking OFF was 32% faster. I'll be careful about what that does and doesn't prove. It's one model, one benchmark, one decoding setting. It is not evidence that reasoning modes are a scam, and I'm not going to pretend I know exactly why this particular model degrades when it talks to itself.</p>
     <p>What it is: a measured counterexample to "thinking is always better." That claim gets repeated as though it were settled, and on my hardware, on a task purpose-built for chain of thought, it was false. If you're choosing a mode for real work, measure your model on your task. Nobody's benchmark is a substitute for that.</p>
+
+    <h3>In November I counted the thinking tokens</h3>
+    <p>GSM8K only tells you whether the answer was right. In November I went back to count what thinking actually costs. I asked six short puzzles, each with one checkable answer, written down before the run. First I asked Outlier's Nano. It thinks silently on hard prompts, so the only sign is the wait before the first word. I measured that wait and the hidden tokens behind it.</p>
+
+    <p><strong>Outlier Nano 4B, the hidden thinking (Outlier 1.11.1020, M1 Ultra 64 GB, 22 November 2026, greedy)</strong></p>
+    <table>
+      <thead>
+        <tr><th>Puzzle</th><th>Tokens generated</th><th>Words you see (tokens)</th><th>Hidden thinking</th><th>Wait before the first word</th><th>Right?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bat and ball, in cents</td><td>1,100</td><td>181</td><td>919 (84%)</td><td>9.2 s</td><td>yes</td></tr>
+        <tr><td>5 machines, 5 widgets</td><td>1,351</td><td>81</td><td>1,270 (94%)</td><td>12.6 s</td><td>yes</td></tr>
+        <tr><td>17 x 24</td><td>408</td><td>13</td><td>395 (97%)</td><td>4.0 s</td><td>yes</td></tr>
+        <tr><td>Train 09:40 plus 2 h 35</td><td>263</td><td>263</td><td>0</td><td>0.5 s</td><td>yes</td></tr>
+        <tr><td>r's in "strawberry"</td><td>132</td><td>132</td><td>0</td><td>0.5 s</td><td>yes</td></tr>
+        <tr><td>Sam, Ana, Lee: is Lee taller than Sam?</td><td>1</td><td>1</td><td>0</td><td>0.4 s</td><td>yes</td></tr>
+      </tbody>
+    </table>
+    <p>Hidden thinking is the engine's token count minus the visible answer re-tokenised. It is approximate, give or take a few tokens. The answers, written down before the run: 5 cents, 5 minutes, 408, 12:15, 3, and no.</p>
+    <p>On three of the six, Nano spent 84% to 97% of its tokens thinking before it wrote a word, which meant a 4 to 13 second wait. On the other three it answered at once. All six were right.</p>
+
+    <p>To see thinking on against thinking off, I ran the same six puzzles on the same base model, Qwen3.5-4B, in Ollama, where the switch works, with a cap of 8,192 tokens.</p>
+    <p><strong>The same base model with the switch that works (Ollama 0.40.17, Qwen3.5-4B Q4_K_M, same Mac, 23 November 2026, greedy)</strong></p>
+    <table>
+      <thead>
+        <tr><th>Puzzle</th><th>Thinking off: tokens, time</th><th>Thinking on: tokens, time</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bat and ball, in cents</td><td>381, 5.3 s, right</td><td>2,215, 24.9 s, right</td></tr>
+        <tr><td>5 machines, 5 widgets</td><td>469, 5.3 s, right</td><td>8,192, 94.2 s, <strong>no answer</strong></td></tr>
+        <tr><td>17 x 24</td><td>175, 2.3 s, right</td><td>539, 6.1 s, right</td></tr>
+        <tr><td>Train 09:40 plus 2 h 35</td><td>259, 3.1 s, right</td><td>701, 7.9 s, right</td></tr>
+        <tr><td>r's in "strawberry"</td><td>90, 1.1 s, right</td><td>595, 6.6 s, right</td></tr>
+        <tr><td>Sam, Ana, Lee</td><td>2, 0.1 s, right</td><td>298, 3.3 s, right</td></tr>
+        <tr><td><strong>All six</strong></td><td><strong>6 of 6 right, 17.2 s</strong></td><td><strong>5 of 6 right, 143.0 s</strong></td></tr>
+      </tbody>
+    </table>
+    <p>Thinking off got all six right in 17 seconds. Thinking on got five right in 143 seconds, and on the 5-machines puzzle it thought for 8,192 tokens, about a minute and a half, without ever answering. On the five it did answer, it used 2.7 to 149 times the tokens for the same answer.</p>
+    <p>Three runs on one Mac point the same way. On GSM8K thinking lost accuracy. On these puzzles it cost far more tokens for the same answers, and once it never finished. Thinking earns its tokens on problems with real dependent steps, which short puzzles mostly aren't. Before you leave it on, measure your own model on your own task.</p>
 
     <h2>Where thinking earns its tokens</h2>
     <p>The pattern I keep seeing is that chain of thought pays when the problem has dependent steps, where getting step four right requires having written down step three. It wastes tokens when the answer was already in the model and just needed to come out.</p>
