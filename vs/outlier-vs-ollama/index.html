@@ -116,7 +116,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-11-22","author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs Ollama — running models bigger than your RAM","description":"Ollama is the easiest way to run local models. Outlier specializes in MoE streaming so models bigger than your RAM still run.","datePublished":"2026-05-19","dateModified":"2026-11-23","author": {"@type": "Person", "name": "Matthew Kerr", "url": "https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-ollama/"}}
   </script>
   <script type="application/ld+json">
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Outlier vs Ollama — running models bigger than your RAM", "item": "https://outlier.host/vs/outlier-vs-ollama/"}]}
@@ -153,8 +153,8 @@
     <h1>Outlier vs Ollama: running models bigger than your RAM</h1>
     <div class="byline-row">
       <span class="byline">Matthew Kerr · Outlier · published 2026-05-19</span>
-      <span class="updated-pill">Last updated 2026-11-22</span>
-      <span class="byline" data-claims-checked="2026-11-09" data-claims-set="Ollama">Ollama prices and plans checked 2026-11-09</span>
+      <span class="updated-pill">Last updated 2026-11-23</span>
+      <span class="byline" data-claims-checked="2026-11-23" data-claims-set="Ollama">Ollama prices and plans checked 2026-11-23</span>
       <span class="byline" data-claims-checked="2026-11-22" data-claims-set="LM Studio, Jan and Msty Studio">LM Studio, Jan and Msty Studio prices and requirements checked 2026-11-22</span>
     </div>
 
@@ -193,7 +193,7 @@
     <h2>Where Outlier wins</h2>
     <ul>
       <li><strong>Running models bigger than your RAM.</strong> On a 64 GB Mac, Ollama is comfortable up to about 50 GB of model once you account for OS overhead. Plus 397B weighs 209 GB. llama.cpp can memory-map a file that big, but it would reread weights from disk on nearly every token and crawl. The V9 paged engine runs the whole 397B model at roughly 18 GB peak OS RSS, streaming individual expert tensors off the SSD as they're needed. This is the thing Outlier was built to do.</li>
-      <li><strong>Built on MLX from the start.</strong> The backend talks to unified memory and Metal directly. Ollama now has an MLX backend too (in preview since March 2026), and this page has no head-to-head benchmark against llama.cpp on the same machine, so it makes no speed claim either way.</li>
+      <li><strong>Built on MLX from the start.</strong> The backend talks to unified memory and Metal directly. Ollama now has an MLX backend too (in preview since March 2026). Against its llama.cpp engine we measured both on one M1 Ultra, running the same base model, Qwen3.5-4B, in three timed runs each. Outlier decoded about 8% faster, at 92.6 tokens a second to Ollama&rsquo;s 85.8. Ollama showed its first word about 1.9 seconds sooner, 3.39 s to Outlier&rsquo;s 5.25 s, on a 4,100-token prompt. The model files differ (Outlier&rsquo;s MLX 4-bit build, Ollama&rsquo;s Q4_K_M), so read this as one machine and one model size.</li>
       <li><strong>Bundled UX.</strong> Chat is free; agent mode, project memory, file editing and vision come with Pro. It's all one app. Nothing to wire up.</li>
       <li><strong>Models tuned for the lineup.</strong> Core 27B scored 0.951 on HumanEval pass@1 in <a href="/data/outlier-tier-benchmarks-2026-08/">our August run</a>, and every tier is calibrated so the experience stays coherent across all 6.</li>
     </ul>
@@ -207,11 +207,13 @@
         <tr><td>Format</td><td>GGUF; MLX on Apple silicon in preview since 0.19</td><td>MLX 4-bit</td></tr>
         <tr><td>Models &gt; available RAM</td><td>Not designed for it (llama.cpp can memory-map one, very slowly)</td><td>Plus 397B via the V9 paged engine (~2.0 tok/s on an M1 Ultra)</td></tr>
         <tr><td>Max model on 64 GB Mac</td><td>~50 GB (e.g., Qwen 70B 4-bit)</td><td>397B via streaming</td></tr>
+        <tr><td>Speed, Qwen3.5-4B on an M1 Ultra (our test, three timed runs)</td><td>Ollama 0.40.17, Q4_K_M: 85.8 tok/s; first token 3.39 s</td><td>Nano, MLX 4-bit (1.11.1020): 92.6 tok/s; first token 5.25 s</td></tr>
         <tr><td>Built-in agent</td><td>No (BYO)</td><td>Yes, built-in (Pro)</td></tr>
         <tr><td>Project memory</td><td>No</td><td>Yes (Pro)</td></tr>
-        <tr><td>Pricing</td><td><a href="https://ollama.com/pricing">$0 locally; cloud plans from $20/mo</a></td><td>$0 Free + the Outlier Lifetime Licence at $39</td></tr>
+        <tr><td>Pricing</td><td><a href="https://ollama.com/pricing">$0 locally; cloud plans from $20.00 a month</a></td><td>$0 Free + the Outlier Lifetime Licence at $39</td></tr>
       </tbody>
     </table>
+    <p class="related">Speed measured by us on an M1 Ultra (64 GB): Outlier 1.11.1020 on 22 November 2026, Ollama 0.40.17 on 23 November 2026. Both: greedy decoding, a prompt of about 4,100 tokens, about 950 tokens decoded, one warm-up and three timed runs, medians.</p>
 
     <h2>Which one to pick</h2>
     <p>Need cross-platform, want open source, and your hardware can already load the model you need at full size? Ollama is your answer. On a Mac, want the polished all-in-one app, and want the option to run MoE models bigger than your RAM should allow? That's Outlier. And you don't have to choose. Plenty of developers keep Ollama running as a scripting backend and use Outlier as the app they actually sit in front of all day.</p>
@@ -221,7 +223,7 @@
     <table>
       <thead><tr><th>App</th><th>Price to run models on your Mac</th><th>Mac it needs</th><th>What its site says about memory</th></tr></thead>
       <tbody>
-        <tr><td>Outlier</td><td>Free (Nano and Lite); Pro $39 once</td><td>Apple silicon, macOS 15 or later</td><td>Nano 4B peaked at about 4 GB and Lite 9B at about 7 GB in <a href="/how-to/run-ai-on-16gb-mac/">our benchmarks</a></td></tr>
+        <tr><td>Outlier</td><td>Free (Nano and Lite); Pro $39 once</td><td>Apple silicon, macOS 15 or later</td><td>Nano 4B peaked at 5.5 to 5.8 GB with a 4,100-token prompt in <a href="/how-to/run-ai-on-16gb-mac/">our 22 Nov test</a> (M1 Ultra)</td></tr>
         <tr><td><a href="https://lmstudio.ai/docs/app/system-requirements">LM Studio</a></td><td>Free; paid plans from $20 a month</td><td>LM Studio needs Apple silicon and macOS 14.0 or later; no Intel Macs</td><td>"16GB+ RAM recommended"</td></tr>
         <tr><td><a href="https://docs.jan.ai/desktop/install/mac">Jan</a></td><td>Free and open source</td><td>Jan needs Apple silicon and macOS 13.6 or later; Intel Macs are no longer supported</td><td>16 GB: typically up to 7B models comfortably</td></tr>
         <tr><td><a href="https://msty.ai/pricing">Msty Studio</a></td><td>Free tier; Aurum $149 a year or $349 once</td><td>Msty Studio runs on macOS 11 or later, Apple silicon or Intel</td><td>Not stated on its pricing or download page</td></tr>
