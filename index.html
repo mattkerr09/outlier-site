@@ -240,7 +240,9 @@
       .hero .wrap > h1{grid-column:1;grid-row:2 / span 2;margin-bottom:0;
         align-self:start;font-size:clamp(3.25rem,4.35vw,4.5rem);max-width:15ch;}
       .hero .wrap > .future-line{grid-column:2;grid-row:2;margin:.5rem 0 0;max-width:none;}
-      .hero .wrap > .hero-maker{grid-column:1;grid-row:4 / span 3;align-self:start;margin-top:1.6rem;}
+      .hero .wrap > .hero-maker{grid-column:1;grid-row:4;align-self:start;margin-top:1.6rem;}
+      /* 23 Nov (kit proof row): under the maker line, beside the price card and the why-pay card. */
+      .hero .wrap > .hero-proof{grid-column:1;grid-row:5 / span 2;align-self:start;margin-top:1rem;}
       .hero .wrap > p.sub{grid-column:2;grid-row:3;margin-top:.9rem;max-width:none;}
       .hero .wrap > .cta-bar{grid-column:2;grid-row:4;align-self:start;}
       /* 10 Nov (Quality Desk): the "Free to start" card had no cell either, so it sat alone under the checks with half its
@@ -496,6 +498,8 @@
     .cmp td.us{background:rgba(168,85,247,.045);}
     .cmp td.y{color:var(--green-light);font-family:var(--mono);font-weight:600;}
     .cmp td.n{color:var(--text-dim);font-family:var(--mono);}
+    /* 23 Nov (kit compare-table): the row a rival wins is tinted, so the honest row is easy to find. */
+    .cmp tr.them{background:rgba(110,231,183,.045);}
     .models table{min-width:740px;}
     .models .tname{font-family:var(--head);font-size:1.0625rem;font-weight:600;color:var(--text);letter-spacing:-.01em;}
     .models .tbase{font-family:var(--mono);font-size:0.77rem;color:var(--text-dim);margin-top:.18rem;}
@@ -595,6 +599,26 @@
     .nosub-when{opacity:.6;font-size:.82em;white-space:nowrap;}
     .nosub-foot{margin:.7rem 0 0;opacity:.85;}
     @media (max-width:560px){.nosub{margin-inline:16px;}.nosub-when{display:block;}}
+    /* price-card (kit component, 2026-11-23): two columns, one row of requirements under them; stacks under 560px. */
+    .price-card{display:grid;grid-template-columns:1fr 1fr;gap:.9rem 1.4rem;padding:1.1rem 1.2rem 1rem;}
+    .price-card .pc-col{min-width:0;}
+    .price-card .pc-pro{border-left:1px solid rgba(128,128,128,.28);padding-left:1.4rem;}
+    .pc-name{margin:0;font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-mid);}
+    .pc-price{margin:.15rem 0 .55rem;font-family:var(--display);font-size:1.7rem;font-weight:700;line-height:1.15;color:var(--text);}
+    .pc-price small{font-family:var(--sans);font-size:.85rem;font-weight:500;color:var(--text-mid);}
+    /* During the sale the price line gives way to Matthew's exact sale sentence (founding_offer_gate allows no other). */
+    .pc-sale{margin:.2rem 0 .65rem;font-size:1.02rem;font-weight:650;line-height:1.35;color:var(--v0);}
+    .pc-list{list-style:none;margin:0;padding:0;display:grid;gap:.35rem;font-size:.9rem;}
+    .pc-list li{position:relative;padding-left:1.35rem;}
+    .pc-list li::before{position:absolute;left:0;top:0;font-weight:700;}
+    .pc-list li.pc-y::before{content:"\2713";color:var(--green-light);}
+    .pc-list li.pc-n{color:var(--text-mid);}
+    .pc-list li.pc-n::before{content:"\2715";color:var(--text-dim);}
+    .pc-buy{margin:.8rem 0 0;}
+    .pc-refund{margin:.45rem 0 0;font-size:.82rem;color:var(--text-mid);}
+    .pc-req{grid-column:1 / -1;margin:0;padding-top:.75rem;border-top:1px solid rgba(128,128,128,.2);font-size:.82rem;color:var(--text-mid);}
+    @media (max-width:560px){.price-card{grid-template-columns:1fr;}.price-card .pc-pro{border-left:0;padding-left:0;
+      border-top:1px solid rgba(128,128,128,.28);padding-top:.9rem;}}
     .whypay{margin-top:.75rem;}
     .whypay-h{font-size:1rem;line-height:1.4;font-weight:650;letter-spacing:0;margin:0 0 .55rem;}
     .whypay-list{gap:.5rem;}
@@ -794,6 +818,17 @@
     .hero-maker .maker-line{font-family:var(--display);font-size:clamp(1.05rem,1.55vw,1.22rem);line-height:1.5;color:var(--text);margin:0;}
     .hero-maker .maker-src{font-size:.85rem;color:var(--text-mid);margin:.55rem 0 0;}
     .hero-maker .maker-src a{color:var(--text);text-decoration:underline;text-underline-offset:3px;}
+    /* proof row (kit component, 2026-11-23) */
+    .hero-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.9rem;margin:1.4rem 0 0;}
+    .hero-proof .hp{padding:.85rem .9rem;border:1px solid rgba(128,128,128,.25);border-radius:12px;background:rgba(255,255,255,.02);}
+    .hp-n{margin:0;font-family:var(--display);font-size:1.75rem;font-weight:700;line-height:1.1;color:var(--v0);}
+    .hp-l{margin:.3rem 0 0;font-size:.88rem;font-weight:600;color:var(--text);}
+    .hp-s{margin:.25rem 0 0;font-size:.76rem;line-height:1.4;color:var(--text-mid);}
+    .hp-src{grid-column:1 / -1;margin:0;font-size:.82rem;color:var(--text-mid);}
+    .hp-src a{color:var(--text);text-decoration:underline;text-underline-offset:3px;}
+    @media (max-width:560px){.hero-proof{grid-template-columns:1fr;gap:.5rem;margin-inline:16px;}.hero-proof .hp{display:grid;padding:.6rem .8rem;
+      grid-template-columns:auto 1fr;column-gap:.8rem;align-items:baseline;}.hp-n{grid-row:1 / span 2;font-size:1.5rem;}
+      .hp-l,.hp-s{grid-column:2;}.hp-l{margin:0;}}
     /* 2026-11-23 (RULES 77 fix 5): at phone widths the demo's code wraps instead of clipping sideways. */
     @media (max-width:640px){.hero .thread .msg.ai pre.code{white-space:pre-wrap;overflow-wrap:anywhere;}}
     /* The "Ask a question" widget renders in a shadow root; on phones shrink it to its icon
@@ -1091,6 +1126,16 @@
       <p class="maker-line">I&rsquo;m Matthew Kerr, and I build Outlier in Grand Rapids. Across three timed runs on my M1 Ultra, Nano decoded 92.6 tokens a second.</p>
       <p class="maker-src">Outlier 1.11.1020, measured 22 Nov 2026. <a href="/data/local-ai-benchmarks-mac-2026/">How it was measured</a></p>
     </div>
+    <!-- 2026-11-23 (the CEO's kit-to-site order; the kit's proof component): three numbers we measured, each with its sample,
+         build and date, linked to the page that shows the method. Read from data/outlier-tier-benchmarks-2026-08/ (MMLU and
+         HumanEval tables, build 1.11.804) and data/v11-streaming-engine-benchmarks/ (Plus, 2026-06-24, build 1.11.593); the
+         Plus figure is the one in seo/_data/models.csv, which figure_provenance_gate holds the page to. -->
+    <div class="hero-proof reveal d2 in">
+      <div class="hp"><p class="hp-n">89.5%</p><p class="hp-l">MMLU, Core 27B</p><p class="hp-s">179 of 200 questions, build 1.11.804, 24 Aug 2026</p></div>
+      <div class="hp"><p class="hp-n">95.1%</p><p class="hp-l">HumanEval, Core 27B</p><p class="hp-s">156 of 164 problems, build 1.11.804, 24 Aug 2026</p></div>
+      <div class="hp"><p class="hp-n">397B</p><p class="hp-l">Plus on a 64 GB Mac</p><p class="hp-s">2.0 tokens a second, build 1.11.593, 24 Jun 2026</p></div>
+      <p class="hp-src"><a href="/data/outlier-tier-benchmarks-2026-08/">How MMLU and HumanEval were measured</a> &middot; <a href="/data/v11-streaming-engine-benchmarks/">How Plus was measured</a></p>
+    </div>
       <p class="future-line reveal d2 in">Outlier runs the model on your own Mac, so your code and chats stay on it unless you use web search or Research. Pull the plug on the internet and it keeps answering.</p>
     <p class="sub reveal d2 in">It&rsquo;s built for the work you&rsquo;d rather not send to a cloud AI. With Pro it can <strong>read your codebase, edit files, run your tests and search the web</strong>. Your chats and files are saved on your Mac, with no usage cap, and the <a href="/privacy.html">privacy page</a> explains the few connections it makes.</p>
     <div class="cta-bar">
@@ -1108,9 +1153,33 @@
       <p class="win-link" hidden>On Windows? A Windows version is in testing. <a href="#windows">Get one email when it&rsquo;s ready</a>.</p>
     </div>
 
-      <div class="nosub reveal d3 in">
-        <p class="nosub-lead">Free to start: Nano + Lite.</p>
-        <p class="nosub-foot">Pro: every model<span data-pbox-regular> for $39 once</span><span data-pbox-founding hidden>. Black Friday sale: $16.99 once through December 2. Then $39</span>. 30-day refund. No subscription.</p>
+      <!-- 2026-11-23 (the CEO's kit-to-site order; Article Studio's map): the kit's price-card replaces the one-line price box.
+           Free and Pro side by side, what Free does NOT include as numbers, Buy inside, the refund, and the memory each model
+           needs. Words from this page's own #pricing tiers and models table. Prices switch through the sale helper (each
+           data-pbox-founding hides the data-pbox-regular right before it). It keeps the .nosub class for its grid cell. -->
+      <div class="nosub price-card reveal d3 in" data-price-card>
+        <div class="pc-col">
+          <p class="pc-name">Free</p>
+          <p class="pc-price">$0 <small>no account</small></p>
+          <ul class="pc-list">
+            <li class="pc-y">Nano (4B) and Lite (9B), offline</li>
+            <li class="pc-y">Local chat and sessions</li>
+            <li class="pc-n">Quick, Core, Vision 3.8 and Plus are Pro</li>
+            <li class="pc-n">8K of context per chat (Pro: up to 128K)</li>
+          </ul>
+        </div>
+        <div class="pc-col pc-pro">
+          <p class="pc-name">Pro</p>
+          <p class="pc-price" data-pbox-regular>$39 <small>once</small></p>
+          <p class="pc-sale" data-pbox-founding hidden>Black Friday sale: $16.99 once through December 2. Then $39.</p>
+          <ul class="pc-list">
+            <li class="pc-y">All six models and every feature</li>
+            <li class="pc-y">Up to 3 Macs, no subscription</li>
+          </ul>
+          <a class="btn btn-primary btn-sm pc-buy" data-buy="hero-card" href="https://outlier.host/buy/outlier?src=home-card" target="_blank" rel="noopener noreferrer nofollow">Buy Pro</a>
+          <p class="pc-refund">30-day refund, no questions asked</p>
+        </div>
+        <p class="pc-req">An M1 or newer Mac on macOS 15+. Memory each model needs: Nano 6 GB, Lite 12 GB, Quick 16 GB, Core and Vision 3.8 24 GB, Plus 64 GB.</p>
       </div>
 
       <!-- 2026-11-22 (growth check action 4; words: Article Studio, ops research/articles/data-2026-11-22/outlier-home-why-pay/FACTS.md).
@@ -1613,6 +1682,8 @@ outlier-c 53887  21u  IPv4  TCP  <span class="p-lo">127.0.0.1</span>:8766-&gt;<s
           <tr><th scope="row" class="lbl">Where inference runs</th><td class="n" data-label="Cloud AI tools">Provider cloud</td><td class="n" data-label="Cloud coding agents">Provider cloud</td><td class="y us" data-label="Outlier Free">Your Mac</td><td class="y us" data-label="Outlier Pro">Your Mac</td></tr>
           <tr><th scope="row" class="lbl">Privacy default</th><td class="n" data-label="Cloud AI tools">Remote request</td><td class="n" data-label="Cloud coding agents">Remote repo / context</td><td class="y us" data-label="Outlier Free">Local by default</td><td class="y us" data-label="Outlier Pro">Local by default</td></tr>
           <tr><th scope="row" class="lbl">Offline use</th><td class="n" data-label="Cloud AI tools">No</td><td class="n" data-label="Cloud coding agents">No</td><td class="y us" data-label="Outlier Free">Yes, once downloaded</td><td class="y us" data-label="Outlier Pro">Yes, once downloaded</td></tr>
+          <!-- 2026-11-23 (the kit's compare-table rule, Article Studio's map): at least one row the rival wins, said plainly. -->
+          <tr class="them"><th scope="row" class="lbl">Runs on Windows or Linux</th><td class="y" data-label="Cloud AI tools">Yes</td><td class="y" data-label="Cloud coding agents">Yes</td><td class="n us" data-label="Outlier Free">No: Apple Silicon Macs only</td><td class="n us" data-label="Outlier Pro">No: Apple Silicon Macs only</td></tr>
           <tr><th scope="row" class="lbl">What it does today</th><td style="color:var(--v0)" data-label="Cloud AI tools">Frontier models in their cloud</td><td style="color:var(--v0)" data-label="Cloud coding agents">Frontier coding agents in their cloud</td><td class="us" data-label="Outlier Free">Chat with Nano and Lite, 8K context</td><td class="us" data-label="Outlier Pro">Agent that reads your codebase, edits files and runs tests; 128K context; six models</td></tr>
         </tbody>
       </table>
