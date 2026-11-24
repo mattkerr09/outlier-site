@@ -11,7 +11,7 @@
   <title>Local AI benchmarks for Mac (2026) | Outlier</title>
   <meta name="description" content="Tok/s and memory data for local AI on Apple Silicon in 2026: Outlier measured, Ollama and LM Studio from public benchmarks.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-09-29">
+  <meta name="last-modified" content="2026-11-24">
   <link rel="canonical" href="https://outlier.host/data/local-ai-benchmarks-mac-2026/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio">
@@ -121,7 +121,7 @@
   {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Outlier", "item": "https://outlier.host/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://outlier.host/learn/"}, {"@type": "ListItem", "position": 3, "name": "Local AI benchmarks for Mac (2026) — Outlier vs Ollama vs LM Studio", "item": "https://outlier.host/data/local-ai-benchmarks-mac-2026/"}]}
   </script>
   <script type="application/ld+json">
-  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.0 on the V9 paged engine. Our only M4 Air figure is an estimate: about 32 tok/s for Nano, seen once in a single prompt on a 16 GB M4 Air (2026-05-04) and not logged."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "This page publishes no head-to-head tok/s for them, so it makes no speed claim either way; Outlier's V9 paged engine runs MoE models bigger than RAM at a usable speed; llama.cpp can memory-map them too, but rereads weights from disk and slows to a crawl."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Measured accuracy figures are on the tier benchmarks page: MMLU for every tier (Nano 52.0%, Core 27B 89.5%, n=200, build 1.11.804) and HumanEval for Core 27B (95.1%) and Vision 3.8 (94.5%)."}}]}
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How fast is Outlier on a Mac?", "acceptedAnswer": {"@type": "Answer", "text": "On M1 Ultra: Nano 4B 92.6 tok/s (1.11.1020, 22 November 2026), Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.0 on the V9 paged engine. Our only M4 Air figure is an estimate: about 32 tok/s for Nano, seen once in a single prompt on a 16 GB M4 Air (2026-05-04) and not logged."}}, {"@type": "Question", "name": "How does Outlier compare to Ollama and LM Studio?", "acceptedAnswer": {"@type": "Answer", "text": "This page publishes no head-to-head tok/s for them, so it makes no speed claim either way; Outlier's V9 paged engine runs MoE models bigger than RAM at a usable speed; llama.cpp can memory-map them too, but rereads weights from disk and slows to a crawl."}}, {"@type": "Question", "name": "What are Outlier's accuracy numbers?", "acceptedAnswer": {"@type": "Answer", "text": "Core 27B is the reasoning-strong coding tier; Nano 4B is the fast everyday tier. Measured accuracy figures are on the tier benchmarks page: MMLU for every tier (Nano 52.0%, Core 27B 89.5%, n=200, build 1.11.804) and HumanEval for Core 27B (95.1%) and Vision 3.8 (94.5%)."}}]}
   </script>
 <script src="https://kerr-affiliate-hub.kerrco.workers.dev/snippet.js" defer></script>
 <style data-pbox-style>
@@ -160,7 +160,7 @@
     <div class="quick-answer">
       <span class="qa-label">Quick answer</span>
       <ul>
-        <li>A small chat model, Outlier Nano 4B, runs at <strong>~70 tok/s</strong> on an M1 Ultra (April 2026 bench). On 22 and 23 November 2026 we ran Outlier and Ollama on the same M1 Ultra with the same base model, Qwen3.5-4B, in three timed runs each: Outlier 1.11.1020 decoded 92.6 tokens a second and Ollama 0.40.17 decoded 85.8. Ollama showed its first word sooner, 3.39 s to Outlier&rsquo;s 5.25 s on a 4,100-token prompt. We have not run LM Studio on this Mac.</li>
+        <li>A small chat model, Outlier Nano 4B, decodes <strong>92.6 tok/s</strong> on an M1 Ultra (Outlier 1.11.1020, 22 November 2026; about 70 in April&rsquo;s shorter bench). On 22 and 23 November 2026 we ran Outlier and Ollama on that Mac with the same base model, Qwen3.5-4B, in three timed runs each: Ollama 0.40.17 decoded 85.8 tokens a second and showed its first word sooner, 3.39 s to Outlier&rsquo;s 5.25 s on a 4,100-token prompt. We have not run LM Studio on this Mac.</li>
         <li>For 27B coding, <strong>Outlier Core 27B does 20.7 tok/s</strong> and is the strongest coding tier in the lineup.</li>
         <li>397B-class MoE? <strong>Outlier's paged engine runs it on a 64 GB Mac</strong> (V9 paged engine; ~2.0 tok/s measured on an M1 Ultra with 64 GB). We have not tested other apps on this model.</li>
         <li>Accuracy is on the <a href="https://outlier.host/data/outlier-tier-benchmarks-2026-08/">tier benchmarks page</a>: MMLU for every tier (Nano <strong>52.0%</strong>, n=200, build 1.11.804) and HumanEval for Core 27B and Vision 3.8. This page sticks to tok/s and memory.</li>
@@ -179,7 +179,7 @@
     <table>
       <thead><tr><th>Tier</th><th>Params</th><th>Disk</th><th>RAM (peak)</th><th>Decode tok/s</th></tr></thead>
       <tbody>
-        <tr><td>Nano 4B</td><td>4B dense</td><td>~2.4 GB</td><td>~4 GB</td><td><strong>71.7</strong></td></tr>
+        <tr><td>Nano 4B</td><td>4B dense</td><td>~2.4 GB</td><td>~4 GB (5.5 to 5.8 GB in November)</td><td><strong>92.6</strong>: measured 2026-11-22 through the shipped app, build 1.11.1020, with a 4,170-token prompt and about 950 decoded tokens, three timed runs. This 2026-04-29 bench recorded 71.7 with its 256-token protocol.</td></tr>
         <tr><td>Lite 9B</td><td>9B dense</td><td>~5 GB</td><td>~7 GB</td><td><strong>53.4</strong></td></tr>
         <tr><td>Quick 26B</td><td>26B-a4b MoE</td><td>~16 GB</td><td>~17 GB</td><td>14.6 <span style="opacity:.7">. Re-measured 43.6 on 2026-08-24 (v1.11.804); the 14.6 is what this 2026-04-29 bench recorded and is left as run</span></td></tr>
         <tr><td>Core 27B</td><td>27B dense</td><td>~15 GB</td><td>~17 GB</td><td><strong>20.7</strong></td></tr>
@@ -187,14 +187,14 @@
         <tr><td>Plus 397B-A17B</td><td>397B-A17B MoE</td><td>~209 GB</td><td>~18 GB (V9 paged)</td><td><strong>2.0 (V9)</strong>: measured 2026-06-24 through the shipped app, build 1.11.593, at its K=40 setting, on an M1 Ultra with 64 GB: the decode rate the app itself reports, 79 s to the first token, 18.0 GB peak memory. Until 1.11.593 the app ran K=20, which measured 1.59 tok/s in the 2026-05-01 sweep. The engine-comparison page reports 2.1 for the old K=20 setting under its own per-token RSS protocol.</td></tr>
       </tbody>
     </table>
-    <p class="source">Nano again in November 2026 (Outlier 1.11.1020, a 4,170-token prompt on the free plan&rsquo;s 8K context, about 950 decoded tokens, three timed runs): 92.6 tok/s decode and a peak of 5.5 to 5.8 GB of memory. The table keeps April&rsquo;s shorter 256-token protocol, which is why its Nano row reads 71.7 tok/s and about 4 GB.</p>
+    <p class="source">Nano again in November 2026 (Outlier 1.11.1020, a 4,170-token prompt on the free plan&rsquo;s 8K context, about 950 decoded tokens, three timed runs): 92.6 tok/s decode and a peak of 5.5 to 5.8 GB of memory. The Nano row above now gives that figure, with April&rsquo;s 256-token reading of 71.7 tok/s and about 4 GB beside it.</p>
     <p class="source">Source: Outlier <code>FINAL_LAUNCH_NUMBERS.md</code>. The M1 Ultra Mac tok/s bench ran 2026-04-29. Accuracy figures are on the tier benchmarks page (MMLU n=200, build 1.11.804, 2026-08-24).</p>
 
     <h2>Outlier decode speed by tier (measured)</h2>
     <table>
       <thead><tr><th>Tool</th><th>Model</th><th>Format</th><th>Mac</th><th>Decode tok/s</th></tr></thead>
       <tbody>
-        <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>71.7</td></tr>
+        <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>71.7 (April 2026, 256 decoded tokens)</td></tr>
         <tr><td>Outlier</td><td>Nano 4B</td><td>MLX 4-bit</td><td>M4 Air 16 GB</td><td>~32</td></tr>
         <tr><td>Outlier</td><td>Core 27B</td><td>MLX 4-bit</td><td>M1 Ultra 64 GB</td><td>20.7</td></tr>
         <tr><td>Outlier</td><td>Plus 397B-A17B</td><td>MLX 4-bit, V9 paged</td><td>M1 Ultra 64 GB</td><td>2.0</td></tr>
@@ -239,7 +239,7 @@
     <div class="faq">
       <div class="faq-item">
         <h3>How fast is Outlier on a Mac?</h3>
-        <p>On M1 Ultra: Nano 4B 71.7 tok/s, Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.0 on the V9 paged engine. Our only M4 Air figure is an estimate: about 32 tok/s for Nano, seen once in a single prompt on a 16 GB M4 Air (2026-05-04) and not logged.</p>
+        <p>On M1 Ultra: Nano 4B 92.6 tok/s (1.11.1020, 22 November 2026), Lite 9B 53.4, Core 27B 20.7, Plus 397B 2.0 on the V9 paged engine. Our only M4 Air figure is an estimate: about 32 tok/s for Nano, seen once in a single prompt on a 16 GB M4 Air (2026-05-04) and not logged.</p>
       </div>
       <div class="faq-item">
         <h3>How does Outlier compare to Ollama and LM Studio?</h3>

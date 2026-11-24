@@ -121,9 +121,9 @@ class MeasuredAnswers(unittest.TestCase):
                 if "16gb" in rel:
                     facts = (("Nano 4B", "~4 GB"), ("Lite 9B", "~7 GB"))
                 elif "qwen" in rel:
-                    facts = (("Nano 4B", "71.7"), ("Lite 9B", "53.4"))
+                    facts = (("Nano 4B", "92.6"), ("Lite 9B", "53.4"))
                 else:
-                    facts = (("Nano 4B", "71.7"),)
+                    facts = (("Nano 4B", "92.6"),)
                 source = (ROOT / SOURCE.lstrip("/") / "index.html").read_text()
                 for model, figure in facts:
                     self.assertIn(model, answer.text)

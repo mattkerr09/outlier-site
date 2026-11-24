@@ -14,13 +14,14 @@ import unittest
 from test_measured_answers import QUICK, SOURCE, check_answer, git, visible
 
 
+# 2026-11-24 (RED row 26): Nano's figure follows models.csv, now 92.6 (1.11.1020, 2026-11-22).
 # Retired the O6, O7 and O8 measured-answer job's old-base scope and byte pins:
 # later reviewed sitewide edits make those byte pins wrong.
 ROOT = Path(__file__).resolve().parent.parent
 PAGES = {
-    "how-to/use-ai-offline-mac/index.html": ("O6", "Nano 4B", "71.7"),
+    "how-to/use-ai-offline-mac/index.html": ("O6", "Nano 4B", "92.6"),
     "learn/own-your-ai/index.html": ("O7", "Core 27B", "20.7"),
-    "best/private-ai-no-cloud/index.html": ("O8", "Nano 4B", "71.7"),
+    "best/private-ai-no-cloud/index.html": ("O8", "Nano 4B", "92.6"),
 }
 TEST = "scripts/test_measured_answers_2.py"
 

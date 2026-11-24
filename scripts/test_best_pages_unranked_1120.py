@@ -29,7 +29,9 @@ DATE = "2026-11-20"
 # Later reviewed upgrades, pinned per page as literals (every other page keeps DATE and its table count):
 # best/private-ai-no-cloud/ was upgraded on 2026-11-21 and gained one table, "Where a private AI server
 # can run", whose first cells are listed here; its original rivals table must stay byte-identical.
-PAGE_DATES = {"best/private-ai-no-cloud/index.html": "2026-11-21"}
+# 2026-11-24: four pages changed (Nano 92.6 at the data source, RED row 26; "unlock" out, rule 11).
+PAGE_DATES = {"best/private-ai-no-cloud/index.html": "2026-11-24", "best/index.html": "2026-11-24",
+              "best/local-ai-for-mac/index.html": "2026-11-24", "best/best-ai-assistant-mac-2026/index.html": "2026-11-24"}
 EXTRA_TABLES = {"best/private-ai-no-cloud/index.html": [
     "Your Mac, using the local apps below",
     "Your own GPU server",

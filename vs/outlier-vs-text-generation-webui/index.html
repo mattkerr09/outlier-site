@@ -11,7 +11,7 @@
   <title>text-generation-webui vs Outlier: two local AI apps</title>
   <meta name="description" content="Both run on your hardware. text-generation-webui is free, AGPL-3.0 and cross-platform, but you bring the weights; Outlier is Mac-only and ready to run.">
   <meta name="theme-color" content="#07060b">
-  <meta name="last-modified" content="2026-09-24">
+  <meta name="last-modified" content="2026-11-24">
   <link rel="canonical" href="https://outlier.host/vs/outlier-vs-text-generation-webui/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="Outlier vs text-generation-webui (oobabooga): two local AI apps compared">
@@ -110,7 +110,7 @@
   <script async src="https://plausible.io/js/pa-ge9NbG73lSHpzh6SU4l7j.js"></script>
   <script>window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()</script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs text-generation-webui (oobabooga): two local AI apps compared","description":"Both run models on your own hardware, so privacy isn't the difference. An honest comparison of setup, interface, model management, platform support and licensing, written by Outlier's founder.","datePublished":"2026-07-23","dateModified":"2026-11-04","author":{"@type":"Person","name":"Matthew Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-text-generation-webui/"}}
+  {"@context":"https://schema.org","@type":"Article","headline":"Outlier vs text-generation-webui (oobabooga): two local AI apps compared","description":"Both run models on your own hardware, so privacy isn't the difference. An honest comparison of setup, interface, model management, platform support and licensing, written by Outlier's founder.","datePublished":"2026-07-23","dateModified":"2026-11-24","author":{"@type":"Person","name":"Matthew Kerr","url":"https://outlier.host/about/"},"publisher":{"@type":"Organization","name":"Outlier","url":"https://outlier.host","logo":{"@type":"ImageObject","url":"https://outlier.host/logo.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://outlier.host/vs/outlier-vs-text-generation-webui/"}}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Outlier","item":"https://outlier.host/"},{"@type":"ListItem","position":2,"name":"Compare","item":"https://outlier.host/vs/"},{"@type":"ListItem","position":3,"name":"Outlier vs text-generation-webui","item":"https://outlier.host/vs/outlier-vs-text-generation-webui/"}]}
@@ -145,7 +145,7 @@
     <h1>Outlier vs text-generation-webui (oobabooga): two local AI apps compared</h1>
     <div class="byline-row">
       <span class="byline">Matthew Kerr · Outlier · published 2026-07-23</span>
-      <span class="updated-pill">Updated 2026-11-04</span>
+      <span class="updated-pill">Updated 2026-11-24</span>
       <span class="byline" data-claims-checked="2026-11-24" data-claims-set="text-generation-webui (TextGen)">text-generation-webui (TextGen) prices and plans checked 2026-11-24</span>
     </div>
 
@@ -171,7 +171,7 @@
 
     <h2>What Outlier is</h2>
     <p>Outlier is a native macOS app for Apple Silicon: M1 or later, macOS 15 or newer. No Intel Macs, no Windows, no Linux, no mobile app. Models run fully on-device, no account, no usage caps.</p>
-    <p>Six tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 71.7 tok/s on an M1 Ultra) through Core 27B up to Plus 397B-a17b, which needs 64 GB and streams experts from SSD at about 18 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase for all six tiers. The Nano, Lite, Quick and Core weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a> (Plus and Vision 3.8 come from public community conversions of Qwen's models); the app itself is not open source.</p>
+    <p>Six tiers ship with it, from Nano 4B (2.37 GB, 6 GB RAM, 92.6 tok/s on an M1 Ultra) through Core 27B up to Plus 397B-a17b, which needs 64 GB and streams experts from SSD at about 18 GB peak RSS. Nano and Lite are free; Pro is a one-time purchase for all six tiers. The Nano, Lite, Quick and Core weights are published at <a href="https://huggingface.co/Outlier-Ai">huggingface.co/Outlier-Ai</a> (Plus and Vision 3.8 come from public community conversions of Qwen's models); the app itself is not open source.</p>
 
     <h2>Interface, setup, and what's in the box</h2>
     <p>This is the real dividing line. TextGen is a Gradio web UI wrapped, since v4.7.3, in a bundled Electron shell, so it opens in its own window rather than a browser tab. It's also a server: run it with <code>--api</code> and you get an OpenAI- <em>and</em> Anthropic-compatible endpoint on port 5000, with streaming and tool calling. There's no interactive chat CLI: the command line is for configuration (<code>--cpu</code>, <code>--split-mode</code>, <code>--spec-type</code>), not conversation. The portable builds don't need installing, but on macOS the release notes tell you to run <code>xattr -cr</code> on the folder first, because the builds aren't notarized.</p>

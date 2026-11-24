@@ -11,7 +11,7 @@ same files and the same rules the /seo/run/ pages use, so the checker and those 
     catalog minimum is only the floor the picker lets someone try a tier at; Plus streams its experts from the SSD).
 Speed on any Mac but an M1 Ultra is the M1 Ultra measurement scaled by memory bandwidth and is labeled an estimate, with
 the arithmetic shown, as on the /seo/run/ pages. The page shell (styles, nav, product box, footer) is copied from
-vs/when-ollama-is-enough/ so it looks like the rest of the site.
+vs/when-ollama-is-enough/ (now its own last build, see SHELL) so it looks like the rest of the site.
 usage: scripts/build_mac_checker.py <publish date YYYY-MM-DD>
 """
 from __future__ import annotations
@@ -29,7 +29,10 @@ import render  # noqa: E402  — WORKING_SET_GB and the version the site adverti
 
 OUT = ROOT / "tools" / "can-my-mac-run-it" / "index.html"
 URL = "https://outlier.host/tools/can-my-mac-run-it/"
-SHELL = ROOT / "vs" / "when-ollama-is-enough" / "index.html"
+#: 2026-11-24: vs/when-ollama-is-enough/ folded into vs/ollama-vs-lm-studio/ on 2026-11-07 (34cc0392f), and that page's
+#: markup differs, so the shell is now this page's own last build: it carries every sitewide change made since (phone
+#: link, sale line), and a rebuild changes only what the data changes.
+SHELL = ROOT / "tools" / "can-my-mac-run-it" / "index.html"
 
 
 def rows(name):
@@ -127,12 +130,12 @@ def main(date):
     tail = re.search(r"<footer>.*</html>\n?", shell, re.S).group(0)
 
     def box(where):
-        return pbox.replace('data-pbox="answer"', f'data-pbox="{where}"').replace(
-            "src=vs-when-ollama-is-enough-box-answer", f"src=tools-can-my-mac-run-it-box-{where}")
+        return re.sub(r"src=[a-z0-9-]+-box-answer", f"src=tools-can-my-mac-run-it-box-{where}",
+                      pbox.replace('data-pbox="answer"', f'data-pbox="{where}"'))
 
     title = "Can my Mac run local AI? Free checker (2026)"
     desc = ("Pick your Mac and its memory to see which Outlier models run and how fast, from our own measurements. "
-            "Runs in your browser; nothing is sent.")
+            "Runs in your browser; your picks aren’t sent.")
     ld_article = {"@context": "https://schema.org", "@type": "WebApplication", "name": "Can my Mac run it?",
                   "url": URL, "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (runs in the browser)",
                   "description": desc, "author": {"@type": "Person", "name": "Matthew Kerr"},
@@ -230,9 +233,7 @@ def main(date):
     its experts from the SSD, so it runs on a 64 GB Mac, slowly, by design.</p>
     <p><strong>Speed</strong> is how many tokens a model writes per second once it starts answering. On an M1 Ultra it is
     our own measurement. On every other Mac it is that measurement scaled by your Mac's memory bandwidth (the M1 Ultra has
-    800 GB/s), and it says so. The only time we have checked that projection on another Mac, Nano on a 16 GB M4 Air
-    {"wrote about " + format(air_nano, "g") + " tok/s, about " + str(round(air_nano / air_proj)) + "&times; the " + format(air_proj, ".1f") + " tok/s the projection gives" if air_nano else "has not been measured"},
-    so read the estimates as conservative.</p>
+    800 GB/s), and it says so. We have not measured another Mac yet. {"One unlogged single-prompt observation, Nano at about " + format(air_nano, "g") + " tok/s on a 16 GB M4 Air, was about " + str(round(air_nano / air_proj)) + "&times; the " + format(air_proj, ".1f") + " tok/s the projection gives, so the estimates may be conservative." if air_nano else "No other Mac has been checked against the projection."}</p>
 
     <h2>Where the numbers come from</h2>
     <p>Each model's minimum memory, download size and speed on an M1 Ultra (800 GB/s), measured by Outlier:</p>
@@ -241,7 +242,7 @@ def main(date):
     <p>The memory options and bandwidth of each Mac are Apple's published figures. The same data drives the per-Mac pages
     in <a href="https://outlier.host/run/">Run Outlier on your Mac</a>; for what each amount of memory holds in general, see
     <a href="https://outlier.host/data/mac-ram-to-model-size/">how much RAM a local model needs</a>, and for the step by
-    step, <a href="https://outlier.host/seo/how-to/install-outlier-on-mac/">installing Outlier on a Mac</a>.</p>
+    step, <a href="https://outlier.host/how-to/install-local-ai-on-mac/">installing Outlier on a Mac</a>.</p>
 
 {box("end")}  </div>
 </article>
