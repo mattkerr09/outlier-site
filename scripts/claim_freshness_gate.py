@@ -72,8 +72,18 @@ EXEMPT_MAX = 4
 #: indexable page that quotes a rival's price now needs a claim set like the rest. The 24 pages that already did so on
 #: that day are a BACKLOG: they warn, by name, until dated; any other page fails. Edit the backlog BY REMOVAL ONLY —
 #: BACKLOG_MAX pins its size, so adding a page to silence the gate fails in the same run.
-BACKLOG_MAX = 23
+#: 2026-11-24 (RED row 51): the last 20 were re-read live and dated, or found to quote no company's price; the
+#: backlog is empty and pinned at 0, so every page that quotes a rival's price now needs its own dated claim set.
+BACKLOG_MAX = 0
 BACKLOG_FILE = Path(__file__).with_name("claim_freshness_backlog.json")
+#: 2026-11-24 (RED row 51): three backlog pages carry dollar figures that are no company's price: a word-problem
+#: benchmark's own problems ("4 pens at $1.25"), a CSV fixture's cells, the founder's own past spend. A claim set there
+#: would be a date promising a rival's page was read when no rival is named, re-dated forever. Instead each such page
+#: names its EXACT figures here, with the reason: those figures stop counting as rival prices, and nothing else does.
+#: A figure added to the page later counts again (undated → fails); a listed figure that has left the page fails
+#: (shrink the entry); NOT_RIVAL_MAX pins the size. Only pages outside vs/ best/ seo/vs/ (the backlog's scope).
+NOT_RIVAL_MAX = 3
+NOT_RIVAL_FILE = HERE / "claim_freshness_not_rival.json"
 EXEMPT_FILE = HERE / "claim_freshness_exempt.json"
 
 SCOPE_GLOBS = ("vs/*/index.html", "best/*/index.html", "seo/vs/*/index.html")
@@ -244,6 +254,35 @@ def load_exempt() -> dict:
     return {k: v for k, v in d.items() if not k.startswith("_")}
 
 
+def load_not_rival() -> dict:
+    if not NOT_RIVAL_FILE.exists():
+        return {}
+    d = json.loads(NOT_RIVAL_FILE.read_text(encoding="utf-8"))
+    return {k: v for k, v in d.items() if not k.startswith("_")}
+
+
+def not_rival_left(rel: str, figs: list, entry: dict, res: dict) -> list:
+    """The page's money figures minus the ones its not-rival entry names (as a multiset). Problems go to res['fail']."""
+    from collections import Counter
+    why = (entry.get("why") or "").strip() if isinstance(entry, dict) else ""
+    listed = entry.get("figures") if isinstance(entry, dict) else None
+    if not why or not isinstance(listed, list) or not listed:
+        res["fail"].append(f"not-rival  {rel}: the entry needs a 'why' and the exact 'figures' it covers")
+        return figs
+    have, pinned = Counter(figs), Counter(listed)
+    gone = pinned - have
+    if gone:
+        res["fail"].append(f"not-rival  {rel}: lists {', '.join(sorted(gone))} which the page no longer shows; "
+                           f"shrink the entry in claim_freshness_not_rival.json")
+    left = have - pinned
+    out = []
+    for f in figs:                      # keep page order; each unlisted occurrence counts once
+        if left[f] > 0:
+            out.append(f)
+            left[f] -= 1
+    return out
+
+
 def pages_in_scope(root: Path) -> list[Path]:
     found = []
     for g in SCOPE_GLOBS:
@@ -337,7 +376,8 @@ def load_backlog() -> list:
 
 
 def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int | None = None,
-         backlog: list | None = None, backlog_max: int | None = None) -> dict:
+         backlog: list | None = None, backlog_max: int | None = None, not_rival: dict | None = None,
+         not_rival_max: int | None = None) -> dict:
     """Judge every page. Returns {'sets': [...], 'pages': n, 'rival_pages': n, 'warn': [...], 'fail': [...]}."""
     exempt = load_exempt() if exempt is None else exempt
     exempt_max = EXEMPT_MAX if exempt_max is None else exempt_max
@@ -408,6 +448,17 @@ def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int
         res["fail"].append(f"backlog: claim_freshness_backlog.json lists {len(backlog)} pages, pinned at {backlog_max}. "
                            f"A page was ADDED, which silences this gate for it. Date the page instead.")
     on_backlog = set(backlog)
+    not_rival = load_not_rival() if not_rival is None else not_rival
+    not_rival_max = NOT_RIVAL_MAX if not_rival_max is None else not_rival_max
+    if len(not_rival) > not_rival_max:
+        res["fail"].append(f"not-rival: claim_freshness_not_rival.json lists {len(not_rival)} pages, pinned at "
+                           f"{not_rival_max}. A page was ADDED, which stops its figures counting. Date the page instead, "
+                           f"or change NOT_RIVAL_MAX in the same commit and say why.")
+    for rel in not_rival:
+        if not (root / rel).is_file():
+            res["fail"].append(f"not-rival  {rel}: listed in claim_freshness_not_rival.json but the page does not exist")
+        elif rel in seen_rel:
+            res["fail"].append(f"not-rival  {rel}: is under vs/ best/ seo/vs/, where claim_freshness_exempt.json applies")
     for path in sorted(root.rglob("index.html")):
         rel = path.relative_to(root).as_posix()
         if rel in seen_rel or any(part.startswith((".", "_")) for part in path.relative_to(root).parts):
@@ -417,7 +468,13 @@ def scan(root: Path, today: dt.date, exempt: dict | None = None, exempt_max: int
             continue
         pg = read_page(path)
         figs = rival_figures(squash(pg.prose), mine)
+        if rel in not_rival:
+            figs = not_rival_left(rel, figs, not_rival[rel], res)
         if not figs and not pg.sets:
+            # 2026-11-24: a backlog page that quotes nothing was skipped here before the "remove it" check below, so its
+            # stale entry stayed and would later turn a NEW undated price on that page into a warning instead of a fail.
+            if rel in on_backlog:
+                res["fail"].append(f"backlog    {rel}: quotes no rival price now; remove it from claim_freshness_backlog.json")
             continue
         seen_rel.add(rel)
         res["pages"] += 1
@@ -523,7 +580,7 @@ def self_check(verbose: bool = False) -> int:
         _write(root, "_seo_build/owned_pages.json",
                json.dumps(["seo/vs/generated-undated/index.html", "seo/vs/generated-dated/index.html"]))
         backlog = ["learn/backlogged/index.html", "learn/backlog-but-dated/index.html", "learn/ghost-backlog/index.html"]
-        res = scan(root, today, exempt=exempt, exempt_max=4, backlog=backlog, backlog_max=3)
+        res = scan(root, today, exempt=exempt, exempt_max=4, backlog=backlog, backlog_max=3, not_rival={})
         joined = "\n".join(res["fail"])
         for rel, (_h, verdict, expect_warn) in cases.items():
             fails = [f for f in res["fail"] if f" {rel}" in f or f"{rel}:" in f or f"{rel} [" in f]
@@ -541,21 +598,66 @@ def self_check(verbose: bool = False) -> int:
         if "ghost-backlog" not in joined:
             bad.append("a backlog entry for a page that does not exist was not reported")
         if not any("pinned at 2" in f for f in scan(root, today, exempt=exempt, exempt_max=4, backlog=backlog,
-                                                   backlog_max=2)["fail"]):
+                                                   backlog_max=2, not_rival={})["fail"]):
             bad.append("a backlog over BACKLOG_MAX did not fail")
         # pin: a bigger exempt list than the cap must fail
-        over = scan(root, today, exempt=exempt, exempt_max=3)
+        over = scan(root, today, exempt=exempt, exempt_max=3, not_rival={})
         if not any("pinned at 3" in f for f in over["fail"]):
             bad.append("an exempt list over EXEMPT_MAX did not fail")
         # a tree with nothing in scope must not read as clean
         with tempfile.TemporaryDirectory() as empty:
-            e = scan(Path(empty), today, exempt={})
+            e = scan(Path(empty), today, exempt={}, not_rival={})
             if e["pages"] >= MIN_PAGES:
                 bad.append("an empty tree reported enough pages")
+    # not-rival figures (RED row 51): exact figures stop counting, nothing else does; a backlog page that quotes nothing
+    # must leave the backlog
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        _write(root, "vs/dated/index.html", stamp(1))
+        pages = {"learn/word-problems/index.html": "<p>4 pens at $1.25, paid with a $20 bill.</p>",
+                 "learn/word-problems-grew/index.html": "<p>4 pens at $1.25. ChatGPT Plus is $20 a month.</p>",
+                 "learn/word-problems-shrank/index.html": "<p>4 pens at $1.25.</p>",
+                 "learn/no-reason/index.html": "<p>4 pens at $1.25.</p>",
+                 "learn/backlog-now-clean/index.html": "<p>No prices here any more.</p>"}
+        for rel, h in pages.items():
+            _write(root, rel, h)
+        nr = {"learn/word-problems/index.html": {"why": "word problems", "figures": ["$1.25", "$20"]},
+              "learn/word-problems-grew/index.html": {"why": "word problems", "figures": ["$1.25"]},
+              "learn/word-problems-shrank/index.html": {"why": "word problems", "figures": ["$1.25", "$3.40"]},
+              "learn/no-reason/index.html": {"why": "", "figures": ["$1.25"]},
+              "learn/gone/index.html": {"why": "word problems", "figures": ["$1"]},
+              "vs/dated/index.html": {"why": "wrong list", "figures": ["$20"]}}
+        r = scan(root, today, exempt={}, backlog=["learn/backlog-now-clean/index.html"], backlog_max=1,
+                 not_rival=nr, not_rival_max=6)
+        fl = "\n".join(r["fail"])
+        if "learn/word-problems/index.html" in fl:
+            bad.append("a page whose every figure is listed as not-rival still failed")
+        if not any(f.startswith("undated") and "word-problems-grew" in f for f in r["fail"]):
+            bad.append("a not-rival page that gained an unlisted rival price did not fail as undated")
+        if "$3.40 which the page no longer shows" not in fl:
+            bad.append("a not-rival entry listing a figure the page dropped did not fail")
+        if "learn/no-reason/index.html: the entry needs a 'why'" not in fl:
+            bad.append("a not-rival entry without a reason did not fail")
+        if "learn/gone/index.html: listed in claim_freshness_not_rival.json but the page does not exist" not in fl:
+            bad.append("a not-rival entry for a missing page did not fail")
+        if "vs/dated/index.html: is under vs/" not in fl:
+            bad.append("a not-rival entry for a vs/ page did not fail")
+        if "learn/backlog-now-clean/index.html: quotes no rival price now" not in fl:
+            bad.append("a backlog page that quotes nothing was not told to leave the backlog")
+        if not any("pinned at 5" in f for f in scan(root, today, exempt={}, not_rival=nr, not_rival_max=5)["fail"]):
+            bad.append("a not-rival list over NOT_RIVAL_MAX did not fail")
     # the real arithmetic at its edges
     assert parse_date("2026-02-30") is None and parse_date("July 2026") == dt.date(2026, 7, 1)
     assert parse_date("23 July 2026") == parse_date("July 23, 2026") == dt.date(2026, 7, 23)
     assert says_date("checked 23 July 2026", dt.date(2026, 7, 23)) and not says_date("checked", dt.date(2026, 7, 23))
+    # the PASS line names each kind of warning as itself (RED row 51: 20 undated backlog pages printed as "21 between
+    # 30 and 45" under "every rival claim set is dated")
+    mixed = pass_line(["warn       a: checked x", "backlog    b: no date", "backlog    c: no date", "stale-text b: May"])
+    if ("1 claim set(s) between" not in mixed or "2 backlog page(s) still undated" not in mixed
+            or "1 stale sentence(s)" not in mixed or "every rival claim set is dated" in mixed):
+        bad.append(f"the PASS line miscounted mixed warnings: {mixed}")
+    if pass_line([]) != f"PASS: every rival claim set is dated and none is older than {FAIL_DAYS} days":
+        bad.append("the PASS line with no warnings changed")
     if bad:
         print("claim_freshness_gate SELF-CHECK FAILED: the gate misjudged its own fixtures:")
         for b in bad:
@@ -617,9 +719,31 @@ def main(argv: list[str]) -> int:
               f"deploy. Re-read the rival's own page, correct the claim, move the date; if it cannot be confirmed, "
               f"remove the claim.")
         return 1
-    print(f"PASS: every rival claim set is dated and none is older than {FAIL_DAYS} days"
-          + (f" ({len(res['warn'])} between {WARN_DAYS} and {FAIL_DAYS})" if res["warn"] else ""))
+    print(pass_line(res["warn"]))
     return 0
+
+
+def pass_line(warns: list) -> str:
+    """The PASS summary, with each kind of warning counted as itself.
+
+    Until 2026-11-24 this printed "every rival claim set is dated ... (21 between 30 and 45)" when no claim set was
+    30 to 45 days old: the 21 were 20 backlog pages that carry NO date and one stale sentence. The count was every
+    warning; the words named one kind. A backlog page is undated, so "every rival claim set is dated" was false too
+    whenever the backlog was not empty (Saban, RED row 51)."""
+    aging = sum(w.startswith("warn ") for w in warns)
+    backlog = sum(w.startswith("backlog ") for w in warns)
+    stale = sum(w.startswith("stale-text ") for w in warns)
+    parts = []
+    if aging:
+        parts.append(f"{aging} claim set(s) between {WARN_DAYS} and {FAIL_DAYS} days old")
+    if backlog:
+        parts.append(f"{backlog} backlog page(s) still undated")
+    if stale:
+        parts.append(f"{stale} stale sentence(s) on backlog pages")
+    head = f"PASS: no dated claim set is older than {FAIL_DAYS} days"
+    if not backlog:
+        head = f"PASS: every rival claim set is dated and none is older than {FAIL_DAYS} days"
+    return head + (f"; warnings: {', '.join(parts)}" if parts else "")
 
 
 if __name__ == "__main__":
