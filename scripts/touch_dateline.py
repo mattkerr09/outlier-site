@@ -37,6 +37,11 @@ TODAY = datetime.date.today().isoformat()
 #: reads clean over the rest of the site.
 JSONLD = re.compile(r'("dateModified"\s*:\s*")(\d{4}-\d{2}-\d{2})(")')
 
+#: 2026-11-24: the third place. 192 pages also carry <meta name="last-modified">; this tool never moved it, so every
+#: page it touched kept an old meta date (145 pages disagreed with their own dateModified that day, and
+#: scripts/test_best_pages_unranked_1120.py caught four).
+META = re.compile(r'(<meta name="last-modified" content=")(\d{4}-\d{2}-\d{2})(")')
+
 #: Every visible shape in the corpus, measured rather than assumed:
 #: 165 "Last updated YYYY-MM-DD", 44 "Updated YYYY-MM-DD", 3 "Updated Month D, YYYY".
 VISIBLE = [
@@ -109,6 +114,7 @@ def touch(path: str, today: str = TODAY, owned=_UNREAD) -> dict:
     pub_before = re.findall(r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})"', s)
 
     s, n_json = JSONLD.subn(lambda m: m.group(1) + today + m.group(3), s)
+    s, n_meta = META.subn(lambda m: m.group(1) + today + m.group(3), s)
 
     n_vis = 0
     for rx in VISIBLE:
@@ -123,7 +129,7 @@ def touch(path: str, today: str = TODAY, owned=_UNREAD) -> dict:
     if s != before:
         with open(path, "w", encoding="utf-8") as f:
             f.write(s)
-    return {"jsonld": n_json, "visible": n_vis, "changed": s != before}
+    return {"jsonld": n_json, "visible": n_vis, "meta": n_meta, "changed": s != before}
 
 
 def changed_pages() -> list[str]:
@@ -142,6 +148,9 @@ def self_check() -> int:
             '<p>Updated 2020-01-01</p><script>{"datePublished": "2019-05-05", "dateModified": "2020-01-01"}</script>',
         "long visible form":
             '<p>Updated January 1, 2020</p><script>{"datePublished":"2019-05-05","dateModified":"2020-01-01"}</script>',
+        "meta last-modified too":
+            '<meta name="last-modified" content="2020-01-01"><p>Last updated 2020-01-01</p>'
+            '<script>{"datePublished":"2019-05-05","dateModified":"2020-01-01"}</script>',
     }
     ok = True
     with tempfile.TemporaryDirectory(dir="/tmp") as tmp:
