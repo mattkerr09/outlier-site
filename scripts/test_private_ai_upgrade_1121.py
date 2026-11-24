@@ -134,9 +134,10 @@ def check(html, sitemap):
                for s in blocks(html, 'script') if 'application/ld+json' in s]
     structured_article = next(s for s in schemas if s.get('@type') == 'Article')
     assert structured_article['headline'] == h1
-    assert structured_article['dateModified'] == '2026-11-21'
-    assert 'Last updated 2026-11-21' in html
-    assert current.meta['last-modified'] == '2026-11-21'
+    # 2026-11-24: the page changed again (Nano 92.6 tok/s at the data source, RED row 26).
+    assert structured_article['dateModified'] == '2026-11-24'
+    assert 'Last updated 2026-11-24' in html
+    assert current.meta['last-modified'] == '2026-11-24'
     assert 'claim set above, dated 2026-11-20' in article
     faq = next(s for s in schemas if s.get('@type') == 'FAQPage')['mainEntity']
     assert [q['name'] for q in faq] == ORIGINAL_FAQS + [NEW_FAQ]
@@ -154,7 +155,7 @@ def check(html, sitemap):
     entries = ET.fromstring(sitemap).findall('s:url', ns)
     match = [e for e in entries if e.find('s:loc', ns).text ==
              'https://outlier.host/best/private-ai-no-cloud/']
-    assert len(match) == 1 and match[0].find('s:lastmod', ns).text == '2026-11-21'
+    assert len(match) == 1 and match[0].find('s:lastmod', ns).text == '2026-11-24'
 
 
 def main():
