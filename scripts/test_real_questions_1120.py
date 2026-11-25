@@ -168,7 +168,10 @@ def check_page(raw, rel):
         assert 'I make Outlier.' in text, 'missing disclosure'
         assert not re.search(r'[\u2013\u2014]|\b\d{4}-\d{2}-\d{2}\b', text), 'visible dash or ISO date'
         assert not re.search(r'\b(?:Codex|gate|job|Article Studio|RULES|chain|bar|C38)\b', text), 'internal words'
-        assert not any('kerrandcompanyholdings.com' in urlsplit(u).netloc for u in links), 'other Kerr domain'
+        # 2026-11-25: the site's own analytics script (self-hosted Plausible, Matthew) is a resource, not a link to
+        # another Kerr site; only that exact script path is exempt, any other URL on the host still fails.
+        analytics = 'https://stats.kerrandcompanyholdings.com/js/pa-xi1xnOwGkopAzD_lBWALO.js'
+        assert not any('kerrandcompanyholdings.com' in urlsplit(u).netloc for u in links if u != analytics), 'other Kerr domain'
         faq = [(shown(q), shown(a)) for q,a in re.findall(
             r'<div class="faq-item"><h3>(.*?)</h3><p>(.*?)</p></div>', raw, re.S)]
         schema = next(s for s in schemas(raw) if s.get('@type') == 'FAQPage')

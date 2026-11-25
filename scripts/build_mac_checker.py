@@ -121,7 +121,7 @@ def main(date):
 
     shell = SHELL.read_text(encoding="utf-8")
     style = re.search(r"  <style>\n.*?\n  </style>\n", shell, re.S).group(0)
-    head_scripts = re.search(r"  <script async src=\"https://plausible\.io/js/[^\n]*\n  <script>window\.plausible[^\n]*\n",
+    head_scripts = re.search(r"  <script async src=\"https://(?:plausible\.io|stats\.kerrandcompanyholdings\.com)/js/[^\n]*\n  <script>window\.plausible[^\n]*\n",
                              shell).group(0)
     snippet = re.search(r"<script src=\"https://kerr-affiliate-hub\.kerrco\.workers\.dev/snippet\.js\" defer></script>\n"
                         r"<style data-pbox-style>.*?</style>\n", shell, re.S).group(0)
